@@ -53,10 +53,14 @@ jobs:
     needs: unit
     steps:
       - uses: actions/checkout@v4
-      - run: cp .env.example .env
+      # APP_KEY is injected host-side BEFORE up: containers mount .env
+      # read-only, so key:generate cannot write it in-container (same class
+      # of failure `make fresh` hit locally in Session 0).
+      - run: |
+          cp .env.example .env
+          sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - name: Bring up the ephemeral stack (same compose as local — parity)
-        run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 300
-      - run: docker compose -f docker/compose.yaml exec -T app php artisan key:generate --force
+        run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
       - name: Integration + smoke suites inside the stack
         run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --testsuite=Integration
       - name: Stack teardown
@@ -74,9 +78,10 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
-      - run: cp .env.example .env
-      - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 300
-      - run: docker compose -f docker/compose.yaml exec -T app php artisan key:generate --force
+      - run: |
+          cp .env.example .env
+          sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
+      - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
         env:
