@@ -29,8 +29,11 @@ RUN install-php-extensions \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Dependency layer first for build caching.
+# Dev dependencies ARE installed: this is the local/CI image and the
+# Integration/Isolation suites run inside it (parity, Doc 01 SEC-01). The
+# hardened production image (--no-dev, distroless-ish) is Doc 18's session.
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction
+RUN composer install --no-scripts --no-autoloader --prefer-dist --no-interaction
 
 COPY . .
 COPY --from=assets /build/public/build ./public/build

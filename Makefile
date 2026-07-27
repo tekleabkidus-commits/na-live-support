@@ -16,16 +16,23 @@ down:
 	$(COMPOSE) down
 
 ## rebuild + migrate + seed from scratch (DESTROYS local data volumes)
+# APP_KEY lives in the host .env (mounted read-only into containers), so it
+# is generated with --show and written host-side, never inside a container.
 fresh:
+	@test -f .env || cp .env.example .env
 	$(COMPOSE) down -v
 	$(COMPOSE) up -d --build
-	$(COMPOSE) exec app php artisan key:generate --force
+	@grep -q '^APP_KEY=base64' .env || { \
+		KEY=$$($(COMPOSE) exec -T app php artisan key:generate --show) && \
+		sed -i "s|^APP_KEY=.*|APP_KEY=$$KEY|" .env && \
+		$(COMPOSE) up -d app worker scheduler reverb; \
+	}
 	$(COMPOSE) exec app php artisan migrate:fresh --seed --force
 	@echo "Fresh stack ready at http://localhost"
 
-## full Pest suite (unit/feature locally; integration suites need 'make up')
+## full Pest suite, run INSIDE the app container (parity; 'make up' first)
 test:
-	./vendor/bin/pest
+	$(COMPOSE) exec app ./vendor/bin/pest
 
 ## every CI gate, in registry order, with a PASS/FAIL summary
 gates:

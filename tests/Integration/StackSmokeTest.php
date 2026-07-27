@@ -107,7 +107,7 @@ test('postgres role physics: app cannot bypass RLS, platform_admin is the only b
 
     // …and it is the ONLY non-superuser role that may bypass RLS.
     $bypassers = $pdo->query('SELECT rolname FROM pg_roles WHERE rolbypassrls AND NOT rolsuper')->fetchAll(PDO::FETCH_COLUMN);
-    expect($bypassers)->toBe(['platform_admin'], 'unexpected RLS-bypassing role(s): '.implode(', ', $bypassers));
+    expect($bypassers)->toBe(['platform_admin']); // any other rolbypassrls role here is a Sev-1
 });
 
 test('app credentials cannot authenticate as platform_admin', function () {
@@ -128,11 +128,11 @@ test('both redis instances respond and are distinct servers with opposite person
     // not appear on the other.
     $volatileInfo = $volatile->info('server');
     $durableInfo = $durable->info('server');
-    expect($volatileInfo['run_id'])->not->toBe($durableInfo['run_id'], 'volatile and durable point at the SAME Redis server');
+    expect($volatileInfo['run_id'])->not->toBe($durableInfo['run_id']); // same run_id = same server = merged instances
 
     $marker = 'smoke:distinct:'.getmypid();
     $volatile->set($marker, '1', ['ex' => 30]);
-    expect($durable->exists($marker))->toBe(0, 'marker key crossed instances — they are the same server');
+    expect($durable->exists($marker))->toBe(0); // marker crossing instances = same server
     $volatile->del($marker);
 
     // Opposite personalities (the reason the split exists):
@@ -163,11 +163,9 @@ test('horizon supervises all eleven queue families', function () {
     }
     $joined = implode(' ', $supervisorNames);
     foreach (QUEUE_FAMILIES as $family) {
-        expect($joined)->toContain($family, sprintf(
-            'queue family "%s" has no Horizon supervisor (found: %s)',
-            $family,
-            $joined === '' ? 'none' : $joined,
-        ));
+        // NOTE: toContain() is variadic (extra args are MORE needles, not a
+        // message) — caught in Session 0 when the message-arg made this fail.
+        expect($joined)->toContain($family);
     }
 });
 
@@ -190,5 +188,5 @@ test('reverb accepts a websocket connection', function () {
     $response = (string) fread($socket, 1024);
     fclose($socket);
 
-    expect($response)->toContain('101', 'Reverb did not upgrade the connection. First bytes: '.substr($response, 0, 120));
+    expect($response)->toContain('101 Switching Protocols');
 });

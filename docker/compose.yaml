@@ -25,6 +25,10 @@ x-app-image: &app-image
     dockerfile: docker/app/Dockerfile
   image: na-live-support/app:dev
   env_file: ../.env
+  volumes:
+    # The image ships no .env (hygiene); the dev stack mounts the project's
+    # one read-only so artisan/tests see the same env the services got.
+    - ../.env:/app/.env:ro
   networks: [na-net]
   depends_on:
     postgres:
