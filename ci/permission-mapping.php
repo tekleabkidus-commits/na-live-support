@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 
-/** @var list<array<string, mixed>> $permissions */
+/** @var list<mixed> $permissions */
 $permissions = require $root.'/registries/permissions.php';
 
 /** @var array<string, string> $exempt route-name-or-uri => reason */
@@ -98,14 +98,14 @@ if ($unmapped !== []) {
     }
     if ($bootstrap) {
         printf(
-            "permission-mapping: WARN — %d unmapped route(s), tolerated ONLY while registries/permissions.php is empty. "
+            'permission-mapping: WARN — %d unmapped route(s), tolerated ONLY while registries/permissions.php is empty. '
             ."The first registered key flips this gate to blocking.\n",
             count($unmapped),
         );
         exit(0);
     }
     fwrite(STDERR, sprintf(
-        "permission-mapping: FAIL (%d unmapped route(s)). Registry has %d key(s), so bootstrap mode is over: "
+        'permission-mapping: FAIL (%d unmapped route(s)). Registry has %d key(s), so bootstrap mode is over: '
         ."every route needs `permission:<key>` middleware or an entry in ci/permission-exempt-routes.php.\n",
         count($unmapped),
         count($registeredKeys),

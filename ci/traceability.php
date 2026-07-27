@@ -66,7 +66,7 @@ $bootstrap = $entries === [];
 if ($unmapped !== []) {
     if ($bootstrap) {
         printf(
-            "traceability: WARN — %d of %d ACs across 19 documents are unmapped, tolerated ONLY while "
+            'traceability: WARN — %d of %d ACs across 19 documents are unmapped, tolerated ONLY while '
             ."registries/traceability.yaml is empty. The first entry flips this gate to blocking.\n",
             count($unmapped),
             count($allAcs),

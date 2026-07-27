@@ -212,8 +212,8 @@ final class RegistryCheck extends Command
                     'string', 'encrypted-string' => is_string($entry['default']),
                     'int' => is_int($entry['default']),
                     'bool' => is_bool($entry['default']),
-                    'json' => is_array($entry['default']),
-                    default => false,
+                    // in_array() above guarantees the only remaining type is json
+                    default => is_array($entry['default']),
                 };
                 if (! $defaultOk) {
                     $this->errors[] = sprintf('%s: default does not match declared type "%s"', $ref, $type);

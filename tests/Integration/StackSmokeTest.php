@@ -73,7 +73,7 @@ function redisClient(string $envPrefix, string $fallbackHost, int $fallbackPort)
     if ($target === null) {
         throw new RuntimeException($envPrefix.' Redis unreachable — is the stack up? Run `make up` first.');
     }
-    $client = new Redis();
+    $client = new Redis;
     $client->connect($target[0], $target[1], 2);
 
     return $client;
@@ -190,5 +190,5 @@ test('reverb accepts a websocket connection', function () {
     $response = (string) fread($socket, 1024);
     fclose($socket);
 
-    expect($response)->toContain('101', "Reverb did not upgrade the connection. First bytes: ".substr($response, 0, 120));
+    expect($response)->toContain('101', 'Reverb did not upgrade the connection. First bytes: '.substr($response, 0, 120));
 });

@@ -17,4 +17,12 @@ export default defineConfigWithVueTs(
     pluginVue.configs['flat/recommended'],
     vueTsConfigs.recommended,
     prettierConfig,
+    {
+        // Inertia page components are addressed by file path (Pages/Welcome),
+        // so single-word filenames are the framework convention, not a smell.
+        files: ['resources/js/Pages/**/*.vue'],
+        rules: {
+            'vue/multi-word-component-names': 'off',
+        },
+    },
 );

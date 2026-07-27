@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 
-/** @var list<array<string, mixed>> $coverage */
+/** @var list<mixed> $coverage */
 $coverage = require $root.'/registries/audit-coverage.php';
 
 /** @var array<string, string> $exempt route-uri-or-name => reason */
@@ -108,7 +108,7 @@ if ($uncovered !== []) {
     }
     if ($bootstrap) {
         printf(
-            "audit-coverage: WARN — %d uncovered mutating route(s), tolerated ONLY while registries/audit-coverage.php is empty. "
+            'audit-coverage: WARN — %d uncovered mutating route(s), tolerated ONLY while registries/audit-coverage.php is empty. '
             ."The first registered action flips this gate to blocking.\n",
             count($uncovered),
         );

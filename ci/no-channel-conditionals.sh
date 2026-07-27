@@ -23,7 +23,11 @@ if [ ${#DIRS[@]} -eq 0 ]; then
 fi
 
 # Conditional keywords followed (same line) by a quoted concrete channel name.
-PATTERN="(if|elseif|else if|switch|match|case)[^\n]*['\"](telegram|webchat|sms)['\"]"
+# NOTE: grep -E is line-based, so `.*` cannot cross lines here. An earlier
+# version used [^\n]*, which in POSIX ERE means "not backslash, not n" and
+# silently never matched `$channel` — caught by the Session 0 falsification
+# protocol. Gates must be seen to fail.
+PATTERN="\b(if|elseif|else if|switch|match|case)\b.*['\"](telegram|webchat|sms)['\"]"
 
 MATCHES=$(grep -rnE --include='*.php' "$PATTERN" "${DIRS[@]}" 2>/dev/null || true)
 

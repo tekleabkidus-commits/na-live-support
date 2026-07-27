@@ -56,6 +56,7 @@ function filesUnder(string $dir, string $suffix): array
 /** Letters (Latin or Ethiopic) — 2+ in a row means "a word a human reads". */
 const WORD_RE = '[A-Za-z\x{1200}-\x{137F}]{2,}';
 
+/** @param array<string, list<string>> $allowlist */
 function isAllowed(string $relative, string $text, array $allowlist): bool
 {
     $text = trim($text);
@@ -68,6 +69,10 @@ function isAllowed(string $relative, string $text, array $allowlist): bool
     return false;
 }
 
+/**
+ * @param  array<string, list<string>>  $allowlist
+ * @param  list<string>  $violations
+ */
 function checkTemplateText(string $template, string $relative, array $allowlist, array &$violations): void
 {
     // (a) text nodes: text between > and < that is not an i18n interpolation.
@@ -119,7 +124,7 @@ if ($violations !== []) {
         fwrite(STDERR, "string-lint: $v\n");
     }
     fwrite(STDERR, sprintf(
-        "string-lint: FAIL (%d violation(s)). User-visible strings must be i18n keys "
+        'string-lint: FAIL (%d violation(s)). User-visible strings must be i18n keys '
         ."(Doc 01 FR-09). Genuine exceptions go in ci/string-lint-allowlist.php with a reason.\n",
         count($violations),
     ));
