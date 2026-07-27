@@ -1,0 +1,92 @@
+# CI gate inventory (CLAUDE.md §2, Doc 18 FR-08 / T-02).
+#
+# Every gate that runs in the pipeline is registered here; `make gates` runs
+# exactly this list, in order. Removing or skipping a gate requires a signed
+# change file in ci/skips/ that the gate-skip-guard verifies — a release that
+# "temporarily disables" a gate is the incident precursor this exists to stop.
+#
+# Entry schema (all fields required):
+#   gate_id:     kebab-case unique id, e.g. string-lint
+#   name:        human-readable one-liner
+#   command:     the exact command `make gates` executes (relative to repo root)
+#   owning_doc:  DocNN that mandates the gate
+#   owning_ac:   the AC id (or FR id) in that doc the gate enforces
+#   owner:       who answers when it fails (role, not person)
+#   added_date:  YYYY-MM-DD
+#   blocking:    true  (a non-blocking "gate" is not a gate; bootstrap-mode
+#                gates print WARN while their registry is empty but still
+#                exit 0 — the flip to hard failure is implemented in the
+#                gate script itself, not by setting this to false)
+
+gates:
+  - gate_id: registry-check
+    name: All six registries are well-formed and cross-consistent
+    command: php artisan registry:check
+    owning_doc: Doc18
+    owning_ac: FR-08
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: string-lint
+    name: No user-visible string literals outside the i18n layer
+    command: php ci/string-lint.php
+    owning_doc: Doc01
+    owning_ac: FR-09
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: no-channel-conditionals
+    name: No telegram/webchat/sms conditionals in domain code
+    command: bash ci/no-channel-conditionals.sh
+    owning_doc: Doc04
+    owning_ac: T-09
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: migration-safety
+    name: Migrations are expand-contract and lock-safe
+    command: php ci/migration-safety.php
+    owning_doc: Doc18
+    owning_ac: FR-09
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: permission-mapping
+    name: Every registered route maps to a registered permission key
+    command: php ci/permission-mapping.php
+    owning_doc: Doc03
+    owning_ac: AC-01
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: audit-coverage
+    name: Every state-mutating action has an audit-coverage entry
+    command: php ci/audit-coverage.php
+    owning_doc: Doc17
+    owning_ac: AC-01
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: traceability
+    name: Every AC in /docs maps to a test entry
+    command: php ci/traceability.php
+    owning_doc: Doc19
+    owning_ac: FR-02
+    owner: qa
+    added_date: "2026-07-27"
+    blocking: true
+
+  - gate_id: gate-skip-guard
+    name: Skipped gates require a signed change file in ci/skips/
+    command: bash ci/gate-skip-guard.sh
+    owning_doc: Doc18
+    owning_ac: FR-08
+    owner: platform-engineering
+    added_date: "2026-07-27"
+    blocking: true

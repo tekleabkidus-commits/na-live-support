@@ -1,0 +1,222 @@
+# Na Live Support — local/CI stack (Session 0, Doc 18 §4).
+# Parity rule (Doc 01 SEC-01): RLS, Octane, and real queue workers are ON
+# here. Local is never a softer environment than production.
+#
+# Host ports: app 80 · reverb 8080 · postgres 5432 · redis-volatile 6379 ·
+# redis-durable 6380 · meilisearch 7700 · minio 9000/9001 · mailpit 8025/1025.
+# Mocks and clamav are reachable on the private network only.
+
+name: na-live-support
+
+networks:
+  na-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-durable-data:
+  meilisearch-data:
+  minio-data:
+  clamav-data:
+
+x-app-image: &app-image
+  build:
+    context: ..
+    dockerfile: docker/app/Dockerfile
+  image: na-live-support/app:dev
+  env_file: ../.env
+  networks: [na-net]
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis-volatile:
+      condition: service_healthy
+    redis-durable:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app-image
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  worker:
+    <<: *app-image
+    command: ["php", "artisan", "horizon"]
+    healthcheck:
+      test: ["CMD", "php", "artisan", "horizon:status"]
+      interval: 15s
+      timeout: 10s
+      retries: 6
+      start_period: 20s
+
+  scheduler:
+    <<: *app-image
+    command: ["php", "artisan", "schedule:work"]
+    healthcheck:
+      test: ["CMD", "php", "-v"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  reverb:
+    <<: *app-image
+    command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "php -r 'exit(@fsockopen(\"localhost\", 8080) ? 0 : 1);'"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_local_password
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis-volatile:
+    image: redis:7
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis/volatile.conf:/usr/local/etc/redis/redis.conf:ro
+    ports:
+      - "6379:6379"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  redis-durable:
+    image: redis:7
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis/durable.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis-durable-data:/data
+    ports:
+      - "6380:6379"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.16
+    environment:
+      MEILI_MASTER_KEY: local_master_key
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meilisearch-data:/meili_data
+    ports:
+      - "7700:7700"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7700/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  minio:
+    image: minio/minio:latest
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: minio_local
+      MINIO_ROOT_PASSWORD: minio_local_secret
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  clamav:
+    image: clamav/clamav:stable
+    volumes:
+      - clamav-data:/var/lib/clamav
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "clamdcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 180s
+
+  mock-telegram:
+    build:
+      context: ./mocks
+      args: { SERVICE: telegram }
+    image: na-live-support/mock-telegram:dev
+    environment: { PORT: 8081 }
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  mock-sms:
+    build:
+      context: ./mocks
+      args: { SERVICE: sms }
+    image: na-live-support/mock-sms:dev
+    environment: { PORT: 8082 }
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  mock-ai:
+    build:
+      context: ./mocks
+      args: { SERVICE: ai }
+    image: na-live-support/mock-ai:dev
+    environment: { PORT: 8083 }
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 6

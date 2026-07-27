@@ -1,0 +1,20 @@
+# Test traceability matrix (CLAUDE.md §2, Doc 19 FR-02).
+#
+# Every Acceptance Criterion in Docs 01–19 §18 maps to ≥ 1 automated test, or
+# to a justified manual/drill entry. The `traceability` CI gate cross-checks
+# this file against /docs and against the test tree; an unmapped AC fails the
+# build once this registry is non-empty (bootstrap flip — see ci/traceability.php).
+#
+# Entry schema (all fields required):
+#   ac_ref:      "DocNN AC-XX" — must exist verbatim in that document
+#   suite_path:  repo-relative test path, e.g. tests/Isolation/TenantScopeTest.php
+#                (or "manual" — then `justification` is required)
+#   type:        automated | manual | drill
+#   tier:        unit | contract | integration | isolation | security | property | browser
+#   cadence:     every-push | nightly | weekly | release
+#   environment: local | ci | staging | production-smoke
+#   owner:       role answerable for the test (e.g. qa, platform-engineering)
+
+entries: []
+# Intentionally empty in Session 0. The first entries arrive with Doc 01's
+# acceptance criteria (AC-01, AC-02 isolation suites).

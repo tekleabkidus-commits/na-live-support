@@ -5,7 +5,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
-| — | Repo bootstrap + CI gates | NOT STARTED | S0 | — | |
+| — | Repo bootstrap + CI gates | IN PROGRESS | S0 | — | Laravel 13.23; 8 gates live (3 in bootstrap-warn mode); stack + smoke pending proof this session |
 | 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |

@@ -1,58 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Na Live Support
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+AI-first, white-label customer support platform for betting operators.
+Ethiopia first: Amharic + English, Telegram-dominant, local SMS gateways.
 
-## About Laravel
+**Start here:** [CLAUDE.md](CLAUDE.md) is the project constitution. The 19
+specification documents in [docs/](docs/) are law. [docs/BUILD-STATUS.md](docs/BUILD-STATUS.md)
+says what is actually built and proven.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Installed versions (checked, not assumed — Session 0, 2026-07-27)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Layer | Version |
+|---|---|
+| PHP | 8.4.23 |
+| Laravel | **13.23.0** |
+| Octane / FrankenPHP | 2.18.0 / `dunglas/frankenphp:1-php8.4` image |
+| PostgreSQL | 16 (`postgres:16` image) |
+| Redis | 7 (`redis:7` image) × 2 instances |
+| Horizon | 5.48.1 |
+| Reverb | 1.11.0 |
+| Meilisearch | v1.16 (server) / 1.16.1 (client) · Scout 11.4.0 |
+| Pennant | 1.24.0 |
+| Fortify / Sanctum | 1.37.3 / 4.3.3 |
+| Nutgram | 4.49.0 (laravel bridge 1.7.1) |
+| Inertia | 3.1.1 (`@inertiajs/vue3` 3.6.1) |
+| Vue / TypeScript | 3.5.40 / 6.0.3 |
+| Vite / Tailwind | 8.1.5 / 4.3.3 |
+| Node / npm | 20.20.2 / 10.8.2 |
+| Pest | 4.7.5 |
+| Playwright / axe-core | 1.62.0 / @axe-core/playwright 4.12.1 |
+| PHPStan (max) | 2.2.6 via Larastan 3.10.0 |
+| Pint / ESLint / Prettier | 1.29.3 / 10.8.0 / 3.9.6 |
+| symfony/yaml | 8.1.1 (registry tooling — ADR 0001) |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## The owner's interface (Makefile)
 
-## Learning Laravel
+| Command | What it does |
+|---|---|
+| `make up` | bring the whole stack up (first run builds images) — app at http://localhost |
+| `make down` | stop the stack (data survives) |
+| `make fresh` | rebuild + migrate + seed from scratch (**destroys local data**) |
+| `make test` | full Pest suite — expects the stack up (`make up` first): parity means the integration/smoke tests talk to the real services |
+| `make gates` | every CI gate in `registries/gates.yaml` order, one PASS/FAIL line each + summary |
+| `make lint` | Pint + PHPStan (max) + ESLint + vue-tsc |
+| `make browser` | Playwright suite incl. axe-core accessibility scan (stack must be up) |
+| `make shell` | shell into the app container |
+| `make logs` | tail all services |
+| `make status` | what is running, what is healthy |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Stack topology (docker/compose.yaml)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+App, worker (Horizon, 11 queue-family supervisors), scheduler, reverb —
+one shared image. Postgres 16 (RLS-ready; separate `app` and `platform_admin`
+roles), redis-volatile (cache; LRU, no persistence) + redis-durable (queues;
+AOF) — **never merged** (ADR 0001), Meilisearch, MinIO, Mailpit, ClamAV, and
+three deterministic mock providers (`mock-telegram`, `mock-sms`, `mock-ai`)
+so CI and local dev never touch a real provider.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Host ports: app **80** · reverb **8080** · postgres **5432** ·
+redis-volatile **6379** · redis-durable **6380** · meilisearch **7700** ·
+minio **9000/9001** · mailpit **8025** (smtp 1025).
 
-## Agentic Development
+## Repository layout
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+See CLAUDE.md §5. Highlights: `/docs` (the law) · `/registries` (the six
+constitution registries) · `/ci` (gate scripts) · `/docker` (stack) ·
+`/widget` (standalone Preact iframe bundle, Wave 2) · `/sidecars/smpp`
+(Go/Node SMPP sidecar — SMPP is never implemented in PHP, ADR 0001).

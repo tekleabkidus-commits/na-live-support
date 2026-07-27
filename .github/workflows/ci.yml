@@ -1,0 +1,114 @@
+# Na Live Support CI (Doc 18 FR-07 stage order):
+#   lint+static → unit → integration (ephemeral stack) → browser →
+#   performance budgets → (deploy stages stubbed until Doc 18's session)
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-static:
+    name: "Stage 1: lint + static + gates"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pcntl, redis, pdo_pgsql, intl, zip, gd, bcmath
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci
+      - run: cp .env.example .env && php artisan key:generate
+      - run: ./vendor/bin/pint --test
+      - run: ./vendor/bin/phpstan analyse --memory-limit=1G
+      - run: npx eslint resources/js tests/Browser
+      - run: npx vue-tsc --noEmit
+      - name: CI gates (registries/gates.yaml order)
+        run: bash ci/run-gates.sh
+
+  unit:
+    name: "Stage 2: unit"
+    runs-on: ubuntu-latest
+    needs: lint-static
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pcntl, redis, pdo_pgsql, intl, zip, gd, bcmath
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
+      - run: cp .env.example .env && php artisan key:generate
+      - run: ./vendor/bin/pest --testsuite=Unit,Feature
+
+  integration:
+    name: "Stage 3: integration (ephemeral stack)"
+    runs-on: ubuntu-latest
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp .env.example .env
+      - name: Bring up the ephemeral stack (same compose as local — parity)
+        run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 300
+      - run: docker compose -f docker/compose.yaml exec -T app php artisan key:generate --force
+      - name: Integration + smoke suites inside the stack
+        run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --testsuite=Integration
+      - name: Stack teardown
+        if: always()
+        run: docker compose -f docker/compose.yaml down -v
+
+  browser:
+    name: "Stage 4: browser (Playwright + axe)"
+    runs-on: ubuntu-latest
+    needs: integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: cp .env.example .env
+      - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 300
+      - run: docker compose -f docker/compose.yaml exec -T app php artisan key:generate --force
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env:
+          BASE_URL: http://localhost
+      - if: always()
+        run: docker compose -f docker/compose.yaml down -v
+
+  performance:
+    name: "Stage 5: performance budgets (placeholder until Doc 19 L1 profile)"
+    runs-on: ubuntu-latest
+    needs: browser
+    steps:
+      - uses: actions/checkout@v4
+      - name: Performance budgets
+        run: |
+          echo "Performance budgets run here from Doc 19's L1 load profile onward."
+          echo "Session 0 has no budgets to enforce yet; this stage exists so the"
+          echo "pipeline shape (Doc 18 FR-07) is fixed from the first commit."
+
+  # ---- deploy stages (stubbed; Doc 18's session implements them) ----------
+  deploy-staging:
+    name: "Stage 6: deploy to staging (STUB)"
+    runs-on: ubuntu-latest
+    needs: performance
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - run: echo "STUB — staging deploy is implemented in Doc 18's session."
+
+  deploy-production:
+    name: "Stage 7: deploy to production (STUB, manual approval)"
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: false  # never runs until Doc 18's session wires environments + approvals
+    steps:
+      - run: echo "STUB — production deploy is implemented in Doc 18's session."
