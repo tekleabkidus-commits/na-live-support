@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    # CLAUDE.md §3: PHPStan at max level. Do not lower this; fix the code.
+    level: max
+    paths:
+        - app
+        - registries
+        - ci
+        - database
+        - routes
+    excludePaths:
+        - database/migrations (?)

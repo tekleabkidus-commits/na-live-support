@@ -1,7 +1,51 @@
+# --- project intake (originals live in _intake/, working copies in extracted/; never commit) ---
 _intake/
 extracted/
-vendor/
-node_modules/
+
+# --- dependencies ---
+/vendor/
+/node_modules/
+/widget/node_modules/
+
+# --- environment & secrets ---
 .env
-Thumbs.db
+.env.*
+!.env.example
+/auth.json
+
+# --- Laravel runtime ---
+/storage/*.key
+/storage/pail
+/public/build
+/public/hot
+/public/storage
+/bootstrap/cache/*.php
+database/database.sqlite
+
+# --- test & tooling output ---
+/.phpunit.cache
+/coverage
+/playwright-report
+/test-results
+/.phpstan.cache
+/.pint.cache
+
+# --- octane / frankenphp ---
+/frankenphp
+frankenphp-worker.php
+/caddy
+
+# --- editors & OS noise ---
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
 .DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# --- logs ---
+*.log
+
+**/caddy
