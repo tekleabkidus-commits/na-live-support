@@ -5,7 +5,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
-| — | Repo bootstrap + CI gates | IN PROGRESS (CI red) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored; performance stage is a placeholder until Doc 19 L1. CI HAS run (3 runs) — latest on main is RED at Stage 2; Stages 3–7 have never executed |
+| — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed |
 | 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
@@ -44,3 +44,12 @@ _(Claude Code appends here. Every deferral needs a spec id and a reason.)_
 ## Open blockers
 
 _(Claude Code appends here. Only the owner can clear these.)_
+
+- **Dev host: native `redis-server` is still enabled and running** (`UnitFileState=enabled`,
+  `ActiveState=active`, PID 179). It binds `127.0.0.1:6379` and shadows the container's published
+  redis-volatile port. `sudo systemctl disable --now redis-server` was attempted but did not reach
+  this systemd instance — the journal shows no stop event after the boot start. The smoke test can
+  no longer connect to it silently (see close-out notes), but any S1 code run from the host against
+  `localhost:6379` still would. Owner action: re-run the disable, then
+  `docker compose -f docker/compose.yaml up -d redis-volatile` to reclaim the port. CI is
+  unaffected — runners have no native Redis.
