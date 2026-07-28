@@ -7,10 +7,13 @@ declare(strict_types=1);
 | Session 0 Part G — proof-of-life smoke test.
 |------------------------------------------------------------------------------
 |
-| Runs against the REAL Docker stack (`make up`), from inside the app
-| container or from the host (published ports). It does not skip: if the
-| stack is down, it fails loudly — parity (Doc 01 SEC-01) means the stack IS
-| the local environment.
+| Runs against the REAL Docker stack, from INSIDE the app container (`make
+| test`). It does not skip: if the stack is down, it fails loudly — parity
+| (Doc 01 SEC-01) means the stack IS the local environment.
+|
+| The Redis checks resolve container DNS only, with no localhost fallback: a
+| native redis-server on the host shadows the published 6379 and would be
+| asserted against silently. See redisEndpoint().
 |
 | Asserts:
 |   1. the running app answers /up (the actual Octane/FrankenPHP server)
@@ -63,18 +66,41 @@ function pgConnection(string $user, string $password): PDO
     );
 }
 
-function redisClient(string $envPrefix, string $fallbackHost, int $fallbackPort): Redis
+/**
+ * Resolve a Redis endpoint from container DNS ONLY — never localhost.
+ *
+ * There is deliberately no host-port fallback here. A native redis-server on
+ * the developer's machine binds 127.0.0.1:6379 and shadows the container's
+ * published port, so a `localhost` fallback lets this suite connect to the
+ * WRONG server and assert against it — silently, with the stack up and healthy.
+ * That is precisely the failure this smoke test exists to catch, so it must
+ * fail loudly instead of degrading. Run it inside the stack: `make test`.
+ */
+function redisEndpoint(string $envPrefix, string $defaultHost): array
 {
-    $candidates = [
-        [getenv($envPrefix.'_HOST') ?: $fallbackHost, (int) (getenv($envPrefix.'_PORT') ?: 6379)],
-        ['localhost', $fallbackPort],
-    ];
-    $target = reachable($candidates);
-    if ($target === null) {
-        throw new RuntimeException($envPrefix.' Redis unreachable — is the stack up? Run `make up` first.');
+    $host = getenv($envPrefix.'_HOST') ?: $defaultHost;
+    $port = (int) (getenv($envPrefix.'_PORT') ?: 6379);
+
+    if (reachable([[$host, $port]]) === null) {
+        throw new RuntimeException(sprintf(
+            '%s Redis unreachable at %s:%d. This suite runs INSIDE the stack — use `make test`, '
+            .'not pest from the host. (No localhost fallback exists: a host Redis would answer '
+            .'and the assertions below would silently target the wrong server.)',
+            $envPrefix,
+            $host,
+            $port,
+        ));
     }
+
+    return [$host, $port];
+}
+
+function redisClient(string $envPrefix, string $defaultHost): Redis
+{
+    [$host, $port] = redisEndpoint($envPrefix, $defaultHost);
+
     $client = new Redis;
-    $client->connect($target[0], $target[1], 2);
+    $client->connect($host, $port, 2);
 
     return $client;
 }
@@ -118,8 +144,8 @@ test('app credentials cannot authenticate as platform_admin', function () {
 });
 
 test('both redis instances respond and are distinct servers with opposite personalities', function () {
-    $volatile = redisClient('REDIS_VOLATILE', 'redis-volatile', 6379);
-    $durable = redisClient('REDIS_DURABLE', 'redis-durable', 6380);
+    $volatile = redisClient('REDIS_VOLATILE', 'redis-volatile');
+    $durable = redisClient('REDIS_DURABLE', 'redis-durable');
 
     expect($volatile->ping())->toBeTrue()
         ->and($durable->ping())->toBeTrue();
@@ -143,13 +169,13 @@ test('both redis instances respond and are distinct servers with opposite person
 });
 
 test('horizon supervises all eleven queue families', function () {
-    // Point Laravel's redis config at whichever durable endpoint is
-    // reachable from here (container DNS or host-published port).
-    $target = reachable([[getenv('REDIS_DURABLE_HOST') ?: 'redis-durable', 6379], ['localhost', 6380]]);
-    expect($target)->not->toBeNull('durable Redis unreachable — run `make up`');
+    // Point Laravel's redis config at the durable endpoint. Container DNS
+    // only — see redisEndpoint(): a localhost fallback could reach a host
+    // Redis and read someone else's queue state.
+    [$host, $port] = redisEndpoint('REDIS_DURABLE', 'redis-durable');
     config([
-        'database.redis.durable.host' => $target[0],
-        'database.redis.durable.port' => $target[1],
+        'database.redis.durable.host' => $host,
+        'database.redis.durable.port' => $port,
     ]);
 
     $masters = app(MasterSupervisorRepository::class)->all();
