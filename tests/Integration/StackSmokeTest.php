@@ -11,9 +11,10 @@ declare(strict_types=1);
 | test`). It does not skip: if the stack is down, it fails loudly — parity
 | (Doc 01 SEC-01) means the stack IS the local environment.
 |
-| The Redis checks resolve container DNS only, with no localhost fallback: a
-| native redis-server on the host shadows the published 6379 and would be
-| asserted against silently. See redisEndpoint().
+| EVERY endpoint resolves via container DNS only, with no localhost fallback:
+| a host service on the same published port (a native redis-server on 6379, an
+| unrelated Postgres on 5432) would answer and be asserted against silently.
+| See stackEndpoint().
 |
 | Asserts:
 |   1. the running app answers /up (the actual Octane/FrankenPHP server)
@@ -36,63 +37,71 @@ const QUEUE_FAMILIES = [
     'ai', 'sms', 'automation', 'reports', 'outbox-relay', 'audit',
 ];
 
-/** First host:port that accepts a TCP connection — container DNS or localhost. */
-function reachable(array $candidates): ?array
+/** True if host:port accepts a TCP connection within the timeout. */
+function reachable(string $host, int $port): bool
 {
-    foreach ($candidates as [$host, $port]) {
-        $s = @fsockopen($host, $port, $errno, $errstr, 2);
-        if ($s !== false) {
-            fclose($s);
-
-            return [$host, $port];
-        }
+    $s = @fsockopen($host, $port, $errno, $errstr, 2);
+    if ($s === false) {
+        return false;
     }
+    fclose($s);
 
-    return null;
-}
-
-function pgConnection(string $user, string $password): PDO
-{
-    $target = reachable([[getenv('DB_HOST') ?: 'postgres', 5432], ['localhost', 5432]]);
-    if ($target === null) {
-        throw new RuntimeException('Postgres unreachable — is the stack up? Run `make up` first.');
-    }
-
-    return new PDO(
-        sprintf('pgsql:host=%s;port=%d;dbname=na_live_support', $target[0], $target[1]),
-        $user,
-        $password,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_TIMEOUT => 3],
-    );
+    return true;
 }
 
 /**
- * Resolve a Redis endpoint from container DNS ONLY — never localhost.
+ * Resolve a stack endpoint from container DNS ONLY — never localhost.
  *
- * There is deliberately no host-port fallback here. A native redis-server on
- * the developer's machine binds 127.0.0.1:6379 and shadows the container's
- * published port, so a `localhost` fallback lets this suite connect to the
- * WRONG server and assert against it — silently, with the stack up and healthy.
- * That is precisely the failure this smoke test exists to catch, so it must
- * fail loudly instead of degrading. Run it inside the stack: `make test`.
+ * There is deliberately no host-port fallback anywhere in this suite. A
+ * developer machine routinely runs its own services on the very ports the
+ * stack publishes — this one has had a native redis-server on 6379 and an
+ * unrelated `kiron-db` Postgres container — so a `localhost` fallback lets the
+ * suite connect to the WRONG server and assert against it, silently, with the
+ * stack up and healthy. That is precisely the failure this smoke test exists
+ * to catch, so it must fail loudly instead of degrading. A fallback also hides
+ * a broken container network behind a green run, which is worse than a red one.
+ *
+ * Run it inside the stack: `make test`.
  */
-function redisEndpoint(string $envPrefix, string $defaultHost): array
+function stackEndpoint(string $label, string $host, int $port): array
 {
-    $host = getenv($envPrefix.'_HOST') ?: $defaultHost;
-    $port = (int) (getenv($envPrefix.'_PORT') ?: 6379);
-
-    if (reachable([[$host, $port]]) === null) {
+    if (! reachable($host, $port)) {
         throw new RuntimeException(sprintf(
-            '%s Redis unreachable at %s:%d. This suite runs INSIDE the stack — use `make test`, '
-            .'not pest from the host. (No localhost fallback exists: a host Redis would answer '
-            .'and the assertions below would silently target the wrong server.)',
-            $envPrefix,
+            '%s unreachable at %s:%d. This suite runs INSIDE the stack — use `make test`, not '
+            .'pest from the host. (No localhost fallback exists: a host service on the same port '
+            .'would answer and the assertions below would silently target the wrong server.)',
+            $label,
             $host,
             $port,
         ));
     }
 
     return [$host, $port];
+}
+
+function pgConnection(string $user, string $password): PDO
+{
+    [$host, $port] = stackEndpoint(
+        'Postgres',
+        getenv('DB_HOST') ?: 'postgres',
+        (int) (getenv('DB_PORT') ?: 5432),
+    );
+
+    return new PDO(
+        sprintf('pgsql:host=%s;port=%d;dbname=na_live_support', $host, $port),
+        $user,
+        $password,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_TIMEOUT => 3],
+    );
+}
+
+function redisEndpoint(string $envPrefix, string $defaultHost): array
+{
+    return stackEndpoint(
+        $envPrefix.' Redis',
+        getenv($envPrefix.'_HOST') ?: $defaultHost,
+        (int) (getenv($envPrefix.'_PORT') ?: 6379),
+    );
 }
 
 function redisClient(string $envPrefix, string $defaultHost): Redis
@@ -106,11 +115,10 @@ function redisClient(string $envPrefix, string $defaultHost): Redis
 }
 
 test('the running app server answers /up', function () {
-    $target = reachable([['app', 80], ['localhost', 80]]);
-    expect($target)->not->toBeNull('app server unreachable on app:80 / localhost:80 — run `make up`');
+    [$host, $port] = stackEndpoint('App server', 'app', 80);
 
     $ctx = stream_context_create(['http' => ['timeout' => 5]]);
-    $body = @file_get_contents(sprintf('http://%s:%d/up', $target[0], $target[1]), false, $ctx);
+    $body = @file_get_contents(sprintf('http://%s:%d/up', $host, $port), false, $ctx);
     $status = isset($http_response_header[0]) ? $http_response_header[0] : 'no response';
 
     expect($body)->not->toBeFalse('GET /up returned no body')
@@ -170,7 +178,7 @@ test('both redis instances respond and are distinct servers with opposite person
 
 test('horizon supervises all eleven queue families', function () {
     // Point Laravel's redis config at the durable endpoint. Container DNS
-    // only — see redisEndpoint(): a localhost fallback could reach a host
+    // only — see stackEndpoint(): a localhost fallback could reach a host
     // Redis and read someone else's queue state.
     [$host, $port] = redisEndpoint('REDIS_DURABLE', 'redis-durable');
     config([
@@ -196,15 +204,14 @@ test('horizon supervises all eleven queue families', function () {
 });
 
 test('reverb accepts a websocket connection', function () {
-    $target = reachable([['reverb', 8080], ['localhost', 8080]]);
-    expect($target)->not->toBeNull('Reverb unreachable on reverb:8080 / localhost:8080 — run `make up`');
+    [$host, $port] = stackEndpoint('Reverb', 'reverb', 8080);
 
     $key = getenv('REVERB_APP_KEY') ?: 'local-key';
-    $socket = fsockopen($target[0], $target[1], $errno, $errstr, 5);
+    $socket = fsockopen($host, $port, $errno, $errstr, 5);
     expect($socket)->not->toBeFalse("TCP connect to Reverb failed: $errstr");
 
     $handshake = "GET /app/$key HTTP/1.1\r\n"
-        ."Host: {$target[0]}:{$target[1]}\r\n"
+        ."Host: {$host}:{$port}\r\n"
         ."Upgrade: websocket\r\n"
         ."Connection: Upgrade\r\n"
         .'Sec-WebSocket-Key: '.base64_encode(random_bytes(16))."\r\n"

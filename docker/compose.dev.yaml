@@ -1,0 +1,47 @@
+# Dev-only source-delivery override (ADR 0002). NEVER used by CI.
+#
+# CI runs `docker compose -f docker/compose.yaml` with no override, so the
+# pipeline always builds and tests the baked, deterministic image. This file
+# changes exactly one thing on a developer machine: HOW SOURCE REACHES THE
+# CONTAINER. Everything that constitutes the security posture — RLS, the `app`
+# / `platform_admin` role split, the two-Redis separation, real Horizon
+# workers, Octane — lives in compose.yaml and is untouched here, so local is
+# still never a softer environment than CI (Doc 01 SEC-01).
+#
+# Why the anonymous volumes: a bare `..:/app` bind mount shadows the image's
+# own vendor/, node_modules/ and public/build/ with whatever the host happens
+# to have — or, on a fresh clone, with nothing at all, which would break the
+# served app in a way that looks like an application bug. Each anonymous
+# volume pins that path back to the image's copy. storage/ and bootstrap/cache
+# stay container-owned too, so runtime state is identical to CI and the
+# container never writes root-owned files into the working tree.
+#
+# Anonymous volumes are themselves a staleness risk (Docker will happily reuse
+# one built from an older image), which is why `make up` passes
+# --renew-anon-volumes. Changing composer.json, package.json or the Dockerfile
+# still requires a rebuild — only PHP/JS source is live.
+
+name: na-live-support
+
+x-dev-source: &dev-source
+  volumes:
+    - ..:/app
+    # Container-owned paths — the image's copy wins over the bind mount.
+    - /app/vendor
+    - /app/node_modules
+    - /app/public/build
+    - /app/bootstrap/cache
+    - /app/storage
+
+services:
+  app:
+    <<: *dev-source
+
+  worker:
+    <<: *dev-source
+
+  scheduler:
+    <<: *dev-source
+
+  reverb:
+    <<: *dev-source

@@ -39,13 +39,21 @@ says what is actually built and proven.
 | `make up` | bring the whole stack up (first run builds images) — app at http://localhost |
 | `make down` | stop the stack (data survives) |
 | `make fresh` | rebuild + migrate + seed from scratch (**destroys local data**) |
-| `make test` | full Pest suite — expects the stack up (`make up` first): parity means the integration/smoke tests talk to the real services |
+| `make reload` | reload Octane + restart worker/scheduler/reverb so the long-lived processes re-read your edits (see ADR 0002) |
+| `make test` | full Pest suite — expects the stack up (`make up` first): parity means the integration/smoke tests talk to the real services. Runs `make reload` first, so a test can never assert against stale code |
 | `make gates` | every CI gate in `registries/gates.yaml` order, one PASS/FAIL line each + summary |
 | `make lint` | Pint + PHPStan (max) + ESLint + vue-tsc |
 | `make browser` | Playwright suite incl. axe-core accessibility scan (stack must be up) |
 | `make shell` | shell into the app container |
 | `make logs` | tail all services |
 | `make status` | what is running, what is healthy |
+
+The Makefile loads `docker/compose.yaml` **and** the dev-only override
+`docker/compose.dev.yaml`, which bind-mounts the working tree into the PHP
+services so local runs test the code you just edited. CI never loads the
+override — it names `compose.yaml` alone and always tests the immutable baked
+image. Rationale and the parity argument: [ADR 0002](docs/adr/0002-dev-source-delivery.md).
+Changing `composer.json`, `package.json` or the Dockerfile still needs `make up`.
 
 ## Stack topology (docker/compose.yaml)
 

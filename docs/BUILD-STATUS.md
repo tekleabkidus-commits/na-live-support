@@ -32,10 +32,15 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
   `tests/Feature/HealthEndpointTest.php` (`GET /up`): Stage 2 installs no Node and builds no
   assets, so the Inertia root view's `@vite` had no manifest and 500'd on every clean runner
   (CI run 30307818550) while passing locally. The full Inertia render stays proven by Stages 3–4.
-- `tests/Integration/StackSmokeTest.php` lost its silent `localhost` Redis fallback: a native
-  redis-server on the host shadows the published 6379, so the fallback could assert against the
-  wrong server with the stack up and healthy. The suite is now container-only (`make test`) and
-  fails with an explicit message instead.
+- `tests/Integration/StackSmokeTest.php` lost **every** silent `localhost` fallback — Redis first,
+  then Postgres and the app/Reverb HTTP checks. A host service on a published port (a native
+  redis-server on 6379, an unrelated Postgres on 5432) would answer and be asserted against with
+  the stack up and healthy. All five endpoints now resolve container DNS only through
+  `stackEndpoint()`; the suite is container-only (`make test`) and fails with an explicit message.
+- Dev source delivery changed (ADR 0002): `docker/compose.dev.yaml` bind-mounts the working tree
+  into app/worker/scheduler/reverb, and `make test` depends on a new `make reload`. CI does not
+  load the override. This fixes `make test` executing a *deleted* test from the baked image during
+  this close-out.
 
 ## Deferred with reason
 
@@ -45,11 +50,16 @@ _(Claude Code appends here. Every deferral needs a spec id and a reason.)_
 
 _(Claude Code appends here. Only the owner can clear these.)_
 
-- **Dev host: native `redis-server` is still enabled and running** (`UnitFileState=enabled`,
-  `ActiveState=active`, PID 179). It binds `127.0.0.1:6379` and shadows the container's published
-  redis-volatile port. `sudo systemctl disable --now redis-server` was attempted but did not reach
-  this systemd instance — the journal shows no stop event after the boot start. The smoke test can
-  no longer connect to it silently (see close-out notes), but any S1 code run from the host against
-  `localhost:6379` still would. Owner action: re-run the disable, then
-  `docker compose -f docker/compose.yaml up -d redis-volatile` to reclaim the port. CI is
-  unaffected — runners have no native Redis.
+- **Dev host: native `redis-server` is STILL enabled and running.** Reported disabled by the owner
+  twice; verified otherwise three times. Evidence at the last check: `is-active: active`,
+  `is-enabled: enabled`, `PING → PONG` on `127.0.0.1:6379`, and — decisively — the enable symlink
+  `/etc/systemd/system/multi-user.target.wants/redis-server.service` still carries its original
+  install mtime of **2026-04-06 18:03:48**. `systemctl disable` removes that symlink, so it has
+  never run successfully on this filesystem. The host rebooted at 2026-07-28 18:58:27 and redis
+  autostarted two seconds later, which is what an *enabled* unit does. Most likely the command ran
+  in a different WSL distro or errored unnoticed (`WSL_DISTRO_NAME=Ubuntu`, hostname `Kidus`).
+  Owner action: re-run it with the output visible (`! sudo systemctl disable --now redis-server`)
+  so the result is in the transcript, then the port can be reclaimed. **Impact is now bounded**:
+  no test can silently reach it (`stackEndpoint()` forbids every localhost fallback), but S1
+  application code run from the host against `localhost:6379` still would. CI is unaffected —
+  runners have no native Redis.
