@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | |
+| 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | Opening housekeeping before Doc 01 work: add the published-port listener assertion (see Deferred with reason) |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -45,6 +45,22 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 ## Deferred with reason
 
 _(Claude Code appends here. Every deferral needs a spec id and a reason.)_
+
+- **Published-port listener assertion in the stack smoke suite — ADOPTED by the owner
+  2026-07-30, scheduled for S1 opening housekeeping, deliberately not done in S0.**
+  `tests/Integration/StackSmokeTest.php` should assert that every port `docker/compose.yaml`
+  publishes has a real host listener, so a container reporting `healthy` while its host-side
+  `docker-proxy` silently failed to bind can never again pass unnoticed. Motivation is the
+  cleared redis blocker below: for ~53 minutes `redis-volatile` showed
+  `0.0.0.0:6379->6379` and `healthy` while `*:6379` was unbound and the native daemon served
+  every host connection. The healthcheck runs *inside* the container and structurally cannot
+  see this.
+
+  Reason for deferral, not a silent drop: S0's scope closed CI-proven on `af9562d`, and this
+  is new test surface no S0 document asks for — adding it here would be the "while I was in
+  there" work CLAUDE.md §0.5 prohibits. It carries no spec id yet; S1 should give it one
+  under Doc 18/19 coverage when it lands. Owner's ruling: it belongs to S1's opening
+  housekeeping, before Doc 01 implementation begins.
 
 ## Open blockers
 
