@@ -68,12 +68,33 @@ _(Claude Code appends here. Only the owner can clear these.)_
   not restarted in 50 hours. So the command has never reached this systemd. The symlink mtime says
   the same thing independently — `disable` unlinks it, and it still carries its April install mtime.
 
-  **Root cause (new): `sudo` on this host requires a password, and Claude Code's `!` shell is not a
-  TTY.** `sudo -n true` → `sudo: a password is required`, exit 1. Every
-  `! sudo systemctl disable --now redis-server` therefore fails at the sudo layer before systemd is
-  involved, and the failure is easy to miss in the scrollback. This is not a different-WSL-distro
-  problem (hostname `Kidus`, `WSL_DISTRO_NAME=Ubuntu`, both confirmed at the console) — the earlier
-  guess in this entry was wrong.
+  **Root cause — CONFIRMED by direct test, not inferred: `sudo` on this host requires a password,
+  and no shell reachable from Claude Code is a TTY.** Two independent probes:
+
+  ```
+  # in Claude Code's tool shell
+  sudo -n true
+  → sudo: a password is required                                        (exit 1)
+
+  # typed by the owner at the Claude Code prompt as: ! sudo systemctl disable --now redis-server
+  → sudo: a terminal is required to read the password; either use the -S option to read
+    from standard input or configure an askpass helper
+  → sudo: a password is required
+  ```
+
+  So **`sudo` can never be run from inside Claude Code on this host, by either path** — including
+  the `!` prefix, which is otherwise the way to run interactive commands. Every
+  `sudo systemctl disable --now redis-server` attempted here failed at the sudo layer before systemd
+  was involved, which is why the unit's 50-hour uptime is unbroken. The failure is easy to miss in
+  the scrollback, and a pasted command line that lacks the leading `!` never executes at all — it
+  arrives as chat text. Both of those account for the three "already disabled" reports.
+
+  This is *not* a different-WSL-distro problem (hostname `Kidus`, `WSL_DISTRO_NAME=Ubuntu`, both
+  confirmed at the console) — that earlier guess in this entry was wrong.
+
+  Do **not** work around this with `sudo -S` piping the password in: it would put the owner's
+  password into the transcript and the session logs, violating C-13. Privileged host changes on this
+  machine are owner-only, in a real terminal, full stop.
 
   **Impact is worse than previously recorded — the collision is live, not theoretical.** Docker
   publishes `redis-volatile` as `0.0.0.0:6379->6379`, but its `docker-proxy` never bound: `ss -ltn`
