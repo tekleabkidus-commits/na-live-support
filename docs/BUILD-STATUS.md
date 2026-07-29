@@ -50,90 +50,70 @@ _(Claude Code appends here. Every deferral needs a spec id and a reason.)_
 
 _(Claude Code appends here. Only the owner can clear these.)_
 
-- **Dev host: native `redis-server` is STILL enabled and running — and the root cause is now
-  known.** Reported disabled by the owner three times; verified otherwise four times (latest check
-  **2026-07-30 00:30 EAT**). This blocker stays OPEN and the volatile port is NOT reclaimed.
+_None open._
 
-  Evidence at the 4th check:
+## Cleared blockers
 
-  | Check | Result |
-  |---|---|
-  | `systemctl is-active redis-server` | `active` |
-  | `systemctl is-enabled redis-server` | `enabled` (`UnitFileState=enabled`) |
-  | `redis-cli -h 127.0.0.1 -p 6379 PING` | `PONG` |
-  | enable symlink `/etc/systemd/system/multi-user.target.wants/redis-server.service` | still present, mtime still **2026-04-06 18:03:48** |
-  | native redis `uptime_in_seconds` | `182142` (≈50 h 35 m) — running continuously since **2026-07-27 21:56:27**, matching systemd `ActiveEnterTimestamp` |
+- **CLEARED 2026-07-30 — Dev host: native `redis-server` occupying port 6379.** Open from
+  2026-07-27; reported disabled three times and verified otherwise four times before it actually
+  went. The owner ran `sudo systemctl disable --now redis-server` in an interactive Ubuntu terminal
+  (the only path that works — see the root cause below), then the port was reclaimed from this
+  session. Verified after the fact, not on report:
 
-  The uptime is the decisive datum: `systemctl disable --now` *stops* the unit, and this process has
-  not restarted in 50 hours. So the command has never reached this systemd. The symlink mtime says
-  the same thing independently — `disable` unlinks it, and it still carries its April install mtime.
+  | Check | Before | After |
+  |---|---|---|
+  | `systemctl is-active redis-server` | `active` | **`inactive`** (`SubState=dead`) |
+  | `systemctl is-enabled redis-server` | `enabled` | **`disabled`** (`UnitFileState=disabled`) |
+  | enable symlink in `multi-user.target.wants/` | present, mtime 2026-04-06 18:03:48 | **gone** — `No such file or directory` |
+  | `ps` for `/usr/bin/redis-server` | PID 179, 50 h uptime | **no match** |
+  | `ss -ltn` on 6379 | `127.0.0.1:6379` (native only) | **`*:6379`** (docker-proxy bound) |
 
-  **Root cause — CONFIRMED by direct test, not inferred: `sudo` on this host requires a password,
-  and no shell reachable from Claude Code is a TTY.** Two independent probes:
+  Port reclaimed with `docker compose -f docker/compose.yaml up -d --force-recreate redis-volatile`
+  — the recreate was necessary because the proxy had failed to bind at original start and does not
+  retry. Host `127.0.0.1:6379` now provably reaches the container, by matching `run_id`:
+
+  | Property | was (native) | now (redis-volatile) |
+  |---|---|---|
+  | `redis_version` | `7.0.15` | `7.4.10` |
+  | `executable` | `/usr/bin/redis-server` | `/data/redis-server` |
+  | `config_file` | `/etc/redis/redis.conf` | `/usr/local/etc/redis/redis.conf` |
+  | `maxmemory-policy` | `noeviction` | `allkeys-lru` |
+  | `maxmemory` | unset | `268435456` (256 mb) |
+  | `run_id` on host `:6379` | `985f883f…` | `5fc059e5b1d89436282972addd2b6b9df13c6624` |
+  | `run_id` inside the container | — | `5fc059e5b1d89436282972addd2b6b9df13c6624` — **identical** |
+
+  Instance separation (CLAUDE.md §3) re-verified intact afterwards: `:6380` is a distinct server
+  (`run_id c22971f2…`) with `appendonly yes` / `noeviction`, against volatile's `appendonly no` /
+  `allkeys-lru`. All 14 stack services `running / healthy`; `make test` 8 passed / 33 assertions,
+  including `both redis instances respond and are distinct servers with opposite …`.
+
+  **Root cause of the three false reports — confirmed by direct test, and it is a standing
+  constraint on this host, not a one-off.** `sudo` here requires a password and **no shell reachable
+  from Claude Code is a TTY**, by either path:
 
   ```
-  # in Claude Code's tool shell
+  # Claude Code tool shell
   sudo -n true
   → sudo: a password is required                                        (exit 1)
 
-  # typed by the owner at the Claude Code prompt as: ! sudo systemctl disable --now redis-server
+  # owner typing `! sudo systemctl disable --now redis-server` at the Claude Code prompt
   → sudo: a terminal is required to read the password; either use the -S option to read
     from standard input or configure an askpass helper
   → sudo: a password is required
   ```
 
-  So **`sudo` can never be run from inside Claude Code on this host, by either path** — including
-  the `!` prefix, which is otherwise the way to run interactive commands. Every
-  `sudo systemctl disable --now redis-server` attempted here failed at the sudo layer before systemd
-  was involved, which is why the unit's 50-hour uptime is unbroken. The failure is easy to miss in
-  the scrollback, and a pasted command line that lacks the leading `!` never executes at all — it
-  arrives as chat text. Both of those account for the three "already disabled" reports.
+  So every in-session attempt died at the sudo layer before systemd was involved — which is exactly
+  why the unit's 50-hour uptime stayed unbroken across three "already disabled" reports. A second
+  failure mode was observed directly: a command line pasted at the prompt **without** a leading `!`
+  never executes at all, it arrives as chat text. An earlier guess in this entry blamed a different
+  WSL distro; that was wrong (hostname `Kidus`, `WSL_DISTRO_NAME=Ubuntu`, confirmed at the console).
 
-  This is *not* a different-WSL-distro problem (hostname `Kidus`, `WSL_DISTRO_NAME=Ubuntu`, both
-  confirmed at the console) — that earlier guess in this entry was wrong.
-
-  Do **not** work around this with `sudo -S` piping the password in: it would put the owner's
-  password into the transcript and the session logs, violating C-13. Privileged host changes on this
-  machine are owner-only, in a real terminal, full stop.
-
-  **Impact is worse than previously recorded — the collision is live, not theoretical.** Docker
-  publishes `redis-volatile` as `0.0.0.0:6379->6379`, but its `docker-proxy` never bound: `ss -ltn`
-  shows **no** `*:6379` listener (contrast `*:6380`, which redis-durable's proxy holds), because the
-  native daemon already owns `127.0.0.1:6379`. The published mapping is cosmetic. Fingerprinting
-  `127.0.0.1:6379` from the host proves the **native** daemon answers, with the wrong eviction
-  policy for a volatile cache:
-
-  | Property | host `127.0.0.1:6379` (answering) | `redis-volatile` container (intended) |
-  |---|---|---|
-  | `redis_version` | `7.0.15` | `7.4.10` |
-  | `executable` | `/usr/bin/redis-server` | `/data/redis-server` |
-  | `config_file` | `/etc/redis/redis.conf` | `/usr/local/etc/redis/redis.conf` |
-  | `maxmemory-policy` | `noeviction` | `allkeys-lru` (per `docker/redis/volatile.conf`) |
-
-  The container's healthcheck runs *inside* the container, so it reports `healthy` and hides this.
-
-  Still bounded for tests and CI: no test can silently reach the native daemon
-  (`stackEndpoint()` forbids every localhost fallback, S0 close-out note above), and CI runners have
-  no native Redis — run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123)
-  on `af9562d` is green. The exposure is S1+ application code or any tool run from the host against
-  `localhost:6379`: it gets a `noeviction` 7.0.15 instance instead of the `allkeys-lru` 7.4.10 one.
-
-  **Owner action — must be run in a real interactive Ubuntu terminal, not through Claude Code**
-  (Claude Code cannot type a sudo password, which is why the last three attempts silently failed):
-
-  ```
-  sudo systemctl disable --now redis-server
-  systemctl is-active redis-server; systemctl is-enabled redis-server
-  ls -la /etc/systemd/system/multi-user.target.wants/redis-server.service
-  ```
-
-  Expect `inactive`, `disabled`, and `No such file or directory`. Then reclaim the port — the
-  container must be recreated, since its proxy failed to bind at start and will not retry:
-
-  ```
-  cd ~/projects/na-live-support && docker compose -f docker/compose.yaml up -d --force-recreate redis-volatile
-  redis-cli -h 127.0.0.1 -p 6379 info server | grep redis_version   # expect 7.4.10
-  redis-cli -h 127.0.0.1 -p 6379 config get maxmemory-policy        # expect allkeys-lru
-  ```
-
-  Paste that output and the blocker can be closed on evidence rather than on report.
+  **Standing rules that follow (apply to every future session):**
+  1. Privileged host changes on this machine are owner-only, executed in a real terminal. Never ask
+     for `! sudo …` — it cannot work.
+  2. Never work around it with `sudo -S` piping a password in: that serializes the owner's password
+     into the transcript and session logs, violating C-13.
+  3. Never treat a report of a completed host change as evidence. Verify the *effect* — unit state,
+     symlink presence, process uptime, and a `run_id`-level identity check on the service itself.
+  4. A `healthy` container does not mean its published port works: the healthcheck runs *inside* the
+     container and cannot see a failed host-side proxy bind. Check `ss -ltn` for a real listener.
