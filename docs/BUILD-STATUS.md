@@ -5,7 +5,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
-| — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed |
+| — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
@@ -50,16 +50,69 @@ _(Claude Code appends here. Every deferral needs a spec id and a reason.)_
 
 _(Claude Code appends here. Only the owner can clear these.)_
 
-- **Dev host: native `redis-server` is STILL enabled and running.** Reported disabled by the owner
-  twice; verified otherwise three times. Evidence at the last check: `is-active: active`,
-  `is-enabled: enabled`, `PING → PONG` on `127.0.0.1:6379`, and — decisively — the enable symlink
-  `/etc/systemd/system/multi-user.target.wants/redis-server.service` still carries its original
-  install mtime of **2026-04-06 18:03:48**. `systemctl disable` removes that symlink, so it has
-  never run successfully on this filesystem. The host rebooted at 2026-07-28 18:58:27 and redis
-  autostarted two seconds later, which is what an *enabled* unit does. Most likely the command ran
-  in a different WSL distro or errored unnoticed (`WSL_DISTRO_NAME=Ubuntu`, hostname `Kidus`).
-  Owner action: re-run it with the output visible (`! sudo systemctl disable --now redis-server`)
-  so the result is in the transcript, then the port can be reclaimed. **Impact is now bounded**:
-  no test can silently reach it (`stackEndpoint()` forbids every localhost fallback), but S1
-  application code run from the host against `localhost:6379` still would. CI is unaffected —
-  runners have no native Redis.
+- **Dev host: native `redis-server` is STILL enabled and running — and the root cause is now
+  known.** Reported disabled by the owner three times; verified otherwise four times (latest check
+  **2026-07-30 00:30 EAT**). This blocker stays OPEN and the volatile port is NOT reclaimed.
+
+  Evidence at the 4th check:
+
+  | Check | Result |
+  |---|---|
+  | `systemctl is-active redis-server` | `active` |
+  | `systemctl is-enabled redis-server` | `enabled` (`UnitFileState=enabled`) |
+  | `redis-cli -h 127.0.0.1 -p 6379 PING` | `PONG` |
+  | enable symlink `/etc/systemd/system/multi-user.target.wants/redis-server.service` | still present, mtime still **2026-04-06 18:03:48** |
+  | native redis `uptime_in_seconds` | `182142` (≈50 h 35 m) — running continuously since **2026-07-27 21:56:27**, matching systemd `ActiveEnterTimestamp` |
+
+  The uptime is the decisive datum: `systemctl disable --now` *stops* the unit, and this process has
+  not restarted in 50 hours. So the command has never reached this systemd. The symlink mtime says
+  the same thing independently — `disable` unlinks it, and it still carries its April install mtime.
+
+  **Root cause (new): `sudo` on this host requires a password, and Claude Code's `!` shell is not a
+  TTY.** `sudo -n true` → `sudo: a password is required`, exit 1. Every
+  `! sudo systemctl disable --now redis-server` therefore fails at the sudo layer before systemd is
+  involved, and the failure is easy to miss in the scrollback. This is not a different-WSL-distro
+  problem (hostname `Kidus`, `WSL_DISTRO_NAME=Ubuntu`, both confirmed at the console) — the earlier
+  guess in this entry was wrong.
+
+  **Impact is worse than previously recorded — the collision is live, not theoretical.** Docker
+  publishes `redis-volatile` as `0.0.0.0:6379->6379`, but its `docker-proxy` never bound: `ss -ltn`
+  shows **no** `*:6379` listener (contrast `*:6380`, which redis-durable's proxy holds), because the
+  native daemon already owns `127.0.0.1:6379`. The published mapping is cosmetic. Fingerprinting
+  `127.0.0.1:6379` from the host proves the **native** daemon answers, with the wrong eviction
+  policy for a volatile cache:
+
+  | Property | host `127.0.0.1:6379` (answering) | `redis-volatile` container (intended) |
+  |---|---|---|
+  | `redis_version` | `7.0.15` | `7.4.10` |
+  | `executable` | `/usr/bin/redis-server` | `/data/redis-server` |
+  | `config_file` | `/etc/redis/redis.conf` | `/usr/local/etc/redis/redis.conf` |
+  | `maxmemory-policy` | `noeviction` | `allkeys-lru` (per `docker/redis/volatile.conf`) |
+
+  The container's healthcheck runs *inside* the container, so it reports `healthy` and hides this.
+
+  Still bounded for tests and CI: no test can silently reach the native daemon
+  (`stackEndpoint()` forbids every localhost fallback, S0 close-out note above), and CI runners have
+  no native Redis — run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123)
+  on `af9562d` is green. The exposure is S1+ application code or any tool run from the host against
+  `localhost:6379`: it gets a `noeviction` 7.0.15 instance instead of the `allkeys-lru` 7.4.10 one.
+
+  **Owner action — must be run in a real interactive Ubuntu terminal, not through Claude Code**
+  (Claude Code cannot type a sudo password, which is why the last three attempts silently failed):
+
+  ```
+  sudo systemctl disable --now redis-server
+  systemctl is-active redis-server; systemctl is-enabled redis-server
+  ls -la /etc/systemd/system/multi-user.target.wants/redis-server.service
+  ```
+
+  Expect `inactive`, `disabled`, and `No such file or directory`. Then reclaim the port — the
+  container must be recreated, since its proxy failed to bind at start and will not retry:
+
+  ```
+  cd ~/projects/na-live-support && docker compose -f docker/compose.yaml up -d --force-recreate redis-volatile
+  redis-cli -h 127.0.0.1 -p 6379 info server | grep redis_version   # expect 7.4.10
+  redis-cli -h 127.0.0.1 -p 6379 config get maxmemory-policy        # expect allkeys-lru
+  ```
+
+  Paste that output and the blocker can be closed on evidence rather than on report.
