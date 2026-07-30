@@ -134,6 +134,11 @@ final class TenancyServiceProvider extends ServiceProvider
         $context = $this->app->make(TenantContext::class);
         $context->clear();
 
+        // Per-request audit counters (see AuditLogger::$recorded). Accumulating them across
+        // requests would let one request's audit entry satisfy the next request's
+        // `audit:` declaration.
+        \App\Support\Audit\AuditLogger::resetRecordedCounts();
+
         // Only touch connections that already exist. Resolving one here just to
         // clear it would open a connection on every idle tick.
         foreach ($this->app->make('db')->getConnections() as $name => $connection) {

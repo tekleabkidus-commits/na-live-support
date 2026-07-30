@@ -23,6 +23,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'tenant' => App\Http\Middleware\ResolveTenant::class,
             'tenant.state' => App\Http\Middleware\EnforceTenantState::class,
+            // Declares which audit action a mutating route emits, and verifies at runtime
+            // that it actually did. The `audit-coverage` gate reads these declarations.
+            'audit' => App\Http\Middleware\DeclareAuditAction::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

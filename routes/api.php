@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Foundation\IngressProbeController;
+use App\Http\Controllers\Foundation\TenantSettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,8 +26,7 @@ use Illuminate\Support\Facades\Route;
 | its probe with a genuine handler on the SAME middleware stack, which is exactly the
 | contract Doc 01 is supposed to hand them.
 |
-| FR-07's settings endpoints are absent, not stubbed: the settings engine was not
-| built this session and a route returning invented data is worse than no route.
+| The settings endpoints are real (FR-07's settings.read/write API) and stay.
 |
 */
 
@@ -44,11 +44,17 @@ Route::group([], function (): void {
         ->group(function (): void {
             Route::get('context', [IngressProbeController::class, 'show'])->name('foundation.staff.context');
 
-            // FR-07's settings.read/write API is NOT here yet. The settings engine
-            // was not built in this session (see docs/BUILD-STATUS.md); routes
-            // pointing at a controller that does not exist would break `route:list`
-            // and every gate that reads it, and stub routes returning fake data would
-            // be worse than absent ones.
+            // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
+            // which is a deletion of the override row rather than a write of the
+            // default — see SettingsRepository::reset().
+            Route::get('settings', [TenantSettingsController::class, 'index'])->name('foundation.settings.index');
+            Route::get('settings/{key}', [TenantSettingsController::class, 'show'])->name('foundation.settings.show');
+            Route::put('settings/{key}', [TenantSettingsController::class, 'update'])
+                ->middleware('audit:tenant.setting_changed')
+                ->name('foundation.settings.update');
+            Route::delete('settings/{key}', [TenantSettingsController::class, 'destroy'])
+                ->middleware('audit:tenant.setting_changed')
+                ->name('foundation.settings.reset');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.

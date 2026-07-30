@@ -84,10 +84,28 @@ foreach ($routes as $route) {
         continue;
     }
 
+    // Find the route's `audit:<action_key>` declaration.
+    //
+    // MATCHED ON BOTH SPELLINGS, because `route:list --json` reports middleware with
+    // aliases ALREADY RESOLVED: a route declaring `audit:tenant.setting_changed` comes
+    // back as `App\Http\Middleware\DeclareAuditAction:tenant.setting_changed`. The
+    // original form only looked for the alias, so it would have reported every properly
+    // declared route as uncovered — a false FAIL rather than a false PASS, but it was
+    // invisible until Doc 01 added the first mutating route, because Session 0 had none
+    // to test against.
+    //
+    // Accepting the alias too keeps the gate working if Laravel's output format changes
+    // back, and keeps it readable for anyone grepping for `audit:`.
     $action = null;
     foreach ($middlewareList as $mw) {
-        if (is_string($mw) && str_starts_with($mw, 'audit:')) {
-            $action = substr($mw, strlen('audit:'));
+        if (! is_string($mw) || ! str_contains($mw, ':')) {
+            continue;
+        }
+
+        [$head, $tail] = explode(':', $mw, 2);
+
+        if ($head === 'audit' || str_ends_with($head, 'DeclareAuditAction')) {
+            $action = $tail;
             break;
         }
     }

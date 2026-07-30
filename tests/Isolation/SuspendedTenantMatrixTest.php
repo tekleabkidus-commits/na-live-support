@@ -138,7 +138,14 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
         ac08MoveTo($tenant, $state);
 
         foreach (ac08Surfaces() as $surface => $spec) {
+            // BOTH layers cleared, not just the context. An earlier version cleared only
+            // TenantContext, which left `app.tenant_id` populated from the fixture — and
+            // the staff cells then passed because the resolver's tenant-state read
+            // succeeded on leftover session state rather than through the pre-context
+            // lookup a real request uses. A test that depends on ambient database state can
+            // be green while production is broken; this one was, briefly.
             app(TenantContext::class)->clear();
+            app(App\Support\Tenancy\RlsSession::class)->clear();
 
             $response = $spec['kind'] === null
                 ? $this->actingAs($staffUser)->json($spec['method'], $spec['uri'])

@@ -111,6 +111,36 @@ entries:
       (tenant_id, step) in tenant_provisioning_steps, but the provisioning job that
       would race against it was not built.
 
+  # ── FR-07 / T-04 / EC-06 / FS-01: the settings engine ──────────────────────
+  #
+  # Not an AC of Doc 01 §18, but Doc 19 FR-02 wants the mapping to be usable as an
+  # index, and these are the tests that prove the engine. Recorded against EC-06 and
+  # FS-01, which ARE named requirements with tests.
+  - ac_ref: "Doc01 EC-06"
+    suite_path: tests/Feature/Foundation/SettingsEngineTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Last-write-wins, both writes audited, conflict signalled to the loser. Uses a
+      database-side version counter rather than updated_at: EC-08 forbids app-clock
+      ordering, and Laravel's timestampTz(0) could not distinguish same-second writes
+      anyway.
+  - ac_ref: "Doc01 FS-01"
+    suite_path: tests/Feature/Foundation/SettingsEngineTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Redis pointed at a closed port — a real connection failure, not a mock — then reads
+      and writes both verified to still succeed from the database.
+
   # ── Doc 01 AC-06: Amharic rendering ────────────────────────────────────────
   - ac_ref: "Doc01 AC-06"
     suite_path: manual

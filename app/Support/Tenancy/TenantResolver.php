@@ -190,21 +190,28 @@ final class TenantResolver
 
     private function readState(string $tenantId, ResolutionSource $source): TenantState
     {
-        // Read through the platform-free path: `tenants` is RLS'd on `id`, and the
-        // context is not bound yet, so this uses the same SECURITY DEFINER-free
-        // route the resolver already needs — a direct read that RLS will filter once
-        // bound. Before binding we must therefore ask the database plainly, and the
-        // only row this can return is the one whose id we already hold.
-        /** @var list<object{state: string}> $rows */
-        $rows = DB::select('SELECT state FROM tenants WHERE id = ?', [$tenantId]);
+        // Through the SECURITY DEFINER function, NOT a direct SELECT.
+        //
+        // `tenants` is RLS-policed on `id` so that one tenant cannot observe another's
+        // existence (SEC-06), and resolution runs before any context is bound — so a direct
+        // read here fails with `invalid input syntax for type uuid: ""` when
+        // `app.tenant_id` is empty. That is the RLS layer correctly refusing an unscoped
+        // read; the fix is not to weaken it but to ask a narrow question through a function
+        // that may answer it. Exactly the same shape as resolve_tenant_key().
+        //
+        // See the create_resolve_tenant_state_function migration: a direct read passed its
+        // tests for a while only because fixtures had left the session variable populated.
+        /** @var list<object{state: string|null}> $rows */
+        $rows = DB::select('SELECT resolve_tenant_state(?::uuid) AS state', [$tenantId]);
+        $state = $rows[0]->state ?? null;
 
-        if ($rows === []) {
+        if (! is_string($state)) {
             $this->recordFailedResolution($source, $tenantId);
 
             throw TenantNotResolved::forSource($source);
         }
 
-        return TenantState::from($rows[0]->state);
+        return TenantState::from($state);
     }
 
     /**

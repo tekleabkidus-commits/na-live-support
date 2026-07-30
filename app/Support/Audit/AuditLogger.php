@@ -37,6 +37,21 @@ final class AuditLogger
     /** @var array<string, array<string, mixed>>|null */
     private static ?array $registry = null;
 
+    /**
+     * How many entries this process has written, per action key.
+     *
+     * Read by the DeclareAuditAction middleware to verify that a route which DECLARED an
+     * audit action actually wrote it. Static because the logger is resolved fresh per
+     * caller and the middleware needs a view across the whole request.
+     *
+     * Reset at Octane request boundaries by the same listener that scrubs tenancy state —
+     * a counter that accumulated across requests would let one request's audit satisfy the
+     * next request's declaration.
+     *
+     * @var array<string, int>
+     */
+    private static array $recorded = [];
+
     public function __construct(private readonly TenantContext $context) {}
 
     /**
@@ -73,6 +88,8 @@ final class AuditLogger
             // occurred_at and created_at default to now() IN THE DATABASE (EC-08):
             // an app-server wall clock must never order audit history.
         ]);
+
+        self::$recorded[$actionKey] = (self::$recorded[$actionKey] ?? 0) + 1;
     }
 
     /**
@@ -160,5 +177,21 @@ final class AuditLogger
     public static function forgetRegistry(): void
     {
         self::$registry = null;
+    }
+
+    /**
+     * How many entries with this action key this process has written.
+     */
+    public static function recordedCount(string $actionKey): int
+    {
+        return self::$recorded[$actionKey] ?? 0;
+    }
+
+    /**
+     * Clear the per-request counters (Octane request boundary).
+     */
+    public static function resetRecordedCounts(): void
+    {
+        self::$recorded = [];
     }
 }
