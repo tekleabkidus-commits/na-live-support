@@ -118,6 +118,28 @@ return new class extends Migration
                   AND k.hash = p_hash;
             $$;
         SQL);
+
+        // OWNERSHIP IS THE SECURITY BOUNDARY HERE, so it is set explicitly.
+        //
+        // A SECURITY DEFINER function runs as its owner. Owned by `migrator` — the
+        // default, since migrations run as migrator — the function was subject to
+        // FORCE ROW LEVEL SECURITY like any other owner, so its own query was
+        // filtered by `app.tenant_id`: the value it exists to discover. It failed
+        // with `invalid input syntax for type uuid: ""` and five of the six FR-03
+        // resolution paths could not resolve at all.
+        //
+        // `key_resolver` is NOLOGIN with BYPASSRLS and owns nothing else. Nobody can
+        // connect as it; its bypass is reachable only by invoking this function,
+        // whose body reads one row matched on an exact key hash. So the bypass is
+        // scoped to a function BODY rather than granted to a principal, and FORCE
+        // stays on every tenant table (owner ruling, S1).
+        DB::statement('ALTER FUNCTION resolve_tenant_key(text, text, text) OWNER TO key_resolver');
+
+        // Executing as key_resolver, the function needs its own read privileges —
+        // default privileges grant to app and platform_admin only. SELECT on exactly
+        // the two tables it joins, and nothing more.
+        DB::statement('GRANT SELECT ON tenant_keys TO key_resolver');
+        DB::statement('GRANT SELECT ON tenants TO key_resolver');
     }
 
     public function down(): void

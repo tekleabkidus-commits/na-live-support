@@ -45,7 +45,44 @@ abstract class TestCase extends BaseTestCase
 
         $this->migrateOnce();
 
+        $this->failFastInsteadOfHanging();
+
         DB::connection('pgsql')->beginTransaction();
+    }
+
+    /**
+     * A test may fail. A test may not hang.
+     *
+     * WHY THIS EXISTS. An isolation test tried `ALTER TABLE users DISABLE ROW LEVEL
+     * SECURITY` to prove the layers were independent. That needs ACCESS EXCLUSIVE,
+     * which conflicts with the row locks the test's own INSERTs held — so the ALTER
+     * waited on the test's transaction while the test waited on the ALTER. Pest was
+     * then killed by an external timeout, which left the backend "idle in
+     * transaction" with its locks still held AND the queued ALTER still pending. A
+     * pending ACCESS EXCLUSIVE request blocks every lock request behind it, so from
+     * that moment EVERY query against `users` hung — including the next three
+     * unrelated test runs, which each appeared to hang for their own reasons.
+     *
+     * One deadlock cost three misdiagnoses. Timeouts turn that whole class of
+     * incident into an immediate, named failure:
+     *
+     *   lock_timeout       a statement that cannot get its lock in 5 s fails, rather
+     *                      than queueing and taking the suite with it.
+     *   statement_timeout  a runaway query dies at 30 s instead of running until CI
+     *                      gives up with no useful output.
+     *   idle_in_transaction_session_timeout
+     *                      a killed test process cannot leave locks held forever;
+     *                      Postgres reaps the abandoned transaction after 60 s.
+     *
+     * Session-level, so they apply to everything the test does, including DDL issued
+     * on this connection.
+     */
+    private function failFastInsteadOfHanging(): void
+    {
+        $connection = DB::connection('pgsql');
+        $connection->statement("SET lock_timeout = '5s'");
+        $connection->statement("SET statement_timeout = '30s'");
+        $connection->statement("SET idle_in_transaction_session_timeout = '60s'");
     }
 
     protected function tearDown(): void

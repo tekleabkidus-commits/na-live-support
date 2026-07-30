@@ -1,14 +1,16 @@
 -- Database roles (Doc 01 T-01 / SEC-01 / SEC-02; ADR 0003).
 --
--- THREE roles, three jobs, and the separation is the point:
+-- FOUR roles, four jobs, and the separation is the point:
 --
 --   migrator       — owns the schema. Runs DDL and nothing else. NOBYPASSRLS.
 --   app            — the role every HTTP request, queued job and socket
 --                    connection uses. DML only: no CREATE, no ownership,
 --                    therefore NO ability to ALTER TABLE ... DISABLE ROW
 --                    LEVEL SECURITY. RLS APPLIES to it (no bypass).
---   platform_admin — the ONLY role that may bypass RLS. Used exclusively by
+--   platform_admin — the only LOGIN role that may bypass RLS. Used exclusively by
 --                    the platform console service account and retention jobs.
+--   key_resolver   — NOLOGIN. Owns one SECURITY DEFINER function and nothing
+--                    else; see the long note below it.
 --
 -- WHY THE migrator/app SPLIT EXISTS (ADR 0003, owner ruling D-3):
 -- In PostgreSQL the owner of a table is exempt from that table's RLS policies
@@ -36,6 +38,38 @@ CREATE ROLE migrator LOGIN PASSWORD 'migrator_local_password' NOSUPERUSER NOCREA
 CREATE ROLE app LOGIN PASSWORD 'app_local_password' NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
 CREATE ROLE platform_admin LOGIN PASSWORD 'platform_admin_local_password' NOSUPERUSER NOCREATEDB NOCREATEROLE BYPASSRLS;
 
+-- A FOURTH ROLE THAT NOBODY CAN LOG IN AS (owner ruling, S1).
+--
+-- key_resolver exists to own exactly one function: resolve_tenant_key(), the
+-- SECURITY DEFINER lookup that turns a presented credential into a tenant id.
+--
+-- WHY IT HAS TO EXIST. Resolution happens BEFORE a tenant is known — that is what
+-- resolution is — so the lookup cannot be filtered by `app.tenant_id`. A
+-- SECURITY DEFINER function executes as its OWNER, and the owner was `migrator`;
+-- but FORCE ROW LEVEL SECURITY applies policies to owners too, so the function's
+-- own query was filtered by the value it existed to discover, and failed with
+-- `invalid input syntax for type uuid: ""`. Five of the six FR-03 resolution paths
+-- could not resolve at all.
+--
+-- WHY NOLOGIN IS THE WHOLE POINT. The alternative fixes were to drop FORCE (which
+-- relaxes isolation on `tenants` and `tenant_keys` for any future data migration)
+-- or to give `migrator` BYPASSRLS (which hands a login role with credentials in the
+-- environment the ability to read every tenant's data). This role has no password,
+-- no LOGIN, and appears in no environment variable — it cannot be connected as by
+-- anyone, ever. Its BYPASSRLS is reachable only by invoking one function whose body
+-- reads a single row matched on an exact key hash, and the app role holds nothing on
+-- `tenant_keys` except EXECUTE on that function.
+--
+-- So the bypass is scoped to a function BODY rather than to a principal. Note that
+-- tests/Integration/StackSmokeTest.php asserts which roles may bypass RLS, and it
+-- names this one explicitly with this reasoning — a new BYPASSRLS role appearing
+-- without that justification is a Sev-1.
+CREATE ROLE key_resolver NOLOGIN BYPASSRLS;
+
+-- So that migrations (run as migrator) can assign the function's ownership. A role
+-- may only transfer ownership to a role it is a member of.
+GRANT key_resolver TO migrator;
+
 -- The schema owner owns the databases. `app` is deliberately NOT the owner.
 CREATE DATABASE na_live_support OWNER migrator;
 
@@ -50,7 +84,14 @@ CREATE DATABASE na_live_support_test OWNER migrator;
 
 ALTER SCHEMA public OWNER TO migrator;
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT USAGE ON SCHEMA public TO app, platform_admin;
+GRANT USAGE ON SCHEMA public TO app, platform_admin, key_resolver;
+
+-- key_resolver needs CREATE on the schema purely to be able to OWN an object in
+-- it: PostgreSQL requires a prospective owner to hold CREATE on the containing
+-- schema. It is not there so this role can build things — it cannot log in, so the
+-- only code that could ever run as it is the one SECURITY DEFINER function it owns,
+-- and that function's body is a single SELECT.
+GRANT CREATE ON SCHEMA public TO key_resolver;
 GRANT CONNECT ON DATABASE na_live_support TO app, platform_admin;
 
 -- Tables migrator creates from here on: app gets DML, never ownership.
@@ -76,7 +117,14 @@ ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public
 
 ALTER SCHEMA public OWNER TO migrator;
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT USAGE ON SCHEMA public TO app, platform_admin;
+GRANT USAGE ON SCHEMA public TO app, platform_admin, key_resolver;
+
+-- key_resolver needs CREATE on the schema purely to be able to OWN an object in
+-- it: PostgreSQL requires a prospective owner to hold CREATE on the containing
+-- schema. It is not there so this role can build things — it cannot log in, so the
+-- only code that could ever run as it is the one SECURITY DEFINER function it owns,
+-- and that function's body is a single SELECT.
+GRANT CREATE ON SCHEMA public TO key_resolver;
 GRANT CONNECT ON DATABASE na_live_support_test TO app, platform_admin;
 
 ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public

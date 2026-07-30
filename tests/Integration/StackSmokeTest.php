@@ -275,9 +275,44 @@ test('postgres role physics: app cannot bypass RLS, platform_admin is the only b
     expect($row)->not->toBeFalse('role "platform_admin" is missing from pg_roles')
         ->and($row['rolbypassrls'])->toBeTrue('platform_admin must bypass RLS for console/retention work');
 
-    // …and it is the ONLY non-superuser role that may bypass RLS.
-    $bypassers = $pdo->query('SELECT rolname FROM pg_roles WHERE rolbypassrls AND NOT rolsuper')->fetchAll(PDO::FETCH_COLUMN);
-    expect($bypassers)->toBe(['platform_admin']); // any other rolbypassrls role here is a Sev-1
+    // …and the set of RLS-bypassing roles is EXACTLY these two, no more.
+    //
+    // Session 0 asserted `['platform_admin']`. S1 added `key_resolver` and the
+    // justification has to live next to the assertion, because a new BYPASSRLS role
+    // appearing without one is a Sev-1:
+    //
+    //   platform_admin  LOGIN, password in the environment. Used by the platform
+    //                   console and retention jobs, gated by PlatformConnection which
+    //                   refuses to run while a tenant is bound and logs actor
+    //                   identity (SEC-02).
+    //   key_resolver    NOLOGIN, NO password, in no environment variable. Cannot be
+    //                   connected as by anyone. Owns exactly one SECURITY DEFINER
+    //                   function, resolve_tenant_key(), whose body reads a single row
+    //                   matched on an exact key hash. It exists because FR-03
+    //                   resolution must look up a credential BEFORE a tenant is
+    //                   known, and FORCE ROW LEVEL SECURITY applies to owners — so a
+    //                   migrator-owned function was filtered by the very value it
+    //                   exists to discover.
+    //
+    // The two assertions below are deliberately separate: the second one is what
+    // makes key_resolver's bypass acceptable, and it must fail if that role ever
+    // gains the ability to log in.
+    $bypassers = $pdo->query('SELECT rolname FROM pg_roles WHERE rolbypassrls AND NOT rolsuper ORDER BY rolname')->fetchAll(PDO::FETCH_COLUMN);
+    expect($bypassers)->toBe(['key_resolver', 'platform_admin']);
+
+    $row = $pdo->query("SELECT rolcanlogin FROM pg_roles WHERE rolname = 'key_resolver'")->fetch(PDO::FETCH_ASSOC);
+    expect($row)->not->toBeFalse('role "key_resolver" is missing from pg_roles')
+        ->and($row['rolcanlogin'])->toBeFalse(
+            'SEV-1: key_resolver can log in. Its RLS bypass is only acceptable because it is reachable '
+            .'solely by invoking one SECURITY DEFINER function, never by connecting as it.',
+        );
+
+    // The function must actually be owned by that role — otherwise the NOLOGIN role is
+    // decoration and the bypass is sitting somewhere else.
+    $owner = $pdo->query("
+        SELECT pg_get_userbyid(proowner) FROM pg_proc WHERE proname = 'resolve_tenant_key'
+    ")->fetchColumn();
+    expect($owner)->toBe('key_resolver');
 });
 
 test('app credentials cannot authenticate as platform_admin', function () {
