@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 2/8 proven (AC-01 partial, AC-02) | Isolation is built and proven on both layers, independently. Settings engine, outbox relay, provisioning job, quotas and the remaining conventions are NOT built — see the S1 section below. Doc 01 is NOT complete and must not be treated as done |
+| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 4/8 proven + AC-04 partial (AC-01 partial, AC-02, AC-04 partial, AC-08) | Isolation proven on both layers independently. Settings engine, outbox relay and the suspended-tenant matrix now built and proven. STILL NOT BUILT: provisioning job (AC-05), quotas, T-05 job/socket/console bindings, cursor pagination, cache helper, feature-flag registry, BR-05 cold summary, partition maintenance. AC-03/05/06/07 unproven. Doc 01 is NOT complete |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -64,8 +64,9 @@ accounting; the session report has the full self-audit table.
 
 | Doc 01 id | State | Note |
 |---|---|---|
-| FR-07 / T-04 settings engine | **NOT DONE** | Registry, `tenant_settings` table and audit actions exist; no engine, no cache, no `settings.read` API. EC-06 concurrency and FS-01 Redis fallback untouched |
-| FR-08 / T-03 outbox RELAY | **PARTIAL** | Table, `EventPublisher` and `EventCatalog` built and used by `TenantLifecycle`. The relay worker does not exist, so AC-04 cannot run |
+| FR-07 / T-04 settings engine | **DONE** | 11 registry keys, five types, Redis hash + DB fallback, old→new audit, settings.read/write API. EC-06 uses a DB-side version counter, not `updated_at` — EC-08 forbids app-clock ordering and `timestamptz(0)` could not separate same-second writes. FS-01 proven against a real closed port |
+| FR-08 / T-03 outbox RELAY | **PARTIAL** | Relay, `outbox:relay` command, lag metric and AC-04's four properties proven. The QUEUE-PUSH leg does not exist — Docs 04-17 own the consumers, so there is no queue leg to crash yet. The relay appends to `events`, which is what reporting replays from |
+| AC-08 suspended matrix | **DONE** | 4 states x 5 surfaces as a data table, plus banner i18n key and per-key revocation on archive. Falsified by "tightening" suspension to reject inbound |
 | FR-06 provisioning job | **NOT DONE** | `tenant_provisioning_steps` table and its `(tenant_id, step)` idempotency key exist; the job does not. AC-05, EC-04, FS-04 unproven |
 | NFR-06 / EC-09 / FS-05 quotas | **NOT DONE** | `tenant_quota_usage` table only |
 | T-05 job binding | **NOT DONE** | Written, then **deleted rather than shipped untested** — no job exists to consume it. Returns with the provisioning job |
@@ -76,7 +77,7 @@ accounting; the session report has the full self-audit table.
 | FR-11 feature-flag registry | **NOT DONE** | Pennant installed, unused |
 | BR-05 30-day cold summary | **NOT DONE** | `TenantState` models the semantics; no retention path |
 | NFR-07 / EC-10 partitions | **PARTIAL** | Monthly partitions +3 months created by migration, with a DEFAULT partition as a safety net; no maintenance command and no monitor |
-| AC-03…AC-08 | **NOT PROVEN** | See `registries/traceability.yaml`, which records each with its reason |
+| AC-03, AC-05, AC-06, AC-07 | **NOT PROVEN** | See `registries/traceability.yaml`, which records each with its reason. AC-05 needs the provisioning job; AC-03 needs Doc 04/06's tickets and messages; AC-06 and AC-07 are buildable now and were not reached |
 | Doc 01 §8/§9 platform console | **DEFERRED** | API contract not built either; noted for a design-led session |
 | Audit hash-chaining | **DEFERRED to Doc 17** | Append-only physics (`REVOKE UPDATE, DELETE`) is real now; the chain is Doc 17's |
 
@@ -107,6 +108,24 @@ accounting; the session report has the full self-audit table.
   good. Tone, register and the vocabulary Ethiopian players expect are a native
   judgement. This does not expire when AC-06 goes green.
 
+### Gaps in the tests themselves (not just in the code)
+
+Three tests are skipped with their reasons in the file rather than deleted, and one class of
+test is weaker than it looks:
+
+- `EventPublisher` refusing to publish outside a transaction cannot be proven by the current
+  harness, because every test runs inside one, so `DB::transactionLevel()` is never 0.
+- The `ConnectionEstablished` re-application on reconnect needs a non-transactional harness:
+  a `DB::purge` inside the test transaction discards the rolled-back fixture.
+- `DeclareAuditAction`'s throw path needs `SettingsRepository` extracted to an interface
+  before a stand-in can be substituted.
+- **A test that reads the database with no tenant bound fails loudly, and a test that has a
+  tenant bound from a fixture can pass for the wrong reason.** One AC-08 cell did: the staff
+  surface resolved tenant state from leftover `app.tenant_id` rather than through the
+  pre-context lookup a real request uses. Fixed by clearing BOTH layers before each request,
+  and worth remembering as a review question for every new test — ambient session state is
+  invisible in a green run.
+
 ### Risks carried forward
 
 - **`RlsSession` is the most dangerous class in the project.** Set the session variable
@@ -123,7 +142,14 @@ accounting; the session report has the full self-audit table.
   five ingress probes and no CRUD. Every module that adds endpoints widens what AC-01
   must cover, and the schema-generated table half will not notice a missing endpoint.
 - **No performance numbers are claimed.** AC-07 was not run. Nothing in this session
-  measured the ≤1 ms resolution or ≤0.5 ms settings budgets.
+  measured the ≤1 ms resolution or ≤0.5 ms settings budgets, and the settings engine's
+  ≤0.5 ms p99 read is therefore an unverified design intent rather than a measured fact.
+- **`occurred_at` is Postgres transaction-start time, not insert time.** It is stamped by
+  `DEFAULT now()`, and Postgres `now()` is the transaction timestamp — so a row written late
+  in a long transaction carries an earlier stamp than the moment it was written. This is
+  correct for causal ordering (and EC-08 wants DB time), but any future code treating
+  `occurred_at` as "when this happened to the millisecond" will be wrong. It already produced
+  a negative lag reading; the metric now clamps at zero.
 
 ## Deferred with reason
 
