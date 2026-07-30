@@ -34,7 +34,7 @@ fresh:
 		sed -i "s|^APP_KEY=.*|APP_KEY=$$KEY|" .env && \
 		$(COMPOSE) up -d app worker scheduler reverb; \
 	}
-	$(COMPOSE) exec app php artisan migrate:fresh --seed --force
+	$(COMPOSE) exec app php artisan migrate:fresh --seed --force --database=pgsql_migrator
 	@echo "Fresh stack ready at http://localhost"
 
 ## re-read source in the long-lived processes, then wait for them to be healthy

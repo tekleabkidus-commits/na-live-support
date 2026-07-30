@@ -101,6 +101,57 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        /*
+        |----------------------------------------------------------------------
+        | THREE POSTGRES IDENTITIES, ONE CLUSTER (Doc 01 T-01/SEC-02, ADR 0003)
+        |----------------------------------------------------------------------
+        |
+        | `pgsql`           — the application role. Everything that serves
+        |                     traffic uses this. DML only; cannot own or ALTER a
+        |                     table, so it cannot disable RLS.
+        | `pgsql_migrator`  — the schema owner. DDL only: `php artisan migrate`
+        |                     and partition maintenance. Never serves a request.
+        | `pgsql_platform`  — platform_admin, the only RLS-bypassing role.
+        |                     Reachable ONLY through PlatformConnection, which
+        |                     throws if a TenantContext is bound (SEC-02).
+        |
+        | All three share host/port/database with `pgsql` deliberately: same
+        | cluster, same data, different privileges. Do not "simplify" them into
+        | one connection — the privilege separation IS the isolation guarantee
+        | that NFR-01's second layer rests on.
+        |
+        */
+
+        'pgsql_migrator' => [
+            'driver' => 'pgsql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_MIGRATOR_USERNAME', 'migrator'),
+            'password' => env('DB_MIGRATOR_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
+        'pgsql_platform' => [
+            'driver' => 'pgsql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_PLATFORM_USERNAME', 'platform_admin'),
+            'password' => env('DB_PLATFORM_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

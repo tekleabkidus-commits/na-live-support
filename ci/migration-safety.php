@@ -40,13 +40,56 @@ $auditTables = ['audit_entries', 'audit_log', 'audit_anchors'];
 $files = glob($dir.'/*.php') ?: [];
 sort($files);
 
+/**
+ * Blank out comments, keep everything else byte-for-byte.
+ *
+ * WHY (added S1, with falsification below): the rules here are text searches,
+ * and a text search cannot tell `DB::statement('DROP TABLE x')` from a docblock
+ * explaining why the migration AVOIDS dropping a table. Two S1 migrations
+ * tripped rule 1 on their own prose. That false positive is worse than it
+ * looks: the only way to silence it is to add an
+ * `@expand-contract: contract-phase` marker, and that marker is a REVIEWABLE
+ * ASSERTION that the expand and backfill releases already shipped. A gate that
+ * pressures authors into writing a false assertion is training them to lie to
+ * the next reviewer.
+ *
+ * String literals are deliberately NOT stripped: raw SQL lives in strings and
+ * must stay in scope. Only comments go, and a destructive op inside a comment is
+ * by definition not executed. Detection of real operations is therefore
+ * unchanged — proven by falsifying every rule after this change.
+ */
+function withoutComments(string $php): string
+{
+    $out = '';
+    foreach (token_get_all($php) as $token) {
+        if (! is_array($token)) {
+            $out .= $token;
+
+            continue;
+        }
+        if ($token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT) {
+            // Preserve newlines so line numbers still line up for a human
+            // reading the file next to this gate's output.
+            $out .= str_repeat("\n", substr_count($token[1], "\n"));
+
+            continue;
+        }
+        $out .= $token[1];
+    }
+
+    return $out;
+}
+
 foreach ($files as $path) {
     $relative = substr($path, strlen($root) + 1);
     $contents = (string) file_get_contents($path);
 
     // Only lint the up() phase: everything before "function down".
-    $downPos = strpos($contents, 'function down');
-    $up = $downPos === false ? $contents : substr($contents, 0, $downPos);
+    // Comments are removed FIRST so that "function down" inside a comment
+    // cannot truncate the scan early and hide the real up() body.
+    $code = withoutComments($contents);
+    $downPos = strpos($code, 'function down');
+    $up = $downPos === false ? $code : substr($code, 0, $downPos);
 
     $hasContractMarker = preg_match('/@expand-contract:\s*contract-phase\s+\S+/', $contents) === 1;
     $hasAuditMarker = preg_match('/@audit-change-control:\s*\S+/', $contents) === 1;
@@ -81,8 +124,20 @@ foreach ($files as $path) {
     }
 
     // 3. Audit-table changes need the change-control marker.
+    //
+    // Matched on a WORD BOUNDARY, not on adjacent quotes. The original form
+    // required the name to be quote-delimited — `Schema::table('audit_log', …)`
+    // — which caught the schema-builder spelling and missed every raw one:
+    // `DB::statement('ALTER TABLE audit_log …')`, a trigger, a REVOKE. Since
+    // audit tables are precisely where the interesting changes are raw DDL
+    // (append-only grants, hash-chain triggers), the rule was blind to its own
+    // subject. Found by falsifying it in S1; see the commit for the probes.
+    //
+    // The boundary keeps `audit_log_actor_type_check` and
+    // `audit_log_tenant_occurred_index` from matching on their own — an index
+    // NAME is not a table reference — while `ON audit_log (` still matches.
     foreach ($auditTables as $table) {
-        $touchesAudit = preg_match('/[\'"]'.preg_quote($table, '/').'[\'"]/', $up) === 1;
+        $touchesAudit = preg_match('/\b'.preg_quote($table, '/').'\b/', $up) === 1;
         if ($touchesAudit && ! $hasAuditMarker) {
             $violations[] = sprintf(
                 '%s: touches audit table "%s" without "@audit-change-control: <ref>" marker (Doc 17 FR-11)',
