@@ -1,20 +1,159 @@
 # Test traceability matrix (CLAUDE.md §2, Doc 19 FR-02).
 #
-# Every Acceptance Criterion in Docs 01–19 §18 maps to ≥ 1 automated test, or
-# to a justified manual/drill entry. The `traceability` CI gate cross-checks
-# this file against /docs and against the test tree; an unmapped AC fails the
-# build once this registry is non-empty (bootstrap flip — see ci/traceability.php).
+# Every Acceptance Criterion in Docs 01–19 §18 maps to ≥ 1 automated test, or to a
+# justified manual/drill entry. The `traceability` CI gate cross-checks this file
+# against /docs and against the test tree.
+#
+# ENFORCEMENT IS PER DOCUMENT (ADR 0004, owner ruling D-1): a document's ACs become
+# blocking as soon as its row in docs/BUILD-STATUS.md leaves `NOT STARTED`. Doc 01 is
+# IN PROGRESS, so every one of its eight ACs must appear below or the build fails.
+# The other eighteen documents are reported as pending and are not yet enforced.
 #
 # Entry schema (all fields required):
 #   ac_ref:      "DocNN AC-XX" — must exist verbatim in that document
-#   suite_path:  repo-relative test path, e.g. tests/Isolation/TenantScopeTest.php
-#                (or "manual" — then `justification` is required)
+#   suite_path:  repo-relative test path (or "manual" — then `justification` is required)
 #   type:        automated | manual | drill
 #   tier:        unit | contract | integration | isolation | security | property | browser
 #   cadence:     every-push | nightly | weekly | release
 #   environment: local | ci | staging | production-smoke
-#   owner:       role answerable for the test (e.g. qa, platform-engineering)
+#   owner:       role answerable for the test
+#
+# `status` and `gap`/`justification` are additional fields this project adds so a row
+# can be honest about partial coverage. An AC is NEVER recorded here as covered when
+# it is not — a false row in this registry is the worst possible lie in the repo,
+# because it is the file that tells the owner what is proven.
 
-entries: []
-# Intentionally empty in Session 0. The first entries arrive with Doc 01's
-# acceptance criteria (AC-01, AC-02 isolation suites).
+entries:
+  # ── Doc 01 AC-01: isolation suite, every tenant-scoped table ────────────────
+  - ac_ref: "Doc01 AC-01"
+    suite_path: tests/Isolation/CrossTenantAccessTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      The direct-SQL half is complete and schema-generated: zero rows cross-tenant on
+      all ten tenant-scoped tables, and writes stamped with another tenant refused by
+      WITH CHECK. The "via every public endpoint touching that table" half is only as
+      complete as the endpoints that exist — Doc 01 ships five ingress probes and no
+      CRUD surface, so it widens as Docs 04-17 add endpoints.
+
+  - ac_ref: "Doc01 AC-01"
+    suite_path: tests/Isolation/TwoLayerIndependenceTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      NFR-01's real requirement — each layer contains cross-tenant access with the
+      other disabled. Layer 2 proven with the Eloquent scope removed; Layer 1 proven
+      with the RLS session variable pointed at the wrong tenant.
+
+  # ── Doc 01 AC-02: forged tenant_id fuzz ────────────────────────────────────
+  - ac_ref: "Doc01 AC-02"
+    suite_path: tests/Isolation/ForgedTenantIdFuzzTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      500 requests, forgeries in body, query and header, each proven by a unique trace
+      id. Passes with no validation rule existing, because request input is not a
+      source of tenant identity at all.
+
+  # ── Doc 01 AC-03: worker kill mid-burst ────────────────────────────────────
+  - ac_ref: "Doc01 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: staging
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1, and recorded as such rather than mapped to a test that
+      does not assert it. AC-03 reconciles "tickets/messages/events" after killing each
+      worker class; tickets arrive in Doc 06 and messages in Doc 04, so two of the
+      three counts cannot exist yet. The events/outbox third also needs the outbox
+      relay, which was not built this session.
+
+  # ── Doc 01 AC-04: outbox chaos ─────────────────────────────────────────────
+  - ac_ref: "Doc01 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1. The outbox TABLE and EventPublisher exist and are used by
+      TenantLifecycle, but the relay worker does not, so there is nothing to crash
+      between commit and queue push.
+
+  # ── Doc 01 AC-05: concurrent provisioning ──────────────────────────────────
+  - ac_ref: "Doc01 AC-05"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1. The idempotency key exists as a unique index on
+      (tenant_id, step) in tenant_provisioning_steps, but the provisioning job that
+      would race against it was not built.
+
+  # ── Doc 01 AC-06: Amharic rendering ────────────────────────────────────────
+  - ac_ref: "Doc01 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: ci
+    owner: qa
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1 as an automated test. lang/en and lang/am both exist and
+      are complete for every foundation string, but no test yet asserts zero key
+      leakage or zero missing-translation telemetry. Separately and permanently: the
+      Amharic is machine-authored and needs native-speaker review before any real
+      operator sees it (standing pre-launch item in BUILD-STATUS).
+
+  # ── Doc 01 AC-07: p99 latency budgets under L1 ─────────────────────────────
+  - ac_ref: "Doc01 AC-07"
+    suite_path: manual
+    type: manual
+    tier: property
+    cadence: release
+    environment: staging
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1. Doc 18 FR-32 defines L1 as a micro-benchmark, so this is
+      buildable now, but the settings and quota paths it must measure do not exist yet.
+      No latency numbers are claimed anywhere in this session's report.
+
+  # ── Doc 01 AC-08: suspended-tenant matrix ──────────────────────────────────
+  - ac_ref: "Doc01 AC-08"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: ci
+    owner: qa
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S1 as an automated test. The mechanism is built and in the
+      request path — TenantState carries the FR-05 matrix, EnforceTenantState applies
+      it per surface, and all five ingress routes declare which side of the
+      inbound/outbound asymmetry they are on — but no test walks the matrix. Highest
+      value gap to close first next session: suspension is the requirement most likely
+      to be "simplified" by someone reading the inbound-accepted rule as a bug.

@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | NOT STARTED | S1 | 0/8 | Opening housekeeping before Doc 01 work: add the published-port listener assertion (see Deferred with reason) |
+| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 2/8 proven (AC-01 partial, AC-02) | Isolation is built and proven on both layers, independently. Settings engine, outbox relay, provisioning job, quotas and the remaining conventions are NOT built — see the S1 section below. Doc 01 is NOT complete and must not be treated as done |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -41,6 +41,89 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
   into app/worker/scheduler/reverb, and `make test` depends on a new `make reload`. CI does not
   load the override. This fixes `make test` executing a *deleted* test from the baked image during
   this close-out.
+
+## Session-1 report (Doc 01 — Platform Foundation & Multitenancy)
+
+**Doc 01 is NOT complete.** Isolation — which Doc 01 §21 and the session prompt both
+name as the deliverable — is built and proven on both layers independently. Roughly
+half of the document's supporting cast is not built. This section is the honest
+accounting; the session report has the full self-audit table.
+
+### Proven by executed tests (pest: 30 passed, 1 skipped, 1114 assertions)
+
+| Area | Evidence |
+|---|---|
+| Two-layer isolation, layers proven INDEPENDENT | `tests/Isolation/TwoLayerIndependenceTest.php` — scope removed → RLS alone contains; RLS pointed at the wrong tenant → scope alone contains, with a control proving the DB really was permitting the other tenant |
+| AC-01 cross-tenant read/write | `tests/Isolation/CrossTenantAccessTest.php` — generated from `information_schema`, so tables added later are covered automatically. 0 rows cross-tenant on all 10 tenant tables; forged writes refused by `WITH CHECK` on all 4 writable ones |
+| AC-02 forged `tenant_id` fuzz | `tests/Isolation/ForgedTenantIdFuzzTest.php` — 500 requests, body/query/header, unique trace id each |
+| EC-01 Octane session-variable leak | `tests/Isolation/OctaneConnectionLifecycleTest.php` |
+| `app` role cannot disable RLS | ADR 0003's table — 6 tampering routes all refused |
+| Published-port host listeners | `tests/Integration/StackSmokeTest.php`, falsified both ways |
+
+### NOT built this session — no code, or code without a test
+
+| Doc 01 id | State | Note |
+|---|---|---|
+| FR-07 / T-04 settings engine | **NOT DONE** | Registry, `tenant_settings` table and audit actions exist; no engine, no cache, no `settings.read` API. EC-06 concurrency and FS-01 Redis fallback untouched |
+| FR-08 / T-03 outbox RELAY | **PARTIAL** | Table, `EventPublisher` and `EventCatalog` built and used by `TenantLifecycle`. The relay worker does not exist, so AC-04 cannot run |
+| FR-06 provisioning job | **NOT DONE** | `tenant_provisioning_steps` table and its `(tenant_id, step)` idempotency key exist; the job does not. AC-05, EC-04, FS-04 unproven |
+| NFR-06 / EC-09 / FS-05 quotas | **NOT DONE** | `tenant_quota_usage` table only |
+| T-05 job binding | **NOT DONE** | Written, then **deleted rather than shipped untested** — no job exists to consume it. Returns with the provisioning job |
+| T-05 socket + console bindings | **NOT DONE** | HTTP binding built and proven; Reverb callback and Artisan `--tenant` are not |
+| T-02 `tenant_sequences` | **PARTIAL** | Table and CHECK constraint exist; no allocator, no concurrency property test |
+| T-08 cursor pagination | **NOT DONE** | `ErrorCode::InvalidPagination` reserved; no helper, no lint |
+| T-09 cache convention helper | **NOT DONE** | Convention followed by hand in `TenantResolver` only |
+| FR-11 feature-flag registry | **NOT DONE** | Pennant installed, unused |
+| BR-05 30-day cold summary | **NOT DONE** | `TenantState` models the semantics; no retention path |
+| NFR-07 / EC-10 partitions | **PARTIAL** | Monthly partitions +3 months created by migration, with a DEFAULT partition as a safety net; no maintenance command and no monitor |
+| AC-03…AC-08 | **NOT PROVEN** | See `registries/traceability.yaml`, which records each with its reason |
+| Doc 01 §8/§9 platform console | **DEFERRED** | API contract not built either; noted for a design-led session |
+| Audit hash-chaining | **DEFERRED to Doc 17** | Append-only physics (`REVOKE UPDATE, DELETE`) is real now; the chain is Doc 17's |
+
+### Inherited tasks other sessions must not miss
+
+- **Doc 02** must re-register Fortify's routes. They were auto-registered and live —
+  `/login`, `/register`, `/forgot-password`, 2FA, passkeys, 18 mutating routes with no
+  audit coverage and no specification. `AppServiceProvider::deferAuthenticationRoutesToDoc02()`
+  turns them off. Doc 02 removes that call and ships them with audit coverage and
+  permission mapping.
+- **Doc 02** inherits a constraint, not a bug: authenticating a user by email happens
+  before any tenant is resolved, so it cannot go through `User`'s global scope. Same
+  chicken-and-egg as `tenant_keys`; the answer is a narrow lookup, **not** removing the
+  scope. See the note in `app/Models/User.php`.
+- **Docs 05 / 13 / 14** each own one line in `ci/audit-exempt-routes.php`. The ingress
+  probes there mutate nothing; the real handlers will, and the route names do not change,
+  so the exemption would silently carry over. Each document deletes its own line.
+- **Doc 18** owns the credential-separation follow-up in ADR 0003: all three database
+  passwords currently live in one `.env`.
+- **Doc 19** owns converting the six `not-implemented` traceability rows to automated
+  tests.
+
+### Standing pre-launch item
+
+- **Every `am` string requires native-speaker review before any real operator sees it.**
+  `lang/am/foundation.php` and `lang/am/ref.php` are machine-authored. AC-06 can prove
+  zero key leakage and zero missing-translation telemetry; it cannot prove the Amharic is
+  good. Tone, register and the vocabulary Ethiopian players expect are a native
+  judgement. This does not expire when AC-06 goes green.
+
+### Risks carried forward
+
+- **`RlsSession` is the most dangerous class in the project.** Set the session variable
+  and fail to clear it and, under Octane, the next request on that connection inherits
+  the previous tenant's visibility — while the Eloquent scope filters correctly, so
+  nothing looks wrong. Three overlapping defences exist (scoped container binding,
+  clear-on-terminate, clear-in-`finally`); the one skipped test in the suite is the
+  reconnect case, which needs a non-transactional harness.
+- **A latent recursion in the `ConnectionEstablished` hook was fixed but is worth
+  remembering.** Issuing a statement from inside that hook makes booting the application
+  require a live database, so `route:list` and `config:cache` hang when the database is
+  unreachable. Invisible in every green test; visible only during an outage.
+- **AC-01's endpoint half is only as strong as the endpoints that exist.** Doc 01 has
+  five ingress probes and no CRUD. Every module that adds endpoints widens what AC-01
+  must cover, and the schema-generated table half will not notice a missing endpoint.
+- **No performance numbers are claimed.** AC-07 was not run. Nothing in this session
+  measured the ≤1 ms resolution or ≤0.5 ms settings budgets.
 
 ## Deferred with reason
 
