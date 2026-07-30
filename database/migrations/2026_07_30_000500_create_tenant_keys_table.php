@@ -86,6 +86,13 @@ return new class extends Migration
         // narrowed this to one row, so there is no enumeration oracle here;
         // timing-safe comparison and per-key rate limiting on the presented
         // secret are Doc 02's (AC-01) to own across all credential types.
+        // DROP-then-CREATE, not CREATE OR REPLACE: `migrate:fresh` drops TABLES
+        // (and views) but leaves FUNCTIONS behind, so a second run would collide
+        // with the survivor from the first. CREATE OR REPLACE would paper over it
+        // today and fail the day this function's return type changes, since
+        // REPLACE cannot alter a signature. Being explicit costs one line.
+        DB::unprepared('DROP FUNCTION IF EXISTS resolve_tenant_key(text, text, text);');
+
         DB::unprepared(<<<'SQL'
             CREATE FUNCTION resolve_tenant_key(p_kind text, p_prefix text, p_hash text)
             RETURNS TABLE (

@@ -11,6 +11,14 @@ use Illuminate\Support\Str;
 
 /**
  * @extends Factory<User>
+ *
+ * `tenant_id` is deliberately absent from definition(): BelongsToTenant fills it
+ * from the bound context on create (Doc 01 FR-04 — the value is never chosen by a
+ * caller, and a factory is a caller). Creating a user with no tenant bound throws
+ * MissingTenantContext, which is correct: tests must say which tenant they mean.
+ *
+ * Emails use the `@fixture…` convention from CLAUDE.md §8 so that synthetic data
+ * is self-identifying if it ever escapes.
  */
 class UserFactory extends Factory
 {
@@ -28,7 +36,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => 'fixture-'.fake()->unique()->lexify('??????').'@fixture.invalid',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
