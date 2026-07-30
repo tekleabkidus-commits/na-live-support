@@ -82,6 +82,24 @@ gates:
     added_date: "2026-07-27"
     blocking: true
 
+  - gate_id: isolation-suite
+    name: Two-layer tenant isolation holds, and each layer holds alone
+    command: bash ci/isolation-suite.sh
+    owning_doc: Doc01
+    owning_ac: AC-01
+    owner: platform-engineering
+    added_date: "2026-07-30"
+    blocking: true
+
+  - gate_id: event-catalog
+    name: docs/EVENT-CATALOG.md matches the code-side event catalog
+    command: php ci/event-catalog.php
+    owning_doc: Doc01
+    owning_ac: FR-08
+    owner: platform-engineering
+    added_date: "2026-07-30"
+    blocking: true
+
   - gate_id: gate-skip-guard
     name: Skipped gates require a signed change file in ci/skips/
     command: bash ci/gate-skip-guard.sh

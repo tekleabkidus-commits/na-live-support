@@ -85,17 +85,20 @@ entries:
 
   # ── Doc 01 AC-04: outbox chaos ─────────────────────────────────────────────
   - ac_ref: "Doc01 AC-04"
-    suite_path: manual
-    type: manual
-    tier: integration
-    cadence: release
+    suite_path: tests/Isolation/OutboxChaosTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S1. The outbox TABLE and EventPublisher exist and are used by
-      TenantLifecycle, but the relay worker does not, so there is nothing to crash
-      between commit and queue push.
+    status: partial
+    gap: >-
+      Proven: an event is never published for a rolled-back write; a committed event
+      survives a relay that never ran; re-processing the same row yields ONE event
+      (enforced by the events primary key, so duplicate delivery cannot become duplicate
+      effect); relay order is UUIDv7 order with no wall clock. NOT proven: the queue-push
+      half. Docs 04-17 own the consumers, so there is no queue leg to crash yet — the
+      relay currently appends to `events`, which is what reporting replays from.
 
   # ── Doc 01 AC-05: concurrent provisioning ──────────────────────────────────
   - ac_ref: "Doc01 AC-05"

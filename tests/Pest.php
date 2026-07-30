@@ -9,6 +9,7 @@ use App\Support\Audit\AuditActor;
 use App\Support\Tenancy\ResolutionSource;
 use App\Support\Tenancy\RlsSession;
 use App\Support\Tenancy\TenantContext;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -146,6 +147,74 @@ function suspendTenant(Tenant $tenant): Tenant
         actorLabel: 'test fixture',
         reason: 'test fixture',
     ));
+}
+
+/**
+ * Run a callback the way a platform worker runs: with NO tenant bound.
+ *
+ * The outbox relay, retention jobs and quota reconciliation all read across tenants through
+ * PlatformConnection, which REFUSES to start while a tenant context is bound (SEC-02).
+ * Test fixtures leave a tenant bound — createTenant() binds, and asTenant() restores that
+ * binding — so calling a platform operation straight after a fixture trips the guard. That
+ * is the guard being right, not a harness quirk: a relay invoked from inside a
+ * tenant-resolved request would be exactly the SEC-02 violation it exists to prevent.
+ *
+ * @template T
+ *
+ * @param  callable(): T  $callback
+ * @return T
+ */
+function asPlatformWorker(callable $callback): mixed
+{
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    return $callback();
+}
+
+/**
+ * Commit the harness transaction so ANOTHER CONNECTION can see the fixtures.
+ *
+ * Needed by anything that genuinely runs on a second connection in production — the outbox
+ * relay, retention, reconciliation — because those go through `pgsql_platform` and an
+ * uncommitted transaction on `pgsql` is invisible to it. Faking it (pointing the relay at the
+ * test's own connection) would test a code path that does not exist in production and would
+ * skip the very cross-tenant read the platform connection is for.
+ *
+ * The caller must clean up: pass the tenant ids to cleanupTenants() in a finally. Nothing
+ * rolls these back.
+ */
+function commitFixtures(): void
+{
+    $connection = DB::connection('pgsql');
+
+    if ($connection->transactionLevel() > 0) {
+        $connection->commit();
+    }
+}
+
+/**
+ * Delete everything belonging to the given tenants, children before parents.
+ *
+ * Through the platform connection because the app role holds no DELETE on business tables
+ * (BR-02) and RLS would scope the deletes to one tenant at a time anyway.
+ *
+ * @param  list<string>  $tenantIds
+ */
+function cleanupTenants(array $tenantIds): void
+{
+    if ($tenantIds === []) {
+        return;
+    }
+
+    $platform = DB::connection('pgsql_platform');
+
+    foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
+        'tenant_provisioning_steps', 'tenant_quota_usage', 'tenant_keys', 'users'] as $table) {
+        $platform->table($table)->whereIn('tenant_id', $tenantIds)->delete();
+    }
+
+    $platform->table('tenants')->whereIn('id', $tenantIds)->delete();
 }
 
 /*
