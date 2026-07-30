@@ -143,17 +143,15 @@ entries:
 
   # ── Doc 01 AC-08: suspended-tenant matrix ──────────────────────────────────
   - ac_ref: "Doc01 AC-08"
-    suite_path: manual
-    type: manual
-    tier: integration
-    cadence: release
+    suite_path: tests/Isolation/SuspendedTenantMatrixTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
     environment: ci
     owner: qa
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S1 as an automated test. The mechanism is built and in the
-      request path — TenantState carries the FR-05 matrix, EnforceTenantState applies
-      it per surface, and all five ingress routes declare which side of the
-      inbound/outbound asymmetry they are on — but no test walks the matrix. Highest
-      value gap to close first next session: suspension is the requirement most likely
-      to be "simplified" by someone reading the inbound-accepted rule as a bug.
+    status: covered
+    gap: >-
+      All four states x five entry surfaces asserted as a data table, plus the banner
+      i18n key on refusal and per-key revocation on archive. Falsified by "tightening"
+      suspension to reject inbound traffic — the most plausible wrong fix — which fails
+      with a message pointing the reader at US-02 before they change it.

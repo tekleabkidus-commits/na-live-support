@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Foundation\Tenancy;
 
 use App\Models\Tenant;
+use App\Models\TenantKey;
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
 use App\Support\Events\EventPublisher;
@@ -109,6 +110,10 @@ final class TenantLifecycle
                 actorLabel: $actorLabel,
             );
 
+            if ($target === TenantState::Archived) {
+                $this->revokeEveryKey($tenant);
+            }
+
             // Through the outbox, never dispatched directly (C-06/T-03): a
             // subscriber must not learn a tenant was suspended by a transaction
             // that then rolled back.
@@ -123,5 +128,61 @@ final class TenantLifecycle
 
             return $tenant;
         });
+    }
+
+    /**
+     * FR-05's archived clause: "all keys revoked".
+     *
+     * Revocation happens IN THE SAME TRANSACTION as the state change, which is the
+     * only ordering that cannot leave a gap. Archive-then-revoke would leave a window
+     * where the tenant is archived and its Telegram bot key still resolves;
+     * revoke-then-archive would leave one where the keys are dead but the tenant still
+     * looks active. Both windows are short and neither is acceptable for the state
+     * that means "this relationship has ended".
+     *
+     * The effect is that an archived tenant's channels stop resolving at all —
+     * resolution returns 404 (SEC-06) rather than reaching the state check. That is
+     * stronger than a 403 and it is what "keys revoked" should mean: the credential is
+     * not refused, it ceases to exist.
+     *
+     * Each revocation is audited separately rather than as one bulk entry. An operator
+     * asking "when did my widget stop working" needs an answer per key, and
+     * `tenant.key_revoked` is registered with a `system` actor precisely for this path.
+     */
+    private function revokeEveryKey(Tenant $tenant): void
+    {
+        $keys = TenantKey::query()->whereNull('revoked_at')->get();
+
+        foreach ($keys as $key) {
+            $keyId = $key->getKey();
+
+            if (! is_string($keyId)) {
+                throw new \LogicException('TenantKey without a string id while archiving.');
+            }
+
+            $kind = $key->getAttribute('kind');
+            $prefix = $key->getAttribute('prefix');
+
+            if (! is_string($kind) || ! is_string($prefix)) {
+                throw new \LogicException(sprintf(
+                    'TenantKey %s is missing kind or prefix; both are NOT NULL columns, so this means the '
+                    .'model was built from a partial select.',
+                    $keyId,
+                ));
+            }
+
+            $key->forceFill(['revoked_at' => now()])->save();
+
+            $this->audit->record(
+                actionKey: 'tenant.key_revoked',
+                entity: 'tenant_key',
+                entityId: $keyId,
+                actorType: AuditActor::System,
+                payload: [
+                    'kind' => $kind,
+                    'prefix' => $prefix,
+                ],
+            );
+        }
     }
 }
