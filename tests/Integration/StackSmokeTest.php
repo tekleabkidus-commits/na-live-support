@@ -27,10 +27,15 @@ declare(strict_types=1);
 |      correct persistence/eviction personalities
 |   4. Horizon supervises all eleven queue families
 |   5. Reverb accepts a WebSocket connection (HTTP 101)
+|   6. every port docker/compose.yaml publishes has a REAL host listener
+|      (Doc 18 FR-01 / Doc 19 FR-09 — S1 opening housekeeping)
+|   7. the host-published Postgres/Redis ports reach the stack's OWN
+|      containers, not a host impostor answering on the same port
 |
 */
 
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
+use Symfony\Component\Yaml\Yaml;
 
 const QUEUE_FAMILIES = [
     'telegram-in', 'telegram-out', 'webchat-in', 'webchat-out', 'media',
@@ -113,6 +118,137 @@ function redisClient(string $envPrefix, string $defaultHost): Redis
 
     return $client;
 }
+
+/**
+ * The HOST's address, as seen from inside this container.
+ *
+ * This is the whole trick behind the published-port assertions below. The
+ * suite runs INSIDE the app container and therefore cannot read the host's
+ * `ss -ltn`. But it can dial the host across the bridge — and the bridge
+ * gateway address is exactly what a working `docker-proxy` binds and a
+ * loopback-only host daemon does NOT. So "can I reach the host on this port"
+ * is a faithful proxy for "is there a real host listener on this port".
+ *
+ * Read from /proc/net/route (little-endian hex) because the slim app image
+ * ships no `ip`/`route` binary.
+ */
+function hostGateway(): string
+{
+    foreach (file('/proc/net/route') ?: [] as $i => $line) {
+        if ($i === 0) {
+            continue;
+        }
+        $fields = preg_split('/\s+/', trim($line)) ?: [];
+        if (($fields[1] ?? '') === '00000000' && isset($fields[2])) {
+            return long2ip((int) hexdec(implode('', array_reverse(str_split($fields[2], 2)))));
+        }
+    }
+
+    throw new RuntimeException('no default route in /proc/net/route — cannot locate the host from inside the container');
+}
+
+/**
+ * Every host port docker/compose.yaml publishes, as "service" => [ports].
+ *
+ * Parsed from the compose file itself, not hardcoded: a service that gains a
+ * published port next month is covered without anyone remembering to edit
+ * this test.
+ *
+ * @return array<string, list<int>>
+ */
+function publishedHostPorts(): array
+{
+    /** @var mixed $compose */
+    $compose = Yaml::parseFile(base_path('docker/compose.yaml'));
+    $services = (is_array($compose) && is_array($compose['services'] ?? null)) ? $compose['services'] : [];
+
+    $out = [];
+    foreach ($services as $service => $definition) {
+        if (! is_array($definition) || ! is_array($definition['ports'] ?? null)) {
+            continue;
+        }
+        foreach ($definition['ports'] as $mapping) {
+            // "80:80" and "6380:6379" — the host port is the part before the colon.
+            if (is_string($mapping) && str_contains($mapping, ':')) {
+                $out[(string) $service][] = (int) strtok($mapping, ':');
+            }
+        }
+    }
+    ksort($out);
+
+    return $out;
+}
+
+test('every port compose.yaml publishes has a real listener on the host', function () {
+    // WHY THIS EXISTS (docs/BUILD-STATUS.md, cleared redis blocker): for ~53
+    // minutes redis-volatile reported `0.0.0.0:6379->6379` and `healthy` while
+    // *:6379 was unbound and a native host daemon served every host
+    // connection. A container healthcheck runs INSIDE the container and is
+    // structurally blind to a failed host-side docker-proxy bind. This test is
+    // the eye the healthcheck does not have.
+    $gateway = hostGateway();
+    $published = publishedHostPorts();
+
+    expect($published)->not->toBeEmpty('parsed no published ports out of docker/compose.yaml — the parser broke, not the stack');
+
+    $unbound = [];
+    foreach ($published as $service => $ports) {
+        foreach ($ports as $port) {
+            if (! reachable($gateway, $port)) {
+                $unbound[] = sprintf('%s (host port %d)', $service, $port);
+            }
+        }
+    }
+
+    expect($unbound)->toBe([], sprintf(
+        'published port(s) with NO host listener: %s. The container may still be healthy — '
+        .'the healthcheck cannot see this. A docker-proxy that failed to bind at start does not retry: '
+        .'`docker compose -f docker/compose.yaml up -d --force-recreate <service>`.',
+        implode(', ', $unbound),
+    ));
+});
+
+test('host-published database ports reach the stack containers, not a host impostor', function () {
+    // Port-open (above) proves SOMETHING listens. It cannot prove it is OURS:
+    // a host daemon bound to 0.0.0.0 answers just as readily. These are the
+    // three ports a developer machine actually collides on, so each is pinned
+    // to a server-identity value that differs between any two instances.
+    $gateway = hostGateway();
+
+    // Redis: run_id is regenerated per server start and is unique per instance.
+    foreach ([['REDIS_VOLATILE', 'redis-volatile', 6379], ['REDIS_DURABLE', 'redis-durable', 6380]] as [$prefix, $dnsHost, $hostPort]) {
+        $viaContainerDns = redisClient($prefix, $dnsHost);
+
+        $viaHostPort = new Redis;
+        $viaHostPort->connect($gateway, $hostPort, 2);
+
+        expect($viaHostPort->info('server')['run_id'])->toBe(
+            $viaContainerDns->info('server')['run_id'],
+            sprintf(
+                'host port %d is served by a DIFFERENT redis than the %s container — a host daemon is '
+                .'shadowing the published port. This is the exact failure that hid for 53 minutes in S0.',
+                $hostPort,
+                $dnsHost,
+            ),
+        );
+    }
+
+    // Postgres: system_identifier is generated at initdb and is unique per cluster.
+    $viaContainerDns = pgConnection(getenv('DB_USERNAME') ?: 'app', getenv('DB_PASSWORD') ?: 'app_local_password')
+        ->query('SELECT system_identifier FROM pg_control_system()')->fetchColumn();
+
+    $viaHostPort = (new PDO(
+        sprintf('pgsql:host=%s;port=5432;dbname=na_live_support', $gateway),
+        getenv('DB_USERNAME') ?: 'app',
+        getenv('DB_PASSWORD') ?: 'app_local_password',
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_TIMEOUT => 3],
+    ))->query('SELECT system_identifier FROM pg_control_system()')->fetchColumn();
+
+    expect($viaHostPort)->toBe(
+        $viaContainerDns,
+        'host port 5432 is served by a DIFFERENT postgres cluster than the postgres container',
+    );
+});
 
 test('the running app server answers /up', function () {
     [$host, $port] = stackEndpoint('App server', 'app', 80);
