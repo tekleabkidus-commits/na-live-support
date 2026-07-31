@@ -43,7 +43,11 @@ jobs:
           coverage: none
       - run: composer install --no-interaction --prefer-dist
       - run: cp .env.example .env && php artisan key:generate
-      - run: ./vendor/bin/pest --testsuite=Unit,Feature
+      # Unit ONLY: the Feature suite is container-only by design (owner ruling
+      # D-4 — SQLite cannot express RLS, so every Feature test runs against the
+      # stack's Postgres). Feature runs in Stage 3 with the rest of the
+      # in-stack suites; run 30608024521 is what happens otherwise.
+      - run: ./vendor/bin/pest --testsuite=Unit
 
   integration:
     name: "Stage 3: integration (ephemeral stack)"
@@ -75,8 +79,8 @@ jobs:
       # blocking; run 30607808128 is what happens when they run stackless.
       - name: CI gates (registries/gates.yaml order)
         run: bash ci/run-gates.sh
-      - name: Integration + smoke suites inside the stack
-        run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --testsuite=Integration
+      - name: Full Pest suite inside the stack (parity with local `make test`)
+        run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest
       - name: Stack teardown
         if: always()
         run: docker compose -f docker/compose.yaml down -v
