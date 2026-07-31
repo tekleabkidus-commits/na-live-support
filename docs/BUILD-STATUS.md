@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 4/8 proven + AC-04 partial (AC-01 partial, AC-02, AC-04 partial, AC-08) | Isolation proven on both layers independently. Settings engine, outbox relay and the suspended-tenant matrix now built and proven. STILL NOT BUILT: provisioning job (AC-05), quotas, T-05 job/socket/console bindings, cursor pagination, cache helper, feature-flag registry, BR-05 cold summary, partition maintenance. AC-03/05/06/07 unproven. Doc 01 is NOT complete |
+| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 5/8 proven + AC-04 partial (AC-01 partial, AC-02, AC-04 partial, AC-05, AC-08) | Isolation proven on both layers independently. Settings engine, outbox relay, suspended-tenant matrix, and now the FR-06 provisioning job + T-05 job binding built and proven. STILL NOT BUILT: quotas, T-05 socket/console bindings, cursor pagination, cache helper, feature-flag registry, BR-05 cold summary, partition maintenance. AC-03/06/07 unproven. Doc 01 is NOT complete |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -49,10 +49,12 @@ name as the deliverable — is built and proven on both layers independently. Ro
 half of the document's supporting cast is not built. This section is the honest
 accounting; the session report has the full self-audit table.
 
-### Proven by executed tests (pest: 30 passed, 1 skipped, 1114 assertions)
+### Proven by executed tests (pest: 63 passed, 3 skipped, 1271 assertions — full suite re-run 2026-07-31)
 
 | Area | Evidence |
 |---|---|
+| AC-05 concurrent provisioning + EC-04/EC-05/FS-04 | `tests/Isolation/ConcurrentProvisioningTest.php` — 6 passed, 33 assertions. Two independent connections with overlapping transactions race on `unique (tenant_id, step)`; also sequential retry, double dispatch through the real job, FR-03f fail-before-handler, mid-flight suspension halt |
+| T-05 job binding / FR-03f | `BindTenantContextToJob` + `TenantAware`, exercised through `ProvisionTenant` in the same suite — a job with no tenant fails BEFORE its handler runs |
 | Two-layer isolation, layers proven INDEPENDENT | `tests/Isolation/TwoLayerIndependenceTest.php` — scope removed → RLS alone contains; RLS pointed at the wrong tenant → scope alone contains, with a control proving the DB really was permitting the other tenant |
 | AC-01 cross-tenant read/write | `tests/Isolation/CrossTenantAccessTest.php` — generated from `information_schema`, so tables added later are covered automatically. 0 rows cross-tenant on all 10 tenant tables; forged writes refused by `WITH CHECK` on all 4 writable ones |
 | AC-02 forged `tenant_id` fuzz | `tests/Isolation/ForgedTenantIdFuzzTest.php` — 500 requests, body/query/header, unique trace id each |
@@ -67,9 +69,9 @@ accounting; the session report has the full self-audit table.
 | FR-07 / T-04 settings engine | **DONE** | 11 registry keys, five types, Redis hash + DB fallback, old→new audit, settings.read/write API. EC-06 uses a DB-side version counter, not `updated_at` — EC-08 forbids app-clock ordering and `timestamptz(0)` could not separate same-second writes. FS-01 proven against a real closed port |
 | FR-08 / T-03 outbox RELAY | **PARTIAL** | Relay, `outbox:relay` command, lag metric and AC-04's four properties proven. The QUEUE-PUSH leg does not exist — Docs 04-17 own the consumers, so there is no queue leg to crash yet. The relay appends to `events`, which is what reporting replays from |
 | AC-08 suspended matrix | **DONE** | 4 states x 5 surfaces as a data table, plus banner i18n key and per-key revocation on archive. Falsified by "tightening" suspension to reject inbound |
-| FR-06 provisioning job | **NOT DONE** | `tenant_provisioning_steps` table and its `(tenant_id, step)` idempotency key exist; the job does not. AC-05, EC-04, FS-04 unproven |
+| FR-06 provisioning job | **DONE** | `TenantProvisioner` + `ProvisionTenant` job. Runs as the ordinary `app` role with NO RLS bypass (generate id → bind → write). Roles/SLA/business-hours/KB steps are recorded seams — Docs 03/12/10 own their contents, visible via `isSeamAwaitingItsModule()`. AC-05, EC-04, EC-05, FS-04 proven |
 | NFR-06 / EC-09 / FS-05 quotas | **NOT DONE** | `tenant_quota_usage` table only |
-| T-05 job binding | **NOT DONE** | Written, then **deleted rather than shipped untested** — no job exists to consume it. Returns with the provisioning job |
+| T-05 job binding | **DONE** | `TenantAware` trait + `BindTenantContextToJob` middleware, restored from their earlier deletion now that `ProvisionTenant` exercises them. Capture at dispatch (C-14 correlation id included), resolve CURRENT state before the handler, clear both layers in `finally`. `ProvisionTenant` itself declines the middleware — the tenant it binds does not exist yet; see the docblock |
 | T-05 socket + console bindings | **NOT DONE** | HTTP binding built and proven; Reverb callback and Artisan `--tenant` are not |
 | T-02 `tenant_sequences` | **PARTIAL** | Table and CHECK constraint exist; no allocator, no concurrency property test |
 | T-08 cursor pagination | **NOT DONE** | `ErrorCode::InvalidPagination` reserved; no helper, no lint |
@@ -77,7 +79,7 @@ accounting; the session report has the full self-audit table.
 | FR-11 feature-flag registry | **NOT DONE** | Pennant installed, unused |
 | BR-05 30-day cold summary | **NOT DONE** | `TenantState` models the semantics; no retention path |
 | NFR-07 / EC-10 partitions | **PARTIAL** | Monthly partitions +3 months created by migration, with a DEFAULT partition as a safety net; no maintenance command and no monitor |
-| AC-03, AC-05, AC-06, AC-07 | **NOT PROVEN** | See `registries/traceability.yaml`, which records each with its reason. AC-05 needs the provisioning job; AC-03 needs Doc 04/06's tickets and messages; AC-06 and AC-07 are buildable now and were not reached |
+| AC-03, AC-06, AC-07 | **NOT PROVEN** | See `registries/traceability.yaml`, which records each with its reason. AC-03 needs Doc 04/06's tickets and messages; AC-06 and AC-07 are buildable now and were not reached. (AC-05 is now proven — moved to the table above) |
 | Doc 01 §8/§9 platform console | **DEFERRED** | API contract not built either; noted for a design-led session |
 | Audit hash-chaining | **DEFERRED to Doc 17** | Append-only physics (`REVOKE UPDATE, DELETE`) is real now; the chain is Doc 17's |
 
