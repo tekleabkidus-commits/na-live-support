@@ -496,15 +496,14 @@ entries:
     owner: platform-engineering
     status: not-implemented
     justification: >-
-      IMPLEMENTED BUT UNPROVEN, and the distinction is evidenced rather than asserted.
-      regenerate() is called at the password boundary, but with that line deliberately
-      removed the test STILL PASSED — the HTTP test client does not replay Set-Cookie,
-      so every simulated request starts its own session and the pre/post ids differ
-      either way. The test is skipped rather than left green. Boundary 2 (post-2FA)
-      does not exist yet (step 7). Both become provable in the browser suite, where a
-      real cookie jar exists; that is the next session's work.
-      PROVEN today from this file: the tenant-hint SIGNATURE (exhaustive over forgery
-      shapes) and that login writes a hint naming the session's own tenant.
+      STILL IMPLEMENTED AND STILL UNPROVEN after a second attempt, now in the browser
+      suite — and the second failure has a different cause worth recording. With
+      regenerate() removed the BROWSER test also passed, because Laravel re-encrypts the
+      session cookie with a fresh IV on every response: cookie VALUES differ even when
+      the underlying session id is identical, so a client-side comparison cannot see
+      regeneration at all. Proving SEC-04 requires a SERVER-side assertion — the old
+      session id's Redis key gone, a new one present. Both tests are skipped, not
+      counted. Boundary 2 (post-2FA) still does not exist (step 7).
   - ac_ref: "Doc02 T-04"
     suite_path: tests/Security/SessionFixationTest.php
     type: automated
@@ -517,9 +516,14 @@ entries:
       Built and in use: the tenant-prefixed session handler (t:{tenant}:sess:*, with a
       mandatory TTL per C-07), the signed tenant hint that selects the prefix, and
       VerifyTenantHint's authority check. Proven: the signature mechanism, the hint
-      written at login, and that the check does not break the authenticated happy path
-      (positive control). NOT PROVEN: that a PRESENT-and-WRONG hint is refused over
-      HTTP — the forged cookie never reaches $request->cookie() in this harness, so the
-      negative tests could not distinguish a working defence from an absent one and are
-      skipped. T-04's revocation half (key delete + session.revoked publish, Reverb
-      socket close) is NOT BUILT — it is the remainder of step 6.
+      written at login, and — new in S7, via tests/Browser/session.spec.ts with a real
+      cookie jar and a positive control — that a session survives across requests, that
+      a hint whose signature does not verify yields NO session, and that logout ends the
+      session. T-06 proven in passing (login without the CSRF token is 419).
+      NOT PROVEN: VerifyTenantHint's OWN comparison. With that middleware disabled the
+      Q7 test still passes, because StaffUserProvider::retrieveById refuses an
+      unverifiable hint first (defence in depth, but not the same defence). Exercising
+      the middleware needs a VALIDLY SIGNED hint naming a DIFFERENT tenant, which the
+      browser cannot forge without the app key.
+      NOT BUILT: T-04's revocation half (key delete + session.revoked publish + Reverb
+      socket close), the session cap, and the timeouts — the remainder of step 6.

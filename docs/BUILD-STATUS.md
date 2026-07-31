@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 5.5 of 14 planned steps** | S4–S6 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 6 of 14 planned steps** | S4–S7 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -523,6 +523,58 @@ Session cap and eviction (FR-10), idle/absolute timeouts (FR-11), revocation + `
 publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03 live-session
 invalidation, the per-request locale hop (I-5), devices screen + T-03 fingerprint + T-08 GeoIP
 (ADR 0006 unwritten), and steps 7–14 unchanged.
+
+
+
+## Session-7 report (Doc 02 step 6 continued — the browser suite, and what it caught)
+
+**Evidence: pest 203 passed / 10 skipped; browser 8 passed / 1 skipped; `make gates` 10/10;
+lint clean. CI-proven on `723167e`: run
+[30668681058](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30668681058).**
+
+The S6 blocker is cleared: `tests/Browser/session.spec.ts` uses Playwright's request context
+(a real cookie jar), and `BrowserFixtureSeeder` gives it accounts to log into. CI's browser
+stage now migrates and seeds.
+
+### THREE DEFECTS THE BROWSER FOUND THAT NO PHP TEST COULD
+
+All three were invisible to the pest suite for the same reason: `actingAs()` injects the
+principal directly and therefore never exercises the cookie path.
+
+1. **`/api/staff/*` had no session middleware.** Laravel's `api` group is stateless, so a
+   genuinely signed-in agent's cookie meant nothing on the staff API and every request 404'd —
+   wearing the mask of Doc 01 SEC-06's deliberate 404-on-failed-resolution, exactly as
+   `routes/api.php`'s own header warns.
+2. **Rehydrating a session's user is the FIRST database read of an authenticated request**, and
+   the tenant middleware cannot precede it (Doc 01 FR-03a resolves the tenant *from* the user).
+   It threw `MissingTenantContext` → 500 on every session-authenticated request. The tenant hint
+   now scopes that read, which is what the hint was for; `VerifyTenantHint` still independently
+   confirms the loaded user belongs to it.
+3. **Logout audited with no tenant bound → 500.** Same family as the failed-login audit fixed in
+   S5; the logout route carries no tenant middleware because there is no tenant to resolve from
+   a request that is *ending* a session.
+
+### Proven, each with a positive control that fails if the plumbing breaks
+
+A session survives across requests; a hint whose signature does not verify yields no session;
+logout ends the session; and T-06 in passing — login without the CSRF token is 419.
+
+### Still NOT proven, and why (both falsified, both kept honest)
+
+- **SEC-04.** With `regenerate()` removed the BROWSER test also passed. Laravel re-encrypts the
+  session cookie with a fresh IV per response, so cookie *values* differ even when the session id
+  does not — a client-side comparison structurally cannot see regeneration. It needs a
+  server-side assertion (old id's Redis key gone, new one present). Skipped, not counted.
+- **`VerifyTenantHint`'s own comparison.** With the middleware disabled the Q7 test still passes,
+  because the provider refuses an unverifiable hint first. Proving the middleware needs a validly
+  signed hint for a *different* tenant, which the browser cannot forge without the app key.
+
+### Still not built (the rest of step 6)
+
+Concurrent-session cap and oldest eviction (FR-10), idle/absolute timeouts (FR-11), revocation +
+`session.revoked` publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03
+live-session invalidation, the per-request locale hop (I-5), and the devices screen with GeoIP
+(ADR 0006 still unwritten).
 
 
 ## Deferred with reason
