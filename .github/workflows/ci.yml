@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint-static:
-    name: "Stage 1: lint + static + gates"
+    name: "Stage 1: lint + static"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,8 +29,6 @@ jobs:
       - run: ./vendor/bin/phpstan analyse --memory-limit=1G
       - run: npx eslint resources/js tests/Browser
       - run: npx vue-tsc --noEmit
-      - name: CI gates (registries/gates.yaml order)
-        run: bash ci/run-gates.sh
 
   unit:
     name: "Stage 2: unit"
@@ -53,6 +51,15 @@ jobs:
     needs: unit
     steps:
       - uses: actions/checkout@v4
+      # The gate runner executes host-side here (registry checks, linters), and
+      # ci/isolation-suite.sh execs into the app container — so this stage needs
+      # PHP + vendor on the runner as well as the stack.
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pcntl, redis, pdo_pgsql, intl, zip, gd, bcmath
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
       # APP_KEY is injected host-side BEFORE up: containers mount .env
       # read-only, so key:generate cannot write it in-container (same class
       # of failure `make fresh` hit locally in Session 0).
@@ -61,6 +68,13 @@ jobs:
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - name: Bring up the ephemeral stack (same compose as local — parity)
         run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # The gates run HERE, not in Stage 1: the isolation-suite gate is
+      # container-only (Doc 01 §21 — it must never report PASS without running),
+      # and the stack it needs exists only in this stage. Same placement as
+      # local: `make gates` also requires the stack up. All 10 gates remain
+      # blocking; run 30607808128 is what happens when they run stackless.
+      - name: CI gates (registries/gates.yaml order)
+        run: bash ci/run-gates.sh
       - name: Integration + smoke suites inside the stack
         run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --testsuite=Integration
       - name: Stack teardown
