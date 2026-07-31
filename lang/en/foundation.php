@@ -56,4 +56,9 @@ return [
         ],
         'failed' => 'Setup could not finish at this step. Reference: :error_ref',
     ],
+
+    'feature' => [
+        // Registry #7 labels (FR-11) — what Doc 16's Backoffice shows next to each flag.
+        'emergency_read_only' => 'Emergency read-only mode',
+    ],
 ];

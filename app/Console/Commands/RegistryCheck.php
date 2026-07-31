@@ -8,15 +8,15 @@ use Illuminate\Console\Command;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Validates the six constitution registries (CLAUDE.md §2) against their
- * schemas and cross-checks them. Exits non-zero on any violation — this is
- * the `registry-check` CI gate.
+ * Validates the seven constitution registries (CLAUDE.md §2, ADR 0005) against
+ * their schemas and cross-checks them. Exits non-zero on any violation — this
+ * is the `registry-check` CI gate.
  */
 final class RegistryCheck extends Command
 {
     protected $signature = 'registry:check';
 
-    protected $description = 'Validate the six constitution registries and their cross-references';
+    protected $description = 'Validate the seven constitution registries and their cross-references';
 
     /** @var list<string> */
     private array $errors = [];
@@ -52,6 +52,7 @@ final class RegistryCheck extends Command
         $this->checkSettings($base.'/settings.php');
         $this->checkNotifications($base.'/notifications.php');
         $this->checkAuditCoverage($base.'/audit-coverage.php');
+        $this->checkFeatures($base.'/features.php');
         $gates = $this->checkGates($base.'/gates.yaml');
         $this->checkTraceability($base.'/traceability.yaml');
         $this->crossCheckGateCommands($gates);
@@ -65,7 +66,7 @@ final class RegistryCheck extends Command
             return self::FAILURE;
         }
 
-        $this->info('registry-check: PASS (all six registries well-formed and cross-consistent)');
+        $this->info('registry-check: PASS (all seven registries well-formed and cross-consistent)');
 
         return self::SUCCESS;
     }
@@ -285,6 +286,35 @@ final class RegistryCheck extends Command
                         $this->errors[] = sprintf('%s: required_fields entries must be non-empty strings', $ref);
                     }
                 }
+            }
+            $this->checkOwningDoc($entry['owning_doc'], $ref);
+        }
+    }
+
+    private function checkFeatures(string $path): void
+    {
+        $seen = [];
+        foreach ($this->loadPhpRegistry($path, 'features') as $i => $entry) {
+            $ref = sprintf('features[%d]', $i);
+            if (! $this->requireFields($entry, ['key', 'label_i18n_key', 'default', 'tenant_toggleable', 'owning_doc'], $ref)) {
+                continue;
+            }
+            $key = $entry['key'];
+            if (! is_string($key) || preg_match('/^[a-z0-9_]+(\.[a-z0-9_]+)+$/', $key) !== 1) {
+                $this->errors[] = sprintf('%s: key must be dot-namespaced lowercase, got %s', $ref, var_export($key, true));
+            } elseif (isset($seen[$key])) {
+                $this->errors[] = sprintf('%s: duplicate key "%s"', $ref, $key);
+            } else {
+                $seen[$key] = true;
+            }
+            if (! is_string($entry['label_i18n_key']) || $entry['label_i18n_key'] === '') {
+                $this->errors[] = sprintf('%s: label_i18n_key must be a non-empty string', $ref);
+            }
+            if (! is_bool($entry['default'])) {
+                $this->errors[] = sprintf('%s: default must be a bool — a flag is a switch, not a setting (FR-07 owns values)', $ref);
+            }
+            if (! is_bool($entry['tenant_toggleable'])) {
+                $this->errors[] = sprintf('%s: tenant_toggleable must be a bool', $ref);
             }
             $this->checkOwningDoc($entry['owning_doc'], $ref);
         }

@@ -38,7 +38,7 @@ STEP 5  Run the full gate suite (`make gates`). Paste the real output.
 STEP 6  SELF-AUDIT: re-read the document's §18 Acceptance Criteria one by one and produce a
         completion table: | AC id | test path | status (PASS / FAIL / NOT-IMPLEMENTED + why) |.
         Honest NOT-IMPLEMENTED rows are acceptable. A false PASS row is a Sev-1 defect.
-STEP 7  Update /docs/BUILD-STATUS.md and the six registries. Stop and report.
+STEP 7  Update /docs/BUILD-STATUS.md and the seven registries. Stop and report.
 ```
 
 ---
@@ -75,7 +75,7 @@ discipline, and each must have a test that fails if it is ever removed.
 
 ---
 
-## 2. The six registries (the platform's constitution)
+## 2. The seven registries (the platform's constitution)
 
 Every registry is a code-registered, machine-readable file that CI cross-checks. A feature that is
 not registered **cannot ship**.
@@ -88,6 +88,7 @@ not registered **cannot ship**.
 | Audit coverage matrix | `registries/audit-coverage.php` | Every state-mutating action has an audit entry; a mutation without one = build failure |
 | CI gate inventory | `registries/gates.yaml` | Each gate maps to its owning doc's AC; skipping a gate requires a signed change file the pipeline verifies |
 | Test traceability matrix | `registries/traceability.yaml` | Every AC in Docs 01–19 maps to ≥1 automated test or a justified manual/drill entry; unmapped AC = build failure |
+| Feature flags | `registries/features.php` | Every flag key has owning doc, default, `tenant_toggleable`; no unregistered flag may be read or written (ADR 0005, owner ruling) |
 
 ---
 
@@ -149,7 +150,7 @@ not registered **cannot ship**.
   /Http                   controllers, middleware, requests, resources
   /Jobs, /Listeners       queued work, per family
   /Support                shared kernel: TenantContext, Outbox, Settings, Ids, Problem
-/registries               the six registries (see §2)
+/registries               the seven registries (see §2)
 /database/migrations      expand-contract, linted
 /docs                     the 19 specification documents  ← THE LAW
   /adr                    architecture decision records (one per deviation or new dependency)

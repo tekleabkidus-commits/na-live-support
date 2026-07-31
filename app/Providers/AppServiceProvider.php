@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Support\Flags\FeatureRegistry;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 
@@ -56,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Registry #7: every flag in registries/features.php becomes a Pennant
+        // definition resolving its registered default (FR-11, ADR 0005).
+        $this->app->make(FeatureRegistry::class)->defineAll();
     }
 }

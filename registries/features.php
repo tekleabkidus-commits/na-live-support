@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|------------------------------------------------------------------------------
+| Feature-flag registry — registry #7 (CLAUDE.md §2, Doc 01 FR-11, ADR 0005)
+|------------------------------------------------------------------------------
+|
+| Every module registers its feature-flag keys here so Doc 16's Backoffice can
+| enumerate and toggle them without code knowledge (FR-11). No flag may be read
+| or written unless registered — FeatureRegistry throws on an unknown key, the
+| same posture as the settings engine.
+|
+| Entry schema (all fields required):
+|   key               string  dot-namespaced, e.g. "widget.file_upload"
+|   label_i18n_key    string  what Doc 16 shows an operator (N-03: never raw text)
+|   default           bool    the value every tenant starts with
+|   tenant_toggleable bool    false = platform-only switch, invisible to operators
+|   owning_doc        string  "DocNN"
+|
+| N-19 (flags hide, they never destroy): registered keys must never appear in a
+| migration — a flag may guard rendering and routing, never schema or deletes.
+| tests/Feature/Foundation/FeatureRegistryTest.php greps for exactly that.
+|
+*/
+
+return [
+    [
+        // FS-03's runbook switch: "enable emergency read-only mode flag while
+        // diagnosing" an isolation failure. Platform-only by nature — an operator
+        // must not be able to lift the platform out of a safety mode.
+        'key' => 'platform.emergency_read_only',
+        'label_i18n_key' => 'foundation.feature.emergency_read_only',
+        'default' => false,
+        'tenant_toggleable' => false,
+        'owning_doc' => 'Doc01',
+    ],
+];

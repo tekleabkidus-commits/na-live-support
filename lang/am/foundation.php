@@ -54,4 +54,8 @@ return [
         ],
         'failed' => 'ማዘጋጀቱ በዚህ ደረጃ መጠናቀቅ አልቻለም። ማጣቀሻ: :error_ref',
     ],
+
+    'feature' => [
+        'emergency_read_only' => 'የአደጋ ጊዜ ንባብ-ብቻ ሁነታ',
+    ],
 ];
