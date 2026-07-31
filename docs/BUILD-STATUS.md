@@ -212,7 +212,9 @@ test surface, not just S2's additions.
 ## Session-3 report (Doc 01 wrap-up) — THE FINAL DOC 01 SELF-AUDIT
 
 Evidence base: full suite **151 passed, 3 skipped (1624 assertions)**; `make gates` 10/10;
-Pint/PHPStan(max)/ESLint/vue-tsc clean. Every DONE row cites a test that executed. Two audit
+Pint/PHPStan(max)/ESLint/vue-tsc clean. **CI-proven on `c76bf7c`: run
+[30613246335](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30613246335),
+Stages 1–6 green, Stage 7 the by-design manual stub.** Every DONE row cites a test that executed. Two audit
 findings were FIXED rather than defended: S1's "immutability physics test asserts the grant"
 (N-13) referred to a hand-run ADR 0003 demonstration — no such test existed until
 `GrantPhysicsTest` this session, which then immediately caught a BR-02 DELETE hole in the
