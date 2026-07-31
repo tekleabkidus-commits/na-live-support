@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 4 of 14 planned steps done** | S4 | AC-01 partial (login half); 8 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `6a4fae0`: run [30658659162](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30658659162), Stages 1–6 green.** Lockout, sessions/devices, 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. See the S4 section |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 5 of 14 planned steps done** | S4–S5 | AC-01 partial (login half), **AC-02 covered**; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `a77c33a`: run [30661784756](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30661784756), Stages 1–6 green.** Sessions/devices, 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. See the S4/S5 sections |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -392,6 +392,67 @@ Stages 1–6 green, Stage 7 the by-design manual stub.** Local: 190 passed / 5 s
 | 4 | Doc 02 owns the users-table shape | **DONE** — expand-only migration, UUIDv7/timestamptz conventions kept |
 | 5 | Per-request user locale (C-08 first hop) | **NOT DONE** — `users.locale` exists and is read by the login door; nothing sets the request locale yet |
 | 6 | `set_config` preamble + `REVOKE DELETE` on new tenant tables | **DONE** — all five new tables, verified by the schema-generated physics tests |
+
+
+
+## Session-5 report (Doc 02 step 5 — lockout, plus the S4 flake follow-up)
+
+**Evidence: 200 passed / 5 skipped (2159 assertions), `make gates` 10/10, lint clean.
+CI-proven on `a77c33a`: run
+[30661784756](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30661784756),
+Stages 1–6 green.**
+
+### The S4 flake: not reproduced, now self-diagnosing
+
+Fifteen further full-suite runs — 6 quiet, 3 of the enumeration group under 8-core load,
+3 full-suite under load, 3 with `--order-by=random` (which would surface inter-test state
+leakage, the class BUILD-STATUS warns about) — all green. The flake did not recur and
+**remains unidentified**.
+
+Prime suspect, on reasoning rather than evidence: `FoundationBudgetsTest` is the only
+default-run assertion whose outcome depends on machine load, and Doc 01 already records its
+events-insert row as MARGINAL. Rather than guess further or weaken anything, its failure
+messages now carry p50/p99/max, the asserted ceiling, the spec budget and which mode
+produced it — verified by running `PERF_BUDGETS_ENFORCE=1`, which fires the message with
+real numbers. The next occurrence will identify itself.
+
+### AC-02 proven, and more than AC-02 asks
+
+| Clause | Evidence |
+|---|---|
+| 1–4 generic, no lock | `LockoutTest` — counter increments, `locked_until` stays null, message identical to any other miss |
+| 5th locks | proven; the CORRECT password is then refused, with no lock state or remaining time in the body |
+| reset unlocks | EC-11's guaranteed victim path — the account works immediately afterwards |
+| admin unlock audited | audited at the unit boundary (`unlockByAdmin` records the acting admin). **No route invokes it yet** — the admin surface is a later step, so this clause is not proven through HTTP |
+| window rolls / lock expires | asserted at exact boundaries with an injected clock (CLAUDE.md §8) |
+| per-IP throttle independent | 20 refusals then 429, and *not* before the budget, against addresses with no account — EC-11's attacker cap |
+| multi-candidate (owner ruling) | one failed attempt locks EVERY account matching that address across tenants |
+
+Falsified twice: the lockout trigger disabled (6 tests red, including brute-force and
+EC-11), and counting limited to the first candidate (the multi-candidate test red). Both
+restored; tree verified clean.
+
+### Two defects this step exposed
+
+1. **Audit writes for a failed login had no tenant bound.** A failed login binds no tenant
+   by definition, but the audit row and outbox row live in the target account's tenant,
+   behind RLS. The insert failed *and aborted the surrounding transaction*, so every later
+   statement failed with "current transaction is aborted" and the real cause was invisible
+   behind the cascade. Fixed by extracting `RunsWithinTenant` (restore in a `finally` —
+   Doc 01 R-01's failure mode is exactly a helper that binds and forgets to unbind).
+2. **Two test bugs of the same family, both of which produced false confidence.**
+   `postJson()`'s third argument is HEADERS, so `REMOTE_ADDR` never set the client IP and
+   the entire suite shared one throttle bucket — this had also been silently threatening
+   the AC-01 timing suite, which makes 10+ requests. And Pest's `toContain` is *variadic
+   over expected values*, so a "message" second argument was asserted as an extra element
+   the array had to contain. Same trap as `toHaveKey` in S4. **In this framework custom
+   messages belong to `toBeTrue`/`toBeFalse`, not to the collection matchers.**
+
+### Still NOT built (nine of fourteen steps)
+
+Sessions/devices (incl. inherited Doc 01 EC-03 and the locale hop), 2FA, password lifecycle
+(so **AC-01's reset half stays unproven**), API tokens and the T-05 intersection, widget
+tokens, webhook auth, the SEC-08 log-scrubber gate, and every screen.
 
 
 ## Deferred with reason
