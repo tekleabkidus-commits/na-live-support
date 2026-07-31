@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Support\Flags\FeatureRegistry;
+use App\Support\I18n\TelemetricTranslator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Translation\Translator;
 use Laravel\Fortify\Fortify;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +18,15 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->deferAuthenticationRoutesToDoc02();
+
+        // C-08's fallback chain (user → tenant default → English) with §14's
+        // missing-translation telemetry, replacing the stock single-fallback translator.
+        $this->app->extend('translator', function (Translator $translator): TelemetricTranslator {
+            $replacement = new TelemetricTranslator($translator->getLoader(), $translator->getLocale());
+            $replacement->setFallback($translator->getFallback());
+
+            return $replacement;
+        });
     }
 
     /**
