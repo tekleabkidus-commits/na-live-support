@@ -93,6 +93,14 @@ final class EventPartitions
                     sprintf("'%s'", $month->toDateTimeString()),
                     sprintf("'%s'", $month->addMonth()->toDateTimeString()),
                 ));
+
+                // The promise the RLS migration made on this class's behalf: a parent's
+                // policies do not govern DIRECT queries against a partition, so every
+                // new partition gets its own copy — enable, force, police — or
+                // `SELECT * FROM events_2027_01` would be an unscoped read of a month
+                // of events. RlsCoverageTest asserts no partition is ever bare.
+                $this->protect($name);
+
                 $created[] = $name;
             }
 
@@ -180,6 +188,24 @@ final class EventPartitions
                 return (int) $rows[0]->n;
             },
         );
+    }
+
+    /**
+     * The same enable + force + policy the RLS migration applies — kept textually in
+     * step with its protect(); RlsCoverageTest fails if either side drifts.
+     */
+    private function protect(string $partition): void
+    {
+        DB::connection(self::CONNECTION)->statement(sprintf('ALTER TABLE %s ENABLE ROW LEVEL SECURITY', $partition));
+        DB::connection(self::CONNECTION)->statement(sprintf('ALTER TABLE %s FORCE ROW LEVEL SECURITY', $partition));
+        DB::connection(self::CONNECTION)->statement(sprintf(
+            <<<'SQL'
+                CREATE POLICY tenant_isolation ON %1$s
+                    USING (tenant_id = current_setting('app.tenant_id')::uuid)
+                    WITH CHECK (tenant_id = current_setting('app.tenant_id')::uuid)
+                SQL,
+            $partition,
+        ));
     }
 
     private function monthOf(string $partitionName): ?CarbonImmutable
