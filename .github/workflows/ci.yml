@@ -72,6 +72,13 @@ jobs:
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - name: Bring up the ephemeral stack (same compose as local — parity)
         run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # The MAIN stack database gets its schema the way a deploy would. The test
+      # harness migrates only na_live_support_test (per process, migrator role);
+      # StackSmokeTest inspects na_live_support itself — run 30608153474 failed
+      # because the S1 function-ownership assertion was the first smoke check to
+      # need real schema there, and only local dev had ever migrated it.
+      - name: Migrate the stack database (same command as `make fresh`)
+        run: docker compose -f docker/compose.yaml exec -T app php artisan migrate:fresh --seed --force --database=pgsql_migrator
       # The gates run HERE, not in Stage 1: the isolation-suite gate is
       # container-only (Doc 01 §21 — it must never report PASS without running),
       # and the stack it needs exists only in this stage. Same placement as
