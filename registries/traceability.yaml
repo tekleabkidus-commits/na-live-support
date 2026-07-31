@@ -327,20 +327,29 @@ entries:
   # ════════════════════════════════════════════════════════════════════════════
 
   - ac_ref: "Doc02 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/EnumerationTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      Planned suite: tests/Security/EnumerationTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the login step (step 4 of the approved Doc 02 plan): byte-identical
-      bodies and ±50 ms timing across existing/non-existing emails on login and reset,
-      written BEFORE the login flow it constrains. Not yet built — no login flow
-      exists at the skeleton step.
+    status: partial
+    gap: >-
+      PROVEN for LOGIN, both dimensions. Bodies: byte-identical across
+      existing/non-existing addresses AND across "exists in two tenants" vs "exists
+      nowhere" — one refusal path (LoginRefused) renders every credential failure, so
+      identity is structural rather than coincidental. Timing: equalisation measured at
+      the provider, where it lives — 86.2 ms vs 0.8 ms when the dummy verify is removed,
+      within ±50 ms when present, plus a floor assertion so "both paths cheap" also
+      fails. The HTTP-level timing test was REMOVED after being proven unable to detect
+      an 89 ms hole (medians 205.8 vs 205.7 with the defence deleted); that measurement
+      is recorded in the test.
+      NOT YET COVERED: the RESET half of AC-01 ("login and reset"), and the invite flow
+      SEC-01 also names — the password-lifecycle step was not reached this session.
+      A known residual, deliberately not closed: an address existing in N tenants costs
+      N verifications, so multi-tenant membership is timing-distinguishable to an
+      attacker who already knows the address exists. Existence itself — what AC-01
+      specifies — is not.
 
   - ac_ref: "Doc02 AC-02"
     suite_path: manual

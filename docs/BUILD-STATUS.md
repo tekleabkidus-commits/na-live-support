@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | IN PROGRESS | S4 | 0/9 | Skeleton landed: explicit-registration policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, permission gate flipped blocking (first 2 keys), auth.* settings registered (T-10), all 9 ACs mapped not-implemented (ADR 0004). **SEC-06 TLS stack CI-proven on `ac9a483`: run [30626690339](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30626690339), Stages 1–6 green** — https+wss end to end, cleartext refused in every environment |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 4 of 14 planned steps done** | S4 | AC-01 partial (login half); 8 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `6a4fae0`: run [30658659162](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30658659162), Stages 1–6 green.** Lockout, sessions/devices, 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. See the S4 section |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -303,6 +303,96 @@ ACK, EC-03 sessions, NFR-06/SEC-05 callers, FS-01/FS-02 infra, R-02 consumers, A
 (EC-09 grace, R-04 usage APIs, FS-03 read-only enforcement); (4) genuinely small residue
 buildable today (FR-10/T-10 seed assertions, BR-03 ref grants, T-06 correlation continuity,
 EC-07 seed additivity, R-03 telemetry — none is load-bearing for Docs 02–07 to proceed).
+
+
+## Session-4 report (Doc 02 — Authentication, Sessions & Security Core: steps 1–4 of 14)
+
+**Doc 02 is NOT complete and is not close.** Four of the fourteen approved steps landed.
+What exists is the security *substrate* — transport, schema, pre-tenant identity resolution,
+and the login path with its enumeration defence. What does not exist yet is most of the
+document's user-visible surface: lockout, sessions and devices, 2FA, password lifecycle,
+API tokens, widget tokens, webhook auth, and every screen.
+
+**CI-proven on `6a4fae0`: run
+[30658659162](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30658659162),
+Stages 1–6 green, Stage 7 the by-design manual stub.** Local: 190 passed / 5 skipped
+(2096 assertions), `make gates` 10/10, Pint + PHPStan(max) + ESLint + vue-tsc clean.
+
+### Proven by executed tests
+
+| Area | Evidence |
+|---|---|
+| SEC-06 transport | `StackSmokeTest` (verify_peer ON, SAN coverage, 30-day expiry margin, cleartext-serves-no-body, WSS handshake) + `HttpsRefusalTest` (426 in *testing* and under a simulated production env) + `transport.spec.ts` (browser: redirect, HSTS, CSP **enforced** — an unnonced inline script is refused) |
+| T-07 headers | `SecurityHeadersTest` — full set on page, API and error responses; nonce rotates per request |
+| T-02 / SEC-07 | `MiddlewareOrderTest` (order asserted from the real route table), `NoImpersonationTest` (routes, all seven registries, and the file tree swept) |
+| I-1 route policy | `RouteRegistrationTest` — deferral gone, auto-registration permanently off, no `/register`, and in-suite mirrors of the permission-mapping and audit-coverage gates |
+| Auth schema physics | `GrantPhysicsTest` + `RlsCoverageTest` + `CrossTenantAccessTest` pick up all five new tables automatically: RLS+FORCE, DELETE revoked, timestamptz. Plus the Q6 assertion that **no readable recovery-code column exists** |
+| Pre-tenant doors (I-2, Q1, Sanctum ruling) | `PreTenantLookupTest` — each door answers with no tenant bound, direct reads still refused, no lasting cross-tenant visibility, exact-match only, no secret returned; both doors owned by NOLOGIN `key_resolver` |
+| FR-01/FR-03a login | `LoginFlowTest` — signs in, binds the tenant discovered from the account, refuses a wrong password with problem-details |
+| AC-01 (login half) | `EnumerationTest` — byte-identical bodies incl. the multi-tenant case; equalisation measured at the provider: **86.2 ms vs 0.8 ms** when removed, within ±50 ms when present |
+
+### Three findings that falsification caught and review would not have
+
+1. **The AC-01 suite was passing vacuously.** `/login` failures rendered as **302 redirects**,
+   because Doc 01's handler only returns JSON for `api/*`. AC-01 compares two *failures*, and
+   two broken responses are byte-identical — so the suite was green while the login route was
+   wrong, and it *stayed* green when the timing equalisation was deliberately deleted. Fixed by
+   proving the SUCCESS path first (`LoginFlowTest`) and giving refusals a real problem-details
+   response (`LoginRefused`). **The general lesson: a safety test that compares two failures is
+   only as trustworthy as a separate proof that success works.**
+2. **The HTTP-level timing test could not detect an 89 ms hole.** With the defence removed,
+   medians were 205.8 ms vs 205.7 ms — request overhead swamped the signal. Replaced with a
+   provider-level measurement that fails at 86.2 vs 0.8 ms, plus a floor assertion so a future
+   "optimisation" making *both* paths cheap also fails. The measurements are recorded in the test.
+3. **Registering the rate limiter via the facade resolved the cache driver at boot**, which
+   silently defeated Doc 01's FS-01 proof: `QuotaTest` could no longer simulate a Redis outage,
+   because the cache repository was already built with a live connection. Deferred to
+   `afterResolving`. A Doc 01 test went permanently green for a Doc 02 reason.
+
+### NOT built in S4 (the remaining ten steps)
+
+| Doc 02 area | State |
+|---|---|
+| FR-03 lockout state machine, AC-02, EC-11 | NOT STARTED — schema columns exist and are unused |
+| FR-10–14 sessions, devices, AC-04 socket close, I-3 suspension-kills-sessions, I-5 locale | NOT STARTED — `devices` table exists and is unwritten; login records `device_id: ''` deliberately rather than faking one |
+| FR-06–09 2FA, AC-03, EC-10, SEC-03 | NOT STARTED — hashed recovery-code store and 2FA columns exist, no flow |
+| FR-15–17 password lifecycle, T-09 breach check, FS-02 mail | NOT STARTED — `auth_action_tokens`, history table and reset door exist, no flow. **AC-01's reset half is therefore unproven** |
+| FR-18–20 tokens, T-05 intersection, AC-05, BR-03/BR-04, FS-05 | NOT STARTED — table + `resolve_api_token` door exist, no guard, no intersection engine |
+| FR-21/22 widget tokens, AC-06, BR-06 | NOT STARTED — the `widget` guard is deliberately absent from config/auth.php rather than stubbed |
+| FR-23–25 webhook auth, AC-07 | NOT STARTED |
+| SEC-08 log-scrubber gate, AC-08 | NOT STARTED |
+| §8/§9/§13 views, AC-09 | NOT STARTED — no auth screen exists; routes/auth.php carries only POST /login and /logout |
+
+### Risks carried forward
+
+- **The suite failed once in ~six full runs, then passed 3/3 on re-run, and I did not
+  identify which test.** It is most likely the AC-01 provider timing measurement or the
+  Doc 01 performance budgets (both median-based on shared hardware), but *likely* is not
+  *known*. A flaky safety test teaches people to re-run red, which is how a real failure gets
+  ignored — the next session should identify and stabilise it before adding more timing tests.
+- **A known, deliberate residual in AC-01:** an address existing in N tenants costs N password
+  verifications, so "this address is in more than one workspace" is timing-distinguishable to
+  someone who already knows the address exists. Existence itself — what AC-01 specifies — is
+  not. Closing it would mean padding every login to the worst case, a permanent tax on the
+  shift-start spike (§12).
+- **`RequirePermission` declares but does not enforce for staff sessions.** That is the agreed
+  Doc 03 seam and it is documented in the class, but until Doc 03 lands, a route carrying
+  `permission:settings.edit` is *mapped*, not *guarded*.
+- **The dev TLS certificate is baked into the image and is public by construction.** It is
+  named "NOT FOR PRODUCTION" for that reason; Doc 18 FR-12 owns real material.
+- **Amharic auth copy is machine-authored** and joins the standing pre-launch native-review item.
+
+### Inherited-task status (the six Doc 01 handed to Doc 02)
+
+| # | Item | State |
+|---|---|---|
+| 1 | Remove `deferAuthenticationRoutesToDoc02` | **DONE** — replaced by permanent explicit registration; gates flipped blocking and are green |
+| 2 | Pre-tenant email lookup the `resolve_tenant_key` way | **DONE** — `resolve_staff_login`, proven narrow in `PreTenantLookupTest` |
+| 3 | Doc 01 EC-03: suspension invalidates LIVE sessions | **NOT DONE** — belongs to the sessions step; today suspension is refused at the next request only |
+| 4 | Doc 02 owns the users-table shape | **DONE** — expand-only migration, UUIDv7/timestamptz conventions kept |
+| 5 | Per-request user locale (C-08 first hop) | **NOT DONE** — `users.locale` exists and is read by the login door; nothing sets the request locale yet |
+| 6 | `set_config` preamble + `REVOKE DELETE` on new tenant tables | **DONE** — all five new tables, verified by the schema-generated physics tests |
+
 
 ## Deferred with reason
 
