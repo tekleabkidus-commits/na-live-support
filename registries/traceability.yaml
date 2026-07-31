@@ -102,17 +102,21 @@ entries:
 
   # ── Doc 01 AC-05: concurrent provisioning ──────────────────────────────────
   - ac_ref: "Doc01 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Isolation/ConcurrentProvisioningTest.php
+    type: automated
     tier: integration
-    cadence: release
+    cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S1. The idempotency key exists as a unique index on
-      (tenant_id, step) in tenant_provisioning_steps, but the provisioning job that
-      would race against it was not built.
+    status: covered
+    gap: >-
+      The concurrency proof uses two independent database connections with genuinely
+      overlapping transactions against unique (tenant_id, step) — the loser learns it
+      lost from the database, not from a check. Also proven: sequential retry (EC-05),
+      double dispatch through the real job with the T-05 binding, FR-03f fail-before-
+      handler, and the EC-04 mid-flight suspension halt. Roles/SLA/business-hours/KB
+      steps are recorded seams: Docs 03/12/10 own their contents, so completion of
+      those steps creates nothing yet — visible via isSeamAwaitingItsModule().
 
   # ── FR-07 / T-04 / EC-06 / FS-01: the settings engine ──────────────────────
   #
