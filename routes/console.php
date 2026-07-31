@@ -2,9 +2,26 @@
 
 declare(strict_types=1);
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+/*
+|------------------------------------------------------------------------------
+| Scheduled foundation jobs (Doc 01)
+|------------------------------------------------------------------------------
+|
+| The scaffolded `inspire` command is gone — a platform whose console prints
+| inspirational quotes but not its own maintenance schedule has its priorities
+| inverted. Everything here runs platform-scope on the scheduler container.
+|
+| EC-10's pairing is deliberate: maintain keeps the partition window rolling
+| monthly; check verifies DAILY that it worked and that nothing has landed in
+| the DEFAULT partition. The monitor's non-zero exit is the alert channel until
+| Doc 18 wires real alerting.
+|
+*/
+
+Schedule::command('partitions:maintain')->monthlyOn(1, '02:00')->timezone('UTC');
+Schedule::command('partitions:check')->dailyAt('02:30')->timezone('UTC');
+
+// FS-05: Redis quota counters reconciled against the durable ledger.
+Schedule::command('quota:reconcile')->hourly();
