@@ -26,7 +26,18 @@ return Application::configure(basePath: dirname(__DIR__))
             // Declares which audit action a mutating route emits, and verifies at runtime
             // that it actually did. The `audit-coverage` gate reads these declarations.
             'audit' => App\Http\Middleware\DeclareAuditAction::class,
+            // Doc 02 T-02/T-05: declares which permission a route requires. The
+            // permission-mapping gate reads these; enforcement layers attach here
+            // (token-scope intersection in Doc 02's token step, staff verdicts in
+            // Doc 03). See the middleware's docblock before assuming it enforces.
+            'permission' => App\Http\Middleware\RequirePermission::class,
         ]);
+
+        // Doc 02 T-07: one security-header posture on every response, both
+        // surfaces. Appended (not prepended) so it wraps the innermost work and
+        // stamps headers even on responses produced by earlier middleware.
+        $middleware->appendToGroup('web', App\Http\Middleware\SecurityHeaders::class);
+        $middleware->appendToGroup('api', App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -47,13 +47,21 @@ Route::group([], function (): void {
             // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
             // which is a deletion of the override row rather than a write of the
             // default — see SettingsRepository::reset().
-            Route::get('settings', [TenantSettingsController::class, 'index'])->name('foundation.settings.index');
-            Route::get('settings/{key}', [TenantSettingsController::class, 'show'])->name('foundation.settings.show');
+            // Permission keys from Doc 03's catalog (its §4 defines the names;
+            // Doc 02's session added the mappings when the gate flipped blocking).
+            // Until Doc 03's resolver lands these DECLARE rather than enforce for
+            // staff sessions — see RequirePermission's docblock.
+            Route::get('settings', [TenantSettingsController::class, 'index'])
+                ->middleware('permission:settings.view')
+                ->name('foundation.settings.index');
+            Route::get('settings/{key}', [TenantSettingsController::class, 'show'])
+                ->middleware('permission:settings.view')
+                ->name('foundation.settings.show');
             Route::put('settings/{key}', [TenantSettingsController::class, 'update'])
-                ->middleware('audit:tenant.setting_changed')
+                ->middleware(['permission:settings.edit', 'audit:tenant.setting_changed'])
                 ->name('foundation.settings.update');
             Route::delete('settings/{key}', [TenantSettingsController::class, 'destroy'])
-                ->middleware('audit:tenant.setting_changed')
+                ->middleware(['permission:settings.edit', 'audit:tenant.setting_changed'])
                 ->name('foundation.settings.reset');
         });
 

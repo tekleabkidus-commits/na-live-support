@@ -314,3 +314,153 @@ entries:
       NOT provable yet: "inbound is still ACKed to channels" — no channel exists.
       Doc 04 must prove ACK-but-summarize against this frozen contract (owner ruling,
       inherited task in BUILD-STATUS). PARTIAL until that proof exists.
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # Doc 02 — Authentication, Sessions & Security Core (S4)
+  #
+  # All nine ACs mapped in the SAME COMMIT that flips the BUILD-STATUS row to
+  # IN PROGRESS (ADR 0004: leaving NOT STARTED makes these rows blocking, so the
+  # flip and the rows must land together). Rows start not-implemented with the
+  # step that builds them named; each step updates its own row when the test
+  # actually executes. A row claiming coverage before its test runs is the false
+  # PASS this registry exists to prevent.
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - ac_ref: "Doc02 AC-01"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Security/EnumerationTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the login step (step 4 of the approved Doc 02 plan): byte-identical
+      bodies and ±50 ms timing across existing/non-existing emails on login and reset,
+      written BEFORE the login flow it constrains. Not yet built — no login flow
+      exists at the skeleton step.
+
+  - ac_ref: "Doc02 AC-02"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Feature/Auth/LockoutTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the lockout step (step 5): 1–4 generic, 5th locks, reset unlocks
+      per candidate account (owner ruling on multi-candidate emails), admin unlock
+      audited. Not yet built.
+
+  - ac_ref: "Doc02 AC-03"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Feature/Auth/TwoFactorChallengeTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the 2FA step (step 7): ±1 step accepted, ±2 rejected against the
+      pinned window config, 5-failure void, recovery-code single use. Not yet built.
+
+  - ac_ref: "Doc02 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Integration/SessionRevocationSocketTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the sessions step (step 6): 6th login evicts oldest, evicted
+      session's real Reverb socket closes ≤ 2 s. Not yet built.
+
+  - ac_ref: "Doc02 AC-05"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Feature/Auth/TokenScopeIntersectionTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the token step (step 9). WILL END THIS SESSION AS PARTIAL BY OWNER
+      RULING (plan Q5): the intersection engine, 10 s cache, and 403-naming-the-key
+      are proven against the permission keys this session registers and the stubbed
+      Doc 03 resolver; the literal tickets.read/tickets.reply wording needs Doc 03's
+      real resolver and Doc 06's ticket routes. A DONE here before then is a false
+      DONE.
+
+  - ac_ref: "Doc02 AC-06"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Feature/Auth/WidgetSessionTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the widget-token step (step 10): allowed origin succeeds; disallowed
+      fails at the CORS layer and the server layer independently. Not yet built.
+
+  - ac_ref: "Doc02 AC-07"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Feature/Auth/WebhookAuthTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the webhook-auth step (step 11): secret mismatch → 403, nothing
+      processed, metric incremented — against Doc 01's existing ingress probes.
+      Not yet built.
+
+  - ac_ref: "Doc02 AC-08"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Security/SecretsNeverSerializeTest.php (converted from "manual" the moment the
+      file exists and executes).
+      Planned for the secret-hygiene step (step 12): seeded fake credentials absent
+      from every sink (logs, jobs, events, audit payloads), plus the new log-scrubber
+      CI gate. Not yet built.
+
+  - ac_ref: "Doc02 AC-09"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned suite: tests/Browser/auth-visual.spec.ts (converted from "manual" the moment the
+      file exists and executes).
+      PARTIAL BY DESIGN for this session (owner-approved closure bucket): the views
+      step (step 13) ships fully functional, themed, i18n-keyed screens with
+      mechanical a11y assertions in the 360 px Playwright smoke; pixel-regression
+      baselines for every §8 state in en+am × light+dark attach when the approved
+      Claude Design screens land. This row records that bucket rather than claiming
+      visual coverage that does not exist.

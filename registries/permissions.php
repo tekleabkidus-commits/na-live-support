@@ -20,5 +20,38 @@ declare(strict_types=1);
 */
 
 return [
-    // Intentionally empty in Session 0. First entries arrive with Doc 03.
+    /*
+    |--------------------------------------------------------------------------
+    | First entries (Doc 02 session)
+    |--------------------------------------------------------------------------
+    |
+    | Registering the FIRST key flips the permission-mapping gate from warn to
+    | blocking for EVERY route — that flip is deliberate and happened in the
+    | Doc 02 skeleton commit, with all pre-existing routes mapped or exempted in
+    | the same commit.
+    |
+    | Key NAMES are Doc 03's: its §4 catalog is the naming authority
+    | (settings.view, settings.edit, admin.users.*, admin.2fa.reset,
+    | apikeys.machine.manage, …) and its NFR-03 forbids ever renaming a key. So
+    | entries registered before Doc 03's session carry owning_doc "Doc03" — the
+    | document that DEFINES the key — even though Doc 02's routes are the first
+    | consumers. Doc 02 invents no key names of its own; scopes here are the
+    | narrowest reading and Doc 03's session is the authority that widens them.
+    |
+    */
+
+    [
+        'key' => 'settings.view',
+        'label_i18n_key' => 'perm.settings.view',
+        'group' => 'settings',
+        'scopes' => ['All'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'key' => 'settings.edit',
+        'label_i18n_key' => 'perm.settings.edit',
+        'group' => 'settings',
+        'scopes' => ['All'],
+        'owning_doc' => 'Doc03',
+    ],
 ];

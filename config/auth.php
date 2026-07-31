@@ -11,37 +11,45 @@ return [
     | Authentication Defaults
     |--------------------------------------------------------------------------
     |
-    | This option defines the default authentication "guard" and password
-    | reset "broker" for your application. You may change these values
-    | as required, but they're a perfect start for most applications.
+    | The default guard is `staff` — the browser-session staff surface. Named
+    | for what it authenticates, not for the transport, per Doc 02 T-02.
     |
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
+        'guard' => env('AUTH_GUARD', 'staff'),
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Guards
+    | Authentication Guards (Doc 02 T-02, BR-06)
     |--------------------------------------------------------------------------
     |
-    | Next, you may define every authentication guard for your application.
-    | Of course, a great default configuration has been defined for you
-    | which utilizes session storage plus the Eloquent user provider.
+    | Three strictly partitioned guards, and the partition is STRUCTURAL:
     |
-    | All authentication guards have a user provider, which defines how the
-    | users are actually retrieved out of your database or other storage
-    | system used by the application. Typically, Eloquent is utilized.
-    |
-    | Supported: "session"
+    |   staff   session-backed browser guard for staff users. Fortify drives its
+    |           flows; routes/auth.php owns its routes.
+    |   api     Sanctum bearer tokens (personal + machine), stateless. Scope
+    |           enforcement is the T-05 intersection, but the guard boundary
+    |           itself never depends on scopes.
+    |   widget  registered by the widget step (FR-21) with its OWN driver whose
+    |           principal is a visitor record, NOT App\Models\User — so a widget
+    |           token can never satisfy `auth:staff`/`auth:api` regardless of any
+    |           scope misconfiguration (BR-06). It is absent here until that
+    |           driver exists: a guard entry pointing at an unregistered driver
+    |           would be dead config that LOOKS like a partition.
     |
     */
 
     'guards' => [
-        'web' => [
+        'staff' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],

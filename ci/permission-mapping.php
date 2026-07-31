@@ -76,8 +76,18 @@ foreach ($routes as $route) {
 
     $mappedKey = null;
     foreach ($middlewareList as $mw) {
-        if (is_string($mw) && str_starts_with($mw, 'permission:')) {
-            $mappedKey = substr($mw, strlen('permission:'));
+        // Matched on BOTH spellings for the same reason ci/audit-coverage.php documents:
+        // `route:list --json` reports middleware with aliases already resolved, so a route
+        // declaring `permission:settings.view` comes back as
+        // `App\Http\Middleware\RequirePermission:settings.view`. The alias-only match
+        // reported every properly mapped route as unmapped — a false FAIL, invisible
+        // until Doc 02 mapped the first route.
+        if (! is_string($mw) || ! str_contains($mw, ':')) {
+            continue;
+        }
+        [$head, $tail] = explode(':', $mw, 2);
+        if ($head === 'permission' || str_ends_with($head, 'RequirePermission')) {
+            $mappedKey = $tail;
             break;
         }
     }
