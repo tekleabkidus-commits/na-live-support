@@ -51,6 +51,11 @@ return new class extends Migration
 
         DB::statement('ALTER TABLE tenant_cold_summaries ADD CONSTRAINT tenant_cold_summaries_count_check CHECK (message_count >= 0)');
 
+        // BR-02: default privileges include DELETE; every tenant-scoped table revokes
+        // it at birth. Caught by GrantPhysicsTest on this migration's first audit —
+        // the summary row for a dead account is itself never hard-deleted by the app.
+        DB::statement('REVOKE DELETE ON tenant_cold_summaries FROM app');
+
         DB::statement('ALTER TABLE tenant_cold_summaries ENABLE ROW LEVEL SECURITY');
         DB::statement('ALTER TABLE tenant_cold_summaries FORCE ROW LEVEL SECURITY');
         DB::statement(<<<'SQL'
