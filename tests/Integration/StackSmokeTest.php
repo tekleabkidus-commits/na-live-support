@@ -250,15 +250,72 @@ test('host-published database ports reach the stack containers, not a host impos
     );
 });
 
-test('the running app server answers /up', function () {
-    [$host, $port] = stackEndpoint('App server', 'app', 80);
+test('the running app server answers /up over TLS with a chain that validates', function () {
+    [$host, $port] = stackEndpoint('App server', 'app', 443);
 
-    $ctx = stream_context_create(['http' => ['timeout' => 5]]);
-    $body = @file_get_contents(sprintf('http://%s:%d/up', $host, $port), false, $ctx);
+    // verify_peer TRUE, against the dev CA in the image trust store (Doc 02
+    // SEC-06). A smoke test that passed `verify_peer => false` would report a
+    // healthy stack while serving an expired, self-signed or wrong-host
+    // certificate — which is most of what can actually go wrong with TLS.
+    $ctx = stream_context_create([
+        'http' => ['timeout' => 5],
+        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true],
+    ]);
+    $body = @file_get_contents(sprintf('https://%s:%d/up', $host, $port), false, $ctx);
     $status = isset($http_response_header[0]) ? $http_response_header[0] : 'no response';
 
-    expect($body)->not->toBeFalse('GET /up returned no body')
+    expect($body)->not->toBeFalse('GET https:///up returned no body — TLS handshake or app failure')
         ->and($status)->toContain('200');
+});
+
+test('the app serves NOTHING over cleartext: :80 only redirects (SEC-06)', function () {
+    [$host, $port] = stackEndpoint('App server cleartext', 'app', 80);
+
+    $ctx = stream_context_create([
+        'http' => ['timeout' => 5, 'follow_location' => 0, 'ignore_errors' => true],
+    ]);
+    $body = @file_get_contents(sprintf('http://%s:%d/up', $host, $port), false, $ctx);
+    $headers = implode("\n", $http_response_header ?? []);
+
+    // 308 preserves the method, so a POST of credentials is never silently
+    // downgraded to a GET that drops its body somewhere in the middle.
+    expect($headers)->toContain('308')
+        ->and($headers)->toContain('Location: https://')
+        // The health payload must NOT appear: a redirect that also serves the
+        // body has still served the body over cleartext.
+        ->and((string) $body)->not->toContain('Application up');
+});
+
+test('the app certificate covers every name the stack addresses it by', function () {
+    [$host, $port] = stackEndpoint('App server', 'app', 443);
+
+    $ctx = stream_context_create([
+        'ssl' => ['capture_peer_cert' => true, 'verify_peer' => true, 'verify_peer_name' => true],
+    ]);
+    $client = @stream_socket_client(
+        sprintf('ssl://%s:%d', $host, $port),
+        $errno,
+        $errstr,
+        5,
+        STREAM_CLIENT_CONNECT,
+        $ctx,
+    );
+    expect($client)->not->toBeFalse("TLS handshake with the app failed: $errstr");
+
+    $params = stream_context_get_params($client);
+    $cert = openssl_x509_parse($params['options']['ssl']['peer_certificate']);
+    fclose($client);
+
+    $san = $cert['extensions']['subjectAltName'] ?? '';
+
+    // Container-to-container and host-side names both have to work, or half the
+    // stack silently falls back to cleartext or fails at handshake time.
+    expect($san)->toContain('DNS:localhost')
+        ->and($san)->toContain('DNS:app')
+        ->and($san)->toContain('DNS:reverb')
+        // Not expired, and not about to be: a dev cert that quietly lapses looks
+        // like a networking outage to whoever hits it next.
+        ->and($cert['validTo_time_t'])->toBeGreaterThan(time() + 86400 * 30);
 });
 
 test('postgres role physics: app cannot bypass RLS, platform_admin is the only bypasser', function () {
@@ -374,12 +431,28 @@ test('horizon supervises all eleven queue families', function () {
     }
 });
 
-test('reverb accepts a websocket connection', function () {
+test('reverb accepts a websocket connection over WSS with a validated chain', function () {
     [$host, $port] = stackEndpoint('Reverb', 'reverb', 8080);
 
     $key = getenv('REVERB_APP_KEY') ?: 'local-key';
-    $socket = fsockopen($host, $port, $errno, $errstr, 5);
-    expect($socket)->not->toBeFalse("TCP connect to Reverb failed: $errstr");
+
+    // ssl:// with verify_peer, not fsockopen. Realtime carries the session
+    // events T-04 uses to force-close revoked sessions (AC-04), so it is the
+    // last transport that may be cleartext — and a plain TCP connect would
+    // succeed against a Reverb serving no TLS at all, which is exactly the
+    // regression this asserts against.
+    $ctx = stream_context_create([
+        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true, 'peer_name' => $host],
+    ]);
+    $socket = @stream_socket_client(
+        sprintf('ssl://%s:%d', $host, $port),
+        $errno,
+        $errstr,
+        5,
+        STREAM_CLIENT_CONNECT,
+        $ctx,
+    );
+    expect($socket)->not->toBeFalse("WSS connect to Reverb failed: $errstr");
 
     $handshake = "GET /app/$key HTTP/1.1\r\n"
         ."Host: {$host}:{$port}\r\n"

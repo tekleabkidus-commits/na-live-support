@@ -2,7 +2,7 @@
 # Parity rule (Doc 01 SEC-01): RLS, Octane, and real queue workers are ON
 # here. Local is never a softer environment than production.
 #
-# Host ports: app 80 · reverb 8080 · postgres 5432 · redis-volatile 6379 ·
+# Host ports: app 443 (+80 redirect) · reverb 8080 (wss) · postgres 5432 · redis-volatile 6379 ·
 # redis-durable 6380 · meilisearch 7700 · minio 9000/9001 · mailpit 8025/1025.
 # Mocks and clamav are reachable on the private network only.
 
@@ -42,9 +42,15 @@ services:
   app:
     <<: *app-image
     ports:
+      # 443 is the real surface; 80 exists only to 308-redirect to it
+      # (Doc 02 SEC-06 — nothing is ever served over cleartext).
+      - "443:443"
       - "80:80"
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost/up"]
+      # No --insecure: the dev CA is in the image's trust store, so this
+      # validates the chain. A healthcheck that skips validation cannot
+      # notice a broken certificate, which is half of what it is for.
+      test: ["CMD", "curl", "-fsS", "https://localhost/up"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -75,7 +81,12 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD-SHELL", "php -r 'exit(@fsockopen(\"localhost\", 8080) ? 0 : 1);'"]
+      # A TLS handshake, not a bare TCP connect: fsockopen succeeds against a
+      # listener that is failing to serve TLS at all, so the old check would
+      # have reported healthy for a Reverb that no wss:// client could use.
+      # $$ escapes compose's own variable interpolation — a single $ made
+      # compose substitute empty strings and the check silently tested nothing.
+      test: ["CMD-SHELL", "php -r '$$c=@stream_socket_client(\"ssl://localhost:8080\", $$e, $$s, 5); exit($$c ? 0 : 1);'"]
       interval: 10s
       timeout: 5s
       retries: 6

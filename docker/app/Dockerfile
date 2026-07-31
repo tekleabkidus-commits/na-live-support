@@ -28,6 +28,12 @@ RUN install-php-extensions \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# TLS material for the whole stack (Doc 02 SEC-06). Baked here so certificates
+# are deterministic and need no runtime acquisition — see the script's header
+# for why, and for the line separating this from Doc 18's production certs.
+COPY docker/app/generate-dev-certs.sh /usr/local/bin/generate-dev-certs.sh
+RUN chmod +x /usr/local/bin/generate-dev-certs.sh && /usr/local/bin/generate-dev-certs.sh
+
 # Dependency layer first for build caching.
 # Dev dependencies ARE installed: this is the local/CI image and the
 # Integration/Isolation suites run inside it (parity, Doc 01 SEC-01). The
@@ -43,5 +49,10 @@ RUN composer dump-autoload --optimize --no-scripts \
     && chmod -R ug+rwX storage bootstrap/cache
 
 # Octane + FrankenPHP entrypoint; worker/scheduler/reverb override `command`.
-EXPOSE 80
-CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80"]
+#
+# The Caddyfile pins TLS to the image-baked certificate and serves :80 only as a
+# 308 redirect (SEC-06). Port 80 stays exposed FOR that redirect — a developer
+# who types http://localhost lands on https rather than on a connection error,
+# which is the behaviour production has too.
+EXPOSE 80 443
+CMD ["php", "artisan", "octane:frankenphp", "--caddyfile=/app/docker/app/Caddyfile"]

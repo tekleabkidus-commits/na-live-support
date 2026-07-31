@@ -36,7 +36,22 @@ return [
             'path' => env('REVERB_SERVER_PATH', ''),
             'hostname' => env('REVERB_HOST'),
             'options' => [
-                'tls' => [],
+                // WSS, not WS (Doc 02 SEC-06 / T-04). Reverb terminates TLS
+                // itself here rather than sitting behind the app's Caddy: it is
+                // a separate process on its own port, so "the stack speaks TLS"
+                // has to include this listener or the realtime channel would be
+                // the one cleartext path — carrying exactly the session-scoped
+                // events T-04 uses to force-close revoked sessions.
+                //
+                // The cert is the image-baked dev chain (docker/app/
+                // generate-dev-certs.sh). Doc 18 FR-12 owns production
+                // certificates; when it lands, these paths point at real
+                // material and nothing else here changes.
+                'tls' => array_filter([
+                    'local_cert' => env('REVERB_TLS_CERT'),
+                    'local_pk' => env('REVERB_TLS_KEY'),
+                    'verify_peer' => false,
+                ], fn ($value) => $value !== null),
             ],
             'max_request_size' => env('REVERB_MAX_REQUEST_SIZE', 10_000),
             // The Reverb pub/sub backplane rides the VOLATILE Redis instance

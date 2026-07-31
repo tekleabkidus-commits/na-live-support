@@ -40,6 +40,15 @@ enum ErrorCode: string
     /** Generic validation failure; `errors` carries the per-field detail. */
     case ValidationFailed = 'validation_failed';
 
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 02 — Authentication, Sessions & Security Core
+    |--------------------------------------------------------------------------
+    */
+
+    /** SEC-06: the request arrived over cleartext. Refused in every environment. */
+    case InsecureTransport = 'insecure_transport';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

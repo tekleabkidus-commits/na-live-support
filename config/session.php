@@ -165,13 +165,20 @@ return [
     | HTTPS Only Cookies
     |--------------------------------------------------------------------------
     |
-    | By setting this option to true, session cookies will only be sent back
-    | to the server if the browser has a HTTPS connection. This will keep
-    | the cookie from being sent to you when it can't be done securely.
+    | Doc 02 FR-10: HttpOnly, Secure, SameSite=Lax — all three, everywhere.
+    |
+    | The stock default here is `env('SESSION_SECURE_COOKIE')`, i.e. NULL, which
+    | makes Laravel decide per request: the cookie gets its Secure flag only when
+    | the current request happens to be HTTPS. That is a reasonable framework
+    | default and the wrong posture for this platform — it means a single
+    | cleartext request silently issues a cookie that will later travel in the
+    | open. SEC-06 refuses cleartext outright, so hard-defaulting to `true` costs
+    | nothing and removes the conditional entirely. The env var still exists for
+    | Doc 18's environments; it may only ever be used to keep this true.
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => (bool) env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,0 +1,74 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	admin {$CADDY_SERVER_ADMIN_HOST}:{$CADDY_SERVER_ADMIN_PORT}
+
+	# Octane's worker mode. NOT optional and not boilerplate: without this block
+	# FrankenPHP serves the worker script as an ordinary PHP file, which prints
+	# "FrankenPHP must be in worker mode to use this script." with HTTP 200 — a
+	# page that looks alive to a healthcheck while no Laravel middleware, and
+	# therefore no security header and no auth, has run at all. Dropping it while
+	# adapting the stub is how this file got that wrong once already.
+	frankenphp {
+		worker {
+			file "{$APP_PUBLIC_PATH}/frankenphp-worker.php"
+			{$CADDY_SERVER_WORKER_DIRECTIVE}
+			{$CADDY_SERVER_WATCH_DIRECTIVES}
+		}
+	}
+
+	# Certificates are BAKED INTO THE IMAGE by docker/app/Dockerfile, not
+	# obtained at runtime. Caddy's automatic HTTPS would otherwise try to reach
+	# an ACME server (impossible in CI, which runs network-isolated by design)
+	# or spin up its own internal CA whose state lives in a container volume —
+	# meaning a rebuilt container serves a DIFFERENT certificate, and every
+	# client that pinned the old one breaks for reasons that look like a network
+	# fault. A deterministic, image-baked cert makes TLS reproducible: the same
+	# image always presents the same chain, and the CA is in the image's trust
+	# store, so in-container clients (healthchecks, the smoke suite, PHP HTTP
+	# calls between services) validate properly rather than skipping validation.
+	auto_https off
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+# SEC-06: plain HTTP is answered ONLY to redirect. Nothing is served over
+# cleartext — the application also refuses at the middleware layer
+# (RequireSecureTransport), so a misconfigured proxy cannot silently produce a
+# cleartext auth surface. Two independent layers, same posture as the tenancy
+# work.
+:80 {
+	redir https://{host}{uri} 308
+}
+
+:443 {
+	tls /certs/server.crt /certs/server.key
+
+	log {
+		level {$CADDY_SERVER_LOG_LEVEL}
+
+		# Redact the authorization query parameter that can be set by Mercure...
+		format filter {
+			wrap {$CADDY_SERVER_LOGGER}
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	route {
+		root * "{$APP_PUBLIC_PATH}"
+		encode zstd br gzip
+
+		{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+		php_server {
+			index frankenphp-worker.php
+			try_files {path} frankenphp-worker.php
+			# Required for the public/storage/ directory...
+			resolve_root_symlink
+		}
+	}
+}

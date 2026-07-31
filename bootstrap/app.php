@@ -33,6 +33,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => App\Http\Middleware\RequirePermission::class,
         ]);
 
+        // Doc 02 SEC-06: cleartext is refused BEFORE anything else runs — no
+        // session is read, no credential is parsed, no tenant is resolved on a
+        // request whose secrets already crossed the wire in the open. Prepended
+        // globally for that reason; see the middleware for why it has no
+        // environment carve-out.
+        $middleware->prepend(App\Http\Middleware\RequireSecureTransport::class);
+
         // Doc 02 T-07: one security-header posture on every response, both
         // surfaces. Appended (not prepended) so it wraps the innermost work and
         // stamps headers even on responses produced by earlier middleware.
