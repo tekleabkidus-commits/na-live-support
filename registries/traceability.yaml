@@ -484,3 +484,42 @@ entries:
       baselines for every §8 state in en+am × light+dark attach when the approved
       Claude Design screens land. This row records that bucket rather than claiming
       visual coverage that does not exist.
+
+  # ── Doc 02 SEC-04 / T-04: recorded because the mechanism EXISTS and is not
+  #    proven, which is exactly the state this registry must not hide.
+  - ac_ref: "Doc02 SEC-04"
+    suite_path: tests/Security/SessionFixationTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      IMPLEMENTED BUT UNPROVEN, and the distinction is evidenced rather than asserted.
+      regenerate() is called at the password boundary, but with that line deliberately
+      removed the test STILL PASSED — the HTTP test client does not replay Set-Cookie,
+      so every simulated request starts its own session and the pre/post ids differ
+      either way. The test is skipped rather than left green. Boundary 2 (post-2FA)
+      does not exist yet (step 7). Both become provable in the browser suite, where a
+      real cookie jar exists; that is the next session's work.
+      PROVEN today from this file: the tenant-hint SIGNATURE (exhaustive over forgery
+      shapes) and that login writes a hint naming the session's own tenant.
+  - ac_ref: "Doc02 T-04"
+    suite_path: tests/Security/SessionFixationTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Built and in use: the tenant-prefixed session handler (t:{tenant}:sess:*, with a
+      mandatory TTL per C-07), the signed tenant hint that selects the prefix, and
+      VerifyTenantHint's authority check. Proven: the signature mechanism, the hint
+      written at login, and that the check does not break the authenticated happy path
+      (positive control). NOT PROVEN: that a PRESENT-and-WRONG hint is refused over
+      HTTP — the forged cookie never reaches $request->cookie() in this harness, so the
+      negative tests could not distinguish a working defence from an absent one and are
+      skipped. T-04's revocation half (key delete + session.revoked publish, Reverb
+      socket close) is NOT BUILT — it is the remainder of step 6.

@@ -20,7 +20,11 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    // 'tenant-redis' (Doc 02 T-04): the Redis session handler with a per-tenant
+    // key prefix. Registered in FortifyServiceProvider; see
+    // TenantPrefixedSessionHandler for why the prefix exists when RLS already
+    // isolates the database.
+    'driver' => env('SESSION_DRIVER', 'tenant-redis'),
 
     /*
     |--------------------------------------------------------------------------

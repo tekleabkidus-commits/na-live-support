@@ -40,9 +40,24 @@ return Application::configure(basePath: dirname(__DIR__))
         // environment carve-out.
         $middleware->prepend(App\Http\Middleware\RequireSecureTransport::class);
 
+        // The tenant hint is SIGNED, not secret (see TenantHint): its integrity
+        // comes from an HMAC, and its authority from VerifyTenantHint comparing
+        // it against the session's own user. Encrypting it on top would add no
+        // security property the signature does not already give, while making
+        // the value unreadable to the session handler that must consult it
+        // BEFORE the session — and therefore before cookie decryption has
+        // produced anything useful.
+        $middleware->encryptCookies(except: [App\Support\Auth\Sessions\TenantHint::COOKIE]);
+
         // Doc 02 T-07: one security-header posture on every response, both
         // surfaces. Appended (not prepended) so it wraps the innermost work and
         // stamps headers even on responses produced by earlier middleware.
+        // Q7's authority check: a session whose user does not belong to the
+        // hinted tenant is discarded. In the group, not per route — a route that
+        // forgot to declare it would be a route where the check does not happen.
+        $middleware->appendToGroup('web', App\Http\Middleware\VerifyTenantHint::class);
+        $middleware->appendToGroup('api', App\Http\Middleware\VerifyTenantHint::class);
+
         $middleware->appendToGroup('web', App\Http\Middleware\SecurityHeaders::class);
         $middleware->appendToGroup('api', App\Http\Middleware\SecurityHeaders::class);
     })

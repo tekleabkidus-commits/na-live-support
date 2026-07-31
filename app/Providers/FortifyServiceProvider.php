@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Domain\Auth\Login\StaffLoginResolver;
 use App\Domain\Auth\Login\StaffUserProvider;
+use App\Support\Auth\Sessions\TenantHint;
+use App\Support\Auth\Sessions\TenantPrefixedSessionHandler;
 use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
 use App\Support\Settings\SettingsRegistry;
@@ -14,8 +16,10 @@ use App\Support\Tenancy\TenantContext;
 use Illuminate\Cache\RateLimiter as RateLimiterContract;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Redis\Factory as RedisFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +52,30 @@ final class FortifyServiceProvider extends ServiceProvider
     {
         $this->registerStaffUserProvider();
         $this->registerAuthRateLimiter();
+        $this->registerTenantPrefixedSessions();
+    }
+
+    /**
+     * T-04: sessions are stored under a per-tenant key prefix.
+     *
+     * Registered as a session DRIVER rather than by swapping the handler after
+     * the fact, so config/session.php names it explicitly and a future reader
+     * can see which storage a session actually uses without tracing container
+     * bindings.
+     */
+    private function registerTenantPrefixedSessions(): void
+    {
+        Session::extend('tenant-redis', function (Application $app): TenantPrefixedSessionHandler {
+            $connection = config('session.connection');
+            $lifetime = config('session.lifetime');
+
+            return new TenantPrefixedSessionHandler(
+                $app->make(RedisFactory::class),
+                $app->make(TenantHint::class),
+                is_string($connection) && $connection !== '' ? $connection : 'default',
+                is_numeric($lifetime) ? (int) $lifetime : 120,
+            );
+        });
     }
 
     /**

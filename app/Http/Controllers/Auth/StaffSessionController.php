@@ -11,6 +11,7 @@ use App\Domain\Auth\Login\LoginRefused;
 use App\Domain\Auth\Login\StaffUserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Auth\Sessions\TenantHint;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Http\JsonResponse;
@@ -50,6 +51,7 @@ final class StaffSessionController extends Controller
     public function __construct(
         private readonly LoginRecorder $recorder,
         private readonly LockoutManager $lockout,
+        private readonly TenantHint $hint,
     ) {}
 
     /**
@@ -181,6 +183,12 @@ final class StaffSessionController extends Controller
 
     private function establishSession(Request $request, User $user): JsonResponse|RedirectResponse
     {
+        // T-04/Q7: point storage at this user's tenant BEFORE regenerating, so
+        // the new session id is written under `t:{tenant}:` rather than into the
+        // guest keyspace. The guest session is abandoned, not migrated.
+        $tenantId = $user->tenantId();
+        $this->hint->useForThisRequest($tenantId);
+
         // SEC-04, first of two privilege boundaries: regenerate the session id
         // the moment the password is accepted, so a fixed pre-login id cannot
         // become an authenticated one. The second boundary (post-2FA) is added
@@ -197,10 +205,33 @@ final class StaffSessionController extends Controller
         // exists yet rather than being fed a placeholder that looks real.
         $this->recorder->succeeded($user, $request, deviceId: '', newDevice: false);
 
-        return $request->expectsJson()
+        $response = $request->expectsJson()
             // No tenant id, no workspace name, no candidate count: a successful
             // response must not enumerate either (AC-01).
             ? new JsonResponse(['status' => 'signed_in'])
             : redirect()->intended('/');
+
+        // The hint travels with the same flags as the session cookie: HttpOnly
+        // so script cannot read it, Secure because SEC-06 refuses cleartext
+        // anyway, SameSite=Lax to match FR-10.
+        // Config values cross a type boundary (config() returns mixed), so each
+        // is narrowed with the same defaults config/session.php declares rather
+        // than cast — a malformed value must not silently widen the cookie's
+        // scope.
+        $lifetime = config('session.lifetime');
+        $path = config('session.path');
+        $domain = config('session.domain');
+        $sameSite = config('session.same_site');
+
+        return $response->withCookie(cookie(
+            name: TenantHint::COOKIE,
+            value: $this->hint->sign($tenantId),
+            minutes: is_numeric($lifetime) ? (int) $lifetime : 120,
+            path: is_string($path) && $path !== '' ? $path : '/',
+            domain: is_string($domain) ? $domain : null,
+            secure: true,
+            httpOnly: true,
+            sameSite: is_string($sameSite) && $sameSite !== '' ? $sameSite : 'lax',
+        ));
     }
 }
