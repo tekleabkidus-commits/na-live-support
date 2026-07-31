@@ -90,9 +90,32 @@ final class TenantLifecycle
             // `state` is not fillable on the model (see App\Models\Tenant) so that
             // no mass-assignment anywhere can reach it, which means the one
             // legitimate writer has to go around Eloquent's setters too.
+            //
+            // THE LIFECYCLE TIMESTAMPS ARE STAMPED HERE AND ONLY HERE (owner ruling,
+            // wrap-up session): BR-05's retention policy reads suspended_at as a fact,
+            // so its single writer is this transition, in DB time (EC-08). Reactivation
+            // CLEARS suspended_at — a tenant suspended twice starts a fresh retention
+            // window, which is what "reactivation loses nothing" (US-02) implies.
+            $updates = [
+                'state' => $target->value,
+                'state_changed_at' => DB::raw('now()'),
+            ];
+
+            if ($target === TenantState::Suspended) {
+                $updates['suspended_at'] = DB::raw('now()');
+            } elseif ($target === TenantState::Active) {
+                $updates['suspended_at'] = null;
+
+                if ($current === TenantState::Provisioning) {
+                    $updates['provisioned_at'] = DB::raw('now()');
+                }
+            } elseif ($target === TenantState::Archived) {
+                $updates['archived_at'] = DB::raw('now()');
+            }
+
             Tenant::query()
                 ->whereKey($tenant->tenantId())
-                ->update(['state' => $target->value]);
+                ->update($updates);
 
             $tenant->refresh();
 

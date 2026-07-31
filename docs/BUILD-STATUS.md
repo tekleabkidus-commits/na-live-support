@@ -198,6 +198,11 @@ test surface, not just S2's additions.
   (`config/pennant.php`) and toggles do not persist until Doc 16 ships a tenant-scoped driver.
 - **Docs 04/05/09** wire `QuotaMeter::allow()` into their ingress/AI paths — the meter exists
   but nothing calls it yet; SEC-05's "before expensive work" is each caller's obligation.
+- **Doc 04** must prove BR-05's **ACK-but-summarize** against this session's frozen contract
+  (owner ruling): on every inbound message for a suspended tenant, ask
+  `InboundAccrualPolicy::modeFor()`; `ColdSummary` → ACK the channel and call
+  `ColdSummaryStore::record()` — the message body is never stored. BR-05 stays PARTIAL until
+  that proof exists; the policy, store, and `suspended_at` stamping are proven now.
 - **Doc 02/07** set the per-request user locale; the C-08 chain's first hop currently only
   fires when a caller passes a locale explicitly.
 - **Doc 07** re-registers per-user notification channels under the `tenant.{tenantId}`
