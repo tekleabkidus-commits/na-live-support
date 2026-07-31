@@ -54,6 +54,10 @@ reload:
 test: reload
 	$(COMPOSE) exec app ./vendor/bin/pest
 
+## AC-07 latency budgets, STRICT spec assertions, dev-hardware-indicative (Doc 01 §12)
+perf:
+	$(COMPOSE) exec -e PERF_BUDGETS_ENFORCE=1 app ./vendor/bin/pest --testsuite=Performance
+
 ## every CI gate, in registry order, with a PASS/FAIL summary
 gates:
 	bash ci/run-gates.sh

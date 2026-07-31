@@ -25,7 +25,7 @@ use Tests\TestCase;
 */
 
 pest()->extend(TestCase::class)
-    ->in('Feature', 'Contract', 'Integration', 'Isolation', 'Security', 'Property');
+    ->in('Feature', 'Contract', 'Integration', 'Isolation', 'Security', 'Property', 'Performance');
 
 /*
 |--------------------------------------------------------------------------
