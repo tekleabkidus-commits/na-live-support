@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Support\Tenancy;
 
 use App\Domain\Foundation\Tenancy\TenantState;
+use App\Support\Cache\TenantCache;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -40,6 +40,8 @@ use RuntimeException;
  */
 final class TenantResolver
 {
+    public function __construct(private readonly TenantCache $cache) {}
+
     /**
      * How long a key→tenant mapping stays cached.
      *
@@ -75,10 +77,11 @@ final class TenantResolver
         // still sends. So the cached path still costs one indexed primary-key read
         // to answer "is this tenant still allowed to do this", which is the read
         // that must never be stale.
+        // Through TenantCache's preContext surface — the ONE sanctioned exception to
+        // t:{tenant}: prefixing, because this cache exists to discover the tenant (T-09).
         $cacheKey = sprintf('t:keymap:%s:%s:%s', $kind, $prefix, substr($hash, 0, 16));
 
-        /** @var string|null $tenantId */
-        $tenantId = Cache::get($cacheKey);
+        $tenantId = $this->cache->preContextGet($cacheKey);
 
         if ($tenantId === null) {
             $row = $this->lookupKey($kind, $prefix, $hash);
@@ -90,7 +93,7 @@ final class TenantResolver
             }
 
             $tenantId = $row->tenant_id;
-            Cache::put($cacheKey, $tenantId, self::KEY_CACHE_TTL);
+            $this->cache->preContextPut($cacheKey, $tenantId, self::KEY_CACHE_TTL);
 
             if ($row->revoked) {
                 $this->recordFailedResolution($source, $prefix);
@@ -110,7 +113,7 @@ final class TenantResolver
         $row = $this->lookupKey($kind, $prefix, $hash);
 
         if ($row === null || $row->revoked) {
-            Cache::forget($cacheKey);
+            $this->cache->preContextForget($cacheKey);
             $this->recordFailedResolution($source, $prefix);
 
             throw TenantNotResolved::forSource($source);
