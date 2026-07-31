@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
 use App\Support\Events\EventPublisher;
+use App\Support\Tenancy\RunsWithinTenant;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,8 @@ use Illuminate\Support\Facades\DB;
  */
 final class LoginRecorder
 {
+    use RunsWithinTenant;
+
     public function __construct(
         private readonly AuditLogger $audit,
         private readonly EventPublisher $events,
@@ -83,28 +86,36 @@ final class LoginRecorder
         FailureReason $reason,
         Request $request,
     ): void {
-        $this->audit->record(
-            actionKey: 'auth.login.failed',
-            entity: 'user',
-            entityId: $candidate->userId,
-            // 'staff', not 'system': a real principal attempted this, even though
-            // the attempt failed. Attributing it to the system would hide a
-            // targeted attack inside background noise.
-            actorType: AuditActor::Staff,
-            payload: [
-                'reason' => $reason->value,
-                'ip' => $this->ip($request),
-            ],
-            actorId: $candidate->userId,
-            tenantId: $candidate->tenantId,
-        );
+        // BIND THE CANDIDATE'S TENANT FOR THE WRITE. A failed login binds no
+        // tenant — resolving one is what SUCCESS does — but the audit row and the
+        // outbox row both live in that account's tenant, behind RLS. Without
+        // this the insert fails on `app.tenant_id` being unset, and (worse) it
+        // aborts the surrounding transaction so every later statement fails with
+        // a misleading "transaction is aborted". See RunsWithinTenant.
+        $this->withinTenant($candidate->tenantId, function () use ($candidate, $reason, $request): void {
+            $this->audit->record(
+                actionKey: 'auth.login.failed',
+                entity: 'user',
+                entityId: $candidate->userId,
+                // 'staff', not 'system': a real principal attempted this, even
+                // though the attempt failed. Attributing it to the system would
+                // hide a targeted attack inside background noise.
+                actorType: AuditActor::Staff,
+                payload: [
+                    'reason' => $reason->value,
+                    'ip' => $this->ip($request),
+                ],
+                actorId: $candidate->userId,
+                tenantId: $candidate->tenantId,
+            );
 
-        $this->publishOutsideTheAuditWrite('auth.login.failed', [
-            'tenant_id' => $candidate->tenantId,
-            'user_id' => $candidate->userId,
-            'reason' => $reason->value,
-            'ip_hash' => $this->hashIp($request),
-        ]);
+            $this->publishOutsideTheAuditWrite('auth.login.failed', [
+                'tenant_id' => $candidate->tenantId,
+                'user_id' => $candidate->userId,
+                'reason' => $reason->value,
+                'ip_hash' => $this->hashIp($request),
+            ]);
+        }, $this->context);
     }
 
     /**

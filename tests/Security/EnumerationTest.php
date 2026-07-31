@@ -62,10 +62,18 @@ function enumerationTenant(): array
  */
 function postLogin(string $email, string $password): array
 {
-    $response = test()->postJson('https://localhost/login', [
-        'email' => $email,
-        'password' => $password,
-    ], ['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)]);
+    // withServerVariables, not postJson()'s third argument — that one is
+    // HEADERS, so the address arrived as HTTP_REMOTE_ADDR and every request in
+    // the suite shared a single per-IP throttle bucket. This suite compares two
+    // refusals; had the shared bucket run out it would have compared two 429s
+    // and passed for the wrong reason, exactly like the redirect bug this file
+    // already documents.
+    $response = test()
+        ->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])
+        ->postJson('https://localhost/login', [
+            'email' => $email,
+            'password' => $password,
+        ]);
 
     return [
         'status' => $response->getStatusCode(),

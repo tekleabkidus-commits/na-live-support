@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Support\Tenancy\ResolutionSource;
 use App\Support\Tenancy\RlsSession;
 use App\Support\Tenancy\TenantContext;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -77,6 +78,19 @@ final class StaffUserProvider implements UserProvider
      */
     private array $verified = [];
 
+    /**
+     * The candidates the last credential lookup considered.
+     *
+     * The lockout step needs these: an address may match accounts in several
+     * tenants, and a failed attempt counts against EVERY one (owner ruling).
+     * The provider is the only place that knows the full candidate set, and
+     * re-running the lookup in the controller would double the pre-tenant read
+     * on every failed login.
+     *
+     * @var list<StaffLoginCandidate>
+     */
+    private array $lastCandidates = [];
+
     public function __construct(
         private readonly StaffLoginResolver $resolver,
         private readonly Hasher $hasher,
@@ -93,6 +107,7 @@ final class StaffUserProvider implements UserProvider
         $password = is_string($credentials['password'] ?? null) ? $credentials['password'] : '';
 
         $candidates = $this->resolver->candidatesFor($email);
+        $this->lastCandidates = $candidates;
 
         if ($candidates === []) {
             // The equalisation, and the single most important line in this file:
@@ -104,7 +119,13 @@ final class StaffUserProvider implements UserProvider
 
         $matched = [];
         foreach ($candidates as $candidate) {
-            if ($this->hasher->check($password, $candidate->passwordHash)) {
+            // The verification runs for EVERY candidate, locked or not, before
+            // any lockout check — a locked account that skipped hashing would
+            // answer faster than an unlocked one, which is the AC-01 timing
+            // oracle again, this time keyed on lock state rather than existence.
+            $verified = $this->hasher->check($password, $candidate->passwordHash);
+
+            if ($verified && ! $candidate->isLockedAt(CarbonImmutable::now())) {
                 $matched[] = $candidate;
             }
         }
@@ -129,6 +150,14 @@ final class StaffUserProvider implements UserProvider
         $this->verified[$candidate->userId] = true;
 
         return $this->hydrate($candidate);
+    }
+
+    /**
+     * @return list<StaffLoginCandidate>
+     */
+    public function lastCandidates(): array
+    {
+        return $this->lastCandidates;
     }
 
     /**

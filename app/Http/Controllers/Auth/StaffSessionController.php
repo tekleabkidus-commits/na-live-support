@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Domain\Auth\Lockout\LockoutManager;
 use App\Domain\Auth\Login\FailureReason;
 use App\Domain\Auth\Login\LoginRecorder;
 use App\Domain\Auth\Login\LoginRefused;
+use App\Domain\Auth\Login\StaffUserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\CarbonImmutable;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,7 +47,32 @@ use Illuminate\Pipeline\Pipeline;
  */
 final class StaffSessionController extends Controller
 {
-    public function __construct(private readonly LoginRecorder $recorder) {}
+    public function __construct(
+        private readonly LoginRecorder $recorder,
+        private readonly LockoutManager $lockout,
+    ) {}
+
+    /**
+     * The staff guard's provider, typed.
+     *
+     * Reached through the guard rather than the container so it is the SAME
+     * instance the attempt just used — a freshly resolved provider would carry
+     * no candidates, and the lockout would silently count nothing.
+     */
+    private function provider(): StaffUserProvider
+    {
+        $guard = auth('staff');
+        $provider = $guard instanceof SessionGuard ? $guard->getProvider() : null;
+
+        if (! $provider instanceof StaffUserProvider) {
+            throw new \LogicException(
+                'The staff guard is not backed by StaffUserProvider. Login cannot enforce lockout or the '
+                .'AC-01 equalisation without it — check config/auth.php providers.users.driver.',
+            );
+        }
+
+        return $provider;
+    }
 
     public function store(Request $request): JsonResponse|RedirectResponse
     {
@@ -73,7 +102,26 @@ final class StaffSessionController extends Controller
         );
 
         if (! $authenticated) {
-            $this->recorder->failedForUnknownAccount($request);
+            // FR-03: count this failure against every candidate the address
+            // matched (owner ruling — see LockoutManager). An address matching
+            // nothing produces an empty list and no writes, which is correct:
+            // there is no account to protect and nothing to audit.
+            $candidates = $this->provider()->lastCandidates();
+            $this->lockout->recordFailedAttempt($candidates, CarbonImmutable::now());
+
+            if ($candidates === []) {
+                $this->recorder->failedForUnknownAccount($request);
+            } else {
+                foreach ($candidates as $candidate) {
+                    $this->recorder->failedForKnownAccount(
+                        $candidate,
+                        $candidate->isLockedAt(CarbonImmutable::now())
+                            ? FailureReason::Locked
+                            : FailureReason::BadCredentials,
+                        $request,
+                    );
+                }
+            }
 
             // FR-02/AC-01: ONE generic message for every credential failure —
             // wrong password, no such address, address in two tenants with the
@@ -138,6 +186,11 @@ final class StaffSessionController extends Controller
         // become an authenticated one. The second boundary (post-2FA) is added
         // by the 2FA step.
         $request->session()->regenerate();
+
+        // FR-03: a success ends the current failure window. Done here rather
+        // than in the provider because it is a state TRANSITION, and those
+        // belong to the manager that can audit them.
+        $this->lockout->recordSuccess($user);
 
         // FR-04's device record and T-03's new-device notice arrive with the
         // sessions step; until then the recorder is told plainly that neither

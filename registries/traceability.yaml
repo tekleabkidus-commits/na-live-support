@@ -352,19 +352,30 @@ entries:
       specifies — is not.
 
   - ac_ref: "Doc02 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Auth/LockoutTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      Planned suite: tests/Feature/Auth/LockoutTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the lockout step (step 5): 1–4 generic, 5th locks, reset unlocks
-      per candidate account (owner ruling on multi-candidate emails), admin unlock
-      audited. Not yet built.
+    status: covered
+    gap: >-
+      Every AC-02 clause executed: attempts 1-4 return the generic message and do not
+      lock, the 5th locks, the CORRECT password is refused while locked without the
+      response revealing lock state or remaining time, a completed password reset
+      unlocks (EC-11's guaranteed victim path), and the lock transition is audited with
+      reason + attempt count and no credential material. Beyond AC-02's wording:
+      FR-03's window ROLLS and the lock EXPIRES on its own, both asserted at exact
+      boundaries with an injected clock; the per-IP throttle is proven independent
+      (20 refusals then 429, and NOT before the budget) against addresses with no
+      account, which is EC-11's attacker cap. The owner's multi-candidate ruling is
+      proven: one failed attempt locks EVERY account matching that address across
+      tenants. Falsified twice — lockout trigger disabled (6 red) and counting limited
+      to the first candidate (1 red) — then restored.
+      NOT COVERED HERE: AC-02 names "admin unlock audited"; LockoutManager::unlockByAdmin
+      exists and audits with the acting admin, but no ROUTE invokes it yet — the admin
+      surface belongs to a later Doc 02 step, so that clause is proven at the unit
+      boundary and not through HTTP.
 
   - ac_ref: "Doc02 AC-03"
     suite_path: manual

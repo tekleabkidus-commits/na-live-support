@@ -146,4 +146,26 @@ return [
         'required_fields' => ['ip'],
         'owning_doc' => 'Doc02',
     ],
+    [
+        'action_key' => 'auth.lockout.locked',
+        'entity' => 'user',
+        // 'system': the lock is applied BY the platform in response to attempts,
+        // not by any principal. The person making the attempts is, by
+        // definition, not authenticated.
+        'actor_types' => ['system'],
+        // AC-02 wants the trail to answer "why is this account locked" without a
+        // log dive. Never the credential that was tried (SEC-08).
+        'required_fields' => ['reason', 'failed_attempts'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.lockout.unlocked',
+        'entity' => 'user',
+        // 'staff' for AC-02's audited admin unlock; 'system' for the EC-11
+        // reset path, where no admin is involved and inventing one would be a
+        // lie in the trail.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc02',
+    ],
 ];
