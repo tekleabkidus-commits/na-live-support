@@ -150,33 +150,40 @@ entries:
 
   # ── Doc 01 AC-06: Amharic rendering ────────────────────────────────────────
   - ac_ref: "Doc01 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Foundation/I18nFallbackTest.php
+    type: automated
     tier: integration
-    cadence: release
+    cadence: every-push
     environment: ci
     owner: qa
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S1 as an automated test. lang/en and lang/am both exist and
-      are complete for every foundation string, but no test yet asserts zero key
-      leakage or zero missing-translation telemetry. Separately and permanently: the
-      Amharic is machine-authored and needs native-speaker review before any real
-      operator sees it (standing pre-launch item in BUILD-STATUS).
+    status: covered
+    gap: >-
+      The sweep walks the COMPLETE lang/en key space through Amharic (and the reverse):
+      zero raw-key leakage, zero missing-translation telemetry — keys added later are
+      covered automatically. The C-08 chain (user → tenant default → English) and the
+      per-key/locale telemetry are proven, falsified both ways. Separately and
+      PERMANENTLY: the Amharic is machine-authored and needs native-speaker review
+      before any real operator sees it (standing pre-launch item in BUILD-STATUS) —
+      AC-06 proves no key leaks, it cannot prove the Amharic is good.
 
   # ── Doc 01 AC-07: p99 latency budgets under L1 ─────────────────────────────
   - ac_ref: "Doc01 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Performance/FoundationBudgetsTest.php
+    type: automated
     tier: property
-    cadence: release
-    environment: staging
+    cadence: every-push
+    environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S1. Doc 18 FR-32 defines L1 as a micro-benchmark, so this is
-      buildable now, but the settings and quota paths it must measure do not exist yet.
-      No latency numbers are claimed anywhere in this session's report.
+    status: partial
+    gap: >-
+      PARTIAL BY DESIGN, dev-hardware-indicative (owner ruling). Measured strict
+      (PERF_BUDGETS_ENFORCE=1 / make perf), 2000 samples: resolution p99 0.75-0.82 ms
+      (budget 1.0), settings 0.17-0.24 ms (0.5), outbox publish 0.86-0.95 ms (5.0),
+      registry cold-load <0.1 ms (50) — WITHIN. Events insert 0.76-1.15 ms against 1.0:
+      MARGINAL, one of five runs breached; not engineered away. Default runs assert a
+      5x regression ceiling only, because single-run p99 flakes on shared hardware.
+      NOT measured: +3 ms on an authenticated GET (needs Doc 02), relay lag under 10x
+      burst. AC-07 proper needs Doc 19's L1 profile with dashboards as evidence.
 
   # ── Doc 01 AC-08: suspended-tenant matrix ──────────────────────────────────
   - ac_ref: "Doc01 AC-08"
@@ -192,3 +199,86 @@ entries:
       i18n key on refusal and per-key revocation on archive. Falsified by "tightening"
       suspension to reject inbound traffic — the most plausible wrong fix — which fails
       with a message pointing the reader at US-02 before they change it.
+
+  # ── S2 supporting cast: named requirements with tests (Doc 19 FR-02 index) ──
+  - ac_ref: "Doc01 T-02"
+    suite_path: tests/Isolation/SequenceAllocatorTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      UPDATE…RETURNING in the owning transaction: two-connection lock proof, rollback
+      gap-freedom, refusal outside a transaction, and a structural no-SELECT assertion
+      that catches the check-then-act rewrite the concurrency staging alone cannot.
+
+  - ac_ref: "Doc01 T-05"
+    suite_path: tests/Isolation/TenantBindingSurfacesTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      All four bindings now exist. HTTP proven by the fuzz/matrix suites, jobs by
+      ConcurrentProvisioningTest, sockets and console here: tenant from the user record
+      never the channel name (C-10 indistinguishable refusals), --tenant through the
+      resolver with no all-tenants mode, §9's Retry via tenant:provision-retry.
+
+  - ac_ref: "Doc01 T-08"
+    suite_path: tests/Feature/Foundation/CursorPaginationTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Cursor/limit≤100/next_cursor with offset-family params rejected BY NAME as 400
+      invalid_pagination; opaque versioned cursors; UUIDv7 order. Doc 01 ships no
+      unbounded collection — Doc 04's messages are the first real consumer.
+
+  - ac_ref: "Doc01 T-09"
+    suite_path: tests/Feature/Foundation/TenantCacheTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      C-07 as signatures: prefix built from bound context, mandatory TTL, required
+      invalidation event, read-through only. The resolver's credential→tenant map is
+      the ONE sanctioned pre-context exception, confined to t:keymap: in one class.
+
+  - ac_ref: "Doc01 FR-11"
+    suite_path: tests/Feature/Foundation/FeatureRegistryTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Registry #7 (ADR 0005, owner ruling): unregistered reads throw, resolution is
+      tenant-scoped through Pennant, enumeration carries i18n labels for Doc 16, N-19
+      proven by migration grep. Pennant pinned to the array store — its stock schema
+      has no tenant_id (C-02), so the persistent store is Doc 16's inherited task.
+
+  - ac_ref: "Doc01 NFR-06"
+    suite_path: tests/Feature/Foundation/QuotaTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      429 quota_exceeded naming the quota, 80% alert once per window, EC-09 lowering
+      destroys nothing, FS-05 flushed-counter repair from the ledger, FS-01 postures
+      against a real closed port. NOT yet wired into any ingress path — Docs 04/05/09
+      call allow() from their handlers; EC-09's configurable grace policy deferred
+      (no shape specified; belongs with the platform console).

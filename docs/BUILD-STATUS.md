@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1 | 5/8 proven + AC-04 partial (AC-01 partial, AC-02, AC-04 partial, AC-05, AC-08) | Isolation proven on both layers independently. Settings engine, outbox relay, suspended-tenant matrix, and now the FR-06 provisioning job + T-05 job binding built and proven. STILL NOT BUILT: quotas, T-05 socket/console bindings, cursor pagination, cache helper, feature-flag registry, BR-05 cold summary, partition maintenance. AC-03/06/07 unproven. Doc 01 is NOT complete |
+| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1–S2 | 6/8 + AC-04 & AC-07 partial (AC-01 partial, AC-02, AC-04 partial, AC-05, AC-06, AC-07 partial, AC-08) | S2 added: quotas (NFR-06/EC-09/FS-05), T-05 socket + console bindings (all four surfaces now exist), T-02 allocator, T-08 cursor pagination, T-09 TenantCache, FR-11 flag registry (**registry #7**, ADR 0005), AC-06 i18n chain + telemetry, AC-07 budgets dev-hardware-indicative. STILL NOT BUILT: AC-03 (needs Docs 04/06), BR-05 cold summary, EC-10 partition maintenance command/monitor, §8/§9 platform console. Doc 01 is NOT complete |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -152,6 +152,49 @@ test is weaker than it looks:
   correct for causal ordering (and EC-08 wants DB time), but any future code treating
   `occurred_at` as "when this happened to the millisecond" will be wrong. It already produced
   a negative lag reading; the metric now clamps at zero.
+
+## Session-2 report (Doc 01 — supporting cast: AC-06, AC-07, quotas, T-02/T-05/T-08/T-09, FR-11)
+
+**Doc 01 is STILL not complete**, but the supporting cast is now largely built and proven.
+One constitutional change: **registries/features.php is registry #7** (owner ruling, ADR 0005 —
+the constitution changes by ruling and ADR, never silently).
+
+### Proven by executed tests (full suite: 121 passed, 3 skipped, 1539 assertions; gates 10/10)
+
+| Area | Evidence |
+|---|---|
+| T-09 cache conventions | `tests/Feature/Foundation/TenantCacheTest.php` — 9 passed. C-07 as signatures; the resolver's credential map is the one sanctioned pre-context exception, confined to `t:keymap:` |
+| T-02 sequence allocator | `tests/Isolation/SequenceAllocatorTest.php` — 6 passed. Two-connection lock proof, rollback gap-freedom, structural no-SELECT assertion (catches the check-then-act rewrite the concurrency staging alone cannot — verified by mutation) |
+| T-08 cursor pagination | `tests/Feature/Foundation/CursorPaginationTest.php` — 15 passed. Offset rejected BY NAME, opaque cursors, UUIDv7 order. First real consumer is Doc 04 |
+| FR-11 flag registry (#7) | `tests/Feature/Foundation/FeatureRegistryTest.php` — 6 passed. Unregistered reads throw; tenant-scoped Pennant; N-19 migration grep; `registry:check` gains section 7, falsified with a malformed entry |
+| T-05 sockets + console | `tests/Isolation/TenantBindingSurfacesTest.php` — 7 passed. Tenant from the USER record never the channel name; C-10 indistinguishable refusals; `--tenant` with no all-tenants mode; §9 Retry via `tenant:provision-retry` |
+| NFR-06/EC-09/FS-05 quotas | `tests/Feature/Foundation/QuotaTest.php` — 7 passed. 429 naming the quota; refused attempts consume nothing; 80% alert once per window; flushed-counter repair from the ledger; FS-01 postures against a real closed port |
+| AC-06 i18n | `tests/Feature/Foundation/I18nFallbackTest.php` — 6 passed, 127 assertions. Full-key sweep en↔am, zero leakage, zero telemetry; C-08 chain user→tenant→en falsified both ways |
+| AC-07 (partial) | `tests/Performance/FoundationBudgetsTest.php` + `make perf`. Dev-hardware-indicative: resolution 0.75–0.82 ms (≤1.0), settings 0.17–0.24 ms (≤0.5), outbox 0.86–0.95 ms (≤5.0), cold-load <0.1 ms (≤50) — WITHIN. **Events insert 0.76–1.15 ms vs ≤1.0: MARGINAL, 1 of 5 strict runs breached — not engineered away.** Default runs assert a 5× regression ceiling only (p99 flakes on shared hardware; a flaky red main teaches everyone to ignore red) |
+
+### NOT built in S2 — remaining Doc 01 debt
+
+| Doc 01 id | State | Note |
+|---|---|---|
+| AC-03 worker-kill reconciliation | NOT DONE | still needs Doc 04/06 tickets+messages |
+| BR-05 30-day cold summary | NOT DONE | retention path unbuilt |
+| EC-10 partition maintenance | PARTIAL | +3-month partitions exist from S1; no maintenance command, no future-partition monitor |
+| §8/§9 platform console | DEFERRED | design-led session; `tenant:provision-retry` is the minimal §9 Retry until then |
+| EC-09 grace policy knob | DEFERRED | no shape specified in any doc; belongs with the platform console |
+| AC-07 proper | PARTIAL | needs Doc 19 L1 profile + dashboards; §12's "+3 ms on authenticated GET" also needs Doc 02 |
+
+### Inherited tasks added in S2 (other sessions must not miss)
+
+- **Doc 16** owns the persistent Pennant store: the stock `features` table has no `tenant_id`
+  (violates C-02, sits outside RLS), so Pennant is pinned to the `array` store
+  (`config/pennant.php`) and toggles do not persist until Doc 16 ships a tenant-scoped driver.
+- **Docs 04/05/09** wire `QuotaMeter::allow()` into their ingress/AI paths — the meter exists
+  but nothing calls it yet; SEC-05's "before expensive work" is each caller's obligation.
+- **Doc 02/07** set the per-request user locale; the C-08 chain's first hop currently only
+  fires when a caller passes a locale explicitly.
+- **Doc 07** re-registers per-user notification channels under the `tenant.{tenantId}`
+  namespace — the scaffolded `App.Models.User.{id}` channel was removed (it strict-compared a
+  UUID with `(int) $id` and could never authorize).
 
 ## Deferred with reason
 
