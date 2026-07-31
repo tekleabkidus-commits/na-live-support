@@ -42,6 +42,8 @@ return [
         'invalid_pagination' => 'ልክ ያልሆነ የገጽ ጥያቄ',
         'validation_failed' => 'የተወሰኑ ዝርዝሮች ማስተካከል ያስፈልጋቸዋል',
         // Doc 02 SEC-06: refused because the request arrived over cleartext.
+        'invalid_credentials' => 'መግባት አልተሳካም',
+        'rate_limited' => 'በጣም ብዙ ሙከራዎች',
         'insecure_transport' => 'ደህንነቱ የተጠበቀ ግንኙነት ያስፈልጋል',
         'insecure_transport_detail' => 'ይህ አገልግሎት የሚገኘው በተመሰጠረ ግንኙነት ብቻ ነው። https ተጠቅመው እንደገና ይገናኙ።',
     ],

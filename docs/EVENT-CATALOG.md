@@ -12,7 +12,34 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-5 event(s).
+8 event(s).
+
+## `auth.login.failed`
+
+A staff authentication attempt failed, with FR-04's reason category.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `reason`, `ip_hash`
+- **Producers:** Doc02/LoginPipeline
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.login.succeeded`
+
+A staff user completed authentication and a session was established (FR-04).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `device_id`, `new_device`
+- **Producers:** Doc02/LoginPipeline
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.logout`
+
+A staff user ended their session deliberately (§4.8).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`
+- **Producers:** Doc02/LoginPipeline
+- **Consumers:** Doc17/Audit
 
 ## `tenant.provisioned`
 

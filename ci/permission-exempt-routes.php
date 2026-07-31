@@ -28,6 +28,16 @@ return [
      | revisit these lines with their real surfaces, exactly as they must the
      | audit exemptions.
      */
+    /*
+     | Doc 02's authentication surface. Requiring a permission to log in is
+     | circular: authentication is what ESTABLISHES the principal whose
+     | permissions could be checked. Logout is the same — a session's owner may
+     | always end it, and a permission that could be revoked mid-session would
+     | leave someone unable to sign out.
+     */
+    'auth.login' => 'Authentication establishes the principal; there is no principal yet to hold a permission.',
+    'auth.logout' => 'A session owner may always end their own session; no permission gates it.',
+
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
     'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',

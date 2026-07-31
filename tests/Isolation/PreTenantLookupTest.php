@@ -8,6 +8,7 @@ use App\Support\Tenancy\RlsSession;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -41,7 +42,7 @@ function twoTenantsWithUsers(): array
     $tenantA = createTenant();
     $userA = asTenant($tenantA, fn (): User => User::factory()->create([
         'email' => 'shared@fixture.example',
-        'password' => bcrypt('correct-horse-battery-staple-a'),
+        'password' => Hash::make('correct-horse-battery-staple-a'),
         'password_set_at' => now(),
     ]));
     activateTenant($tenantA);
@@ -49,7 +50,7 @@ function twoTenantsWithUsers(): array
     $tenantB = createTenant();
     $userB = asTenant($tenantB, fn (): User => User::factory()->create([
         'email' => 'shared@fixture.example',
-        'password' => bcrypt('correct-horse-battery-staple-b'),
+        'password' => Hash::make('correct-horse-battery-staple-b'),
         'password_set_at' => now(),
     ]));
     activateTenant($tenantB);

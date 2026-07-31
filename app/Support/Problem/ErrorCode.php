@@ -50,6 +50,20 @@ enum ErrorCode: string
     case InsecureTransport = 'insecure_transport';
 
     /**
+     * FR-03 / SEC-05: a per-IP rate limit refused the request BEFORE any
+     * expensive work. Distinct from quota_exceeded, which is a tenant's usage
+     * ceiling — this one applies pre-tenant, to a shared surface.
+     */
+    case RateLimited = 'rate_limited';
+
+    /**
+     * FR-02 / AC-01: a login attempt was refused. ONE code for every credential
+     * failure — a client must not be able to tell "no such account" from "wrong
+     * password" by branching on the code any more than by reading the message.
+     */
+    case InvalidCredentials = 'invalid_credentials';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

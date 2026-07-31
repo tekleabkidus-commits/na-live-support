@@ -43,6 +43,8 @@ return [
         'invalid_pagination' => 'Invalid page request',
         'validation_failed' => 'Some details need fixing',
         // Doc 02 SEC-06: refused because the request arrived over cleartext.
+        'invalid_credentials' => 'Sign-in failed',
+        'rate_limited' => 'Too many attempts',
         'insecure_transport' => 'Secure connection required',
         'insecure_transport_detail' => 'This service is only available over an encrypted connection. Reconnect using https and try again.',
     ],

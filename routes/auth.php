@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\StaffSessionController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |------------------------------------------------------------------------------
 | Authentication surface (Doc 02; required from routes/web.php)
@@ -32,3 +35,41 @@ declare(strict_types=1);
 | defect this file exists to prevent.
 |
 */
+
+/*
+|------------------------------------------------------------------------------
+| Login (Doc 02 FR-01, FR-02, FR-04, FR-05, SEC-05)
+|------------------------------------------------------------------------------
+|
+| MIDDLEWARE ORDER IS THE SPECIFICATION, not a style choice (T-02, SEC-05):
+|
+|   throttle  runs FIRST, before any expensive work. SEC-05's pattern and FR-03's
+|             independent per-IP limit both live here — an attacker must not be
+|             able to make the server spend ~100 ms of argon2id per request just
+|             by sending requests. This is why the limiter is middleware rather
+|             than a check inside the controller.
+|   guest     a signed-in user hitting /login is redirected, not re-authenticated.
+|
+| There is deliberately NO `tenant:` middleware on these routes: resolving the
+| tenant is what logging in DOES (Doc 01 FR-03a resolves a tenant FROM the
+| authenticated user, which does not exist yet). The tenant is bound inside the
+| pipeline by StaffUserProvider the moment a candidate's password verifies.
+|
+| Both routes are exempt from the permission registry — see
+| ci/permission-exempt-routes.php: authentication is what establishes the
+| principal a permission could be checked against, so requiring one here is
+| circular.
+|
+*/
+
+Route::middleware(['guest:staff', 'throttle:auth-ip'])->group(function (): void {
+    Route::post('login', [StaffSessionController::class, 'store'])
+        ->middleware('audit:auth.login.succeeded')
+        ->name('auth.login');
+});
+
+Route::middleware('auth:staff')->group(function (): void {
+    Route::post('logout', [StaffSessionController::class, 'destroy'])
+        ->middleware('audit:auth.logout')
+        ->name('auth.logout');
+});

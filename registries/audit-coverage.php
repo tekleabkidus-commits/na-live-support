@@ -98,4 +98,52 @@ return [
         'required_fields' => ['kind', 'prefix'],
         'owning_doc' => 'Doc01',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 02 — Authentication, Sessions & Security Core
+    |--------------------------------------------------------------------------
+    |
+    | THESE WRITE SYNCHRONOUSLY (owner ruling; Doc 17 FR-02). Auth events are the
+    | one class written straight to the append-only audit table rather than
+    | through the outbox: an authentication decision must leave a record even if
+    | the queue is dead, and FS-01 already says staff auth fails CLOSED when
+    | infrastructure is down — a trail that depends on a working relay would go
+    | silent in exactly the incident it exists to reconstruct. AuditLogger's
+    | direct insert is that path; it shares schema and insert code with the
+    | future outbox consumer, so Doc 17 changes nothing here.
+    |
+    | Payload fields carry NO credential material and no email (SEC-08): the
+    | audit trail is access-controlled and tenant-scoped, but it is also
+    | exportable (US-06), and an exported trail full of addresses is a breach
+    | waiting for a misdirected file.
+    */
+
+    [
+        'action_key' => 'auth.login.succeeded',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        // FR-04 names exactly what a successful login records. `ip` and
+        // `user_agent` are here rather than in the event payload because this
+        // table is tenant-scoped and access-controlled; the bus is neither.
+        'required_fields' => ['ip', 'device_id', 'new_device'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.login.failed',
+        'entity' => 'user',
+        // 'system': a failure against a NON-EXISTENT account has no staff actor
+        // to attribute, and inventing one would put a fictional principal in the
+        // trail.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['reason', 'ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.logout',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ip'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

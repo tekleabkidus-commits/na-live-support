@@ -72,15 +72,18 @@ return [
     */
 
     'providers' => [
+        // NOT 'eloquent' (Doc 02 FR-01, Doc 01's inherited constraint #2).
+        //
+        // The stock Eloquent provider looks a user up by email through the
+        // model's tenant global scope — and at login no tenant is bound, because
+        // finding the account is HOW the tenant is discovered. `staff` resolves
+        // through the SECURITY DEFINER door instead and performs the timing
+        // equalisation AC-01 requires. See StaffUserProvider's docblock; the
+        // driver is registered in FortifyServiceProvider.
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'staff',
             'model' => env('AUTH_MODEL', User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

@@ -85,6 +85,54 @@ final class EventCatalog
             'consumers' => ['Doc16/Backoffice', 'Doc18/Alerting'],
             'description' => 'A tenant hit a quota ceiling and a request was refused with 429.',
         ],
+
+        /*
+        |----------------------------------------------------------------------
+        | Doc 02 §4.8 — auth events
+        |----------------------------------------------------------------------
+        |
+        | Doc 02 §21 says to freeze these names now, because Docs 15/17/18 build
+        | reports, audit views and alerts against them.
+        |
+        | PAYLOADS ARE IDENTIFIERS ONLY (owner ruling; SEC-07, SEC-08, C-13).
+        | No email addresses, no user agents, no tokens, no codes. An address is
+        | itself identifying, and an event bus fans out to consumers with
+        | different retention and access rules than the audit log — so anything
+        | a consumer genuinely needs beyond an id, it fetches by id under its own
+        | authorisation. The publisher REJECTS extra keys, so this is enforced
+        | rather than encouraged.
+        |
+        | The one apparent exception is `ip_hash` on auth.login.failed, and it is
+        | not an exception: it is a salted hash, present so security monitoring
+        | (Doc 18) can correlate "same source, many accounts" without the bus
+        | carrying a personal datum. The raw IP lives on the device record and in
+        | the audit entry, both tenant-scoped and access-controlled.
+        */
+
+        'auth.login.succeeded' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'device_id', 'new_device'],
+            'producers' => ['Doc02/LoginPipeline'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A staff user completed authentication and a session was established (FR-04).',
+        ],
+        'auth.login.failed' => [
+            'schema_version' => 1,
+            // user_id is present ONLY when the attempt identified an account; a
+            // miss on a non-existent address publishes nothing at all, because
+            // there is no tenant to publish it under — that case is a metric.
+            'payload' => ['tenant_id', 'user_id', 'reason', 'ip_hash'],
+            'producers' => ['Doc02/LoginPipeline'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A staff authentication attempt failed, with FR-04\'s reason category.',
+        ],
+        'auth.logout' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id'],
+            'producers' => ['Doc02/LoginPipeline'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'A staff user ended their session deliberately (§4.8).',
+        ],
     ];
 
     /**

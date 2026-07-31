@@ -74,6 +74,37 @@ class User extends Authenticatable implements TenantScoped
     }
 
     /**
+     * The primary key as the string it always is.
+     *
+     * `getKey()` is `mixed` on every Eloquent model, which is honest — a model's
+     * key type is not knowable statically. Here it IS knowable: C-01 makes every
+     * primary key a UUIDv7 string, and the column is `uuid NOT NULL`. This
+     * validates rather than casts, so a genuinely wrong type fails loudly at the
+     * boundary instead of silently stringifying.
+     */
+    public function identifier(): string
+    {
+        $key = $this->getKey();
+
+        if (! is_string($key) || $key === '') {
+            throw new \LogicException('User has no string primary key — C-01 requires a UUIDv7.');
+        }
+
+        return $key;
+    }
+
+    public function tenantId(): string
+    {
+        $tenantId = $this->getAttribute('tenant_id');
+
+        if (! is_string($tenantId) || $tenantId === '') {
+            throw new \LogicException('User has no tenant_id — the column is NOT NULL (Doc 01 C-02).');
+        }
+
+        return $tenantId;
+    }
+
+    /**
      * FR-05 / BR-04: a disabled account authenticates nowhere.
      */
     public function isDisabled(): bool
