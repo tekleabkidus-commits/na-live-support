@@ -86,6 +86,31 @@ function assertedBudget(float $specBudgetMs): float
     return getenv('PERF_BUDGETS_ENFORCE') === '1' ? $specBudgetMs : $specBudgetMs * 5.0;
 }
 
+/**
+ * @param  array{p50: float, p99: float, max: float}  $stats
+ */
+function assertBudget(string $name, array $stats, float $specBudgetMs): void
+{
+    $ceiling = assertedBudget($specBudgetMs);
+    $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+
+    expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+        '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+        .'%s',
+        $name,
+        $stats['p99'],
+        $strict ? 'SPEC BUDGET' : '5x regression ceiling',
+        $ceiling,
+        $specBudgetMs,
+        $stats['p50'],
+        $stats['max'],
+        $strict
+            ? 'Strict mode (`make perf`): this is the spec budget itself, on dev hardware.'
+            : 'This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a '
+                .'machine under heavy load — compare p50 against the spec budget to tell which.',
+    ));
+}
+
 it('meets the §12 budgets on dev hardware: resolution ≤1ms, settings ≤0.5ms, events ≤1ms p99', function () {
     $tenant = activateTenant(createTenant());
     $tenantId = $tenant->tenantId();
@@ -123,10 +148,21 @@ it('meets the §12 budgets on dev hardware: resolution ≤1ms, settings ≤0.5ms
     });
     reportBudget('outbox publish (NFR-04)', 5.0, $outboxPublish);
 
-    expect($resolution['p99'])->toBeLessThanOrEqual(assertedBudget(1.0), 'NFR-02: resolution p99 over budget')
-        ->and($settingsRead['p99'])->toBeLessThanOrEqual(assertedBudget(0.5), 'NFR-03: settings p99 over budget')
-        ->and($eventsInsert['p99'])->toBeLessThanOrEqual(assertedBudget(1.0), '§12: events insert p99 over budget')
-        ->and($outboxPublish['p99'])->toBeLessThanOrEqual(assertedBudget(5.0), 'NFR-04: outbox publish p99 over budget');
+    // FAILURE MESSAGES CARRY THE NUMBERS, and the reason is a real incident rather
+    // than tidiness. The Doc 02 S4 session saw this suite fail exactly once in a
+    // long working session and pass on every re-run; because the message said only
+    // "over budget", the run could not be diagnosed after the fact and fifteen
+    // further runs (quiet, under 8-core load, and randomly ordered) failed to
+    // reproduce it. A timing assertion that cannot say WHAT it measured when it
+    // fires wastes its own evidence — the one moment it had something to report.
+    //
+    // These are dev-hardware-indicative and default to a 5× regression ceiling, so
+    // a failure here means either a genuine order-of-magnitude regression or a
+    // machine under load. The message now lets the reader tell which.
+    assertBudget('NFR-02 tenant resolution', $resolution, 1.0);
+    assertBudget('NFR-03 settings cached read', $settingsRead, 0.5);
+    assertBudget('§12 events table insert', $eventsInsert, 1.0);
+    assertBudget('NFR-04 outbox publish', $outboxPublish, 5.0);
 });
 
 it('cold-loads the settings registry within 50 ms (§12)', function () {
