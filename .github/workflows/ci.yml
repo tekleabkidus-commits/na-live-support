@@ -107,6 +107,13 @@ jobs:
           cp .env.example .env
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # The browser stage brings up a FRESH stack, so its database is empty. The
+      # session suite (Doc 02 step 6) logs in for real — it needs schema and an
+      # account, and it cannot create one through a UI that does not exist yet.
+      - name: Migrate and seed browser fixtures
+        run: |
+          docker compose -f docker/compose.yaml exec -T app php artisan migrate:fresh --force --database=pgsql_migrator
+          docker compose -f docker/compose.yaml exec -T app php artisan db:seed --class='Database\Seeders\BrowserFixtureSeeder' --force
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
         env:

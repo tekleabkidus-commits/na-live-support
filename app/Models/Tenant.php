@@ -92,6 +92,24 @@ final class Tenant extends Model implements TenantScoped
         return $key;
     }
 
+    /**
+     * The primary key as the string it always is (C-01: UUIDv7 everywhere).
+     *
+     * Same reasoning as User::identifier(): `getKey()` is `mixed` on every
+     * Eloquent model, and this validates rather than casts so a wrong type
+     * fails at the boundary instead of stringifying silently.
+     */
+    public function identifier(): string
+    {
+        $key = $this->getKey();
+
+        if (! is_string($key) || $key === '') {
+            throw new \LogicException('Tenant has no string primary key — C-01 requires a UUIDv7.');
+        }
+
+        return $key;
+    }
+
     public function state(): TenantState
     {
         $state = $this->getAttribute('state');

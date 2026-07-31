@@ -160,6 +160,7 @@ final class FortifyServiceProvider extends ServiceProvider
             $app->make('hash'),
             $app->make(TenantContext::class),
             $app->make(RlsSession::class),
+            $app->make(TenantHint::class),
         ));
     }
 }

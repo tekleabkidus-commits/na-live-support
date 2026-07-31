@@ -137,6 +137,17 @@ final class LoginRecorder
 
     public function loggedOut(User $user, Request $request): void
     {
+        // Same reason as failedForKnownAccount: the logout route carries no
+        // tenant middleware (there is no tenant to resolve from a request that
+        // is ENDING a session), but the audit row and outbox row live in the
+        // user's tenant behind RLS. Without this the logout 500s — and it did.
+        $this->withinTenant($user->tenantId(), function () use ($user, $request): void {
+            $this->writeLogout($user, $request);
+        }, $this->context);
+    }
+
+    private function writeLogout(User $user, Request $request): void
+    {
         $this->audit->record(
             actionKey: 'auth.logout',
             entity: 'user',

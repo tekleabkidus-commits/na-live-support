@@ -38,8 +38,34 @@ use Illuminate\Support\Facades\Route;
 // mask, so check `route:list` before assuming the resolver is at fault.
 Route::group([], function (): void {
 
-    // ── Staff surface (FR-03a). Suspended blocks it entirely (FR-05, EC-03).
-    Route::middleware(['tenant:staff_session', 'tenant.state:staff'])
+    /*
+     | ── Staff surface (FR-03a). Suspended blocks it entirely (FR-05, EC-03).
+     |
+     | THE SESSION MIDDLEWARE IS NOT OPTIONAL HERE, and its absence was a real
+     | defect the browser suite caught. These routes authenticate via
+     | `tenant:staff_session` — a SESSION — but Laravel's `api` group is
+     | stateless: no cookie decryption, no session start. So a genuinely
+     | signed-in agent's cookie meant nothing on this surface and every request
+     | 404'd (Doc 01 SEC-06's deliberate 404-on-failed-resolution, wearing the
+     | mask of a routing bug exactly as routes/api.php's own header warns).
+     |
+     | It went unnoticed because the PHP tests use actingAs(), which injects the
+     | principal directly and therefore never exercises the cookie path at all.
+     | The browser suite, with a real cookie jar, failed on its first request.
+     |
+     | The agent app is same-origin Inertia, so the staff API is deliberately
+     | session-authenticated rather than token-authenticated; that is what T-02's
+     | `staff` guard means. Bearer tokens get their own surface (FR-18/19) under
+     | the `api` guard, which stays stateless.
+     */
+    Route::middleware([
+        Illuminate\Cookie\Middleware\EncryptCookies::class,
+        Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        Illuminate\Session\Middleware\StartSession::class,
+        App\Http\Middleware\VerifyTenantHint::class,
+        'tenant:staff_session',
+        'tenant.state:staff',
+    ])
         ->prefix('staff')
         ->group(function (): void {
             Route::get('context', [IngressProbeController::class, 'show'])->name('foundation.staff.context');

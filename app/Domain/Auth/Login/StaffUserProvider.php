@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Domain\Auth\Login;
 
 use App\Models\User;
+use App\Support\Auth\Sessions\TenantHint;
 use App\Support\Tenancy\ResolutionSource;
 use App\Support\Tenancy\RlsSession;
+use App\Support\Tenancy\RunsWithinTenant;
 use App\Support\Tenancy\TenantContext;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -59,6 +61,8 @@ use Illuminate\Contracts\Hashing\Hasher;
  */
 final class StaffUserProvider implements UserProvider
 {
+    use RunsWithinTenant;
+
     /**
      * A hash of a value no password can be, used to spend the same time on a
      * miss as on a hit. Computed once per process, never compared successfully.
@@ -96,6 +100,7 @@ final class StaffUserProvider implements UserProvider
         private readonly Hasher $hasher,
         private readonly TenantContext $context,
         private readonly RlsSession $rls,
+        private readonly TenantHint $hint,
     ) {}
 
     /**
@@ -186,14 +191,38 @@ final class StaffUserProvider implements UserProvider
 
     public function retrieveById($identifier): ?Authenticatable
     {
-        // Called on every authenticated request to rehydrate the session's user.
-        // A tenant IS bound by then (the session carries it), so this is an
-        // ordinary scoped read — no narrow door, no bypass.
         if (! is_string($identifier) || $identifier === '') {
             return null;
         }
 
-        return User::query()->find($identifier);
+        // ─────────────────────────────────────────────────────────────────────
+        // THIS IS WHERE THE TENANT HINT EARNS ITS KEEP, and the first version of
+        // this method assumed the opposite — that "a tenant IS bound by then".
+        // It is not. Rehydrating a session's user is the FIRST database read of
+        // an authenticated request, and the tenant middleware cannot run before
+        // it, because the tenant is resolved FROM the user (Doc 01 FR-03a). So
+        // the read arrived with no context bound and threw MissingTenantContext,
+        // which surfaced as a 500 on every session-authenticated request — a
+        // defect invisible to every PHP test, because actingAs() injects the
+        // user object and never performs this read.
+        //
+        // The hint closes the loop: it names the tenant whose keyspace the
+        // session was read from, so it can also scope the read that loads the
+        // user. It is still not AUTHORITY — VerifyTenantHint independently
+        // confirms the loaded user actually belongs to the hinted tenant, and
+        // discards the session if not. A forged hint therefore buys a lookup in
+        // a tenant the attacker chose, which returns THEIR OWN user id or
+        // nothing, and is then rejected.
+        //
+        // No hint means no safe way to scope this read, so there is no session.
+        // ─────────────────────────────────────────────────────────────────────
+        $tenantId = $this->hint->current();
+
+        if ($tenantId === null) {
+            return null;
+        }
+
+        return $this->withinTenant($tenantId, fn (): ?User => User::query()->find($identifier));
     }
 
     public function retrieveByToken($identifier, #[\SensitiveParameter] $token): ?Authenticatable
