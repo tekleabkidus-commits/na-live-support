@@ -282,3 +282,35 @@ entries:
       against a real closed port. NOT yet wired into any ingress path — Docs 04/05/09
       call allow() from their handlers; EC-09's configurable grace policy deferred
       (no shape specified; belongs with the platform console).
+
+  # ── Wrap-up session: EC-10 both halves, BR-05 policy+store, grant physics ───
+  - ac_ref: "Doc01 EC-10"
+    suite_path: tests/Feature/Foundation/PartitionMonitorTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Both halves: partitions:maintain keeps 3 future months rolling and drops beyond
+      NFR-07's 13 (PartitionMaintenanceTest); partitions:check goes red on a thin
+      future window OR any row in events_default, healed through maintain in the same
+      test. Maintenance-created partitions carry their own RLS from birth
+      (RlsCoverageTest — the promise the RLS migration made). Scheduled monthly/daily.
+
+  - ac_ref: "Doc01 BR-05"
+    suite_path: tests/Feature/Foundation/ColdSummaryRetentionTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Proven: suspended_at stamped/cleared by its single writer, the boundary decision
+      with a caller-supplied clock at the platform-configurable N days, unclear cases
+      resolving loudly to Full (US-02), and the count+last-pointer store per channel.
+      NOT provable yet: "inbound is still ACKed to channels" — no channel exists.
+      Doc 04 must prove ACK-but-summarize against this frozen contract (owner ruling,
+      inherited task in BUILD-STATUS). PARTIAL until that proof exists.

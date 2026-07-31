@@ -6,7 +6,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | Doc | Module | Status | Session | ACs proven | Notes |
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
-| 01 | Platform Foundation & Multitenancy | **IN PROGRESS** | S1–S2 | 6/8 + AC-04 & AC-07 partial (AC-01 partial, AC-02, AC-04 partial, AC-05, AC-06, AC-07 partial, AC-08) | S2 added: quotas (NFR-06/EC-09/FS-05), T-05 socket + console bindings (all four surfaces now exist), T-02 allocator, T-08 cursor pagination, T-09 TenantCache, FR-11 flag registry (**registry #7**, ADR 0005), AC-06 i18n chain + telemetry, AC-07 budgets dev-hardware-indicative. STILL NOT BUILT: AC-03 (needs Docs 04/06), BR-05 cold summary, EC-10 partition maintenance command/monitor, §8/§9 platform console. Doc 01 is NOT complete |
+| 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
 | 02 | Authentication, Sessions & Security Core | NOT STARTED | S2 | — | |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
@@ -208,6 +208,99 @@ test surface, not just S2's additions.
 - **Doc 07** re-registers per-user notification channels under the `tenant.{tenantId}`
   namespace — the scaffolded `App.Models.User.{id}` channel was removed (it strict-compared a
   UUID with `(int) $id` and could never authorize).
+
+## Session-3 report (Doc 01 wrap-up) — THE FINAL DOC 01 SELF-AUDIT
+
+Evidence base: full suite **151 passed, 3 skipped (1624 assertions)**; `make gates` 10/10;
+Pint/PHPStan(max)/ESLint/vue-tsc clean. Every DONE row cites a test that executed. Two audit
+findings were FIXED rather than defended: S1's "immutability physics test asserts the grant"
+(N-13) referred to a hand-run ADR 0003 demonstration — no such test existed until
+`GrantPhysicsTest` this session, which then immediately caught a BR-02 DELETE hole in the
+brand-new `tenant_cold_summaries` table and an NFR-08 violation in scaffold `failed_jobs`.
+
+**All 69 ids. DONE = executed test cited. PARTIAL = stated remainder. NOT DONE = not built.**
+
+| Id | Status | Evidence / one-line reason |
+|---|---|---|
+| FR-01 | DONE | No tenant cap exists anywhere; multi-tenant behaviour proven across every Isolation suite |
+| FR-02 | DONE | `CrossTenantAccessTest` (schema-generated) + non-null constraints in every migration |
+| FR-03 | DONE | All six sources: a `SuspendedTenantMatrixTest`, b–e resolver+`ForgedTenantIdFuzzTest`, f `ConcurrentProvisioningTest`; rebind refused (`TenantScopeTest`) |
+| FR-04 | DONE | `ForgedTenantIdFuzzTest` — 500 forgeries, zero effect; request input is never a source |
+| FR-05 | DONE | `SuspendedTenantMatrixTest` — 4 states × 5 surfaces, banner key, key revocation on archive |
+| FR-06 | PARTIAL | Job+idempotency+audit proven (`ConcurrentProvisioningTest`); roles/SLA/hours/KB are recorded seams owned by Docs 03/12/10 |
+| FR-07 | DONE | `SettingsEngineTest` + `SettingsApiTest` — registry, five types, cache, audit old→new, read API |
+| FR-08 | PARTIAL | Publish→outbox→events proven (`OutboxChaosTest`); queued SUBSCRIBERS don't exist until Docs 04–17 |
+| FR-09 | DONE | `string-lint` gate (executed in `make gates`) + `I18nFallbackTest` full-key sweep |
+| FR-10 | PARTIAL | ref_* seeded+versioned by migrations; no executed test asserts seed contents |
+| FR-11 | PARTIAL | Registry #7 + tenant-scoped resolution proven (`FeatureRegistryTest`); persistent store is Doc 16's (Pennant array-pinned, C-02) |
+| NFR-01 | DONE | `TwoLayerIndependenceTest` (each layer alone) + `RlsCoverageTest` (no partition ever bare) |
+| NFR-02 | PARTIAL | p99 0.75–0.82 ms vs 1.0 budget, dev-hardware-indicative (`FoundationBudgetsTest`); L1 pending |
+| NFR-03 | PARTIAL | Read p99 0.17–0.24 ms vs 0.5 dev-indicative; ≤2 s cross-node invalidation needs >1 node |
+| NFR-04 | PARTIAL | Publish p99 0.86–0.95 ms vs 5.0 dev-indicative; L1 pending |
+| NFR-05 | PARTIAL | Relay-crash half proven (`OutboxChaosTest`); worker-kill reconciliation is AC-03 (NOT DONE) |
+| NFR-06 | PARTIAL | Full mechanism proven (`QuotaTest`: 429+name, 80% once, postures); zero ingress callers until Docs 04/05/09 |
+| NFR-07 | PARTIAL | 13-month drop proven (`PartitionMaintenanceTest`); "aggregated forever" is Doc 15's half |
+| NFR-08 | DONE | `GrantPhysicsTest` schema sweep: zero timestamp-without-tz columns (after fixing `failed_jobs`) |
+| BR-01 | PARTIAL | Modeling rule; no violating surface exists, and nothing executable can assert an absence yet |
+| BR-02 | DONE | `GrantPhysicsTest`: app role DENIED DELETE on all 10 tenant tables, by catalog fact |
+| BR-03 | PARTIAL | ref_* changes only via migrations in practice; write-grant physics on ref_* not asserted |
+| BR-04 | DONE | `CrossTenantAccessTest` + RLS: no cross-boundary read path; no export mechanism exists |
+| BR-05 | PARTIAL | Policy+store+timestamps proven (`ColdSummaryRetentionTest`); ACK-to-channel clause awaits Doc 04 (owner ruling) |
+| T-01 | DONE | `TenantScopeTest` + `TwoLayerIndependenceTest` + `OctaneConnectionLifecycleTest` |
+| T-02 | DONE | `SequenceAllocatorTest` — lock proof, gap-free rollback, structural no-SELECT |
+| T-03 | PARTIAL | Outbox+relay+idempotency proven (`OutboxChaosTest`); queue-push leg awaits first consumer |
+| T-04 | DONE | `SettingsEngineTest` — registry, Redis hash, invalidation, encrypted casts |
+| T-05 | DONE | All 4 bindings: HTTP (fuzz/matrix), jobs (`ConcurrentProvisioningTest`), sockets+console (`TenantBindingSurfacesTest`) |
+| T-06 | PARTIAL | Table, partitions, UUIDv7 order proven; request→job→event correlation continuity has no dedicated assertion |
+| T-07 | DONE | Problem-details shape asserted in `CursorPaginationTest` + `SettingsApiTest`; codes in shared enum |
+| T-08 | DONE | `CursorPaginationTest` — 15 tests incl. offset rejected by name |
+| T-09 | DONE | `TenantCacheTest` — prefix/TTL/invalidation-event by signature; one audited pre-context exception |
+| T-10 | PARTIAL | Tables+migrations exist; same seed-content gap as FR-10 |
+| SEC-01 | DONE | Isolation suite executes against RLS in local AND CI (same compose); prod env does not exist yet |
+| SEC-02 | DONE | `TenantScopeTest` (refuses platform op while bound) + logged actor in every `PlatformConnection::run` |
+| SEC-03 | DONE | `GrantPhysicsTest` hash-column denial + key issuance/revocation in `SuspendedTenantMatrixTest` |
+| SEC-04 | NOT DONE | No vault exists; DB stores no third-party secrets yet either. Doc 18 owns it (ADR 0003 credential note stands) |
+| SEC-05 | PARTIAL | Meter enforces check-before-work by construction (`QuotaTest`); real call sites arrive with Docs 04/05/09 |
+| SEC-06 | DONE | Resolver 404-not-403 + metric (fuzz/matrix); C-10 indistinguishability also proven for sockets |
+| SEC-07 | DONE | Event catalog fixes payload keys (ids only), enforced by the `event-catalog` gate every push |
+| EC-01 | PARTIAL | 4/5 cases proven (`OctaneConnectionLifecycleTest`); the reconnect re-application case is the 1 honest skip |
+| EC-02 | DONE | `GrantPhysicsTest` pins after_commit=true on durable queue; outbox half in `OutboxChaosTest` |
+| EC-03 | PARTIAL | Next-request refusal + banner proven (matrix); session INVALIDATION mechanics are Doc 02's Fortify work |
+| EC-04 | DONE | `ConcurrentProvisioningTest` — clean halt at step boundary, suspended stays suspended |
+| EC-05 | DONE | `ConcurrentProvisioningTest` — unique-index idempotency, sequential + concurrent + via job |
+| EC-06 | DONE | `SettingsEngineTest` — DB-side version counter, both writes audited, loser signalled |
+| EC-07 | PARTIAL | Migration linter enforces expand-contract; seed-specific additivity has no dedicated check |
+| EC-08 | DONE | DB-time/UUIDv7 ordering proven (`OutboxChaosTest` order, `SettingsEngineTest` version counter); quota buckets are a documented non-ordering exception |
+| EC-09 | PARTIAL | Lower-below-usage proven destructive-action-free (`QuotaTest`); grace-policy knob deferred (no spec shape) |
+| EC-10 | DONE | `PartitionMaintenanceTest` + `PartitionMonitorTest` — window rolls, monitor red on thin future OR non-empty DEFAULT, healed through maintain |
+| FS-01 | PARTIAL | Settings fallback + quota postures proven against a real closed port; presence/poll degrade is Doc 07's |
+| FS-02 | PARTIAL | No-loss/no-dup/resume proven (`OutboxChaosTest`); lag metric exists, ALERTING channel is Doc 18's |
+| FS-03 | PARTIAL | Deploy-blocking isolation gate is LIVE in CI; emergency read-only FLAG registered (#7) but read-only enforcement unbuilt |
+| FS-04 | DONE | `ConcurrentProvisioningTest` — failed step recorded with error_ref, never partially active, Retry via `tenant:provision-retry` |
+| FS-05 | DONE | `QuotaTest` — flushed counter restored from ledger, drift recorded and logged |
+| AC-01 | PARTIAL | SQL half complete+schema-generated; endpoint half grows with every module's endpoints (5 probes exist) |
+| AC-02 | DONE | `ForgedTenantIdFuzzTest` — 500 requests, unique trace ids |
+| AC-03 | NOT DONE | Needs Doc 04/06 tickets+messages for the reconcile counts; recorded in traceability with reason |
+| AC-04 | PARTIAL | Rolled-back-never-published / crash-survival / exactly-once-in-effect proven; queue-push leg awaits consumers |
+| AC-05 | DONE | `ConcurrentProvisioningTest` — two genuinely concurrent connections |
+| AC-06 | DONE | `I18nFallbackTest` — full-key sweep both directions, zero leakage, zero telemetry (Amharic still needs native review — standing item) |
+| AC-07 | PARTIAL | All measurable §12 rows dev-hardware-indicative, one (events insert) MARGINAL; AC-07 proper needs Doc 19 L1 + dashboards |
+| AC-08 | DONE | `SuspendedTenantMatrixTest` — full matrix, falsified by the plausible wrong fix |
+| R-01 | DONE | Mitigations built AND tested (`OctaneConnectionLifecycleTest`, scoped binding, clear-in-finally); reconnect case is EC-01's honest skip |
+| R-02 | PARTIAL | Event catalog with fixed payload keys is live+gated; consumer contract tests await first consumer |
+| R-03 | PARTIAL | Registry+gate live; owner sign-off is process; unused-key telemetry not built |
+| R-04 | PARTIAL | 80% alert proven; usage APIs for operators not built (platform console / Doc 16) |
+| R-05 | DONE | Partitioning confined to append-only `events`, accessed only via publisher/relay/`EventPartitions` — no ad-hoc Eloquent on partitions exists |
+
+**Tally: 37 DONE · 30 PARTIAL · 2 NOT DONE (SEC-04 → Doc 18, AC-03 → Docs 04/06).**
+
+Reading guide for the "done enough" decision: every PARTIAL falls in one of four buckets —
+(1) blocked on a later document's artifacts (FR-06 seams, FR-08/T-03/AC-04 consumers, BR-05
+ACK, EC-03 sessions, NFR-06/SEC-05 callers, FS-01/FS-02 infra, R-02 consumers, AC-03);
+(2) blocked on Doc 19's L1 (NFR-02/03/04, AC-07); (3) needs the design-led platform console
+(EC-09 grace, R-04 usage APIs, FS-03 read-only enforcement); (4) genuinely small residue
+buildable today (FR-10/T-10 seed assertions, BR-03 ref grants, T-06 correlation continuity,
+EC-07 seed additivity, R-03 telemetry — none is load-bearing for Docs 02–07 to proceed).
 
 ## Deferred with reason
 
