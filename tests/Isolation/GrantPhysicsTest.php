@@ -77,3 +77,72 @@ it('keeps after_commit TRUE on the durable queue connection (C-06/EC-02: afterCo
     // is one config edit away from silently vanishing, hence the assertion.
     expect(config('queue.connections.redis.after_commit'))->toBeTrue();
 });
+
+/*
+|--------------------------------------------------------------------------
+| Doc 02 credential physics
+|--------------------------------------------------------------------------
+|
+| Same posture as the rules above: what must be true of stored credentials is
+| asserted from the CATALOG, so a future migration that reintroduces a
+| readable secret fails a test rather than passing review.
+|
+*/
+
+it('stores no recovery code in a readable form (SEC-03/BR-02/Q6: hashed, shown exactly once)', function () {
+    // Fortify's stock storage is an ENCRYPTED-RETRIEVABLE column plus a
+    // re-display route, which makes "displayed exactly once" a UI convention
+    // rather than a fact. The hashed user_recovery_codes table replaced it —
+    // this asserts the replacement stayed replaced.
+    /** @var list<object{table_name: string, column_name: string}> $rows */
+    $rows = DB::connection('pgsql_migrator')->select("
+        SELECT table_name, column_name
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND (column_name LIKE '%recovery_code%' OR column_name LIKE '%recovery_codes%')
+    ");
+
+    $offenders = [];
+    foreach ($rows as $row) {
+        // The ONE legitimate column is the argon2id digest.
+        if ($row->table_name === 'user_recovery_codes' && $row->column_name === 'code_hash') {
+            continue;
+        }
+        $offenders[] = $row->table_name.'.'.$row->column_name;
+    }
+
+    expect($offenders)->toBeEmpty(
+        'SEV-1: a recovery-code column exists outside the hashed store — anything retrievable '
+        .'can be re-displayed, and SEC-03 says exactly once: '.implode(', ', $offenders),
+    );
+});
+
+it('keeps every credential column out of reach of a plaintext read (SEC-08)', function () {
+    // A column whose NAME promises a hash but whose contents are not one is the
+    // failure this cannot catch; what it CAN catch is the reintroduction of a
+    // column that is plaintext by construction.
+    $forbidden = [
+        'users' => ['plain_password', 'password_plain', 'totp_secret_plain'],
+        'auth_action_tokens' => ['token', 'token_plain', 'plaintext'],
+        'user_recovery_codes' => ['code', 'code_plain'],
+    ];
+
+    foreach ($forbidden as $table => $columns) {
+        foreach ($columns as $column) {
+            /** @var list<object{present: bool}> $rows */
+            $rows = DB::connection('pgsql_migrator')->select(
+                'SELECT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_schema = \'public\' AND table_name = ? AND column_name = ?
+                 ) AS present',
+                [$table, $column],
+            );
+
+            expect((bool) $rows[0]->present)->toBeFalse(sprintf(
+                'SEV-1: %s.%s exists — a credential stored in the clear (SEC-08).',
+                $table,
+                $column,
+            ));
+        }
+    }
+});
