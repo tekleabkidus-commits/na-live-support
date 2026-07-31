@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 5 of 14 planned steps done** | S4–S5 | AC-01 partial (login half), **AC-02 covered**; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `a77c33a`: run [30661784756](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30661784756), Stages 1–6 green.** Sessions/devices, 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. See the S4/S5 sections |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 5.5 of 14 planned steps** | S4–S6 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -453,6 +453,76 @@ restored; tree verified clean.
 Sessions/devices (incl. inherited Doc 01 EC-03 and the locale hop), 2FA, password lifecycle
 (so **AC-01's reset half stays unproven**), API tokens and the T-05 intersection, widget
 tokens, webhook auth, the SEC-08 log-scrubber gate, and every screen.
+
+
+
+## Session-6 report (Doc 02 step 6, partial — session storage; and a harness blocker)
+
+**Evidence: 203 passed / 10 skipped (2170 assertions), `make gates` 10/10, lint clean.
+CI-proven on `9d43fa0`: run
+[30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533),
+Stages 1–6 green.**
+
+**Step 6 is roughly half done and the second half is BLOCKED on a test-harness limitation,
+not on design.** Read the blocker section before the next session plans this work.
+
+### Built and proven
+
+| Area | Evidence |
+|---|---|
+| T-04 tenant-prefixed session storage | `TenantPrefixedSessionHandler` — `t:{tenant}:sess:*` with a mandatory TTL (C-07). Guest sessions stay unprefixed and are abandoned, not migrated, at login |
+| Q7 hint signature | `SessionFixationTest` — exhaustive over forgery shapes (unsigned, mutated signature, empty, separator-only) |
+| Q7 hint issuance | login writes a hint naming the session's own tenant |
+| Positive control | an authenticated request with a matching hint is served (so the middleware does not break the happy path) |
+
+### Three defects found, all the same family: code that looked right, tests that could not see it
+
+1. **`TenantHint` was stateful.** It memoised its resolution and held the request injected at
+   construction, so after login every LATER request answered with the LOGIN tenant — the check
+   compared a user against the tenant it had just come from and never discarded anything. This is
+   Doc 01 R-01's exact shape (state outliving its request looks correct in every green run and
+   serves the previous tenant under Octane). Now stateless: it reads the current request per call
+   and caches nothing.
+2. **`discard()` called `logout()`**, which cycles the remember-me token and therefore SAVES the
+   user — with no tenant bound, so the cross-tenant guard refused it and the defence became a 500.
+   Worse than the error: cycling a token on an **attacker-supplied cookie** is a denial of service
+   — forge a hint, and a real user's remember-me dies on every device. Now `forgetUser()`, which
+   touches no state.
+3. **Two safety tests were worthless and are now skipped with their evidence.** The SEC-04 test
+   stayed GREEN with `regenerate()` commented out; the hint tamper tests stayed green with the
+   defence unreachable.
+
+### THE BLOCKER (this is the important part for the next session)
+
+**Laravel's HTTP test client does not replay `Set-Cookie`, so every simulated request starts a
+fresh session.** Consequences, all discovered by falsification rather than reasoning:
+
+- Session **fixation** cannot be observed: pre- and post-login ids differ because they are two
+  unrelated sessions, whether or not anything regenerated.
+- The tenant hint never reaches `$request->cookie()`, so `VerifyTenantHint` finds no hint to
+  disagree with and the tamper tests cannot distinguish a working defence from an absent one.
+- By extension, **everything remaining in step 6 has the same problem**: concurrent-session cap
+  and oldest-eviction, idle/absolute timeouts, revocation, and the inherited Doc 01 EC-03
+  suspension-kills-live-sessions all require a session that survives more than one request.
+
+**The next session should build these against the BROWSER suite (Playwright, real cookie jar)
+rather than the HTTP test client, and should treat any session assertion that passes without a
+positive control as suspect.** This is now the third time in this document that a green safety
+test turned out to be comparing two identical failures.
+
+### Implemented but UNPROVEN (recorded in traceability, not counted)
+
+- **SEC-04 boundary 1** — `regenerate()` is called at the password boundary; no test observes it.
+- **SEC-04 boundary 2** (post-2FA) — the 2FA challenge does not exist yet (step 7).
+- **Q7's authority check** — `VerifyTenantHint` compares a present hint against the session's user
+  and discards on mismatch; it has never been observed rejecting anything.
+
+### Not built (the rest of step 6, plus steps 7–14)
+
+Session cap and eviction (FR-10), idle/absolute timeouts (FR-11), revocation + `session.revoked`
+publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03 live-session
+invalidation, the per-request locale hop (I-5), devices screen + T-03 fingerprint + T-08 GeoIP
+(ADR 0006 unwritten), and steps 7–14 unchanged.
 
 
 ## Deferred with reason
