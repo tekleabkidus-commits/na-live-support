@@ -87,6 +87,32 @@ final class TenantCache
         Cache::forget($this->key($suffix));
     }
 
+    /**
+     * Atomically add to a counter, creating it WITH its TTL on first touch.
+     *
+     * Cache::increment() alone creates a key with no expiry — a C-07 violation by
+     * accident — so creation goes through Cache::add(0, ttl) first: set-if-absent with
+     * the TTL attached, atomic across workers, and increment() preserves the expiry.
+     *
+     * @return int the counter's value after this addition
+     */
+    public function increment(string $suffix, int $by, int $ttlSeconds, string $invalidatedBy): int
+    {
+        $key = $this->key($suffix);
+        $this->assertTtl($ttlSeconds);
+        $this->assertInvalidationEvent($invalidatedBy);
+
+        Cache::add($key, 0, $ttlSeconds);
+
+        return (int) Cache::increment($key, $by);
+    }
+
+    /** The compensation half of increment() — a refused attempt must not consume. */
+    public function decrement(string $suffix, int $by): void
+    {
+        Cache::decrement($this->key($suffix), $by);
+    }
+
     /** @see the class docblock — resolver credential maps only. */
     public function preContextGet(string $key): ?string
     {
