@@ -161,6 +161,14 @@ the constitution changes by ruling and ADR, never silently).
 
 ### Proven by executed tests (full suite: 121 passed, 3 skipped, 1539 assertions; gates 10/10)
 
+**CI-proven on `f5d8873`: run
+[30610552926](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30610552926),
+Stages 1–6 all green (Stage 3 = all 10 gates in-stack + the full 121-test suite; Stage 7 is the
+by-design manual deploy stub).** Of note: this session's CI fixes mean the isolation suite,
+Feature suite and migrated-main-DB smoke checks now genuinely execute in CI — the first pipeline
+where that is true, so this run ID is the first end-to-end CI evidence for the whole Doc 01
+test surface, not just S2's additions.
+
 | Area | Evidence |
 |---|---|
 | T-09 cache conventions | `tests/Feature/Foundation/TenantCacheTest.php` — 9 passed. C-07 as signatures; the resolver's credential map is the one sanctioned pre-context exception, confined to `t:keymap:` |
