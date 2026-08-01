@@ -488,22 +488,27 @@ entries:
   # ── Doc 02 SEC-04 / T-04: recorded because the mechanism EXISTS and is not
   #    proven, which is exactly the state this registry must not hide.
   - ac_ref: "Doc02 SEC-04"
-    suite_path: tests/Security/SessionFixationTest.php
+    suite_path: tests/Browser/session.spec.ts
     type: automated
-    tier: security
+    tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: partial
     justification: >-
-      STILL IMPLEMENTED AND STILL UNPROVEN after a second attempt, now in the browser
-      suite — and the second failure has a different cause worth recording. With
-      regenerate() removed the BROWSER test also passed, because Laravel re-encrypts the
-      session cookie with a fresh IV on every response: cookie VALUES differ even when
-      the underlying session id is identical, so a client-side comparison cannot see
-      regeneration at all. Proving SEC-04 requires a SERVER-side assertion — the old
-      session id's Redis key gone, a new one present. Both tests are skipped, not
-      counted. Boundary 2 (post-2FA) still does not exist (step 7).
+      BOUNDARY 1 IS NOW PROVEN, on the third attempt, and this row records why the first
+      two did not count. Attempts 1 and 2 compared session COOKIE VALUES (PHP client,
+      then browser); both passed with regenerate() deliberately removed, because Laravel
+      re-encrypts the cookie with a fresh IV per response. The observable that
+      distinguishes them is in STORAGE: after authentication the pre-login session key
+      is GONE and a different one exists under the tenant prefix. That is asserted via
+      the test-only `auth:session-inspect` command, and it FAILS when login is changed
+      to a non-migrating variant ("the planted id is still live").
+      Recorded honestly: the property has TWO sources — SessionGuard::login() migrates,
+      and the controller regenerates explicitly — so removing either alone does not
+      reopen it. The explicit call is kept so SEC-04 does not depend on a framework
+      internal.
+      BOUNDARY 2 (post-2FA) still does not exist (step 7), hence partial not covered.
   - ac_ref: "Doc02 T-04"
     suite_path: tests/Security/SessionFixationTest.php
     type: automated
@@ -520,10 +525,15 @@ entries:
       cookie jar and a positive control — that a session survives across requests, that
       a hint whose signature does not verify yields NO session, and that logout ends the
       session. T-06 proven in passing (login without the CSRF token is 419).
-      NOT PROVEN: VerifyTenantHint's OWN comparison. With that middleware disabled the
-      Q7 test still passes, because StaffUserProvider::retrieveById refuses an
-      unverifiable hint first (defence in depth, but not the same defence). Exercising
-      the middleware needs a VALIDLY SIGNED hint naming a DIFFERENT tenant, which the
-      browser cannot forge without the app key.
+      NEW: a VALIDLY SIGNED hint naming a DIFFERENT tenant is now proven refused
+      (tests/Browser/session.spec.ts), minted via the test-only `auth:session-inspect
+      sign-hint`. Recorded honestly: disabling VerifyTenantHint's comparison does not
+      reopen it, because StaffUserProvider::retrieveById scopes its lookup BY the hint —
+      a hint naming tenant B finds no user holding tenant A's session. The middleware is
+      defence in depth whose distinct value is discarding the session explicitly and
+      logging why; it is not the sole barrier, and the code says so.
+      ALSO FIXED THIS SESSION: SESSION_DRIVER was still `redis` in .env, so the
+      tenant-prefixed handler was configured but NEVER IN USE — T-04's prefix was inert
+      until the browser suite went looking for the keys and found none.
       NOT BUILT: T-04's revocation half (key delete + session.revoked publish + Reverb
       socket close), the session cap, and the timeouts — the remainder of step 6.

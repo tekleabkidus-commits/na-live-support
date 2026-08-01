@@ -25,6 +25,20 @@ use Symfony\Component\HttpFoundation\Response;
  * not reinterpreted as belonging to the hint. Reinterpreting is the dangerous
  * failure, because it is the one that silently succeeds.
  *
+ * WHAT FALSIFICATION SHOWED ABOUT THIS MIDDLEWARE'S NECESSITY, recorded because
+ * it is easy to over-claim. Disabling the comparison below does NOT let a
+ * validly-signed hint for another tenant through: StaffUserProvider::retrieveById
+ * scopes its lookup BY the hint, so a hint naming tenant B finds no user with
+ * tenant A's session id and the session simply does not resolve. The attack is
+ * already dead one layer down.
+ *
+ * This middleware is therefore defence in depth rather than the sole barrier,
+ * and its distinct value is that it discards the session EXPLICITLY and logs
+ * why, instead of relying on a lookup miss that would look identical to an
+ * expired session. That distinction matters for incident response, not for
+ * access control. Stated plainly so nobody removes the provider's scoping in the
+ * belief that this middleware is holding the line.
+ *
  * Runs after the session is loaded and before anything reads the authenticated
  * user, which is why it sits in the `web` group rather than on individual
  * routes: a route that forgot to declare it would be a route where the check

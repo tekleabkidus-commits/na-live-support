@@ -199,6 +199,15 @@ final class StaffSessionController extends Controller
         // the moment the password is accepted, so a fixed pre-login id cannot
         // become an authenticated one. The second boundary (post-2FA) is added
         // by the 2FA step.
+        //
+        // REDUNDANT WITH THE GUARD, DELIBERATELY. Laravel's SessionGuard::login()
+        // already calls session->migrate(true), so removing this line does not
+        // reopen the hole — falsification proved exactly that (the browser test
+        // stayed green). It is kept because the protection then depends on a
+        // framework internal rather than on anything this document controls: a
+        // future refactor to a non-migrating login would silently lose SEC-04,
+        // and when that refactor was SIMULATED the test failed with "the planted
+        // id is still live". Belt and braces, with the test watching both.
         $request->session()->regenerate();
 
         // FR-03: a success ends the current failure window. Done here rather
