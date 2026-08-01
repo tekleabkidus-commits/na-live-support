@@ -128,6 +128,24 @@ async function cookieValue(ctx: APIRequestContext, name: string): Promise<string
 }
 
 test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
+    // SERIAL, and not for speed. These tests share global state by nature —
+    // one Redis keyspace, one per-IP login budget, one fixture account — and the
+    // cap test's clear-tenant reset wipes sessions belonging to whichever test
+    // happens to be running beside it. In parallel, SEC-04 failed because the
+    // cap test had just deleted the session it was measuring. Tests that share a
+    // real backing store cannot be made independent by wishing.
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(() => {
+        // Every worker in this suite dials the app from the SAME client address,
+        // so they share one per-IP login budget (SEC-05/FR-03, 20/min). CI failed
+        // with "login 5 failed" and the cap assertion then failed for a reason
+        // unrelated to eviction. Resetting the limiter between tests keeps the
+        // production control untouched — LockoutTest still proves it — and stops
+        // one test's traffic deciding another's outcome.
+        inspect('clear-throttle');
+    });
+
     test('POSITIVE CONTROL: a session established by login survives to the next request', async ({
         baseURL,
     }) => {

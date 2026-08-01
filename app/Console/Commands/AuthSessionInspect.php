@@ -41,12 +41,27 @@ use RuntimeException;
 final class AuthSessionInspect extends Command
 {
     protected $signature = 'auth:session-inspect
-        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant"}
+        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant", "clear-throttle"}
         {--tenant= : tenant id (omit for the unprefixed guest keyspace)}
         {--session= : session id}
         {--cookie= : an encrypted session cookie value}';
 
     protected $description = 'Test-only: inspect session storage / mint a signed tenant hint (Doc 02 SEC-04, Q7)';
+
+    /**
+     * @return list<string>
+     */
+    private function limiterKeys(): array
+    {
+        $cacheStore = config('cache.default');
+        $connection = config(sprintf('cache.stores.%s.connection', is_string($cacheStore) ? $cacheStore : 'redis'));
+        $redis = app(RedisFactory::class)->connection(is_string($connection) ? $connection : 'default');
+
+        /** @var list<string> $keys */
+        $keys = $redis->keys('*auth-ip*');
+
+        return $keys;
+    }
 
     private function withoutPrefix(string $key): string
     {
@@ -137,6 +152,28 @@ final class AuthSessionInspect extends Command
                     }
                 }
                 $this->line((string) $deleted);
+
+                return self::SUCCESS;
+
+            case 'clear-throttle':
+                // TEST DETERMINISM, not a weakened control. The per-IP login
+                // throttle (SEC-05/FR-03) is real and stays real; the browser
+                // suite simply shares ONE client address across parallel
+                // workers, so the cap test's six logins competed with every
+                // other test's for the same 20/minute budget. CI failed with
+                // "login 5 failed" and the cap assertion then failed for a
+                // reason that had nothing to do with eviction.
+                //
+                // Flushing the limiter between tests keeps the production
+                // behaviour untouched and stops one test's traffic deciding
+                // another's outcome. tests/Feature/Auth/LockoutTest.php still
+                // proves the throttle itself.
+                $cleared = 0;
+                foreach ($this->limiterKeys() as $limiterKey) {
+                    $store->del($this->withoutPrefix($limiterKey));
+                    $cleared++;
+                }
+                $this->line((string) $cleared);
 
                 return self::SUCCESS;
 
