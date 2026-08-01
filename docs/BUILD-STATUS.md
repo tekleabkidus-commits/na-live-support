@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 6 of 14 planned steps** | S4–S7 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 6.5 of 14 planned steps** | S4–S8 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -575,6 +575,71 @@ Concurrent-session cap and oldest eviction (FR-10), idle/absolute timeouts (FR-1
 `session.revoked` publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03
 live-session invalidation, the per-request locale hop (I-5), and the devices screen with GeoIP
 (ADR 0006 still unwritten).
+
+
+
+## Session-8 report (ruling reconciliation + SEC-04 proven at last)
+
+**Evidence: pest 204 passed / 10 skipped (2188 assertions); browser 10 passed / 0 skipped;
+`make gates` 10/10; lint clean. CI green on `cc03fd1`, all stages.**
+
+### Rulings filed (docs/ANSWERS-FROM-DOC-AUTHOR.md is new)
+
+`docs/CONFLICTS.md`'s Known Gap is **CLOSED**: the 19-document series permanently supersedes the
+never-supplied master design document, so no future session need caveat its absence. Binding
+decisions that Docs 01–19 do not contain now have one sanctioned home.
+
+- **R-1 definer surface: accepted as built** (4 doors, recorded deviation). **Ceiling is four** — a
+  fifth needs an owner ruling AND an ADR.
+- **R-2 `ambiguous_tenant`**: the >1-tenant-verifies refusal now logs its own reason instead of
+  lying with `bad_credentials`. User-facing message unchanged; a test asserts the response leaks
+  no "reset"/"workspace"/"tenant" hint.
+- **R-3 timing across 0/1/N**: the provider now pads to a FIXED verification budget, closing the
+  residual S4 recorded and accepted. NFR-01 sanctions the cost explicitly ("≤400 ms **excluding
+  intentional equalization**").
+- **R-4 recovery-code count from unconsumed rows**: filed; lands with the 2FA step that owns it.
+
+### THE HEADLINE DEFECT: T-04's tenant prefix was inert
+
+`SESSION_DRIVER` was still `redis` in `.env`, so `TenantPrefixedSessionHandler` was registered,
+configured, documented — **and never in use**. Sessions were stored by the stock handler with no
+tenant prefix at all. Found only because the browser suite went looking for `guest:sess:*` keys in
+Redis and found none. A configured-but-unwired component is invisible to every test that does not
+inspect the storage itself.
+
+### SEC-04 proven on the third attempt
+
+Attempts 1 and 2 compared session **cookie values** (PHP client, then browser). Both passed with
+`regenerate()` deliberately removed, because Laravel re-encrypts the cookie with a fresh IV per
+response. The observable that actually distinguishes them is in **storage**: after authentication
+the pre-login key is GONE and a new one exists under the tenant prefix. Asserted through a
+test-only `auth:session-inspect` command, and **falsified** by swapping login for a non-migrating
+variant — it fails with "the planted id is still live".
+
+Q7's middleware layer is now exercised too: a **validly signed hint naming a different tenant** is
+refused (minting it needs the app key, hence the command).
+
+### Two redundancies recorded rather than over-claimed — both found by sabotage
+
+- `SessionGuard::login()` already migrates the session, so the controller's `regenerate()` is
+  belt-and-braces. Kept, because otherwise SEC-04 rests on a framework internal; the code says so.
+- `StaffUserProvider::retrieveById` scopes its lookup **by the hint**, so a wrong-tenant hint finds
+  nothing even with `VerifyTenantHint` disabled. The middleware is defence in depth whose distinct
+  value is discarding explicitly and logging why — not the sole barrier. Both files say so.
+
+### A measurement lesson worth keeping
+
+CI failed R-3's bound with medians 207.5 / 201.7 / 256.3 ms while the same code measured tight
+locally. Scheduler noise is strictly **additive**, so the median drifts upward with load — by
+different amounts per path. The fix was the estimator, not the tolerance: nine samples, each path
+warmed, compared at the **floor**. Loosening ±50 ms would have hidden a real regression later.
+Re-falsified with the new estimator (0.7 / 112.7 / 209.1 ms with padding off).
+
+### Still not built (the rest of step 6)
+
+Concurrent-session cap and oldest eviction (FR-10), idle/absolute timeouts (FR-11), revocation +
+`session.revoked` publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03
+live-session invalidation, the per-request locale hop (I-5), devices screen + GeoIP (ADR 0006).
 
 
 ## Deferred with reason
