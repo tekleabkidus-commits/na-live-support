@@ -108,20 +108,26 @@ final class StaffSessionController extends Controller
             // matched (owner ruling — see LockoutManager). An address matching
             // nothing produces an empty list and no writes, which is correct:
             // there is no account to protect and nothing to audit.
-            $candidates = $this->provider()->lastCandidates();
+            $provider = $this->provider();
+            $candidates = $provider->lastCandidates();
+            $ambiguous = $provider->lastAttemptWasAmbiguous();
             $this->lockout->recordFailedAttempt($candidates, CarbonImmutable::now());
 
             if ($candidates === []) {
                 $this->recorder->failedForUnknownAccount($request);
             } else {
                 foreach ($candidates as $candidate) {
-                    $this->recorder->failedForKnownAccount(
-                        $candidate,
-                        $candidate->isLockedAt(CarbonImmutable::now())
-                            ? FailureReason::Locked
-                            : FailureReason::BadCredentials,
-                        $request,
-                    );
+                    // Owner ruling R-2: an ambiguous refusal is recorded as such
+                    // in the event and audit trail. The RESPONSE is unchanged —
+                    // LoginRefused renders the generic message for every
+                    // credential failure (FR-02/AC-01).
+                    $reason = match (true) {
+                        $ambiguous => FailureReason::AmbiguousTenant,
+                        $candidate->isLockedAt(CarbonImmutable::now()) => FailureReason::Locked,
+                        default => FailureReason::BadCredentials,
+                    };
+
+                    $this->recorder->failedForKnownAccount($candidate, $reason, $request);
                 }
             }
 

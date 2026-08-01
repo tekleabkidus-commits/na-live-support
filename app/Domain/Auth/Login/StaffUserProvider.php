@@ -70,6 +70,35 @@ final class StaffUserProvider implements UserProvider
     private ?string $dummyHash = null;
 
     /**
+     * How many argon2id verifications a credential check ALWAYS performs
+     * (owner ruling R-3, 2026-08-01).
+     *
+     * ─────────────────────────────────────────────────────────────────────────
+     * WHY A FIXED BUDGET RATHER THAN "one per candidate".
+     *
+     * The earlier design spent one verification per candidate and one on a miss.
+     * That equalised 0-vs-1 — AC-01's literal requirement — but left a residual
+     * the S4 session recorded and accepted: an address in TWO tenants cost two
+     * verifications, so "this address exists in more than one workspace" was
+     * measurable by anyone who already knew the address existed.
+     *
+     * The owner has ruled that residual closed rather than accepted, so the work
+     * is now constant: real verifications first, then dummy verifications until
+     * the budget is spent. 0, 1 and 2 candidates all cost exactly two hashes.
+     *
+     * WHY 2, AND WHAT HAPPENS ABOVE IT. Two covers the realistic shape — one
+     * account, occasionally the same address in a second workspace. Above the
+     * budget the padding cannot help and timing degrades again; that is a stated
+     * bound, not a silent one, and the test asserts the budget it claims. Raising
+     * it costs every login ~90 ms, so it should not be raised without a reason.
+     *
+     * NFR-01 SANCTIONS THIS COST EXPLICITLY: its p99 budget is "≤ 400 ms
+     * EXCLUDING intentional equalization". The padding is exactly that.
+     * ─────────────────────────────────────────────────────────────────────────
+     */
+    private const EQUALISED_VERIFICATIONS = 2;
+
+    /**
      * The verdict computed during retrieveByCredentials, keyed by user id.
      *
      * Laravel calls retrieveByCredentials() and then validateCredentials() as
@@ -95,6 +124,16 @@ final class StaffUserProvider implements UserProvider
      */
     private array $lastCandidates = [];
 
+    /**
+     * Whether the last credential check was refused because the email AND
+     * password matched in more than one tenant (owner ruling R-2).
+     *
+     * Carried out of the provider because only the provider can see it — by the
+     * time the controller learns the attempt failed, the candidate set has
+     * already been reduced to "no single match".
+     */
+    private bool $lastAttemptWasAmbiguous = false;
+
     public function __construct(
         private readonly StaffLoginResolver $resolver,
         private readonly Hasher $hasher,
@@ -113,26 +152,34 @@ final class StaffUserProvider implements UserProvider
 
         $candidates = $this->resolver->candidatesFor($email);
         $this->lastCandidates = $candidates;
+        $this->lastAttemptWasAmbiguous = false;
 
-        if ($candidates === []) {
-            // The equalisation, and the single most important line in this file:
-            // spend a verification on a miss so the miss is not fast.
-            $this->hasher->check($password, $this->dummyHash());
-
-            return null;
-        }
-
+        $verifications = 0;
         $matched = [];
+
         foreach ($candidates as $candidate) {
             // The verification runs for EVERY candidate, locked or not, before
             // any lockout check — a locked account that skipped hashing would
             // answer faster than an unlocked one, which is the AC-01 timing
             // oracle again, this time keyed on lock state rather than existence.
             $verified = $this->hasher->check($password, $candidate->passwordHash);
+            $verifications++;
 
             if ($verified && ! $candidate->isLockedAt(CarbonImmutable::now())) {
                 $matched[] = $candidate;
             }
+        }
+
+        // Pad to the fixed budget so 0, 1 and 2 candidates are indistinguishable
+        // by duration (owner ruling R-3). The dummy hash can never match, so this
+        // changes timing and nothing else.
+        while ($verifications < self::EQUALISED_VERIFICATIONS) {
+            $this->hasher->check($password, $this->dummyHash());
+            $verifications++;
+        }
+
+        if ($candidates === []) {
+            return null;
         }
 
         if (count($matched) !== 1) {
@@ -145,6 +192,7 @@ final class StaffUserProvider implements UserProvider
             // both (an enumeration oracle). The escape hatch is password reset,
             // which issues one token per matching account (owner ruling Q1).
             if (count($matched) > 1) {
+                $this->lastAttemptWasAmbiguous = true;
                 $this->recordAmbiguousLogin($matched);
             }
 
@@ -163,6 +211,11 @@ final class StaffUserProvider implements UserProvider
     public function lastCandidates(): array
     {
         return $this->lastCandidates;
+    }
+
+    public function lastAttemptWasAmbiguous(): bool
+    {
+        return $this->lastAttemptWasAmbiguous;
     }
 
     /**

@@ -34,6 +34,24 @@ enum FailureReason: string
     case TwoFactorFailed = '2fa_failed';
 
     /**
+     * One email AND one password verified against accounts in more than one
+     * tenant (owner ruling R-1/R-2, 2026-08-01 — see
+     * docs/ANSWERS-FROM-DOC-AUTHOR.md).
+     *
+     * An EXTENSION to FR-04's listed categories, confirmed by the document
+     * author. It existed as a refusal before this ruling but logged
+     * `bad_credentials`, which was untrue and made the case invisible in exactly
+     * the reports that would have revealed it.
+     *
+     * The user still sees the GENERIC message — FR-02 and AC-01 are unchanged.
+     * The way out of a collision (reset the password in one of the tenants,
+     * which breaks the tie) lives in help and runbook copy ONLY: putting it in
+     * the error would confirm the address exists in more than one workspace,
+     * which is the inference AC-01 exists to prevent.
+     */
+    case AmbiguousTenant = 'ambiguous_tenant';
+
+    /**
      * Does this failure get its own screen (FR-05), or the generic one (FR-02)?
      */
     public function hasDistinctMessage(): bool

@@ -143,7 +143,7 @@ it('returns a byte-identical body regardless of which TENANT the address exists 
         ->and($inTwoTenants['body'])->toBe($inNoTenant['body']);
 })->group('enumeration');
 
-it('spends the same work on a miss as on a hit (AC-01 timing, measured where the property lives)', function () {
+it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner ruling R-3)', function () {
     // ─────────────────────────────────────────────────────────────────────────
     // WHY THIS MEASURES THE PROVIDER AND NOT THE HTTP RESPONSE.
     //
@@ -159,53 +159,76 @@ it('spends the same work on a miss as on a hit (AC-01 timing, measured where the
     //
     // So an 89 ms hole in the defence was invisible at the HTTP layer: a login
     // request costs ~205 ms of session, middleware and framework work whose
-    // variance swamps the signal, and the medians came out equal while the
-    // vulnerability was fully present. A green test that stays green through the
-    // exact regression it names is worse than no test — it is a false
-    // reassurance in the file the owner reads to decide what is proven.
+    // variance swamps the signal. A green test that stays green through the
+    // exact regression it names is worse than no test.
     //
-    // The equalisation lives in StaffUserProvider, so that is where it is
-    // measured. The HTTP-level assertions above still matter and still run —
-    // they cover the BODY dimension, where the response is the artefact.
+    // THREE PATHS, NOT TWO (owner ruling R-3). AC-01's literal requirement is
+    // existing-vs-non-existing, and S4 closed that while recording a residual:
+    // an address in TWO tenants cost two verifications, making "exists in more
+    // than one workspace" measurable. The owner ruled that residual closed, so
+    // the provider now pads to a fixed verification budget and this test asserts
+    // the bound across all three shapes.
     // ─────────────────────────────────────────────────────────────────────────
-    enumerationTenant();
+    [$tenantA] = enumerationTenant();
+
+    // A second tenant holding the SAME address with a DIFFERENT password: the
+    // N-candidate shape. (Same address AND same password is the ambiguous case,
+    // which is refused for other reasons — see the ruling R-2 test.)
+    $tenantB = createTenant();
+    asTenant($tenantB, fn (): User => User::factory()->create([
+        'email' => 'two.tenants@fixture.example',
+        'password' => Hash::make('a-different-password-entirely'),
+        'password_set_at' => now(),
+    ]));
+    activateTenant($tenantB);
+    asTenant($tenantA, fn (): User => User::factory()->create([
+        'email' => 'two.tenants@fixture.example',
+        'password' => Hash::make('yet-another-password'),
+        'password_set_at' => now(),
+    ]));
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
 
     $provider = app(App\Domain\Auth\Login\StaffUserProvider::class);
 
-    // Warm: first call pays for the dummy hash's one-time computation.
+    // Warm: the first call pays for the dummy hash's one-time computation.
     $provider->retrieveByCredentials(['email' => 'warmup@fixture.example', 'password' => 'x']);
 
-    $hit = timeRequests(
+    $measure = fn (string $email): array => timeRequests(
         fn () => $provider->retrieveByCredentials([
-            'email' => 'real.account@fixture.example',
-            'password' => 'the-wrong-password',
-        ]),
-        5,
-    );
-    $miss = timeRequests(
-        fn () => $provider->retrieveByCredentials([
-            'email' => 'no.such.account@fixture.example',
+            'email' => $email,
             'password' => 'the-wrong-password',
         ]),
         5,
     );
 
-    $delta = abs(median($hit) - median($miss));
+    $none = median($measure('no.such.account@fixture.example'));   // 0 candidates
+    $one = median($measure('real.account@fixture.example'));       // 1 candidate
+    $many = median($measure('two.tenants@fixture.example'));       // 2 candidates
 
-    expect($delta)->toBeLessThan(AC01_TOLERANCE_MS, sprintf(
-        'AC-01 timing: a real address costs %.1f ms and an unknown one %.1f ms — delta %.1f ms exceeds '
-        .'the ±%.0f ms bound. The miss path is not verifying against the dummy hash, so an attacker '
-        .'can tell a real address from a fake one with a stopwatch.',
-        median($hit),
-        median($miss),
-        $delta,
-        AC01_TOLERANCE_MS,
+    $report = sprintf('0-candidate %.1f ms | 1-candidate %.1f ms | N-candidate %.1f ms', $none, $one, $many);
+
+    expect(abs($none - $one))->toBeLessThan(AC01_TOLERANCE_MS, sprintf(
+        'AC-01: existence is timing-distinguishable (%s). The miss path is not doing equivalent work.',
+        $report,
     ));
 
-    // The floor matters as much as the delta: if BOTH paths became cheap (a
+    expect(abs($one - $many))->toBeLessThan(AC01_TOLERANCE_MS, sprintf(
+        'Owner ruling R-3: multi-tenant membership is timing-distinguishable (%s). The verification '
+        .'budget is not being padded — an attacker who knows an address exists can tell whether it '
+        .'exists in more than one workspace.',
+        $report,
+    ));
+
+    expect(abs($none - $many))->toBeLessThan(AC01_TOLERANCE_MS, sprintf(
+        'AC-01/R-3: the 0-candidate and N-candidate paths differ (%s).',
+        $report,
+    ));
+
+    // The floor matters as much as the deltas: if ALL paths became cheap (a
     // future "optimisation" that skips verification when the password is
-    // obviously wrong), the delta would still be zero and the defence gone.
-    expect(median($miss))->toBeGreaterThan(20.0,
+    // obviously wrong), every delta would still be zero and the defence gone.
+    expect($none)->toBeGreaterThan(20.0,
         'the miss path is too cheap to be verifying anything — equalisation has been removed',
     );
 })->group('enumeration');

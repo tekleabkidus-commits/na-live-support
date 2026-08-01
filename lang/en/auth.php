@@ -41,6 +41,10 @@ return [
 
         'ip_blocked' => 'Those details don\'t match an account. Check them and try again.',
         'bad_credentials' => 'Those details don\'t match an account. Check them and try again.',
+        // Owner ruling R-2: recorded in events/audit as its own category, but the
+        // PERSON always sees the generic text — a distinct message here would
+        // confirm the address exists in more than one workspace (AC-01).
+        'ambiguous_tenant' => 'Those details don\'t match an account. Check them and try again.',
         '2fa_failed' => 'That code didn\'t work. Check your authenticator and try again.',
     ],
 

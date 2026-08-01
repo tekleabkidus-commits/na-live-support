@@ -24,11 +24,20 @@ level** (the same IDs, not merely the same counts) — 1,702 identifiers verifie
 dropped. Ethiopic (Amharic) text appears in exactly one source document (Doc 14, the stop-word
 `ተወው` in FR-15) and survives intact in the `.md` conversion.
 
-## Known gap
+## Known gap — CLOSED by owner ruling, 2026-08-01
 
-The **~34-page master design document** referenced in `PROJECT-SUMMARY.md` §4 is **NOT present in
-any of the three archives**. If it contains binding decisions not captured in Docs 01–19, it must
-be supplied by the owner; until then, Docs 01–19 + `CLAUDE.md` are the only law.
+The **~34-page master design document** referenced in `PROJECT-SUMMARY.md` §4 was never present in
+any of the three archives. It was carried here as an open question: if it contained binding
+decisions not captured in Docs 01–19, it would have to be supplied.
+
+**The owner has ruled that it does not, and never will.** The 19-document series **fully and
+permanently supersedes** the master design document. Docs 01–19 + `CLAUDE.md` are the law, with no
+outstanding external source. The gap is closed, not deferred: nobody should re-open this by
+producing that document later, and no future session needs to caveat its absence.
+
+Where a specification question genuinely has no answer in the 19 documents, the resolution path is
+an **owner ruling recorded in `docs/ANSWERS-FROM-DOC-AUTHOR.md`** (plus an ADR when it changes
+architecture) — not a search for a missing master document.
 
 ## Status notes
 
