@@ -296,6 +296,70 @@ test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
         await tamperedCtx.dispose();
     });
 
+    test('FR-10: the 6th concurrent login evicts the OLDEST session, not the newest', async ({
+        baseURL,
+    }) => {
+        // ─────────────────────────────────────────────────────────────────────
+        // ASSERTED VIA SESSION KEYS, NOT VIA THE INDEX. The registry's sorted set
+        // is bookkeeping; storage is truth. A test that read the index could pass
+        // while the evicted session was still perfectly usable — which is the
+        // only thing that actually matters here.
+        //
+        // Six independent cookie jars = six browsers. The cap is 5.
+        // ─────────────────────────────────────────────────────────────────────
+        const { primary } = tenantIds();
+
+        // Start from a known-empty state. Without this the fixture user carries
+        // sessions from every previous run, the eviction count grows, and the
+        // oldest session disappears whichever end the code evicts from — the
+        // test passed with the eviction order deliberately REVERSED before this
+        // line existed.
+        inspect('clear-tenant', `--tenant=${primary}`);
+
+        const contexts: APIRequestContext[] = [];
+        const sessionIds: string[] = [];
+
+        for (let i = 0; i < 6; i++) {
+            const ctx = await freshContext(baseURL!);
+            const response = await login(ctx);
+            expect(response.status(), `login ${i + 1} failed`).toBe(200);
+
+            contexts.push(ctx);
+            sessionIds.push(await sessionIdOf(ctx));
+        }
+
+        // The FIRST session is gone from storage…
+        expect(
+            inspect('key-exists', `--tenant=${primary}`, `--session=${sessionIds[0]}`),
+            'SEV-1: the oldest session survived the cap — six concurrent sessions exist where the ' +
+                'policy allows five',
+        ).toBe('0');
+
+        // …and the newest is not the one that was sacrificed.
+        expect(
+            inspect('key-exists', `--tenant=${primary}`, `--session=${sessionIds[5]}`),
+            'SEV-1: the cap evicted the session that just authenticated — logging a user out at the ' +
+                'moment they logged in',
+        ).toBe('1');
+
+        // The evicted session is genuinely unusable, not merely missing a key.
+        const evictedResponse = await contexts[0].get('/api/staff/settings', {
+            headers: { Accept: 'application/json' },
+        });
+        expect(evictedResponse.status(), 'the evicted session still authenticates').not.toBe(200);
+
+        // POSITIVE CONTROL: the surviving newest session still works, so the
+        // eviction was selective rather than a blanket logout.
+        const survivorResponse = await contexts[5].get('/api/staff/settings', {
+            headers: { Accept: 'application/json' },
+        });
+        expect(survivorResponse.status(), 'the newest session was collateral damage').toBe(200);
+
+        for (const ctx of contexts) {
+            await ctx.dispose();
+        }
+    });
+
     test('logout ends the session for subsequent requests', async ({ baseURL }) => {
         const ctx = await freshContext(baseURL!);
 

@@ -168,4 +168,14 @@ return [
         'required_fields' => ['reason'],
         'owning_doc' => 'Doc02',
     ],
+    [
+        'action_key' => 'auth.session.revoked',
+        'entity' => 'user',
+        // 'staff' when an operator revokes from the devices screen (FR-12);
+        // 'system' for the cap eviction (FR-10) and the tenant-suspension sweep
+        // (Doc 01 EC-03), where no human pressed anything.
+        'actor_types' => ['staff', 'system', 'platform_admin'],
+        'required_fields' => ['reason', 'session_id'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

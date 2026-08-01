@@ -6,6 +6,9 @@ namespace App\Providers;
 
 use App\Domain\Auth\Login\StaffLoginResolver;
 use App\Domain\Auth\Login\StaffUserProvider;
+use App\Support\Audit\AuditLogger;
+use App\Support\Auth\Sessions\SessionRegistry;
+use App\Support\Auth\Sessions\SessionRevoker;
 use App\Support\Auth\Sessions\TenantHint;
 use App\Support\Auth\Sessions\TenantPrefixedSessionHandler;
 use App\Support\Problem\ErrorCode;
@@ -53,6 +56,7 @@ final class FortifyServiceProvider extends ServiceProvider
         $this->registerStaffUserProvider();
         $this->registerAuthRateLimiter();
         $this->registerTenantPrefixedSessions();
+        $this->registerSessionCollaborators();
     }
 
     /**
@@ -63,6 +67,34 @@ final class FortifyServiceProvider extends ServiceProvider
      * can see which storage a session actually uses without tracing container
      * bindings.
      */
+    private function registerSessionCollaborators(): void
+    {
+        // One place decides which Redis connection and TTL the session index
+        // uses, so the index can never point at a different instance than the
+        // sessions it describes.
+        $this->app->singleton(SessionRegistry::class, function (Application $app): SessionRegistry {
+            $connection = config('session.connection');
+            $lifetime = config('session.lifetime');
+
+            return new SessionRegistry(
+                $app->make(RedisFactory::class),
+                is_string($connection) && $connection !== '' ? $connection : 'default',
+                is_numeric($lifetime) ? (int) $lifetime : 120,
+            );
+        });
+
+        $this->app->singleton(SessionRevoker::class, function (Application $app): SessionRevoker {
+            $connection = config('session.connection');
+
+            return new SessionRevoker(
+                $app->make(SessionRegistry::class),
+                $app->make(RedisFactory::class),
+                $app->make(AuditLogger::class),
+                is_string($connection) && $connection !== '' ? $connection : 'default',
+            );
+        });
+    }
+
     private function registerTenantPrefixedSessions(): void
     {
         Session::extend('tenant-redis', function (Application $app): TenantPrefixedSessionHandler {

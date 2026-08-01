@@ -11,6 +11,9 @@ use App\Domain\Auth\Login\LoginRefused;
 use App\Domain\Auth\Login\StaffUserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Auth\Sessions\SessionLifetimePolicy;
+use App\Support\Auth\Sessions\SessionRegistry;
+use App\Support\Auth\Sessions\SessionRevoker;
 use App\Support\Auth\Sessions\TenantHint;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\SessionGuard;
@@ -52,6 +55,9 @@ final class StaffSessionController extends Controller
         private readonly LoginRecorder $recorder,
         private readonly LockoutManager $lockout,
         private readonly TenantHint $hint,
+        private readonly SessionRegistry $sessions,
+        private readonly SessionRevoker $revoker,
+        private readonly SessionLifetimePolicy $lifetime,
     ) {}
 
     /**
@@ -161,6 +167,10 @@ final class StaffSessionController extends Controller
 
         $this->recorder->loggedOut($user, $request);
 
+        // Drop the index entry as well as the session: a logged-out session that
+        // lingered in the index would show on the devices screen as active.
+        $this->sessions->forget($user->tenantId(), $user->identifier(), $request->session()->getId());
+
         auth('staff')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -215,8 +225,37 @@ final class StaffSessionController extends Controller
         // belong to the manager that can audit them.
         $this->lockout->recordSuccess($user);
 
+        // FR-11's two clocks start here. `established_at` is stamped ONCE and
+        // never refreshed — that is what makes the absolute limit absolute.
+        $now = CarbonImmutable::now();
+        $request->session()->put(SessionLifetimePolicy::ESTABLISHED_AT, $now->toIso8601String());
+        $request->session()->put(SessionLifetimePolicy::LAST_ACTIVITY_AT, $now->toIso8601String());
+
+        // FR-10: index the new session, then evict the oldest beyond the cap.
+        // Registration comes first so the cap counts the session that just
+        // authenticated — otherwise a 6th login would evict one of the first
+        // five and leave six live.
+        $sessionId = $request->session()->getId();
+        $this->sessions->register($tenantId, $user->identifier(), $sessionId, $now);
+
+        $evicted = $this->sessions->enforceCap(
+            $tenantId,
+            $user->identifier(),
+            $this->lifetime->maxConcurrent(),
+            $sessionId,
+        );
+
+        foreach ($evicted as $evictedSessionId) {
+            $this->revoker->revoke(
+                $tenantId,
+                $user->identifier(),
+                $evictedSessionId,
+                reason: 'concurrent_session_cap',
+            );
+        }
+
         // FR-04's device record and T-03's new-device notice arrive with the
-        // sessions step; until then the recorder is told plainly that neither
+        // devices sub-step; until then the recorder is told plainly that neither
         // exists yet rather than being fed a placeholder that looks real.
         $this->recorder->succeeded($user, $request, deviceId: '', newDevice: false);
 

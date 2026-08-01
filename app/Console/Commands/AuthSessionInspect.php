@@ -41,12 +41,20 @@ use RuntimeException;
 final class AuthSessionInspect extends Command
 {
     protected $signature = 'auth:session-inspect
-        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie"}
+        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant"}
         {--tenant= : tenant id (omit for the unprefixed guest keyspace)}
         {--session= : session id}
         {--cookie= : an encrypted session cookie value}';
 
     protected $description = 'Test-only: inspect session storage / mint a signed tenant hint (Doc 02 SEC-04, Q7)';
+
+    private function withoutPrefix(string $key): string
+    {
+        $prefix = config('database.redis.options.prefix');
+        $prefix = is_string($prefix) ? $prefix : '';
+
+        return $prefix !== '' && str_starts_with($key, $prefix) ? substr($key, strlen($prefix)) : $key;
+    }
 
     public function handle(RedisFactory $redis, TenantHint $hint): int
     {
@@ -105,6 +113,30 @@ final class AuthSessionInspect extends Command
                 /** @var list<string> $keys */
                 $keys = $store->keys(sprintf('t:%s:sess:*', $tenant));
                 $this->line((string) count($keys));
+
+                return self::SUCCESS;
+
+            case 'clear-tenant':
+                // TEST ISOLATION, and it earned its place. The FR-10 cap proof
+                // logs in six times and asserts which session was evicted — but
+                // sessions accumulate across runs, so the fixture user already
+                // had dozens indexed. The eviction count was then large enough
+                // that the oldest disappeared no matter which end the code
+                // evicted from, and the test passed with the eviction ORDER
+                // deliberately reversed. A test that cannot fail is not a test.
+                $deleted = 0;
+                foreach ([sprintf('t:%s:sess:*', $tenant), sprintf('t:%s:user-sessions:*', $tenant)] as $pattern) {
+                    /** @var list<string> $keys */
+                    $keys = $store->keys($pattern);
+                    foreach ($keys as $key) {
+                        // `keys()` returns FULLY-PREFIXED names while every
+                        // command re-applies the prefix — strip it or the delete
+                        // silently misses everything.
+                        $store->del($this->withoutPrefix($key));
+                        $deleted++;
+                    }
+                }
+                $this->line((string) $deleted);
 
                 return self::SUCCESS;
 
