@@ -392,18 +392,29 @@ entries:
       pinned window config, 5-failure void, recovery-code single use. Not yet built.
 
   - ac_ref: "Doc02 AC-04"
-    suite_path: manual
-    type: manual
-    tier: integration
+    suite_path: tests/Browser/session.spec.ts
+    type: automated
+    tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: partial
     justification: >-
-      Planned suite: tests/Integration/SessionRevocationSocketTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the sessions step (step 6): 6th login evicts oldest, evicted
-      session's real Reverb socket closes ≤ 2 s. Not yet built.
+      HALF PROVEN, and the halves are recorded separately because they fail differently.
+      PROVEN (tests/Browser/session.spec.ts, real cookie jars, isolated per run): the 6th
+      concurrent login evicts the OLDEST session and not the newest; the evicted session no
+      longer authenticates; the newest survives (positive control). Asserted on session
+      KEYS via auth:session-inspect, never on the index. Falsified by reversing the
+      eviction order — red, then green restored. The test needs the clear-tenant reset to
+      be falsifiable at all: without it, accumulated sessions made the oldest vanish
+      whichever end the code evicted from, and it passed with the order REVERSED.
+      NOT PROVEN: "evicted sockets close ≤ 2 s". SessionRevoker calls Reverb's
+      terminate_connections with a Pusher-style signature and Reverb answers 401
+      "Authentication signature invalid" — its verifySignature signs $this->query minus
+      [auth_signature, body_md5, appId, appKey, channelName], which merges ROUTE params, and
+      the exact set is not yet matched. The integration test connects over TLS, is
+      confirmed by Reverb, sends pusher:signin and measures the 2 s deadline; only the
+      termination call is unproven, and the test is SKIPPED rather than left green.
 
   - ac_ref: "Doc02 AC-05"
     suite_path: manual
@@ -537,3 +548,36 @@ entries:
       until the browser suite went looking for the keys and found none.
       NOT BUILT: T-04's revocation half (key delete + session.revoked publish + Reverb
       socket close), the session cap, and the timeouts — the remainder of step 6.
+
+  - ac_ref: "Doc02 FR-11"
+    suite_path: tests/Feature/Auth/SessionLifetimeTest.php
+    type: automated
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      Both clocks asserted at their exact boundaries with an injected clock (479 vs 480
+      minutes idle; 71 vs 72 hours absolute), plus the case that justifies having two:
+      a CONTINUOUSLY ACTIVE session — the stolen-session shape, where idle never fires
+      because the thief keeps it warm — still dies at the absolute limit. Also asserted:
+      a session with no recorded marks is live, not expired, so nobody is logged out one
+      request after signing in. The middleware that applies the policy is wired into the
+      staff surface; its ordering (expire BEFORE touch) is documented in the class.
+  - ac_ref: "Doc01 EC-03"
+    suite_path: tests/Integration/SessionRevocationSocketTest.php
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      THE INHERITED TASK, now discharged. Doc 01 could only refuse a suspended tenant's
+      NEXT request; live-session invalidation was handed to Doc 02. Proven both ways:
+      suspending a tenant destroys every live session of that tenant (positive control
+      asserts they existed first), and a second tenant's sessions are UNTOUCHED — the
+      negative half, without which a sweep that killed everything would pass. Falsified
+      by making the sweep count sessions without revoking them (the Doc 01 behaviour this
+      replaces): red with "a suspended operator's staff are still signed in", then green.

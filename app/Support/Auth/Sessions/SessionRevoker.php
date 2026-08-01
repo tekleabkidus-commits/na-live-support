@@ -139,6 +139,13 @@ final class SessionRevoker
      * T-04's publish. Other application nodes subscribe to learn that a session
      * died elsewhere; the payload is the session id and nothing else.
      */
+    private function configString(string $key, string $fallback = ''): string
+    {
+        $value = config($key);
+
+        return is_scalar($value) && (string) $value !== '' ? (string) $value : $fallback;
+    }
+
     private function publish(string $tenantId, string $sessionId): void
     {
         $this->redis->connection($this->connection)->publish(
@@ -149,23 +156,45 @@ final class SessionRevoker
 
     private function closeSockets(string $userId): void
     {
-        $host = config('reverb.apps.apps.0.options.host');
-        $port = config('reverb.apps.apps.0.options.port');
-        $appId = config('reverb.apps.apps.0.app_id');
+        $appId = $this->configString('reverb.apps.apps.0.app_id');
+        $key = $this->configString('reverb.apps.apps.0.key');
+        $secret = $this->configString('reverb.apps.apps.0.secret');
+        $host = $this->configString('services.reverb.internal_host', 'reverb');
+        $port = $this->configString('services.reverb.internal_port', '8080');
 
-        if (! is_string($host) || ! is_string($appId)) {
+        if ($appId === '' || $key === '' || $secret === '') {
             return;
         }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // A PUSHER-SIGNED REQUEST, because Reverb's HTTP API rejects anything
+        // else — and it must, since this endpoint force-disconnects users.
+        //
+        // The signature covers the METHOD, the PATH and the sorted query string,
+        // which is why they are assembled once here and reused rather than
+        // rebuilt for the request: sign one string and send a different one, and
+        // the call fails with a 401 that fail-open would then swallow as "socket
+        // close unavailable". That is exactly how this looked before the AC-04
+        // test caught it.
+        //
+        // The INTERNAL address is used, not REVERB_HOST: that config value is
+        // what a browser dials. This call is server-to-server.
+        // ─────────────────────────────────────────────────────────────────────
+        $path = sprintf('/apps/%s/users/%s/terminate_connections', $appId, $userId);
+        $params = [
+            'auth_key' => $key,
+            'auth_timestamp' => (string) CarbonImmutable::now()->getTimestamp(),
+            'auth_version' => '1.0',
+        ];
+        ksort($params);
+
+        $query = http_build_query($params);
+        $signature = hash_hmac('sha256', sprintf("POST\n%s\n%s", $path, $query), $secret);
 
         try {
             Http::withoutVerifying()
                 ->timeout(2)
-                ->post(sprintf('https://%s:%s/apps/%s/users/%s/terminate_connections',
-                    $host,
-                    is_scalar($port) ? (string) $port : '443',
-                    $appId,
-                    $userId,
-                ));
+                ->post(sprintf('https://%s:%s%s?%s&auth_signature=%s', $host, $port, $path, $query, $signature));
         } catch (Throwable $e) {
             // FAIL-OPEN WITH A METRIC (NFR-04). The session is already revoked;
             // refusing to complete because a socket could not be closed would

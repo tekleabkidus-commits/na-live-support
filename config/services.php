@@ -37,4 +37,21 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Reverb (server-to-server)
+    |--------------------------------------------------------------------------
+    |
+    | REVERB_HOST is the address a BROWSER dials. Server-side calls into Reverb's
+    | HTTP API — such as Doc 02 T-04's socket termination — need the internal
+    | address instead, which in the container stack is the service name. Doc 18
+    | sets these per environment.
+    |
+    */
+
+    'reverb' => [
+        'internal_host' => env('REVERB_INTERNAL_HOST', 'reverb'),
+        'internal_port' => env('REVERB_INTERNAL_PORT', '8080'),
+    ],
+
 ];
