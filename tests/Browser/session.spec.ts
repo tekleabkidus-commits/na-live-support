@@ -328,29 +328,45 @@ test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
             sessionIds.push(await sessionIdOf(ctx));
         }
 
+        // Named locals rather than indexed access: TypeScript's
+        // noUncheckedIndexedAccess types `arr[0]` as possibly-undefined, and CI
+        // caught it while a cached local vue-tsc did not — the second time this
+        // session that a stale type-check reported success.
+        const oldestSessionId = sessionIds.at(0);
+        const newestSessionId = sessionIds.at(-1);
+        expect(oldestSessionId, 'no first session id captured').toBeTruthy();
+        expect(newestSessionId, 'no last session id captured').toBeTruthy();
+
         // The FIRST session is gone from storage…
         expect(
-            inspect('key-exists', `--tenant=${primary}`, `--session=${sessionIds[0]}`),
+            inspect('key-exists', `--tenant=${primary}`, `--session=${oldestSessionId}`),
             'SEV-1: the oldest session survived the cap — six concurrent sessions exist where the ' +
                 'policy allows five',
         ).toBe('0');
 
         // …and the newest is not the one that was sacrificed.
         expect(
-            inspect('key-exists', `--tenant=${primary}`, `--session=${sessionIds[5]}`),
+            inspect('key-exists', `--tenant=${primary}`, `--session=${newestSessionId}`),
             'SEV-1: the cap evicted the session that just authenticated — logging a user out at the ' +
                 'moment they logged in',
         ).toBe('1');
 
+        // Same reason as the ids above: indexed access is possibly-undefined
+        // under noUncheckedIndexedAccess.
+        const evictedContext = contexts.at(0);
+        const survivingContext = contexts.at(-1);
+        expect(evictedContext, 'no evicted context captured').toBeTruthy();
+        expect(survivingContext, 'no surviving context captured').toBeTruthy();
+
         // The evicted session is genuinely unusable, not merely missing a key.
-        const evictedResponse = await contexts[0].get('/api/staff/settings', {
+        const evictedResponse = await evictedContext!.get('/api/staff/settings', {
             headers: { Accept: 'application/json' },
         });
         expect(evictedResponse.status(), 'the evicted session still authenticates').not.toBe(200);
 
         // POSITIVE CONTROL: the surviving newest session still works, so the
         // eviction was selective rather than a blanket logout.
-        const survivorResponse = await contexts[5].get('/api/staff/settings', {
+        const survivorResponse = await survivingContext!.get('/api/staff/settings', {
             headers: { Accept: 'application/json' },
         });
         expect(survivorResponse.status(), 'the newest session was collateral damage').toBe(200);
