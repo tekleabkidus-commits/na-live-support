@@ -97,6 +97,38 @@ function timeRequests(callable $request, int $samples): array
     return $timings;
 }
 
+/**
+ * The FLOOR of a set of timings, used instead of the median for the AC-01
+ * measurement.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * WHY MINIMUM, AND NOT MEDIAN OR MEAN.
+ *
+ * Scheduler noise is strictly ADDITIVE: a run can be delayed by a competing
+ * process, never accelerated below the work it actually performs. So across
+ * repeated samples the minimum converges on the true cost of the work, while the
+ * median drifts upward with load — and drifts by DIFFERENT amounts for paths
+ * that allocate differently, which is exactly what happened here.
+ *
+ * CI caught it: medians of 207.5 / 201.7 / 256.3 ms gave a 54.6 ms spread and
+ * failed the ±50 ms bound, on a shared runner where argon2id's 64 MiB working
+ * set makes timings memory-bandwidth-sensitive. The same code measured tight
+ * locally. Loosening the tolerance would have been the wrong fix — it would have
+ * hidden a real regression later — so the estimator changed instead, to the one
+ * that measures work rather than work-plus-contention.
+ *
+ * The floor still detects the fault this test exists for: removing a hash
+ * removes ~90 ms of unavoidable work, which lowers the floor and no amount of
+ * quiet can disguise it.
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * @param  list<float>  $values
+ */
+function floorOf(array $values): float
+{
+    return min($values);
+}
+
 function median(array $values): float
 {
     sort($values);
@@ -194,17 +226,23 @@ it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner 
     // Warm: the first call pays for the dummy hash's one-time computation.
     $provider->retrieveByCredentials(['email' => 'warmup@fixture.example', 'password' => 'x']);
 
-    $measure = fn (string $email): array => timeRequests(
-        fn () => $provider->retrieveByCredentials([
-            'email' => $email,
-            'password' => 'the-wrong-password',
-        ]),
-        5,
-    );
+    // Nine samples, and the FLOOR of each set — see floorOf(). Each path is also
+    // warmed once so no path pays a first-call cost the others do not.
+    $measure = function (string $email) use ($provider): float {
+        $provider->retrieveByCredentials(['email' => $email, 'password' => 'warm']);
 
-    $none = median($measure('no.such.account@fixture.example'));   // 0 candidates
-    $one = median($measure('real.account@fixture.example'));       // 1 candidate
-    $many = median($measure('two.tenants@fixture.example'));       // 2 candidates
+        return floorOf(timeRequests(
+            fn () => $provider->retrieveByCredentials([
+                'email' => $email,
+                'password' => 'the-wrong-password',
+            ]),
+            9,
+        ));
+    };
+
+    $none = $measure('no.such.account@fixture.example');   // 0 candidates
+    $one = $measure('real.account@fixture.example');       // 1 candidate
+    $many = $measure('two.tenants@fixture.example');       // 2 candidates
 
     $report = sprintf('0-candidate %.1f ms | 1-candidate %.1f ms | N-candidate %.1f ms', $none, $one, $many);
 
