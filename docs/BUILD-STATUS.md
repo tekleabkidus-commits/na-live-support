@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 6.5 of 14 planned steps** | S4–S8 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 7 of 14 planned steps** | S4–S9 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -640,6 +640,55 @@ Re-falsified with the new estimator (0.7 / 112.7 / 209.1 ms with padding off).
 Concurrent-session cap and oldest eviction (FR-10), idle/absolute timeouts (FR-11), revocation +
 `session.revoked` publish + Reverb socket close ≤ 2 s (T-04/AC-04), inherited Doc 01 EC-03
 live-session invalidation, the per-request locale hop (I-5), devices screen + GeoIP (ADR 0006).
+
+
+
+## Session-9 report (Doc 02 step 6 — the session registry)
+
+**Evidence: pest 212 passed / 12 skipped (2213 assertions); browser 11 passed; `make gates`
+10/10; lint + vue-tsc clean. CI green on `5327189`, all stages.**
+
+### Proven, each with a positive control and falsified before being counted
+
+| Requirement | Evidence | Falsified by |
+|---|---|---|
+| **FR-10** cap + oldest-eviction | browser suite, asserted on session KEYS (not the index): 6th login evicts the 1st, the 6th survives, the evicted session no longer authenticates | reversing the eviction order → red |
+| **FR-11** idle + absolute timeouts | injected clock at exact boundaries (479 vs 480 min; 71 vs 72 h), plus the case that justifies two clocks: a continuously-active session still dies at the absolute limit | — (boundary assertions are two-sided) |
+| **T-04** revocation | session key deleted, index entry dropped | — |
+| **Doc 01 EC-03** (inherited) | suspending a tenant destroys its LIVE sessions; another tenant's are untouched | making the sweep count without revoking → red |
+
+### NOT proven, and skipped rather than left green
+
+**AC-04's socket half.** Reverb answers `401 Authentication signature invalid` to
+`terminate_connections`. Its `verifySignature` signs `$this->query` minus
+`[auth_signature, body_md5, appId, appKey, channelName]` — which merges ROUTE parameters, and
+the exact param set is not yet matched. Everything else in that test works and is kept: the TLS
+websocket connects, Reverb confirms it, `pusher:signin` is sent, and the 2 s deadline is measured.
+Only the termination call is unproven.
+
+### Three bugs the tests caught, all about state rather than logic
+
+1. **The index deleted itself during login.** Laravel writes the session at the END of the
+   request, so the just-registered session had no key yet; reconciliation read that as "expired"
+   and removed it, dropping the whole index. Silent: logins fine, cap never fired, index looked
+   as though it had never been written.
+2. **The cap test passed with the eviction order REVERSED**, because sessions accumulate across
+   runs and the oldest vanished either way. It only became falsifiable once a `clear-tenant`
+   reset gave it a known starting state.
+3. **Shared state across browser workers.** All workers dial from one address, so they competed
+   for a single per-IP login budget (CI: "login 5 failed"); and the cap test's reset wiped
+   sessions belonging to whichever test ran beside it. The suite is now serial with a
+   test-only limiter reset — the production control is untouched, and `LockoutTest` still
+   proves it.
+
+### A repeated lesson worth writing down
+
+`vue-tsc` reported success locally twice while CI failed on real type errors, because the local
+run was cached. **A cached type-check is not evidence.**
+
+### Still not built in step 6
+
+The per-request locale hop (I-5) and the devices screen with GeoIP (ADR 0006 unwritten).
 
 
 ## Deferred with reason
