@@ -58,23 +58,19 @@ return Application::configure(basePath: dirname(__DIR__))
             prepend: App\Http\Middleware\ResolveBearerTenant::class,
         );
 
-        // The widget stack needs the SAME protection (Doc 02 step 10): its
-        // routes declare tenant:widget_key → WidgetCors → auth:widget, and
-        // without these entries the priority-listed Authenticate hops over
-        // both unlisted predecessors — the guard would run with no tenant
-        // bound (the step-9 bug, on a new surface) and its 401s would leave
-        // unstamped, unreadable to the allowed page whose recovery path is
-        // "on 401, re-POST /session". Two prepends, both landing immediately
-        // before Authenticate, in declaration order: ResolveTenant first,
-        // then WidgetCors inserted between it and Authenticate.
-        $middleware->prependToPriorityList(
-            before: Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
-            prepend: App\Http\Middleware\ResolveTenant::class,
-        );
-        $middleware->prependToPriorityList(
-            before: Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
-            prepend: App\Http\Middleware\WidgetCors::class,
-        );
+        // The widget stack (Doc 02 step 10) deliberately does NOT add its
+        // middleware to this list. The first attempt did — ResolveTenant and
+        // WidgetCors prepended before Authenticate, mirroring the bearer fix —
+        // and it broke a DIFFERENT surface: ResolveTenant sits on the staff
+        // routes too, so listing it re-sorted the staff stack, hoisted the
+        // binder above the group-appended SecurityHeaders, and every staff
+        // 404 rendered inside the binder left WITHOUT its T-07 headers
+        // (SecurityHeadersTest went red). The priority list is GLOBAL; a rule
+        // added for one surface moves every stack that middleware appears on.
+        // The widget surface instead authenticates via widget.auth
+        // (AuthenticateWidgetVisitor), which does not implement the
+        // priority-listed AuthenticatesRequests contract — nothing hoists,
+        // declared order IS executed order, asserted by MiddlewareOrderTest.
 
         // A GUEST hitting an authenticated page needs somewhere to go, and the
         // default target is route('login') — which does not exist (the login

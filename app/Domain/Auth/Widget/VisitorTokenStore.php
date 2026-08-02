@@ -95,13 +95,29 @@ final class VisitorTokenStore
             return null;
         }
 
+        $visitorId = $data['visitor_id'] ?? null;
+        $widgetId = $data['widget_id'] ?? null;
+        $cookieHash = $data['cookie_hash'] ?? null;
+        $previousCookieHash = $data['previous_cookie_hash'] ?? null;
+        $issuedAt = $data['issued_at'] ?? null;
+        $lastSeenAt = $data['last_seen_at'] ?? null;
+
+        // A malformed record reads as ABSENT, not as a crash: the visitor
+        // silently re-establishes (EC-09's path), which is the only safe
+        // degradation for corrupt auth state.
+        if (! is_string($visitorId) || ! is_string($widgetId) || ! is_string($cookieHash)
+            || ! ($previousCookieHash === null || is_string($previousCookieHash))
+            || ! is_int($issuedAt) || ! is_int($lastSeenAt)) {
+            return null;
+        }
+
         return new VisitorRecord(
-            visitorId: (string) $data['visitor_id'],
-            widgetId: (string) $data['widget_id'],
-            cookieHash: (string) $data['cookie_hash'],
-            previousCookieHash: isset($data['previous_cookie_hash']) ? (string) $data['previous_cookie_hash'] : null,
-            issuedAt: CarbonImmutable::createFromTimestampUTC((int) $data['issued_at']),
-            lastSeenAt: CarbonImmutable::createFromTimestampUTC((int) $data['last_seen_at']),
+            visitorId: $visitorId,
+            widgetId: $widgetId,
+            cookieHash: $cookieHash,
+            previousCookieHash: $previousCookieHash,
+            issuedAt: CarbonImmutable::createFromTimestampUTC($issuedAt),
+            lastSeenAt: CarbonImmutable::createFromTimestampUTC($lastSeenAt),
         );
     }
 

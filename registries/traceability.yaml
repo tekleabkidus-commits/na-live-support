@@ -458,18 +458,27 @@ entries:
       (production is probe-only until Docs 04/06).
 
   - ac_ref: "Doc02 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Auth/WidgetSessionTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      Planned suite: tests/Feature/Auth/WidgetSessionTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the widget-token step (step 10): allowed origin succeeds; disallowed
-      fails at the CORS layer and the server layer independently. Not yet built.
+      Both clauses, both layers, and INDEPENDENCE proven by removal rather than
+      inspection (S14): allowed origin issues a working session (positive
+      control authenticates the probe afterwards); disallowed origin refused by
+      the SERVER layer on a test-mounted route with WidgetCors absent from the
+      stack, and by the CORS layer with the server check simulated away
+      (WidgetCors around an always-200 $next stamps no ACAO for an off-list
+      origin). Falsified both ways: sabotage (d) removed the server check —
+      only the server-layer tests went red; sabotage (e) stamped ACAO
+      unconditionally — only the CORS-layer tests went red. Found and fixed in
+      the same step: the FRAMEWORK's default CORS config was granting
+      'api/* → *', which overrode the per-widget stamp and would have handed
+      any origin a readable staff-API response; config/cors.php now disables
+      the blanket handler (T-06 posture, documented in the file).
 
   - ac_ref: "Doc02 AC-07"
     suite_path: manual
@@ -633,3 +642,101 @@ entries:
       registry entry and its 3-layer opt model — owned by Doc 07's
       notification pipeline, which ships the notice and its toggleable
       setting together (a setting nothing reads may not enter the registry).
+
+  # ── Doc 02 step 10 (S14): widget visitor tokens ────────────────────────────
+  - ac_ref: "Doc02 FR-21"
+    suite_path: tests/Feature/Auth/WidgetSessionTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      Issuance end to end: allowed origin → opaque 128-bit token (nvt_ + 32
+      hex from the CSPRNG), Redis record bound to {tenant, widget, visitor_id}
+      asserted directly in the store, sliding 30-day TTL proven by shrinking
+      the key's TTL at the Redis layer and watching an authenticated touch
+      re-arm it (no wall-clock assertions; sabotage (g) froze the slide and
+      the clause went red). Endpoint-subset confinement and the visitor's own
+      Reverb channels are WidgetPartitionTest's rows below. Allowlist matcher
+      semantics (ruling D-5) fixture-pinned including the mandatory
+      evil-brand.com dot-boundary case (sabotage (c) red). The widgets table
+      is the Doc 02-owned minimal shape (owner-approved); Doc 13 attaches its
+      config columns expand-contract.
+  - ac_ref: "Doc02 FR-22"
+    suite_path: tests/Feature/Auth/WidgetTokenTheftTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      Approved interpretation in the suite docblock (step-10 ruling D-3):
+      "history preserved server-side via visitor_id" protects the RECORD, not
+      the presenter. Proven: cookie rotates per /session with exactly one
+      generation of grace (two generations back is dead); a bare token gets
+      401 on API routes and a FRESH visitor_id on /session, with the victim's
+      record, pairing and TTL untouched; every mismatch logs the
+      widget.visitor_reissued / widget.visitor_auth_refused security metrics.
+      Sabotage (b) made the cookie comparison always-true — both containment
+      tests went red. The no-linking structure is asserted by reflection: no
+      VisitorTokenStore operation accepts a caller-chosen visitor identity.
+  - ac_ref: "Doc02 BR-06"
+    suite_path: tests/Security/WidgetPartitionTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      Structural, both directions, each refusal beside its positive control:
+      a valid visitor session is nothing on the staff surface (404) and the
+      bearer surface (invalid_token 401); a staff session and a staff API
+      token are nothing on the widget surface; the widget guard has NO
+      provider key in config to misconfigure, its principal is a value object
+      no user provider can retrieve, and WidgetGuard::setUser() throws on any
+      non-visitor principal (WidgetTokenTheftTest). At the socket layer the
+      visitor channel is guards-pinned to widget and the staff channel to
+      staff — the pin on the staff channel is a REAL fix from this step: an
+      auth:widget request makes widget the request's default guard, and the
+      unpinned staff callback received a WidgetVisitor and 500'd on its type
+      declaration instead of refusing with 403. Sabotage (f) swapped the
+      widget guard to a users-provider session guard: 8 tests across two
+      suites went red.
+  - ac_ref: "Doc02 EC-08"
+    suite_path: tests/Feature/Auth/WidgetSessionTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      SERVER-SIDE ANCESTRY VALIDATION PROVEN: an allowed origin wrapped by a
+      disallowed ancestor is refused at issuance (sabotage (a) deleted the
+      check — red); empty ancestry (top-level page) allowed. Recorded
+      honestly per the step-10 ruling: the ancestor list at issuance is
+      CLIENT-SUPPLIED (the loader's location.ancestorOrigins), advisory
+      against non-browser callers — a liar gains a session for its own fresh
+      visitor and nothing else. The STRUCTURAL half — frame-ancestors CSP
+      stamped from the widget allowlist on the actual frame, and the
+      hostile-host page driven against it — is Doc 13's (its FR-03/SEC-02);
+      this row flips to covered when that lands.
+  - ac_ref: "Doc02 EC-09"
+    suite_path: tests/Feature/Auth/WidgetTokenTheftTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      A visitor presenting nothing (cleared cookies) gets a fresh token and a
+      fresh visitor_id; the old record survives server-side, unlinked. The
+      "linking is a staff action" half is proven as ABSENCE: reflection over
+      VisitorTokenStore's public surface shows no operation accepting a
+      visitor identity, so auto-linking has no code path to grow from. Doc 08
+      owns the staff merge.

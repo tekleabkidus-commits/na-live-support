@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\Hash;
  * and exactly one previous generation stays valid — parallel tabs and
  * in-flight requests survive a rotation; anything older is dead.
  */
-
 it('rotates the cookie on every /session refresh, keeping visitor and token stable (FR-22, decision 2)', function (): void {
     [, , $key] = widgetFixture();
 
@@ -190,7 +189,7 @@ it('refuses a token minted under one widget when presented under a sibling widge
 });
 
 it('refuses to plant a staff User behind the widget guard even deliberately (BR-06, sabotage f\'s runtime twin)', function (): void {
-    [$tenant, , ] = widgetFixture();
+    [$tenant] = widgetFixture();
 
     $user = asTenant($tenant, fn (): User => User::factory()->create([
         'password' => Hash::make('the-correct-password'),

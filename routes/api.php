@@ -246,8 +246,11 @@ Route::group([], function (): void {
      | allowlist stamp reads the widgets table under the bound RLS scope,
      | OUTSIDE the guard so the guard's own 401 reaches an allowed page
      | CORS-readable (the mismatch→re-POST /session recovery depends on it).
-     | bootstrap/app.php's priority-list entries make this executed order
-     | real; MiddlewareOrderTest asserts it.
+     | The guard middleware is widget.auth (AuthenticateWidgetVisitor), NOT
+     | auth:widget — Laravel's Authenticate is priority-listed and the sorter
+     | would hoist it over the binder (see the middleware's docblock for the
+     | full sorter story); declared order here IS executed order, and
+     | MiddlewareOrderTest asserts both that and Authenticate's absence.
      |
      | BR-06 structurally: separate route group, separate guard whose
      | principal is not a User, separate cookie scope (Path=/api/widget).
@@ -270,7 +273,7 @@ Route::group([], function (): void {
             ->post('session', [App\Http\Controllers\Widget\WidgetSessionController::class, 'store'])
             ->name('auth.widget.session');
 
-        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, 'auth:widget', 'tenant.state:inbound'])
+        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, App\Http\Middleware\AuthenticateWidgetVisitor::class, 'tenant.state:inbound'])
             ->group(function (): void {
                 Route::get('context', [IngressProbeController::class, 'show'])
                     ->name('auth.widget.context');

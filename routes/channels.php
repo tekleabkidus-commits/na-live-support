@@ -26,13 +26,15 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 // `guards => ['staff']` became LOAD-BEARING with Doc 02 step 10, not
-// decorative: a request authenticated by `auth:widget` makes the widget guard
-// the request's DEFAULT guard (Authenticate::shouldUse), so without the pin,
-// a visitor presenting at any broadcast-auth door had their WidgetVisitor
-// handed to this callback — whose User type declaration then blew up with a
-// 500 instead of the 403 a refusal owes (found by WidgetPartitionTest's
-// staff-channel case). Pinned, the staff guard is consulted explicitly, finds
-// no session on a visitor request, and refuses cleanly before the callback.
+// decorative. Found by WidgetPartitionTest's staff-channel case: while the
+// widget surface used Laravel's auth:widget, Authenticate::shouldUse made
+// `widget` the request's DEFAULT guard, and an unpinned channel handed this
+// callback a WidgetVisitor — which blew up on the User type declaration with
+// a 500 where a refusal owes 403. The surface now authenticates without
+// touching the default guard (AuthenticateWidgetVisitor), but the pin stays:
+// it makes this channel's principal source EXPLICIT instead of inherited
+// from whatever middleware ran first, which is the only shape under which
+// BR-06's "regardless of any misconfiguration" holds at the socket layer.
 Broadcast::channel('tenant.{tenantId}', function (User $user, string $tenantId): bool {
     return app(ChannelTenantBinding::class)->authorize($user, $tenantId);
 }, ['guards' => ['staff']]);

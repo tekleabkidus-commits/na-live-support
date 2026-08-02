@@ -95,6 +95,12 @@ final class WidgetSessionController extends Controller
 
     private function establish(Request $request, Widget $widget): JsonResponse
     {
+        $widgetId = $widget->getKey();
+
+        if (! is_string($widgetId)) {
+            throw new \LogicException('Widget was loaded without a string id; HasUuids should have set one.');
+        }
+
         $tenantId = $this->context->tenantId();
         $now = CarbonImmutable::now();
 
@@ -104,7 +110,7 @@ final class WidgetSessionController extends Controller
         if (is_string($presentedToken) && $presentedToken !== '') {
             $record = $this->store->find($tenantId, $presentedToken);
 
-            $belongsHere = $record !== null && $record->widgetId === (string) $widget->getKey();
+            $belongsHere = $record !== null && $record->widgetId === $widgetId;
 
             if ($belongsHere && is_string($presentedCookie) && $record->cookieMatches($presentedCookie)) {
                 // The rightful holder returning: FR-21's slide, FR-22's rotate.
@@ -124,7 +130,7 @@ final class WidgetSessionController extends Controller
             ]);
         }
 
-        $issued = $this->store->issue($tenantId, (string) $widget->getKey(), $now);
+        $issued = $this->store->issue($tenantId, $widgetId, $now);
 
         return $this->sessionResponse($issued->visitorId, $issued->token, $issued->cookie, status: 201);
     }

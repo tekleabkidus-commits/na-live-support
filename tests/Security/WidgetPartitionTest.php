@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Hash;
  * succeeding on its OWN surface) — two refusals compared to each other prove
  * nothing, per the standing AC-01 lesson.
  */
-
 it('refuses a valid visitor session on the staff and bearer surfaces (BR-06, visitor → staff direction)', function (): void {
     [, , $key] = widgetFixture();
 

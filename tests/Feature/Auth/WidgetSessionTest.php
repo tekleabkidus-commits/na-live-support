@@ -133,7 +133,7 @@ it('withholds the CORS grant even when the server layer waves everything through
     // what — a stand-in for a deleted server check. The disallowed origin's
     // response must carry no Access-Control-Allow-Origin: the browser would
     // refuse to hand it to the page, which is the CORS layer refusing alone.
-    [$tenant, $widget, ] = widgetFixture();
+    [$tenant, $widget] = widgetFixture();
 
     $stampFor = function (string $origin) use ($tenant, $widget): ?string {
         $request = Illuminate\Http\Request::create('https://localhost/api/widget/v1/session', 'POST');
@@ -270,8 +270,8 @@ it('answers a genuine preflight permissively and a bare OPTIONS with nothing (T-
 });
 
 it('keeps two tenants\' widgets invisible to each other (N-01, the standing check)', function (): void {
-    [$tenantA, $widgetA, ] = widgetFixture();
-    [$tenantB, , ] = widgetFixture();
+    [$tenantA, $widgetA] = widgetFixture();
+    [$tenantB] = widgetFixture();
 
     $seenFromB = asTenant($tenantB, fn () => Widget::query()->count());
     expect($seenFromB)->toBe(1);

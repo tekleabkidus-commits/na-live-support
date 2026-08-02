@@ -143,12 +143,14 @@ it('keeps the bearer surface stateless — no session, no cookies, no CSRF in th
 });
 
 it('orders the EXECUTED widget stack binder → CORS → guard → state (T-02, step 10)', function () {
-    // Step 9's sorter lesson, applied to the new surface before it could bite:
-    // Authenticate is priority-listed, so without bootstrap/app.php's entries
-    // for ResolveTenant and WidgetCors it would hop over both — the widget
-    // guard would run with no tenant bound (500), and the guard's 401s would
-    // leave without CORS headers, unreadable to the allowed page whose
-    // recovery path is "on 401, re-POST /session".
+    // The widget guard is DELIBERATELY not Laravel's Authenticate: that class
+    // is priority-listed, the sorter hoists it over unlisted predecessors
+    // (the step-9 bug), and the first fix — listing ResolveTenant globally —
+    // re-sorted the STAFF stack and stripped T-07 headers off its error
+    // responses. AuthenticateWidgetVisitor is invisible to the sorter, so
+    // this asserts both the executed order AND Authenticate's absence: if
+    // someone "simplifies" back to auth:widget, the absence clause goes red
+    // before the subtle ordering bug does.
     $route = Route::getRoutes()->getByName('auth.widget.context');
     expect($route)->not->toBeNull('route auth.widget.context is not registered');
 
@@ -169,8 +171,11 @@ it('orders the EXECUTED widget stack binder → CORS → guard → state (T-02, 
         if (str_starts_with($mw, App\Http\Middleware\WidgetCors::class)) {
             $cors = $i;
         }
-        if (str_starts_with($mw, Illuminate\Auth\Middleware\Authenticate::class)) {
+        if (str_starts_with($mw, App\Http\Middleware\AuthenticateWidgetVisitor::class)) {
             $guard = $i;
+        }
+        if (str_starts_with($mw, Illuminate\Auth\Middleware\Authenticate::class)) {
+            test()->fail('Laravel\'s Authenticate is on the widget stack — the sorter will hoist it over the binder; use widget.auth (AuthenticateWidgetVisitor) instead.');
         }
         if (str_starts_with($mw, App\Http\Middleware\EnforceTenantState::class)) {
             $state = $i;
@@ -179,7 +184,7 @@ it('orders the EXECUTED widget stack binder → CORS → guard → state (T-02, 
 
     expect($binder)->not->toBeNull('widget binder missing from the executed stack')
         ->and($cors)->not->toBeNull('WidgetCors missing from the executed stack')
-        ->and($guard)->not->toBeNull('auth:widget guard missing from the executed stack')
+        ->and($guard)->not->toBeNull('widget guard middleware missing from the executed stack')
         ->and($state)->not->toBeNull('tenant.state missing from the executed stack')
         ->and($binder)->toBeLessThan($cors, 'CORS would stamp against a cleared RLS scope')
         ->and($cors)->toBeLessThan($guard, 'the guard 401 would leave CORS-unreadable')

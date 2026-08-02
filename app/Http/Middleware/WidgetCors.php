@@ -51,9 +51,10 @@ use Symfony\Component\HttpFoundation\Response;
  * clears in its `finally` — wrapped the other way, the stamp would query a
  * cleared scope and 500; outside the guard because the guard's own 401 must
  * reach the allowed page CORS-readable, or the decision-3 recovery (401 →
- * re-POST /session) becomes an opaque network error. The priority-list entry
- * in bootstrap/app.php is what makes this executed order real — see step 9's
- * sorter lesson. (2) Preflights, which present no key and so can never pass
+ * re-POST /session) becomes an opaque network error. The order holds because
+ * NOTHING on this stack is priority-listed — the guard is deliberately not
+ * Laravel's Authenticate (see AuthenticateWidgetVisitor on why), so the
+ * sorter has nothing to hoist. (2) Preflights, which present no key and so can never pass
  * the binder, are served by a dedicated OPTIONS route carrying ONLY this
  * middleware; the preflight branch below belongs to that route.
  */

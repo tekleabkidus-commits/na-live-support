@@ -130,7 +130,11 @@ final class WidgetGuard implements Guard
 
     public function id(): ?string
     {
-        return $this->user()?->getAuthIdentifier();
+        // Via the property, not user(): Larastan types every Guard::user()
+        // as the app's User model, which this guard exists to never carry.
+        $this->user();
+
+        return $this->visitor?->visitorId;
     }
 
     public function hasUser(): bool
