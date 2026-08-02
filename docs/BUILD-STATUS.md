@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6, 7, 8 & 9 COMPLETE (11 of 14 steps)** | S4–S12 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; 4 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). Remaining: FR-09 role enforcement (needs Doc 03), widget tokens, webhook auth, SEC-08, views |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–10 COMPLETE (12 of 14 steps)** | S4–S14 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; 3 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** Remaining: FR-09 role enforcement (needs Doc 03), webhook auth (step 11), SEC-08 (step 12), views |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -1109,6 +1109,170 @@ scope_denied is a catalog key, not a person; regenerated same commit).
   (`candidatesFor()` returns zero rows) but was not sabotaged at the SQL layer — that
   would mean re-migrating mid-suite. The pre-change history stands in: before this
   migration the same query returned the row.
+
+## Session-14 report (Doc 02 step 10 — widget visitor tokens)
+
+Step 10 closed: FR-21, FR-22 (rulings D-1…D-5 applied as approved), AC-06 (both
+layers, independence proven by REMOVAL), BR-06 both directions, EC-08 **PARTIAL by
+ruling** (server-side ancestry proven; the structural frame-ancestors half is
+Doc 13's), EC-09 including the no-linking-capability reflection assertion, plus the
+widget slices of T-02 (guard), T-06 (per-widget CORS) and the T-07 posture fix below.
+
+Local proof: **pest 366 passed / 11 skipped (3566 assertions)**, `make gates`
+**10/10**, Pint + PHPStan(max, 1G) + ESLint clean. CI pending at report time —
+the push and run link are appended below when green. New suites:
+`WidgetSessionTest` (13), `WidgetTokenTheftTest` (8), `WidgetPartitionTest` (5),
+two new `MiddlewareOrderTest` cases (executed widget order + Authenticate-absence,
+sessionless-surface absence), `SuspendedTenantMatrixTest` widget cells now drive
+the REAL issuer (201, seeded allowlist) instead of the Doc 01 probe.
+
+### The architecture that landed
+
+- **`widgets` table** — the Doc 02-owned minimal shape the tenant_keys migration
+  planned for: `key_id` (unique, → tenant_keys) + `allowed_origins` jsonb, default
+  `[]` = fail-closed. Standard physics verified in the test DB: RLS enabled AND
+  forced, `tenant_isolation` policy, app grants exactly INSERT/SELECT/UPDATE (no
+  DELETE). Doc 13 attaches its config columns expand-contract.
+- **`OriginAllowlist`** — the ONE matcher (ruling D-5): https only, case-normalized
+  hosts, exact ports (absent = 443), exact origins or `*.domain` wildcards with the
+  dot boundary; `evil-brand.com` vs `*.brand.com` is fixture-pinned. Punycode
+  lookalikes deliberately out of scope per ruling; docblock says whose problem
+  homographs are (the operator's allowlist).
+- **`VisitorTokenStore`** — redis-volatile (ruling D-1), keys
+  `t:{tenant}:widget-visitor:{sha256(token)}`, token `nvt_` + 128 CSPRNG bits,
+  cookie secrets stored as sha256 only, sliding 30-day SETEX. No operation accepts
+  a caller-chosen visitor identity — EC-09's "linking is staff-only" as an absent
+  capability, asserted by reflection.
+- **POST `/api/widget/v1/session`** — supersedes the Doc 01 probe on the same
+  trust model (`tenant:widget_key` + `tenant.state:inbound`; a suspended
+  operator's visitors keep their identity — US-02 for web chat, asserted in the
+  suspended matrix). Validates Origin-header/declared-origin agreement, allowlist,
+  and every declared ancestor; refusals are byte-identical `origin_not_allowed`
+  403s with a security metric. Issue 201 / refresh 200 (rotate cookie, slide TTL) /
+  bare-token re-issue 201 with a FRESH visitor_id and the victim untouched.
+- **`widget` guard** (`WidgetGuard` + `WidgetVisitor`) — principal is a value
+  object, not a User, not a model; `setUser()` throws on anything else; config
+  entry has NO provider key. Four checks in order: token header → store record →
+  same-widget binding → cookie pair (current-or-previous). BR-06 is structural in
+  both directions and sabotage (f) — a users-provider session guard swapped in —
+  set 8 tests red across two suites.
+- **`WidgetCors`** — AC-06's independent CORS layer: stamps ACAO exactly for
+  allowlisted origins, inside the binder (RLS scope) and outside the guard (401s
+  stay CORS-readable); permissive preflight documented in the class (a preflight
+  cannot know the widget; enforcement is dual-layer on the actual request).
+- **Reverb door** — `POST widget/v1/broadcasting/auth` on the widget stack;
+  visitor channels `tenant.{t}.visitor.{v}` guards-pinned to `widget`, the staff
+  channel now guards-pinned to `staff`. Channel tests run against the REAL
+  Pusher-protocol driver — the suite bootstrap's `BROADCAST_CONNECTION=null`
+  would have 200'd every channel and proven nothing (recorded in the test).
+
+### Three real defects found while proving it
+
+1. **The framework's default CORS config granted `api/* → *`.** No
+   `config/cors.php` existed, so Laravel's built-in HandleCors ran with its
+   defaults on the whole API — every staff response carried
+   `Access-Control-Allow-Origin: *`, and it overrode the per-widget stamp. The
+   published config now disables the blanket handler with the T-06 posture
+   documented per surface. This predates step 10 and was invisible because no
+   test ever asserted a CORS header until AC-06.
+2. **The first widget-order fix broke the staff surface.** Mirroring step 9
+   (ResolveTenant + WidgetCors into the middleware priority list) held the widget
+   order — and silently re-sorted the STAFF stack, hoisting the binder above the
+   group-appended SecurityHeaders: staff 404s rendered with NO T-07 headers.
+   `SecurityHeadersTest` caught it on the first full-suite run. The priority list
+   is global; the fix is `AuthenticateWidgetVisitor` (`widget.auth`), which does
+   what `auth:widget` did without implementing the priority-listed contract —
+   nothing hoists, and `MiddlewareOrderTest` now asserts Authenticate's ABSENCE
+   from the widget stack so the "simplification" back to `auth:widget` fails red.
+3. **The staff broadcast channel 500'd on a visitor.** Under `auth:widget`,
+   `shouldUse` made `widget` the request's default guard, and the unpinned staff
+   channel callback received a `WidgetVisitor` — TypeError against its `User`
+   type declaration, 500 where a refusal owes 403. Fixed twice over: the staff
+   channel is guards-pinned, and the replacement middleware never touches the
+   default guard.
+
+### Falsification ledger (sabotage before counting — every red observed in-session)
+
+| Sabotage | Expected red | Result |
+|---|---|---|
+| (a) ancestor check deleted | EC-08 disallowed-ancestor test | **red**, restored |
+| (b) cookie comparison always-true | rotation-grace boundary + bare-token 401 | **red** (2 tests), restored |
+| (c) wildcard weakened to bare suffix | `evil-brand.com` fixture | **red**, restored |
+| (d) server-side origin check removed | server-layer refusal + CORS-independence direction one | **red** (2 tests; the CORS-layer test stayed green — that is the independence property working), restored |
+| (e) ACAO stamped unconditionally | CORS-layer tests both suites | **red** (2 tests), restored |
+| (f) widget guard → session driver + users provider | BR-06 partition | **red — 8 tests across two suites**, restored |
+| (g) TTL slide frozen | sliding-TTL clause | **red**, restored |
+
+Plus two discoveries that would have made tests vacuous, both now recorded in the
+tests themselves: Laravel JSON test requests drop cookies without
+`withCredentials()` (and the test client's cookie jar PERSISTS across in-test
+requests — `resetWidgetClient()` exists so "no cookie" means no cookie), and the
+NullBroadcaster approves every channel (channel tests swap in the real driver).
+
+### Registry / catalog deltas
+
+`permission-exempt`: +4 widget routes (visitor surface — no staff principal
+exists to hold a permission; Doc 01's widget probe line removed).
+`audit-exempt`: +3 (Redis-only issuance; §4.8's closed event set has no visitor
+event, by ruling; Doc 01's widget probe line removed; telegram/DLR probe lines
+untouched — steps 11 / Docs 05/14 own them). `traceability`: AC-06 → covered;
+new rows FR-21, FR-22, BR-06 covered; EC-08 PARTIAL naming Doc 13's half; EC-09
+covered. `settings`: unchanged (the 30-day TTL is spec-fixed; no key invented).
+`permissions`, `notifications`, `gates.yaml`, `EVENT-CATALOG`: unchanged.
+
+### ⚠ Doc 18 handoff (owner ruling, step-10 approval — Decision 1)
+
+Visitor tokens live on **redis-volatile** (`allkeys-lru`, no persistence) beside
+staff sessions. **The property at stake is US-07: "my chat history is still there
+a week later."** Under memory pressure, `allkeys-lru` may evict a 30-day visitor
+token early; the visitor silently degrades to EC-09's fresh-identity path and
+continuity breaks with no error anywhere. Doc 18 therefore OWES, as spec work,
+not as an optimization:
+
+1. an eviction policy on the volatile instance that spares TTL'd visitor keys
+   (`volatile-ttl` or equivalent) — chosen deliberately against the staff-session
+   and cache workloads sharing the instance;
+2. memory sizing that accounts for the visitor population (10k concurrent
+   sessions is the Doc 01 capacity number; visitor records are ~300 B each,
+   but the 30-day window means the RESIDENT population is much larger than the
+   concurrent one);
+3. an eviction-observed metric/alert if the instance exposes one (`evicted_keys`
+   does exist in Redis INFO), so US-07 breaking shows up as a graph, not a
+   support ticket.
+
+Until Doc 18 lands this, US-07 holds only while the volatile instance is not
+under eviction pressure. Recorded here so it cannot silently become "how it has
+always worked."
+
+### Deliberately NOT built in step 10, with reasons
+
+- **The widget frame's `frame-ancestors` CSP and the hostile-host page against
+  it** — Doc 13 FR-03/SEC-02; the EC-08 traceability row is PARTIAL and names it.
+- **Every real visitor endpoint** (messages, config, KB, typing…) — Doc 13 T-03
+  mounts them on THIS stack; the surface is probe-only beyond issuance, the
+  step-9 posture.
+- **Per-visitor-token rate limiting** — Doc 13 T-03's clause ("Doc 02 FR-25
+  family"), belongs with the endpoints it protects; nothing invented now.
+- **Widget admin/config surface, key rotation flow** — Doc 13 FR-19 (Install
+  tab); today a widget row is created by console/fixture only.
+- **Visitor-token screens** — none exist by design (visitors see no auth UI).
+- **≤2 ms guard p99 measurement** — Doc 19 L1, same bucket as every perf budget.
+
+### Risks / residuals worth naming
+
+- **The volatile-eviction handoff above** — the one true product risk this step
+  leaves open.
+- The preflight reflects arbitrary origins (documented in `WidgetCors`). Grants
+  nothing by itself, but it is the kind of header a scanner flags; the docblock
+  carries the justification a security review will ask for.
+- The ancestor check trusts loader-supplied data (ruling-acknowledged, advisory
+  against non-browsers); the enforceable half is Doc 13's.
+- `require routes/channels.php` re-registration in the channel tests is mildly
+  unusual; if a future channels file gains side effects beyond
+  `Broadcast::channel()` calls, those run twice in that suite.
+- Doc 13 FR-08 says "token per Doc 02 (sliding 30 d)" — if Doc 13 later wants the
+  TTL operator-tunable, that is a settings-registry addition under `auth.*` with
+  a platform minimum, and it reopens ruling D-1's sizing arithmetic.
 
 ## Deferred with reason
 
