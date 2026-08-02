@@ -128,6 +128,39 @@ Route::group([], function (): void {
                 ->middleware('audit:auth.password.changed')
                 ->name('auth.password.change');
 
+            // FR-18: personal access tokens, self-service. Permission-exempt
+            // BY RULING after checking Doc 03 §4.1's catalog end to end: it
+            // contains no personal-token key (apikeys.machine.manage governs
+            // machine tokens only, and is enforced on those routes below).
+            // Same self-scoped-by-construction shape as the sessions routes —
+            // every query starts from the caller's own tokens() relation.
+            Route::get('security/tokens', [App\Http\Controllers\Auth\PersonalTokensController::class, 'index'])
+                ->name('auth.tokens.index');
+            Route::post('security/tokens', [App\Http\Controllers\Auth\PersonalTokensController::class, 'store'])
+                ->middleware('audit:auth.token.created')
+                ->name('auth.tokens.store');
+            Route::delete('security/tokens/{tokenId}', [App\Http\Controllers\Auth\PersonalTokensController::class, 'destroy'])
+                ->middleware('audit:auth.token.revoked')
+                ->name('auth.tokens.revoke');
+
+            // FR-19: machine tokens — admin-created, service-account-bound,
+            // rotated with an overlap window. apikeys.machine.manage is
+            // Doc 03 §4.1's own key (high risk): declared here, enforced for
+            // token principals NOW (T-05 branch), for staff when the resolver
+            // lands — the same posture as the settings routes below.
+            Route::get('admin/machine-tokens', [App\Http\Controllers\Auth\MachineTokensController::class, 'index'])
+                ->middleware('permission:apikeys.machine.manage')
+                ->name('auth.machine_tokens.index');
+            Route::post('admin/machine-tokens', [App\Http\Controllers\Auth\MachineTokensController::class, 'store'])
+                ->middleware(['permission:apikeys.machine.manage', 'audit:auth.token.created'])
+                ->name('auth.machine_tokens.store');
+            Route::post('admin/machine-tokens/{tokenId}/rotate', [App\Http\Controllers\Auth\MachineTokensController::class, 'rotate'])
+                ->middleware(['permission:apikeys.machine.manage', 'audit:auth.token.created'])
+                ->name('auth.machine_tokens.rotate');
+            Route::delete('admin/machine-tokens/{tokenId}', [App\Http\Controllers\Auth\MachineTokensController::class, 'destroy'])
+                ->middleware(['permission:apikeys.machine.manage', 'audit:auth.token.revoked'])
+                ->name('auth.machine_tokens.revoke');
+
             // FR-08: the admin reset — permission DECLARED from Doc 03's
             // catalog (admin.2fa.reset, high risk), enforced when its resolver
             // lands.
@@ -161,6 +194,28 @@ Route::group([], function (): void {
         ->prefix('v1')
         ->group(function (): void {
             Route::get('context', [IngressProbeController::class, 'show'])->name('foundation.api.context');
+        });
+
+    /*
+     | ── The BEARER surface (Doc 02 FR-18/19/20, T-02, T-05, T-06).
+     |
+     | Stateless by construction: no cookie middleware, no session, therefore
+     | no CSRF — which is T-06's "Bearer API CSRF-exempt" as an absence rather
+     | than an exemption list. Order is T-02's: tenant-resolve (the bearer
+     | binder, through the resolve_api_token door) → guard (Sanctum, under the
+     | already-bound RLS) → tenant-state (outbound: a suspended operator's
+     | integrations stop sending). Permission enforcement is per-route via
+     | `permission:<key>`, whose token branch is the T-05 intersection.
+     |
+     | PROBE-ONLY IN PRODUCTION (step-9 ruling Q-A): no document makes any
+     | product API token-accessible yet, so the only real route is the context
+     | probe. Docs 04/06 mount the first real endpoints on THIS stack; AC-05's
+     | permission-gated routes mount on it in tests today.
+     */
+    Route::middleware(['tenant.bearer', 'auth:api', 'tenant.state:outbound'])
+        ->prefix('v1')
+        ->group(function (): void {
+            Route::get('token/context', [IngressProbeController::class, 'show'])->name('auth.token.context');
         });
 
     /*

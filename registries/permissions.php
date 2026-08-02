@@ -63,4 +63,17 @@ return [
         'scopes' => ['All'],
         'owning_doc' => 'Doc03',
     ],
+    [
+        // Doc 03 §4.1 "Platform settings", marked (high) there. First consumer
+        // is Doc 02 FR-19's machine-token routes; token principals are enforced
+        // against it NOW (T-05 branch), staff sessions when Doc 03's resolver
+        // lands. Personal tokens deliberately carry NO key — the catalog has
+        // none for them (checked end to end, step-9 ruling), and the routes are
+        // self-scoped by construction like the sessions routes.
+        'key' => 'apikeys.machine.manage',
+        'label_i18n_key' => 'perm.apikeys.machine.manage',
+        'group' => 'settings',
+        'scopes' => ['All'],
+        'owning_doc' => 'Doc03',
+    ],
 ];

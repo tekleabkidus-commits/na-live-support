@@ -301,4 +301,64 @@ return [
         'required_fields' => ['origin', 'ip'],
         'owning_doc' => 'Doc02',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 02 §4.5 — API tokens (FR-18/FR-19/FR-20, T-05, BR-03, BR-04)
+    |--------------------------------------------------------------------------
+    |
+    | BR-03 is why every actor type here is 'staff': a machine token's actions
+    | are attributed to its visible service-account USER, which audits exactly
+    | like a human — 'system' never appears on a token action, by rule.
+    | The payloads carry name/abilities here and NOT on the bus (step-9 ruling:
+    | events are identifier-only; this table is tenant-scoped and
+    | access-controlled, the bus is neither).
+    */
+
+    [
+        'action_key' => 'auth.token.created',
+        'entity' => 'personal_access_token',
+        'actor_types' => ['staff'],
+        // `kind` is personal|machine; a rotation additionally records
+        // `rotation_of` naming the predecessor (FR-19 "all audited").
+        'required_fields' => ['kind', 'name', 'abilities'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.token.revoked',
+        'entity' => 'personal_access_token',
+        // reason: self_revoked | revoked_by_admin | user_disabled (BR-04).
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.token.scope_denied',
+        'entity' => 'personal_access_token',
+        // FR-20/AC-05: which permission the T-05 intersection lacked. user_id
+        // duplicates the actor id so the entry survives actor-column reshaping
+        // in Doc 17's export (same duplication as the session entries).
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission', 'user_id'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.service_account.created',
+        'entity' => 'user',
+        // Q-B: created (find-or-create) inside the machine-token store, by the
+        // admin the route authenticated.
+        'actor_types' => ['staff'],
+        'required_fields' => ['name'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.user.disabled',
+        'entity' => 'user',
+        // 'system' until Doc 03's admin surface exists to supply a staff actor
+        // (the same posture as auth.invite.issued); UserDisabler records
+        // 'staff' whenever an actorId is passed.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['revoked_token_count'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

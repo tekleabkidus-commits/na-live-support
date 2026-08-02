@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-15 event(s).
+18 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -102,6 +102,33 @@ A reset was requested and a token minted for THIS account; one event per matched
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `user_id`
 - **Producers:** Doc02/PasswordLifecycle
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.token.created`
+
+An API token was minted — personal, machine, or a rotation's replacement (FR-18/FR-19); `user_id` is the owner (a service account for machine tokens, BR-03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `token_id`
+- **Producers:** Doc02/TokenMinter
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.token.revoked`
+
+An API token was revoked — self-service, admin action, or BR-04's disable cascade; the audit entry carries which.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `token_id`
+- **Producers:** Doc02/TokenRevoker
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.token.scope_denied`
+
+A token-authenticated request failed the T-05 intersection for the named permission (FR-20 insufficient_scope, AC-05).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `token_id`, `permission`
+- **Producers:** Doc02/RequirePermission
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
 ## `tenant.provisioned`

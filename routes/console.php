@@ -25,3 +25,8 @@ Schedule::command('partitions:check')->dailyAt('02:30')->timezone('UTC');
 
 // FS-05: Redis quota counters reconciled against the durable ledger.
 Schedule::command('quota:reconcile')->hourly();
+
+// Doc 02 FS-05: expired API tokens pruned nightly (platform role — the app
+// role cannot DELETE on that table, by grant). 03:00, after the partition
+// jobs, so the maintenance window stays one contiguous block.
+Schedule::command('tokens:prune')->dailyAt('03:00')->timezone('UTC');

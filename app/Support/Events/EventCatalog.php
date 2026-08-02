@@ -186,6 +186,34 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
             'description' => 'A password was set outside the reset flow: authenticated self-change (FR-14) or an invitation\'s first password (FR-17); `origin` says which.',
         ],
+
+        // ── Doc 02 §4.5: API tokens (§4.8's three token events). Identifier-only
+        // BY RULING (step 9): tenant, user and token ids — never scope lists,
+        // names or anything plaintext-derived. The one addition is `permission`
+        // on scope_denied, because "denied WHAT" is the datum Doc 18's
+        // monitoring alerts on (R-03 token-sprawl reviews consume it too), and
+        // a permission KEY identifies a catalog entry, not a person.
+        'auth.token.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'token_id'],
+            'producers' => ['Doc02/TokenMinter'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'An API token was minted — personal, machine, or a rotation\'s replacement (FR-18/FR-19); `user_id` is the owner (a service account for machine tokens, BR-03).',
+        ],
+        'auth.token.revoked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'token_id'],
+            'producers' => ['Doc02/TokenRevoker'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'An API token was revoked — self-service, admin action, or BR-04\'s disable cascade; the audit entry carries which.',
+        ],
+        'auth.token.scope_denied' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'token_id', 'permission'],
+            'producers' => ['Doc02/RequirePermission'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A token-authenticated request failed the T-05 intersection for the named permission (FR-20 insufficient_scope, AC-05).',
+        ],
     ];
 
     /**

@@ -79,6 +79,20 @@ return [
     'auth.2fa.disable' => 'Self-service: turns the caller\'s own 2FA off, code-proven (§4.8).',
     'auth.2fa.challenge' => 'The login\'s second half: no principal exists until the code verifies (FR-07, SS-02).',
 
+    /*
+     | Doc 02 FR-18: personal tokens, self-service. Doc 03 §4.1's catalog was
+     | checked end to end per the step-9 ruling: it contains NO personal-token
+     | key — apikeys.machine.manage governs machine tokens only and is mapped
+     | on those routes. Every query here starts from the caller's own tokens()
+     | relation, so there is no object to authorize beyond authentication —
+     | the sessions-routes shape exactly.
+     */
+    'auth.tokens.index' => 'Self-service: lists only the caller\'s own tokens; Doc 03 §4.1 has no personal-token key (step-9 ruling).',
+    'auth.tokens.store' => 'Self-service: mints a token on the caller\'s own account; scope ceiling enforced by T-05 at use, not by a management permission the catalog does not define.',
+    'auth.tokens.revoke' => 'Self-service: a token owner may always revoke their own token, as with sessions and logout.',
+
+    'auth.token.context' => 'Resolution probe on the bearer surface: reports the token\'s own resolved context; the first product routes here arrive with Docs 04/06 and will carry permission keys.',
+
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
     'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',
