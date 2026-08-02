@@ -196,30 +196,48 @@ it('closes a live Reverb socket within 2 seconds of revocation (AC-04)', functio
         ->toBeTrue('positive control: Reverb never confirmed the connection, so a later close proves nothing');
 
     // ─────────────────────────────────────────────────────────────────────────
-    // pusher:signin — WITHOUT THIS THERE IS NOTHING TO TERMINATE.
+    // A PRESENCE-CHANNEL SUBSCRIPTION — WITHOUT THIS THERE IS NOTHING TO
+    // TERMINATE.
     //
-    // terminate_connections acts on connections Reverb knows belong to a USER,
-    // and a socket only acquires a user identity by signing in. The first version
-    // of this test skipped it, so Reverb correctly terminated nothing and the
-    // socket stayed open for the full 2 s — which read like a broken feature and
-    // was a broken test. The real agent app performs this handshake too.
+    // The installed Reverb has NO pusher:signin (grep the vendor tree — the
+    // string does not occur; S9's signin frame was silently ignored, which is
+    // why the socket survived revocation while everything else worked).
+    // UsersTerminateController matches `$connection->data()['user_id']` over the
+    // CHANNEL manager's connections, and channel_data carrying a user_id exists
+    // only for presence-channel subscriptions. That is also how the real agent
+    // workspace will hold its socket (Doc 07 owns the actual channel names);
+    // the auth is minted here directly with the app secret, exactly as
+    // InteractsWithPrivateChannels::verify checks it:
+    // HMAC("socket_id:channel:channel_data").
     // ─────────────────────────────────────────────────────────────────────────
     preg_match('/socket_id[^0-9]*([0-9]+\.[0-9]+)/', $established, $matches);
     $socketId = $matches[1] ?? '';
     expect($socketId)->not->toBe('', 'no socket_id in Reverb\'s connection_established frame');
 
     $secret = (string) config('reverb.apps.apps.0.secret');
-    $userData = (string) json_encode(['id' => $userId]);
-    $auth = $key.':'.hash_hmac('sha256', $socketId.'::user::'.$userData, $secret);
+    $channel = 'presence-fixture.session-revocation';
+    // user_info is NOT optional decoration: Reverb's presence bookkeeping reads
+    // it unconditionally, and without it the subscribe is accepted, member_added
+    // broadcasts — and THEN an "Undefined array key" throws, surfacing to the
+    // client as the wholly misleading 4200 "Invalid message format". Diagnosed
+    // against `reverb:start --debug`, which is the only place the real error
+    // appears.
+    $channelData = (string) json_encode(['user_id' => $userId, 'user_info' => ['name' => 'fixture']]);
+    $auth = $key.':'.hash_hmac('sha256', sprintf('%s:%s:%s', $socketId, $channel, $channelData), $secret);
 
     fwrite($socket, wsFrame((string) json_encode([
-        'event' => 'pusher:signin',
-        'data' => ['auth' => $auth, 'user_data' => $userData],
+        'event' => 'pusher:subscribe',
+        'data' => ['channel' => $channel, 'auth' => $auth, 'channel_data' => $channelData],
     ])));
 
-    // Give Reverb a moment to associate the connection with the user before the
-    // revocation races it.
-    usleep(300_000);
+    // POSITIVE CONTROL, replacing the blind sleep the signin version used:
+    // Reverb must CONFIRM the subscription, or the terminate call below has no
+    // connection to match and a 2 s survival would be this test's fault again.
+    stream_set_timeout($socket, 3);
+    $subscribeReply = (string) fread($socket, 2048);
+    expect(str_contains($subscribeReply, 'subscription_succeeded'))
+        ->toBeTrue('positive control: Reverb never confirmed the presence subscription — reply: '
+            .substr($subscribeReply, 0, 200));
 
     $revokedAt = hrtime(true);
     app(SessionRevoker::class)->revoke($tenantId, $userId, 'session-with-socket', reason: 'test');
@@ -247,15 +265,17 @@ it('closes a live Reverb socket within 2 seconds of revocation (AC-04)', functio
         .'revoked agent keeps receiving live conversation traffic until they close the tab.',
         $elapsed,
     ));
-})->group('reverb')->skip(
-    'NOT PROVEN: Reverb returns 401 "Authentication signature invalid" to the terminate_connections '
-    .'call. The revoker builds a Pusher-style signature over METHOD/PATH/sorted-query and Reverb '
-    .'(Protocols/Pusher/Http/Controllers/Controller::verifySignature) signs $this->query minus '
-    .'[auth_signature, body_md5, appId, appKey, channelName] — which merges ROUTE parameters, so the '
-    .'exact param set is not yet matched. Everything else in this test WORKS and is worth keeping: '
-    .'the TLS websocket connects, Reverb confirms it, pusher:signin is sent, and the 2 s deadline is '
-    .'measured. Only the termination call is unproven. AC-04 stays NOT PROVEN rather than green.'
-);
+})->group('reverb');
+// S9 skipped this with a 401 diagnosed as unmatched ROUTE parameters. Reading the
+// installed Controller::verifySignature showed otherwise: this version parses the
+// URI query only — the real mismatch was body_md5. Http::post() with no data still
+// sends the two-byte JSON body `[]`, Reverb signs md5(body) over any non-empty
+// body, and the revoker had signed without it. The revoker now sends a genuinely
+// empty body via send() and builds sign-string and wire-string from one param
+// array. Falsified before counting: with the SIGNED string corrupted (a literal
+// appended to $signedQuery while the wire string stayed correct — the exact
+// sign-one-send-another failure mode), this test failed at the 2 s deadline with
+// the socket still open. Restored, re-run green.
 
 it('Doc 01 EC-03: suspending a tenant kills its LIVE sessions, not just the next request', function () {
     // ─────────────────────────────────────────────────────────────────────────

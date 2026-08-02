@@ -170,12 +170,27 @@ final class SessionRevoker
         // A PUSHER-SIGNED REQUEST, because Reverb's HTTP API rejects anything
         // else — and it must, since this endpoint force-disconnects users.
         //
-        // The signature covers the METHOD, the PATH and the sorted query string,
-        // which is why they are assembled once here and reused rather than
-        // rebuilt for the request: sign one string and send a different one, and
-        // the call fails with a 401 that fail-open would then swallow as "socket
-        // close unavailable". That is exactly how this looked before the AC-04
-        // test caught it.
+        // WHAT REVERB ACTUALLY VERIFIES (Protocols/Pusher/Http/Controllers/
+        // Controller::verifySignature, read in vendor rather than assumed):
+        //
+        //   1. it parses the URI query string only — route params stay route
+        //      params in this version, despite appId/appKey/channelName sitting
+        //      in the except-list for other transports;
+        //   2. if the request BODY is non-empty it adds body_md5 = md5(body) to
+        //      the params it signs — the caller's query string never carries it;
+        //   3. it joins the ksorted params as a RAW `key=value&…` string
+        //      (formatQueryParametersForVerification), NOT as http_build_query's
+        //      urlencoded form.
+        //
+        // (2) is exactly how the S9 401 happened: Http::post() with no data
+        // still sends a two-byte JSON body `[]` (bodyFormat json encodes the
+        // empty array), Reverb signed body_md5 over it, and we had signed
+        // without it. The fix is to make the body explicit and EMPTY — this
+        // endpoint takes none — and to send it with send(), which attaches no
+        // body at all. (3) matters on principle: sign one string and send a
+        // different one and the call 401s, which fail-open then swallows as
+        // "socket close unavailable". Both strings are built from ONE param
+        // array below for that reason.
         //
         // The INTERNAL address is used, not REVERB_HOST: that config value is
         // what a browser dials. This call is server-to-server.
@@ -188,13 +203,34 @@ final class SessionRevoker
         ];
         ksort($params);
 
-        $query = http_build_query($params);
-        $signature = hash_hmac('sha256', sprintf("POST\n%s\n%s", $path, $query), $secret);
+        $signedQuery = implode('&', array_map(
+            static fn (string $k, string $v): string => sprintf('%s=%s', $k, $v),
+            array_keys($params),
+            array_values($params),
+        ));
+        $signature = hash_hmac('sha256', sprintf("POST\n%s\n%s", $path, $signedQuery), $secret);
+
+        // The wire query is urlencoded (parse_str decodes it back to the same
+        // values Reverb signs); auth_signature itself is excluded from signing.
+        $wireQuery = http_build_query($params + ['auth_signature' => $signature]);
 
         try {
-            Http::withoutVerifying()
+            $response = Http::withoutVerifying()
                 ->timeout(2)
-                ->post(sprintf('https://%s:%s%s?%s&auth_signature=%s', $host, $port, $path, $query, $signature));
+                ->send('POST', sprintf('https://%s:%s%s?%s', $host, $port, $path, $wireQuery));
+
+            // A refused call does NOT throw — the client only throws on
+            // transport failures. The S9 401 was invisible for exactly this
+            // reason: fail-open swallowed it with no metric, which is the half
+            // of NFR-04 ("fail-open ... with named metrics") that silence
+            // violates.
+            if (! $response->successful()) {
+                logger()->warning('Session revoked but socket termination was refused', [
+                    'metric' => 'auth.session.socket_close_failed',
+                    'user_id' => $userId,
+                    'status' => $response->status(),
+                ]);
+            }
         } catch (Throwable $e) {
             // FAIL-OPEN WITH A METRIC (NFR-04). The session is already revoked;
             // refusing to complete because a socket could not be closed would
