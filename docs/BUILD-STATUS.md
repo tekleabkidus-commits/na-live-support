@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6, 7 & 8 COMPLETE (10 of 14 steps)** | S4–S12 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); 5 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** Remaining: FR-09 role enforcement (needs Doc 03), tokens, widget, webhook auth, SEC-08, views |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6, 7, 8 & 9 COMPLETE (11 of 14 steps)** | S4–S12 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; 4 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean. Remaining: FR-09 role enforcement (needs Doc 03), widget tokens, webhook auth, SEC-08, views |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -979,6 +979,130 @@ each with its circularity reason. `audit-exempt`: +2 uniform-response request ro
 (the recorder still writes per-candidate entries whenever a token is minted).
 `traceability`: Doc02 AC-01 → covered; Doc02 EC-03 added as partial per ruling.
 `gates.yaml` unchanged (no new gate; SEC-08's log-scrubber gate is its own later step).
+
+## Session-13 report (Doc 02 step 9 — API tokens)
+
+Step 9 closed: FR-18, FR-19, FR-20 (closed code set per ruling), T-05's intersection
+with the `EffectivePermissions` seam Doc 03 plugs into, AC-05 **PARTIAL by ruling Q5**,
+BR-03, BR-04 (meaning fixed by ruling: DB atomicity + immediate Redis revocation +
+independently-sabotaged per-request backstops on both surfaces), FS-05, EC-06, SS-04,
+§4.8's three token events, and `auth.service_account.created`/`auth.user.disabled`.
+
+Local proof: **pest 336 passed / 11 skipped (3362 assertions)**, `make gates` **10/10**,
+Pint + PHPStan(max) + ESLint + vue-tsc clean. New suites: `ApiTokenLifecycleTest` (14),
+`TokenScopeIntersectionTest` (5), `MachineTokenTest` (6), `UserDisableTest` (4),
+`TokenPruneTest` (2), plus two new `MiddlewareOrderTest` cases (executed bearer order,
+T-06 statelessness-as-absence).
+
+### The architecture that landed
+
+- **`tenant.bearer` binder** (`ResolveBearerTenant`): a fourth HTTP binder rather than a
+  branch in `ResolveTenant`, so each surface still trusts exactly one credential kind.
+  It resolves through the S4 `resolve_api_token` SECURITY DEFINER door (the only
+  pre-tenant path), refuses per FR-20 BEFORE the guard, binds tenant + RLS, and clears
+  both in a `finally`. Refusal order is ruling-fixed: unknown/revoked/disabled-owner all
+  render `invalid_token` byte-identically (asserted literally — revoked and
+  disabled-owner bodies `toBe()` the never-issued body); `token_expired` only for a
+  token that would otherwise be alive.
+- **Sanctum stays the guard** (T-02): `App\Models\PersonalAccessToken` (UUIDv7,
+  tenant-scoped, `revoked_at`, 60 s `last_used_at` write throttle) replaces the stock
+  model; `sanctum.guard = []` kills the session-fallback that would have let a staff
+  cookie satisfy `auth:api`; an `authenticateAccessTokensUsing` callback re-refuses
+  revoked/disabled at the guard layer (the door's second belt).
+- **T-05 engine**: `TokenScopeGate` computes `abilities ∩ EffectivePermissions::for()`
+  per request, cached 10 s per token in redis-volatile (C-07 ledger in the class),
+  forgotten on revocation. `RequirePermission` grew its token branch: 403
+  `insufficient_scope` naming the key, audited + published in one transaction. The
+  staff pass-through is untouched — Doc 03 swaps ONE binding
+  (`EffectivePermissions` → its resolver) and changes nothing else.
+- **Machine tokens**: same table, same door, same scope model; owner is a find-or-create
+  service account (`<slug>@service-accounts.invalid`, RFC 2606 — self-identifying like
+  the fixture phone convention), non-login TWICE (unusable password + excluded inside
+  `resolve_staff_login()` itself, with the rehydration belt in `StaffUserProvider`).
+  Rotation = mint replacement with `rotation_of` audit + deliberate overlap; the
+  explicit revoke closes the window (SS-04's zero-failed-calls proven live).
+- **BR-04**: `UserDisabler` — one transaction for `disabled_at` + every live token's
+  `revoked_at` (each through the ordinary `TokenRevoker`, so per-token audit rows fall
+  out), sessions revoked after commit through the T-04 revoker, backstops per-request
+  on both surfaces. No HTTP route yet by design — Doc 03 owns `admin.users.disable`
+  (S5 admin-unlock precedent).
+- **FS-05**: `tokens:prune`, nightly 03:00 UTC, platform role (app has no DELETE — the
+  grant is asserted in-suite via `has_table_privilege` and swept by GrantPhysicsTest),
+  deletes rows `expires_at <= now()` (DB clock, C-11) and nothing else; the partial
+  index and the plan are documented in the command.
+
+### Two real defects found while proving it, both invisible in the route table
+
+1. **The middleware sorter inverted the declared bearer order.** The route declared
+   `tenant.bearer → auth:api → tenant.state`, and `route:list` showed exactly that —
+   but Laravel re-sorts any stack containing priority-listed middleware, `Authenticate`
+   is priority-listed above the api group's `SubstituteBindings`, and it HOPPED over
+   the unlisted binder. The Sanctum guard ran with no tenant bound and every bearer
+   request 500'd with `MissingTenantContext`. Fix: `prependToPriorityList` — against
+   the **`AuthenticatesRequests` contract**, not the concrete class; the first attempt
+   targeted `Authenticate::class`, which is not literally in the priority list, and was
+   silently appended at the END (worse). `MiddlewareOrderTest` now asserts the SORTED
+   stack the pipeline executes, not the declaration.
+2. **`shouldUse('api')` leaks across harness requests.** A successful `auth:api`
+   request flips the app's default guard; production resets config per request (FPM,
+   Octane), the test harness does not — so after any bearer request, an unnamed
+   `actingAs($user)` planted the user on the wrong guard and every staff request 401'd.
+   All new suites name the guard (`actingAs($user, 'staff')`) and forget guards before
+   each bearer call, with the reason documented at the helpers.
+
+### Falsification ledger (sabotage before counting — every red pasted in-session)
+
+| Sabotage | Expected red | Result |
+|---|---|---|
+| intersection removed (`scopeSet` returns abilities) | owner-exceed + propagation tests | **red**, restored |
+| cache TTL 10 → 3600 | TTL-bound assertion | **first run stayed GREEN** — the assertion compared against the sabotaged constant itself; rewritten to the literal spec 10, then **red**, restored |
+| cache disabled | stale-allow-inside-window (EC-06's documented bound) | **red**, restored |
+| 403 stops naming the key | AC-05 naming test | **red**, restored |
+| door revoked-check removed | revoke test + byte-identity test | **red** (guard belt's generic 401 fails the FR-20 code assertion — the door's rendering is independently load-bearing), restored |
+| door user_disabled-check removed | BR-04 backstop 1 | **red**, restored |
+| token revocation removed from disable transaction | BR-04 main test | **red**, restored |
+| rehydration disabled-check removed | BR-04 backstop 2 | **red**, restored |
+| prune criterion dropped (delete all) | FS-05 survivor assertions | **red**, restored |
+
+Plus two born-red proofs: the executed-order test failed against the real sorter bug
+before the fix, and the BR-04 atomicity test asserts its own injection fired (a
+non-firing injection fails the test rather than passing it).
+
+### Registry / catalog deltas
+
+`permissions`: +1 (`apikeys.machine.manage`, Doc 03 §4.1's name; the catalog was
+checked end to end per ruling — it has NO personal-token key, so the self-service
+routes are exempt with the absence cited). `audit-coverage`: +5 token actions.
+`EVENT-CATALOG`: +3 (18 total, identifier-only payloads per ruling; `permission` on
+scope_denied is a catalog key, not a person; regenerated same commit).
+`permission-exempt`: +4 (3 personal-token self-service + the bearer context probe).
+`traceability`: Doc02 AC-05 → covered, PARTIAL per Q5 with the full gap note.
+`gates.yaml` unchanged.
+
+### Deliberately NOT built in step 9, with reasons
+
+- **AC-05's literal `tickets.read`/`tickets.reply` fixture** — ruling Q5; needs Doc 03's
+  resolver + Doc 06's routes. The traceability row says exactly this.
+- **Product endpoints on the bearer surface** — ruling Q-A: probe-only; Docs 04/06
+  mount the first real routes on this stack.
+- **Service-account role assignment** — Doc 03, through the seam (ruling Q-B).
+- **Admin disable HTTP route** — Doc 03's `admin.users.disable` (high, four-eyes rail).
+- **R-03's quarterly unused-token report** — Doc 15/18 reporting surface.
+- **Token screens + AC-09 visual regression** — views step, like every screen so far.
+- **≤2 ms token-middleware p99 measurement** — Doc 19 L1, same bucket as every other
+  perf budget.
+
+### Risks / residuals worth naming
+
+- The guard-partition test ("session cookie never satisfies the bearer surface") is
+  structurally double-covered: the door refuses before `sanctum.guard=[]` could ever
+  matter, so sabotaging the config alone does not flip it red. The config line is
+  defense-in-depth for FUTURE routes that might mount `auth:api` without the binder;
+  recorded here rather than claimed as independently falsified.
+- `resolve_staff_login()`'s service-account exclusion is asserted through behaviour
+  (`candidatesFor()` returns zero rows) but was not sabotaged at the SQL layer — that
+  would mean re-migrating mid-suite. The pre-change history stands in: before this
+  migration the same query returned the row.
 
 ## Deferred with reason
 

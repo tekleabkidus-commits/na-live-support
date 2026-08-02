@@ -429,22 +429,33 @@ entries:
       so a refused close was previously a SILENT fail-open).
 
   - ac_ref: "Doc02 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Auth/TokenScopeIntersectionTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
+    status: covered
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      Planned suite: tests/Feature/Auth/TokenScopeIntersectionTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the token step (step 9). WILL END THIS SESSION AS PARTIAL BY OWNER
-      RULING (plan Q5): the intersection engine, 10 s cache, and 403-naming-the-key
-      are proven against the permission keys this session registers and the stubbed
-      Doc 03 resolver; the literal tickets.read/tickets.reply wording needs Doc 03's
-      real resolver and Doc 06's ticket routes. A DONE here before then is a false
-      DONE.
+    gap: >-
+      PARTIAL BY OWNER RULING Q5, deliberately: the literal
+      tickets.read/tickets.reply wording needs Doc 03's real resolver and
+      Doc 06's ticket routes — this row flips to a full DONE only when that
+      literal fixture runs. What IS proven (S13), each clause falsified before
+      being counted: the T-05 intersection in BOTH directions (ability ceiling —
+      a settings.view token 403s NAMING settings.edit while the same token's
+      read succeeds as positive control; and owner intersection — an ability the
+      owner's effective permissions lack is dead scope, via a fake bound at the
+      EffectivePermissions seam, sabotage: intersection removed → red). EC-06's
+      ≤10 s propagation: the stale allow IS served inside the window (cache
+      removed → red), the Redis TTL is asserted ≤ the LITERAL 10 — asserting
+      against the code's own constant went green when the constant was
+      sabotaged to 3600, so the bound is the spec's number, not the code's —
+      and the loss lands once the window closes. Revocation forgets the cache
+      immediately rather than waiting out the TTL. Denials audit as
+      auth.token.scope_denied (BR-03: machine tokens attribute to their visible
+      service account) and publish identifier-only events. Routes are
+      test-mounted on the REAL bearer middleware stack per ruling Q-A
+      (production is probe-only until Docs 04/06).
 
   - ac_ref: "Doc02 AC-06"
     suite_path: manual
