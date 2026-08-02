@@ -63,9 +63,28 @@ final class TenantHint
      * not cached at all — an HMAC over a short string, once per call, is far
      * cheaper than the class of bug caching invites — and the login override is
      * scoped to the identity of the request that set it.
+     *
+     * A WEAK REFERENCE TO THE REQUEST, NOT ITS spl_object_id.
+     *
+     * The scoping held `spl_object_id($request)` until S11, and that was a real
+     * production defect of exactly the kind this docblock warns about. PHP
+     * REUSES object ids once an object is collected, so under Octane a later,
+     * unrelated request could be handed the id of the request that set the
+     * override — and `current()` would then answer with the PREVIOUS request's
+     * tenant. A guest request whose id happened to collide read its session
+     * from `t:{tenant}:sess:` instead of `guest:sess:`, found nothing, silently
+     * started a fresh session, and the CSRF token it had just been issued no
+     * longer matched: every affected login died with a bare 419 "Page Expired"
+     * and no server-side error to explain it.
+     *
+     * A weak reference compares the OBJECT, so a recycled id cannot match — and
+     * once the request is collected the reference reads null, which matches
+     * nothing. Found by falsification: enrol → next login 419, deterministically,
+     * while the same login against a DB-only 2FA state was fine.
      * ─────────────────────────────────────────────────────────────────────────
      */
-    private ?int $overrideForRequest = null;
+    /** @var \WeakReference<Request>|null */
+    private ?\WeakReference $overrideRequest = null;
 
     private ?string $overrideValue = null;
 
@@ -83,7 +102,7 @@ final class TenantHint
             return null;
         }
 
-        if ($this->overrideForRequest === spl_object_id($request)) {
+        if ($this->overrideRequest?->get() === $request) {
             return $this->overrideValue;
         }
 
@@ -132,7 +151,7 @@ final class TenantHint
             return;
         }
 
-        $this->overrideForRequest = spl_object_id($request);
+        $this->overrideRequest = \WeakReference::create($request);
         $this->overrideValue = $tenantId;
     }
 

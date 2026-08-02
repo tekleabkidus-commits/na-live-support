@@ -21,7 +21,12 @@ final class SecurityPageController extends Controller
 {
     public function show(): Response
     {
+        $user = auth('staff')->user();
+
         return Inertia::render('Security/Devices', [
+            // FR-06: the page needs to know which face of the 2FA card to show;
+            // everything else about 2FA state stays server-side.
+            'twoFactorEnabled' => $user?->getAttribute('two_factor_confirmed_at') !== null,
             'copy' => [
                 'title' => __('auth.devices.title'),
                 'subtitle' => __('auth.devices.subtitle'),
@@ -40,6 +45,21 @@ final class SecurityPageController extends Controller
                 'cancel' => __('auth.devices.cancel'),
                 'onlyHere' => __('auth.devices.only_here'),
                 'loadFailed' => __('auth.devices.load_failed'),
+
+                'twoFactorTitle' => __('auth.2fa.title'),
+                'twoFactorOn' => __('auth.2fa.status_on'),
+                'twoFactorOff' => __('auth.2fa.status_off'),
+                'twoFactorEnable' => __('auth.2fa.enable'),
+                'twoFactorScan' => __('auth.2fa.scan_instructions'),
+                'twoFactorManualSecret' => __('auth.2fa.manual_secret'),
+                'twoFactorCodeLabel' => __('auth.2fa.code_label'),
+                'twoFactorConfirm' => __('auth.2fa.confirm_action'),
+                'twoFactorCodesWarning' => __('auth.2fa.codes_warning'),
+                'twoFactorCodesSaved' => __('auth.2fa.codes_saved'),
+                'twoFactorDownload' => __('auth.2fa.download_codes'),
+                'twoFactorRegenerate' => __('auth.2fa.regenerate_codes'),
+                'twoFactorDisable' => __('auth.2fa.disable'),
+                'twoFactorDisableCodeLabel' => __('auth.2fa.disable_code_label'),
             ],
         ]);
     }

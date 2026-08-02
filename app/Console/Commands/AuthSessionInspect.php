@@ -41,10 +41,12 @@ use RuntimeException;
 final class AuthSessionInspect extends Command
 {
     protected $signature = 'auth:session-inspect
-        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant", "clear-throttle"}
+        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant", "clear-throttle", "totp", "clear-2fa"}
         {--tenant= : tenant id (omit for the unprefixed guest keyspace)}
         {--session= : session id}
-        {--cookie= : an encrypted session cookie value}';
+        {--cookie= : an encrypted session cookie value}
+        {--secret= : a base32 TOTP secret (totp action)}
+        {--email= : a fixture user email (clear-2fa action)}';
 
     protected $description = 'Test-only: inspect session storage / mint a signed tenant hint (Doc 02 SEC-04, Q7)';
 
@@ -193,6 +195,36 @@ final class AuthSessionInspect extends Command
 
             case 'sign-hint':
                 $this->line($hint->sign($tenant));
+
+                return self::SUCCESS;
+
+            case 'totp':
+                // The browser cannot compute a TOTP without carrying its own
+                // implementation — which would then be tested against itself.
+                // This answers with the same engine the SERVER verifies with,
+                // so the browser suite drives the real challenge end to end.
+                $secret = (string) $this->option('secret');
+                $this->line((string) app(\PragmaRX\Google2FA\Google2FA::class)->oathTotp(
+                    $secret,
+                    intdiv(\Carbon\CarbonImmutable::now()->getTimestamp(), 30),
+                ));
+
+                return self::SUCCESS;
+
+            case 'clear-2fa':
+                // Browser fixtures persist across runs; a user enrolled by run
+                // N would break run N+1's password-only tests. Resetting here
+                // keeps the suite idempotent — the same reason clear-tenant
+                // exists.
+                // Platform connection: the command binds no tenant, and RLS on
+                // `users` would (correctly) blank the update otherwise. Same
+                // precedent as the browser suite reading tenant ids.
+                $email = (string) $this->option('email');
+                $updated = \Illuminate\Support\Facades\DB::connection('pgsql_platform')
+                    ->table('users')
+                    ->where('email', $email)
+                    ->update(['two_factor_secret' => null, 'two_factor_confirmed_at' => null]);
+                $this->line((string) $updated);
 
                 return self::SUCCESS;
 

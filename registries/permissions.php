@@ -54,4 +54,13 @@ return [
         'scopes' => ['All'],
         'owning_doc' => 'Doc03',
     ],
+    [
+        // Doc 03 §4.1 "Users & Roles", marked (high) there. First consumer is
+        // Doc 02 FR-08's admin reset route; Doc 03's session wires enforcement.
+        'key' => 'admin.2fa.reset',
+        'label_i18n_key' => 'perm.admin.2fa.reset',
+        'group' => 'admin',
+        'scopes' => ['All'],
+        'owning_doc' => 'Doc03',
+    ],
 ];

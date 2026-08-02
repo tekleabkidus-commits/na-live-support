@@ -96,6 +96,67 @@ final class LockoutManager
     }
 
     /**
+     * FR-07: a VOIDED 2FA challenge counts as ONE failed login attempt.
+     *
+     * The five wrong codes themselves are the challenge's own counter; what
+     * feeds lockout is the void — the whole login attempt failing. Counting
+     * each code here instead would let one mistyped-authenticator session lock
+     * an account that never got a password wrong, which is a harsher machine
+     * than AC-02 specifies.
+     */
+    public function recordVoidedChallenge(User $user, CarbonImmutable $now): void
+    {
+        $before = LockoutState::fromCandidate(
+            $this->intAttribute($user, 'failed_login_attempts'),
+            $this->timeAttribute($user, 'first_failed_login_at'),
+            $this->timeAttribute($user, 'locked_until'),
+        );
+
+        $after = $this->policy->recordFailure($before, $now);
+
+        if ($after === $before) {
+            return;
+        }
+
+        $this->withinTenant($user->tenantId(), function () use ($user, $before, $after): void {
+            $this->persist($user->identifier(), $after);
+
+            if ($before->lockedUntil === null && $after->lockedUntil !== null) {
+                $this->audit->record(
+                    actionKey: 'auth.lockout.locked',
+                    entity: 'user',
+                    entityId: $user->identifier(),
+                    actorType: AuditActor::System,
+                    payload: [
+                        'reason' => '2fa_challenge_voided',
+                        'failed_attempts' => $after->failedAttempts,
+                    ],
+                    tenantId: $user->tenantId(),
+                );
+            }
+        }, $this->context, $this->rls);
+    }
+
+    private function intAttribute(User $user, string $key): int
+    {
+        $value = $user->getAttribute($key);
+
+        return is_numeric($value) ? (int) $value : 0;
+    }
+
+    private function timeAttribute(User $user, string $key): ?CarbonImmutable
+    {
+        $value = $user->getAttribute($key);
+
+        return match (true) {
+            $value instanceof CarbonImmutable => $value,
+            $value instanceof \DateTimeInterface => CarbonImmutable::instance($value),
+            is_string($value) && $value !== '' => CarbonImmutable::parse($value),
+            default => null,
+        };
+    }
+
+    /**
      * A successful authentication ends the current failure window.
      */
     public function recordSuccess(User $user): void

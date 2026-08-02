@@ -133,6 +133,34 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit'],
             'description' => 'A staff user ended their session deliberately (§4.8).',
         ],
+        'auth.2fa.enabled' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id'],
+            'producers' => ['Doc02/TwoFactor'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A user confirmed 2FA enrolment with a valid code (FR-06).',
+        ],
+        'auth.2fa.disabled' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id'],
+            'producers' => ['Doc02/TwoFactor'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A user turned their own 2FA off, proving a current code first (§4.8).',
+        ],
+        'auth.2fa.reset_by_admin' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'admin_id'],
+            'producers' => ['Doc02/TwoFactor'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'An admin cleared a user\'s 2FA; the user re-enrols at next login (FR-08).',
+        ],
+        'auth.2fa.challenge_failed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'attempt'],
+            'producers' => ['Doc02/TwoFactor'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A 2FA challenge attempt failed; the fifth voids the login attempt (FR-07).',
+        ],
     ];
 
     /**

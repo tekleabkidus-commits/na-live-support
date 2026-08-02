@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Auth\SecuritySessionsController;
+use App\Http\Controllers\Auth\TwoFactorAdminResetController;
+use App\Http\Controllers\Auth\TwoFactorEnrolmentController;
 use App\Http\Controllers\Foundation\IngressProbeController;
 use App\Http\Controllers\Foundation\TenantSettingsController;
 use Illuminate\Support\Facades\Route;
@@ -95,6 +97,30 @@ Route::group([], function (): void {
             Route::post('security/sessions/revoke-others', [SecuritySessionsController::class, 'destroyOthers'])
                 ->middleware('audit:auth.session.revoked_others')
                 ->name('auth.sessions.revoke_others');
+
+            // FR-06/FR-07: self-service 2FA. begin is only reachable while 2FA
+            // is off; every other mutation demands a current code (see the
+            // controller). Permission-exempt like the sessions routes; each
+            // mutation declares its audit action.
+            Route::post('security/2fa', [TwoFactorEnrolmentController::class, 'store'])
+                ->middleware('audit:auth.2fa.enrolment_started')
+                ->name('auth.2fa.begin');
+            Route::post('security/2fa/confirm', [TwoFactorEnrolmentController::class, 'confirm'])
+                ->middleware('audit:auth.2fa.enabled')
+                ->name('auth.2fa.confirm');
+            Route::post('security/2fa/recovery-codes', [TwoFactorEnrolmentController::class, 'regenerateCodes'])
+                ->middleware('audit:auth.2fa.codes_regenerated')
+                ->name('auth.2fa.regenerate_codes');
+            Route::delete('security/2fa', [TwoFactorEnrolmentController::class, 'destroy'])
+                ->middleware('audit:auth.2fa.disabled')
+                ->name('auth.2fa.disable');
+
+            // FR-08: the admin reset — permission DECLARED from Doc 03's
+            // catalog (admin.2fa.reset, high risk), enforced when its resolver
+            // lands.
+            Route::delete('admin/users/{userId}/two-factor', [TwoFactorAdminResetController::class, 'destroy'])
+                ->middleware(['permission:admin.2fa.reset', 'audit:auth.2fa.reset_by_admin'])
+                ->name('auth.2fa.admin_reset');
 
             // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
             // which is a deletion of the override row rather than a write of the

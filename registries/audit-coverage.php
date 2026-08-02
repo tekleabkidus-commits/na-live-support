@@ -188,4 +188,57 @@ return [
         'required_fields' => ['count', 'reason'],
         'owning_doc' => 'Doc02',
     ],
+    [
+        'action_key' => 'auth.2fa.enrolment_started',
+        'entity' => 'user',
+        // A pending secret was written. Not yet a security change (the account
+        // still logs in with password alone until confirm), but a mutation the
+        // trail must be able to place before the auth.2fa.enabled that follows.
+        'actor_types' => ['staff'],
+        'required_fields' => ['enrolment_id'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.2fa.enabled',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['enrolment_id'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.2fa.codes_regenerated',
+        'entity' => 'user',
+        // FR-07's banner path: a fresh batch supersedes the old one. The batch
+        // rows themselves are the durable record (no DELETE grant); this entry
+        // is the who-and-when.
+        'actor_types' => ['staff'],
+        'required_fields' => ['count'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.2fa.disabled',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => [],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.2fa.reset_by_admin',
+        'entity' => 'user',
+        // FR-08's high-visibility entry: the ADMIN is the actor, the target is
+        // the entity, and the payload names the admin again so an export that
+        // flattens actor columns still carries who did it.
+        'actor_types' => ['staff'],
+        'required_fields' => ['admin_id'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.2fa.challenge_failed',
+        'entity' => 'user',
+        // Per-attempt trace (FR-07); the fifth attempt's void reaches lockout
+        // through auth.lockout.locked when it tips the counter over.
+        'actor_types' => ['staff'],
+        'required_fields' => ['attempt'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

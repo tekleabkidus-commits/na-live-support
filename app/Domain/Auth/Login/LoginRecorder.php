@@ -119,6 +119,35 @@ final class LoginRecorder
     }
 
     /**
+     * FR-07 / §4.8: one failed 2FA challenge attempt. The fifth becomes a void,
+     * which the LOCKOUT records separately — this entry is the per-attempt
+     * trace a security officer correlates against a TOTP-guessing pattern.
+     */
+    public function twoFactorChallengeFailed(User $user, int $attempt, Request $request): void
+    {
+        $this->withinTenant($user->tenantId(), function () use ($user, $attempt, $request): void {
+            $this->audit->record(
+                actionKey: 'auth.2fa.challenge_failed',
+                entity: 'user',
+                entityId: $user->identifier(),
+                actorType: AuditActor::Staff,
+                payload: [
+                    'attempt' => $attempt,
+                    'ip' => $this->ip($request),
+                ],
+                actorId: $user->identifier(),
+                tenantId: $user->tenantId(),
+            );
+
+            $this->publishOutsideTheAuditWrite('auth.2fa.challenge_failed', [
+                'tenant_id' => $user->tenantId(),
+                'user_id' => $user->identifier(),
+                'attempt' => $attempt,
+            ]);
+        }, $this->context);
+    }
+
+    /**
      * A failure against an address that matches NO account.
      *
      * Deliberately produces no audit entry and no event: both are tenant-scoped,

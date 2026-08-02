@@ -42,9 +42,23 @@ interface Copy {
     cancel: string;
     onlyHere: string;
     loadFailed: string;
+    twoFactorTitle: string;
+    twoFactorOn: string;
+    twoFactorOff: string;
+    twoFactorEnable: string;
+    twoFactorScan: string;
+    twoFactorManualSecret: string;
+    twoFactorCodeLabel: string;
+    twoFactorConfirm: string;
+    twoFactorCodesWarning: string;
+    twoFactorCodesSaved: string;
+    twoFactorDownload: string;
+    twoFactorRegenerate: string;
+    twoFactorDisable: string;
+    twoFactorDisableCodeLabel: string;
 }
 
-const props = defineProps<{ copy: Copy }>();
+const props = defineProps<{ copy: Copy; twoFactorEnabled: boolean }>();
 
 const sessions = ref<SessionRow[]>([]);
 const loadFailed = ref(false);
@@ -115,6 +129,97 @@ function formatWhen(iso: string | null): string {
         return '—';
     }
     return new Date(iso).toLocaleString();
+}
+
+// ── FR-06: the 2FA card (begin → scan → confirm → codes shown once). ────────
+const twoFactorOn = ref(props.twoFactorEnabled);
+const enrolment = ref<{ secret: string; qr_svg: string; enrolment_id: string } | null>(null);
+const enrolCode = ref('');
+const disableCode = ref('');
+const recoveryCodes = ref<string[]>([]);
+const twoFactorError = ref<string | null>(null);
+
+async function twoFactorPost(
+    path: string,
+    body: Record<string, string>,
+    method = 'POST',
+): Promise<{ ok: boolean; body: Record<string, unknown> }> {
+    twoFactorError.value = null;
+    const response = await fetch(path, {
+        method,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': xsrfToken(),
+        },
+        body: JSON.stringify(body),
+    });
+    const json = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+    if (!response.ok) {
+        // Problem-details `detail` is the server's already-localized copy.
+        twoFactorError.value =
+            typeof json.detail === 'string' ? json.detail : String(response.status);
+    }
+    return { ok: response.ok, body: json };
+}
+
+async function beginEnrolment(): Promise<void> {
+    const { ok, body } = await twoFactorPost('/api/staff/security/2fa', {});
+    if (ok) {
+        enrolment.value = body as unknown as {
+            secret: string;
+            qr_svg: string;
+            enrolment_id: string;
+        };
+    }
+}
+
+async function confirmEnrolment(): Promise<void> {
+    if (!enrolment.value) {
+        return;
+    }
+    const { ok, body } = await twoFactorPost('/api/staff/security/2fa/confirm', {
+        code: enrolCode.value,
+        enrolment_id: enrolment.value.enrolment_id,
+    });
+    if (ok) {
+        recoveryCodes.value = (body.recovery_codes as string[] | undefined) ?? [];
+        twoFactorOn.value = true;
+        enrolment.value = null;
+        enrolCode.value = '';
+    }
+}
+
+async function disableTwoFactor(): Promise<void> {
+    const { ok } = await twoFactorPost(
+        '/api/staff/security/2fa',
+        { code: disableCode.value },
+        'DELETE',
+    );
+    if (ok) {
+        twoFactorOn.value = false;
+        disableCode.value = '';
+        recoveryCodes.value = [];
+    }
+}
+
+async function regenerateCodes(): Promise<void> {
+    const { ok, body } = await twoFactorPost('/api/staff/security/2fa/recovery-codes', {
+        code: disableCode.value,
+    });
+    if (ok) {
+        recoveryCodes.value = (body.recovery_codes as string[] | undefined) ?? [];
+        disableCode.value = '';
+    }
+}
+
+function downloadCodes(): void {
+    const blob = new Blob([recoveryCodes.value.join('\n')], { type: 'text/plain' });
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = 'recovery-codes.txt';
+    anchor.click();
+    URL.revokeObjectURL(anchor.href);
 }
 
 onMounted(() => {
@@ -219,6 +324,138 @@ onMounted(() => {
                 {{ props.copy.revokeOthers }}
             </button>
         </div>
+
+        <!-- FR-06: the 2FA card. States: off → enrolling (QR + confirm) →
+             codes-shown-once → on (disable / regenerate, both code-proven). -->
+        <section
+            class="mt-10 rounded-lg border border-slate-800 bg-slate-900 p-6"
+            data-testid="two-factor-card"
+        >
+            <h2 class="text-lg font-semibold">
+                {{ props.copy.twoFactorTitle }}
+                <span
+                    data-testid="two-factor-status"
+                    class="ms-2 rounded px-2 py-0.5 text-xs"
+                    :class="
+                        twoFactorOn
+                            ? 'bg-emerald-900 text-emerald-200'
+                            : 'bg-slate-800 text-slate-400'
+                    "
+                >
+                    {{ twoFactorOn ? props.copy.twoFactorOn : props.copy.twoFactorOff }}
+                </span>
+            </h2>
+
+            <p
+                v-if="twoFactorError"
+                role="alert"
+                data-testid="two-factor-error"
+                class="mt-3 rounded border border-red-800 bg-red-950 p-2 text-sm text-red-200"
+            >
+                {{ twoFactorError }}
+            </p>
+
+            <!-- Off, not yet enrolling. -->
+            <button
+                v-if="!twoFactorOn && !enrolment"
+                type="button"
+                data-testid="two-factor-enable"
+                class="mt-4 rounded border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:border-slate-500"
+                @click="beginEnrolment()"
+            >
+                {{ props.copy.twoFactorEnable }}
+            </button>
+
+            <!-- Enrolling: QR, manual secret, confirm code. -->
+            <div v-if="enrolment" class="mt-4" data-testid="two-factor-enrolment">
+                <p class="text-sm text-slate-400">{{ props.copy.twoFactorScan }}</p>
+                <!-- Server-rendered SVG from our own backend (bacon-qr-code), not
+                     user-influenced markup. -->
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div class="mt-3 inline-block rounded bg-white p-2" v-html="enrolment.qr_svg"></div>
+                <p class="mt-2 text-xs text-slate-400">
+                    {{ props.copy.twoFactorManualSecret }}:
+                    <code class="font-mono text-slate-200">{{ enrolment.secret }}</code>
+                </p>
+                <label class="mt-4 block text-sm text-slate-300">
+                    {{ props.copy.twoFactorCodeLabel }}
+                    <input
+                        v-model="enrolCode"
+                        data-testid="two-factor-code-input"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        class="mt-1 block w-40 rounded border border-slate-700 bg-slate-950 px-3 py-2 font-mono"
+                    />
+                </label>
+                <button
+                    type="button"
+                    data-testid="two-factor-confirm"
+                    class="mt-3 rounded bg-emerald-800 px-4 py-2 text-sm text-emerald-50"
+                    @click="confirmEnrolment()"
+                >
+                    {{ props.copy.twoFactorConfirm }}
+                </button>
+            </div>
+
+            <!-- The one and only showing of recovery codes (SEC-03). -->
+            <div v-if="recoveryCodes.length > 0" class="mt-4" data-testid="recovery-codes">
+                <p class="text-sm text-amber-300">{{ props.copy.twoFactorCodesWarning }}</p>
+                <div
+                    class="mt-3 grid grid-cols-2 gap-2 font-mono text-sm text-slate-200 sm:grid-cols-4"
+                >
+                    <span v-for="code in recoveryCodes" :key="code">{{ code }}</span>
+                </div>
+                <div class="mt-3 flex gap-3">
+                    <button
+                        type="button"
+                        class="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                        @click="downloadCodes()"
+                    >
+                        {{ props.copy.twoFactorDownload }}
+                    </button>
+                    <button
+                        type="button"
+                        data-testid="codes-saved"
+                        class="rounded border border-emerald-800 px-3 py-1 text-xs text-emerald-300"
+                        @click="recoveryCodes = []"
+                    >
+                        {{ props.copy.twoFactorCodesSaved }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- On: disable / regenerate, both demanding a current code. -->
+            <div v-if="twoFactorOn" class="mt-4" data-testid="two-factor-manage">
+                <label class="block text-sm text-slate-300">
+                    {{ props.copy.twoFactorDisableCodeLabel }}
+                    <input
+                        v-model="disableCode"
+                        data-testid="two-factor-manage-code"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        class="mt-1 block w-40 rounded border border-slate-700 bg-slate-950 px-3 py-2 font-mono"
+                    />
+                </label>
+                <div class="mt-3 flex gap-3">
+                    <button
+                        type="button"
+                        data-testid="two-factor-regenerate"
+                        class="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                        @click="regenerateCodes()"
+                    >
+                        {{ props.copy.twoFactorRegenerate }}
+                    </button>
+                    <button
+                        type="button"
+                        data-testid="two-factor-disable"
+                        class="rounded border border-red-800 px-3 py-1 text-xs text-red-200"
+                        @click="disableTwoFactor()"
+                    >
+                        {{ props.copy.twoFactorDisable }}
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <!-- §8: "revoke all others" uses a modal. -->
         <div

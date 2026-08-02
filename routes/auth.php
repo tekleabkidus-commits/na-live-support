@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\SecurityPageController;
 use App\Http\Controllers\Auth\StaffSessionController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,14 @@ Route::middleware(['guest:staff', 'throttle:auth-ip'])->group(function (): void 
     Route::post('login', [StaffSessionController::class, 'store'])
         ->middleware('audit:auth.login.succeeded')
         ->name('auth.login');
+
+    // FR-07: the challenge is the login's second half — same guest posture
+    // (no principal exists until the code verifies, SS-02), same per-IP
+    // throttle (code guessing is capped exactly like password guessing), and
+    // the same audit declaration, honoured when a session is established.
+    Route::post('login/two-factor', [TwoFactorChallengeController::class, 'store'])
+        ->middleware('audit:auth.login.succeeded')
+        ->name('auth.2fa.challenge');
 });
 
 Route::middleware('auth:staff')->group(function (): void {

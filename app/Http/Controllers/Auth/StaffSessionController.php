@@ -9,14 +9,11 @@ use App\Domain\Auth\Login\FailureReason;
 use App\Domain\Auth\Login\LoginRecorder;
 use App\Domain\Auth\Login\LoginRefused;
 use App\Domain\Auth\Login\StaffUserProvider;
+use App\Domain\Auth\TwoFactor\PendingChallenge;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Support\Auth\Devices\DeviceRegistrar;
-use App\Support\Auth\Sessions\SessionLifetimePolicy;
-use App\Support\Auth\Sessions\SessionMetadataStore;
+use App\Support\Auth\Sessions\SessionEstablisher;
 use App\Support\Auth\Sessions\SessionRegistry;
-use App\Support\Auth\Sessions\SessionRevoker;
-use App\Support\Auth\Sessions\TenantHint;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Http\JsonResponse;
@@ -56,12 +53,9 @@ final class StaffSessionController extends Controller
     public function __construct(
         private readonly LoginRecorder $recorder,
         private readonly LockoutManager $lockout,
-        private readonly TenantHint $hint,
         private readonly SessionRegistry $sessions,
-        private readonly SessionRevoker $revoker,
-        private readonly SessionLifetimePolicy $lifetime,
-        private readonly DeviceRegistrar $devices,
-        private readonly SessionMetadataStore $sessionMetadata,
+        private readonly SessionEstablisher $establisher,
+        private readonly PendingChallenge $pending,
     ) {}
 
     /**
@@ -105,12 +99,14 @@ final class StaffSessionController extends Controller
         // deliberately does NOT decide about disabled users, suspended tenants or
         // lockout — those have distinct outcomes and audit entries, and live in
         // the pipeline below.
+        // Remember is deliberately NOT passed to attempt(): a remember cookie
+        // is issued only once authentication is COMPLETE, and for a 2FA account
+        // the password is half an authentication. The flag rides the pending
+        // state and is honoured at establishment (FR-13 — the cookie extends
+        // lifetime only, and never skips the challenge itself).
         $authenticated = auth('staff')->attempt(
             ['email' => $email, 'password' => $password],
-            // FR-13: remember-me extends the COOKIE only. It never bypasses a
-            // later 2FA challenge on a new device — that binding is the 2FA
-            // step's, and this flag does not reach it.
-            $request->boolean('remember'),
+            false,
         );
 
         if (! $authenticated) {
@@ -150,18 +146,55 @@ final class StaffSessionController extends Controller
 
         /** @var User $user */
         $user = auth('staff')->user();
+        $remember = $request->boolean('remember');
 
         $response = app(Pipeline::class)
             ->send($request)
             ->through($this->pipesAfterCredentialCheck())
-            ->then(fn (Request $request): JsonResponse|RedirectResponse => $this->establishSession($request, $user));
+            ->then(fn (Request $request): JsonResponse|RedirectResponse => $this->completeOrChallenge($request, $user, $remember));
 
         // The pipeline's return type is mixed by construction; every pipe either
         // passes the request through or throws LoginRefused, so the only value
         // that can arrive here is the closure's.
         return $response instanceof JsonResponse || $response instanceof RedirectResponse
             ? $response
-            : $this->establishSession($request, $user);
+            : $this->completeOrChallenge($request, $user, $remember);
+    }
+
+    /**
+     * §10's fork: 2FA enabled → challenge; otherwise a session, now.
+     */
+    private function completeOrChallenge(Request $request, User $user, bool $remember): JsonResponse|RedirectResponse
+    {
+        if ($user->getAttribute('two_factor_confirmed_at') !== null) {
+            // The password alone is HALF an authentication for this account
+            // (FR-07, SS-02). attempt() authenticated the guard, so both traces
+            // of that must go before the response: the in-memory user and the
+            // session's auth key. forgetUser, never logout() — logout cycles
+            // the remember token, a user save this request must not perform.
+            $guard = auth('staff');
+            if ($guard instanceof SessionGuard) {
+                $request->session()->forget($guard->getName());
+                $guard->forgetUser();
+            }
+
+            $this->pending->stash($request, $user, $remember);
+
+            // 401, honestly: the caller is not authenticated. It also keeps the
+            // route's `audit:auth.login.succeeded` declaration truthful — that
+            // entry is written when a session exists, and DeclareAuditAction
+            // only demands it of 2xx responses. The challenge SCREEN is the
+            // views step's; today's client acts on the JSON status.
+            return new JsonResponse(['status' => 'two_factor_required'], 401);
+        }
+
+        if ($remember) {
+            // Full authentication just completed with no challenge owed, so the
+            // remember cookie withheld from attempt() is issued here (FR-13).
+            auth('staff')->login($user, true);
+        }
+
+        return $this->establisher->establish($request, $user);
     }
 
     public function destroy(Request $request): JsonResponse|RedirectResponse
@@ -199,115 +232,5 @@ final class StaffSessionController extends Controller
         return [
             \App\Domain\Auth\Login\Pipes\RefuseBlockedPrincipal::class,
         ];
-    }
-
-    private function establishSession(Request $request, User $user): JsonResponse|RedirectResponse
-    {
-        // T-04/Q7: point storage at this user's tenant BEFORE regenerating, so
-        // the new session id is written under `t:{tenant}:` rather than into the
-        // guest keyspace. The guest session is abandoned, not migrated.
-        $tenantId = $user->tenantId();
-        $this->hint->useForThisRequest($tenantId);
-
-        // SEC-04, first of two privilege boundaries: regenerate the session id
-        // the moment the password is accepted, so a fixed pre-login id cannot
-        // become an authenticated one. The second boundary (post-2FA) is added
-        // by the 2FA step.
-        //
-        // REDUNDANT WITH THE GUARD, DELIBERATELY. Laravel's SessionGuard::login()
-        // already calls session->migrate(true), so removing this line does not
-        // reopen the hole — falsification proved exactly that (the browser test
-        // stayed green). It is kept because the protection then depends on a
-        // framework internal rather than on anything this document controls: a
-        // future refactor to a non-migrating login would silently lose SEC-04,
-        // and when that refactor was SIMULATED the test failed with "the planted
-        // id is still live". Belt and braces, with the test watching both.
-        $request->session()->regenerate();
-
-        // FR-03: a success ends the current failure window. Done here rather
-        // than in the provider because it is a state TRANSITION, and those
-        // belong to the manager that can audit them.
-        $this->lockout->recordSuccess($user);
-
-        // FR-11's two clocks start here. `established_at` is stamped ONCE and
-        // never refreshed — that is what makes the absolute limit absolute.
-        $now = CarbonImmutable::now();
-        $request->session()->put(SessionLifetimePolicy::ESTABLISHED_AT, $now->toIso8601String());
-        $request->session()->put(SessionLifetimePolicy::LAST_ACTIVITY_AT, $now->toIso8601String());
-
-        // FR-10: index the new session, then evict the oldest beyond the cap.
-        // Registration comes first so the cap counts the session that just
-        // authenticated — otherwise a 6th login would evict one of the first
-        // five and leave six live.
-        $sessionId = $request->session()->getId();
-        $this->sessions->register($tenantId, $user->identifier(), $sessionId, $now);
-
-        $evicted = $this->sessions->enforceCap(
-            $tenantId,
-            $user->identifier(),
-            $this->lifetime->maxConcurrent(),
-            $sessionId,
-        );
-
-        foreach ($evicted as $evictedSessionId) {
-            $this->revoker->revoke(
-                $tenantId,
-                $user->identifier(),
-                $evictedSessionId,
-                reason: 'concurrent_session_cap',
-            );
-        }
-
-        // FR-04/T-03: the device upsert — one row per (user, fingerprint),
-        // city resolved in-process and STORED (T-08, FS-04; ADR 0006). After
-        // the cap enforcement so an evicted session cannot carry a fresher
-        // device stamp than the login that evicted it.
-        ['device' => $device, 'new' => $newDevice] = $this->devices->record($user, $request, $now);
-
-        // FR-12: the facts the Security page shows for THIS session. The city
-        // may be null — that IS the FS-04 "location unavailable" state, stored
-        // as such rather than papered over.
-        $this->sessionMetadata->put($tenantId, $sessionId, [
-            'device_id' => $device->identifier(),
-            'device_label' => is_string($device->label) ? $device->label : '',
-            'ip' => $request->ip(),
-            'city' => is_string($device->last_city) ? $device->last_city : null,
-            'country_code' => is_string($device->last_country_code) ? $device->last_country_code : null,
-            'signed_in_at' => $now->toIso8601String(),
-        ]);
-
-        // T-03's notice itself is deferred with the notification pipeline
-        // (Docs 07/14); newDevice is recorded so the trail already says when a
-        // machine was first seen.
-        $this->recorder->succeeded($user, $request, deviceId: $device->identifier(), newDevice: $newDevice);
-
-        $response = $request->expectsJson()
-            // No tenant id, no workspace name, no candidate count: a successful
-            // response must not enumerate either (AC-01).
-            ? new JsonResponse(['status' => 'signed_in'])
-            : redirect()->intended('/');
-
-        // The hint travels with the same flags as the session cookie: HttpOnly
-        // so script cannot read it, Secure because SEC-06 refuses cleartext
-        // anyway, SameSite=Lax to match FR-10.
-        // Config values cross a type boundary (config() returns mixed), so each
-        // is narrowed with the same defaults config/session.php declares rather
-        // than cast — a malformed value must not silently widen the cookie's
-        // scope.
-        $lifetime = config('session.lifetime');
-        $path = config('session.path');
-        $domain = config('session.domain');
-        $sameSite = config('session.same_site');
-
-        return $response->withCookie(cookie(
-            name: TenantHint::COOKIE,
-            value: $this->hint->sign($tenantId),
-            minutes: is_numeric($lifetime) ? (int) $lifetime : 120,
-            path: is_string($path) && $path !== '' ? $path : '/',
-            domain: is_string($domain) ? $domain : null,
-            secure: true,
-            httpOnly: true,
-            sameSite: is_string($sameSite) && $sameSite !== '' ? $sameSite : 'lax',
-        ));
     }
 }

@@ -12,7 +12,43 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-8 event(s).
+12 event(s).
+
+## `auth.2fa.challenge_failed`
+
+A 2FA challenge attempt failed; the fifth voids the login attempt (FR-07).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `attempt`
+- **Producers:** Doc02/TwoFactor
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.2fa.disabled`
+
+A user turned their own 2FA off, proving a current code first (§4.8).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`
+- **Producers:** Doc02/TwoFactor
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.2fa.enabled`
+
+A user confirmed 2FA enrolment with a valid code (FR-06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`
+- **Producers:** Doc02/TwoFactor
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.2fa.reset_by_admin`
+
+An admin cleared a user's 2FA; the user re-enrols at next login (FR-08).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `admin_id`
+- **Producers:** Doc02/TwoFactor
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
 ## `auth.login.failed`
 

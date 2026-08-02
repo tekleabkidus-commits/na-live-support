@@ -513,6 +513,108 @@ test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
         await ctx.dispose();
     });
 
+    test('FR-06/FR-07: the full 2FA journey — enrol, challenge, SEC-04 second boundary, recovery code', async ({
+        baseURL,
+    }) => {
+        // Idempotency across runs: fixtures persist, so run N's enrolment
+        // would break run N+1's password-only logins elsewhere in this file.
+        // This user is reset at the start and at the end.
+        inspect('clear-2fa', `--email=${PRIMARY_EMAIL}`);
+
+        try {
+            // ── Enrol, driving the REAL endpoints. ───────────────────────────
+            const ctx = await freshContext(baseURL!);
+            expect((await login(ctx)).status(), 'login failed').toBe(200);
+
+            const token = async () => decodeURIComponent((await cookieValue(ctx, 'XSRF-TOKEN'))!);
+
+            const begin = await ctx.post('/api/staff/security/2fa', {
+                headers: { Accept: 'application/json', 'X-XSRF-TOKEN': await token() },
+            });
+            expect(begin.status(), '2FA begin was refused').toBe(200);
+            const { secret, enrolment_id } = (await begin.json()) as {
+                secret: string;
+                enrolment_id: string;
+            };
+
+            const confirm = await ctx.post('/api/staff/security/2fa/confirm', {
+                headers: { Accept: 'application/json', 'X-XSRF-TOKEN': await token() },
+                data: { code: inspect('totp', `--secret=${secret}`), enrolment_id },
+            });
+            expect(confirm.status(), '2FA confirm was refused').toBe(200);
+            const { recovery_codes } = (await confirm.json()) as { recovery_codes: string[] };
+            expect(recovery_codes.length, 'FR-06: eight recovery codes, shown once').toBe(8);
+
+            await ctx.dispose();
+
+            // ── The challenge path, in a fresh browser. ──────────────────────
+            const fresh = await freshContext(baseURL!);
+            const half = await login(fresh);
+            expect(half.status(), 'a 2FA account must NOT be signed in by password alone').toBe(
+                401,
+            );
+            expect(((await half.json()) as { status: string }).status).toBe('two_factor_required');
+
+            // SS-02: the half-authenticated browser can read NOTHING.
+            expect(
+                (
+                    await fresh.get('/api/staff/settings', {
+                        headers: { Accept: 'application/json' },
+                    })
+                ).status(),
+                'SEV-1 (SS-02): a valid-password-no-TOTP caller read staff data',
+            ).not.toBe(200);
+
+            // SEC-04's SECOND boundary: capture the pending-challenge session id…
+            const pendingId = await sessionIdOf(fresh);
+
+            const challengeToken = decodeURIComponent((await cookieValue(fresh, 'XSRF-TOKEN'))!);
+            const challenge = await fresh.post('/login/two-factor', {
+                headers: { Accept: 'application/json', 'X-XSRF-TOKEN': challengeToken },
+                data: { code: inspect('totp', `--secret=${secret}`) },
+            });
+            expect(challenge.status(), 'the challenge refused a valid TOTP').toBe(200);
+
+            // …and prove it DIED in storage when the code verified (the S8
+            // method — cookie values cannot show this).
+            expect(await sessionIdOf(fresh)).not.toBe(pendingId);
+            expect(
+                inspect('key-exists', `--session=${pendingId}`),
+                'SEV-1 (SEC-04): the pre-challenge session id survived the second privilege boundary',
+            ).toBe('0');
+
+            // POSITIVE CONTROL: fully signed in now.
+            expect(
+                (
+                    await fresh.get('/api/staff/settings', {
+                        headers: { Accept: 'application/json' },
+                    })
+                ).status(),
+            ).toBe(200);
+            await fresh.dispose();
+
+            // ── Recovery-code path (AC-03: works once). ──────────────────────
+            const lostPhone = await freshContext(baseURL!);
+            expect((await login(lostPhone)).status()).toBe(401);
+
+            const recoveryToken = decodeURIComponent((await cookieValue(lostPhone, 'XSRF-TOKEN'))!);
+            const viaRecovery = await lostPhone.post('/login/two-factor', {
+                headers: { Accept: 'application/json', 'X-XSRF-TOKEN': recoveryToken },
+                data: { recovery_code: recovery_codes[0] },
+            });
+            expect(viaRecovery.status(), 'a recovery code must sign in (US-02)').toBe(200);
+            expect(
+                ((await viaRecovery.json()) as { recovery_codes_remaining: number })
+                    .recovery_codes_remaining,
+                'FR-07: the response reports the remaining count',
+            ).toBe(7);
+            await lostPhone.dispose();
+        } finally {
+            // Leave the fixture user password-only for every other test.
+            inspect('clear-2fa', `--email=${PRIMARY_EMAIL}`);
+        }
+    });
+
     test('logout ends the session for subsequent requests', async ({ baseURL }) => {
         const ctx = await freshContext(baseURL!);
 

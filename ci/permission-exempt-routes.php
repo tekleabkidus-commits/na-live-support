@@ -50,6 +50,19 @@ return [
     'auth.sessions.revoke' => 'Self-service: a session owner may always end their own session, as with logout.',
     'auth.sessions.revoke_others' => 'Self-service: bulk form of the same right; scoped to the caller by construction.',
 
+    /*
+     | Doc 02 FR-06/FR-07: 2FA on the caller's OWN account. Same self-service
+     | reasoning as the sessions routes; every mutation demands a current code
+     | (or, for begin, is only reachable while 2FA is off). The one 2FA route
+     | that touches ANOTHER user — FR-08's admin reset — is NOT here: it
+     | carries admin.2fa.reset.
+     */
+    'auth.2fa.begin' => 'Self-service: starts enrolment on the caller\'s own account (FR-06).',
+    'auth.2fa.confirm' => 'Self-service: activates the caller\'s own enrolment with a valid code (FR-06).',
+    'auth.2fa.regenerate_codes' => 'Self-service: reissues the caller\'s own recovery codes, code-proven (FR-07).',
+    'auth.2fa.disable' => 'Self-service: turns the caller\'s own 2FA off, code-proven (§4.8).',
+    'auth.2fa.challenge' => 'The login\'s second half: no principal exists until the code verifies (FR-07, SS-02).',
+
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
     'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',

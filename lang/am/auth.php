@@ -40,6 +40,32 @@ return [
     ],
 
     // Machine-authored, pending native review (the standing pre-launch item).
+    '2fa' => [
+        'no_pending' => 'መጀመሪያ በይለፍ ቃልዎ ይግቡ።',
+        'one_proof_required' => 'የማረጋገጫ መተግበሪያ ኮድዎን ወይም አንድ የመልሶ ማግኛ ኮድ ያስገቡ።',
+        'voided' => 'በጣም ብዙ የተሳሳቱ ኮዶች። ከመጀመሪያው እንደገና ይግቡ።',
+        'enrolment_superseded' => 'በሌላ ትር አዲስ ማዋቀር ተጀምሯል። አዲሱን QR ኮድ ስካን አድርገው እንደገና ይሞክሩ።',
+        'already_enabled' => 'ባለሁለት-ደረጃ ማረጋገጫ አስቀድሞ በርቷል። እንደገና ለማዋቀር መጀመሪያ ያጥፉት።',
+        'user_not_found' => 'ያ ተጠቃሚ የለም።',
+        'confirm_name_mismatch' => 'የጻፉት ስም ከዚህ ተጠቃሚ ጋር አይዛመድም። ምንም አልተቀየረም።',
+        'not_enabled_for_user' => 'ይህ ተጠቃሚ ባለሁለት-ደረጃ ማረጋገጫ አላበራም።',
+        'title' => 'ባለሁለት-ደረጃ ማረጋገጫ',
+        'status_on' => 'በርቷል',
+        'status_off' => 'ጠፍቷል',
+        'enable' => 'ባለሁለት-ደረጃ ማረጋገጫ ያዋቅሩ',
+        'scan_instructions' => 'ይህን QR ኮድ በማረጋገጫ መተግበሪያዎ ስካን ያድርጉ፣ ወይም ሚስጥሩን በእጅ ያስገቡ።',
+        'manual_secret' => 'በእጅ የሚገባ ሚስጥር',
+        'code_label' => 'ከመተግበሪያዎ ባለ6-አኃዝ ኮድ ያስገቡ',
+        'confirm_action' => 'አብራ',
+        'codes_warning' => 'እነዚህን የመልሶ ማግኛ ኮዶች አሁን ያስቀምጡ። አንድ ጊዜ ብቻ ይታያሉ፤ እያንዳንዱም አንድ ጊዜ ብቻ ይሰራል።',
+        'codes_saved' => 'ኮዶቹን አስቀምጫለሁ',
+        'download_codes' => 'ኮዶቹን አውርድ',
+        'regenerate_codes' => 'አዲስ የመልሶ ማግኛ ኮዶች ፍጠር',
+        'disable' => 'ባለሁለት-ደረጃ ማረጋገጫ አጥፋ',
+        'disable_code_label' => 'ለማረጋገጥ የአሁኑን ኮድ ያስገቡ',
+        'low_codes_banner' => ':count የመልሶ ማግኛ ኮዶች ቀርተዋል። በቅርቡ አዲስ ስብስብ ይፍጠሩ።',
+    ],
+
     'devices' => [
         'title' => 'መሣሪያዎች',
         'subtitle' => 'አሁን የገቡባቸው ቦታዎች በሙሉ። የማያውቁትን ይሰርዙ።',

@@ -53,6 +53,44 @@ return [
         'too_many_requests' => 'Too many attempts from this connection. Wait a moment and try again.',
     ],
 
+    // FR-06/FR-07: 2FA enrolment, challenge and recovery (§8's wizard copy
+    // slots; the full designed wizard arrives with the views step).
+    '2fa' => [
+        // Challenge-side errors. `voided` is FR-07's fifth failure — back to
+        // the password; deliberately does not say how close to lockout the
+        // account now is.
+        'no_pending' => 'Sign in with your password first.',
+        'one_proof_required' => 'Enter either your authenticator code or one recovery code.',
+        'voided' => 'Too many incorrect codes. Sign in again from the start.',
+
+        // EC-10's designed loser error — distinct from a wrong code, because
+        // the fix is different: rescan, not retype.
+        'enrolment_superseded' => 'A newer set-up was started in another tab. Scan the newest QR code and try again.',
+        'already_enabled' => 'Two-factor authentication is already on. Turn it off first to set it up again.',
+
+        // FR-08 admin reset.
+        'user_not_found' => 'That user does not exist.',
+        'confirm_name_mismatch' => 'The name you typed does not match this user. Nothing was changed.',
+        'not_enabled_for_user' => 'This user does not have two-factor authentication turned on.',
+
+        // Security-page section (§8/§9).
+        'title' => 'Two-factor authentication',
+        'status_on' => 'On',
+        'status_off' => 'Off',
+        'enable' => 'Set up two-factor authentication',
+        'scan_instructions' => 'Scan this QR code with your authenticator app, or enter the secret manually.',
+        'manual_secret' => 'Manual secret',
+        'code_label' => 'Enter the 6-digit code from your app',
+        'confirm_action' => 'Activate',
+        'codes_warning' => 'Save these recovery codes now. They are shown only once, and each works only once.',
+        'codes_saved' => 'I have saved these codes',
+        'download_codes' => 'Download codes',
+        'regenerate_codes' => 'Generate new recovery codes',
+        'disable' => 'Turn off two-factor authentication',
+        'disable_code_label' => 'Enter a current code to confirm',
+        'low_codes_banner' => 'You have :count recovery codes left. Generate a new set soon.',
+    ],
+
     // FR-12's Security page (§8/§9). `location_unavailable` is FS-04's designed
     // degradation copy — a null city from GeoIP renders as this, never as an
     // error. `only_here` is §9's empty state, verbatim.
