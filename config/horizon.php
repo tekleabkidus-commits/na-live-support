@@ -368,6 +368,25 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
+        // ADR 0007 (Doc 02 FS-02): auth email is the account-recovery path and
+        // must never queue behind bulk work; its depth is only a meaningful
+        // FS-02 signal if the queue carries nothing but mail. `tries` stays 1
+        // here because FS-02's retry ×6 backoff belongs to the Mailable itself
+        // — a supervisor-level default would silently retry every future mail
+        // job whether or not its document asked for that.
+        'mail' => [
+            'connection' => 'redis',
+            'queue' => ['mail'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [

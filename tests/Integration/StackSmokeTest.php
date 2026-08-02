@@ -25,7 +25,7 @@ declare(strict_types=1);
 |      - the app's password cannot authenticate as platform_admin
 |   3. both Redis instances respond and are DISTINCT servers with the
 |      correct persistence/eviction personalities
-|   4. Horizon supervises all eleven queue families
+|   4. Horizon supervises all twelve queue families
 |   5. Reverb accepts a WebSocket connection (HTTP 101)
 |   6. every port docker/compose.yaml publishes has a REAL host listener
 |      (Doc 18 FR-01 / Doc 19 FR-09 — S1 opening housekeeping)
@@ -40,6 +40,7 @@ use Symfony\Component\Yaml\Yaml;
 const QUEUE_FAMILIES = [
     'telegram-in', 'telegram-out', 'webchat-in', 'webchat-out', 'media',
     'ai', 'sms', 'automation', 'reports', 'outbox-relay', 'audit',
+    'mail', // ADR 0007 — Doc 02 FS-02's auth-email family
 ];
 
 /** True if host:port accepts a TCP connection within the timeout. */
@@ -404,7 +405,7 @@ test('both redis instances respond and are distinct servers with opposite person
         ->and($durable->config('GET', 'appendonly')['appendonly'])->toBe('yes');
 });
 
-test('horizon supervises all eleven queue families', function () {
+test('horizon supervises all twelve queue families', function () {
     // Point Laravel's redis config at the durable endpoint. Container DNS
     // only — see stackEndpoint(): a localhost fallback could reach a host
     // Redis and read someone else's queue state.

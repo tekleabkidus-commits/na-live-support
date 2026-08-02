@@ -89,3 +89,47 @@ count says "8 remaining" while the account has one code left, so the prompt that
 the user to regenerate never appears, and they discover it when they are locked out. The store is
 small, per-user, and indexed for exactly this query (`user_recovery_codes_live_index`), so there is
 no performance argument for caching it.
+
+---
+
+## 2026-08-02 — Doc 02 step 8 rulings (Session 12, password lifecycle)
+
+Filed at plan approval, before implementation.
+
+### R-5. Auth email rides a dedicated `mail` queue family (ADR 0007)
+
+**Extends** CLAUDE.md §3's Horizon supervisor list, by ruling and ADR — the only sanctioned way
+the constitution changes. Rationale recorded in ADR 0007: reset email is the account-recovery
+path (ruling Q1's escape hatch, EC-11's self-unlock) and must never queue behind bulk work;
+FS-02's admin-visible depth requires a queue that contains nothing but mail. The family is named
+`mail` generically so future notification email rides it; Doc 02 owns the family's existence.
+
+### R-6. Reset-unlock is per account, never per address
+
+**Clarifies** Doc 02 FR-03 ("unlock also possible by … completed password reset") against the
+multi-candidate lockout rule (S5). A failed attempt locks EVERY account matching the address —
+but a completed reset unlocks EXACTLY the account the token was bound to. Other candidate
+accounts on the same address stay locked, and the attacker's per-IP throttle is unaffected.
+Unlocking siblings would let one tenant's reset silently unlock an account in another tenant —
+an unlock the other tenant's audit trail could not explain. Asserted in PasswordResetFlowTest.
+
+### R-7. The multi-tenant escape-hatch explanation never appears in a response body
+
+**Re-affirms and extends R-2's final paragraph to the reset flow's own screens.** The reset
+request response and the token-error screens carry only generic copy ("if the account exists…",
+"this link has expired — request a new one"). The explanation that resetting a password in one
+tenant breaks a cross-tenant password collision lives in runbook/help content only. The
+enumeration suite asserts the reset responses byte-identical across 0-, 1- and N-candidate
+addresses, which structurally forbids any such copy from creeping in.
+
+### R-8. T-01 deviation for the reset flow: Fortify substrate, custom token persistence
+
+**Records a deviation** from Doc 02 T-01 ("Fortify drives login/reset/2FA"), same shape as S11's
+2FA deviation. Fortify's reset flow persists tokens in the stock `password_reset_tokens` table,
+which is keyed by EMAIL as its primary key — one row per address. That cannot express this
+platform: emails are unique per TENANT, one address may match accounts in several tenants, and
+the owner ruling on ambiguity requires one token PER MATCHING ACCOUNT. The flow therefore runs on
+`auth_action_tokens` (SEC-02 as schema physics, one live token per user+purpose) behind the
+`resolve_auth_action_token` door, while Fortify remains the substrate it already is for login.
+The dead stock `password_reset_tokens` table is dropped in a later **contract** release per C-12,
+not in this step.
