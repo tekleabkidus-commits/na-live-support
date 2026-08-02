@@ -41,7 +41,18 @@ const INVITE_PASSWORD_NEW = `An-Invitees-Own-${RUN_STAMP}`;
 function inspect(...args: string[]): string {
     return execFileSync(
         'docker',
-        ['compose', '-f', 'docker/compose.yaml', 'exec', '-T', 'app', 'php', 'artisan', 'auth:session-inspect', ...args],
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'auth:session-inspect',
+            ...args,
+        ],
         { encoding: 'utf8' },
     ).trim();
 }
@@ -96,13 +107,17 @@ async function actionLinkFor(
     path: '/reset-password' | '/invitation',
 ): Promise<string> {
     for (let attempt = 0; attempt < 60; attempt++) {
-        const search = await mailpit.get(`/api/v1/search?query=${encodeURIComponent(`to:"${email}"`)}`);
+        const search = await mailpit.get(
+            `/api/v1/search?query=${encodeURIComponent(`to:"${email}"`)}`,
+        );
         const body = (await search.json()) as { messages?: { ID: string }[] };
 
-        if (body.messages?.length) {
-            const message = (await (
-                await mailpit.get(`/api/v1/message/${body.messages[0].ID}`)
-            ).json()) as { HTML?: string; Text?: string };
+        const newestId = body.messages?.[0]?.ID;
+        if (newestId) {
+            const message = (await (await mailpit.get(`/api/v1/message/${newestId}`)).json()) as {
+                HTML?: string;
+                Text?: string;
+            };
 
             const haystack = `${message.HTML ?? ''}\n${message.Text ?? ''}`;
             const match = haystack.match(
@@ -175,30 +190,53 @@ test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
         // A LIVE session that must die with the reset (FR-16's "all sessions
         // revoked"), plus its positive control while the password is intact.
         const victimSession = await freshContext(baseURL!);
-        expect((await login(victimSession, RESET_EMAIL, PASSWORD)).status(), 'fixture login failed').toBe(200);
-        expect(await sessionAlive(victimSession), 'positive control: the session must work before the reset').toBe(true);
+        expect(
+            (await login(victimSession, RESET_EMAIL, PASSWORD)).status(),
+            'fixture login failed',
+        ).toBe(200);
+        expect(
+            await sessionAlive(victimSession),
+            'positive control: the session must work before the reset',
+        ).toBe(true);
 
         await resetPasswordVia(baseURL!, mailpit, RESET_EMAIL, RESET_PASSWORD_NEW);
 
         // The session that existed before the reset is DEAD — observed as a
         // browser observes it, not as a Redis inspection.
-        expect(await sessionAlive(victimSession), 'FR-16: the pre-reset session survived').toBe(false);
+        expect(await sessionAlive(victimSession), 'FR-16: the pre-reset session survived').toBe(
+            false,
+        );
 
         // Old password dead, new password works.
         inspect('clear-throttle');
         const withOld = await freshContext(baseURL!);
-        expect((await login(withOld, RESET_EMAIL, PASSWORD)).status(), 'the OLD password still logs in').toBe(422);
+        expect(
+            (await login(withOld, RESET_EMAIL, PASSWORD)).status(),
+            'the OLD password still logs in',
+        ).toBe(422);
         const withNew = await freshContext(baseURL!);
-        expect((await login(withNew, RESET_EMAIL, RESET_PASSWORD_NEW)).status(), 'the NEW password was refused').toBe(200);
+        expect(
+            (await login(withNew, RESET_EMAIL, RESET_PASSWORD_NEW)).status(),
+            'the NEW password was refused',
+        ).toBe(200);
 
         // Fixture repair (see RUN_STAMP's comment for why not a second reset),
         // then the published credential provably works again.
         expect(inspect('restore-password', `--email=${RESET_EMAIL}`)).toBe('1');
         inspect('clear-throttle');
         const restored = await freshContext(baseURL!);
-        expect((await login(restored, RESET_EMAIL, PASSWORD)).status(), 'the fixture password was not restored').toBe(200);
+        expect(
+            (await login(restored, RESET_EMAIL, PASSWORD)).status(),
+            'the fixture password was not restored',
+        ).toBe(200);
 
-        await Promise.all([victimSession.dispose(), withOld.dispose(), withNew.dispose(), restored.dispose(), mailpit.dispose()]);
+        await Promise.all([
+            victimSession.dispose(),
+            withOld.dispose(),
+            withNew.dispose(),
+            restored.dispose(),
+            mailpit.dispose(),
+        ]);
     });
 
     test('FR-17/EC-04: the invited fixture activates through a resent emailed link, then returns to the invited state', async ({
@@ -209,7 +247,10 @@ test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
 
         // Invited means: cannot log in, with the generic refusal (SEC-01).
         const before = await freshContext(baseURL!);
-        expect((await login(before, INVITED_EMAIL, PASSWORD)).status(), 'an invited account must refuse login').toBe(422);
+        expect(
+            (await login(before, INVITED_EMAIL, PASSWORD)).status(),
+            'an invited account must refuse login',
+        ).toBe(422);
 
         // EC-04's self-service resend is the production path that mints the
         // link — no admin surface exists yet, and none is needed for this.
@@ -243,12 +284,21 @@ test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
         // The account is now an ordinary one.
         inspect('clear-throttle');
         const activated = await freshContext(baseURL!);
-        expect((await login(activated, INVITED_EMAIL, INVITE_PASSWORD_NEW)).status(), 'the activated account was refused').toBe(200);
+        expect(
+            (await login(activated, INVITED_EMAIL, INVITE_PASSWORD_NEW)).status(),
+            'the activated account was refused',
+        ).toBe(200);
 
         // Fixture repair: back to invited for the next run.
         expect(inspect('make-invited', `--email=${INVITED_EMAIL}`)).toBe('1');
 
-        await Promise.all([before.dispose(), requester.dispose(), redeemer.dispose(), activated.dispose(), mailpit.dispose()]);
+        await Promise.all([
+            before.dispose(),
+            requester.dispose(),
+            redeemer.dispose(),
+            activated.dispose(),
+            mailpit.dispose(),
+        ]);
     });
 
     test('FR-14: an authenticated change keeps the changing session and kills the sibling', async ({
@@ -256,8 +306,12 @@ test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
     }) => {
         const changer = await freshContext(baseURL!);
         const sibling = await freshContext(baseURL!);
-        expect((await login(changer, RESET_EMAIL, PASSWORD)).status(), 'changer login failed').toBe(200);
-        expect((await login(sibling, RESET_EMAIL, PASSWORD)).status(), 'sibling login failed').toBe(200);
+        expect((await login(changer, RESET_EMAIL, PASSWORD)).status(), 'changer login failed').toBe(
+            200,
+        );
+        expect((await login(sibling, RESET_EMAIL, PASSWORD)).status(), 'sibling login failed').toBe(
+            200,
+        );
 
         // Positive controls, both alive.
         expect(await sessionAlive(changer)).toBe(true);
@@ -275,7 +329,9 @@ test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
         expect(changed.status(), 'the password change was refused').toBe(200);
 
         // FR-14, both halves: the sibling died, the prover survived.
-        expect(await sessionAlive(sibling), 'FR-14: the sibling session survived the change').toBe(false);
+        expect(await sessionAlive(sibling), 'FR-14: the sibling session survived the change').toBe(
+            false,
+        );
         expect(await sessionAlive(changer), 'FR-14: the changing session must survive').toBe(true);
 
         // Fixture repair — the flow itself (correctly) refuses changing BACK

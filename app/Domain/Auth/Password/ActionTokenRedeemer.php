@@ -80,7 +80,8 @@ final class ActionTokenRedeemer
                 return false;
             }
 
-            $current = mb_strtolower(trim((string) $user->getAttribute('email')));
+            $address = $user->getAttribute('email');
+            $current = mb_strtolower(trim(is_string($address) ? $address : ''));
 
             return $current === mb_strtolower(trim($redemption->sentToEmail));
         }, $this->context);

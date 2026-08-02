@@ -333,23 +333,22 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      PROVEN for LOGIN, both dimensions. Bodies: byte-identical across
-      existing/non-existing addresses AND across "exists in two tenants" vs "exists
-      nowhere" — one refusal path (LoginRefused) renders every credential failure, so
-      identity is structural rather than coincidental. Timing: equalisation measured at
-      the provider, where it lives — 86.2 ms vs 0.8 ms when the dummy verify is removed,
-      within ±50 ms when present, plus a floor assertion so "both paths cheap" also
-      fails. The HTTP-level timing test was REMOVED after being proven unable to detect
-      an 89 ms hole (medians 205.8 vs 205.7 with the defence deleted); that measurement
-      is recorded in the test.
-      NOT YET COVERED: the RESET half of AC-01 ("login and reset"), and the invite flow
-      SEC-01 also names — the password-lifecycle step was not reached this session.
-      A known residual, deliberately not closed: an address existing in N tenants costs
-      N verifications, so multi-tenant membership is timing-distinguishable to an
-      attacker who already knows the address exists. Existence itself — what AC-01
-      specifies — is not.
+      BOTH HALVES PROVEN — "login and reset", plus the invite flow SEC-01 names.
+      LOGIN (S4–S8): bodies byte-identical across existing/non-existing and across
+      tenant-membership shapes (one refusal path renders every credential failure);
+      timing equalised at the provider by a FIXED verification budget (ruling R-3
+      closed the S4 multi-tenant residual), floor-estimator measured, falsified at
+      86.2 ms vs 0.8 ms with the dummy verify removed.
+      RESET (S12): bodies byte-identical across 0/1/N candidates AND the invited
+      shape, with an R-7 assertion that no response mentions workspaces or tenants;
+      timing equalised by UniformResponseFloor's fixed 150 ms response floor,
+      measured at the handler with the same floor estimator. Falsified: floor
+      removed -> red at 0.5 ms vs 16.6 ms — numbers proving the floor assertion is
+      load-bearing, since that raw delta would have PASSED the ±50 ms bound alone.
+      INVITE: resend responses byte-identical for invited/active/unknown addresses
+      (InvitationTest), behind the same floor inside InvitationIssuer.
 
   - ac_ref: "Doc02 AC-02"
     suite_path: tests/Feature/Auth/LockoutTest.php
@@ -599,3 +598,27 @@ entries:
       negative half, without which a sweep that killed everything would pass. Falsified
       by making the sweep count sessions without revoking them (the Doc 01 behaviour this
       replaces): red with "a suspended operator's staff are still signed in", then green.
+  # ── Doc 02 EC-03: recorded PARTIAL by owner ruling (S12 plan approval) —
+  #    "the traceability row records the split and names the step that ships
+  #    the notice", rather than the notice clause silently disappearing.
+  - ac_ref: "Doc02 EC-03"
+    suite_path: tests/Browser/password.spec.ts
+    type: automated
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      ANOTHER-DEVICE REDEMPTION PROVEN: the browser journey requests the reset
+      from one context and redeems the emailed link from a completely fresh
+      cookie jar (different "device", no shared state), and the pest flow test
+      does the same across distinct IPs/user agents. The token is deliberately
+      not device-bound (auth_action_tokens migration).
+      NEW-DEVICE NOTICE DEFERRED with T-03's notice mechanism (S10 deferral):
+      the login that follows a foreign-device redemption records new_device on
+      the device row today, but no notice is sent. Mail transport now exists
+      (ADR 0007), so the remaining unblocker is the notification-category
+      registry entry and its 3-layer opt model — owned by Doc 07's
+      notification pipeline, which ships the notice and its toggleable
+      setting together (a setting nothing reads may not enter the registry).

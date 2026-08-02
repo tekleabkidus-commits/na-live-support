@@ -69,7 +69,8 @@ final class InvitationIssuer
         bool $resend = false,
     ): void {
         $this->withinTenant($user->tenantId(), function () use ($user, $now, $request, $actorId, $resend): void {
-            $email = (string) $user->getAttribute('email');
+            $address = $user->getAttribute('email');
+            $email = is_string($address) ? $address : '';
 
             $plaintext = $this->tokens->issue(
                 $user->tenantId(),

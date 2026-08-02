@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
 use App\Support\Settings\SettingsRepository;
+use App\Support\Tenancy\RunsWithinTenant;
+use App\Support\Tenancy\TenantContext;
 use Carbon\CarbonImmutable;
 use Closure;
 use Illuminate\Http\Request;
@@ -41,6 +43,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class EnforcePasswordExpiry
 {
+    use RunsWithinTenant;
+
     /**
      * Route names an expired-password principal may still reach.
      */
@@ -50,7 +54,10 @@ final class EnforcePasswordExpiry
         'auth.logout',
     ];
 
-    public function __construct(private readonly SettingsRepository $settings) {}
+    public function __construct(
+        private readonly SettingsRepository $settings,
+        private readonly TenantContext $context,
+    ) {}
 
     /**
      * @param  Closure(Request): Response  $next
@@ -63,7 +70,19 @@ final class EnforcePasswordExpiry
             return $next($request); // guests have no password to expire
         }
 
-        $maxAgeDays = $this->maxAgeDays();
+        // READ UNDER THE USER'S OWN TENANT, explicitly. On the staff API this
+        // middleware runs after `tenant:staff_session` and the bind is a
+        // no-op; on the WEB group no tenant middleware exists, and an unbound
+        // SettingsRepository::get() throws — which 500'd every authenticated
+        // page the moment this middleware was first wired. Caught by the
+        // browser suite only: the pest suite cannot render the one
+        // authenticated web page (no Vite manifest in stage 3), which is
+        // exactly why the browser stage exists.
+        $maxAgeDays = $this->withinTenant(
+            $user->tenantId(),
+            fn (): int => $this->maxAgeDays(),
+            $this->context,
+        );
 
         if ($maxAgeDays <= 0) {
             return $next($request); // 0 = disabled, the spec default

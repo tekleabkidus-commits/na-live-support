@@ -32,7 +32,7 @@ const errors = ref<string[]>([]);
 
 function xsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
-    return match ? decodeURIComponent(match[1]) : '';
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
 
 async function submit(): Promise<void> {
@@ -89,7 +89,9 @@ async function submit(): Promise<void> {
 
         <form v-else class="mt-6 space-y-4" @submit.prevent="submit">
             <div>
-                <label class="block text-sm font-medium" for="new-password">{{ copy.passwordLabel }}</label>
+                <label class="block text-sm font-medium" for="new-password">{{
+                    copy.passwordLabel
+                }}</label>
                 <input
                     id="new-password"
                     v-model="password"
@@ -103,7 +105,9 @@ async function submit(): Promise<void> {
             </div>
 
             <div>
-                <label class="block text-sm font-medium" for="confirm-password">{{ copy.confirmLabel }}</label>
+                <label class="block text-sm font-medium" for="confirm-password">{{
+                    copy.confirmLabel
+                }}</label>
                 <input
                     id="confirm-password"
                     v-model="confirmation"
@@ -114,7 +118,11 @@ async function submit(): Promise<void> {
                 />
             </div>
 
-            <ul v-if="errors.length" class="rounded bg-red-50 p-3 text-sm text-red-800" role="alert">
+            <ul
+                v-if="errors.length"
+                class="rounded bg-red-50 p-3 text-sm text-red-800"
+                role="alert"
+            >
                 <li v-for="message in errors" :key="message">{{ message }}</li>
             </ul>
 

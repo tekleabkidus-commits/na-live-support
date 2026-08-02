@@ -57,13 +57,13 @@ final class PasswordChanger
      *                                      proved the current password survives
      *                                      (FR-14 revokes the OTHERS)
      * @param  (callable(): bool)|null  $oncePolicyPassed  the token-consumption
-     *                                      gate: runs AFTER policy passes and
-     *                                      BEFORE anything mutates, so a policy
-     *                                      failure leaves the caller's token
-     *                                      alive for the retry, while a consumed
-     *                                      token binds to exactly one mutation.
-     *                                      Returning false (someone else spent
-     *                                      it first) aborts with nothing changed.
+     *                                                     gate: runs AFTER policy passes and
+     *                                                     BEFORE anything mutates, so a policy
+     *                                                     failure leaves the caller's token
+     *                                                     alive for the retry, while a consumed
+     *                                                     token binds to exactly one mutation.
+     *                                                     Returning false (someone else spent
+     *                                                     it first) aborts with nothing changed.
      */
     public function apply(
         User $user,
@@ -80,7 +80,8 @@ final class PasswordChanger
             throw new StaleActionToken;
         }
 
-        $previousHash = (string) $user->getRawOriginal('password');
+        $rawPrevious = $user->getRawOriginal('password');
+        $previousHash = is_string($rawPrevious) ? $rawPrevious : '';
         $hadPassword = $user->getAttribute('password_set_at') !== null;
 
         // The `hashed` cast runs argon2id at NFR-03's tuning; assigning an

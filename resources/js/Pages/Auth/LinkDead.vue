@@ -25,7 +25,7 @@ const sent = ref(false);
 
 function xsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
-    return match ? decodeURIComponent(match[1]) : '';
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
 
 async function resend(): Promise<void> {
@@ -64,13 +64,19 @@ async function resend(): Promise<void> {
         </a>
 
         <template v-if="resendUrl">
-            <p v-if="sent" class="mt-6 rounded bg-green-50 p-4 text-sm text-green-800" role="status">
+            <p
+                v-if="sent"
+                class="mt-6 rounded bg-green-50 p-4 text-sm text-green-800"
+                role="status"
+            >
                 {{ copy.resent }}
             </p>
 
             <form v-else class="mt-6 space-y-4" @submit.prevent="resend">
                 <div>
-                    <label class="block text-sm font-medium" for="resend-email">{{ copy.emailLabel }}</label>
+                    <label class="block text-sm font-medium" for="resend-email">{{
+                        copy.emailLabel
+                    }}</label>
                     <input
                         id="resend-email"
                         v-model="email"

@@ -45,7 +45,9 @@ final class PasswordChangeController extends Controller
         $current = $request->string('current_password')->toString();
         $password = $request->string('password')->toString();
 
-        if (! Hash::check($current, (string) $user->getRawOriginal('password'))) {
+        $rawHash = $user->getRawOriginal('password');
+
+        if (! Hash::check($current, is_string($rawHash) ? $rawHash : '')) {
             return ProblemDetails::response(
                 code: ErrorCode::ValidationFailed,
                 status: 422,

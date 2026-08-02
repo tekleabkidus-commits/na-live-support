@@ -21,3 +21,7 @@ declare module 'node:child_process' {
         options?: { encoding?: string; cwd?: string },
     ): string;
 }
+
+// `process.env` for suite-level overrides (MAILPIT_URL). Same reasoning as
+// child_process above: one global, declared narrowly, instead of @types/node.
+declare const process: { env: Record<string, string | undefined> };

@@ -40,7 +40,8 @@ final class PasswordHistory
      */
     public function isReused(User $user, string $candidate, int $depth): bool
     {
-        $current = (string) $user->getAttribute('password');
+        $rawCurrent = $user->getRawOriginal('password');
+        $current = is_string($rawCurrent) ? $rawCurrent : '';
 
         if ($current !== '' && Hash::check($candidate, $current)) {
             return true;

@@ -20,7 +20,7 @@ const sent = ref(false);
 
 function xsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
-    return match ? decodeURIComponent(match[1]) : '';
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
 
 async function submit(): Promise<void> {
@@ -57,7 +57,9 @@ async function submit(): Promise<void> {
 
             <form class="mt-6 space-y-4" @submit.prevent="submit">
                 <div>
-                    <label class="block text-sm font-medium" for="email">{{ copy.emailLabel }}</label>
+                    <label class="block text-sm font-medium" for="email">{{
+                        copy.emailLabel
+                    }}</label>
                     <input
                         id="email"
                         v-model="email"

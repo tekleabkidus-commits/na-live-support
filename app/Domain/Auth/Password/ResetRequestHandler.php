@@ -86,7 +86,8 @@ final class ResetRequestHandler
                 return; // raced away between the door and the bound read
             }
 
-            $email = (string) $user->getAttribute('email');
+            $address = $user->getAttribute('email');
+            $email = is_string($address) ? $address : '';
             $ttlMinutes = $this->ttlMinutes();
 
             $plaintext = $this->tokens->issue(
