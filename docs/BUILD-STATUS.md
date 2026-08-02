@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — step 6 COMPLETE (8 of 14 steps)** | S4–S10 | AC-01 partial (login half), AC-02 covered, **AC-04 covered (both halves, falsified)**; 6 ACs not-implemented | Step 6 closed in S10: AC-04 socket close proven ≤2 s (the S9 401 was body_md5, not route params), I-5 locale hop live, devices screen + GeoIP stub (ADR 0006) with FS-04 degradation, FR-11 middleware WIRED (it had been attached nowhere), clear-throttle made real (it had matched nothing since S9). Local: pest 239/2411 assertions, browser 13/13 ×3 consecutive, gates 10/10, lint clean. **CI pending push — see S10.** Remaining: 2FA, password lifecycle, tokens, widget, webhook auth, SEC-08, views |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — step 6 COMPLETE (8 of 14 steps)** | S4–S10 | AC-01 partial (login half), AC-02 covered, **AC-04 covered (both halves, falsified)**; 6 ACs not-implemented | Step 6 closed in S10: AC-04 socket close proven ≤2 s (the S9 401 was body_md5, not route params), I-5 locale hop live, devices screen + GeoIP stub (ADR 0006) with FS-04 degradation, FR-11 middleware WIRED (it had been attached nowhere), clear-throttle made real (it had matched nothing since S9). Local: pest 239/2411 assertions, browser 13/13 ×3 consecutive, gates 10/10, lint clean. **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** Remaining: 2FA, password lifecycle, tokens, widget, webhook auth, SEC-08, views |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -695,8 +695,10 @@ The per-request locale hop (I-5) and the devices screen with GeoIP (ADR 0006 unw
 
 **Evidence: pest 239 passed / 11 skipped (2411 assertions); browser 13 passed — three
 consecutive full runs; `make gates` 10/10; Pint + PHPStan(max) + ESLint + vue-tsc clean
-(vue-tsc uncached). CI NOT yet run on these commits — the owner pushes; local evidence
-only until then.**
+(vue-tsc uncached). CI-proven on `b9b407d`: run
+[30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324),
+Stages 1–6 green (Stage 4 executed the 13-test browser suite including the new FR-12
+tests and the real clear-throttle), Stage 7 the by-design manual stub.**
 
 ### AC-04's socket half: proven, and the S9 diagnosis was wrong
 
