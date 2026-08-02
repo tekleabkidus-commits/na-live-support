@@ -241,4 +241,64 @@ return [
         'required_fields' => ['attempt'],
         'owning_doc' => 'Doc02',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 02 §4.4 — the password lifecycle (FR-14–17, SEC-02, EC-04, EC-11)
+    |--------------------------------------------------------------------------
+    |
+    | Written per ACCOUNT, in that account's tenant: a reset request for an
+    | address in three tenants leaves three trails, each visible to its own
+    | operator and no other (the multi-candidate rule's audit shape). Nothing
+    | here carries the token, its hash, or the address (SEC-08).
+    */
+
+    [
+        'action_key' => 'auth.password.reset_requested',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.password.reset_completed',
+        'entity' => 'user',
+        // 'origin' distinguishes nothing today (always reset) but keeps the
+        // three PasswordChanger doors symmetric in exports.
+        'actor_types' => ['staff'],
+        'required_fields' => ['origin', 'ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.password.changed',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['origin', 'ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.invite.issued',
+        'entity' => 'user',
+        // 'system' until Doc 03's admin surface exists to supply a staff actor;
+        // the service accepts an actorId and records 'staff' the day it is wired.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.invite.resent',
+        'entity' => 'user',
+        // 'system': EC-04's resend is requested by an UNAUTHENTICATED person;
+        // recording them as a staff actor would fabricate a principal.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ip'],
+        'owning_doc' => 'Doc02',
+    ],
+    [
+        'action_key' => 'auth.invite.accepted',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['origin', 'ip'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

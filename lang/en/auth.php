@@ -115,5 +115,77 @@ return [
         'cannot_revoke_current' => 'This is your current session. Use sign out to end it.',
         'session_not_found' => 'That session no longer exists.',
     ],
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 02 §4.4 — password lifecycle (FR-15/FR-16/FR-17, SEC-01, EC-04)
+    |--------------------------------------------------------------------------
+    |
+    | ENUMERATION RULES REACH INTO THE COPY: `forgot_sent` and
+    | `invite_resent_note` are the uniform "if the account exists…" answers and
+    | must never gain a variant that reveals whether anything matched (AC-01
+    | compares response BYTES). `link_dead_body` is one message for every kind
+    | of dead link — expired, used, superseded, never-existed — because
+    | distinguishing them confirms the link was once real (SEC-01). And per
+    | ruling R-7, nothing here may ever explain the multi-tenant escape hatch;
+    | that lives in runbook copy only.
+    |
+    | `forgot_sent` also carries FS-02's "UI notes possible delay" clause.
+    */
+    'password' => [
+        'policy_failed' => 'That password doesn\'t meet the requirements.',
+        'rule_length' => 'Use at least :min characters.',
+        'rule_classes' => 'Mix at least three of: lowercase letters, capital letters, numbers, symbols.',
+        'rule_breached' => 'That password has appeared in a known data breach. Please choose a different one.',
+        'rule_reuse' => 'You\'ve used that password recently. Choose one you haven\'t used before.',
+        'confirm_mismatch' => 'The two passwords don\'t match.',
+        'current_password_wrong' => 'Your current password didn\'t match.',
+
+        'forgot_title' => 'Reset your password',
+        'forgot_intro' => 'Enter your work email and we\'ll send you a link to choose a new password.',
+        'email_label' => 'Email address',
+        'forgot_submit' => 'Send reset link',
+        'forgot_sent' => 'If that address has an account, a reset link is on its way. It can take a minute or two to arrive.',
+
+        'reset_title' => 'Choose a new password',
+        'password_label' => 'New password',
+        'confirm_label' => 'Repeat the new password',
+        'reset_submit' => 'Change password',
+        'reset_done' => 'Your password has been changed. Sign in with the new one — everywhere else has been signed out.',
+
+        'link_dead_title' => 'This link can\'t be used',
+        'link_dead_body' => 'It may have expired or already been used.',
+        'link_dead_again' => 'Request a new link',
+
+        'invite_title' => 'Set your password',
+        'invite_intro' => 'Your account is ready. Choose a password to start using it.',
+        'invite_submit' => 'Set password and continue',
+        'invite_done' => 'Your password is set. You can sign in now.',
+        'invite_resend' => 'Send me a new invitation link',
+        'invite_resent_note' => 'If that address was invited, a new link is on its way. It can take a minute or two to arrive.',
+
+        'expired_notice' => 'Your password has expired. Choose a new one to continue.',
+
+        'change_title' => 'Change password',
+        'current_password_label' => 'Current password',
+        'change_submit' => 'Change password',
+        'changed_ok' => 'Your password has been changed. Other sessions have been signed out.',
+    ],
+
+    // FR-16/FR-17 email copy (§14). :workspace is the operator's name — data,
+    // never copy (N-03). `link_fallback` prefixes the raw URL for clients that
+    // don't render the button.
+    'mail' => [
+        'reset_subject' => 'Reset your :workspace password',
+        'reset_line1' => 'Someone asked to reset the password for your :workspace account.',
+        'reset_action' => 'Choose a new password',
+        'reset_valid' => 'This link works once and expires in :minutes minutes.',
+        'reset_ignore' => 'If this wasn\'t you, you can ignore this email — your password is unchanged.',
+        'invite_subject' => 'You\'ve been invited to :workspace',
+        'invite_line1' => 'An administrator created an account for you on :workspace.',
+        'invite_action' => 'Set your password',
+        'invite_valid' => 'This link works once and expires in :days days.',
+        'invite_ignore' => 'If you weren\'t expecting this, you can ignore this email.',
+        'link_fallback' => 'If the button doesn\'t work, copy this address into your browser:',
+    ],
 
 ];

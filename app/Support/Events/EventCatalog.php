@@ -161,6 +161,31 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
             'description' => 'A 2FA challenge attempt failed; the fifth voids the login attempt (FR-07).',
         ],
+
+        // ── Doc 02 §4.4: the password lifecycle (§4.8's three password events).
+        // Identifiers only, per the LoginRecorder rule: never the address the
+        // request named, never anything token-derived (SEC-07, SEC-08).
+        'auth.password.reset_requested' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id'],
+            'producers' => ['Doc02/PasswordLifecycle'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A reset was requested and a token minted for THIS account; one event per matched account (FR-16).',
+        ],
+        'auth.password.reset_completed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'origin'],
+            'producers' => ['Doc02/PasswordLifecycle'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A reset token was redeemed: new password set, all sessions revoked, this account unlocked (FR-16, EC-11, R-6).',
+        ],
+        'auth.password.changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'origin'],
+            'producers' => ['Doc02/PasswordLifecycle'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A password was set outside the reset flow: authenticated self-change (FR-14) or an invitation\'s first password (FR-17); `origin` says which.',
+        ],
     ];
 
     /**

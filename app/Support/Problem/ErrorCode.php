@@ -64,6 +64,28 @@ enum ErrorCode: string
     case InvalidCredentials = 'invalid_credentials';
 
     /**
+     * FR-15/FR-16: a candidate password failed the tenant's policy. `errors`
+     * carries one entry per failed RULE (length, classes, reuse, breached) —
+     * that per-rule shape is the "live policy validation" contract the views
+     * step's strength meter will consume.
+     */
+    case PasswordPolicyViolation = 'password_policy_violation';
+
+    /**
+     * FR-16/FR-17/SEC-01: a presented reset or invite link cannot act — unknown,
+     * expired, consumed, superseded, or otherwise dead, in ONE code with no
+     * distinction (distinguishing them would confirm the token was once real).
+     */
+    case ActionLinkInvalid = 'action_link_invalid';
+
+    /**
+     * FR-15 max-age: the authenticated principal's password is past the
+     * tenant's auth.password.max_age_days and this request is outside the
+     * change surface. The client routes the user to the Security page.
+     */
+    case PasswordExpired = 'password_expired';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

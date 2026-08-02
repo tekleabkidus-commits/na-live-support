@@ -79,6 +79,9 @@ Route::group([], function (): void {
         // refused tenant's problem-details render in the DEFAULT locale — the
         // refusal must not vary by who asked).
         App\Http\Middleware\ApplyUserLocale::class,
+        // FR-15 max-age: after locale so the confinement notice renders in the
+        // user's language; the change endpoint itself is on its allowlist.
+        App\Http\Middleware\EnforcePasswordExpiry::class,
     ])
         ->prefix('staff')
         ->group(function (): void {
@@ -114,6 +117,16 @@ Route::group([], function (): void {
             Route::delete('security/2fa', [TwoFactorEnrolmentController::class, 'destroy'])
                 ->middleware('audit:auth.2fa.disabled')
                 ->name('auth.2fa.disable');
+
+            // FR-14/FR-15: the authenticated self-change. Proves the CURRENT
+            // password before accepting a new one (a session is a weaker
+            // credential than the password — see the controller); revokes all
+            // OTHER sessions on success. Self-service, permission-exempt like
+            // the sessions routes. On EnforcePasswordExpiry's allowlist so an
+            // expired password can still be changed.
+            Route::put('security/password', [App\Http\Controllers\Auth\PasswordChangeController::class, 'update'])
+                ->middleware('audit:auth.password.changed')
+                ->name('auth.password.change');
 
             // FR-08: the admin reset — permission DECLARED from Doc 03's
             // catalog (admin.2fa.reset, high risk), enforced when its resolver

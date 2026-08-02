@@ -35,4 +35,17 @@ return [
     'foundation.webhook.telegram' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 05 must remove this line when it adds a real handler.',
     'foundation.widget.session' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 13 must remove this line when it adds a real handler.',
     'foundation.webhook.sms_dlr' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 14 must remove this line when it adds a real handler.',
+
+    /*
+     | Doc 02's two uniform-response request routes (SEC-01/AC-01). Both answer
+     | an identical 200 whether or not any account matched, so a 2xx proves
+     | nothing about mutation and the audit MIDDLEWARE (which requires a 2xx to
+     | have written its action) cannot apply. The mutations themselves are NOT
+     | unaudited: whenever a token is actually minted, PasswordLifecycleRecorder
+     | writes auth.password.reset_requested / auth.invite.resent in the matched
+     | account's own tenant — PasswordResetFlowTest and InvitationTest assert
+     | those entries exist.
+     */
+    'auth.password.forgot' => 'Uniform SEC-01 response: 200 regardless of matches; per-candidate audit (auth.password.reset_requested) is written by the recorder whenever a token is minted.',
+    'auth.invitation.resend' => 'Uniform SEC-01 response: 200 regardless of matches; per-candidate audit (auth.invite.resent) is written by the recorder whenever a token is minted.',
 ];

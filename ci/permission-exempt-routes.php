@@ -57,6 +57,22 @@ return [
      | that touches ANOTHER user — FR-08's admin reset — is NOT here: it
      | carries admin.2fa.reset.
      */
+    /*
+     | Doc 02 FR-16/FR-17: the password-lifecycle guest surface. Same circularity
+     | as /login — every route here exists to (re)establish a credential for
+     | someone who cannot authenticate, so no staff principal exists to hold a
+     | permission. The token IS the authorisation on the redemption routes,
+     | validated by ActionTokenRedeemer against SEC-02's bindings.
+     */
+    'auth.password.forgot.form' => 'Guest form: requesting a reset is what someone who cannot log in does; no principal exists yet.',
+    'auth.password.forgot' => 'Guest request: uniform SEC-01 response; the token it may mint is the eventual authorisation.',
+    'auth.password.reset.form' => 'Guest form: the presented token is the authorisation, checked by the redeemer.',
+    'auth.password.reset' => 'Guest redemption: single-use token authorises exactly this action (SEC-02).',
+    'auth.invitation.form' => 'Guest form: the presented invite token is the authorisation, checked by the redeemer.',
+    'auth.invitation.accept' => 'Guest redemption: the invited person\'s first credential; no principal exists until it is set (FR-17).',
+    'auth.invitation.resend' => 'Guest request: EC-04 self-service resend, uniform SEC-01 response.',
+    'auth.password.change' => 'Self-service: changes the caller\'s OWN password after re-proving the current one (FR-14).',
+
     'auth.2fa.begin' => 'Self-service: starts enrolment on the caller\'s own account (FR-06).',
     'auth.2fa.confirm' => 'Self-service: activates the caller\'s own enrolment with a valid code (FR-06).',
     'auth.2fa.regenerate_codes' => 'Self-service: reissues the caller\'s own recovery codes, code-proven (FR-07).',

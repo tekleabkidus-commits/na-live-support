@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\InvitationController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\SecurityPageController;
 use App\Http\Controllers\Auth\StaffSessionController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
@@ -76,6 +78,49 @@ Route::middleware(['guest:staff', 'throttle:auth-ip'])->group(function (): void 
     Route::post('login/two-factor', [TwoFactorChallengeController::class, 'store'])
         ->middleware('audit:auth.login.succeeded')
         ->name('auth.2fa.challenge');
+});
+
+/*
+|------------------------------------------------------------------------------
+| Password lifecycle (Doc 02 FR-16, FR-17, SEC-01, SEC-02, EC-04, EC-11)
+|------------------------------------------------------------------------------
+|
+| All guest surfaces, all behind the same per-IP throttle as login (SEC-05:
+| token guessing and address probing are capped exactly like password
+| guessing). No tenant middleware for the same reason as /login: the tenant is
+| what the TOKEN resolves (via the resolve_auth_action_token door) or what the
+| candidate lookup discovers per account.
+|
+| AUDIT SHAPE, decided by what a 2xx PROVES: the two apply routes (reset store,
+| invitation accept) mutate on every success and DECLARE their actions; the two
+| request routes (forgot, resend) answer 200 identically whether or not any
+| account matched (SEC-01), so a 2xx proves nothing about mutation and they are
+| audit-EXEMPT with reasons — the per-candidate trail is still written by
+| PasswordLifecycleRecorder whenever a token was actually minted.
+|
+| GETs render forms; they mutate nothing and declare nothing.
+|
+*/
+
+Route::middleware(['guest:staff', 'throttle:auth-ip'])->group(function (): void {
+    Route::get('forgot-password', [PasswordResetController::class, 'showRequestForm'])
+        ->name('auth.password.forgot.form');
+    Route::post('forgot-password', [PasswordResetController::class, 'request'])
+        ->name('auth.password.forgot');
+
+    Route::get('reset-password', [PasswordResetController::class, 'show'])
+        ->name('auth.password.reset.form');
+    Route::post('reset-password', [PasswordResetController::class, 'store'])
+        ->middleware('audit:auth.password.reset_completed')
+        ->name('auth.password.reset');
+
+    Route::get('invitation', [InvitationController::class, 'show'])
+        ->name('auth.invitation.form');
+    Route::post('invitation', [InvitationController::class, 'store'])
+        ->middleware('audit:auth.invite.accepted')
+        ->name('auth.invitation.accept');
+    Route::post('invitation/resend', [InvitationController::class, 'resend'])
+        ->name('auth.invitation.resend');
 });
 
 Route::middleware('auth:staff')->group(function (): void {

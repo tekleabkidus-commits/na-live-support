@@ -66,4 +66,18 @@ return [
         'database' => env('GEOIP_DATABASE_PATH', ''),
     ],
 
+    /*
+    | Doc 02 T-09 / FR-15. The k-anonymity breached-password range API. The
+    | checker sends a 5-hex-char SHA-1 prefix and nothing else — never the
+    | password, never its full hash (asserted by BreachCheckTest on the request
+    | itself). Production egress goes through the Doc 18 egress proxy with its
+    | per-destination allowlist; tests fake the client and never dial out.
+    | Empty base_url means "no endpoint configured", which fails open with the
+    | named metric exactly like a timeout (NFR-04, FS-03).
+    */
+    'breach_check' => [
+        'base_url' => env('BREACH_CHECK_BASE_URL', 'https://api.pwnedpasswords.com'),
+        'timeout_seconds' => 0.5, // T-09's 500 ms, not tunable per tenant
+    ],
+
 ];

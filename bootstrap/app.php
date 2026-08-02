@@ -87,6 +87,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // ordering against tenant middleware is explicit. After the lifetime
         // check: an expired session's refusal renders in the default locale.
         $middleware->appendToGroup('web', App\Http\Middleware\ApplyUserLocale::class);
+
+        // FR-15's max-age clause. LAST in the group, deliberately: it needs an
+        // authenticated principal (after session middleware), that principal's
+        // tenant setting (after the hint/tenant plumbing), and its refusal
+        // should render in the user's own locale (after the locale hop). A
+        // guest, a disabled max-age (the default) and a fresh password are all
+        // no-ops. The staff API group appends it in routes/api.php.
+        $middleware->appendToGroup('web', App\Http\Middleware\EnforcePasswordExpiry::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

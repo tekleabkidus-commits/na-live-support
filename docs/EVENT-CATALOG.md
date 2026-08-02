@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-12 event(s).
+15 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -76,6 +76,33 @@ A staff user ended their session deliberately (§4.8).
 - **Payload:** `tenant_id`, `user_id`
 - **Producers:** Doc02/LoginPipeline
 - **Consumers:** Doc17/Audit
+
+## `auth.password.changed`
+
+A password was set outside the reset flow: authenticated self-change (FR-14) or an invitation's first password (FR-17); `origin` says which.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `origin`
+- **Producers:** Doc02/PasswordLifecycle
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.password.reset_completed`
+
+A reset token was redeemed: new password set, all sessions revoked, this account unlocked (FR-16, EC-11, R-6).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `origin`
+- **Producers:** Doc02/PasswordLifecycle
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.password.reset_requested`
+
+A reset was requested and a token minted for THIS account; one event per matched account (FR-16).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`
+- **Producers:** Doc02/PasswordLifecycle
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
 ## `tenant.provisioned`
 
