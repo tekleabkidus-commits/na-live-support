@@ -47,6 +47,10 @@ return [
         'rate_limited' => 'Too many attempts',
         'insecure_transport' => 'Secure connection required',
         'insecure_transport_detail' => 'This service is only available over an encrypted connection. Reconnect using https and try again.',
+        // Doc 02 FR-20: the bearer surface's closed code set (step-9 ruling).
+        'invalid_token' => 'Invalid API token',
+        'token_expired' => 'API token expired',
+        'insufficient_scope' => 'Missing permission',
     ],
 
     'provisioning' => [

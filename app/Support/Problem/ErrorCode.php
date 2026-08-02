@@ -85,6 +85,23 @@ enum ErrorCode: string
      */
     case PasswordExpired = 'password_expired';
 
+    /*
+    | FR-20's CLOSED code set for the bearer surface (step-9 owner ruling):
+    | exactly these three. Revoked tokens and disabled owners render as
+    | invalid_token — the door flags them internally for audit, the response
+    | never distinguishes them, and no fourth code may be added here without
+    | reopening that ruling.
+    */
+
+    /** FR-20: no valid token was presented — unknown, malformed, revoked, or a disabled owner. 401. */
+    case InvalidToken = 'invalid_token';
+
+    /** FR-20: the token was real and has passed its own expires_at. 401. */
+    case TokenExpired = 'token_expired';
+
+    /** FR-20/AC-05: authenticated, but the T-05 intersection lacks the required permission — named in `detail` and `errors`. 403. */
+    case InsufficientScope = 'insufficient_scope';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

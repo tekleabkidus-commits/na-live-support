@@ -53,6 +53,15 @@ return [
         'too_many_requests' => 'Too many attempts from this connection. Wait a moment and try again.',
     ],
 
+    // FR-18/FR-19/FR-20: API tokens. The two refusal details are deliberately
+    // uninformative (invalid never says WHY — see TokenRefused); the scope one
+    // names the missing permission because AC-05 requires exactly that.
+    'token' => [
+        'invalid' => 'This request did not include a valid API token.',
+        'expired' => 'This API token has expired. Create a new token or rotate it to continue.',
+        'insufficient_scope' => 'This token does not include the :permission permission.',
+    ],
+
     // FR-06/FR-07: 2FA enrolment, challenge and recovery (§8's wizard copy
     // slots; the full designed wizard arrives with the views step).
     '2fa' => [

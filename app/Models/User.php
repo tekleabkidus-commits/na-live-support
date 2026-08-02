@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * A staff user, belonging to exactly one tenant (Doc 01 FR-02, FR-03a; Doc 02).
@@ -42,7 +43,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements TenantScoped
 {
     /** @use HasFactory<UserFactory> */
-    use BelongsToTenant, HasFactory, Notifiable;
+    use BelongsToTenant, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -61,6 +62,7 @@ class User extends Authenticatable implements TenantScoped
             'password_set_at' => 'datetime',
             'password_changed_at' => 'datetime',
             'disabled_at' => 'datetime',
+            'service_account_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
             'first_failed_login_at' => 'datetime',
             'locked_until' => 'datetime',
@@ -120,5 +122,28 @@ class User extends Authenticatable implements TenantScoped
     public function hasTwoFactorEnabled(): bool
     {
         return $this->two_factor_confirmed_at !== null;
+    }
+
+    /**
+     * FR-19/BR-03: a machine token's owner — visible in audit as itself, and
+     * non-login by construction (see the service-account migration's docblock
+     * for the two enforcement layers).
+     */
+    public function isServiceAccount(): bool
+    {
+        return $this->service_account_at !== null;
+    }
+
+    /**
+     * FR-18/FR-19: this user's API tokens, on the PLATFORM's model — pinned
+     * here rather than left to HasApiTokens' static lookup, so the relation's
+     * type says what every caller actually receives (tenant-scoped, UUIDv7,
+     * revocable).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<PersonalAccessToken, $this>
+     */
+    public function tokens(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
     }
 }

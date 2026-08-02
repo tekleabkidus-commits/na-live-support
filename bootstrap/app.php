@@ -22,6 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // middleware has to guess from the URL.
         $middleware->alias([
             'tenant' => App\Http\Middleware\ResolveTenant::class,
+            // Doc 02's bearer surface (FR-18/19/20): token → tenant through the
+            // resolve_api_token door. A separate binder rather than a branch in
+            // ResolveTenant so each surface still trusts exactly ONE credential
+            // kind — see the middleware's docblock.
+            'tenant.bearer' => App\Http\Middleware\ResolveBearerTenant::class,
             'tenant.state' => App\Http\Middleware\EnforceTenantState::class,
             // Declares which audit action a mutating route emits, and verifies at runtime
             // that it actually did. The `audit-coverage` gate reads these declarations.
@@ -32,6 +37,26 @@ return Application::configure(basePath: dirname(__DIR__))
             // Doc 03). See the middleware's docblock before assuming it enforces.
             'permission' => App\Http\Middleware\RequirePermission::class,
         ]);
+
+        // T-02's bearer order, enforced against the middleware SORTER, not just
+        // the route declaration. The route lists tenant.bearer before auth:api,
+        // but Laravel re-sorts any route stack containing priority-listed
+        // middleware — and Authenticate is priority-listed above the api
+        // group's SubstituteBindings, so it HOPPED over the (unlisted) bearer
+        // binder and the Sanctum guard ran with no tenant bound: every bearer
+        // request 500'd with MissingTenantContext. Registering the binder
+        // immediately BEFORE Authenticate in the priority list makes the
+        // declared order and the executed order the same thing. The
+        // MiddlewareOrderTest asserts the EXECUTED order for exactly this
+        // reason.
+        // The CONTRACT, not the concrete class: the kernel's priority list
+        // names AuthenticatesRequests, and an entry that is not literally in
+        // the list is silently appended at the END — which put the binder
+        // AFTER the guard and reproduced the exact bug this exists to fix.
+        $middleware->prependToPriorityList(
+            before: Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+            prepend: App\Http\Middleware\ResolveBearerTenant::class,
+        );
 
         // A GUEST hitting an authenticated page needs somewhere to go, and the
         // default target is route('login') — which does not exist (the login

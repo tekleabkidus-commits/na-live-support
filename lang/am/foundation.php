@@ -46,6 +46,10 @@ return [
         'rate_limited' => 'በጣም ብዙ ሙከራዎች',
         'insecure_transport' => 'ደህንነቱ የተጠበቀ ግንኙነት ያስፈልጋል',
         'insecure_transport_detail' => 'ይህ አገልግሎት የሚገኘው በተመሰጠረ ግንኙነት ብቻ ነው። https ተጠቅመው እንደገና ይገናኙ።',
+        // Doc 02 FR-20: the bearer surface's closed code set (step-9 ruling).
+        'invalid_token' => 'ልክ ያልሆነ የኤፒአይ ቶከን',
+        'token_expired' => 'የኤፒአይ ቶከን ጊዜው አልፏል',
+        'insufficient_scope' => 'የጎደለ ፈቃድ',
     ],
 
     'provisioning' => [

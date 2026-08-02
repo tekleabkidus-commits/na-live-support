@@ -39,6 +39,14 @@ return [
         'too_many_requests' => 'ከዚህ ግንኙነት በጣም ብዙ ሙከራዎች። ትንሽ ቆይተው ይሞክሩ።',
     ],
 
+    // FR-18/FR-19/FR-20: API tokens (see the en file's note on deliberate
+    // uninformativeness).
+    'token' => [
+        'invalid' => 'ይህ ጥያቄ ልክ የሆነ የኤፒአይ ቶከን አላካተተም።',
+        'expired' => 'የዚህ ኤፒአይ ቶከን ጊዜ አልፏል። ለመቀጠል አዲስ ቶከን ይፍጠሩ ወይም ያዙሩት።',
+        'insufficient_scope' => 'ይህ ቶከን የ :permission ፈቃድን አላካተተም።',
+    ],
+
     // Machine-authored, pending native review (the standing pre-launch item).
     '2fa' => [
         'no_pending' => 'መጀመሪያ በይለፍ ቃልዎ ይግቡ።',

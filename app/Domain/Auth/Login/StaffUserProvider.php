@@ -275,7 +275,32 @@ final class StaffUserProvider implements UserProvider
             return null;
         }
 
-        return $this->withinTenant($tenantId, fn (): ?User => User::query()->find($identifier));
+        $user = $this->withinTenant($tenantId, fn (): ?User => User::query()->find($identifier));
+
+        if (! $user instanceof User) {
+            return null;
+        }
+
+        // BR-04/EC-05's staff-side per-request backstop (step-9 ruling): a
+        // disabled user is refused AT REHYDRATION, so a session key that
+        // somehow survives the disable-time Redis revocation still
+        // authenticates nothing — the next request re-reads disabled state
+        // from the row itself. RefuseBlockedPrincipal covers login; this
+        // covers every request after it.
+        if ($user->isDisabled()) {
+            return null;
+        }
+
+        // FR-19's second non-login layer (step-9 ruling): resolve_staff_login
+        // already excludes service accounts, so none can ever LOG IN — this
+        // refusal covers the path that does not go through login at all, a
+        // session key somehow existing for one. No session may rehydrate a
+        // service-account principal, whatever planted it.
+        if ($user->isServiceAccount()) {
+            return null;
+        }
+
+        return $user;
     }
 
     public function retrieveByToken($identifier, #[\SensitiveParameter] $token): ?Authenticatable
