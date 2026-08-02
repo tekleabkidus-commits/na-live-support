@@ -398,23 +398,26 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      HALF PROVEN, and the halves are recorded separately because they fail differently.
-      PROVEN (tests/Browser/session.spec.ts, real cookie jars, isolated per run): the 6th
-      concurrent login evicts the OLDEST session and not the newest; the evicted session no
-      longer authenticates; the newest survives (positive control). Asserted on session
-      KEYS via auth:session-inspect, never on the index. Falsified by reversing the
-      eviction order — red, then green restored. The test needs the clear-tenant reset to
-      be falsifiable at all: without it, accumulated sessions made the oldest vanish
-      whichever end the code evicted from, and it passed with the order REVERSED.
-      NOT PROVEN: "evicted sockets close ≤ 2 s". SessionRevoker calls Reverb's
-      terminate_connections with a Pusher-style signature and Reverb answers 401
-      "Authentication signature invalid" — its verifySignature signs $this->query minus
-      [auth_signature, body_md5, appId, appKey, channelName], which merges ROUTE params, and
-      the exact set is not yet matched. The integration test connects over TLS, is
-      confirmed by Reverb, sends pusher:signin and measures the 2 s deadline; only the
-      termination call is unproven, and the test is SKIPPED rather than left green.
+      BOTH HALVES PROVEN, each falsified before being counted. Eviction half
+      (tests/Browser/session.spec.ts, real cookie jars, isolated per run): the 6th
+      concurrent login evicts the OLDEST session and not the newest; the evicted session
+      no longer authenticates; the newest survives (positive control). Asserted on
+      session KEYS via auth:session-inspect, never on the index. Falsified by reversing
+      the eviction order — red, then restored green. Socket half
+      (tests/Integration/SessionRevocationSocketTest.php, un-skipped in S10): a REAL TLS
+      websocket to the running Reverb subscribes to a presence channel carrying the
+      user's id (this Reverb has no pusher:signin — S9's frame was silently ignored,
+      which is why its socket survived), revocation calls terminate_connections with the
+      signature built exactly as Controller::verifySignature checks it (empty body sent
+      via send() — Http::post()'s implicit `[]` body was the real S9 401, via body_md5 —
+      raw key=value join, one param array for sign and wire), and the socket reaches EOF
+      within the 2 s deadline. Falsified by corrupting the SIGNED string while the wire
+      string stayed correct — red at the deadline with the socket still open; restored
+      green. Non-2xx terminate responses now log the auth.session.socket_close_failed
+      metric (NFR-04's fail-open-with-metric; the HTTP client does not throw on 401,
+      so a refused close was previously a SILENT fail-open).
 
   - ac_ref: "Doc02 AC-05"
     suite_path: manual

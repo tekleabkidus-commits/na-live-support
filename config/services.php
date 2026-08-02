@@ -54,4 +54,16 @@ return [
         'internal_port' => env('REVERB_INTERNAL_PORT', '8080'),
     ],
 
+    /*
+    | Doc 02 T-08 / ADR 0006. The MMDB city database GeoIpResolver reads —
+    | in-process, never a network call. Unset/empty means "no database", which
+    | is a sanctioned posture: the resolver returns null with a named metric
+    | and device rows store IP only (FS-04). Doc 18 owns delivering the real
+    | GeoLite2 file and its weekly refresh; tests point this at the synthetic
+    | stub in fixtures/geoip (relative paths resolve against base_path()).
+    */
+    'geoip' => [
+        'database' => env('GEOIP_DATABASE_PATH', ''),
+    ],
+
 ];

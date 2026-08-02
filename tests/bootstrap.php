@@ -48,6 +48,11 @@ $overrides = [
     'CACHE_STORE' => 'redis',
     'REDIS_PREFIX' => 'na-test-',
 
+    // ADR 0006: the synthetic GeoIP stub (RFC 5737 ranges only). Relative, so
+    // GeoIpResolver anchors it at base_path(); the FS-04 tests override the
+    // config at runtime to point at corrupt/missing files.
+    'GEOIP_DATABASE_PATH' => 'fixtures/geoip/stub-city.mmdb',
+
     'MAIL_MAILER' => 'array',
     'QUEUE_CONNECTION' => 'sync',
     'SESSION_DRIVER' => 'array',

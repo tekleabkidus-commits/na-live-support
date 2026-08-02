@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Domain\Auth\Login\StaffLoginResolver;
 use App\Domain\Auth\Login\StaffUserProvider;
 use App\Support\Audit\AuditLogger;
+use App\Support\Auth\Sessions\SessionMetadataStore;
 use App\Support\Auth\Sessions\SessionRegistry;
 use App\Support\Auth\Sessions\SessionRevoker;
 use App\Support\Auth\Sessions\TenantHint;
@@ -72,6 +73,17 @@ final class FortifyServiceProvider extends ServiceProvider
         // One place decides which Redis connection and TTL the session index
         // uses, so the index can never point at a different instance than the
         // sessions it describes.
+        $this->app->singleton(SessionMetadataStore::class, function (Application $app): SessionMetadataStore {
+            $connection = config('session.connection');
+            $lifetime = config('session.lifetime');
+
+            return new SessionMetadataStore(
+                $app->make(RedisFactory::class),
+                is_string($connection) && $connection !== '' ? $connection : 'default',
+                is_numeric($lifetime) ? (int) $lifetime : 120,
+            );
+        });
+
         $this->app->singleton(SessionRegistry::class, function (Application $app): SessionRegistry {
             $connection = config('session.connection');
             $lifetime = config('session.lifetime');
@@ -80,6 +92,7 @@ final class FortifyServiceProvider extends ServiceProvider
                 $app->make(RedisFactory::class),
                 is_string($connection) && $connection !== '' ? $connection : 'default',
                 is_numeric($lifetime) ? (int) $lifetime : 120,
+                $app->make(SessionMetadataStore::class),
             );
         });
 

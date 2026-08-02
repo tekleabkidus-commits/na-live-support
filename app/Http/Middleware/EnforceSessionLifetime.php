@@ -54,7 +54,17 @@ final class EnforceSessionLifetime
         if ($this->policy->hasExpired($establishedAt, $lastActivityAt, $now)) {
             $this->registry->forget($user->tenantId(), $user->identifier(), $session->getId());
 
-            auth('staff')->logout();
+            // forgetUser, NOT logout() — the same fix S6 applied to
+            // VerifyTenantHint::discard, rediscovered here the moment this
+            // middleware was first WIRED: logout() cycles the remember token,
+            // which SAVES the user with no tenant bound and turns every expiry
+            // into a 500. Not cycling is also what FR-13 specifies — remember-me
+            // lives to the ABSOLUTE limit by its own cookie lifetime, so an
+            // idle expiry must leave it able to re-authenticate.
+            $guard = auth('staff');
+            if ($guard instanceof \Illuminate\Auth\SessionGuard) {
+                $guard->forgetUser();
+            }
             $session->invalidate();
             $session->regenerateToken();
 

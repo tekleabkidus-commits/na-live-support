@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\SecuritySessionsController;
 use App\Http\Controllers\Foundation\IngressProbeController;
 use App\Http\Controllers\Foundation\TenantSettingsController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,12 @@ Route::group([], function (): void {
         Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         Illuminate\Session\Middleware\StartSession::class,
         App\Http\Middleware\VerifyTenantHint::class,
+        // FR-11/FR-12: BEFORE tenant resolution, deliberately. Expiry here
+        // de-authenticates, so an expired session fails staff resolution with
+        // the same 404 an unauthenticated request gets; placed after it, a
+        // dead session would reach the controller with a tenant bound and no
+        // principal. The touch half is FR-12's "last active".
+        App\Http\Middleware\EnforceSessionLifetime::class,
         'tenant:staff_session',
         'tenant.state:staff',
         // I-5: the C-08 chain's first hop. After the session middleware (the
@@ -74,6 +81,20 @@ Route::group([], function (): void {
         ->prefix('staff')
         ->group(function (): void {
             Route::get('context', [IngressProbeController::class, 'show'])->name('foundation.staff.context');
+
+            // FR-12: the Security page's sessions table and its two actions.
+            // Self-service (the caller's own sessions only, by construction) —
+            // permission-exempt like logout; the mutations audit through the
+            // revoker (auth.session.revoked per session) plus the always-fired
+            // bulk entry (auth.session.revoked_others).
+            Route::get('security/sessions', [SecuritySessionsController::class, 'index'])
+                ->name('auth.sessions.index');
+            Route::delete('security/sessions/{digest}', [SecuritySessionsController::class, 'destroy'])
+                ->middleware('audit:auth.session.revoked')
+                ->name('auth.sessions.revoke');
+            Route::post('security/sessions/revoke-others', [SecuritySessionsController::class, 'destroyOthers'])
+                ->middleware('audit:auth.session.revoked_others')
+                ->name('auth.sessions.revoke_others');
 
             // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
             // which is a deletion of the override row rather than a write of the

@@ -53,4 +53,29 @@ return [
         'too_many_requests' => 'Too many attempts from this connection. Wait a moment and try again.',
     ],
 
+    // FR-12's Security page (§8/§9). `location_unavailable` is FS-04's designed
+    // degradation copy — a null city from GeoIP renders as this, never as an
+    // error. `only_here` is §9's empty state, verbatim.
+    'devices' => [
+        'title' => 'Devices',
+        'subtitle' => 'Everywhere you are signed in right now. Revoke anything you don\'t recognise.',
+        'column_device' => 'Device',
+        'column_first_seen' => 'First seen',
+        'column_last_active' => 'Last active',
+        'column_ip' => 'IP address',
+        'column_location' => 'Location',
+        'current_badge' => 'This device',
+        'location_unavailable' => 'Location unavailable',
+        'revoke' => 'Revoke',
+        'revoke_confirm' => 'Confirm revoke',
+        'revoke_others' => 'Revoke all other sessions',
+        'revoke_others_title' => 'Revoke all other sessions?',
+        'revoke_others_body' => 'Every session except this one will be signed out immediately, including open tabs on other devices.',
+        'cancel' => 'Cancel',
+        'only_here' => 'You\'re only signed in here.',
+        'load_failed' => 'Your sessions could not be loaded. Refresh to try again.',
+        'cannot_revoke_current' => 'This is your current session. Use sign out to end it.',
+        'session_not_found' => 'That session no longer exists.',
+    ],
+
 ];

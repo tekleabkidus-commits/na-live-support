@@ -394,6 +394,125 @@ test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
         }
     });
 
+    test('FR-12: the devices API sees both browsers, refuses to revoke the current one, and revoke-others kills the sibling', async ({
+        baseURL,
+    }) => {
+        const { primary } = tenantIds();
+        inspect('clear-tenant', `--tenant=${primary}`);
+
+        // Two REAL browsers: independent cookie jars, real logins.
+        const mine = await freshContext(baseURL!);
+        const sibling = await freshContext(baseURL!);
+        expect((await login(mine)).status(), 'first login failed').toBe(200);
+        expect((await login(sibling)).status(), 'second login failed').toBe(200);
+
+        // POSITIVE CONTROL: the sibling works before anything is revoked.
+        expect(
+            (
+                await sibling.get('/api/staff/settings', {
+                    headers: { Accept: 'application/json' },
+                })
+            ).status(),
+            'positive control: the sibling session must work before revocation',
+        ).toBe(200);
+
+        const listResponse = await mine.get('/api/staff/security/sessions', {
+            headers: { Accept: 'application/json' },
+        });
+        expect(listResponse.status(), 'the sessions list was refused').toBe(200);
+
+        const { sessions } = (await listResponse.json()) as {
+            sessions: {
+                digest: string;
+                current: boolean;
+                device_label: string;
+                location: string | null;
+            }[];
+        };
+
+        expect(sessions.length, 'both browsers must be listed').toBe(2);
+
+        const current = sessions.find((row) => row.current);
+        const other = sessions.find((row) => !row.current);
+        expect(current, 'no row is marked as the current session').toBeTruthy();
+        expect(other, 'the sibling browser is missing from the list').toBeTruthy();
+        expect(sessions[0]?.current, '§8: the current device is pinned first').toBe(true);
+        expect(
+            current!.device_label.length,
+            'T-03: the current row carries a parsed device label',
+        ).toBeGreaterThan(0);
+
+        const token = decodeURIComponent((await cookieValue(mine, 'XSRF-TOKEN'))!);
+
+        // The current session is refused by single revoke — logout owns that.
+        const selfRevoke = await mine.delete(`/api/staff/security/sessions/${current!.digest}`, {
+            headers: { Accept: 'application/json', 'X-XSRF-TOKEN': token },
+        });
+        expect(
+            selfRevoke.status(),
+            'revoking the CURRENT session must be refused — sawing off the branch you sit on has a dedicated verb (logout)',
+        ).toBe(422);
+
+        // Revoke all others: the sibling dies, this browser survives.
+        const revokeOthers = await mine.post('/api/staff/security/sessions/revoke-others', {
+            headers: { Accept: 'application/json', 'X-XSRF-TOKEN': token },
+        });
+        expect(revokeOthers.status(), 'revoke-others was refused').toBe(200);
+        expect(((await revokeOthers.json()) as { count: number }).count).toBe(1);
+
+        const siblingAfter = await sibling.get('/api/staff/settings', {
+            headers: { Accept: 'application/json' },
+        });
+        expect(
+            siblingAfter.status(),
+            'SEV-1: the sibling session survived revoke-others (US-03)',
+        ).not.toBe(200);
+
+        // POSITIVE CONTROL: the revoking browser itself still works.
+        const mineAfter = await mine.get('/api/staff/settings', {
+            headers: { Accept: 'application/json' },
+        });
+        expect(mineAfter.status(), 'revoke-others took the current session with it').toBe(200);
+
+        await mine.dispose();
+        await sibling.dispose();
+    });
+
+    test('FR-12: the /security page is served to a signed-in agent and gated from guests', async ({
+        baseURL,
+    }) => {
+        // The PHP suite cannot touch this route: stage 3 builds no assets, so
+        // @vite has no manifest there (the S0 lesson). Here the real page is
+        // served with the real build.
+        const guest = await freshContext(baseURL!);
+        const guestResponse = await guest.get('/security', {
+            headers: { Accept: 'text/html' },
+            maxRedirects: 0,
+        });
+        expect(
+            guestResponse.status(),
+            'a guest reached the Security page — auth:staff is not gating it',
+        ).not.toBe(200);
+
+        const ctx = await freshContext(baseURL!);
+        expect((await login(ctx)).status(), 'login failed').toBe(200);
+
+        const page = await ctx.get('/security', { headers: { Accept: 'text/html' } });
+        expect(page.status(), 'the Security page was refused to a signed-in agent').toBe(200);
+
+        const html = await page.text();
+        // Inertia JSON-escapes the component name in data-page, so the slash
+        // arrives as `Security\/Devices` — matching the unescaped form fails
+        // against a perfectly correct page.
+        expect(
+            html.includes('Security\\/Devices'),
+            'the response is not the Inertia Security/Devices page',
+        ).toBe(true);
+
+        await guest.dispose();
+        await ctx.dispose();
+    });
+
     test('logout ends the session for subsequent requests', async ({ baseURL }) => {
         const ctx = await freshContext(baseURL!);
 

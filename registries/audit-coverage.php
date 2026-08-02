@@ -178,4 +178,14 @@ return [
         'required_fields' => ['reason', 'session_id'],
         'owning_doc' => 'Doc02',
     ],
+    [
+        'action_key' => 'auth.session.revoked_others',
+        'entity' => 'user',
+        // FR-12's bulk action, audited ONCE per press — including the empty
+        // case, where no per-session auth.session.revoked entry exists to
+        // carry the fact that the button was pressed at all.
+        'actor_types' => ['staff'],
+        'required_fields' => ['count', 'reason'],
+        'owning_doc' => 'Doc02',
+    ],
 ];

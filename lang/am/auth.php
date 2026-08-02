@@ -39,4 +39,27 @@ return [
         'too_many_requests' => 'ከዚህ ግንኙነት በጣም ብዙ ሙከራዎች። ትንሽ ቆይተው ይሞክሩ።',
     ],
 
+    // Machine-authored, pending native review (the standing pre-launch item).
+    'devices' => [
+        'title' => 'መሣሪያዎች',
+        'subtitle' => 'አሁን የገቡባቸው ቦታዎች በሙሉ። የማያውቁትን ይሰርዙ።',
+        'column_device' => 'መሣሪያ',
+        'column_first_seen' => 'መጀመሪያ የታየው',
+        'column_last_active' => 'መጨረሻ ንቁ የነበረው',
+        'column_ip' => 'የአይፒ አድራሻ',
+        'column_location' => 'አካባቢ',
+        'current_badge' => 'ይህ መሣሪያ',
+        'location_unavailable' => 'አካባቢ አይገኝም',
+        'revoke' => 'ሰርዝ',
+        'revoke_confirm' => 'መሰረዙን አረጋግጥ',
+        'revoke_others' => 'ሌሎች ክፍለ-ጊዜዎችን በሙሉ ሰርዝ',
+        'revoke_others_title' => 'ሌሎች ክፍለ-ጊዜዎችን በሙሉ ይሰረዙ?',
+        'revoke_others_body' => 'ከዚህ በስተቀር ሁሉም ክፍለ-ጊዜዎች ወዲያውኑ ይወጣሉ፤ በሌሎች መሣሪያዎች ላይ የተከፈቱ ትሮችም ጭምር።',
+        'cancel' => 'ተወው',
+        'only_here' => 'የገቡት እዚህ ብቻ ነው።',
+        'load_failed' => 'ክፍለ-ጊዜዎችዎን መጫን አልተቻለም። እንደገና ለመሞከር ገጹን ያድሱ።',
+        'cannot_revoke_current' => 'ይህ አሁን ያሉበት ክፍለ-ጊዜ ነው። ለመጨረስ መውጫውን ይጠቀሙ።',
+        'session_not_found' => 'ያ ክፍለ-ጊዜ ከእንግዲህ የለም።',
+    ],
+
 ];

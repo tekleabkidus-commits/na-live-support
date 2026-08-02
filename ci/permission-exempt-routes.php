@@ -38,6 +38,18 @@ return [
     'auth.login' => 'Authentication establishes the principal; there is no principal yet to hold a permission.',
     'auth.logout' => 'A session owner may always end their own session; no permission gates it.',
 
+    /*
+     | Doc 02 FR-12's Security page: self-service over the caller's OWN sessions
+     | only — no parameter can name another user, so there is no object to
+     | authorize beyond authentication. Doc 03's catalog is closed (BR-03) and
+     | deliberately contains no profile.* key; inventing one here would violate
+     | the catalog's authority the same way a free-text permission would.
+     */
+    'auth.security.page' => 'Self-service Security page shell; the caller sees only their own sessions.',
+    'auth.sessions.index' => 'Self-service: lists only the authenticated caller\'s own sessions (FR-12).',
+    'auth.sessions.revoke' => 'Self-service: a session owner may always end their own session, as with logout.',
+    'auth.sessions.revoke_others' => 'Self-service: bulk form of the same right; scoped to the caller by construction.',
+
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
     'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',

@@ -53,14 +53,28 @@ final class AuthSessionInspect extends Command
      */
     private function limiterKeys(): array
     {
+        // THE ORIGINAL PATTERN ('*auth-ip*') MATCHED NOTHING, EVER. Laravel's
+        // named-limiter middleware stores hits under md5(limiterName.by-key),
+        // so the limiter's NAME never appears in Redis — clear-throttle was a
+        // placebo from S9 until S10, and the serial suite merely stayed under
+        // the 20/minute budget until one more test tipped it over. Discovered
+        // when the command reported "0" against a limiter that then served a
+        // 429. Limiter entries are the only cache keys that are a bare 32-hex
+        // hash (plus their `:timer` twin), which is what this matches.
         $cacheStore = config('cache.default');
         $connection = config(sprintf('cache.stores.%s.connection', is_string($cacheStore) ? $cacheStore : 'redis'));
         $redis = app(RedisFactory::class)->connection(is_string($connection) ? $connection : 'default');
 
-        /** @var list<string> $keys */
-        $keys = $redis->keys('*auth-ip*');
+        $cachePrefix = config('cache.prefix');
+        $cachePrefix = is_string($cachePrefix) ? $cachePrefix : '';
 
-        return $keys;
+        /** @var list<string> $keys */
+        $keys = $redis->keys(sprintf('*%s*', $cachePrefix));
+
+        return array_values(array_filter(
+            $keys,
+            static fn (string $key): bool => preg_match('/[0-9a-f]{32}(:timer)?$/', $key) === 1,
+        ));
     }
 
     private function withoutPrefix(string $key): string

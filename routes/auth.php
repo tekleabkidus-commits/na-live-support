@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\SecurityPageController;
 use App\Http\Controllers\Auth\StaffSessionController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,4 +73,11 @@ Route::middleware('auth:staff')->group(function (): void {
     Route::post('logout', [StaffSessionController::class, 'destroy'])
         ->middleware('audit:auth.logout')
         ->name('auth.logout');
+
+    // FR-12: profile → Security. The PAGE is a shell — the sessions table and
+    // its actions go through /api/staff/security/* (routes/api.php), which
+    // carry the full staff middleware chain. Self-service: see
+    // ci/permission-exempt-routes.php for why no permission key applies.
+    Route::get('security', [SecurityPageController::class, 'show'])
+        ->name('auth.security.page');
 });

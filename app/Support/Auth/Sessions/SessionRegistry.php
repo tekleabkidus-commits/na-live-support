@@ -46,6 +46,7 @@ final class SessionRegistry
         private readonly RedisFactory $redis,
         private readonly string $connection,
         private readonly int $ttlMinutes,
+        private readonly SessionMetadataStore $metadata,
     ) {}
 
     /**
@@ -153,6 +154,29 @@ final class SessionRegistry
     {
         $this->connection()->del(TenantPrefixedSessionHandler::keyFor($tenantId, $sessionId));
         $this->connection()->zrem($this->key($tenantId, $userId), $sessionId);
+
+        // FR-12's metadata dies with the session, last — a lingering meta hash
+        // with no session key is invisible (every reader goes through the live
+        // list), and its TTL bounds the residue anyway.
+        $this->metadata->forget($tenantId, $sessionId);
+    }
+
+    /**
+     * Live sessions with their last-activity timestamps, oldest first — the
+     * devices screen's "last active" column comes from the index's own scores
+     * (EnforceSessionLifetime refreshes them per request).
+     *
+     * @return array<string, int> session id => unix timestamp
+     */
+    public function liveSessionsWithActivity(string $tenantId, string $userId, ?string $assumeLive = null): array
+    {
+        $out = [];
+        foreach ($this->liveSessionsFor($tenantId, $userId, $assumeLive) as $sessionId) {
+            $score = $this->connection()->zscore($this->key($tenantId, $userId), $sessionId);
+            $out[$sessionId] = is_numeric($score) ? (int) $score : 0;
+        }
+
+        return $out;
     }
 
     /**

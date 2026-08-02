@@ -11,7 +11,9 @@ use App\Domain\Auth\Login\LoginRefused;
 use App\Domain\Auth\Login\StaffUserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Auth\Devices\DeviceRegistrar;
 use App\Support\Auth\Sessions\SessionLifetimePolicy;
+use App\Support\Auth\Sessions\SessionMetadataStore;
 use App\Support\Auth\Sessions\SessionRegistry;
 use App\Support\Auth\Sessions\SessionRevoker;
 use App\Support\Auth\Sessions\TenantHint;
@@ -58,6 +60,8 @@ final class StaffSessionController extends Controller
         private readonly SessionRegistry $sessions,
         private readonly SessionRevoker $revoker,
         private readonly SessionLifetimePolicy $lifetime,
+        private readonly DeviceRegistrar $devices,
+        private readonly SessionMetadataStore $sessionMetadata,
     ) {}
 
     /**
@@ -254,10 +258,28 @@ final class StaffSessionController extends Controller
             );
         }
 
-        // FR-04's device record and T-03's new-device notice arrive with the
-        // devices sub-step; until then the recorder is told plainly that neither
-        // exists yet rather than being fed a placeholder that looks real.
-        $this->recorder->succeeded($user, $request, deviceId: '', newDevice: false);
+        // FR-04/T-03: the device upsert — one row per (user, fingerprint),
+        // city resolved in-process and STORED (T-08, FS-04; ADR 0006). After
+        // the cap enforcement so an evicted session cannot carry a fresher
+        // device stamp than the login that evicted it.
+        ['device' => $device, 'new' => $newDevice] = $this->devices->record($user, $request, $now);
+
+        // FR-12: the facts the Security page shows for THIS session. The city
+        // may be null — that IS the FS-04 "location unavailable" state, stored
+        // as such rather than papered over.
+        $this->sessionMetadata->put($tenantId, $sessionId, [
+            'device_id' => $device->identifier(),
+            'device_label' => is_string($device->label) ? $device->label : '',
+            'ip' => $request->ip(),
+            'city' => is_string($device->last_city) ? $device->last_city : null,
+            'country_code' => is_string($device->last_country_code) ? $device->last_country_code : null,
+            'signed_in_at' => $now->toIso8601String(),
+        ]);
+
+        // T-03's notice itself is deferred with the notification pipeline
+        // (Docs 07/14); newDevice is recorded so the trail already says when a
+        // machine was first seen.
+        $this->recorder->succeeded($user, $request, deviceId: $device->identifier(), newDevice: $newDevice);
 
         $response = $request->expectsJson()
             // No tenant id, no workspace name, no candidate count: a successful
