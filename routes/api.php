@@ -65,6 +65,11 @@ Route::group([], function (): void {
         App\Http\Middleware\VerifyTenantHint::class,
         'tenant:staff_session',
         'tenant.state:staff',
+        // I-5: the C-08 chain's first hop. After the session middleware (the
+        // guard needs a started session to answer) and after tenant state (a
+        // refused tenant's problem-details render in the DEFAULT locale — the
+        // refusal must not vary by who asked).
+        App\Http\Middleware\ApplyUserLocale::class,
     ])
         ->prefix('staff')
         ->group(function (): void {

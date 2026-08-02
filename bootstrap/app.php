@@ -60,6 +60,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->appendToGroup('web', App\Http\Middleware\SecurityHeaders::class);
         $middleware->appendToGroup('api', App\Http\Middleware\SecurityHeaders::class);
+
+        // I-5 (Doc 01 → Doc 02 inherited task): the per-request user-locale hop
+        // of C-08's chain. In the web GROUP so every authenticated page renders
+        // in the user's language without each route opting in; a guest request
+        // is a no-op. The staff API group appends it in routes/api.php, where
+        // ordering against tenant middleware is explicit.
+        $middleware->appendToGroup('web', App\Http\Middleware\ApplyUserLocale::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
