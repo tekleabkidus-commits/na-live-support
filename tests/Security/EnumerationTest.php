@@ -318,3 +318,118 @@ it('never reveals which of several tenants the address belongs to, even on SUCCE
         ->and($body)->not->toContain('candidates')
         ->and($body)->not->toContain('tenant');
 })->group('enumeration');
+
+/*
+|--------------------------------------------------------------------------
+| AC-01's RESET half — unproven since S4, closed in S12 (Doc 02 step 8)
+|--------------------------------------------------------------------------
+|
+| Same two dimensions as the login half, one difference in mechanism: the
+| request path's work is token minting and mail queuing, not argon2id, so the
+| equalizer is a fixed RESPONSE FLOOR (UniformResponseFloor) rather than
+| dummy verifications. The floor assertion below is what keeps it alive — the
+| deltas alone would stay green if someone deleted the floor today, because
+| the raw per-candidate work is single-digit milliseconds. That is the S4
+| both-paths-got-cheap lesson applied at design time.
+*/
+
+function postForgot(string $email): array
+{
+    $response = test()
+        ->withServerVariables(['REMOTE_ADDR' => '198.51.100.'.random_int(2, 250)])
+        ->postJson('https://localhost/forgot-password', ['email' => $email]);
+
+    return [
+        'status' => $response->getStatusCode(),
+        'body' => $response->getContent() ?: '',
+    ];
+}
+
+it('returns a byte-identical reset-request body across 0, 1 and N candidate addresses (AC-01 reset half)', function () {
+    Illuminate\Support\Facades\Mail::fake();
+    [$tenantA] = enumerationTenant();
+
+    $tenantB = createTenant();
+    asTenant($tenantB, fn (): User => User::factory()->create([
+        'email' => 'real.account@fixture.example',
+        'password' => Hash::make('a-different-password-entirely'),
+        'password_set_at' => now(),
+    ]));
+    activateTenant($tenantB);
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    $none = postForgot('no.such.account@fixture.example');
+    $many = postForgot('real.account@fixture.example');
+
+    // An INVITED account is a third refusal shape hiding inside the same
+    // response (no token minted, per the eligibility rules).
+    $tenantC = createTenant();
+    asTenant($tenantC, fn (): User => User::factory()->create([
+        'email' => 'invited.reset@fixture.example',
+        'password' => Hash::make(bin2hex(random_bytes(32))),
+        'password_set_at' => null,
+    ]));
+    activateTenant($tenantC);
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    $invited = postForgot('invited.reset@fixture.example');
+
+    expect($many['status'])->toBe($none['status'])
+        ->and($many['body'])->toBe($none['body'])
+        ->and($invited['body'])->toBe($none['body']);
+
+    // R-7 belt-and-braces: no response hints at the multi-tenant escape
+    // hatch, which lives in runbook copy only.
+    foreach ([$none, $many, $invited] as $response) {
+        expect(strtolower($response['body']))->not->toContain('workspace')
+            ->and(strtolower($response['body']))->not->toContain('tenant');
+    }
+})->group('enumeration');
+
+it('answers reset requests at the fixed floor whatever matched — and the floor is provably alive', function () {
+    Illuminate\Support\Facades\Mail::fake();
+    [$tenantA] = enumerationTenant();
+
+    $tenantB = createTenant();
+    asTenant($tenantB, fn (): User => User::factory()->create([
+        'email' => 'real.account@fixture.example',
+        'password' => Hash::make('a-different-password-entirely'),
+        'password_set_at' => now(),
+    ]));
+    activateTenant($tenantB);
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    // Handler level, not HTTP, for the same reason the login half measures
+    // the provider: request overhead swamps single-digit-ms signals.
+    $handler = app(App\Domain\Auth\Password\ResetRequestHandler::class);
+    $request = Illuminate\Http\Request::create('https://localhost/forgot-password', 'POST');
+
+    $measure = function (string $email) use ($handler, $request): float {
+        $handler->handle($email, $request, Carbon\CarbonImmutable::now()); // warm
+
+        return floorOf(timeRequests(
+            fn () => $handler->handle($email, $request, Carbon\CarbonImmutable::now()),
+            5,
+        ));
+    };
+
+    $none = $measure('no.such.account@fixture.example');  // 0 candidates
+    $many = $measure('real.account@fixture.example');     // 2 candidates (tenants A and B) — the N shape
+
+    $report = sprintf('0-candidate %.1f ms | N-candidate %.1f ms', $none, $many);
+
+    expect(abs($none - $many))->toBeLessThan(AC01_TOLERANCE_MS, sprintf(
+        'AC-01 reset half: existence is timing-distinguishable on /forgot-password (%s).',
+        $report,
+    ));
+
+    // THE ASSERTION THAT KEEPS THE EQUALIZER ALIVE: every path takes at least
+    // the declared floor. Delete UniformResponseFloor's sleep and this goes
+    // red even though the deltas above would not.
+    $floor = App\Domain\Auth\Password\UniformResponseFloor::FLOOR_MS;
+    expect($none)->toBeGreaterThanOrEqual($floor, sprintf('0-candidate path answered below the %s ms floor (%s)', $floor, $report))
+        ->and($many)->toBeGreaterThanOrEqual($floor, sprintf('N-candidate path answered below the %s ms floor (%s)', $floor, $report));
+})->group('enumeration');
