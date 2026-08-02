@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — 7 of 14 planned steps** | S4–S9 | AC-01 partial (login half), AC-02 covered; 7 ACs not-implemented | Landed: explicit-route policy (Fortify auto-routes off permanently), staff/api guards, T-07 headers, TLS everywhere (SEC-06), the auth schema + three pre-tenant SECURITY DEFINER doors, and the login core with AC-01 equalisation. **CI-proven on `9d43fa0`: run [30666654533](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30666654533), Stages 1–6 green.** Session STORAGE landed (tenant-prefixed + signed hint); session LIFECYCLE (cap, timeouts, revocation, socket close, suspension-kill), 2FA, password lifecycle, tokens, widget, webhook auth, views — NOT STARTED. **A harness blocker now gates several proofs — see the S6 section** |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — step 6 COMPLETE (8 of 14 steps)** | S4–S10 | AC-01 partial (login half), AC-02 covered, **AC-04 covered (both halves, falsified)**; 6 ACs not-implemented | Step 6 closed in S10: AC-04 socket close proven ≤2 s (the S9 401 was body_md5, not route params), I-5 locale hop live, devices screen + GeoIP stub (ADR 0006) with FS-04 degradation, FR-11 middleware WIRED (it had been attached nowhere), clear-throttle made real (it had matched nothing since S9). Local: pest 239/2411 assertions, browser 13/13 ×3 consecutive, gates 10/10, lint clean. **CI pending push — see S10.** Remaining: 2FA, password lifecycle, tokens, widget, webhook auth, SEC-08, views |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -690,6 +690,96 @@ run was cached. **A cached type-check is not evidence.**
 
 The per-request locale hop (I-5) and the devices screen with GeoIP (ADR 0006 unwritten).
 
+
+## Session-10 report (Doc 02 step 6 CLOSED — socket proof, locale hop, devices + GeoIP)
+
+**Evidence: pest 239 passed / 11 skipped (2411 assertions); browser 13 passed — three
+consecutive full runs; `make gates` 10/10; Pint + PHPStan(max) + ESLint + vue-tsc clean
+(vue-tsc uncached). CI NOT yet run on these commits — the owner pushes; local evidence
+only until then.**
+
+### AC-04's socket half: proven, and the S9 diagnosis was wrong
+
+Reverb's 401 was never about route parameters. The installed
+`Controller::verifySignature` parses the URI query only; the real mismatch was
+**body_md5**: `Http::post()` with no data still sends the two-byte JSON body `[]`, Reverb
+folds `md5(body)` into the signed params, and the revoker signed without it. Second S9
+error: this Reverb version has **no `pusher:signin` at all** (grep the vendor tree) — the
+test's signin frame was silently ignored, so Reverb never knew the socket belonged to the
+user and correctly terminated nothing. The test now subscribes to a presence channel
+whose `channel_data` carries the user id (with `user_info`, whose absence throws a
+misleading 4200 deep in presence bookkeeping — diagnosed only under `reverb:start
+--debug`). The revoker sends a genuinely empty body via `send()` and builds sign-string
+and wire-string from ONE param array (raw `key=value` join, exactly as
+`formatQueryParametersForVerification` does). **Falsified: signed string corrupted while
+the wire string stayed correct → red at the 2 s deadline with the socket open; restored →
+socket closes in ~0.3 s.** Bonus NFR-04 fix: the HTTP client does not throw on 401, so a
+refused terminate was SILENT fail-open; non-2xx now logs
+`auth.session.socket_close_failed`.
+
+### I-5: the C-08 chain's first hop, per request
+
+`ApplyUserLocale` (web group + staff API) makes `users.locale` the request locale;
+proven end-to-end on localized problem-details bodies, with a positive control proving
+the en/am sentinel strings differ (identical translations would green every assertion).
+The Octane half — restore in `finally` — is proven by two users through ONE application
+instance. **Falsified twice: hop disabled → 2 red; restore removed → leak test red.**
+Malformed `users.locale` degrades to the chain with `i18n.invalid_user_locale` (it feeds
+the translation FileLoader's path — shape-checked, never trusted).
+
+### Devices screen + GeoIP (FR-04, FR-12, T-03, T-08, FS-04; ADR 0006 filed)
+
+| Piece | Evidence |
+|---|---|
+| ADR 0006 stub `.mmdb` | `fixtures/geoip/stub-city.mmdb` (1 030 bytes, RFC 5737 ranges only, en+am names) from a checked-in generator; validated by the OFFICIAL reader — different authors, so green ≠ shared format misreading |
+| T-08 resolver | in-process, fail-open with `auth.geoip.lookup_failed`; un-pins a broken handle so a replaced file heals without a deploy (`GeoIpTest`, 8 passed) |
+| FS-04 | corrupt database → login still succeeds, row stores IP only, API states `location: null`, screen renders the i18n "location unavailable" copy (`DeviceRegistrationTest`, `SecuritySessionsApiTest`) |
+| T-03 fingerprint | family+platform+accept-language+low-entropy hints; a browser UPGRADE is NOT a new device; label is data ("Chrome · Windows"), not copy (`DeviceRegistrationTest`, 6 passed) |
+| FR-12 API | sessions as sha256 DIGESTS (a session id is the credential — raw ids never leave the server); revoke-one refuses the current session (422 — logout owns that); revoke-others audits ONCE even when empty (`SecuritySessionsApiTest`, 7 passed) |
+| FR-12 end-to-end | browser: two real cookie jars, current badge, §8 current-first ordering, revoke-others kills the sibling and spares the caller; `/security` page served to staff, gated from guests (`session.spec.ts`, 13 passed) |
+| Cross-user attack | a digest for ANOTHER user's session resolves against the caller's own index → 404, victim session untouched |
+
+### THREE CONTROLS THAT EXISTED ONLY ON PAPER, found by wiring things up
+
+1. **`EnforceSessionLifetime` was attached NOWHERE.** S9 proved the timeout POLICY with
+   an injected clock; the middleware applying it to requests was dead code — FR-11 was
+   not actually enforced on any surface, and FR-12's "last active" never refreshed. Wired
+   into web + staff API (before tenant resolution, so expiry refuses like
+   unauthenticated). **Falsified: unwiring it turns two tests red.**
+2. **Wiring it immediately exposed a 500 on every expiry:** its `logout()` cycles the
+   remember token → a user SAVE with no tenant bound. The exact S6 `discard()` bug,
+   rediscovered the moment the code first ran. `forgetUser()` instead — which is also
+   what FR-13 wants (remember-me lives to the absolute limit by its own cookie).
+3. **`clear-throttle` had matched NOTHING since S9.** Named limiters store hits under
+   `md5(name.key)` — the string "auth-ip" never appears in Redis, so the S9 "fix" was a
+   placebo and the serial suite merely stayed under the 20/min budget until one more test
+   tipped it. Now matches the real hashed keys; three consecutive full browser runs
+   (≈39 logins inside a minute) pass where back-to-back runs previously 429'd.
+
+Also fixed on the way: guests hitting an authenticated page 500'd (`route('login')`
+does not exist until the views step) — `redirectGuestsTo('/')`, to be repointed at the
+real login screen with FR-11's return-URL notice when the views step builds it.
+
+### Deliberately NOT built in step 6, with reasons
+
+- **T-03's new-device NOTICE and its toggleable setting** — there is no notification
+  pipeline until Docs 07/14, and a setting nothing reads may not enter the registry.
+  `devices.notified_at` exists and stays null; the notice step owns both.
+- **FR-11's "session expired" notice + return-URL redirect UX** — the login SCREEN does
+  not exist (views step, AC-09). What is true now: expiry de-authenticates before any
+  handler runs.
+- **Localized GeoIP names are stored at login in the user's locale-at-login** (the row's
+  only reader is its owner). A user who changes language later sees the stored name until
+  their next login from that device — recorded as accepted behaviour, not a bug.
+
+### Standing notes
+
+- The devices-screen Amharic copy is machine-authored — joins the native-review item.
+- `lang/en/auth.php` gained the `devices` section; `registries/audit-coverage.php` gained
+  `auth.session.revoked_others`; four self-service routes joined
+  `ci/permission-exempt-routes.php` (Doc 03's catalog is closed and has no profile.* key
+  — inventing one would violate BR-03).
+- Traceability: Doc02 AC-04 is now `covered` with both falsifications recorded.
 
 ## Deferred with reason
 
