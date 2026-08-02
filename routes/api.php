@@ -232,9 +232,58 @@ Route::group([], function (): void {
         ->post('webhooks/telegram', [IngressProbeController::class, 'ingest'])
         ->name('foundation.webhook.telegram');
 
-    Route::middleware(['tenant:widget_key', 'tenant.state:inbound'])
-        ->post('widget/session', [IngressProbeController::class, 'ingest'])
-        ->name('foundation.widget.session');
+    /*
+     | ── The WIDGET surface (Doc 02 FR-21/FR-22, T-02, T-06, BR-06, AC-06).
+     |
+     | Supersedes Doc 01's widget ingress probe with the real session issuer,
+     | on the same trust model: `tenant:widget_key` resolves the tenant from
+     | the widget key, `tenant.state:inbound` keeps a suspended operator's
+     | visitors alive (their chat identity is inbound state; what suspension
+     | stops is outbound sends).
+     |
+     | Order is T-02's: tenant-resolve → guard → tenant-state, with WidgetCors
+     | between binder and guard — INSIDE the binder because its response-side
+     | allowlist stamp reads the widgets table under the bound RLS scope,
+     | OUTSIDE the guard so the guard's own 401 reaches an allowed page
+     | CORS-readable (the mismatch→re-POST /session recovery depends on it).
+     | bootstrap/app.php's priority-list entries make this executed order
+     | real; MiddlewareOrderTest asserts it.
+     |
+     | BR-06 structurally: separate route group, separate guard whose
+     | principal is not a User, separate cookie scope (Path=/api/widget).
+     | No cookie/session middleware here — the FR-22 cookie is set raw on the
+     | response and read raw from the request.
+     |
+     | Like the bearer surface, PROBE-ONLY beyond session issuance: the
+     | context probe and the Reverb auth door are the whole authenticated
+     | subset until Docs 04/13 mount real endpoints on THIS stack.
+     */
+    Route::prefix('widget/v1')->group(function (): void {
+        // Preflights carry no key and can never resolve a tenant; they land
+        // here, on WidgetCors alone. See WidgetPreflightController.
+        Route::options('{any}', App\Http\Controllers\Widget\WidgetPreflightController::class)
+            ->where('any', '.*')
+            ->middleware(App\Http\Middleware\WidgetCors::class)
+            ->name('auth.widget.preflight');
+
+        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, 'tenant.state:inbound'])
+            ->post('session', [App\Http\Controllers\Widget\WidgetSessionController::class, 'store'])
+            ->name('auth.widget.session');
+
+        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, 'auth:widget', 'tenant.state:inbound'])
+            ->group(function (): void {
+                Route::get('context', [IngressProbeController::class, 'show'])
+                    ->name('auth.widget.context');
+
+                // FR-21's "that visitor's own Reverb channels": the widget
+                // surface's OWN broadcasting-auth door. The visitor channel in
+                // routes/channels.php names the widget guard; the staff door
+                // (Doc 07's, when it builds one) will never accept a visitor
+                // token any more than this one accepts a staff session.
+                Route::post('broadcasting/auth', [Illuminate\Broadcasting\BroadcastController::class, 'authenticate'])
+                    ->name('auth.widget.broadcast');
+            });
+    });
 
     Route::middleware(['tenant:sms_gateway_key', 'tenant.state:inbound'])
         ->post('webhooks/sms/dlr', [IngressProbeController::class, 'ingest'])

@@ -50,6 +50,8 @@ return [
         'invalid_token' => 'ልክ ያልሆነ የኤፒአይ ቶከን',
         'token_expired' => 'የኤፒአይ ቶከን ጊዜው አልፏል',
         'insufficient_scope' => 'የጎደለ ፈቃድ',
+        // Doc 02 FR-21/AC-06: widget session refused — origin or ancestor off-list.
+        'origin_not_allowed' => 'ይህ ድረ-ገጽ ይህን የውይይት መስኮት መጠቀም አይችልም',
     ],
 
     'provisioning' => [

@@ -96,6 +96,23 @@ return [
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
     'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',
-    'foundation.widget.session' => 'Channel-key-authenticated ingress (Doc 01 FR-03d); staff permissions do not apply. Doc 13 revisits.',
     'foundation.webhook.sms_dlr' => 'Channel-key-authenticated ingress (Doc 01 FR-03e); staff permissions do not apply. Doc 14 revisits.',
+
+    /*
+     | Doc 02 step 10: the visitor surface (FR-21/FR-22, BR-06).
+     |
+     | Staff permission keys CANNOT apply here as a matter of structure, not
+     | convenience: the principal is a WidgetVisitor, which holds no roles and
+     | no permissions, and BR-06 forbids any path from this surface into the
+     | staff permission model. Authentication is the widget key (tenant
+     | resolution) plus the visitor token+cookie pair (the widget guard);
+     | authorization is "your own session, your own channels", enforced by
+     | construction in the guard and the channel callbacks. Doc 13's real
+     | endpoints inherit these exemptions' SHAPE (visitor-token scoped, per
+     | its T-03), not staff keys.
+     */
+    'auth.widget.session' => 'Widget-key-authenticated issuance (FR-21); the caller is an anonymous visitor — no staff principal exists to hold a permission.',
+    'auth.widget.context' => 'Resolution probe on the visitor surface: reports the visitor\'s own resolved context; visitor-token + cookie authenticated (widget guard).',
+    'auth.widget.broadcast' => 'Reverb auth for the visitor\'s OWN channels only (FR-21); enforced by the channel callback comparing principal to channel name, not by a permission key.',
+    'auth.widget.preflight' => 'CORS preflight catch-all (T-06): no credential, no principal, headers-only response.',
 ];

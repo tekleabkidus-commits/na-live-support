@@ -42,6 +42,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ResolveTenant
 {
+    /**
+     * Where the resolved tenant_keys row id is stashed for key-based paths
+     * (Doc 02 FR-21). The widget surface needs to know WHICH key resolved the
+     * request — the key is the widget's identity — and the resolver already
+     * pays for that answer; this hands it to the controller/guard without a
+     * second lookup. Same pattern as ResolveBearerTenant::TOKEN_ID_ATTRIBUTE.
+     * Null-for-session paths is implicit: the attribute is simply never set.
+     */
+    public const KEY_ID_ATTRIBUTE = 'resolved_tenant_key_id';
+
     public function __construct(
         private readonly TenantResolver $resolver,
         private readonly TenantContext $context,
@@ -68,6 +78,10 @@ final class ResolveTenant
         // but only if it is a well-formed uuid — an unvalidated value would let a
         // caller poison the log stream of every job this request spawns.
         $correlationId = $this->inboundCorrelationId($request);
+
+        if ($resolved->keyId !== null) {
+            $request->attributes->set(self::KEY_ID_ATTRIBUTE, $resolved->keyId);
+        }
 
         $this->context->bind($resolved->tenantId, $resolved->source, $correlationId);
         $this->rls->set($resolved->tenantId);

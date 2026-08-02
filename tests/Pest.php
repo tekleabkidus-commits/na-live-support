@@ -210,12 +210,152 @@ function cleanupTenants(array $tenantIds): void
     $platform = DB::connection('pgsql_platform');
 
     foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
-        'tenant_provisioning_steps', 'tenant_quota_usage', 'tenant_keys',
+        'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'tenant_keys',
         'personal_access_tokens', 'users'] as $table) {
         $platform->table($table)->whereIn('tenant_id', $tenantIds)->delete();
     }
 
     $platform->table('tenants')->whereIn('id', $tenantIds)->delete();
+}
+
+/*
+|--------------------------------------------------------------------------
+| Widget-surface fixtures (Doc 02 step 10 — FR-21/FR-22)
+|--------------------------------------------------------------------------
+|
+| Shared here rather than defined in one suite because Pest only discovers the
+| files it is asked to run: a helper defined in WidgetSessionTest.php would
+| make `pest tests/Feature/Auth/WidgetTokenTheftTest.php` fatal on an
+| undefined function, and targeted runs are the standing iteration mode.
+|
+*/
+
+const WIDGET_ORIGIN = 'https://help.fixture-operator.example';
+
+/**
+ * A tenant with a widget key and (unless told otherwise) its minimal FR-21
+ * widget record. Returns [tenant, widget|null, key plaintext] with all
+ * context cleared — callers make real HTTP requests from a cold start.
+ *
+ * @param  list<string>  $origins
+ * @return array{0: Tenant, 1: App\Models\Widget|null, 2: string}
+ */
+function widgetFixture(array $origins = [WIDGET_ORIGIN], bool $withWidgetRecord = true): array
+{
+    $tenant = createTenant();
+
+    [$widget, $plaintext] = asTenant($tenant, function () use ($origins, $withWidgetRecord): array {
+        $issued = app(App\Support\Tenancy\TenantKeyIssuer::class)->issue(
+            kind: 'widget',
+            label: 'fixture widget',
+            actor: AuditActor::PlatformAdmin,
+        );
+
+        $widget = null;
+        if ($withWidgetRecord) {
+            $widget = App\Models\Widget::query()->create([
+                'key_id' => $issued['key']->getKey(),
+                'allowed_origins' => $origins,
+            ]);
+        }
+
+        return [$widget, $issued['plaintext']];
+    });
+
+    activateTenant($tenant);
+
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    return [$tenant, $widget, $plaintext];
+}
+
+/**
+ * POST /api/widget/v1/session as a page at WIDGET_ORIGIN (override via
+ * $headers). $cookie is the raw FR-22 cookie — the widget surface runs no
+ * cookie encryption, so it travels unencrypted exactly as in production.
+ */
+/**
+ * The test client accumulates cookies set by earlier requests in the same
+ * test (withUnencryptedCookie writes a persistent jar) — so "this request
+ * carries NO cookie" must be enforced, not assumed. Without this reset, the
+ * theft suite's bare-token request silently rode the victim's earlier cookie
+ * and proved nothing.
+ */
+function resetWidgetClient(): void
+{
+    app('auth')->forgetGuards();
+
+    $testCase = test();
+
+    // Pest hands back a forwarding proxy, not the TestCase — method calls
+    // pass through it, reflection does not.
+    if ($testCase instanceof Pest\Support\HigherOrderTapProxy) {
+        $testCase = $testCase->target;
+    }
+
+    $reflection = new ReflectionObject($testCase);
+
+    foreach (['defaultCookies' => [], 'unencryptedCookies' => [], 'withCredentials' => false] as $property => $empty) {
+        $reflected = $reflection->getProperty($property);
+        $reflected->setValue($testCase, $empty);
+    }
+}
+
+function widgetSession(string $keyPlaintext, array $headers = [], array $body = [], ?string $cookie = null): Illuminate\Testing\TestResponse
+{
+    resetWidgetClient();
+
+    $request = test()->withHeaders(array_merge([
+        'Authorization' => 'Bearer '.$keyPlaintext,
+        'Origin' => WIDGET_ORIGIN,
+    ], $headers));
+
+    if ($cookie !== null) {
+        // withCredentials(), or the cookie never leaves the jar: Laravel's
+        // JSON test requests mirror fetch() semantics and omit cookies unless
+        // credentials mode is on — which is also exactly how the real widget
+        // client must call this surface (fetch {credentials:'include'}).
+        $request = $request->withUnencryptedCookie('nlw_visitor', $cookie)->withCredentials();
+    }
+
+    return $request->postJson('https://localhost/api/widget/v1/session', $body);
+}
+
+/**
+ * GET the widget context probe as an authenticated visitor (or a pretender —
+ * pass a wrong/absent cookie to be one).
+ */
+function widgetContext(string $keyPlaintext, string $token, ?string $cookie, array $headers = []): Illuminate\Testing\TestResponse
+{
+    resetWidgetClient();
+
+    $request = test()->withHeaders(array_merge([
+        'Authorization' => 'Bearer '.$keyPlaintext,
+        'Origin' => WIDGET_ORIGIN,
+        'X-Visitor-Token' => $token,
+    ], $headers));
+
+    if ($cookie !== null) {
+        // See widgetSession() on why withCredentials() is required.
+        $request = $request->withUnencryptedCookie('nlw_visitor', $cookie)->withCredentials();
+    }
+
+    return $request->getJson('https://localhost/api/widget/v1/context');
+}
+
+/**
+ * The FR-22 cookie a response set, or fail the test asking for it.
+ */
+function visitorCookieFrom(Illuminate\Testing\TestResponse $response): string
+{
+    foreach ($response->baseResponse->headers->getCookies() as $cookie) {
+        if ($cookie->getName() === 'nlw_visitor') {
+            return (string) $cookie->getValue();
+        }
+    }
+
+    test()->fail('No nlw_visitor cookie on the response.');
 }
 
 /*

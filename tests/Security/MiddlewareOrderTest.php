@@ -142,6 +142,70 @@ it('keeps the bearer surface stateless — no session, no cookies, no CSRF in th
     }
 });
 
+it('orders the EXECUTED widget stack binder → CORS → guard → state (T-02, step 10)', function () {
+    // Step 9's sorter lesson, applied to the new surface before it could bite:
+    // Authenticate is priority-listed, so without bootstrap/app.php's entries
+    // for ResolveTenant and WidgetCors it would hop over both — the widget
+    // guard would run with no tenant bound (500), and the guard's 401s would
+    // leave without CORS headers, unreadable to the allowed page whose
+    // recovery path is "on 401, re-POST /session".
+    $route = Route::getRoutes()->getByName('auth.widget.context');
+    expect($route)->not->toBeNull('route auth.widget.context is not registered');
+
+    $sorted = app('router')->gatherRouteMiddleware($route);
+
+    $binder = null;
+    $cors = null;
+    $guard = null;
+    $state = null;
+
+    foreach ($sorted as $i => $mw) {
+        if (! is_string($mw)) {
+            continue;
+        }
+        if (str_starts_with($mw, App\Http\Middleware\ResolveTenant::class)) {
+            $binder = $i;
+        }
+        if (str_starts_with($mw, App\Http\Middleware\WidgetCors::class)) {
+            $cors = $i;
+        }
+        if (str_starts_with($mw, Illuminate\Auth\Middleware\Authenticate::class)) {
+            $guard = $i;
+        }
+        if (str_starts_with($mw, App\Http\Middleware\EnforceTenantState::class)) {
+            $state = $i;
+        }
+    }
+
+    expect($binder)->not->toBeNull('widget binder missing from the executed stack')
+        ->and($cors)->not->toBeNull('WidgetCors missing from the executed stack')
+        ->and($guard)->not->toBeNull('auth:widget guard missing from the executed stack')
+        ->and($state)->not->toBeNull('tenant.state missing from the executed stack')
+        ->and($binder)->toBeLessThan($cors, 'CORS would stamp against a cleared RLS scope')
+        ->and($cors)->toBeLessThan($guard, 'the guard 401 would leave CORS-unreadable')
+        ->and($guard)->toBeLessThan($state);
+});
+
+it('keeps the widget surface sessionless — no session, no cookie encryption, no CSRF in the executed stack (BR-06, T-06)', function () {
+    // BR-06's "separate cookie scope" as an absence: the FR-22 visitor cookie
+    // is set raw and read raw, so no cookie middleware belongs here — and a
+    // staff session cookie arriving on this surface is inert bytes, because
+    // nothing on the stack even decrypts it.
+    $route = Route::getRoutes()->getByName('auth.widget.session');
+    $sorted = app('router')->gatherRouteMiddleware($route);
+
+    foreach ($sorted as $mw) {
+        if (! is_string($mw)) {
+            continue;
+        }
+
+        expect($mw)
+            ->not->toContain('StartSession')
+            ->not->toContain('ValidateCsrfToken')
+            ->not->toContain('EncryptCookies');
+    }
+});
+
 it('registers the permission alias to the RequirePermission middleware', function () {
     $aliases = app('router')->getMiddleware();
 

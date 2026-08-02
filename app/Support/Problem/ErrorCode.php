@@ -103,6 +103,14 @@ enum ErrorCode: string
     case InsufficientScope = 'insufficient_scope';
 
     /**
+     * FR-21/AC-06/EC-08: a widget session request from an origin (or with a
+     * frame ancestor) outside the widget's domain allowlist. ONE code for
+     * origin and ancestor refusals alike — distinguishing them would tell a
+     * probing page which of its two identities failed. 403.
+     */
+    case OriginNotAllowed = 'origin_not_allowed';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

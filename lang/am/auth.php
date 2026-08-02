@@ -47,6 +47,11 @@ return [
         'insufficient_scope' => 'ይህ ቶከን የ :permission ፈቃድን አላካተተም።',
     ],
 
+    // FR-21/AC-06/EC-08: the widget session refusal (see lang/en/auth.php).
+    'widget' => [
+        'origin_not_allowed' => 'ይህ ገጽ በመስኮቱ የተፈቀዱ ድረ-ገጾች ዝርዝር ውስጥ የለም። የድረ-ገጹ ባለቤት ዝርዝሩን በመስኮት ማስተካከያዎች ውስጥ ማዘመን ይችላል።',
+    ],
+
     // Machine-authored, pending native review (the standing pre-launch item).
     '2fa' => [
         'no_pending' => 'መጀመሪያ በይለፍ ቃልዎ ይግቡ።',

@@ -33,8 +33,25 @@ return [
      | docs/BUILD-STATUS.md as an inherited task rather than left to be noticed.
      */
     'foundation.webhook.telegram' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 05 must remove this line when it adds a real handler.',
-    'foundation.widget.session' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 13 must remove this line when it adds a real handler.',
     'foundation.webhook.sms_dlr' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 14 must remove this line when it adds a real handler.',
+
+    /*
+     | Doc 02 step 10: the widget probe's promised replacement (FR-21/FR-22).
+     |
+     | The session issuer mutates REDIS ONLY — an anonymous visitor credential
+     | with no tenant DB write. Doc 02 §4.8 defines the closed auth event set
+     | and deliberately contains no visitor-session event: visitors are
+     | anonymous (N-06) and high-volume, and an audit row per widget page-load
+     | would be a firehose of nothing. Refusals and theft-shaped mismatches DO
+     | leave evidence — the widget.origin_blocked / widget.visitor_reissued
+     | security metrics, which Doc 13's Health tab and Doc 18's monitoring
+     | consume. When Doc 04/13 give a visitor's FIRST MESSAGE a durable effect
+     | (conversation, shell customer), those mutations audit under their own
+     | documents' actions.
+     */
+    'auth.widget.session' => 'FR-21 issuance mutates Redis only; §4.8\'s closed event set has no visitor event (step-10 ruling). Refusals emit the widget.origin_blocked security metric instead.',
+    'auth.widget.broadcast' => 'Reverb channel authorization: grants a socket subscription, mutates nothing durable; the visitor channel callback is the enforcement point (FR-21).',
+    'auth.widget.preflight' => 'CORS preflight catch-all: answers OPTIONS with headers only; no credential is even readable at preflight time (T-06).',
 
     /*
      | Doc 02's two uniform-response request routes (SEC-01/AC-01). Both answer

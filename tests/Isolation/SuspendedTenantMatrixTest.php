@@ -51,7 +51,16 @@ function ac08Surfaces(): array
         'staff' => ['uri' => '/api/staff/context', 'method' => 'GET', 'kind' => null],
         'api' => ['uri' => '/api/v1/context', 'method' => 'GET', 'kind' => 'api'],
         'webhook_telegram' => ['uri' => '/api/webhooks/telegram', 'method' => 'POST', 'kind' => 'telegram_bot'],
-        'widget' => ['uri' => '/api/widget/session', 'method' => 'POST', 'kind' => 'widget'],
+        // Since Doc 02 step 10 this is the REAL session issuer, not the Doc 01
+        // probe — so the cell needs a genuine allowlisted Origin (the fixture
+        // widget row is seeded alongside the key below), and "accepted" is
+        // 201 issued-a-visitor-session rather than the probe's 202.
+        'widget' => [
+            'uri' => '/api/widget/v1/session',
+            'method' => 'POST',
+            'kind' => 'widget',
+            'headers' => ['Origin' => 'https://fixture-widget-host.example'],
+        ],
         'webhook_sms_dlr' => ['uri' => '/api/webhooks/sms/dlr', 'method' => 'POST', 'kind' => 'sms_gateway'],
     ];
 }
@@ -83,16 +92,21 @@ function ac08Expected(): array
             'staff' => 200,
             'api' => 200,
             'webhook_telegram' => 202,
-            'widget' => 202,
+            // 201 since Doc 02 step 10: the real FR-21 handler ISSUES a
+            // visitor session where the probe merely acknowledged (202).
+            'widget' => 201,
             'webhook_sms_dlr' => 202,
         ],
         // THE ROW THAT MATTERS. Staff out, outbound-capable API out, all three
-        // inbound surfaces still accepting. See the file docblock.
+        // inbound surfaces still accepting. See the file docblock. For the
+        // widget that now means a suspended operator's VISITORS still get
+        // their session identity (201) — their history survives suspension,
+        // which is US-02's "reactivation loses nothing" for web chat.
         'suspended' => [
             'staff' => 403,
             'api' => 403,
             'webhook_telegram' => 202,
-            'widget' => 202,
+            'widget' => 201,
             'webhook_sms_dlr' => 202,
         ],
         // Archived revokes every key (FR-05), so the four key-bearing surfaces stop
@@ -123,11 +137,22 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
             $issuer = app(TenantKeyIssuer::class);
             $out = [];
             foreach (['api', 'telegram_bot', 'widget', 'sms_gateway'] as $kind) {
-                $out[$kind] = $issuer->issue(
+                $issued = $issuer->issue(
                     kind: $kind,
                     label: 'ac08 '.$kind,
                     actor: AuditActor::PlatformAdmin,
-                )['plaintext'];
+                );
+                $out[$kind] = $issued['plaintext'];
+
+                // Doc 02 step 10: the widget surface's real handler refuses a
+                // key with no widget record (fail-closed), so the matrix seeds
+                // the minimal FR-21 shape its Origin header matches.
+                if ($kind === 'widget') {
+                    App\Models\Widget::query()->create([
+                        'key_id' => $issued['key']->getKey(),
+                        'allowed_origins' => ['https://fixture-widget-host.example'],
+                    ]);
+                }
             }
 
             return $out;
@@ -149,8 +174,10 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
 
             $response = $spec['kind'] === null
                 ? $this->actingAs($staffUser)->json($spec['method'], $spec['uri'])
-                : $this->withHeaders(['Authorization' => 'Bearer '.$plaintexts[$spec['kind']]])
-                    ->json($spec['method'], $spec['uri']);
+                : $this->withHeaders(array_merge(
+                    ['Authorization' => 'Bearer '.$plaintexts[$spec['kind']]],
+                    $spec['headers'] ?? [],
+                ))->json($spec['method'], $spec['uri']);
 
             $results[$stateName][$surface] = $response->status();
 

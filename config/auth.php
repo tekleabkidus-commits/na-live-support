@@ -33,12 +33,15 @@ return [
     |   api     Sanctum bearer tokens (personal + machine), stateless. Scope
     |           enforcement is the T-05 intersection, but the guard boundary
     |           itself never depends on scopes.
-    |   widget  registered by the widget step (FR-21) with its OWN driver whose
-    |           principal is a visitor record, NOT App\Models\User — so a widget
-    |           token can never satisfy `auth:staff`/`auth:api` regardless of any
-    |           scope misconfiguration (BR-06). It is absent here until that
-    |           driver exists: a guard entry pointing at an unregistered driver
-    |           would be dead config that LOOKS like a partition.
+    |   widget  the FR-21 visitor surface. Its driver's principal is a
+    |           WidgetVisitor value object, NOT App\Models\User — so a widget
+    |           token can never satisfy `auth:staff`/`auth:api` regardless of
+    |           any scope misconfiguration (BR-06): those guards retrieve Users
+    |           through user providers, and a visitor is not retrievable by
+    |           them in any configuration. Note the ABSENT `provider` key —
+    |           the widget guard consults the Redis visitor-token store, and
+    |           giving it a user provider would be handing it the exact
+    |           capability BR-06 exists to deny.
     |
     */
 
@@ -51,6 +54,10 @@ return [
         'api' => [
             'driver' => 'sanctum',
             'provider' => 'users',
+        ],
+
+        'widget' => [
+            'driver' => 'widget-visitor',
         ],
     ],
 

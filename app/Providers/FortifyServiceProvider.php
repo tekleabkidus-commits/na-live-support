@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Domain\Auth\Login\StaffLoginResolver;
 use App\Domain\Auth\Login\StaffUserProvider;
+use App\Domain\Auth\Widget\VisitorTokenStore;
+use App\Domain\Auth\Widget\WidgetGuard;
 use App\Support\Audit\AuditLogger;
 use App\Support\Auth\Sessions\SessionMetadataStore;
 use App\Support\Auth\Sessions\SessionRegistry;
@@ -55,6 +57,7 @@ final class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerStaffUserProvider();
+        $this->registerWidgetGuard();
         $this->registerAuthRateLimiter();
         $this->registerTenantPrefixedSessions();
         $this->registerSessionCollaborators();
@@ -186,6 +189,38 @@ final class FortifyServiceProvider extends ServiceProvider
                     detail: __('auth.throttle.too_many_requests'),
                 ));
         });
+    }
+
+    /**
+     * The `widget` guard driver and its token store (Doc 02 FR-21/FR-22,
+     * T-02, BR-06).
+     *
+     * The store rides the SAME Redis connection as staff sessions (step-10
+     * ruling, decision 1: `volatile`, with the eviction risk named in
+     * BUILD-STATUS as a Doc 18 handoff). Config-driven exactly like the
+     * session collaborators above so the two can never silently diverge.
+     *
+     * The guard is registered as a DRIVER for the same reason the staff
+     * provider is: config/auth.php names `widget-visitor`, and a guard whose
+     * driver nobody registered fails at boot — loudly, not as a silent
+     * fallback to a session guard that would dissolve BR-06's partition.
+     */
+    private function registerWidgetGuard(): void
+    {
+        $this->app->singleton(VisitorTokenStore::class, function (Application $app): VisitorTokenStore {
+            $connection = config('session.connection');
+
+            return new VisitorTokenStore(
+                $app->make(RedisFactory::class),
+                is_string($connection) && $connection !== '' ? $connection : 'default',
+            );
+        });
+
+        Auth::extend('widget-visitor', fn (Application $app, string $name, array $config): WidgetGuard => new WidgetGuard(
+            $app->make(VisitorTokenStore::class),
+            $app->make(TenantContext::class),
+            $app->make('request'),
+        ));
     }
 
     /**

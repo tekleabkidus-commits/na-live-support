@@ -62,6 +62,13 @@ return [
         'insufficient_scope' => 'This token does not include the :permission permission.',
     ],
 
+    // FR-21/AC-06/EC-08: the widget session refusal. ONE detail for origin and
+    // ancestor failures alike — see ErrorCode::OriginNotAllowed on why the
+    // response never says which check refused.
+    'widget' => [
+        'origin_not_allowed' => 'This page is not on the widget\'s list of allowed sites. The site owner can update the list in widget settings.',
+    ],
+
     // FR-06/FR-07: 2FA enrolment, challenge and recovery (§8's wizard copy
     // slots; the full designed wizard arrives with the views step).
     '2fa' => [

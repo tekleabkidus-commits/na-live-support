@@ -58,6 +58,24 @@ return Application::configure(basePath: dirname(__DIR__))
             prepend: App\Http\Middleware\ResolveBearerTenant::class,
         );
 
+        // The widget stack needs the SAME protection (Doc 02 step 10): its
+        // routes declare tenant:widget_key → WidgetCors → auth:widget, and
+        // without these entries the priority-listed Authenticate hops over
+        // both unlisted predecessors — the guard would run with no tenant
+        // bound (the step-9 bug, on a new surface) and its 401s would leave
+        // unstamped, unreadable to the allowed page whose recovery path is
+        // "on 401, re-POST /session". Two prepends, both landing immediately
+        // before Authenticate, in declaration order: ResolveTenant first,
+        // then WidgetCors inserted between it and Authenticate.
+        $middleware->prependToPriorityList(
+            before: Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+            prepend: App\Http\Middleware\ResolveTenant::class,
+        );
+        $middleware->prependToPriorityList(
+            before: Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+            prepend: App\Http\Middleware\WidgetCors::class,
+        );
+
         // A GUEST hitting an authenticated page needs somewhere to go, and the
         // default target is route('login') — which does not exist (the login
         // SCREEN is the views step; only POST /login does). Without this line
