@@ -847,6 +847,15 @@ and is deliberately not "optimised" by weakening the hash**; it is bounded by BA
 gated upstream by the per-IP throttle. If NFR-01 must hold for misses too, that is an owner
 decision about the hash cost, not something to fix quietly here.
 
+### A stale skip resolved rather than left to rot
+
+`SessionFixationTest`'s "regenerates again after the 2FA challenge" had been skipped since S6
+with the reason "the 2FA challenge does not exist yet". It exists now, so the skip would have
+become a lie by omission. The boundary **is** proven — in the browser suite, by the same
+storage-level observable S8 established for boundary 1 — and the pest test is kept as a
+signpost explaining why it cannot be asserted in a client that does not replay `Set-Cookie`.
+`Doc02 SEC-04` moves from `partial` to `covered` in traceability, with both boundaries named.
+
 ### NOT built in step 7, with reasons
 
 - **FR-09 (2FA enforcement by role) — NOT BUILT, deliberately.** "Users in

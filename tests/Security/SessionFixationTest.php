@@ -131,11 +131,25 @@ it('does not carry pre-login session data into the authenticated session', funct
 })->skip('regenerate() intentionally PRESERVES session data (it is not invalidate()); Doc 02 does not require dropping it at the password boundary, and dropping it would lose the intended-URL the login flow depends on. Recorded rather than silently asserted either way.');
 
 it('regenerates again after the 2FA challenge (SEC-04, boundary 2)', function () {
-    // The second privilege boundary. Unassertable until the 2FA step exists —
-    // recorded as a skip with its reason rather than omitted, so the gap is
-    // visible in the run output instead of only in a document.
+    // ─────────────────────────────────────────────────────────────────────────
+    // BUILT IN S11 AND PROVEN — IN THE BROWSER SUITE, NOT HERE.
+    //
+    // The boundary exists now: TwoFactorChallengeController completes through
+    // SessionEstablisher, whose regenerate() is the second privilege boundary.
+    // But proving it needs the SAME observable S8 established for boundary 1 —
+    // the pre-boundary session id GONE FROM STORAGE — and that needs a session
+    // that survives two requests. This client does not replay cookies (the S6
+    // blocker), so the pending-challenge session cannot reach the challenge
+    // request at all.
+    //
+    // tests/Browser/session.spec.ts ("the full 2FA journey") captures the
+    // pending-challenge id, posts the TOTP, and asserts via auth:session-inspect
+    // that the old key is gone and the id changed. Kept here as a SIGNPOST so
+    // the gap is not re-opened by someone reading only this file, and skipped
+    // rather than faked with an assertion this harness cannot make.
+    // ─────────────────────────────────────────────────────────────────────────
     expect(true)->toBeTrue();
-})->skip('2FA challenge does not exist yet (Doc 02 step 7). SEC-04 boundary 2 is unproven and is recorded as such in traceability.');
+})->skip('PROVEN in tests/Browser/session.spec.ts (real cookie jar + storage-level assertion); unassertable in this client, which does not replay Set-Cookie. See the comment above.');
 
 /*
 |--------------------------------------------------------------------------

@@ -518,7 +518,7 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
       BOUNDARY 1 IS NOW PROVEN, on the third attempt, and this row records why the first
       two did not count. Attempts 1 and 2 compared session COOKIE VALUES (PHP client,
@@ -532,7 +532,12 @@ entries:
       and the controller regenerates explicitly — so removing either alone does not
       reopen it. The explicit call is kept so SEC-04 does not depend on a framework
       internal.
-      BOUNDARY 2 (post-2FA) still does not exist (step 7), hence partial not covered.
+      BOUNDARY 2 (post-2FA) IS NOW PROVEN TOO (S11), by the same storage-level observable:
+      the browser suite captures the PENDING-CHALLENGE session id, posts a valid TOTP, and
+      asserts the old key is gone from storage and the id changed. Both boundaries therefore
+      hold, and the mirror test in tests/Security/SessionFixationTest.php stays skipped with a
+      signpost - that client cannot replay Set-Cookie, so the pending session never reaches
+      the challenge request there.
   - ac_ref: "Doc02 T-04"
     suite_path: tests/Security/SessionFixationTest.php
     type: automated
