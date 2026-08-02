@@ -210,7 +210,8 @@ function cleanupTenants(array $tenantIds): void
     $platform = DB::connection('pgsql_platform');
 
     foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
-        'tenant_provisioning_steps', 'tenant_quota_usage', 'tenant_keys', 'users'] as $table) {
+        'tenant_provisioning_steps', 'tenant_quota_usage', 'tenant_keys',
+        'personal_access_tokens', 'users'] as $table) {
         $platform->table($table)->whereIn('tenant_id', $tenantIds)->delete();
     }
 
