@@ -53,6 +53,8 @@ return [
         'insufficient_scope' => 'Missing permission',
         // Doc 02 FR-21/AC-06: widget session refused — origin or ancestor off-list.
         'origin_not_allowed' => 'This site can\'t use this chat widget',
+        // Doc 02 FR-23/FR-24/AC-07: webhook second-credential refusal.
+        'webhook_rejected' => 'Webhook request rejected',
     ],
 
     'provisioning' => [

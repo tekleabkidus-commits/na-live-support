@@ -69,6 +69,13 @@ return [
         'origin_not_allowed' => 'This page is not on the widget\'s list of allowed sites. The site owner can update the list in widget settings.',
     ],
 
+    // FR-23/FR-24/AC-07: the webhook refusal. ONE detail for every cause —
+    // see ErrorCode::WebhookRejected; the audience is an integration log, not
+    // a person, and it must not be a debugging oracle.
+    'webhook' => [
+        'rejected' => 'This webhook request could not be verified.',
+    ],
+
     // FR-06/FR-07: 2FA enrolment, challenge and recovery (§8's wizard copy
     // slots; the full designed wizard arrives with the views step).
     '2fa' => [

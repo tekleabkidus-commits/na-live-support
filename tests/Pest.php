@@ -360,6 +360,81 @@ function visitorCookieFrom(Illuminate\Testing\TestResponse $response): string
 
 /*
 |--------------------------------------------------------------------------
+| Webhook-surface fixtures (Doc 02 step 11 — FR-23/FR-24/FR-25)
+|--------------------------------------------------------------------------
+|
+| Shared for the same reason as the widget helpers above: targeted runs.
+|
+*/
+
+/**
+ * A tenant with a key of the given kind and (unless $credential is null) its
+ * webhook second credential. Returns [tenant, key plaintext, key row id]
+ * with all context cleared.
+ *
+ * @param  array{header_secret_hash?: string, hmac_secret?: string}|null  $credential
+ * @return array{0: Tenant, 1: string, 2: string}
+ */
+function webhookFixture(string $kind, ?array $credential): array
+{
+    $tenant = createTenant();
+
+    [$plaintext, $keyId] = asTenant($tenant, function () use ($kind, $credential): array {
+        $issued = app(App\Support\Tenancy\TenantKeyIssuer::class)->issue(
+            kind: $kind,
+            label: 'fixture '.$kind,
+            actor: AuditActor::PlatformAdmin,
+        );
+
+        $keyId = $issued['key']->getKey();
+        assert(is_string($keyId));
+
+        if ($credential !== null) {
+            App\Models\WebhookCredential::query()->create(['key_id' => $keyId] + $credential);
+        }
+
+        return [$issued['plaintext'], $keyId];
+    });
+
+    activateTenant($tenant);
+
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    return [$tenant, $plaintext, $keyId];
+}
+
+/**
+ * A problem-details body with its per-request members pinned, so two
+ * refusals can be compared byte-for-byte on everything that must not vary
+ * (AC-07's no-oracle posture; trace_id varies BY DESIGN, C-14).
+ */
+function normalizedProblemBody(string $content): string
+{
+    return (string) preg_replace('/"trace_id":"[^"]*"/', '"trace_id":"<trace>"', $content);
+}
+
+/**
+ * Log capture off the log bus: returns a reference to the live array the
+ * listener appends into, so metric assertions read exactly what a request
+ * logged (security_metric context keys, C-10 shape).
+ *
+ * @return list<array{message: string, context: array<string, mixed>}>
+ */
+function &capturedLogsRef(): array
+{
+    static $records;
+    $records = [];
+
+    Illuminate\Support\Facades\Log::listen(function (Illuminate\Log\Events\MessageLogged $event) use (&$records): void {
+        $records[] = ['message' => $event->message, 'context' => $event->context];
+    });
+
+    return $records;
+}
+
+/*
+|--------------------------------------------------------------------------
 | Expectations
 |--------------------------------------------------------------------------
 */

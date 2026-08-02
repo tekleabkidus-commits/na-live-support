@@ -221,6 +221,16 @@ final class FortifyServiceProvider extends ServiceProvider
             $app->make(TenantContext::class),
             $app->make('request'),
         ));
+
+        // FR-24's nonce cache (step-11 ruling, decision 1): the VOLATILE
+        // instance, named explicitly rather than borrowed from
+        // session.connection — replay nonces are the rate-limit lifecycle
+        // family regardless of where sessions live. The connection resolves
+        // per call through the factory, so the FS outage test can repoint it.
+        $this->app->singleton(\App\Domain\Auth\Webhooks\ReplayGuard::class, fn (Application $app): \App\Domain\Auth\Webhooks\ReplayGuard => new \App\Domain\Auth\Webhooks\ReplayGuard(
+            $app->make(RedisFactory::class),
+            'volatile',
+        ));
     }
 
     /**

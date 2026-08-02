@@ -50,7 +50,18 @@ function ac08Surfaces(): array
     return [
         'staff' => ['uri' => '/api/staff/context', 'method' => 'GET', 'kind' => null],
         'api' => ['uri' => '/api/v1/context', 'method' => 'GET', 'kind' => 'api'],
-        'webhook_telegram' => ['uri' => '/api/webhooks/telegram', 'method' => 'POST', 'kind' => 'telegram_bot'],
+        // Since Doc 02 step 11 the webhook probes demand the SECOND
+        // credential (FR-23/FR-24) — static header for telegram, per-request
+        // HMAC for the DLR (computed in the loop; a signature cannot be a
+        // static table entry). Expectations are UNCHANGED: the second
+        // credential sits before tenant.state, so a suspended tenant still
+        // answers 202 once the request proves it is really the channel.
+        'webhook_telegram' => [
+            'uri' => '/api/webhooks/telegram',
+            'method' => 'POST',
+            'kind' => 'telegram_bot',
+            'headers' => ['X-Telegram-Bot-Api-Secret-Token' => 'fixture-telegram-webhook-secret'],
+        ],
         // Since Doc 02 step 10 this is the REAL session issuer, not the Doc 01
         // probe — so the cell needs a genuine allowlisted Origin (the fixture
         // widget row is seeded alongside the key below), and "accepted" is
@@ -61,7 +72,12 @@ function ac08Surfaces(): array
             'kind' => 'widget',
             'headers' => ['Origin' => 'https://fixture-widget-host.example'],
         ],
-        'webhook_sms_dlr' => ['uri' => '/api/webhooks/sms/dlr', 'method' => 'POST', 'kind' => 'sms_gateway'],
+        'webhook_sms_dlr' => [
+            'uri' => '/api/webhooks/sms/dlr',
+            'method' => 'POST',
+            'kind' => 'sms_gateway',
+            'hmac' => true,
+        ],
     ];
 }
 
@@ -153,6 +169,23 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
                         'allowed_origins' => ['https://fixture-widget-host.example'],
                     ]);
                 }
+
+                // Doc 02 step 11: the webhook surfaces refuse a key with no
+                // second credential (fail-closed, AC-07), so the matrix seeds
+                // both mechanisms' minimal shapes.
+                if ($kind === 'telegram_bot') {
+                    App\Models\WebhookCredential::query()->create([
+                        'key_id' => $issued['key']->getKey(),
+                        'header_secret_hash' => hash('sha256', 'fixture-telegram-webhook-secret'),
+                    ]);
+                }
+
+                if ($kind === 'sms_gateway') {
+                    App\Models\WebhookCredential::query()->create([
+                        'key_id' => $issued['key']->getKey(),
+                        'hmac_secret' => 'fixture-dlr-hmac-secret',
+                    ]);
+                }
             }
 
             return $out;
@@ -172,11 +205,30 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
             app(TenantContext::class)->clear();
             app(App\Support\Tenancy\RlsSession::class)->clear();
 
+            // FR-24's signature covers timestamp + nonce + raw body, so the
+            // DLR cell computes fresh headers per request (the body Laravel
+            // sends for json($method, $uri, []) is "[]", and that exact
+            // string is what gets signed).
+            $extraHeaders = $spec['headers'] ?? [];
+            if ($spec['hmac'] ?? false) {
+                $timestamp = (string) now()->getTimestamp();
+                $nonce = (string) Illuminate\Support\Str::uuid7();
+                $extraHeaders = [
+                    'X-Webhook-Timestamp' => $timestamp,
+                    'X-Webhook-Nonce' => $nonce,
+                    'X-Webhook-Signature' => hash_hmac(
+                        'sha256',
+                        sprintf('%s.%s.%s', $timestamp, $nonce, '[]'),
+                        'fixture-dlr-hmac-secret',
+                    ),
+                ];
+            }
+
             $response = $spec['kind'] === null
                 ? $this->actingAs($staffUser)->json($spec['method'], $spec['uri'])
                 : $this->withHeaders(array_merge(
                     ['Authorization' => 'Bearer '.$plaintexts[$spec['kind']]],
-                    $spec['headers'] ?? [],
+                    $extraHeaders,
                 ))->json($spec['method'], $spec['uri']);
 
             $results[$stateName][$surface] = $response->status();

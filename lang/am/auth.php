@@ -52,6 +52,11 @@ return [
         'origin_not_allowed' => 'ይህ ገጽ በመስኮቱ የተፈቀዱ ድረ-ገጾች ዝርዝር ውስጥ የለም። የድረ-ገጹ ባለቤት ዝርዝሩን በመስኮት ማስተካከያዎች ውስጥ ማዘመን ይችላል።',
     ],
 
+    // FR-23/FR-24/AC-07: the webhook refusal (see lang/en/auth.php).
+    'webhook' => [
+        'rejected' => 'ይህ የዌብሁክ ጥያቄ ሊረጋገጥ አልቻለም።',
+    ],
+
     // Machine-authored, pending native review (the standing pre-launch item).
     '2fa' => [
         'no_pending' => 'መጀመሪያ በይለፍ ቃልዎ ይግቡ።',

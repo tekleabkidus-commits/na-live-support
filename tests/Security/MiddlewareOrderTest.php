@@ -211,6 +211,62 @@ it('keeps the widget surface sessionless — no session, no cookie encryption, n
     }
 });
 
+it('orders the EXECUTED webhook stacks binder → throttle → secret → state, with nothing priority-listed (T-02, step 11)', function () {
+    // Both webhook surfaces, one loop — the property is identical and a
+    // matrix with holes is not a matrix. Neither Laravel's Authenticate nor
+    // its ThrottleRequests may appear: both are priority-listed, and either
+    // would let the sorter hoist auth ahead of the (unlisted) binder — the
+    // step-9 bug, avoided the step-10 way (plain classes the sorter cannot
+    // see: ThrottleWebhookKey, VerifyWebhookSecret).
+    foreach (['foundation.webhook.telegram', 'foundation.webhook.sms_dlr'] as $routeName) {
+        $route = Route::getRoutes()->getByName($routeName);
+        expect($route)->not->toBeNull("route {$routeName} is not registered");
+
+        $sorted = app('router')->gatherRouteMiddleware($route);
+
+        $binder = null;
+        $throttle = null;
+        $secret = null;
+        $state = null;
+
+        foreach ($sorted as $i => $mw) {
+            if (! is_string($mw)) {
+                continue;
+            }
+            if (str_starts_with($mw, App\Http\Middleware\ResolveTenant::class)) {
+                $binder = $i;
+            }
+            if (str_starts_with($mw, App\Http\Middleware\ThrottleWebhookKey::class)) {
+                $throttle = $i;
+            }
+            if (str_starts_with($mw, App\Http\Middleware\VerifyWebhookSecret::class)) {
+                $secret = $i;
+            }
+            if (str_starts_with($mw, App\Http\Middleware\EnforceTenantState::class)) {
+                $state = $i;
+            }
+            if (str_starts_with($mw, Illuminate\Auth\Middleware\Authenticate::class)
+                || str_starts_with($mw, Illuminate\Routing\Middleware\ThrottleRequests::class)) {
+                test()->fail("{$routeName} carries priority-listed middleware ({$mw}) — the sorter will reorder this stack; use the webhook.* aliases.");
+            }
+
+            // FR-25's CSRF exemption and sessionlessness as ABSENCE.
+            expect($mw)
+                ->not->toContain('StartSession')
+                ->not->toContain('ValidateCsrfToken')
+                ->not->toContain('EncryptCookies');
+        }
+
+        expect($binder)->not->toBeNull("{$routeName}: binder missing")
+            ->and($throttle)->not->toBeNull("{$routeName}: webhook.throttle missing")
+            ->and($secret)->not->toBeNull("{$routeName}: webhook.auth missing")
+            ->and($state)->not->toBeNull("{$routeName}: tenant.state missing")
+            ->and($binder)->toBeLessThan($throttle, 'the throttle would run with no key resolved')
+            ->and($throttle)->toBeLessThan($secret, 'cheapest-first: the counter must refuse before the credential row is read')
+            ->and($secret)->toBeLessThan($state, 'AC-07 fires before the state matrix, behind a proven credential');
+    }
+});
+
 it('registers the permission alias to the RequirePermission middleware', function () {
     $aliases = app('router')->getMiddleware();
 

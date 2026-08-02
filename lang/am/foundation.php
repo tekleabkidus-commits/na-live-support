@@ -52,6 +52,8 @@ return [
         'insufficient_scope' => 'የጎደለ ፈቃድ',
         // Doc 02 FR-21/AC-06: widget session refused — origin or ancestor off-list.
         'origin_not_allowed' => 'ይህ ድረ-ገጽ ይህን የውይይት መስኮት መጠቀም አይችልም',
+        // Doc 02 FR-23/FR-24/AC-07: webhook second-credential refusal.
+        'webhook_rejected' => 'የዌብሁክ ጥያቄ ውድቅ ተደርጓል',
     ],
 
     'provisioning' => [

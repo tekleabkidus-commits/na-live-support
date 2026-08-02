@@ -36,6 +36,13 @@ return Application::configure(basePath: dirname(__DIR__))
             // (token-scope intersection in Doc 02's token step, staff verdicts in
             // Doc 03). See the middleware's docblock before assuming it enforces.
             'permission' => App\Http\Middleware\RequirePermission::class,
+            // Doc 02 FR-23/FR-24/FR-25: the webhook second credential and the
+            // per-key limit. Both are plain classes the middleware SORTER
+            // cannot see (neither implements a priority-listed contract) —
+            // declared order on the webhook stacks is executed order, which
+            // MiddlewareOrderTest asserts. See each class's docblock.
+            'webhook.auth' => App\Http\Middleware\VerifyWebhookSecret::class,
+            'webhook.throttle' => App\Http\Middleware\ThrottleWebhookKey::class,
         ]);
 
         // T-02's bearer order, enforced against the middleware SORTER, not just

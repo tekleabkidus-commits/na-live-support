@@ -113,12 +113,28 @@ final class TenantCache
         Cache::decrement($this->key($suffix), $by);
     }
 
-    /** @see the class docblock — resolver credential maps only. */
+    /**
+     * @see the class docblock — resolver credential maps only.
+     *
+     * FAIL-OPEN ON CACHE OUTAGE (C-07: "cache is never the source of truth",
+     * NFR-04's named-metric shape; found by Doc 02 step 11's FS proof). This
+     * cache fronts tenant RESOLUTION: with the volatile instance down, an
+     * unhandled connection error here 500'd every key-resolved surface —
+     * turning a cache outage into a platform outage, the exact inversion
+     * C-07 forbids. An unreachable cache is a MISS; the resolver's DB door
+     * answers, slower, and the metric says why p99 moved.
+     */
     public function preContextGet(string $key): ?string
     {
         $this->assertPreContextKey($key);
 
-        $value = Cache::get($key);
+        try {
+            $value = Cache::get($key);
+        } catch (\Throwable) {
+            $this->recordPreContextOutage('get');
+
+            return null;
+        }
 
         return is_string($value) ? $value : null;
     }
@@ -128,14 +144,34 @@ final class TenantCache
         $this->assertPreContextKey($key);
         $this->assertTtl($ttlSeconds);
 
-        Cache::put($key, $tenantId, $ttlSeconds);
+        try {
+            Cache::put($key, $tenantId, $ttlSeconds);
+        } catch (\Throwable) {
+            $this->recordPreContextOutage('put');
+        }
     }
 
     public function preContextForget(string $key): void
     {
         $this->assertPreContextKey($key);
 
-        Cache::forget($key);
+        try {
+            Cache::forget($key);
+        } catch (\Throwable) {
+            // The forget path invalidates a revoked key's mapping. Losing it
+            // during an outage is SAFE: the resolver re-verifies revocation
+            // against the database on every hit, so the stale map entry can
+            // never re-admit a revoked key (see TenantResolver::resolveKey).
+            $this->recordPreContextOutage('forget');
+        }
+    }
+
+    private function recordPreContextOutage(string $operation): void
+    {
+        \Illuminate\Support\Facades\Log::warning('tenant keymap cache unreachable — resolving from the database', [
+            'operation' => $operation,
+            'security_metric' => 'tenant.keymap_cache_unavailable',
+        ]);
     }
 
     /**

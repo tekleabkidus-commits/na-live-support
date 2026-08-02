@@ -228,7 +228,23 @@ Route::group([], function (): void {
      | must lose nothing. So a player's message is still accepted and queued while the
      | operator is suspended; what stops is anything going back out.
      */
-    Route::middleware(['tenant:telegram_bot_key', 'tenant.state:inbound'])
+    /*
+     | Since Doc 02 step 11 both webhook probes demand the SECOND credential
+     | (FR-23/FR-24) behind the route key, on the same probe handlers — the
+     | auth mechanics are Doc 02's; Docs 05/14 replace the HANDLERS and own
+     | the probes' audit-exemption lines. Order: binder (key id + RLS) →
+     | per-key throttle (cheapest first, FR-25/FR-03 pattern) → second
+     | credential → state. Nothing here is priority-listed, so this declared
+     | order is the executed order (MiddlewareOrderTest asserts it).
+     | A key with no seeded webhook credential refuses 403 BY DESIGN —
+     | staging included (step-11 ruling, decision 6).
+     */
+    Route::middleware([
+        'tenant:telegram_bot_key',
+        'webhook.throttle',
+        'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',
+        'tenant.state:inbound',
+    ])
         ->post('webhooks/telegram', [IngressProbeController::class, 'ingest'])
         ->name('foundation.webhook.telegram');
 
@@ -288,7 +304,12 @@ Route::group([], function (): void {
             });
     });
 
-    Route::middleware(['tenant:sms_gateway_key', 'tenant.state:inbound'])
+    Route::middleware([
+        'tenant:sms_gateway_key',
+        'webhook.throttle',
+        'webhook.auth:body_hmac',
+        'tenant.state:inbound',
+    ])
         ->post('webhooks/sms/dlr', [IngressProbeController::class, 'ingest'])
         ->name('foundation.webhook.sms_dlr');
 });

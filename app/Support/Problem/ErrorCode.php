@@ -111,6 +111,15 @@ enum ErrorCode: string
     case OriginNotAllowed = 'origin_not_allowed';
 
     /**
+     * FR-23/FR-24/AC-07: a webhook request failed its second credential —
+     * secret mismatch, absent header, bad signature, stale timestamp,
+     * replayed nonce, or unconfigured key, in ONE code with no distinction
+     * (step-11 ruling: responses never say which check refused; metrics do).
+     * 403.
+     */
+    case WebhookRejected = 'webhook_rejected';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

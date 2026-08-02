@@ -226,6 +226,20 @@ return [
         'owning_doc' => 'Doc02',
     ],
     [
+        // FR-25's per-key webhook limit (step-11 ruling, decision 4). The
+        // spec mandates "rate-limited per key" without a number; T-10 makes
+        // the number a registered auth.* setting rather than a constant.
+        // Platform-owned — it protects shared ingress capacity; the floor
+        // exists so the limit can never be strangled into an outage. Docs
+        // 05/14 may re-default per channel when real traffic numbers exist.
+        'key' => 'auth.webhook.rate_per_minute',
+        'type' => 'int',
+        'default' => 600,
+        'validation' => 'required|integer|min:60|max:6000',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc02',
+    ],
+    [
         'key' => 'auth.session.max_concurrent',
         'type' => 'int',
         'default' => 5,
