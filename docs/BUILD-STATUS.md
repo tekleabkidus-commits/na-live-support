@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6 & 7 COMPLETE (9 of 14 steps)** | S4–S11 | AC-01 partial (login half), AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); 5 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. Remaining: FR-09 role enforcement (needs Doc 03), password lifecycle, tokens, widget, webhook auth, SEC-08, views |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6, 7 & 8 COMPLETE (10 of 14 steps)** | S4–S12 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); 5 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; CI run recorded in the S12 section. Remaining: FR-09 role enforcement (needs Doc 03), tokens, widget, webhook auth, SEC-08, views |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -884,6 +884,98 @@ signpost explaining why it cannot be asserted in a client that does not replay `
   feeds) and the per-IP throttle. Worth stating plainly because "5 attempts" reads as stronger
   than it is on its own.
 - **Amharic 2FA copy is machine-authored** — joins the standing native-review item.
+
+## Session-12 report (Doc 02 step 8 — the password lifecycle)
+
+**Evidence: pest 303 passed / 11 skipped (3078 assertions); browser 17 passed (twice
+consecutively, after the fix below); `make gates` 10/10; Pint + PHPStan(max) + ESLint +
+vue-tsc (uncached) clean. CI: see the run recorded below after push.**
+
+Step 8 closed: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, FR-03's
+reset-unlock through the real flow, EC-03/EC-04, and **AC-01's reset half — unproven
+since S4 — is now covered**, so Doc02 AC-01 moves to `covered` in traceability.
+
+### Rulings filed at plan approval (ANSWERS-FROM-DOC-AUTHOR R-5..R-8)
+
+- **R-5** dedicated `mail` queue family, ADR 0007 (account-recovery mail never queues
+  behind bulk work; FS-02's depth signal needs a mail-only queue). Horizon supervisor
+  #12; the stack smoke test now asserts all twelve.
+- **R-6** reset-unlock is **per account**: completing a reset unlocks exactly the account
+  the token was bound to; sibling candidates on the same address stay locked; the
+  attacker's per-IP throttle is untouched. All three clauses asserted in one test.
+- **R-7** the multi-tenant escape-hatch explanation lives in runbook copy only — the
+  enumeration suite asserts reset responses byte-identical across 0/1/N AND free of
+  workspace/tenant vocabulary.
+- **R-8** T-01 deviation recorded: Fortify's email-keyed `password_reset_tokens` cannot
+  express one-address-in-N-tenants; the flow runs on `auth_action_tokens` (one token PER
+  matching account). The dead stock table drops in a later contract release (C-12).
+
+### Proven, each with a positive control, each sabotaged red before being counted
+
+| Requirement | Evidence | Falsified by |
+|---|---|---|
+| SEC-02 all four clauses | `ActionTokenTest` (8) — 256-bit/SHA-256 at rest, purpose binding both directions, email binding (rename kills links), single-use via compare-and-set, DB-time expiry two-sided, EC-04 supersede as index physics (forged second live row refused by Postgres) | consumed-check dropped → 2 red |
+| FR-15 policy, settings-driven | `PasswordPolicyTest` (9) — default 12 / tenant 14 / BR-05 floor refused at the REGISTRY; classes 3-of-4 when toggled (interpretation recorded in the class docblock); reuse of current + last N with N proven to be N; refused candidate mutates nothing | history depth pinned to 1 → red |
+| FR-15 max age | HTTP through the real middleware: 0 never fires; day 29 free / day 31 confined; changing the password restores access in-session | middleware unwired → red |
+| T-09 / FS-03 breach check | `BreachCheckTest` (8) — **only the 5-hex prefix leaves, asserted on the faked request object**; timeout/503/unconfigured all fail OPEN with the named metric; tenant toggle off → zero calls; nothing password-derived in any log line (SEC-08) | fail-open inverted → red |
+| FR-16 end to end | `PasswordResetFlowTest` (6) — request → mail → set → old dead/new works; policy failure leaves the link alive, success spends it; all sessions revoked (asserted on session KEYS); dedicated dead-link screen identical for every kind of dead | revocation removed → 2 red |
+| EC-11 + R-6 via HTTP | locked victim resets while the attacker keeps going: reset account unlocked and working, **sibling still locked**, attacker's limiter count unchanged | unlock-all-candidates → red |
+| FR-17 + EC-04 | `InvitationTest` (4) — invited refusal byte-identical to unknown-address; 7-day boundary two-sided; resend invalidates old link; active accounts get nothing; **BR-02 structurally: no issuance parameter is password-like, by reflection** | — (physics + reflection are the assertions) |
+| FS-02 | `PasswordMailTest` (5) — queued on `mail`, tries=6, widening backoff, never inline; locale pinned at dispatch (user → tenant default → en); templates render complete in en AND am | — |
+| AC-01 reset half | `EnumerationTest` +2 — bodies byte-identical across 0/1/N/invited with R-7 vocabulary assertion; timing at the handler with the R-3 floor estimator, equalized by a fixed 150 ms response floor that is itself asserted alive | floor removed → red at **0.5 ms vs 16.6 ms** — a delta that would have PASSED ±50 ms, proving the floor assertion is the load-bearing one |
+| Real mail path | `password.spec.ts` (3, real cookie jars, real Horizon → SMTP → Mailpit) — reset journey with a live session dying; invited activation via EC-04 resend; FR-14 keeps the changer, kills the sibling | Horizon worker stopped → red at the mail-wait |
+
+### THE DEFECT THE BROWSER STAGE CAUGHT THAT PEST STRUCTURALLY COULD NOT
+
+`EnforcePasswordExpiry` read its tenant setting through `SettingsRepository::get()`,
+which requires a bound tenant. The staff API binds one; **the web group does not**, so
+the moment the middleware was wired, every authenticated WEB page — /security is the
+only one today — 500'd. Every pest test passed, because the pest suite cannot render
+that page (no Vite manifest in stage 3, the S0 lesson). The 17-test browser run caught
+it on the first full pass. Fixed by binding the user's own tenant for the read;
+recorded here because it is the third time the answer to "why does the browser stage
+exist" has been "because it just caught something nothing else could".
+
+### Deliberately NOT built in step 8, with reasons
+
+- **Designed screens + strength meter** (FR-16's meter, §8/§9, AC-09) — views step; the
+  functional pages ship per-rule problem-details errors, which is the exact data the
+  meter will render.
+- **FS-02's "UI notes possible delay" + "queue depth visible to admins"** — the delay
+  note is IN the uniform response copy; the admin depth surface is deferred with the
+  admin console (Horizon shows per-queue depth meanwhile). Recorded in traceability.
+- **EC-03's new-device notice** — PARTIAL by ruling: another-device redemption proven;
+  the notice defers with T-03's notice. Mail transport now exists, so the remaining
+  unblocker is the notification-category registry entry (Doc 07/14's 3-layer opt model).
+- **Admin user-creation surface** (FR-17's issuer caller) — Doc 03's; `InvitationIssuer`
+  is the service it will call.
+- **Reset for INVITED accounts is deliberately refused** (they get the invite resend
+  instead) — recorded as an interpretation: FR-17's set-password screen doubles as
+  profile completion, and a reset would bypass it.
+
+### Risks carried forward
+
+- **The queued reset/invite mail serializes the action URL — token included — into the
+  job payload on redis-durable.** A considered C-13 tension, documented in the Mailable:
+  the token is single-use, 60-min TTL (reset), superseded by any resend, and the queue
+  sits inside the same trust boundary as the session store. The alternative (storing
+  plaintext tokens for send-time lookup) would break SEC-02 outright.
+- **`UniformResponseFloor` degrades above ~30 candidate tenants for one address** (real
+  work would exceed the 150 ms floor). Same stated-bound shape as R-3's
+  EQUALISED_VERIFICATIONS; unreachable in practice.
+- **The 3-of-4 character-class rule is an interpretation** (Doc 02 names no classes);
+  default-off, one method + one test to change if the owner prefers a different shape.
+- **Amharic password/mail copy is machine-authored** — joins the standing native-review
+  item.
+
+### Registry deltas
+
+`audit-coverage`: +6 password-lifecycle actions. `EVENT-CATALOG`: +3 (§4.8's password
+trio; 15 events total, gate green). `permission-exempt`: +8 guest/self-service routes,
+each with its circularity reason. `audit-exempt`: +2 uniform-response request routes
+(the recorder still writes per-candidate entries whenever a token is minted).
+`traceability`: Doc02 AC-01 → covered; Doc02 EC-03 added as partial per ruling.
+`gates.yaml` unchanged (no new gate; SEC-08's log-scrubber gate is its own later step).
 
 ## Deferred with reason
 
