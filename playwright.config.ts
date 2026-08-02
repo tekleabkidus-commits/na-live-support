@@ -6,6 +6,15 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
     testDir: './tests/Browser',
     fullyParallel: true,
+
+    // ONE worker, deliberately (S9's lesson extended): session.spec.ts and
+    // password.spec.ts both mutate shared backing state — one Redis keyspace,
+    // one per-IP login budget, clear-tenant/clear-throttle resets, and now
+    // fixture CREDENTIALS. Two stateful files in parallel workers can wipe
+    // each other's sessions mid-assertion; serial-within-file does not help
+    // across files. Tests that share a real backing store cannot be made
+    // independent by wishing.
+    workers: 1,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',

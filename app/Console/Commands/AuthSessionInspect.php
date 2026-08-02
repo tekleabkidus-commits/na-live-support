@@ -41,7 +41,7 @@ use RuntimeException;
 final class AuthSessionInspect extends Command
 {
     protected $signature = 'auth:session-inspect
-        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant", "clear-throttle", "totp", "clear-2fa"}
+        {action : one of "key-exists", "sign-hint", "keys-for-tenant", "decrypt-cookie", "clear-tenant", "clear-throttle", "totp", "clear-2fa", "make-invited", "restore-password"}
         {--tenant= : tenant id (omit for the unprefixed guest keyspace)}
         {--session= : session id}
         {--cookie= : an encrypted session cookie value}
@@ -224,6 +224,45 @@ final class AuthSessionInspect extends Command
                     ->table('users')
                     ->where('email', $email)
                     ->update(['two_factor_secret' => null, 'two_factor_confirmed_at' => null]);
+                $this->line((string) $updated);
+
+                return self::SUCCESS;
+
+            case 'restore-password':
+                // Fixture repair, same family as make-invited: the password
+                // journeys change the dedicated fixture's credential, and
+                // FR-15's reuse history (correctly!) refuses changing it BACK
+                // through the flow. This writes the published fixture
+                // credential directly — a repair, not a bypass anyone can
+                // reach: the command refuses to run outside local/testing/ci.
+                $email = (string) $this->option('email');
+                $updated = \Illuminate\Support\Facades\DB::connection('pgsql_platform')
+                    ->table('users')
+                    ->where('email', $email)
+                    ->update([
+                        'password' => \Illuminate\Support\Facades\Hash::make(\Database\Seeders\BrowserFixtureSeeder::PASSWORD),
+                        'password_set_at' => now(),
+                    ]);
+                $this->line((string) $updated);
+
+                return self::SUCCESS;
+
+            case 'make-invited':
+                // FR-17 fixture repair, same family as clear-2fa: the browser
+                // invitation journey converts the invited fixture into an
+                // active account, and run N+1 needs it invited again. Restores
+                // the exact seeded shape — an unusable random hash and NULL
+                // password stamps (invited state's marker, per the users-table
+                // migration).
+                $email = (string) $this->option('email');
+                $updated = \Illuminate\Support\Facades\DB::connection('pgsql_platform')
+                    ->table('users')
+                    ->where('email', $email)
+                    ->update([
+                        'password' => \Illuminate\Support\Facades\Hash::make(bin2hex(random_bytes(32))),
+                        'password_set_at' => null,
+                        'password_changed_at' => null,
+                    ]);
                 $this->line((string) $updated);
 
                 return self::SUCCESS;

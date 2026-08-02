@@ -52,6 +52,16 @@ final class BrowserFixtureSeeder extends Seeder
 
     public const SECOND_TENANT_EMAIL = 'other@fixture.example';
 
+    // Doc 02 step 8 (password.spec.ts): a DEDICATED account for the flows that
+    // MUTATE credentials, so a reset journey can never strand the primary
+    // account other specs log into.
+    public const RESET_EMAIL = 'reset-target@fixture.example';
+
+    // FR-17: seeded in the INVITED state — unusable random hash, NULL
+    // password_set_at. The invitation journey activates it; the suite's
+    // make-invited affordance restores it for the next run.
+    public const INVITED_EMAIL = 'invited-fixture@fixture.example';
+
     public function run(): void
     {
         if (! app()->environment(['local', 'testing', 'ci'])) {
@@ -63,6 +73,8 @@ final class BrowserFixtureSeeder extends Seeder
 
         $primary = $this->tenant('Fixture Operator A');
         $this->user($primary, self::PRIMARY_EMAIL);
+        $this->user($primary, self::RESET_EMAIL);
+        $this->invitedUser($primary, self::INVITED_EMAIL);
 
         $second = $this->tenant('Fixture Operator B');
         $this->user($second, self::SECOND_TENANT_EMAIL);
@@ -145,6 +157,14 @@ final class BrowserFixtureSeeder extends Seeder
         $existing = User::query()->where('email', $email)->first();
 
         if ($existing instanceof User) {
+            // SELF-HEALING, not just idempotent: the password journeys change
+            // this credential, and an existing row returned untouched would
+            // make every later run's logins fail with the fixture password.
+            // Re-seeding restores the published credential exactly.
+            $existing->setAttribute('password', self::PASSWORD);
+            $existing->setAttribute('password_set_at', now());
+            $existing->save();
+
             return $existing;
         }
 
@@ -155,6 +175,36 @@ final class BrowserFixtureSeeder extends Seeder
             'email' => $email,
             'password' => Hash::make(self::PASSWORD),
             'password_set_at' => now(),
+        ]);
+    }
+
+    /**
+     * FR-17's invited shape: the account exists, no password was ever chosen.
+     */
+    private function invitedUser(Tenant $tenant, string $email): User
+    {
+        app(TenantContext::class)->clear();
+        app(TenantContext::class)->bind($tenant->identifier(), ResolutionSource::Console);
+        app(RlsSession::class)->set($tenant->identifier());
+
+        $existing = User::query()->where('email', $email)->first();
+
+        if ($existing instanceof User) {
+            $existing->setAttribute('password', bin2hex(random_bytes(32)));
+            $existing->setAttribute('password_set_at', null);
+            $existing->setAttribute('password_changed_at', null);
+            $existing->save();
+
+            return $existing;
+        }
+
+        return User::query()->create([
+            'id' => (string) Str::uuid7(),
+            'tenant_id' => $tenant->identifier(),
+            'name' => 'Fixture Invitee',
+            'email' => $email,
+            'password' => Hash::make(bin2hex(random_bytes(32))),
+            'password_set_at' => null,
         ]);
     }
 
