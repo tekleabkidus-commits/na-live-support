@@ -24,9 +24,12 @@ defineProps<{
     meterId?: string;
     meterText?: string | null;
     // Host pages differ in surface tone until Doc 16's theming lands; the
-    // input's skin is theirs to set, the structure and behaviour are this
-    // component's.
+    // input's and chrome's skins are theirs to set (both defaults suit the
+    // dark card), the structure and behaviour are this component's. §13 holds
+    // either way: whichever tone the host picks must clear 4.5:1, and the
+    // browser suite's axe sweep is what enforces that.
     inputClass?: string;
+    chromeClass?: string;
 }>();
 
 const emit = defineEmits<{
@@ -58,7 +61,8 @@ function onInput(event: Event): void {
             <button
                 type="button"
                 data-testid="password-toggle"
-                class="absolute inset-y-0 end-0 min-h-11 min-w-11 px-3 text-xs text-slate-400 hover:text-slate-200"
+                class="absolute inset-y-0 end-0 min-h-11 min-w-11 px-3 text-xs"
+                :class="chromeClass ?? 'text-slate-400 hover:text-slate-200'"
                 :aria-label="visible ? hideLabel : showLabel"
                 :aria-pressed="visible"
                 @click="visible = !visible"
@@ -70,7 +74,8 @@ function onInput(event: Event): void {
             v-if="meterText"
             :id="meterId"
             data-testid="strength-meter"
-            class="mt-1 text-xs text-slate-400"
+            class="mt-1 text-xs"
+            :class="chromeClass ?? 'text-slate-400'"
             aria-live="polite"
         >
             {{ meterText }}

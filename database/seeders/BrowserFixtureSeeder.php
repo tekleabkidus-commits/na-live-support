@@ -62,6 +62,13 @@ final class BrowserFixtureSeeder extends Seeder
     // make-invited affordance restores it for the next run.
     public const INVITED_EMAIL = 'invited-fixture@fixture.example';
 
+    // Doc 02 step 13 (auth-screens.spec.ts): a DEDICATED account for the 2FA
+    // journeys — enrolment via the wizard, then the challenge step of the
+    // login card. Dedicated so a mid-run failure can never leave the primary
+    // account 2FA-enrolled and break every other spec's password-only login;
+    // the suite resets it with `auth:session-inspect clear-2fa` either way.
+    public const TWO_FACTOR_EMAIL = 'twofactor-fixture@fixture.example';
+
     public function run(): void
     {
         if (! app()->environment(['local', 'testing', 'ci'])) {
@@ -75,6 +82,7 @@ final class BrowserFixtureSeeder extends Seeder
         $this->user($primary, self::PRIMARY_EMAIL);
         $this->user($primary, self::RESET_EMAIL);
         $this->invitedUser($primary, self::INVITED_EMAIL);
+        $this->user($primary, self::TWO_FACTOR_EMAIL);
 
         $second = $this->tenant('Fixture Operator B');
         $this->user($second, self::SECOND_TENANT_EMAIL);

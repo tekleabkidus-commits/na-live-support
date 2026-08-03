@@ -18,7 +18,7 @@
 // downloaded (§8's gate — the OR is the specification, not a convenience).
 // Regenerated codes flow through the same codes step, gate included: a
 // shown-once set is a shown-once set however it was minted (SEC-03).
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import SegmentedCodeInput from '../../Components/Auth/SegmentedCodeInput.vue';
 import SessionTimeoutSentinel from '../../Components/Auth/SessionTimeoutSentinel.vue';
 
@@ -197,14 +197,18 @@ const codesHeading = ref<HTMLElement | null>(null);
 
 // §13: focus lands on the step heading at every wizard transition, so a
 // screen-reader user hears where they are instead of a silent DOM swap.
-watch(wizardStep, async (step) => {
+// Wired to the Transition's after-enter — with mode="out-in" the incoming
+// step is not in the DOM until the leave finishes, so a nextTick-after-state-
+// change fires against a heading that does not exist yet (and under
+// prefers-reduced-motion Vue still fires after-enter immediately).
+function focusWizardHeading(): void {
+    const step = wizardStep.value;
     if (step === null) {
         return;
     }
-    await nextTick();
     const heading = { scan: scanHeading, verify: verifyHeading, codes: codesHeading }[step];
     heading.value?.focus();
-});
+}
 
 async function twoFactorPost(
     path: string,
@@ -406,7 +410,7 @@ onMounted(() => {
                         </td>
                         <td class="py-3 pe-4">
                             <template v-if="row.location">{{ row.location }}</template>
-                            <span v-else data-testid="location-unavailable" class="text-slate-500">
+                            <span v-else data-testid="location-unavailable" class="text-slate-400">
                                 {{ props.copy.locationUnavailable }}
                             </span>
                         </td>
@@ -441,7 +445,7 @@ onMounted(() => {
             <p
                 v-if="sessions.length === 1 && sessions[0]?.current"
                 data-testid="devices-empty-state"
-                class="mt-4 text-sm text-slate-500"
+                class="mt-4 text-sm text-slate-400"
             >
                 {{ props.copy.onlyHere }}
             </p>
@@ -500,7 +504,7 @@ onMounted(() => {
                 {{ props.copy.twoFactorEnable }}
             </button>
 
-            <Transition name="step" mode="out-in">
+            <Transition name="step" mode="out-in" @after-enter="focusWizardHeading">
                 <!-- Wizard step 1: scan (QR + copyable manual secret). -->
                 <div v-if="wizardStep === 'scan' && enrolment" key="scan" class="mt-4" data-testid="wizard-scan">
                     <h3
@@ -555,12 +559,15 @@ onMounted(() => {
                         {{ props.copy.wizardVerifyTitle }}
                     </h3>
                     <div class="mt-3">
+                        <!-- No auto-focus here, deliberately: §13's rule is that
+                             WIZARD transitions focus the step heading (asserted
+                             by the browser suite); §8's input auto-focus clause
+                             belongs to the login card's challenge step. -->
                         <SegmentedCodeInput
                             v-model="enrolCode"
                             input-id="enrol-code"
                             :label="props.copy.twoFactorCodeLabel"
                             :described-by="twoFactorError ? 'two-factor-error' : undefined"
-                            :auto-focus="true"
                             @complete="(value) => confirmEnrolment(value)"
                         />
                     </div>

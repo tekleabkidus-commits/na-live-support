@@ -21,7 +21,7 @@
 // `returnTo` arrived server-sanitized (SafeReturnUrl — same-origin relative
 // paths only); this file navigates to it and never to anything client-derived.
 // ─────────────────────────────────────────────────────────────────────────────
-import { nextTick, ref, watch } from 'vue';
+import { ref } from 'vue';
 import AuthCard from '../../Components/Auth/AuthCard.vue';
 import PasswordField from '../../Components/Auth/PasswordField.vue';
 import SegmentedCodeInput from '../../Components/Auth/SegmentedCodeInput.vue';
@@ -83,17 +83,22 @@ const credentialsHeading = ref<HTMLElement | null>(null);
 const challengeHeading = ref<HTMLElement | null>(null);
 const doneHeading = ref<HTMLElement | null>(null);
 
-// §13: focus moves to the step heading on wizard transitions. The headings
-// carry tabindex="-1" — focusable by script, invisible to the tab order.
-watch(step, async () => {
-    await nextTick();
+// §13: focus moves to the step heading on transitions. The headings carry
+// tabindex="-1" — focusable by script, invisible to the tab order. Wired to
+// the Transition's after-enter (mode="out-in" means the incoming step is not
+// mounted until the leave finishes). The CHALLENGE step is the specified
+// exception: §8 names it "auto-focus" on the code input, so the heading is
+// skipped there rather than raced against the input's own focus.
+function focusStepHeading(): void {
+    if (step.value === 'challenge') {
+        return;
+    }
     const heading = {
         credentials: credentialsHeading,
-        challenge: challengeHeading,
         done: doneHeading,
     }[step.value];
     heading.value?.focus();
-});
+}
 
 function xsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
@@ -238,7 +243,7 @@ function lowCodesText(): string {
             langAmharic: copy.langAmharic,
         }"
     >
-        <Transition name="step" mode="out-in">
+        <Transition name="step" mode="out-in" @after-enter="focusStepHeading">
             <!-- ── Credentials step ─────────────────────────────────────── -->
             <section v-if="step === 'credentials'" key="credentials">
                 <h1

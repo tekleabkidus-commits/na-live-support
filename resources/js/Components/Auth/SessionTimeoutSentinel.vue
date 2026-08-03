@@ -299,7 +299,25 @@ async function guardedFetch(
 
     await requireReLogin();
 
-    return rawFetch(input, init);
+    return rawFetch(input, refreshCsrfHeader(init));
+}
+
+/**
+ * The original request's headers were built against the DEAD session's CSRF
+ * token; replaying them verbatim would turn every recovered POST into a 419.
+ * Only the token header is rewritten — the replay is otherwise byte-faithful.
+ */
+function refreshCsrfHeader(init?: RequestInit): RequestInit | undefined {
+    if (!init || !init.headers) {
+        return init;
+    }
+
+    const headers = new Headers(init.headers);
+    if (headers.has('X-XSRF-TOKEN')) {
+        headers.set('X-XSRF-TOKEN', xsrfToken());
+    }
+
+    return { ...init, headers };
 }
 
 onMounted(() => {

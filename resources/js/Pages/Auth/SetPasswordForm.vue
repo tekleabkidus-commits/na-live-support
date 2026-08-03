@@ -188,6 +188,7 @@ async function submit(): Promise<void> {
                 meter-id="password-strength"
                 :meter-text="strengthText"
                 input-class="border border-gray-300 bg-white text-gray-900"
+                chrome-class="text-gray-600 hover:text-gray-900"
             />
             <p id="password-hint" class="text-xs text-gray-500">{{ copy.lengthHint }}</p>
 
@@ -199,6 +200,7 @@ async function submit(): Promise<void> {
                 :show-label="copy.showPassword"
                 :hide-label="copy.hidePassword"
                 input-class="border border-gray-300 bg-white text-gray-900"
+                chrome-class="text-gray-600 hover:text-gray-900"
             />
 
             <ul v-if="errors.length" class="rounded bg-red-50 p-3 text-sm text-red-800" role="alert">

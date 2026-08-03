@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-{{-- lang is hardcoded to "en" only until the i18n layer lands in Session 1 (Doc 01 FR-09). --}}
-<html lang="en">
+{{-- §14/§13: the document language follows the request locale (user hop, or the
+     guest cookie behind the login card's switcher) — assistive tech reads
+     pronunciation from this attribute, so a hardcoded "en" would misread every
+     Amharic render. --}}
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
