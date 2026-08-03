@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// Doc 02 FR-12 — the Security page (profile → Security).
+// Doc 02 FR-12 — the Security page (profile → Security), and FR-06's 2FA
+// enrolment as §8's three-step wizard (step 13).
 //
 // Every visible string arrives via the `copy` prop, translated server-side in
 // the request locale (I-5/C-08, N-03) — this file contains no user-facing
@@ -9,8 +10,16 @@
 // §8 rules encoded here: current device pinned first (the API pre-sorts, the
 // template trusts the order), single revoke confirms INLINE (two-step button,
 // no dialog), "revoke all others" uses a modal. §9's empty state renders when
-// only the current session exists.
-import { onMounted, ref } from 'vue';
+// only the current session exists; the table shows a skeleton while loading.
+//
+// THE WIZARD (scan QR → enter code → save codes) OWNS TWO §13 BEHAVIOURS:
+// focus moves to the step heading on every transition, and the codes step
+// BLOCKS completion until "I have saved these" is checked OR the file was
+// downloaded (§8's gate — the OR is the specification, not a convenience).
+// Regenerated codes flow through the same codes step, gate included: a
+// shown-once set is a shown-once set however it was minted (SEC-03).
+import { nextTick, onMounted, ref, watch } from 'vue';
+import SegmentedCodeInput from '../../Components/Auth/SegmentedCodeInput.vue';
 
 interface SessionRow {
     digest: string;
@@ -49,18 +58,26 @@ interface Copy {
     twoFactorScan: string;
     twoFactorManualSecret: string;
     twoFactorCodeLabel: string;
-    twoFactorConfirm: string;
     twoFactorCodesWarning: string;
     twoFactorCodesSaved: string;
     twoFactorDownload: string;
     twoFactorRegenerate: string;
     twoFactorDisable: string;
     twoFactorDisableCodeLabel: string;
+    wizardScanTitle: string;
+    wizardVerifyTitle: string;
+    wizardCodesTitle: string;
+    wizardContinue: string;
+    wizardDone: string;
+    copySecret: string;
+    copyAllCodes: string;
+    copied: string;
 }
 
 const props = defineProps<{ copy: Copy; twoFactorEnabled: boolean }>();
 
 const sessions = ref<SessionRow[]>([]);
+const loading = ref(true);
 const loadFailed = ref(false);
 const confirmingDigest = ref<string | null>(null);
 const showRevokeOthersModal = ref(false);
@@ -73,6 +90,7 @@ function xsrfToken(): string {
 
 async function load(): Promise<void> {
     loadFailed.value = false;
+    loading.value = true;
     try {
         const response = await fetch('/api/staff/security/sessions', {
             headers: { Accept: 'application/json' },
@@ -84,6 +102,8 @@ async function load(): Promise<void> {
         sessions.value = body.sessions;
     } catch {
         loadFailed.value = true;
+    } finally {
+        loading.value = false;
     }
 }
 
@@ -131,13 +151,38 @@ function formatWhen(iso: string | null): string {
     return new Date(iso).toLocaleString();
 }
 
-// ── FR-06: the 2FA card (begin → scan → confirm → codes shown once). ────────
+// ── FR-06: the enrolment wizard (§8: scan → verify → codes). ────────────────
+type WizardStep = 'scan' | 'verify' | 'codes';
+
 const twoFactorOn = ref(props.twoFactorEnabled);
+const wizardStep = ref<WizardStep | null>(null);
 const enrolment = ref<{ secret: string; qr_svg: string; enrolment_id: string } | null>(null);
 const enrolCode = ref('');
-const disableCode = ref('');
+const manageCode = ref('');
 const recoveryCodes = ref<string[]>([]);
 const twoFactorError = ref<string | null>(null);
+
+// §8's gate: EITHER affordance opens the door; nothing else does.
+const codesSaved = ref(false);
+const codesDownloaded = ref(false);
+
+const copiedSecret = ref(false);
+const copiedCodes = ref(false);
+
+const scanHeading = ref<HTMLElement | null>(null);
+const verifyHeading = ref<HTMLElement | null>(null);
+const codesHeading = ref<HTMLElement | null>(null);
+
+// §13: focus lands on the step heading at every wizard transition, so a
+// screen-reader user hears where they are instead of a silent DOM swap.
+watch(wizardStep, async (step) => {
+    if (step === null) {
+        return;
+    }
+    await nextTick();
+    const heading = { scan: scanHeading, verify: verifyHeading, codes: codesHeading }[step];
+    heading.value?.focus();
+});
 
 async function twoFactorPost(
     path: string,
@@ -171,45 +216,76 @@ async function beginEnrolment(): Promise<void> {
             qr_svg: string;
             enrolment_id: string;
         };
+        enrolCode.value = '';
+        wizardStep.value = 'scan';
     }
 }
 
-async function confirmEnrolment(): Promise<void> {
-    if (!enrolment.value) {
+async function confirmEnrolment(code: string): Promise<void> {
+    if (!enrolment.value || busy.value) {
         return;
     }
-    const { ok, body } = await twoFactorPost('/api/staff/security/2fa/confirm', {
-        code: enrolCode.value,
-        enrolment_id: enrolment.value.enrolment_id,
-    });
-    if (ok) {
-        recoveryCodes.value = (body.recovery_codes as string[] | undefined) ?? [];
-        twoFactorOn.value = true;
-        enrolment.value = null;
-        enrolCode.value = '';
+    busy.value = true;
+    try {
+        const { ok, body } = await twoFactorPost('/api/staff/security/2fa/confirm', {
+            code,
+            enrolment_id: enrolment.value.enrolment_id,
+        });
+        if (ok) {
+            recoveryCodes.value = (body.recovery_codes as string[] | undefined) ?? [];
+            twoFactorOn.value = true;
+            enrolment.value = null;
+            enrolCode.value = '';
+            openCodesStep();
+        } else {
+            enrolCode.value = '';
+        }
+    } finally {
+        busy.value = false;
     }
+}
+
+function openCodesStep(): void {
+    codesSaved.value = false;
+    codesDownloaded.value = false;
+    copiedCodes.value = false;
+    wizardStep.value = 'codes';
+}
+
+function finishWizard(): void {
+    // Unreachable while the gate holds — the button is disabled — but guarded
+    // anyway: a keyboard-dispatched click on a disabled button is a browser
+    // bug this screen should not turn into a silent codes loss.
+    if (!codesSaved.value && !codesDownloaded.value) {
+        return;
+    }
+    recoveryCodes.value = [];
+    wizardStep.value = null;
 }
 
 async function disableTwoFactor(): Promise<void> {
     const { ok } = await twoFactorPost(
         '/api/staff/security/2fa',
-        { code: disableCode.value },
+        { code: manageCode.value },
         'DELETE',
     );
     if (ok) {
         twoFactorOn.value = false;
-        disableCode.value = '';
+        manageCode.value = '';
         recoveryCodes.value = [];
+        wizardStep.value = null;
     }
 }
 
 async function regenerateCodes(): Promise<void> {
     const { ok, body } = await twoFactorPost('/api/staff/security/2fa/recovery-codes', {
-        code: disableCode.value,
+        code: manageCode.value,
     });
     if (ok) {
         recoveryCodes.value = (body.recovery_codes as string[] | undefined) ?? [];
-        disableCode.value = '';
+        manageCode.value = '';
+        // SEC-03: a regenerated set is also shown once — same step, same gate.
+        openCodesStep();
     }
 }
 
@@ -220,6 +296,29 @@ function downloadCodes(): void {
     anchor.download = 'recovery-codes.txt';
     anchor.click();
     URL.revokeObjectURL(anchor.href);
+    codesDownloaded.value = true;
+}
+
+async function copySecret(): Promise<void> {
+    if (!enrolment.value) {
+        return;
+    }
+    try {
+        await navigator.clipboard.writeText(enrolment.value.secret);
+        copiedSecret.value = true;
+    } catch {
+        // Clipboard permission refused: the visible text remains selectable;
+        // nothing to report beyond not flipping the "copied" feedback.
+    }
+}
+
+async function copyAllCodes(): Promise<void> {
+    try {
+        await navigator.clipboard.writeText(recoveryCodes.value.join('\n'));
+        copiedCodes.value = true;
+    } catch {
+        // As above — the grid itself stays selectable.
+    }
 }
 
 onMounted(() => {
@@ -240,6 +339,13 @@ onMounted(() => {
         >
             {{ props.copy.loadFailed }}
         </p>
+
+        <!-- §9: skeleton while the table loads — never a full-page blocker. -->
+        <div v-else-if="loading" class="mt-6 space-y-3" data-testid="devices-skeleton" aria-hidden="true">
+            <div class="h-6 animate-pulse rounded bg-slate-800"></div>
+            <div class="h-6 animate-pulse rounded bg-slate-800"></div>
+            <div class="h-6 animate-pulse rounded bg-slate-800"></div>
+        </div>
 
         <div v-else class="mt-6 overflow-x-auto">
             <table class="w-full text-start text-sm" data-testid="devices-table">
@@ -287,7 +393,7 @@ onMounted(() => {
                                 type="button"
                                 :disabled="busy"
                                 data-testid="revoke-button"
-                                class="rounded border px-3 py-1 text-xs"
+                                class="min-h-11 rounded border px-3 py-1 text-xs"
                                 :class="
                                     confirmingDigest === row.digest
                                         ? 'border-red-700 bg-red-900 text-red-100'
@@ -318,15 +424,16 @@ onMounted(() => {
                 v-if="sessions.length > 1"
                 type="button"
                 data-testid="revoke-others-button"
-                class="mt-6 rounded border border-red-800 px-4 py-2 text-sm text-red-200 hover:bg-red-950"
+                class="mt-6 min-h-11 rounded border border-red-800 px-4 py-2 text-sm text-red-200 hover:bg-red-950"
                 @click="showRevokeOthersModal = true"
             >
                 {{ props.copy.revokeOthers }}
             </button>
         </div>
 
-        <!-- FR-06: the 2FA card. States: off → enrolling (QR + confirm) →
-             codes-shown-once → on (disable / regenerate, both code-proven). -->
+        <!-- FR-06: the 2FA card. Off → the §8 wizard (scan → verify → codes,
+             gate on the codes step) → on (disable / regenerate, code-proven;
+             regenerate re-enters the codes step). -->
         <section
             class="mt-10 rounded-lg border border-slate-800 bg-slate-900 p-6"
             data-testid="two-factor-card"
@@ -348,6 +455,7 @@ onMounted(() => {
 
             <p
                 v-if="twoFactorError"
+                id="two-factor-error"
                 role="alert"
                 data-testid="two-factor-error"
                 class="mt-3 rounded border border-red-800 bg-red-950 p-2 text-sm text-red-200"
@@ -355,92 +463,164 @@ onMounted(() => {
                 {{ twoFactorError }}
             </p>
 
-            <!-- Off, not yet enrolling. -->
+            <!-- Off, wizard not started. -->
             <button
-                v-if="!twoFactorOn && !enrolment"
+                v-if="!twoFactorOn && wizardStep === null"
                 type="button"
                 data-testid="two-factor-enable"
-                class="mt-4 rounded border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:border-slate-500"
+                class="mt-4 min-h-11 rounded border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:border-slate-500"
                 @click="beginEnrolment()"
             >
                 {{ props.copy.twoFactorEnable }}
             </button>
 
-            <!-- Enrolling: QR, manual secret, confirm code. -->
-            <div v-if="enrolment" class="mt-4" data-testid="two-factor-enrolment">
-                <p class="text-sm text-slate-400">{{ props.copy.twoFactorScan }}</p>
-                <!-- Server-rendered SVG from our own backend (bacon-qr-code), not
-                     user-influenced markup. -->
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <div class="mt-3 inline-block rounded bg-white p-2" v-html="enrolment.qr_svg"></div>
-                <p class="mt-2 text-xs text-slate-400">
-                    {{ props.copy.twoFactorManualSecret }}:
-                    <code class="font-mono text-slate-200">{{ enrolment.secret }}</code>
-                </p>
-                <label class="mt-4 block text-sm text-slate-300">
-                    {{ props.copy.twoFactorCodeLabel }}
-                    <input
-                        v-model="enrolCode"
-                        data-testid="two-factor-code-input"
-                        inputmode="numeric"
-                        autocomplete="one-time-code"
-                        class="mt-1 block w-40 rounded border border-slate-700 bg-slate-950 px-3 py-2 font-mono"
-                    />
-                </label>
-                <button
-                    type="button"
-                    data-testid="two-factor-confirm"
-                    class="mt-3 rounded bg-emerald-800 px-4 py-2 text-sm text-emerald-50"
-                    @click="confirmEnrolment()"
-                >
-                    {{ props.copy.twoFactorConfirm }}
-                </button>
-            </div>
-
-            <!-- The one and only showing of recovery codes (SEC-03). -->
-            <div v-if="recoveryCodes.length > 0" class="mt-4" data-testid="recovery-codes">
-                <p class="text-sm text-amber-300">{{ props.copy.twoFactorCodesWarning }}</p>
-                <div
-                    class="mt-3 grid grid-cols-2 gap-2 font-mono text-sm text-slate-200 sm:grid-cols-4"
-                >
-                    <span v-for="code in recoveryCodes" :key="code">{{ code }}</span>
-                </div>
-                <div class="mt-3 flex gap-3">
+            <Transition name="step" mode="out-in">
+                <!-- Wizard step 1: scan (QR + copyable manual secret). -->
+                <div v-if="wizardStep === 'scan' && enrolment" key="scan" class="mt-4" data-testid="wizard-scan">
+                    <h3
+                        ref="scanHeading"
+                        tabindex="-1"
+                        data-testid="wizard-scan-heading"
+                        class="text-base font-semibold focus:outline-none"
+                    >
+                        {{ props.copy.wizardScanTitle }}
+                    </h3>
+                    <p class="mt-2 text-sm text-slate-400">{{ props.copy.twoFactorScan }}</p>
+                    <!-- Server-rendered SVG from our own backend (bacon-qr-code), not
+                         user-influenced markup. §13: the secret is exposed as
+                         accessible TEXT beside the QR, not only as pixels. -->
+                    <!-- eslint-disable-next-line vue/no-v-html -->
+                    <div class="mt-3 inline-block rounded bg-white p-2" v-html="enrolment.qr_svg"></div>
+                    <p class="mt-2 text-xs text-slate-400">
+                        {{ props.copy.twoFactorManualSecret }}:
+                        <code class="font-mono text-slate-200" data-testid="manual-secret">{{
+                            enrolment.secret
+                        }}</code>
+                    </p>
+                    <div class="mt-2" aria-live="polite">
+                        <button
+                            type="button"
+                            data-testid="copy-secret"
+                            class="min-h-11 rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                            @click="copySecret()"
+                        >
+                            {{ copiedSecret ? props.copy.copied : props.copy.copySecret }}
+                        </button>
+                    </div>
                     <button
                         type="button"
-                        class="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
-                        @click="downloadCodes()"
+                        data-testid="wizard-scan-continue"
+                        class="mt-4 min-h-11 rounded bg-slate-100 px-4 py-2 text-sm font-medium text-slate-900"
+                        @click="wizardStep = 'verify'"
                     >
-                        {{ props.copy.twoFactorDownload }}
+                        {{ props.copy.wizardContinue }}
                     </button>
-                    <button
-                        type="button"
-                        data-testid="codes-saved"
-                        class="rounded border border-emerald-800 px-3 py-1 text-xs text-emerald-300"
-                        @click="recoveryCodes = []"
+                </div>
+
+                <!-- Wizard step 2: verify — the same one-field segmented input
+                     as the login card, auto-submitting on the 6th digit. -->
+                <div v-else-if="wizardStep === 'verify'" key="verify" class="mt-4" data-testid="wizard-verify">
+                    <h3
+                        ref="verifyHeading"
+                        tabindex="-1"
+                        data-testid="wizard-verify-heading"
+                        class="text-base font-semibold focus:outline-none"
                     >
+                        {{ props.copy.wizardVerifyTitle }}
+                    </h3>
+                    <div class="mt-3">
+                        <SegmentedCodeInput
+                            v-model="enrolCode"
+                            input-id="enrol-code"
+                            :label="props.copy.twoFactorCodeLabel"
+                            :described-by="twoFactorError ? 'two-factor-error' : undefined"
+                            :auto-focus="true"
+                            @complete="(value) => confirmEnrolment(value)"
+                        />
+                    </div>
+                </div>
+
+                <!-- Wizard step 3: the one and only showing of recovery codes
+                     (SEC-03), behind §8's gate: checkbox OR download. -->
+                <div v-else-if="wizardStep === 'codes'" key="codes" class="mt-4" data-testid="wizard-codes">
+                    <h3
+                        ref="codesHeading"
+                        tabindex="-1"
+                        data-testid="wizard-codes-heading"
+                        class="text-base font-semibold focus:outline-none"
+                    >
+                        {{ props.copy.wizardCodesTitle }}
+                    </h3>
+                    <p class="mt-2 text-sm text-amber-300">{{ props.copy.twoFactorCodesWarning }}</p>
+                    <div
+                        class="mt-3 grid grid-cols-2 gap-2 font-mono text-sm text-slate-200 sm:grid-cols-4"
+                        data-testid="recovery-codes"
+                    >
+                        <span v-for="recoveryCode in recoveryCodes" :key="recoveryCode">{{
+                            recoveryCode
+                        }}</span>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-3" aria-live="polite">
+                        <button
+                            type="button"
+                            data-testid="download-codes"
+                            class="min-h-11 rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                            @click="downloadCodes()"
+                        >
+                            {{ props.copy.twoFactorDownload }}
+                        </button>
+                        <button
+                            type="button"
+                            data-testid="copy-all-codes"
+                            class="min-h-11 rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                            @click="copyAllCodes()"
+                        >
+                            {{ copiedCodes ? props.copy.copied : props.copy.copyAllCodes }}
+                        </button>
+                    </div>
+                    <label class="mt-4 flex min-h-11 items-center gap-2 text-sm text-slate-300">
+                        <input
+                            v-model="codesSaved"
+                            type="checkbox"
+                            data-testid="codes-saved-checkbox"
+                            class="size-4 rounded border-slate-700 bg-slate-950"
+                        />
                         {{ props.copy.twoFactorCodesSaved }}
+                    </label>
+                    <button
+                        type="button"
+                        data-testid="wizard-finish"
+                        :disabled="!codesSaved && !codesDownloaded"
+                        class="mt-4 min-h-11 rounded bg-slate-100 px-4 py-2 text-sm font-medium text-slate-900 disabled:opacity-50"
+                        @click="finishWizard()"
+                    >
+                        {{ props.copy.wizardDone }}
                     </button>
                 </div>
-            </div>
+            </Transition>
 
-            <!-- On: disable / regenerate, both demanding a current code. -->
-            <div v-if="twoFactorOn" class="mt-4" data-testid="two-factor-manage">
-                <label class="block text-sm text-slate-300">
+            <!-- On, wizard closed: disable / regenerate, both code-proven. -->
+            <div
+                v-if="twoFactorOn && wizardStep === null"
+                class="mt-4"
+                data-testid="two-factor-manage"
+            >
+                <label class="block text-sm text-slate-300" for="manage-code">
                     {{ props.copy.twoFactorDisableCodeLabel }}
-                    <input
-                        v-model="disableCode"
-                        data-testid="two-factor-manage-code"
-                        inputmode="numeric"
-                        autocomplete="one-time-code"
-                        class="mt-1 block w-40 rounded border border-slate-700 bg-slate-950 px-3 py-2 font-mono"
-                    />
                 </label>
+                <input
+                    id="manage-code"
+                    v-model="manageCode"
+                    data-testid="two-factor-manage-code"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    class="mt-1 block w-40 rounded border border-slate-700 bg-slate-950 px-3 py-2 font-mono"
+                />
                 <div class="mt-3 flex gap-3">
                     <button
                         type="button"
                         data-testid="two-factor-regenerate"
-                        class="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
+                        class="min-h-11 rounded border border-slate-700 px-3 py-1 text-xs text-slate-300"
                         @click="regenerateCodes()"
                     >
                         {{ props.copy.twoFactorRegenerate }}
@@ -448,7 +628,7 @@ onMounted(() => {
                     <button
                         type="button"
                         data-testid="two-factor-disable"
-                        class="rounded border border-red-800 px-3 py-1 text-xs text-red-200"
+                        class="min-h-11 rounded border border-red-800 px-3 py-1 text-xs text-red-200"
                         @click="disableTwoFactor()"
                     >
                         {{ props.copy.twoFactorDisable }}
@@ -473,7 +653,7 @@ onMounted(() => {
                 <div class="mt-6 flex justify-end gap-3">
                     <button
                         type="button"
-                        class="rounded border border-slate-700 px-4 py-2 text-sm text-slate-300"
+                        class="min-h-11 rounded border border-slate-700 px-4 py-2 text-sm text-slate-300"
                         @click="showRevokeOthersModal = false"
                     >
                         {{ props.copy.cancel }}
@@ -482,7 +662,7 @@ onMounted(() => {
                         type="button"
                         :disabled="busy"
                         data-testid="revoke-others-confirm"
-                        class="rounded bg-red-800 px-4 py-2 text-sm text-red-50"
+                        class="min-h-11 rounded bg-red-800 px-4 py-2 text-sm text-red-50"
                         @click="revokeOthers()"
                     >
                         {{ props.copy.revokeOthers }}
@@ -492,3 +672,23 @@ onMounted(() => {
         </div>
     </main>
 </template>
+
+<style scoped>
+/* §9: 150 ms step transitions, none under prefers-reduced-motion. */
+.step-enter-active,
+.step-leave-active {
+    transition: opacity 150ms ease;
+}
+
+.step-enter-from,
+.step-leave-to {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .step-enter-active,
+    .step-leave-active {
+        transition: none;
+    }
+}
+</style>

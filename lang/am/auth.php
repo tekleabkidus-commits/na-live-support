@@ -104,6 +104,16 @@ return [
         'disable_code_label' => 'ለማረጋገጥ የአሁኑን ኮድ ያስገቡ',
         'low_codes_banner' => ':count የመልሶ ማግኛ ኮዶች ቀርተዋል። በቅርቡ አዲስ ስብስብ ይፍጠሩ።',
 
+        // የ§8 የማዋቀሪያ ዊዛርድ (step 13)።
+        'wizard_scan_title' => 'QR ኮዱን ስካን ያድርጉ',
+        'wizard_verify_title' => 'ከመተግበሪያዎ ኮዱን ያስገቡ',
+        'wizard_codes_title' => 'የመልሶ ማግኛ ኮዶችዎን ያስቀምጡ',
+        'wizard_continue' => 'ቀጥል',
+        'wizard_done' => 'ጨርስ',
+        'copy_secret' => 'ሚስጥሩን ቅዳ',
+        'copy_all_codes' => 'ሁሉንም ኮዶች ቅዳ',
+        'copied' => 'ተቀድቷል',
+
         // የመግቢያ ካርዱ የማረጋገጫ ደረጃ (step 13, §8)።
         'challenge_title' => 'የማረጋገጫ ኮድዎን ያስገቡ',
         'challenge_intro' => 'ከማረጋገጫ መተግበሪያዎ ባለ6-አኃዝ ኮዱን ያስገቡ።',

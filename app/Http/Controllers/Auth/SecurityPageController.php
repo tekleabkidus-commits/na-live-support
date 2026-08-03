@@ -53,13 +53,24 @@ final class SecurityPageController extends Controller
                 'twoFactorScan' => __('auth.2fa.scan_instructions'),
                 'twoFactorManualSecret' => __('auth.2fa.manual_secret'),
                 'twoFactorCodeLabel' => __('auth.2fa.code_label'),
-                'twoFactorConfirm' => __('auth.2fa.confirm_action'),
                 'twoFactorCodesWarning' => __('auth.2fa.codes_warning'),
                 'twoFactorCodesSaved' => __('auth.2fa.codes_saved'),
                 'twoFactorDownload' => __('auth.2fa.download_codes'),
                 'twoFactorRegenerate' => __('auth.2fa.regenerate_codes'),
                 'twoFactorDisable' => __('auth.2fa.disable'),
                 'twoFactorDisableCodeLabel' => __('auth.2fa.disable_code_label'),
+
+                // Step 13: §8's wizard chrome. The step headings are what §13's
+                // focus rule lands on; the copy/copied pair feeds an aria-live
+                // region so the state change is announced, not just repainted.
+                'wizardScanTitle' => __('auth.2fa.wizard_scan_title'),
+                'wizardVerifyTitle' => __('auth.2fa.wizard_verify_title'),
+                'wizardCodesTitle' => __('auth.2fa.wizard_codes_title'),
+                'wizardContinue' => __('auth.2fa.wizard_continue'),
+                'wizardDone' => __('auth.2fa.wizard_done'),
+                'copySecret' => __('auth.2fa.copy_secret'),
+                'copyAllCodes' => __('auth.2fa.copy_all_codes'),
+                'copied' => __('auth.2fa.copied'),
             ],
         ]);
     }

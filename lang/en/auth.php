@@ -138,6 +138,18 @@ return [
         'disable_code_label' => 'Enter a current code to confirm',
         'low_codes_banner' => 'You have :count recovery codes left. Generate a new set soon.',
 
+        // §8's enrolment wizard chrome (step 13). The gate copy is
+        // `codes_saved` above — the checkbox half of the checkbox-OR-download
+        // gate the codes step enforces.
+        'wizard_scan_title' => 'Scan the QR code',
+        'wizard_verify_title' => 'Enter the code from your app',
+        'wizard_codes_title' => 'Save your recovery codes',
+        'wizard_continue' => 'Continue',
+        'wizard_done' => 'Done',
+        'copy_secret' => 'Copy the secret',
+        'copy_all_codes' => 'Copy all codes',
+        'copied' => 'Copied',
+
         // The challenge step of the login card (step 13, §8). `recovery_used`
         // is FR-07's "shows remaining count" after a recovery sign-in.
         'challenge_title' => 'Enter your verification code',
