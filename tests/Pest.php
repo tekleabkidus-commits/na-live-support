@@ -5,11 +5,16 @@ declare(strict_types=1);
 use App\Domain\Foundation\Tenancy\TenantLifecycle;
 use App\Domain\Foundation\Tenancy\TenantState;
 use App\Models\Tenant;
+use App\Models\User;
 use App\Support\Audit\AuditActor;
 use App\Support\Tenancy\ResolutionSource;
 use App\Support\Tenancy\RlsSession;
 use App\Support\Tenancy\TenantContext;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -210,8 +215,9 @@ function cleanupTenants(array $tenantIds): void
     $platform = DB::connection('pgsql_platform');
 
     foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
-        'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'tenant_keys',
-        'personal_access_tokens', 'users'] as $table) {
+        'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',
+        'tenant_keys', 'devices', 'auth_action_tokens', 'user_recovery_codes',
+        'user_password_history', 'personal_access_tokens', 'users'] as $table) {
         $platform->table($table)->whereIn('tenant_id', $tenantIds)->delete();
     }
 
@@ -431,6 +437,298 @@ function &capturedLogsRef(): array
     });
 
     return $records;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Secret-hygiene fixtures (Doc 02 step 12 — SEC-08 / AC-08 / C-13)
+|--------------------------------------------------------------------------
+|
+| One driver mints every credential class this document created, through the
+| REAL flows — no service shortcuts on the paths where a request could leak.
+| The two step-12 suites (LogScrubberTest, SecretsNeverSerializeTest) then
+| scan their respective sinks for every value returned here. Shared in
+| Pest.php for the standing reason: targeted runs must not fatal on a helper
+| defined in a sibling suite file.
+|
+| Sentinels are self-identifying per CLAUDE.md §8 (`FAKECRED-…`, fixture
+| emails); server-generated credentials (TOTP secret, recovery codes, token
+| plaintexts, visitor token, reset/invite tokens) are CAPTURED from the real
+| responses instead of seeded, which is strictly stronger: the sweep scans
+| for the actual live values the platform minted.
+|
+*/
+
+const SEEDED_STAFF_PASSWORD = 'FAKECRED-staff-Passw0rd-77341';
+const SEEDED_WRONG_PASSWORD = 'FAKECRED-wrong-Passw0rd-18262';
+const SEEDED_RESET_PASSWORD = 'FAKECRED-reset-Passw0rd-93518';
+const SEEDED_INVITE_PASSWORD = 'FAKECRED-invite-Passw0rd-40257';
+const SEEDED_TELEGRAM_HEADER_SECRET = 'FAKECRED-telegram-header-secret-4e21b0aa';
+const SEEDED_WRONG_TELEGRAM_SECRET = 'FAKECRED-wrong-telegram-secret-59c001db';
+const SEEDED_DLR_HMAC_SECRET = 'FAKECRED-dlr-hmac-secret-b90c33dd';
+
+function seededTotp(string $secret): string
+{
+    return (string) app(PragmaRX\Google2FA\Google2FA::class)
+        ->oathTotp($secret, intdiv(CarbonImmutable::now()->getTimestamp(), 30));
+}
+
+/**
+ * The reset/invite token a queued mailable carries, from the FAKED mail bus.
+ *
+ * @param  class-string  $mailableClass
+ */
+function seededTokenFromFakedMail(string $mailableClass): string
+{
+    $tokens = [];
+
+    Mail::assertQueued($mailableClass, function (object $mail) use (&$tokens): bool {
+        $url = $mail instanceof App\Mail\PasswordResetMail ? $mail->resetUrl : $mail->inviteUrl;
+        if (preg_match('/token=([0-9a-f]{64})/', $url, $matches) === 1) {
+            $tokens[] = $matches[1];
+        }
+
+        return true;
+    });
+
+    if ($tokens === []) {
+        test()->fail(sprintf('No %s token reached the faked mail bus.', $mailableClass));
+    }
+
+    return (string) end($tokens);
+}
+
+/**
+ * The reset/invite token inside a REAL serialized job payload on the
+ * database queue — the recorded C-13 carve-out surface itself, used as the
+ * capture point when the sweep runs with genuine queue serialization.
+ */
+function seededTokenFromJobsTable(string $mailableBasename): string
+{
+    foreach (DB::table('jobs')->pluck('payload') as $payload) {
+        $payload = (string) $payload;
+        if (str_contains($payload, $mailableBasename) && preg_match('/token=([0-9a-f]{64})/', $payload, $matches) === 1) {
+            return $matches[1];
+        }
+    }
+
+    test()->fail(sprintf('No %s payload with a token found on the database queue.', $mailableBasename));
+}
+
+/**
+ * Drive every credential-minting flow Doc 02 built and return the values no
+ * sink may contain.
+ *
+ * @param  bool  $mailOnDatabaseQueue  true → auth mail serializes onto the
+ *                                     database queue for real (jobs-sink
+ *                                     scanning); false → Mail::fake()
+ * @param  bool  $staffOnly  true → only the staff-surface flows (used by the
+ *                           committed events-relay sweep, whose cleanup must
+ *                           stay bounded to one tenant)
+ * @return array{sentinels: array<string, string>, tenants: list<string>}
+ */
+function driveSeededCredentialFlows(bool $mailOnDatabaseQueue, bool $staffOnly = false): array
+{
+    $sentinels = [];
+    $tenants = [];
+
+    // Breach check (T-09): a hard 503 everywhere proves fail-open on the way
+    // past and keeps the driver hermetic — no egress, deterministic.
+    Http::fake(['*' => Http::response('', 503)]);
+
+    if ($mailOnDatabaseQueue) {
+        config(['queue.default' => 'database']);
+    } else {
+        Mail::fake();
+    }
+
+    // ── Staff account: password + login, wrong then right (FR-01/FR-04) ──
+    $tenant = createTenant();
+    $user = asTenant($tenant, fn (): User => User::factory()->create([
+        'email' => 'seeded-staff@fixture.example',
+        'password' => Hash::make(SEEDED_STAFF_PASSWORD),
+        'password_set_at' => now(),
+    ]));
+    activateTenant($tenant);
+    $tenants[] = (string) $tenant->getKey();
+
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+    test()->flushSession();
+
+    $sentinels['staff_password'] = SEEDED_STAFF_PASSWORD;
+    $sentinels['wrong_password'] = SEEDED_WRONG_PASSWORD;
+
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login', [
+        'email' => 'seeded-staff@fixture.example',
+        'password' => SEEDED_WRONG_PASSWORD,
+    ])->assertStatus(422);
+
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login', [
+        'email' => 'seeded-staff@fixture.example',
+        'password' => SEEDED_STAFF_PASSWORD,
+    ])->assertOk();
+
+    // ── 2FA enrolment + challenge + recovery code (FR-06/FR-07) ──
+    $begin = test()->actingAs($user, 'staff')->postJson('/api/staff/security/2fa');
+    $begin->assertOk();
+    $secret = (string) $begin->json('secret');
+
+    $code = seededTotp($secret);
+    $confirm = test()->actingAs($user, 'staff')->postJson('/api/staff/security/2fa/confirm', [
+        'code' => $code,
+        'enrolment_id' => $begin->json('enrolment_id'),
+    ]);
+    $confirm->assertOk();
+    $codes = $confirm->json('recovery_codes');
+
+    $sentinels['totp_secret'] = $secret;
+    $sentinels['totp_code'] = $code;
+    $sentinels['recovery_code_used'] = (string) $codes[0];
+    $sentinels['recovery_code_unused'] = (string) $codes[1];
+
+    // The challenge path, through the real pending state: TOTP once, then a
+    // recovery code, so both credential kinds transit a real request.
+    test()->flushSession();
+    app('auth')->forgetGuards();
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login', [
+        'email' => 'seeded-staff@fixture.example',
+        'password' => SEEDED_STAFF_PASSWORD,
+    ])->assertStatus(401)->assertJsonPath('status', 'two_factor_required');
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login/two-factor', ['code' => seededTotp($secret)])->assertOk();
+
+    test()->flushSession();
+    app('auth')->forgetGuards();
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login', [
+        'email' => 'seeded-staff@fixture.example',
+        'password' => SEEDED_STAFF_PASSWORD,
+    ])->assertStatus(401);
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/login/two-factor', ['recovery_code' => (string) $codes[0]])->assertOk();
+
+    // ── API tokens, personal + machine (FR-18/FR-19) ──
+    $pat = test()->actingAs($user, 'staff')->postJson('https://localhost/api/staff/security/tokens', [
+        'name' => 'seeded integration',
+        'abilities' => ['settings.view'],
+        'expiry' => '90',
+    ]);
+    $pat->assertCreated();
+    $sentinels['pat_plaintext'] = (string) $pat->json('plaintext');
+
+    $machine = test()->actingAs($user, 'staff')->postJson('https://localhost/api/staff/admin/machine-tokens', [
+        'service_account' => 'Seeded Bot',
+        'name' => 'seeded reporting',
+        'abilities' => ['settings.view'],
+        'expiry' => '90',
+    ]);
+    $machine->assertCreated();
+    $sentinels['machine_token_plaintext'] = (string) $machine->json('plaintext');
+
+    // ── Password reset (FR-16) ──
+    test()->flushSession();
+    app('auth')->forgetGuards();
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/forgot-password', ['email' => 'seeded-staff@fixture.example'])->assertOk();
+
+    $resetToken = $mailOnDatabaseQueue
+        ? seededTokenFromJobsTable('PasswordResetMail')
+        : seededTokenFromFakedMail(App\Mail\PasswordResetMail::class);
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/reset-password', [
+        'token' => $resetToken,
+        'password' => SEEDED_RESET_PASSWORD,
+        'password_confirmation' => SEEDED_RESET_PASSWORD,
+    ])->assertOk();
+    $sentinels['reset_token'] = $resetToken;
+    $sentinels['reset_password'] = SEEDED_RESET_PASSWORD;
+
+    // ── Invitation (FR-17) ──
+    $invited = asTenant($tenant, fn (): User => User::factory()->create([
+        'email' => 'seeded-invited@fixture.example',
+        'password' => Hash::make(bin2hex(random_bytes(32))),
+        'password_set_at' => null,
+    ]));
+    asTenant($tenant, fn () => app(App\Domain\Auth\Password\InvitationIssuer::class)->issue(
+        $invited,
+        CarbonImmutable::now(),
+        Illuminate\Http\Request::create('https://localhost/x', 'POST'),
+    ));
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    $inviteToken = $mailOnDatabaseQueue
+        ? seededTokenFromJobsTable('InvitationMail')
+        : seededTokenFromFakedMail(App\Mail\InvitationMail::class);
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/invitation', [
+        'token' => $inviteToken,
+        'password' => SEEDED_INVITE_PASSWORD,
+        'password_confirmation' => SEEDED_INVITE_PASSWORD,
+    ])->assertOk();
+    $sentinels['invite_token'] = $inviteToken;
+    $sentinels['invite_password'] = SEEDED_INVITE_PASSWORD;
+
+    if ($staffOnly) {
+        return ['sentinels' => $sentinels, 'tenants' => $tenants];
+    }
+
+    // ── Widget visitor session (FR-21/FR-22) ──
+    [$widgetTenant, , $widgetKey] = widgetFixture();
+    $tenants[] = (string) $widgetTenant->getKey();
+
+    $issue = widgetSession($widgetKey);
+    $issue->assertCreated();
+    $visitorToken = (string) $issue->json('token');
+    $visitorCookie = visitorCookieFrom($issue);
+    widgetContext($widgetKey, $visitorToken, $visitorCookie)->assertOk();
+
+    $sentinels['widget_key_plaintext'] = $widgetKey;
+    $sentinels['visitor_token'] = $visitorToken;
+    $sentinels['visitor_cookie'] = $visitorCookie;
+
+    // ── Telegram webhook second credential (FR-23), match + mismatch ──
+    [$telegramTenant, $telegramKey] = webhookFixture('telegram_bot', [
+        'header_secret_hash' => hash('sha256', SEEDED_TELEGRAM_HEADER_SECRET),
+    ]);
+    $tenants[] = (string) $telegramTenant->getKey();
+
+    test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+        'Authorization' => 'Bearer '.$telegramKey,
+        'X-Telegram-Bot-Api-Secret-Token' => SEEDED_TELEGRAM_HEADER_SECRET,
+    ])->assertStatus(202);
+    test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+        'Authorization' => 'Bearer '.$telegramKey,
+        'X-Telegram-Bot-Api-Secret-Token' => SEEDED_WRONG_TELEGRAM_SECRET,
+    ])->assertStatus(403);
+
+    $sentinels['telegram_key_plaintext'] = $telegramKey;
+    $sentinels['telegram_header_secret'] = SEEDED_TELEGRAM_HEADER_SECRET;
+    $sentinels['telegram_wrong_secret'] = SEEDED_WRONG_TELEGRAM_SECRET;
+
+    // ── SMS DLR HMAC (FR-24), signed + tampered ──
+    [$dlrTenant, $dlrKey] = webhookFixture('sms_gateway', ['hmac_secret' => SEEDED_DLR_HMAC_SECRET]);
+    $tenants[] = (string) $dlrTenant->getKey();
+
+    $dlrBody = '{"message_id":"seeded-dlr-1","status":"delivered"}';
+    $timestamp = (string) CarbonImmutable::now()->getTimestamp();
+    $nonce = 'seeded-nonce-'.bin2hex(random_bytes(8));
+    $signature = hash_hmac('sha256', sprintf('%s.%s.%s', $timestamp, $nonce, $dlrBody), SEEDED_DLR_HMAC_SECRET);
+
+    $signedDlrServer = static fn (string $sig): array => [
+        'HTTP_AUTHORIZATION' => 'Bearer '.$dlrKey,
+        'HTTP_X_WEBHOOK_SIGNATURE' => $sig,
+        'HTTP_X_WEBHOOK_TIMESTAMP' => $timestamp,
+        'HTTP_X_WEBHOOK_NONCE' => $nonce,
+        'HTTP_ACCEPT' => 'application/json',
+        'CONTENT_TYPE' => 'application/json',
+    ];
+
+    test()->call('POST', 'https://localhost/api/webhooks/sms/dlr', [], [], [], $signedDlrServer($signature), $dlrBody)
+        ->assertStatus(202);
+    test()->call('POST', 'https://localhost/api/webhooks/sms/dlr', [], [], [], $signedDlrServer(str_repeat('ab', 32)), $dlrBody)
+        ->assertStatus(403);
+
+    $sentinels['dlr_key_plaintext'] = $dlrKey;
+    $sentinels['dlr_hmac_secret'] = SEEDED_DLR_HMAC_SECRET;
+    $sentinels['dlr_signature'] = $signature;
+
+    return ['sentinels' => $sentinels, 'tenants' => $tenants];
 }
 
 /*

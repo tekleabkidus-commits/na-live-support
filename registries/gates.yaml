@@ -91,6 +91,15 @@ gates:
     added_date: "2026-07-30"
     blocking: true
 
+  - gate_id: log-scrubber
+    name: Seeded fake credentials are absent from every sink; log records carry trace ids
+    command: bash ci/log-scrubber.sh
+    owning_doc: Doc02
+    owning_ac: AC-08
+    owner: platform-engineering
+    added_date: "2026-08-03"
+    blocking: true
+
   - gate_id: event-catalog
     name: docs/EVENT-CATALOG.md matches the code-side event catalog
     command: php ci/event-catalog.php

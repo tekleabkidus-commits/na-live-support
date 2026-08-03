@@ -502,19 +502,32 @@ entries:
       mismatch, byte-identity and spy tests all went red.
 
   - ac_ref: "Doc02 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/LogScrubberTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      Planned suite: tests/Security/SecretsNeverSerializeTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the secret-hygiene step (step 12): seeded fake credentials absent
-      from every sink (logs, jobs, events, audit payloads), plus the new log-scrubber
-      CI gate. Not yet built.
+      S16, both suites (the second is tests/Security/SecretsNeverSerializeTest.php),
+      run by the log-scrubber gate on every push. THE SINK BOUNDARY, recorded here by
+      owner ruling so the final audit does not rediscover it as a gap: the swept set is
+      the rendered log sink, jobs payloads, outbox, audit payloads, and events after a
+      real committed relay run. Reverb/Redis publish payloads are OUT — T-04's
+      session.revoked publish is identifier-only by design and the event catalog's
+      closed-payload rule polices bus shapes. Every credential class Doc 02 minted is
+      in the roster (21+ sentinels: passwords, TOTP secret + code, recovery codes,
+      reset/invite tokens, PAT + machine plaintexts, widget/telegram/DLR key
+      plaintexts, visitor token + rotating cookie, webhook header secret, hmac secret,
+      signature), server-generated values captured from the real responses. Counting
+      bar held: per sink AND per sentinel, plant → detect → remove → prove absence
+      (savepoint rollback on DB sinks — works even where DELETE is revoked by grant).
+      The recorded C-13 carve-out (PasswordResetMail docblock) is encoded exactly:
+      reset/invite tokens may appear in queue='mail' job rows ONLY, positively
+      asserted in both directions. Sabotages (a)–(f) each went red on the counting
+      assertion — including (a), a password leaked under an innocent key that the
+      key-shape scrubber structurally cannot catch and the value sweep did.
 
   - ac_ref: "Doc02 AC-09"
     suite_path: manual
@@ -536,6 +549,30 @@ entries:
 
   # ── Doc 02 SEC-04 / T-04: recorded because the mechanism EXISTS and is not
   #    proven, which is exactly the state this registry must not hide.
+  - ac_ref: "Doc02 SEC-08"
+    suite_path: tests/Security/LogScrubberTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      S16. BOTH clauses. Clause 1 (logs carry trace_id): AttachLogContext puts
+      tenant_id + trace_id (TenantContext's C-14 correlation id) on every record;
+      asserted on a bound-tenant log line AND on a real refused webhook request's
+      rendered line; sabotage (d) removed the processor and both went red. Clause 2
+      (never passwords/codes/tokens/secrets): two layers with an honest division of
+      labour — ScrubSecrets redacts by key/header shape on every channel via
+      SecurityLogTap (null + emergency exempt by ruling; the channel-pin test makes
+      the exemption list safe, and caught Laravel's config-merge injecting an
+      untapped framework `monthly` channel on its very first run), while the
+      guarantee AC-08 counts is the seeded-credential value sweep over the real
+      flows. The webhook auth headers (X-Telegram-Bot-Api-Secret-Token,
+      X-Webhook-Signature) are covered in nested access-log shapes per the step-11
+      inheritance ruling. Enforced in CI by the log-scrubber gate (fail-closed:
+      cannot-run exits nonzero).
+
   - ac_ref: "Doc02 SEC-04"
     suite_path: tests/Browser/session.spec.ts
     type: automated
