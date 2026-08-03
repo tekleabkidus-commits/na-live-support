@@ -259,8 +259,7 @@ async function submitChallenge(payload: Record<string, unknown>): Promise<void> 
 }
 
 function isGuardedRequest(input: RequestInfo | URL): boolean {
-    const raw =
-        typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    const raw = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
     let url: URL;
     try {
         url = new URL(raw, window.location.origin);
@@ -274,10 +273,7 @@ function isGuardedRequest(input: RequestInfo | URL): boolean {
     return url.origin === window.location.origin && url.pathname.startsWith('/api/staff/');
 }
 
-async function guardedFetch(
-    input: RequestInfo | URL,
-    init?: RequestInit,
-): Promise<Response> {
+async function guardedFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     const response = await rawFetch(input, init);
 
     if ((response.status !== 401 && response.status !== 404) || !isGuardedRequest(input)) {

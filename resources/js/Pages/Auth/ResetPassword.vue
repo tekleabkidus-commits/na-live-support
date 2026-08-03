@@ -27,5 +27,10 @@ defineProps<{
 </script>
 
 <template>
-    <SetPasswordForm endpoint="/reset-password" :token="token" :min-length="minLength" :copy="copy" />
+    <SetPasswordForm
+        endpoint="/reset-password"
+        :token="token"
+        :min-length="minLength"
+        :copy="copy"
+    />
 </template>

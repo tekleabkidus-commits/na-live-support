@@ -88,7 +88,7 @@ final class InvitationController extends Controller
             ];
         }, $this->context);
 
-        $minLength = is_array($prefill) && is_int($prefill['minLength']) ? $prefill['minLength'] : 12;
+        $minLength = $prefill['minLength'];
 
         return Inertia::render('Auth/Invitation', [
             'token' => $token,
@@ -116,8 +116,8 @@ final class InvitationController extends Controller
                 'languageLabel' => __('auth.login.language_label'),
                 'langEnglish' => __('auth.login.lang_english'),
                 'langAmharic' => __('auth.login.lang_amharic'),
-                'name' => is_array($prefill) && is_string($prefill['name']) ? $prefill['name'] : '',
-                'locale' => is_array($prefill) && is_string($prefill['locale']) ? $prefill['locale'] : 'en',
+                'name' => $prefill['name'],
+                'locale' => $prefill['locale'],
             ],
         ]);
     }

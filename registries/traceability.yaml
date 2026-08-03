@@ -530,22 +530,28 @@ entries:
       key-shape scrubber structurally cannot catch and the value sweep did.
 
   - ac_ref: "Doc02 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/auth-screens.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      Planned suite: tests/Browser/auth-visual.spec.ts (converted from "manual" the moment the
-      file exists and executes).
-      PARTIAL BY DESIGN for this session (owner-approved closure bucket): the views
-      step (step 13) ships fully functional, themed, i18n-keyed screens with
-      mechanical a11y assertions in the 360 px Playwright smoke; pixel-regression
-      baselines for every §8 state in en+am × light+dark attach when the approved
-      Claude Design screens land. This row records that bucket rather than claiming
-      visual coverage that does not exist.
+    status: partial
+    gap: >-
+      PARTIAL BY DESIGN (owner ruling at step-13 plan approval, S17). What EXISTS
+      and executes: functional coverage of every §8 screen state at 360 px — the
+      login card's idle/error/challenge/recovery-interstitial states, the
+      three-step enrolment wizard with its checkbox-OR-download gate, the timeout
+      toast, the EC-02 re-login modal, the invitation profile-completion form —
+      with axe-core WCAG 2.2 AA sweeps per state and §13's mechanical assertions
+      (label/aria-describedby association, the segmented code input structurally
+      ONE field, role="alert" on errors, keyboard-only operability, focus to the
+      step heading on wizard transitions; four sabotages each run red). The en
+      side is exercised directly; the am side via the switcher test plus the
+      full-key parity sweep. What does NOT exist and is NOT claimed: pixel
+      baselines for every §8 state in en+am × light+dark — those attach when the
+      approved Claude Design screens land (the named unblocker); there is no
+      dark/light theming yet either (Doc 16). AC-09 stays open until then.
 
   # ── Doc 02 SEC-04 / T-04: recorded because the mechanism EXISTS and is not
   #    proven, which is exactly the state this registry must not hide.
@@ -607,7 +613,7 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
       Built and in use: the tenant-prefixed session handler (t:{tenant}:sess:*, with a
       mandatory TTL per C-07), the signed tenant hint that selects the prefix, and
@@ -626,8 +632,20 @@ entries:
       ALSO FIXED THIS SESSION: SESSION_DRIVER was still `redis` in .env, so the
       tenant-prefixed handler was configured but NEVER IN USE — T-04's prefix was inert
       until the browser suite went looking for the keys and found none.
-      NOT BUILT: T-04's revocation half (key delete + session.revoked publish + Reverb
-      socket close), the session cap, and the timeouts — the remainder of step 6.
+      CORRECTED IN S17 (the tail above previously said the revocation half, the
+      session cap and the timeouts were NOT BUILT — stale since S9/S10, which
+      proved all three): revocation = key delete + index drop + session.revoked
+      publish + Reverb socket close ≤ 2 s is proven by
+      tests/Integration/SessionRevocationSocketTest.php and the FR-12 revoke
+      journeys in tests/Browser/session.spec.ts (S9/S10); the FR-10 cap and
+      oldest-eviction by tests/Browser/session.spec.ts asserted on session KEYS
+      (S9, falsified by reversing the eviction order); the FR-11 timeouts by
+      tests/Feature/Auth/SessionLifetimeTest.php at exact boundaries with an
+      injected clock (S9), wired per S10 — and, since S17, expiry REDIRECTS with
+      the notice flag (tests/Feature/Auth/LoginPageTest.php's FR-11 walk, which
+      caught the sorter hoisting Authenticate above the middleware). This row is
+      now COVERED for T-04's full text; status stays partial only for the
+      documented VerifyTenantHint defence-in-depth nuance above.
 
   - ac_ref: "Doc02 FR-11"
     suite_path: tests/Feature/Auth/SessionLifetimeTest.php

@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–12 COMPLETE (14 of 14 approved steps; FR-09 and the §8/§9 views remain outside the step plan)** | S4–S16 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; **AC-08 covered (S16 — log-scrubber gate over all five sinks, per-sink/per-sentinel positive controls, sabotaged six ways)**; 1 AC not-implemented (AC-09 views) | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. S16 closed step 12 (SEC-08 both clauses + AC-08 + the C-13 secrets-never-serialize sweep: ScrubSecrets/AttachLogContext on every channel via SecurityLogTap, the fail-closed `log-scrubber` gate, 21+ seeded sentinels swept from logs/jobs/outbox/audit/relayed-events, model hidden-pin roster extended, sabotages (a)–(f) each red; one real find: Laravel's config-merge injects an untapped framework `monthly` channel — caught by the channel-pin test on its first run) — local: pest 394/3980, gates 11/11, lint clean; **CI-proven on `91e76c0`: run [30806932074](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30806932074), Stages 1–6 green on first push, `log-scrubber PASS` visible in the Stage 3 gate output.** Remaining: FR-09 role enforcement (needs Doc 03), views + AC-09 |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — step plan COMPLETE incl. the S17 views step; FR-09 role enforcement is the one remaining item (needs Doc 03)** | S4–S17 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; **AC-08 covered (S16 — log-scrubber gate over all five sinks, per-sink/per-sentinel positive controls, sabotaged six ways)**; **AC-09 PARTIAL (S17 — every §8 state functional + axe-swept at 360 px in en/am; pixel baselines await the approved design screens; theming awaits Doc 16)** | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. S16 closed step 12 (SEC-08 both clauses + AC-08 + the C-13 secrets-never-serialize sweep: ScrubSecrets/AttachLogContext on every channel via SecurityLogTap, the fail-closed `log-scrubber` gate, 21+ seeded sentinels swept from logs/jobs/outbox/audit/relayed-events, model hidden-pin roster extended, sabotages (a)–(f) each red; one real find: Laravel's config-merge injects an untapped framework `monthly` channel — caught by the channel-pin test on its first run) — local: pest 394/3980, gates 11/11, lint clean; **CI-proven on `91e76c0`: run [30806932074](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30806932074), Stages 1–6 green on first push, `log-scrubber PASS` visible in the Stage 3 gate output.** S17 closed step 13 (the authentication screens: §8/§9/§13/§14, AC-09 → PARTIAL; login card + 2FA challenge step + enrolment wizard with the checkbox-OR-download gate + T-2 min toast + EC-02 re-login modal + invitation profile completion; interpretation A-2 filed; **two real defects found and fixed**: FR-11 expiry rendered a half-dead 200 instead of redirecting — the sorter hoists Authenticate above the lifetime middleware (S13's lesson replayed on the web stack), and the §13 sweep caught sub-4.5:1 contrast plus a hardcoded `html lang="en"` under an Amharic render). Remaining: FR-09 role enforcement (needs Doc 03); AC-09 pixel baselines (needs approved design screens) |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -1561,6 +1561,117 @@ nested access-log shapes.
   strand committed fixture rows in the test database — same standing
   caveat as the Doc 01 chaos tests, self-identifying via `@fixture`/
   `FAKECRED` markers.
+
+## Session-17 report (Doc 02 step 13 — the authentication screens: §8, §9, §13, §14, AC-09)
+
+**Evidence: pest 431 passed / 11 skipped (4303 assertions), full suite in-stack — includes the enumeration suite per the owner invariant; browser 25 passed (8 new in
+`tests/Browser/auth-screens.spec.ts` + all 17 existing); `make gates` 11/11; Pint +
+PHPStan(max) + ESLint + vue-tsc clean. CI: recorded below after push.**
+
+### Built (every §8 screen state now exists and is exercised)
+
+| Surface | What §8/§9 asked for, delivered |
+|---|---|
+| **Login card** (`GET /login`, new — only the POST existed) | Brand-card shell, states idle → submitting (spinner-in-button, locked fields) → inline generic error → 2FA step → redirect; forgot-password always visible; endonym language switcher; remember-me (FR-13's only UI surface) |
+| **2FA challenge step** | A state of the card, driven by the existing `401 two_factor_required` contract; segmented 6-digit input that is STRUCTURALLY one `<input>` (§13), auto-focus (§8's named exception to the heading-focus rule), paste-friendly, auto-submits on the 6th digit; recovery-code alternative with FR-07's remaining-count interstitial and low-codes banner; `restart_login` RFC 9457 extension member gives the card a stable back-to-password signal for FR-07's void |
+| **Enrolment wizard** (Security page) | Three steps (scan → verify → codes); the codes step BLOCKS until "I have saved these" is checked OR the file downloaded (both halves of the OR proven independently, gate sabotage run red); copyable secret, copy-all codes; regenerated codes re-enter the same gated step (SEC-03) |
+| **Timeout warning** (§8 T-2 min) | `SessionTimeoutSentinel` + `GET /api/staff/session/deadline`: toast scheduled from the SERVER's `effective_seconds_remaining`; "stay signed in" calls the endpoint, which rolls the idle clock and can never move the absolute cap (the load-bearing pest pair) |
+| **EC-02 re-login modal** | Same sentinel, staff-Inertia scope only (owner ruling, stated in the docblock); trigger is interpretation A-2 (confirm-against-the-deadline-probe, because C-10 makes a dead session's 404 deliberately ambiguous); modal handles password + 2FA + recovery; original request replays with a refreshed CSRF header; in-page state survives — proven by typing into a field, killing the session server-side, recovering, and finding the field intact |
+| **Invitation profile completion** | Name + language (exact en|am set) ride the accept, persisted only AFTER the password applies (no unaudited write on a failed accept — proven); form prefills the admin-entered name. **Avatar: NOT-IMPLEMENTED — blocked on the media pipeline (Docs 04/08)** |
+| **§9 components** | PasswordField (visibility toggle + TEXT strength meter arguing from the tenant minimum, §13), SegmentedCodeInput, AuthCard; host-tone props because Doc 16 owns theming |
+| **§14** | Guest locale cookie hop (exactly `en|am`, staff `users.locale` always wins, malformed ignored + counted through the S16 scrubber); `html lang` now follows the request locale (was hardcoded `en` under a stale comment) |
+
+### Proven — the §13 falsification core, each sabotage RED before counting
+
+All at 360×740 (§9/NFR-05), with axe-core WCAG 2.2 AA sweeps per screen state:
+
+| Sabotage | Red output (verbatim assertion that failed) |
+|---|---|
+| (a) `role="alert"` removed from the login error | `expect(error).toHaveAttribute('role', 'alert')` → `unexpected value "null"` |
+| (b) code input split into two inputs | `expect(codeInputs).toHaveCount(1)` → `Expected: 1 Received: 2` |
+| (c) wizard heading focus call dropped | `expect(wizard-scan-heading).toBeFocused()` → `unexpected value "inactive"` |
+| (d) codes-step gate removed | `expect(finish).toBeDisabled()` → `unexpected value "enabled"` |
+
+Also proven: complete keyboard-only sign-in; label/`aria-describedby` association on
+every error; the FR-11 walk (expiry → redirect → notice → return to the preserved URL);
+the ruled return-URL refusal fixtures (absolute, `//host`, `/\host`, `\/host`, plus the
+whole backslash/control-char class) at both unit and page level; the deadline clock pair;
+guest-cookie locale with staff-wins and exact-set refusal (logged + scrubbed); invitation
+profile persistence, refusal, and ordering. **The enumeration suite was re-run as part of
+the full-suite gate per the owner's invariant — the new screens introduce no response
+difference between existing and non-existing accounts (the card renders one error path,
+and its props carry nothing account-shaped, asserted).**
+
+### TWO REAL DEFECTS the new tests caught (both pre-existing, both fixed)
+
+1. **FR-11's redirect never happened on the web surface.** The middleware sorter hoists
+   `Authenticate` (priority-listed contract) ABOVE the group-appended
+   `EnforceSessionLifetime` — S13's bearer-stack lesson replayed on the web stack. So
+   Authenticate passed on the not-yet-flushed session, the middleware then silently
+   de-authenticated, and an expired session's page rendered **half-dead with a 200**
+   (null user, empty props) instead of redirecting. Found by the FR-11 walk-through
+   test's first run; fixed by the middleware OWNING its redirect (`redirect()->guest`)
+   instead of assuming its position; the bootstrap comment that claimed the old ordering
+   was corrected. The staff API surface was never affected (its stack has no
+   priority-listed auth middleware).
+2. **§13 contrast and language-tag violations in shipped screens.** The axe sweep found
+   `slate-500`-on-`slate-950` table text at ≈4.3:1 and the §9 components' dark chrome at
+   ≈2.9:1 on the light forms; fixed with tone props, not test exemptions. The root blade
+   hardcoded `lang="en"` (stale "until i18n lands" comment) — an Amharic render carried
+   the wrong pronunciation tag for assistive tech.
+
+### Decisions filed
+
+- **A-2 in docs/ANSWERS-FROM-DOC-AUTHOR.md**: EC-02 says "next request 401" but Doc 01
+  C-10 makes a dead session's staff-API answer a 404 indistinguishable from not-found —
+  the modal's trigger is therefore client-side confirmation via the deadline probe,
+  server responses unchanged.
+- **§8 vs §13 focus collision resolved by the spec's own text**: wizard transitions focus
+  the step heading (§13); the login challenge step auto-focuses the code input (§8 names
+  it). Recorded in both components.
+- **Focus is wired to `Transition@after-enter`**, not `nextTick` — with `mode="out-in"`
+  the incoming step is not mounted when the state changes; the naive version passed on
+  the first step and failed on every later one, which is exactly what the browser test
+  caught.
+
+### NOT DONE (recorded, not dropped)
+
+- **AC-09 pixel baselines** — PARTIAL by design (owner ruling): functional + axe coverage
+  of every §8 state exists at 360 px in en/am; visual regression attaches when the
+  approved Claude Design screens land. Traceability row updated to `partial` with the
+  named unblocker.
+- **Avatar upload** (§8 invited profile) — needs the media pipeline (Docs 04/08).
+- **Theming** — screens are neutral (logical properties per C-15); Doc 16 owns tokens.
+- **FR-09 2FA role-enforcement policy** — still the one Doc 02 item outside this plan;
+  needs Doc 03's roles.
+
+### Registry corrections in this session
+
+- **Doc02 T-04 traceability row**: the stale tail claiming the revocation half, session
+  cap and timeouts were NOT BUILT (disproven by S9/S10) replaced with citations to
+  `SessionRevocationSocketTest`, `session.spec.ts`, and `SessionLifetimeTest`; row now
+  `covered`, and it records S17's expiry-redirect fix.
+- **Doc02 AC-09 row**: `manual/not-implemented` → `automated/partial` against
+  `tests/Browser/auth-screens.spec.ts` with the pixel-baseline unblocker named.
+
+### Risks carried forward
+
+- **The sentinel monkey-patches `window.fetch` on the staff Inertia surface.** Scoped,
+  documented, and restored on unmount — but any future page that captures `fetch` before
+  the sentinel mounts bypasses the EC-02 modal for its requests. Doc 07's app shell
+  should mount the sentinel once at the root.
+- **The EC-02 replay repeats the original request after re-login.** Idempotent for
+  everything on today's surface; a future non-idempotent staff POST recovered through
+  the modal would run once — after a failure the server never processed. Reviewed as
+  safe today; Doc 07 should re-review when the composer sends messages.
+- **The strength meter is advice, not policy** — deliberately weaker than the server
+  (no breach/reuse check client-side); the copy never promises acceptance.
+- **Amharic for every new string is machine-authored** — joins the standing
+  native-review item.
+- **Local browser runs need `docker compose cp public/build app:/app/public/`** after a
+  frontend build (ADR 0002 pins `public/build` to the image's copy); CI is unaffected
+  (it builds the image). Recorded here so the next session does not chase "stale
+  screens" as an application bug.
 
 ## Deferred with reason
 

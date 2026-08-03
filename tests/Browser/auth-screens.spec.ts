@@ -34,7 +34,18 @@ test.describe.configure({ mode: 'serial' });
 function inspect(...args: string[]): string {
     return execFileSync(
         'docker',
-        ['compose', '-f', 'docker/compose.yaml', 'exec', '-T', 'app', 'php', 'artisan', 'auth:session-inspect', ...args],
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'auth:session-inspect',
+            ...args,
+        ],
         { encoding: 'utf8' },
     ).trim();
 }
@@ -43,7 +54,16 @@ function primaryTenantId(): string {
     const out = execFileSync(
         'docker',
         [
-            'compose', '-f', 'docker/compose.yaml', 'exec', '-T', 'app', 'php', 'artisan', 'tinker', '--execute',
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'tinker',
+            '--execute',
             'foreach (DB::connection("pgsql_platform")->table("tenants")->orderBy("name")->get(["name","id"]) as $t) { echo $t->name, "=", $t->id, "\n"; }',
         ],
         { encoding: 'utf8' },
@@ -98,9 +118,15 @@ async function clearMailbox(mailpit: APIRequestContext): Promise<void> {
     await mailpit.delete('/api/v1/messages');
 }
 
-async function actionLinkFor(mailpit: APIRequestContext, email: string, path: string): Promise<string> {
+async function actionLinkFor(
+    mailpit: APIRequestContext,
+    email: string,
+    path: string,
+): Promise<string> {
     for (let attempt = 0; attempt < 60; attempt++) {
-        const search = await mailpit.get(`/api/v1/search?query=${encodeURIComponent(`to:"${email}"`)}`);
+        const search = await mailpit.get(
+            `/api/v1/search?query=${encodeURIComponent(`to:"${email}"`)}`,
+        );
         const body = (await search.json()) as { messages?: { ID: string }[] };
         const newestId = body.messages?.[0]?.ID;
         if (newestId) {
@@ -109,7 +135,9 @@ async function actionLinkFor(mailpit: APIRequestContext, email: string, path: st
                 Text?: string;
             };
             const haystack = `${message.HTML ?? ''}\n${message.Text ?? ''}`;
-            const match = haystack.match(new RegExp(`https://[^"'\\s<]*${path.slice(1)}\\?token=[0-9a-f]{64}`));
+            const match = haystack.match(
+                new RegExp(`https://[^"'\\s<]*${path.slice(1)}\\?token=[0-9a-f]{64}`),
+            );
             if (match) return match[0];
         }
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -149,7 +177,10 @@ test('§13: keyboard-only sign-in at 360 px; errors are role="alert" and aria-as
     // §13: role="alert" announces the failure; the inputs point at it.
     await expect(error).toHaveAttribute('role', 'alert');
     await expect(page.locator('#login-email')).toHaveAttribute('aria-describedby', /login-error/);
-    await expect(page.locator('#login-password')).toHaveAttribute('aria-describedby', /login-error/);
+    await expect(page.locator('#login-password')).toHaveAttribute(
+        'aria-describedby',
+        /login-error/,
+    );
     await expectAxeClean(page, 'login card (error)');
 
     // Then the same keyboard journey with the right password signs in — the
@@ -161,7 +192,9 @@ test('§13: keyboard-only sign-in at 360 px; errors are role="alert" and aria-as
     await page.waitForURL('**/');
 });
 
-test('§14: the language switcher re-renders the card in Amharic via the guest cookie, and back', async ({ page }) => {
+test('§14: the language switcher re-renders the card in Amharic via the guest cookie, and back', async ({
+    page,
+}) => {
     await gotoLogin(page);
     await expect(page.locator('h1')).toHaveText('Sign in');
 
@@ -213,7 +246,9 @@ test('§8 wizard: focus lands on each step heading, the code field is structural
     await expect(page.getByTestId('wizard-codes')).toBeVisible();
     await expect(page.getByTestId('wizard-codes-heading')).toBeFocused();
 
-    recoveryCodes = (await page.getByTestId('recovery-codes').locator('span').allTextContents()).map((c) => c.trim());
+    recoveryCodes = (
+        await page.getByTestId('recovery-codes').locator('span').allTextContents()
+    ).map((c) => c.trim());
     expect(recoveryCodes.length).toBeGreaterThanOrEqual(8);
 
     const finish = page.getByTestId('wizard-finish');
@@ -264,8 +299,13 @@ test('§8 challenge step: heading takes focus, a wrong code alerts generically a
     await page.waitForURL('**/');
 });
 
-test('FR-07 recovery path: consumes one code, shows the remaining count before moving on', async ({ page }) => {
-    expect(recoveryCodes.length, 'enrolment must have captured codes first (serial suite)').toBeGreaterThan(0);
+test('FR-07 recovery path: consumes one code, shows the remaining count before moving on', async ({
+    page,
+}) => {
+    expect(
+        recoveryCodes.length,
+        'enrolment must have captured codes first (serial suite)',
+    ).toBeGreaterThan(0);
 
     await cardLogin(page, TWO_FACTOR_EMAIL, PASSWORD);
     await expect(page.getByTestId('challenge-heading')).toBeVisible();
@@ -323,7 +363,9 @@ test('EC-02: a session revoked elsewhere raises the re-login modal OVER untouche
     await expect(page.getByTestId('two-factor-error')).toBeVisible();
 });
 
-test('§8 timeout toast: fires at T-2 min on the SERVER\'s deadline, and "stay signed in" defers it', async ({ page }) => {
+test('§8 timeout toast: fires at T-2 min on the SERVER\'s deadline, and "stay signed in" defers it', async ({
+    page,
+}) => {
     await cardLogin(page, PRIMARY_EMAIL, PASSWORD);
     await page.waitForURL('**/');
 
@@ -396,7 +438,10 @@ test('§8/§9 invitation: dead link screen, resend, profile completion (name + l
     await expect(page.locator('[role=status]')).toBeVisible();
 
     // The profile stuck: the fresh account signs in and its locale is am.
-    const probe = await request.newContext({ baseURL: page.url().split('/invitation')[0], ignoreHTTPSErrors: true });
+    const probe = await request.newContext({
+        baseURL: page.url().split('/invitation')[0],
+        ignoreHTTPSErrors: true,
+    });
     await mailpit.dispose();
     await probe.dispose();
 
@@ -421,7 +466,16 @@ function twoFactorSecret(): string {
     const out = execFileSync(
         'docker',
         [
-            'compose', '-f', 'docker/compose.yaml', 'exec', '-T', 'app', 'php', 'artisan', 'tinker', '--execute',
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'tinker',
+            '--execute',
             // Twice, because the model's `encrypted` cast wraps the domain
             // layer's own Crypt envelope — the DB column is encrypt(encrypt(json)).
             `$c = Illuminate\\Support\\Facades\\Crypt::class; $d = json_decode($c::decryptString($c::decryptString((string) DB::connection("pgsql_platform")->table("users")->where("email", "${TWO_FACTOR_EMAIL}")->value("two_factor_secret"))), true); echo $d["secret"];`,

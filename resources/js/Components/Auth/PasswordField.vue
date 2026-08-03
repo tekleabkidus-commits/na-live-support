@@ -53,7 +53,10 @@ function onInput(event: Event): void {
                 :type="visible ? 'text' : 'password'"
                 :autocomplete="autocomplete"
                 required
-                :aria-describedby="[describedBy, meterText ? meterId : undefined].filter(Boolean).join(' ') || undefined"
+                :aria-describedby="
+                    [describedBy, meterText ? meterId : undefined].filter(Boolean).join(' ') ||
+                    undefined
+                "
                 class="w-full rounded p-3 pe-14"
                 :class="inputClass ?? 'border border-slate-700 bg-slate-950 text-slate-100'"
                 @input="onInput"

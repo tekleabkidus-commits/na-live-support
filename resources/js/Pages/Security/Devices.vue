@@ -371,7 +371,12 @@ onMounted(() => {
         </p>
 
         <!-- §9: skeleton while the table loads — never a full-page blocker. -->
-        <div v-else-if="loading" class="mt-6 space-y-3" data-testid="devices-skeleton" aria-hidden="true">
+        <div
+            v-else-if="loading"
+            class="mt-6 space-y-3"
+            data-testid="devices-skeleton"
+            aria-hidden="true"
+        >
             <div class="h-6 animate-pulse rounded bg-slate-800"></div>
             <div class="h-6 animate-pulse rounded bg-slate-800"></div>
             <div class="h-6 animate-pulse rounded bg-slate-800"></div>
@@ -506,7 +511,12 @@ onMounted(() => {
 
             <Transition name="step" mode="out-in" @after-enter="focusWizardHeading">
                 <!-- Wizard step 1: scan (QR + copyable manual secret). -->
-                <div v-if="wizardStep === 'scan' && enrolment" key="scan" class="mt-4" data-testid="wizard-scan">
+                <div
+                    v-if="wizardStep === 'scan' && enrolment"
+                    key="scan"
+                    class="mt-4"
+                    data-testid="wizard-scan"
+                >
                     <h3
                         ref="scanHeading"
                         tabindex="-1"
@@ -519,8 +529,12 @@ onMounted(() => {
                     <!-- Server-rendered SVG from our own backend (bacon-qr-code), not
                          user-influenced markup. §13: the secret is exposed as
                          accessible TEXT beside the QR, not only as pixels. -->
-                    <!-- eslint-disable-next-line vue/no-v-html -->
-                    <div class="mt-3 inline-block rounded bg-white p-2" v-html="enrolment.qr_svg"></div>
+                    <!-- eslint-disable vue/no-v-html -->
+                    <div
+                        class="mt-3 inline-block rounded bg-white p-2"
+                        v-html="enrolment.qr_svg"
+                    ></div>
+                    <!-- eslint-enable vue/no-v-html -->
                     <p class="mt-2 text-xs text-slate-400">
                         {{ props.copy.twoFactorManualSecret }}:
                         <code class="font-mono text-slate-200" data-testid="manual-secret">{{
@@ -549,7 +563,12 @@ onMounted(() => {
 
                 <!-- Wizard step 2: verify — the same one-field segmented input
                      as the login card, auto-submitting on the 6th digit. -->
-                <div v-else-if="wizardStep === 'verify'" key="verify" class="mt-4" data-testid="wizard-verify">
+                <div
+                    v-else-if="wizardStep === 'verify'"
+                    key="verify"
+                    class="mt-4"
+                    data-testid="wizard-verify"
+                >
                     <h3
                         ref="verifyHeading"
                         tabindex="-1"
@@ -575,7 +594,12 @@ onMounted(() => {
 
                 <!-- Wizard step 3: the one and only showing of recovery codes
                      (SEC-03), behind §8's gate: checkbox OR download. -->
-                <div v-else-if="wizardStep === 'codes'" key="codes" class="mt-4" data-testid="wizard-codes">
+                <div
+                    v-else-if="wizardStep === 'codes'"
+                    key="codes"
+                    class="mt-4"
+                    data-testid="wizard-codes"
+                >
                     <h3
                         ref="codesHeading"
                         tabindex="-1"
@@ -584,7 +608,9 @@ onMounted(() => {
                     >
                         {{ props.copy.wizardCodesTitle }}
                     </h3>
-                    <p class="mt-2 text-sm text-amber-300">{{ props.copy.twoFactorCodesWarning }}</p>
+                    <p class="mt-2 text-sm text-amber-300">
+                        {{ props.copy.twoFactorCodesWarning }}
+                    </p>
                     <div
                         class="mt-3 grid grid-cols-2 gap-2 font-mono text-sm text-slate-200 sm:grid-cols-4"
                         data-testid="recovery-codes"

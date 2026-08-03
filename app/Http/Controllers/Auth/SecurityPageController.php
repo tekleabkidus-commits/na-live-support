@@ -33,7 +33,7 @@ final class SecurityPageController extends Controller
             // same person; there is no account chooser in a session-recovery
             // dialog.
             'sentinel' => [
-                'email' => (string) $user?->getAttribute('email'),
+                'email' => is_string($email = $user?->getAttribute('email')) ? $email : '',
                 'copy' => [
                     'timeoutWarning' => __('auth.session.timeout_warning'),
                     'staySignedIn' => __('auth.session.stay_signed_in'),

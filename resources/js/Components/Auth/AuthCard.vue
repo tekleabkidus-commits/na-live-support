@@ -59,7 +59,11 @@ function switchLocale(target: string, current: string): void {
                 type="button"
                 data-testid="lang-en"
                 class="min-h-11 min-w-11 rounded px-3 py-2"
-                :class="locale === 'en' ? 'bg-slate-800 text-slate-100' : 'text-slate-400 hover:text-slate-200'"
+                :class="
+                    locale === 'en'
+                        ? 'bg-slate-800 text-slate-100'
+                        : 'text-slate-400 hover:text-slate-200'
+                "
                 :aria-pressed="locale === 'en'"
                 @click="switchLocale('en', locale)"
             >
@@ -69,7 +73,11 @@ function switchLocale(target: string, current: string): void {
                 type="button"
                 data-testid="lang-am"
                 class="min-h-11 min-w-11 rounded px-3 py-2"
-                :class="locale === 'am' ? 'bg-slate-800 text-slate-100' : 'text-slate-400 hover:text-slate-200'"
+                :class="
+                    locale === 'am'
+                        ? 'bg-slate-800 text-slate-100'
+                        : 'text-slate-400 hover:text-slate-200'
+                "
                 :aria-pressed="locale === 'am'"
                 @click="switchLocale('am', locale)"
             >

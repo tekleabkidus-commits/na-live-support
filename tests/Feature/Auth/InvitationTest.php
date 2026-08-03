@@ -234,7 +234,7 @@ it('completes the profile on accept: name and language persist with the first pa
     app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
     [$token] = queuedInviteTokens();
 
-    test()->postJson('https://localhost/invitation', [
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/invitation', [
         'token' => $token,
         'password' => 'My-Own-First-Password',
         'password_confirmation' => 'My-Own-First-Password',
@@ -259,7 +259,7 @@ it('refuses a locale outside {en, am} loudly, spends nothing, and lets the perso
     app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
     [$token] = queuedInviteTokens();
 
-    $refused = test()->postJson('https://localhost/invitation', [
+    $refused = test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/invitation', [
         'token' => $token,
         'password' => 'My-Own-First-Password',
         'password_confirmation' => 'My-Own-First-Password',
@@ -277,7 +277,7 @@ it('refuses a locale outside {en, am} loudly, spends nothing, and lets the perso
     app(TenantContext::class)->clear();
     app(RlsSession::class)->clear();
 
-    test()->postJson('https://localhost/invitation', [
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/invitation', [
         'token' => $token,
         'password' => 'My-Own-First-Password',
         'password_confirmation' => 'My-Own-First-Password',
@@ -294,7 +294,7 @@ it('leaves the profile untouched when the PASSWORD is refused — no unaudited w
     app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
     [$token] = queuedInviteTokens();
 
-    test()->postJson('https://localhost/invitation', [
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->postJson('https://localhost/invitation', [
         'token' => $token,
         'password' => 'short',
         'password_confirmation' => 'short',
@@ -316,7 +316,7 @@ it('prefills the profile fields from what the admin already entered (§8: comple
     app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
     [$token] = queuedInviteTokens();
 
-    test()->get('https://localhost/invitation?token='.$token)
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->get('https://localhost/invitation?token='.$token)
         ->assertOk()
         ->assertInertia(
             fn ($page) => $page

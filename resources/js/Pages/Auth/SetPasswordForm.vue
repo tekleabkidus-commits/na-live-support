@@ -203,7 +203,11 @@ async function submit(): Promise<void> {
                 chrome-class="text-gray-600 hover:text-gray-900"
             />
 
-            <ul v-if="errors.length" class="rounded bg-red-50 p-3 text-sm text-red-800" role="alert">
+            <ul
+                v-if="errors.length"
+                class="rounded bg-red-50 p-3 text-sm text-red-800"
+                role="alert"
+            >
                 <li v-for="message in errors" :key="message">{{ message }}</li>
             </ul>
 
