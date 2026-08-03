@@ -1,7 +1,8 @@
 <script setup lang="ts">
-// Doc 02 FR-16 — choose a new password on a live reset token. The designed
-// screen (strength meter, §8 states, AC-09) is the views step's; this is the
-// functional form, same precedent as S11's 2FA card.
+// Doc 02 FR-16 — choose a new password on a live reset token, with §9's
+// password field and text strength meter (step 13). Pixel design still awaits
+// the approved screens (AC-09 PARTIAL); the functional and accessible surface
+// is complete.
 import SetPasswordForm from './SetPasswordForm.vue';
 
 defineProps<{
@@ -15,10 +16,16 @@ defineProps<{
         done: string;
         lengthHint: string;
         mismatch: string;
+        showPassword: string;
+        hidePassword: string;
+        strengthLabel: string;
+        strengthWeak: string;
+        strengthFair: string;
+        strengthStrong: string;
     };
 }>();
 </script>
 
 <template>
-    <SetPasswordForm endpoint="/reset-password" :token="token" :copy="copy" />
+    <SetPasswordForm endpoint="/reset-password" :token="token" :min-length="minLength" :copy="copy" />
 </template>

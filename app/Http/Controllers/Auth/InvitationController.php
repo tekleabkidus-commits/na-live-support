@@ -74,11 +74,21 @@ final class InvitationController extends Controller
             ]);
         }
 
-        $minLength = $this->withinTenant(
-            $redemption->tenantId,
-            fn (): int => $this->minLength(),
-            $this->context,
-        );
+        // §8 (step 13): the screen doubles as profile completion, so the form
+        // prefills what the admin already entered — completion, not a blank
+        // slate. Read within the token's tenant like everything else here.
+        $prefill = $this->withinTenant($redemption->tenantId, function () use ($redemption): array {
+            $user = User::query()->find($redemption->userId);
+            $locale = $user?->getAttribute('locale');
+
+            return [
+                'minLength' => $this->minLength(),
+                'name' => is_string($user?->getAttribute('name')) ? $user->getAttribute('name') : '',
+                'locale' => in_array($locale, ['en', 'am'], true) ? $locale : 'en',
+            ];
+        }, $this->context);
+
+        $minLength = is_array($prefill) && is_int($prefill['minLength']) ? $prefill['minLength'] : 12;
 
         return Inertia::render('Auth/Invitation', [
             'token' => $token,
@@ -92,6 +102,22 @@ final class InvitationController extends Controller
                 'done' => __('auth.password.invite_done'),
                 'lengthHint' => __('auth.password.rule_length', ['min' => $minLength]),
                 'mismatch' => __('auth.password.confirm_mismatch'),
+
+                // Step 13: §9's password field (toggle + text strength meter).
+                'showPassword' => __('auth.login.show_password'),
+                'hidePassword' => __('auth.login.hide_password'),
+                'strengthLabel' => __('auth.password.strength_label'),
+                'strengthWeak' => __('auth.password.strength_weak'),
+                'strengthFair' => __('auth.password.strength_fair'),
+                'strengthStrong' => __('auth.password.strength_strong'),
+            ],
+            'profile' => [
+                'nameLabel' => __('auth.password.name_label'),
+                'languageLabel' => __('auth.login.language_label'),
+                'langEnglish' => __('auth.login.lang_english'),
+                'langAmharic' => __('auth.login.lang_amharic'),
+                'name' => is_array($prefill) && is_string($prefill['name']) ? $prefill['name'] : '',
+                'locale' => is_array($prefill) && is_string($prefill['locale']) ? $prefill['locale'] : 'en',
             ],
         ]);
     }
@@ -120,9 +146,34 @@ final class InvitationController extends Controller
             );
         }
 
+        // §8 (step 13): the profile-completion half. Both optional; both
+        // refused loudly when malformed rather than silently rewritten. The
+        // locale bar matches ApplyUserLocale's guest hop exactly — en|am, an
+        // exact set, because this value feeds the same translator.
+        $name = trim($request->string('name')->toString());
+        $locale = $request->string('locale')->toString();
+
+        if ($locale !== '' && ! in_array($locale, ['en', 'am'], true)) {
+            return ProblemDetails::response(
+                code: ErrorCode::ValidationFailed,
+                status: 422,
+                detail: (string) __('auth.password.invalid_language'),
+                errors: ['locale' => [(string) __('auth.password.invalid_language')]],
+            );
+        }
+
+        if (mb_strlen($name) > 255) {
+            return ProblemDetails::response(
+                code: ErrorCode::ValidationFailed,
+                status: 422,
+                detail: (string) __('auth.password.invalid_name'),
+                errors: ['name' => [(string) __('auth.password.invalid_name')]],
+            );
+        }
+
         $now = CarbonImmutable::now();
 
-        $applied = $this->withinTenant($redemption->tenantId, function () use ($redemption, $password, $request, $now): bool {
+        $applied = $this->withinTenant($redemption->tenantId, function () use ($redemption, $password, $name, $locale, $request, $now): bool {
             $user = User::query()->find($redemption->userId);
 
             if ($user === null) {
@@ -138,6 +189,20 @@ final class InvitationController extends Controller
                 keepSessionId: null,
                 oncePolicyPassed: fn (): bool => $this->redeemer->consume($redemption, $now),
             );
+
+            // AFTER the password applied, deliberately: a policy-refused
+            // attempt must leave the user row untouched — a mutation on a
+            // failed accept would be a write the route's audit declaration
+            // (fired on 2xx only) never covers.
+            if ($name !== '') {
+                $user->setAttribute('name', $name);
+            }
+            if ($locale !== '') {
+                $user->setAttribute('locale', $locale);
+            }
+            if ($user->isDirty()) {
+                $user->save();
+            }
 
             return true;
         }, $this->context);

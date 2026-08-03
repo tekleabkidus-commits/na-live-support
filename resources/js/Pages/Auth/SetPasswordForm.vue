@@ -1,17 +1,28 @@
 <script setup lang="ts">
-// Doc 02 FR-16/FR-17 — the shared set-a-password form (reset + invitation).
+// Doc 02 FR-16/FR-17 — the shared set-a-password form (reset + invitation),
+// now with §9's password field (visibility toggle + strength meter) and §8's
+// invitation profile-completion half (step 13).
 //
 // One component because the two flows must behave identically (same policy
-// feedback shape, same done-state) — the differences are the endpoint and the
-// copy, which arrive as props. No user-facing literals live here (N-03); the
-// per-rule errors render the server's own localized problem-details `errors`,
-// which is FR-16's "live policy validation" surface until the views step adds
-// the designed strength meter on top of the same data.
-import { ref } from 'vue';
+// feedback shape, same done-state) — the differences are the endpoint, the
+// copy, and whether the profile fields render (`profile` prop: invitation
+// only), which all arrive as props. No user-facing literals live here (N-03);
+// the per-rule errors render the server's own localized problem-details
+// `errors`, which is FR-16's "live policy validation" surface.
+//
+// THE METER IS TEXT (§13: "strength conveyed as text, not color") and argues
+// from the same fact the server enforces: the tenant's minimum length, passed
+// as a prop. Below the minimum is weak — a meter that says "fair" about a
+// password the server will refuse is worse than none. The meter never blocks
+// submission; the server's verdict is the verdict (the meter is advice, the
+// policy is law).
+import { computed, ref } from 'vue';
+import PasswordField from '../../Components/Auth/PasswordField.vue';
 
 const props = defineProps<{
     endpoint: string;
     token: string;
+    minLength: number;
     copy: {
         title: string;
         intro?: string;
@@ -21,14 +32,51 @@ const props = defineProps<{
         done: string;
         lengthHint: string;
         mismatch: string;
+        showPassword: string;
+        hidePassword: string;
+        strengthLabel: string;
+        strengthWeak: string;
+        strengthFair: string;
+        strengthStrong: string;
+    };
+    profile?: {
+        nameLabel: string;
+        languageLabel: string;
+        langEnglish: string;
+        langAmharic: string;
+        name: string;
+        locale: string;
     };
 }>();
 
 const password = ref('');
 const confirmation = ref('');
+const profileName = ref(props.profile?.name ?? '');
+const profileLocale = ref(props.profile?.locale ?? 'en');
 const busy = ref(false);
 const done = ref(false);
 const errors = ref<string[]>([]);
+
+// §13 text-only strength, from the tenant's own minimum: weak below it,
+// strong at minimum+4 with three character classes, fair between.
+const strengthText = computed<string | null>(() => {
+    if (password.value === '') {
+        return null;
+    }
+
+    const classes = [/[a-z]/, /[A-Z]/, /\d/, /[^A-Za-z0-9]/].filter((pattern) =>
+        pattern.test(password.value),
+    ).length;
+
+    const level =
+        password.value.length < props.minLength
+            ? props.copy.strengthWeak
+            : password.value.length >= props.minLength + 4 && classes >= 3
+              ? props.copy.strengthStrong
+              : props.copy.strengthFair;
+
+    return props.copy.strengthLabel.replace(':level', level);
+});
 
 function xsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
@@ -45,6 +93,17 @@ async function submit(): Promise<void> {
 
     busy.value = true;
     try {
+        const body: Record<string, unknown> = {
+            token: props.token,
+            password: password.value,
+            password_confirmation: confirmation.value,
+        };
+
+        if (props.profile) {
+            body.name = profileName.value;
+            body.locale = profileLocale.value;
+        }
+
         const response = await fetch(props.endpoint, {
             method: 'POST',
             headers: {
@@ -52,11 +111,7 @@ async function submit(): Promise<void> {
                 'Content-Type': 'application/json',
                 'X-XSRF-TOKEN': xsrfToken(),
             },
-            body: JSON.stringify({
-                token: props.token,
-                password: password.value,
-                password_confirmation: confirmation.value,
-            }),
+            body: JSON.stringify(body),
         });
 
         if (response.ok) {
@@ -64,14 +119,15 @@ async function submit(): Promise<void> {
             return;
         }
 
-        const body = (await response.json().catch(() => ({}))) as {
+        const payload = (await response.json().catch(() => ({}))) as {
             detail?: string;
             errors?: Record<string, string[]>;
         };
 
-        errors.value = body.errors
-            ? Object.values(body.errors).flat()
-            : [typeof body.detail === 'string' ? body.detail : String(response.status)];
+        errors.value =
+            payload.errors && Object.keys(payload.errors).length > 0
+                ? Object.values(payload.errors).flat()
+                : [typeof payload.detail === 'string' ? payload.detail : String(response.status)];
     } finally {
         busy.value = false;
     }
@@ -88,48 +144,72 @@ async function submit(): Promise<void> {
         </p>
 
         <form v-else class="mt-6 space-y-4" @submit.prevent="submit">
-            <div>
-                <label class="block text-sm font-medium" for="new-password">{{
-                    copy.passwordLabel
-                }}</label>
-                <input
-                    id="new-password"
-                    v-model="password"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    class="mt-1 w-full rounded border border-gray-300 p-2"
-                    :aria-describedby="'password-hint'"
-                />
-                <p id="password-hint" class="mt-1 text-xs text-gray-500">{{ copy.lengthHint }}</p>
-            </div>
+            <!-- §8: the invitation's set-password screen doubles as profile
+                 completion (name, language; avatar deferred to the media
+                 pipeline — Docs 04/08, recorded in BUILD-STATUS). -->
+            <template v-if="profile">
+                <div>
+                    <label class="block text-sm font-medium" for="profile-name">{{
+                        profile.nameLabel
+                    }}</label>
+                    <input
+                        id="profile-name"
+                        v-model="profileName"
+                        type="text"
+                        autocomplete="name"
+                        data-testid="profile-name"
+                        class="mt-1 w-full rounded border border-gray-300 p-3"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" for="profile-locale">{{
+                        profile.languageLabel
+                    }}</label>
+                    <select
+                        id="profile-locale"
+                        v-model="profileLocale"
+                        data-testid="profile-locale"
+                        class="mt-1 w-full rounded border border-gray-300 p-3"
+                    >
+                        <option value="en">{{ profile.langEnglish }}</option>
+                        <option value="am">{{ profile.langAmharic }}</option>
+                    </select>
+                </div>
+            </template>
 
-            <div>
-                <label class="block text-sm font-medium" for="confirm-password">{{
-                    copy.confirmLabel
-                }}</label>
-                <input
-                    id="confirm-password"
-                    v-model="confirmation"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    class="mt-1 w-full rounded border border-gray-300 p-2"
-                />
-            </div>
+            <PasswordField
+                v-model="password"
+                input-id="new-password"
+                :label="copy.passwordLabel"
+                autocomplete="new-password"
+                :show-label="copy.showPassword"
+                :hide-label="copy.hidePassword"
+                described-by="password-hint"
+                meter-id="password-strength"
+                :meter-text="strengthText"
+                input-class="border border-gray-300 bg-white text-gray-900"
+            />
+            <p id="password-hint" class="text-xs text-gray-500">{{ copy.lengthHint }}</p>
 
-            <ul
-                v-if="errors.length"
-                class="rounded bg-red-50 p-3 text-sm text-red-800"
-                role="alert"
-            >
+            <PasswordField
+                v-model="confirmation"
+                input-id="confirm-password"
+                :label="copy.confirmLabel"
+                autocomplete="new-password"
+                :show-label="copy.showPassword"
+                :hide-label="copy.hidePassword"
+                input-class="border border-gray-300 bg-white text-gray-900"
+            />
+
+            <ul v-if="errors.length" class="rounded bg-red-50 p-3 text-sm text-red-800" role="alert">
                 <li v-for="message in errors" :key="message">{{ message }}</li>
             </ul>
 
             <button
                 type="submit"
                 :disabled="busy"
-                class="w-full rounded bg-gray-900 p-2 text-white disabled:opacity-50"
+                :aria-busy="busy"
+                class="min-h-11 w-full rounded bg-gray-900 p-3 text-white disabled:opacity-50"
             >
                 {{ copy.submit }}
             </button>

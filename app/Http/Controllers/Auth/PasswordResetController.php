@@ -132,6 +132,14 @@ final class PasswordResetController extends Controller
                 'done' => __('auth.password.reset_done'),
                 'lengthHint' => __('auth.password.rule_length', ['min' => $minLength]),
                 'mismatch' => __('auth.password.confirm_mismatch'),
+
+                // Step 13: §9's password field (toggle + text strength meter).
+                'showPassword' => __('auth.login.show_password'),
+                'hidePassword' => __('auth.login.hide_password'),
+                'strengthLabel' => __('auth.password.strength_label'),
+                'strengthWeak' => __('auth.password.strength_weak'),
+                'strengthFair' => __('auth.password.strength_fair'),
+                'strengthStrong' => __('auth.password.strength_strong'),
             ],
         ]);
     }

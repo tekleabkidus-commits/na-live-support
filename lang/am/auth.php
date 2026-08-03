@@ -190,6 +190,15 @@ return [
 
         'expired_notice' => 'የይለፍ ቃልዎ ጊዜው አልፎበታል። ለመቀጠል አዲስ ይምረጡ።',
 
+        // Step 13: የ§9 የይለፍ ቃል ጥንካሬ መለኪያ (በጽሑፍ) እና የ§8 መገለጫ ማጠናቀቂያ።
+        'strength_label' => 'የይለፍ ቃል ጥንካሬ፦ :level',
+        'strength_weak' => 'በጣም አጭር',
+        'strength_fair' => 'መካከለኛ',
+        'strength_strong' => 'ጠንካራ',
+        'name_label' => 'ስምዎ',
+        'invalid_language' => 'ከሚገኙት ቋንቋዎች አንዱን ይምረጡ።',
+        'invalid_name' => 'ያ ስም በጣም ረጅም ነው።',
+
         'change_title' => 'የይለፍ ቃል ቀይር',
         'current_password_label' => 'የአሁኑ የይለፍ ቃል',
         'change_submit' => 'የይለፍ ቃል ቀይር',

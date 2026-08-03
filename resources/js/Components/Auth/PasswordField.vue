@@ -23,6 +23,10 @@ defineProps<{
     describedBy?: string;
     meterId?: string;
     meterText?: string | null;
+    // Host pages differ in surface tone until Doc 16's theming lands; the
+    // input's skin is theirs to set, the structure and behaviour are this
+    // component's.
+    inputClass?: string;
 }>();
 
 const emit = defineEmits<{
@@ -47,7 +51,8 @@ function onInput(event: Event): void {
                 :autocomplete="autocomplete"
                 required
                 :aria-describedby="[describedBy, meterText ? meterId : undefined].filter(Boolean).join(' ') || undefined"
-                class="w-full rounded border border-slate-700 bg-slate-950 p-3 pe-14 text-slate-100"
+                class="w-full rounded p-3 pe-14"
+                :class="inputClass ?? 'border border-slate-700 bg-slate-950 text-slate-100'"
                 @input="onInput"
             />
             <button

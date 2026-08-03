@@ -245,6 +245,16 @@ return [
 
         'expired_notice' => 'Your password has expired. Choose a new one to continue.',
 
+        // Step 13: §9's strength meter (text, never color alone — §13) and
+        // §8's invitation profile completion.
+        'strength_label' => 'Password strength: :level',
+        'strength_weak' => 'too short',
+        'strength_fair' => 'okay',
+        'strength_strong' => 'strong',
+        'name_label' => 'Your name',
+        'invalid_language' => 'Choose one of the available languages.',
+        'invalid_name' => 'That name is too long.',
+
         'change_title' => 'Change password',
         'current_password_label' => 'Current password',
         'change_submit' => 'Change password',
