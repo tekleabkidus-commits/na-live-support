@@ -82,3 +82,35 @@ it('treats a session with no recorded marks as live, not expired', function () {
     expect($policy->hasExpired(null, null, $now))->toBeFalse()
         ->and($policy->hasExpired($now, null, $now))->toBeFalse();
 });
+
+it('stamps an unstamped authenticated session with an absolute clock, once (FR-13 — the recaller path)', function () {
+    // A session established by SessionEstablisher carries both marks. The one
+    // path that creates a session WITHOUT them is login-via-recaller (FR-13):
+    // the guard authenticates from the remember cookie and no controller runs.
+    // The middleware must start that session's absolute clock at first sight —
+    // or a recaller session would never hit the absolute limit FR-13 says
+    // applies to every session — and must never refresh it afterwards.
+    $tenant = createTenant();
+    $user = asTenant($tenant, fn (): App\Models\User => App\Models\User::factory()->create());
+    activateTenant($tenant);
+
+    CarbonImmutable::setTestNow($first = CarbonImmutable::parse('2026-08-03T12:00:00Z'));
+
+    test()->actingAs($user)->get('https://localhost/security')->assertOk();
+
+    expect(session()->get(SessionLifetimePolicy::ESTABLISHED_AT))->toBe($first->toIso8601String())
+        ->and(session()->get(SessionLifetimePolicy::LAST_ACTIVITY_AT))->toBe($first->toIso8601String());
+
+    // A later request rolls the idle clock and leaves the absolute one alone.
+    CarbonImmutable::setTestNow($second = $first->addMinutes(30));
+
+    test()->actingAs($user)->withSession([
+        SessionLifetimePolicy::ESTABLISHED_AT => $first->toIso8601String(),
+        SessionLifetimePolicy::LAST_ACTIVITY_AT => $first->toIso8601String(),
+    ])->get('https://localhost/security')->assertOk();
+
+    expect(session()->get(SessionLifetimePolicy::ESTABLISHED_AT))->toBe($first->toIso8601String())
+        ->and(session()->get(SessionLifetimePolicy::LAST_ACTIVITY_AT))->toBe($second->toIso8601String());
+
+    CarbonImmutable::setTestNow();
+});

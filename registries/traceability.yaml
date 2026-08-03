@@ -870,3 +870,58 @@ entries:
       cache outage into a channel outage, while both SECURITY postures keep
       their own rules on the same broken Redis (the FS test drives all
       three at once).
+  # ── S19 step 0: the three Doc 02 micro-gaps the S18 audit named, closed
+  #    before Doc 03's plan (session-prompt STEP 0). Each row below records the
+  #    EXECUTED assertion that turned a config-only or copy-only control real.
+  - ac_ref: "Doc02 FR-10"
+    suite_path: tests/Feature/Auth/SessionCookieFlagsTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      The S18-named gap closed: the staff session cookie's HttpOnly / Secure /
+      SameSite=Lax flags are now asserted on the REAL Set-Cookie header of a
+      real response, with a positive control that flips all three config values
+      and requires each to come out the other end — the assertion reads the
+      live config→cookie chain, not framework defaults. The cap + eviction +
+      Redis-store halves of FR-10 were already proven (S8/S9,
+      SecuritySessionsApiTest and session.spec.ts).
+  - ac_ref: "Doc02 FR-13"
+    suite_path: tests/Feature/Auth/RememberRecallerTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      The recaller path itself, executed at last: a real remembered login's two
+      durable cookies (recaller + tenant hint) replayed against a dead session
+      sign the user back in via the guard's recaller (viaRemember asserted), and
+      the negative control proves a rotated stored token authenticates nobody.
+      EnforceSessionLifetime now stamps a recaller-established session's
+      absolute clock at first sight (never refreshed once set), so FR-13's
+      "absolute cap applies to every session" holds on the one session shape
+      SessionEstablisher never sees — asserted in SessionLifetimeTest. The
+      withheld-until-complete / establishment-only / never-cycled-at-expiry
+      halves were already proven (S11/S12/S13 suites).
+  - ac_ref: "Doc02 EC-01"
+    suite_path: tests/Feature/Auth/LoginPageTest.php
+    type: automated
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    gap: >-
+      The one-string gap closed: the challenge copy now carries the time-sync
+      help sentence (auth.2fa.challenge_time_sync_help), wording verbatim from
+      the frozen design B7-S02-two-factor-challenge-v2, asserted through the
+      i18n chain in BOTH launch languages (am is a real translation, not the en
+      fallback) and onto the challenge step's props. The ±1-step tolerance and
+      recovery-alternative halves of EC-01 were proven in S11
+      (TwoFactorChallengeTest). The Amharic sentence joins the standing
+      native-review queue. The Doc 02 enumeration suite is untouched.

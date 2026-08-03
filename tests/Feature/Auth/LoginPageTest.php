@@ -125,3 +125,29 @@ it('POSITIVE CONTROL: a legitimate stored return path survives the guard', funct
         ->get('https://localhost/login')
         ->assertInertia(fn ($page) => $page->where('returnTo', '/security?tab=sessions'));
 });
+
+it('carries EC-01\'s time-sync help sentence into the challenge copy, en and am (S19 step 0)', function (): void {
+    [$tenantId, $user] = loginPageUser();
+
+    // The prop rides the same copy chain as every other challenge string —
+    // asserted against the translator, not against a literal, so a key rename
+    // on either side goes red here.
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->withSession([
+        '2fa.pending_user_id' => $user->identifier(),
+        '2fa.pending_tenant_id' => $tenantId,
+    ])->get('https://localhost/login')->assertInertia(
+        fn ($page) => $page
+            ->where('challengePending', true)
+            ->where('copy.timeSyncHelp', __('auth.2fa.challenge_time_sync_help')),
+    );
+
+    // Both launch languages resolve the key (C-08), to two different real
+    // sentences — an untranslated key would echo itself back and fail here.
+    $en = trans('auth.2fa.challenge_time_sync_help', [], 'en');
+    $am = trans('auth.2fa.challenge_time_sync_help', [], 'am');
+
+    expect($en)->toBeString()->not->toBe('auth.2fa.challenge_time_sync_help')
+        ->and($en)->toContain('clock')
+        ->and($am)->toBeString()->not->toBe('auth.2fa.challenge_time_sync_help')
+        ->and($am)->not->toBe($en);
+});

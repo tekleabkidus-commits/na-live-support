@@ -44,6 +44,7 @@ interface Copy {
     continue: string;
     challengeTitle: string;
     challengeIntro: string;
+    timeSyncHelp: string;
     codeLabel: string;
     useRecovery: string;
     useTotp: string;
@@ -355,6 +356,11 @@ function lowCodesText(): string {
                         :auto-focus="true"
                         @complete="(value) => submitChallenge({ code: value })"
                     />
+                    <!-- EC-01: the clock-drift help line, above the recovery
+                         escape route as the frozen design orders them. -->
+                    <p data-testid="time-sync-help" class="mt-4 text-sm text-slate-400">
+                        {{ copy.timeSyncHelp }}
+                    </p>
                     <button
                         type="button"
                         data-testid="use-recovery"

@@ -95,6 +95,15 @@ final class EnforceSessionLifetime
             return redirect()->guest('/login');
         }
 
+        // FR-13: a session created OUTSIDE SessionEstablisher — the remember-
+        // cookie recaller path is the one that exists — arrives with no stamps.
+        // Its absolute clock starts the first time it is seen; without this, a
+        // recaller-established session would never hit the absolute limit,
+        // which FR-13 says applies to EVERY session. Never refreshed once set.
+        if ($establishedAt === null) {
+            $session->put(SessionLifetimePolicy::ESTABLISHED_AT, $now->toIso8601String());
+        }
+
         $session->put(SessionLifetimePolicy::LAST_ACTIVITY_AT, $now->toIso8601String());
 
         // Keeps the index's ordering honest, which is what FR-10's

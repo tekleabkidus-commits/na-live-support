@@ -159,6 +159,11 @@ return [
         'recovery_label' => 'Recovery code',
         'recovery_submit' => 'Sign in with recovery code',
         'recovery_used' => 'You\'re signed in. That recovery code is now used up — you have :count left.',
+
+        // EC-01's help sentence: a drifted phone clock is the actual cause when
+        // a correct-looking code keeps failing. Wording is the frozen design's
+        // (B7-S02-two-factor-challenge-v2), verbatim.
+        'challenge_time_sync_help' => 'Codes keep failing? They are time-based. Check that your phone\'s clock is set automatically — more than about 30 seconds out and no code will match.',
     ],
 
     // Step 13: the session sentinel — §8's T-2 min warning toast and EC-02's

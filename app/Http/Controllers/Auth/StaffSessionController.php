@@ -145,6 +145,7 @@ final class StaffSessionController extends Controller
                 'recoverySubmit' => __('auth.2fa.recovery_submit'),
                 'recoveryUsed' => __('auth.2fa.recovery_used'),
                 'lowCodesBanner' => __('auth.2fa.low_codes_banner'),
+                'timeSyncHelp' => __('auth.2fa.challenge_time_sync_help'),
             ],
         ]);
     }
