@@ -52,12 +52,23 @@ return [
     |
     */
 
+    /*
+    | Every channel except `null` and `emergency` carries SecurityLogTap
+    | (Doc 02 SEC-08 / C-14: scrub secret-shaped context, attach
+    | tenant_id + trace_id). The two exemptions are an owner ruling —
+    | `null` discards every record and `emergency` is Laravel's
+    | fixed-config fallback with no tap support — and the channel-pin
+    | test in tests/Security/LogScrubberTest.php fails on any channel,
+    | present or future, that omits the tap.
+    */
+
     'channels' => [
 
         'stack' => [
             'driver' => 'stack',
             'channels' => explode(',', (string) env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'single' => [
@@ -65,6 +76,7 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'daily' => [
@@ -73,6 +85,21 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
+        ],
+
+        // Not used here, but Laravel's slimmed-config merge injects the
+        // framework's `monthly` channel whether or not this file declares it —
+        // the step-12 channel-pin test caught it arriving WITHOUT the tap on
+        // its first run. Declared explicitly so the tap is on it, and so the
+        // next framework-added channel fails the pin test the same visible way.
+        'monthly' => [
+            'driver' => 'monthly',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'max_files' => 3,
+            'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'slack' => [
@@ -82,6 +109,7 @@ return [
             'emoji' => env('LOG_SLACK_EMOJI', ':boom:'),
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'papertrail' => [
@@ -94,6 +122,7 @@ return [
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'stderr' => [
@@ -105,6 +134,7 @@ return [
             ],
             'formatter' => env('LOG_STDERR_FORMATTER'),
             'processors' => [PsrLogMessageProcessor::class],
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'syslog' => [
@@ -112,12 +142,14 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'facility' => env('LOG_SYSLOG_FACILITY', LOG_USER),
             'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+            'tap' => [App\Support\Logging\SecurityLogTap::class],
         ],
 
         'null' => [

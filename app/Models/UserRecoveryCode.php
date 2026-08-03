@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Support\Tenancy\BelongsToTenant;
 use App\Support\Tenancy\TenantScoped;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\CarbonImmutable|null $used_at
  */
 #[Fillable(['user_id', 'code_hash', 'batch_id', 'used_at'])]
+#[Hidden(['code_hash'])]
 class UserRecoveryCode extends Model implements TenantScoped
 {
     use BelongsToTenant;

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Support\Tenancy\BelongsToTenant;
 use App\Support\Tenancy\TenantScoped;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -33,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $requested_ip
  */
 #[Fillable(['user_id', 'purpose', 'token_hash', 'sent_to_email', 'expires_at', 'consumed_at', 'requested_ip'])]
+#[Hidden(['token_hash'])]
 class AuthActionToken extends Model implements TenantScoped
 {
     use BelongsToTenant;
