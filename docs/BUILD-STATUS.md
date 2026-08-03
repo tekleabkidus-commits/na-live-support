@@ -1566,7 +1566,10 @@ nested access-log shapes.
 
 **Evidence: pest 431 passed / 11 skipped (4303 assertions), full suite in-stack — includes the enumeration suite per the owner invariant; browser 25 passed (8 new in
 `tests/Browser/auth-screens.spec.ts` + all 17 existing); `make gates` 11/11; Pint +
-PHPStan(max) + ESLint + vue-tsc clean. CI: recorded below after push.**
+PHPStan(max) + ESLint + vue-tsc clean. **CI-proven on `1c6e601`: run
+[30843064597](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30843064597),
+Stages 1–6 green on first push** (Stage 4 executed the 25-test browser suite including the
+new 8-test auth-screens spec with its axe sweeps), Stage 7 the by-design manual stub.**
 
 ### Built (every §8 screen state now exists and is exercised)
 
