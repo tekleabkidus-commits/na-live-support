@@ -34,10 +34,31 @@ final class SafeReturnUrl
 {
     public const FALLBACK = '/';
 
-    public static function sanitize(mixed $candidate): string
+    /**
+     * @param  string|null  $trustedOrigin  scheme+host(+port) of THIS app, with
+     *                                      no trailing slash — the framework's
+     *                                      guest redirect stores the intended
+     *                                      URL absolute, so a same-origin
+     *                                      absolute is reduced to its local
+     *                                      path FIRST and then held to the
+     *                                      same rules as any relative input
+     */
+    public static function sanitize(mixed $candidate, ?string $trustedOrigin = null): string
     {
         if (! is_string($candidate) || $candidate === '') {
             return self::FALLBACK;
+        }
+
+        if (is_string($trustedOrigin) && $trustedOrigin !== '' && ! str_contains($trustedOrigin, '\\')) {
+            if ($candidate === $trustedOrigin) {
+                return self::FALLBACK;
+            }
+            if (str_starts_with($candidate, $trustedOrigin.'/')) {
+                // Keep the slash: the remainder starts at the path. Everything
+                // below still applies to it — `https://app//evil` reduces to
+                // `//evil` and is refused, not trusted for its prefix.
+                $candidate = substr($candidate, strlen($trustedOrigin));
+            }
         }
 
         // Control characters (including \r\n — header-injection material if a

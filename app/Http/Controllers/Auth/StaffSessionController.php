@@ -112,7 +112,10 @@ final class StaffSessionController extends Controller
         return Inertia::render('Auth/Login', [
             'challengePending' => $pending !== null,
             'sessionExpired' => (bool) $request->session()->get('auth.session_expired', false),
-            'returnTo' => SafeReturnUrl::sanitize($request->session()->get('url.intended')),
+            'returnTo' => SafeReturnUrl::sanitize(
+                $request->session()->get('url.intended'),
+                $request->getSchemeAndHttpHost(),
+            ),
             'locale' => app()->getLocale(),
             'copy' => [
                 'title' => __('auth.login.title'),

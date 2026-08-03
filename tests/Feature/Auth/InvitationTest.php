@@ -225,3 +225,103 @@ it('offers no structural path for anyone to choose a password for someone else (
     expect($route)->not->toBeNull()
         ->and($route->gatherMiddleware())->toContain('throttle:auth-ip');
 });
+
+// ── Step 13: §8's profile-completion half (name, language). ─────────────────
+
+it('completes the profile on accept: name and language persist with the first password (§8, step 13)', function (): void {
+    [$tenant, $user] = invitedUser('profile-complete@fixture.example');
+
+    app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
+    [$token] = queuedInviteTokens();
+
+    test()->postJson('https://localhost/invitation', [
+        'token' => $token,
+        'password' => 'My-Own-First-Password',
+        'password_confirmation' => 'My-Own-First-Password',
+        'name' => 'Makeda Fixture',
+        'locale' => 'am',
+    ])->assertOk();
+
+    $fresh = asTenant($tenant, fn () => User::query()->findOrFail($user->identifier()));
+    expect($fresh->getAttribute('name'))->toBe('Makeda Fixture')
+        ->and($fresh->getAttribute('locale'))->toBe('am')
+        ->and($fresh->getAttribute('password_set_at'))->not->toBeNull();
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+});
+
+it('refuses a locale outside {en, am} loudly, spends nothing, and lets the person retry (§8, step 13)', function (): void {
+    [$tenant, $user] = invitedUser('profile-locale@fixture.example');
+    $originalName = asTenant($tenant, fn () => User::query()->findOrFail($user->identifier())->getAttribute('name'));
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
+    [$token] = queuedInviteTokens();
+
+    $refused = test()->postJson('https://localhost/invitation', [
+        'token' => $token,
+        'password' => 'My-Own-First-Password',
+        'password_confirmation' => 'My-Own-First-Password',
+        'locale' => 'fr',
+    ]);
+    $refused->assertStatus(422);
+    expect($refused->json('errors.locale'))->not->toBeNull();
+
+    // Nothing was spent or written: the account is still invited, the name
+    // untouched, and THE SAME LINK still works — a refused profile must not
+    // burn the invitation.
+    $fresh = asTenant($tenant, fn () => User::query()->findOrFail($user->identifier()));
+    expect($fresh->getAttribute('password_set_at'))->toBeNull()
+        ->and($fresh->getAttribute('name'))->toBe($originalName);
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    test()->postJson('https://localhost/invitation', [
+        'token' => $token,
+        'password' => 'My-Own-First-Password',
+        'password_confirmation' => 'My-Own-First-Password',
+        'locale' => 'am',
+    ])->assertOk();
+});
+
+it('leaves the profile untouched when the PASSWORD is refused — no unaudited write rides a failed accept', function (): void {
+    [$tenant, $user] = invitedUser('profile-ordering@fixture.example');
+    $originalName = asTenant($tenant, fn () => User::query()->findOrFail($user->identifier())->getAttribute('name'));
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
+    [$token] = queuedInviteTokens();
+
+    test()->postJson('https://localhost/invitation', [
+        'token' => $token,
+        'password' => 'short',
+        'password_confirmation' => 'short',
+        'name' => 'Should Not Persist',
+        'locale' => 'am',
+    ])->assertStatus(422);
+
+    $fresh = asTenant($tenant, fn () => User::query()->findOrFail($user->identifier()));
+    expect($fresh->getAttribute('name'))->toBe($originalName, 'a policy-refused accept wrote the profile anyway — a mutation the audit declaration never covers')
+        ->and($fresh->getAttribute('locale'))->not->toBe('am')
+        ->and($fresh->getAttribute('password_set_at'))->toBeNull();
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+});
+
+it('prefills the profile fields from what the admin already entered (§8: completion, not a blank slate)', function (): void {
+    [, $user] = invitedUser('profile-prefill@fixture.example');
+
+    app(InvitationIssuer::class)->issue($user, CarbonImmutable::now(), Request::create('https://localhost/x', 'POST'));
+    [$token] = queuedInviteTokens();
+
+    test()->get('https://localhost/invitation?token='.$token)
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+                ->component('Auth/Invitation', shouldExist: false)
+                ->where('profile.name', $user->getAttribute('name'))
+                ->where('profile.locale', 'en'),
+        );
+});

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 /**
  * I-5 — the per-request user-locale hop (Doc 01 inherited task; Doc 02 §14, C-08).
@@ -98,3 +99,60 @@ it('ignores a malformed users.locale instead of dying or traversing', function (
     expect(unknownSettingDetail(localeUser('../am')))
         ->toBe(trans('foundation.error.unregistered_setting', locale: 'en'));
 });
+
+// ── Step 13: the guest cookie hop (§8's language switcher; owner ruling). ────
+
+it('guest cookie hop: locale=am renders the login card in Amharic; en and am titles actually differ', function (): void {
+    $en = trans('auth.login.title', locale: 'en');
+    $am = trans('auth.login.title', locale: 'am');
+    expect($en)->not->toBe($am, 'the sentinel string is identical in en and am — the cookie assertions below would be vacuous');
+
+    // Control first: test cookies persist for the remainder of the test, so
+    // the cookie-less request must come before the cookie is ever set.
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->get('https://localhost/login')
+        ->assertInertia(fn ($page) => $page->where('copy.title', $en));
+
+    test()->flushSession();
+
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->withUnencryptedCookie('locale', 'am')
+        ->get('https://localhost/login')
+        ->assertInertia(fn ($page) => $page->where('copy.title', $am));
+});
+
+it('holds the cookie to EXACT membership in {en, am} — a shape-plausible value is still refused and counted', function (): void {
+    // `fr` would pass the staff value's shape check; the client-controlled
+    // cookie is held to the stricter exact-set bar (owner ruling), because a
+    // client string must never reach the translator's file paths on
+    // pattern-match alone.
+    Log::spy();
+
+    test()->withServerVariables(['REMOTE_ADDR' => '203.0.113.'.random_int(2, 250)])->withUnencryptedCookie('locale', 'fr')
+        ->get('https://localhost/login')
+        ->assertInertia(fn ($page) => $page->where('copy.title', trans('auth.login.title', locale: 'en')));
+
+    Log::shouldHaveReceived('warning')->withArgs(
+        fn (string $message, array $context = []): bool => ($context['metric'] ?? null) === 'i18n.invalid_locale_cookie',
+    );
+});
+
+it('users.locale ALWAYS beats the cookie for an authenticated request (owner ruling)', function (): void {
+    expect(unknownSettingDetailWithCookie(localeUser('en'), 'am'))
+        ->toBe(trans('foundation.error.unregistered_setting', locale: 'en'), 'the guest cookie overrode an authenticated user\'s own locale');
+});
+
+function unknownSettingDetailWithCookie(User $user, string $cookie): string
+{
+    app(App\Support\Tenancy\TenantContext::class)->clear();
+    app(App\Support\Tenancy\RlsSession::class)->clear();
+    test()->flushSession();
+
+    $response = test()->actingAs($user)
+        ->withUnencryptedCookie('locale', $cookie)
+        ->getJson('https://localhost/api/staff/settings/tenant.nonsense');
+    $response->assertNotFound();
+
+    $detail = $response->json('detail');
+    expect($detail)->toBeString();
+
+    return $detail;
+}

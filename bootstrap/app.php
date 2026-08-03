@@ -131,12 +131,13 @@ return Application::configure(basePath: dirname(__DIR__))
         // FR-11's clocks on every authenticated WEB request. This line is what
         // makes the middleware real: S9 proved the POLICY with an injected
         // clock, but the middleware itself was attached nowhere — the same
-        // configured-but-unwired failure S8 found in the session prefix. In
-        // the group so an expired session is de-authenticated BEFORE any
-        // route-level auth middleware runs, which is what turns expiry into
-        // FR-11's redirect-to-login. The staff API group carries it in
-        // routes/api.php, where its position against tenant resolution is
-        // load-bearing and explained.
+        // configured-but-unwired failure S8 found in the session prefix.
+        // NOTE (step 13): the middleware does NOT run before route-level
+        // `auth:staff` — the sorter hoists Authenticate above it (S13's
+        // lesson, replayed here) — so it issues FR-11's redirect ITSELF; see
+        // its docblock. The staff API group carries it in routes/api.php,
+        // where its position against tenant resolution is load-bearing and
+        // explained.
         $middleware->appendToGroup('web', App\Http\Middleware\EnforceSessionLifetime::class);
 
         // I-5 (Doc 01 → Doc 02 inherited task): the per-request user-locale hop

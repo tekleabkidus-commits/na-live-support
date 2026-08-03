@@ -68,18 +68,31 @@ final class EnforceSessionLifetime
             $session->invalidate();
             $session->regenerateToken();
 
-            // FR-11: "expiry redirects to login preserving the return URL with
-            // a 'session expired' notice". The redirect and the return URL are
-            // the framework's: the now-unauthenticated request falls through to
-            // `auth:staff`, whose guest redirect targets /login and stores the
-            // intended URL in the session. The NOTICE is this flag, written
-            // into the fresh post-invalidate session and read by the login
-            // card's controller. Not flash() — a language-switch reload of the
-            // login card must not eat the notice; login itself destroys the
-            // session (SEC-04) and the flag with it.
+            // FR-11's notice, written into the fresh post-invalidate session
+            // and read by the login card's controller. Not flash() — a
+            // language-switch reload of the login card must not eat the
+            // notice; login itself destroys the session (SEC-04) and the flag
+            // with it.
             $session->put('auth.session_expired', true);
 
-            return $next($request);
+            // FR-11's REDIRECT is issued HERE, not delegated to `auth:staff`
+            // downstream — because there is no downstream. Step 13's FR-11
+            // walk-through caught the executed order: Authenticate implements
+            // the priority-listed AuthenticatesRequests contract, so the
+            // SORTER hoists it ABOVE this group-appended middleware (S13's
+            // bearer lesson, replayed on the web stack). Authenticate had
+            // already passed on the not-yet-flushed session, and an expired
+            // request rendered its page half-dead instead of redirecting.
+            // A middleware must own its outcome, not assume its position.
+            // redirect()->guest() stores the intended URL, which the card
+            // reads back through SafeReturnUrl. The staff API surface takes
+            // the JSON branch and falls through to C-10's 404 refusal at
+            // tenant resolution, unchanged.
+            if ($request->expectsJson()) {
+                return $next($request);
+            }
+
+            return redirect()->guest('/login');
         }
 
         $session->put(SessionLifetimePolicy::LAST_ACTIVITY_AT, $now->toIso8601String());
