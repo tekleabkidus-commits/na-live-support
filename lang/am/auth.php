@@ -35,6 +35,27 @@ return [
         '2fa_failed' => 'ያ ኮድ አልሰራም። አረጋግጠው እንደገና ይሞክሩ።',
     ],
 
+    // የ§8 የመግቢያ ካርድ (step 13)። ማሽን-የተጻፈ፤ የቋንቋ ተናጋሪ ግምገማ በመጠበቅ ላይ።
+    // `lang_english`/`lang_amharic` በሁለቱም የቋንቋ ፋይሎች ውስጥ ተመሳሳይ ናቸው —
+    // ተጠቃሚ የራሱን ቋንቋ በራሱ ቋንቋ ተጽፎ ማግኘት አለበት።
+    'login' => [
+        'title' => 'ይግቡ',
+        'email_label' => 'የኢሜይል አድራሻ',
+        'password_label' => 'የይለፍ ቃል',
+        'show_password' => 'አሳይ',
+        'hide_password' => 'ደብቅ',
+        'remember' => 'እንደገባሁ አቆየኝ',
+        'submit' => 'ግባ',
+        'submitting' => 'በመግባት ላይ…',
+        'forgot' => 'የይለፍ ቃልዎን ረሱ?',
+        'expired_notice' => 'ለተወሰነ ጊዜ ንቁ ስላልነበሩ ወጥተዋል። ለመቀጠል እንደገና ይግቡ።',
+        'error_fallback' => 'የሆነ ችግር ተፈጥሯል። ገጹን አድሰው እንደገና ይሞክሩ።',
+        'language_label' => 'ቋንቋ',
+        'lang_english' => 'English',
+        'lang_amharic' => 'አማርኛ',
+        'continue' => 'ቀጥል',
+    ],
+
     'throttle' => [
         'too_many_requests' => 'ከዚህ ግንኙነት በጣም ብዙ ሙከራዎች። ትንሽ ቆይተው ይሞክሩ።',
     ],
@@ -82,6 +103,15 @@ return [
         'disable' => 'ባለሁለት-ደረጃ ማረጋገጫ አጥፋ',
         'disable_code_label' => 'ለማረጋገጥ የአሁኑን ኮድ ያስገቡ',
         'low_codes_banner' => ':count የመልሶ ማግኛ ኮዶች ቀርተዋል። በቅርቡ አዲስ ስብስብ ይፍጠሩ።',
+
+        // የመግቢያ ካርዱ የማረጋገጫ ደረጃ (step 13, §8)።
+        'challenge_title' => 'የማረጋገጫ ኮድዎን ያስገቡ',
+        'challenge_intro' => 'ከማረጋገጫ መተግበሪያዎ ባለ6-አኃዝ ኮዱን ያስገቡ።',
+        'use_recovery' => 'በምትኩ የመልሶ ማግኛ ኮድ ይጠቀሙ',
+        'use_totp' => 'በምትኩ የማረጋገጫ መተግበሪያዎን ይጠቀሙ',
+        'recovery_label' => 'የመልሶ ማግኛ ኮድ',
+        'recovery_submit' => 'በመልሶ ማግኛ ኮድ ግባ',
+        'recovery_used' => 'ገብተዋል። ያ የመልሶ ማግኛ ኮድ አሁን ተጠቅሟል — :count ቀርተዋል።',
     ],
 
     'devices' => [

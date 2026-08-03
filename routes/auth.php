@@ -67,6 +67,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['guest:staff', 'throttle:auth-ip'])->group(function (): void {
+    // Step 13: the §8 login card. Named `login` because that is the name the
+    // framework's guest redirect resolves — an authenticated page visited
+    // without a session redirects HERE with the return URL preserved (FR-11).
+    // GET renders and mutates nothing: no audit declaration, and the same
+    // per-IP throttle as the POST (SEC-05 — the card and the attempt share one
+    // budget, so the page cannot be used to probe the limiter's remainder).
+    Route::get('login', [StaffSessionController::class, 'create'])
+        ->name('login');
+
     Route::post('login', [StaffSessionController::class, 'store'])
         ->middleware('audit:auth.login.succeeded')
         ->name('auth.login');

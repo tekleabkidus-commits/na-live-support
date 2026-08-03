@@ -36,10 +36,29 @@ use Symfony\Component\HttpFoundation\Response;
  *    shapes are accepted. Anything else is skipped and counted — a malformed
  *    locale is a data bug that should surface in telemetry, never a request
  *    that dies or a path that traverses.
+ *
+ * 3. GUESTS GET A COOKIE HOP (step 13, §8's language switcher; owner ruling).
+ *    The login card has no principal to read a locale from, so the switcher
+ *    writes a plain `locale` cookie the client controls. It is therefore held
+ *    to a STRICTER bar than the staff value: exact membership in the launch
+ *    set {en, am}, not a shape check — a client-controlled string never
+ *    reaches the translator's file paths on pattern-match alone. A present
+ *    cookie that is not exactly a supported locale is ignored and counted,
+ *    through the same scrubbed log channel as everything else (SEC-08). An
+ *    authenticated user's `users.locale` ALWAYS wins over the cookie.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 final class ApplyUserLocale
 {
+    public const LOCALE_COOKIE = 'locale';
+
+    /**
+     * The launch languages (C-08). Operator-side locale expansion is Doc 16's;
+     * widening this list is a code change on purpose — each entry names a lang/
+     * directory that must exist and have passed the AC-06 parity sweep.
+     */
+    private const SUPPORTED_GUEST_LOCALES = ['en', 'am'];
+
     public function __construct(private readonly Application $app) {}
 
     /**
@@ -60,6 +79,8 @@ final class ApplyUserLocale
                 'metric' => 'i18n.invalid_user_locale',
                 'locale' => $locale,
             ]);
+        } else {
+            $this->applyGuestCookie($request);
         }
 
         try {
@@ -68,6 +89,31 @@ final class ApplyUserLocale
             // See docblock property 1 — this line is the Octane leak control.
             $this->app->setLocale($previous);
         }
+    }
+
+    /**
+     * Docblock property 3: the guest cookie hop. Exact-match against the
+     * launch set, never a shape check — see the docblock for why the bar is
+     * stricter than the staff value's.
+     */
+    private function applyGuestCookie(Request $request): void
+    {
+        $cookie = $request->cookie(self::LOCALE_COOKIE);
+
+        if (! is_string($cookie) || $cookie === '') {
+            return;
+        }
+
+        if (in_array($cookie, self::SUPPORTED_GUEST_LOCALES, true)) {
+            $this->app->setLocale($cookie);
+
+            return;
+        }
+
+        logger()->warning('locale cookie is unsupported and was ignored', [
+            'metric' => 'i18n.invalid_locale_cookie',
+            'locale' => mb_substr($cookie, 0, 32),
+        ]);
     }
 
     private function isWellFormed(string $locale): bool

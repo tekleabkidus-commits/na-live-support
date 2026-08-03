@@ -79,13 +79,17 @@ return Application::configure(basePath: dirname(__DIR__))
         // priority-listed AuthenticatesRequests contract — nothing hoists,
         // declared order IS executed order, asserted by MiddlewareOrderTest.
 
-        // A GUEST hitting an authenticated page needs somewhere to go, and the
-        // default target is route('login') — which does not exist (the login
-        // SCREEN is the views step; only POST /login does). Without this line
-        // the redirect itself threw and every gated page 500'd for guests.
-        // The views step repoints this at the real login screen (FR-11 wants
-        // the return URL preserved with a "session expired" notice there).
-        $middleware->redirectGuestsTo('/');
+        // A GUEST hitting an authenticated page goes to the login card
+        // (step 13). The framework's guest redirect stores the intended URL in
+        // the session, which is FR-11's "preserving the return URL" — the card
+        // reads it back through SafeReturnUrl (never verbatim). The expired
+        // NOTICE is EnforceSessionLifetime's flag; see that middleware.
+        $middleware->redirectGuestsTo('/login');
+
+        // The mirror case: an authenticated user visiting the login card is
+        // redirected home rather than re-authenticated. Explicit because the
+        // framework default targets a route this application does not have.
+        $middleware->redirectUsersTo('/');
 
         // Doc 02 SEC-06: cleartext is refused BEFORE anything else runs — no
         // session is read, no credential is parsed, no tenant is resolved on a
@@ -101,7 +105,16 @@ return Application::configure(basePath: dirname(__DIR__))
         // the value unreadable to the session handler that must consult it
         // BEFORE the session — and therefore before cookie decryption has
         // produced anything useful.
-        $middleware->encryptCookies(except: [App\Support\Auth\Sessions\TenantHint::COOKIE]);
+        $middleware->encryptCookies(except: [
+            App\Support\Auth\Sessions\TenantHint::COOKIE,
+            // §14's language switcher writes this from the login card BEFORE any
+            // principal exists, so the client must be able to set it — an
+            // encrypted cookie can only be minted server-side. It carries no
+            // authority: ApplyUserLocale accepts exactly `en` or `am` (owner
+            // ruling, step 13) and an authenticated user's own locale always
+            // wins over it.
+            App\Http\Middleware\ApplyUserLocale::LOCALE_COOKIE,
+        ]);
 
         // Doc 02 T-07: one security-header posture on every response, both
         // surfaces. Appended (not prepended) so it wraps the innermost work and

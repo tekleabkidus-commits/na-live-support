@@ -70,11 +70,16 @@ final class TwoFactorChallengeController extends Controller
         if ($pending === null) {
             // No password went before this code. Not an attack necessarily —
             // an expired session or a bookmarked URL — but nothing to verify
-            // against either way.
+            // against either way. `restart_login` is an RFC 9457 extension
+            // member (step 13): the DETAIL is localized prose the login card
+            // must not branch on, and this flag is the stable "back to the
+            // password step" signal §10's diagram draws. It reveals nothing —
+            // the caller already knows no challenge is open.
             return ProblemDetails::response(
                 code: ErrorCode::ValidationFailed,
                 status: 422,
                 detail: __('auth.2fa.no_pending'),
+                extra: ['restart_login' => true],
             );
         }
 
@@ -154,10 +159,14 @@ final class TwoFactorChallengeController extends Controller
                 $this->pending->clear($request);
                 $this->lockout->recordVoidedChallenge($user, $now);
 
+                // Same extension member as the no-pending answer: FR-07's void
+                // sends the caller BACK TO THE PASSWORD, and the card needs a
+                // stable signal to do that (the localized detail is not one).
                 return ProblemDetails::response(
                     code: ErrorCode::InvalidCredentials,
                     status: 422,
                     detail: __('auth.2fa.voided'),
+                    extra: ['restart_login' => true],
                 );
             }
 

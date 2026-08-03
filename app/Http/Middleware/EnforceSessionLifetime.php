@@ -68,10 +68,17 @@ final class EnforceSessionLifetime
             $session->invalidate();
             $session->regenerateToken();
 
-            // FR-11: "expiry redirects to login preserving the return URL with a
-            // 'session expired' notice". The notice and redirect belong to the
-            // views step; what must be true NOW is that the request is no longer
-            // authenticated, which is what the next middleware will see.
+            // FR-11: "expiry redirects to login preserving the return URL with
+            // a 'session expired' notice". The redirect and the return URL are
+            // the framework's: the now-unauthenticated request falls through to
+            // `auth:staff`, whose guest redirect targets /login and stores the
+            // intended URL in the session. The NOTICE is this flag, written
+            // into the fresh post-invalidate session and read by the login
+            // card's controller. Not flash() — a language-switch reload of the
+            // login card must not eat the notice; login itself destroys the
+            // session (SEC-04) and the flag with it.
+            $session->put('auth.session_expired', true);
+
             return $next($request);
         }
 

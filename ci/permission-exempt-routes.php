@@ -35,6 +35,7 @@ return [
      | always end it, and a permission that could be revoked mid-session would
      | leave someone unable to sign out.
      */
+    'login' => 'The login card (GET): renders the form that establishes a principal; no principal exists yet to hold a permission.',
     'auth.login' => 'Authentication establishes the principal; there is no principal yet to hold a permission.',
     'auth.logout' => 'A session owner may always end their own session; no permission gates it.',
 

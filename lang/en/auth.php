@@ -48,6 +48,31 @@ return [
         '2fa_failed' => 'That code didn\'t work. Check your authenticator and try again.',
     ],
 
+    // §8's login card (step 13). `expired_notice` is FR-11's "session expired"
+    // notice; `error_fallback` renders only when no problem-details detail
+    // arrived (network failure, expired CSRF) — never in place of a server
+    // refusal, whose own text always wins (AC-01: one rendering path).
+    // The two `lang_*` endonyms are IDENTICAL in both language files by
+    // design: a person hunting for their own language must find it written in
+    // that language, whichever locale the card currently renders in.
+    'login' => [
+        'title' => 'Sign in',
+        'email_label' => 'Email address',
+        'password_label' => 'Password',
+        'show_password' => 'Show',
+        'hide_password' => 'Hide',
+        'remember' => 'Keep me signed in',
+        'submit' => 'Sign in',
+        'submitting' => 'Signing in…',
+        'forgot' => 'Forgot your password?',
+        'expired_notice' => 'You were signed out after a period of inactivity. Sign in again to continue.',
+        'error_fallback' => 'Something went wrong. Refresh the page and try again.',
+        'language_label' => 'Language',
+        'lang_english' => 'English',
+        'lang_amharic' => 'አማርኛ',
+        'continue' => 'Continue',
+    ],
+
     'throttle' => [
         // SEC-05: shown when the per-IP limiter refuses before any hashing.
         'too_many_requests' => 'Too many attempts from this connection. Wait a moment and try again.',
@@ -112,6 +137,16 @@ return [
         'disable' => 'Turn off two-factor authentication',
         'disable_code_label' => 'Enter a current code to confirm',
         'low_codes_banner' => 'You have :count recovery codes left. Generate a new set soon.',
+
+        // The challenge step of the login card (step 13, §8). `recovery_used`
+        // is FR-07's "shows remaining count" after a recovery sign-in.
+        'challenge_title' => 'Enter your verification code',
+        'challenge_intro' => 'Enter the 6-digit code from your authenticator app.',
+        'use_recovery' => 'Use a recovery code instead',
+        'use_totp' => 'Use your authenticator app instead',
+        'recovery_label' => 'Recovery code',
+        'recovery_submit' => 'Sign in with recovery code',
+        'recovery_used' => 'You\'re signed in. That recovery code is now used up — you have :count left.',
     ],
 
     // FR-12's Security page (§8/§9). `location_unavailable` is FS-04's designed

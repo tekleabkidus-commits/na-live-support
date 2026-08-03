@@ -12,6 +12,7 @@ use App\Domain\Auth\Login\StaffUserProvider;
 use App\Domain\Auth\TwoFactor\PendingChallenge;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Auth\SafeReturnUrl;
 use App\Support\Auth\Sessions\SessionEstablisher;
 use App\Support\Auth\Sessions\SessionRegistry;
 use Carbon\CarbonImmutable;
@@ -20,6 +21,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 /**
  * The staff login and logout surface (Doc 02 FR-01, FR-02, FR-04, FR-05, SEC-04).
@@ -78,6 +81,69 @@ final class StaffSessionController extends Controller
         }
 
         return $provider;
+    }
+
+    /**
+     * GET /login — the §8 login card (Doc 02 §8, §9, FR-11, AC-09; step 13).
+     *
+     * WHAT THE PROPS MAY AND MAY NOT CARRY. Everything here is either copy
+     * (translated server-side in the request locale — C-08/N-03; the Vue layer
+     * holds no literals) or state the CALLER's own session already proves:
+     * whether a 2FA challenge is pending, whether the previous session expired
+     * (FR-11's notice, flashed by EnforceSessionLifetime), and where to return
+     * after sign-in. Nothing account-shaped is ever passed — the card renders
+     * identically for every visitor, which is AC-01's non-enumeration property
+     * extended to the screen itself.
+     *
+     * THE RETURN URL IS ATTACKER-POSITIONED and goes through SafeReturnUrl
+     * (owner ruling: absolute, protocol-relative and backslash shapes all
+     * refused). It is read, not pulled: a language-switch reload of this page
+     * must not eat the pending redirect.
+     *
+     * THE 2FA STEP IS A STATE OF THIS CARD, not a route of its own (§8 lists
+     * it among the card's states). A reload mid-challenge lands here and the
+     * `challengePending` prop re-enters the code step — the pending record
+     * itself stays server-side (PendingChallenge; SS-02).
+     */
+    public function create(Request $request): InertiaResponse
+    {
+        $pending = $this->pending->current($request);
+
+        return Inertia::render('Auth/Login', [
+            'challengePending' => $pending !== null,
+            'sessionExpired' => (bool) $request->session()->get('auth.session_expired', false),
+            'returnTo' => SafeReturnUrl::sanitize($request->session()->get('url.intended')),
+            'locale' => app()->getLocale(),
+            'copy' => [
+                'title' => __('auth.login.title'),
+                'emailLabel' => __('auth.login.email_label'),
+                'passwordLabel' => __('auth.login.password_label'),
+                'showPassword' => __('auth.login.show_password'),
+                'hidePassword' => __('auth.login.hide_password'),
+                'remember' => __('auth.login.remember'),
+                'submit' => __('auth.login.submit'),
+                'submitting' => __('auth.login.submitting'),
+                'forgot' => __('auth.login.forgot'),
+                'expiredNotice' => __('auth.login.expired_notice'),
+                'errorFallback' => __('auth.login.error_fallback'),
+                'languageLabel' => __('auth.login.language_label'),
+                // Endonyms, identical in both language files: a person hunting
+                // for their own language must find it written in that language.
+                'langEnglish' => __('auth.login.lang_english'),
+                'langAmharic' => __('auth.login.lang_amharic'),
+                'continue' => __('auth.login.continue'),
+
+                'challengeTitle' => __('auth.2fa.challenge_title'),
+                'challengeIntro' => __('auth.2fa.challenge_intro'),
+                'codeLabel' => __('auth.2fa.code_label'),
+                'useRecovery' => __('auth.2fa.use_recovery'),
+                'useTotp' => __('auth.2fa.use_totp'),
+                'recoveryLabel' => __('auth.2fa.recovery_label'),
+                'recoverySubmit' => __('auth.2fa.recovery_submit'),
+                'recoveryUsed' => __('auth.2fa.recovery_used'),
+                'lowCodesBanner' => __('auth.2fa.low_codes_banner'),
+            ],
+        ]);
     }
 
     public function store(Request $request): JsonResponse|RedirectResponse
@@ -183,8 +249,8 @@ final class StaffSessionController extends Controller
             // 401, honestly: the caller is not authenticated. It also keeps the
             // route's `audit:auth.login.succeeded` declaration truthful — that
             // entry is written when a session exists, and DeclareAuditAction
-            // only demands it of 2xx responses. The challenge SCREEN is the
-            // views step's; today's client acts on the JSON status.
+            // only demands it of 2xx responses. The login card acts on this
+            // status to enter its 2FA step (step 13).
             return new JsonResponse(['status' => 'two_factor_required'], 401);
         }
 
