@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S11-closing-audit-v2</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 3 closing audit</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">All 118 rows of the approved <span style="font-family: ui-monospace, monospace; font-size: 13px;">B3-S00</span> checklist, in order, each marked ✅ with the screen that carries it or ❌ with what is missing. <span style="color: #1D1C18; font-weight: 600;">Every row is ✅.</span> The three section-A gaps closed in <span style="font-family: ui-monospace, monospace; font-size: 13px;">B3-S08-v2</span> once you supplied Doc 02 T-07’s header set. Nothing is marked ✅ that I cannot point at.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ tally.done }} ✅</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #8E2222;">{{ tally.open }} ❌</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">{{ tally.total }} rows</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #8F5F08;">1 delivered state with no row — E07</span>
+    </div>
+  </header>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="13">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; color: #1D1C18;">{{ g.id }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ g.name }}</span>
+        <span style="margin-left: auto; font-size: 11.5px; color: #4A4842;">{{ g.tally }}</span>
+      </div>
+      <sc-for list="{{ g.rows }}" as="row" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 44px 26px minmax(0, 1fr) 180px 170px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+          <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.id }}</span>
+          <span style="font-size: 13px; padding-top: 1px;">{{ row.mk }}</span>
+          <div style="min-width: 0;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; line-height: 1.5; padding-top: 2px;">{{ row.where }}</div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What closed the last three</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;">A04, A06 and A07 were all the same shape of gap — the Install and Health tabs said what was happening without saying what to do about it. Doc 02 T-07 gave the header set, so Install now carries the nonce-based CSP, HSTS, nosniff and referrer policy as one copy-paste block, and Health gained two cards: a CSP-blocked diagnosis with the single directive that fixes it, and the duplicate-snippet notice. <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-S08-v2</span>; <span style="font-family: ui-monospace, monospace; font-size: 12px;">v1</span> is untouched on disk.</p>
+  </section>
+
+  <section style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #8F5F08;">One delivered state with nowhere to be marked</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #8F5F08;">The Help tab's <strong style="font-weight: 600;">language fallback</strong> — an article that exists only in English shown to an Amharic visitor — is drawn in <span style="font-family: ui-monospace, monospace;">B3-S04</span> and required by Doc 13 §14 and Doc 10's article-language behaviour. Section E was approved with six rows and none of them covers it, so it is deliberately not folded into a neighbour: doing that would put a ✅ against a row that did not ask for it. It needs a scope-limited reopen of <span style="font-family: ui-monospace, monospace;">B3-S00</span> to add <strong style="font-weight: 600;">E07</strong>, after which this audit becomes 119 rows.</p>
+  </section>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I am not claiming</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842;">
+      <li><strong style="font-weight: 600;">Ten screen sets and the acceptance list are delivered, none approved.</strong> <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-S01</span> through <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-S10</span> — with <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-S08</span> at <span style="font-family: ui-monospace, monospace; font-size: 12px;">v2</span>, which is what three section-A rows now cite — plus <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-A01</span>, all awaiting your verdict. The versions named in the rows above are what I built, not what you have frozen.</li>
+      <li><strong style="font-weight: 600;">Behaviour rows are drawn, not proved.</strong> Focus trapping, live-region announcements, polling failover, leader election, the proactive cooldown and text zoom are marked ✅ because the design specifies them — whether they behave is a build acceptance question, and <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-A01</span> is where those obligations should accumulate as this batch closes.</li>
+      <li><strong style="font-weight: 600;">Amharic is unreviewed.</strong> Real text throughout, written by me, still needing a native speaker from your operation before i18n keys freeze.</li>
+      <li><strong style="font-weight: 600;">The batch is not closed.</strong> It closes when you say CLOSED, not when this page says 118.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { groups: [], tally: { total: 118, done: 118, open: 0 } };
+  componentDidMount() {
+    import('./b3-audit-data.js').then(m => this.setState({ groups: m.GROUPS, tally: m.TALLY }));
+  }
+  renderVals() {
+    return { groups: this.state.groups, tally: this.state.tally };
+  }
+}
+</script>
+</body>
+</html>

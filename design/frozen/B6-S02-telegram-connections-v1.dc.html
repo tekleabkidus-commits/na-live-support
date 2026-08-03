@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S02-telegram-connections-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows C01–C15</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Business connection lifecycle</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">This is the screen someone works <em>standing next to the support phone</em> — Doc 05 §9 says so outright, and it is the reason the checklist is designed phone-first and the desktop version is the same thing with more room. Everything reused is <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim: the connection-state pills, channel-health dots, tables, typed-confirmation pattern, skeletons and toasts. The shell is <a href="B6-S01-telegram-bots-connection-v1.dc.html">B6-S01</a>'s, unchanged.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The design problem here is that <strong style="font-weight: 600;">three of the four things that go wrong happen on the phone, not in this UI</strong> — a wrong account, a missing reply permission, someone tapping disconnect in Telegram. So each state names what happened <em>on the phone</em> and what to do there, rather than reporting an abstract status. The other rule the screen obeys: an unconfirmed connection never routes a single message, and it says so where an admin can see it.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Amharic is real text, flagged for native review. Accounts and staff are NA BET PLC's.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Connect checklist — 1440</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows C01, C03 · Doc 05 FR-07, SEC-04, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three steps, each with its own live status. Steps one and two happen elsewhere — in BotFather and on the phone — so the platform's honest job is to say precisely what to tap and then wait visibly. Step three is the only one it can complete itself, and it waits with a spinner and a plain sentence rather than a progress bar that is lying about progress.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · waiting at step 3</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C01</span></div>
+    <div data-screen-label="C01 checklist light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #6B675D;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22A55B;"></span>Healthy</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">telegram.connections.manage</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; margin-top: 16px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">Connect a support account</span>
+                <span style="font-size: 11.5px; color: #6B675D;">Step 3 of 3</span>
+                <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Started 12:41 by Sara Bekele</span>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #E4F4EA; color: #156F45; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">1 · Turn on Business Mode for this bot in BotFather</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Message BotFather → /mybots → @nabet_support_bot → Bot Settings → Business Mode → Turn on.</p>
+                  <div style="font-size: 11.5px; color: #156F45; margin-top: 4px;">Done · confirmed 12:43</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #F0EEE9;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #E4F4EA; color: #156F45; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">2 · On the support phone, let the bot reply for you</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Telegram → Settings → Telegram Business → Chatbots → type <strong style="color: #1D1C18;">@nabet_support_bot</strong> → turn on <strong style="color: #1D1C18;">Reply to messages</strong>.</p>
+                  <div style="font-size: 11.5px; color: #156F45; margin-top: 4px;">Done · reply permission granted</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #F0EEE9;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex: none;">◌</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">3 · Waiting for Telegram to tell us the connection exists</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">This usually lands within a few seconds of step 2. Nothing else to do here — leave this open.</p>
+                  <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; margin-top: 8px; display: flex; align-items: center; gap: 9px;">
+                    <span style="font-size: 12px; color: #4A4842;">◌ Listening for the connection… 00:07</span>
+                    <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">It is not arriving</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid #F0EEE9; margin-top: 14px; padding-top: 12px; display: flex; align-items: center; gap: 8px;">
+                <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel this connection</button>
+                <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Nothing routes until you confirm the account on the next step.</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Already connected</div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px;">
+                  <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">@NaBetSupport</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">General line · last inbound 14 s ago</div></div>
+                  <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">●</span>Active</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F0EEE9;">
+                  <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">@NaBetVIP</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">VIP line · last inbound 12 m ago</div></div>
+                  <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">◐</span>Paused</span>
+                </div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Your support phone is production infrastructure</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Whoever holds it can pause or disconnect this line from Telegram's own settings, and the platform will find out only when Telegram tells it. Keep the account on a dedicated device with a cloud password set.</p>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">One account, one bot</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Telegram allows a support account to be connected to exactly one bot. This bot can hold as many accounts as you need, each as its own line with its own health and routing tag.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · waiting at step 3</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same step, same copy</span></div>
+    <div data-screen-label="C01 checklist dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #2F2F29; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #A6A296;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #C9C5BB;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #3ECB80;"></span>Healthy</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">telegram.connections.manage</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; margin-top: 16px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <span style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Connect a support account</span>
+                <span style="font-size: 11.5px; color: #A6A296;">Step 3 of 3</span>
+                <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">Started 12:41 by Sara Bekele</span>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #123322; color: #5AD190; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">1 · Turn on Business Mode for this bot in BotFather</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Message BotFather → /mybots → @nabet_support_bot → Bot Settings → Business Mode → Turn on.</p>
+                  <div style="font-size: 11.5px; color: #5AD190; margin-top: 4px;">Done · confirmed 12:43</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #262622;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #123322; color: #5AD190; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">2 · On the support phone, let the bot reply for you</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Telegram → Settings → Telegram Business → Chatbots → type <strong style="color: #ECEAE4;">@nabet_support_bot</strong> → turn on <strong style="color: #ECEAE4;">Reply to messages</strong>.</p>
+                  <div style="font-size: 11.5px; color: #5AD190; margin-top: 4px;">Done · reply permission granted</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #262622;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex: none;">◌</span>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">3 · Waiting for Telegram to tell us the connection exists</div>
+                  <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">This usually lands within a few seconds of step 2. Nothing else to do here — leave this open.</p>
+                  <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px; margin-top: 8px; display: flex; align-items: center; gap: 9px;">
+                    <span style="font-size: 12px; color: #C9C5BB;">◌ Listening for the connection… 00:07</span>
+                    <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">It is not arriving</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid #262622; margin-top: 14px; padding-top: 12px; display: flex; align-items: center; gap: 8px;">
+                <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel this connection</button>
+                <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">Nothing routes until you confirm the account on the next step.</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Already connected</div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px;">
+                  <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">@NaBetSupport</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">General line · last inbound 14 s ago</div></div>
+                  <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">●</span>Active</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #262622;">
+                  <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">@NaBetVIP</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">VIP line · last inbound 12 m ago</div></div>
+                  <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">◐</span>Paused</span>
+                </div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Your support phone is production infrastructure</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Whoever holds it can pause or disconnect this line from Telegram's own settings, and the platform will find out only when Telegram tells it. Keep the account on a dedicated device with a cloud password set.</p>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">One account, one bot</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Telegram allows a support account to be connected to exactly one bot. This bot can hold as many accounts as you need, each as its own line with its own health and routing tag.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin: 8px 0 0; font-size: 12px; line-height: 1.6; color: #6B6862; max-width: 1180px;">Each step is a live region: when a status changes, the step announces itself rather than only re-colouring. The waiting counter is announced on a slow cadence, not every second.</p>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The confirm gate — and its three failures</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows C02–C05, C09 · Doc 05 FR-07, SEC-04, EC-01, EC-02, EC-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">SEC-04 exists because an attacker who connects <em>their</em> account to your bot would otherwise be invisible. So confirmation is a person reading a name and saying yes — and until they do, the connection is inert and says so. Ten minutes of silence raises an alert rather than letting a pending row rot.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C02 — confirm the account</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Is this your support account?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Telegram says this account granted the bot permission. Check the name against the phone in front of you before you accept it.</p>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="width: 34px; height: 34px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex: none;">NS</span>
+              <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">NA BET Support</div><div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; margin-top: 1px;">@NaBetSupport</div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 5px 12px; margin-top: 11px; font-size: 11.5px;">
+              <span style="color: #6B675D;">Connection id</span><span style="font-family: ui-monospace, monospace; color: #1D1C18;">bcn_4Kd82Naa19</span>
+              <span style="color: #6B675D;">Can reply</span><span style="color: #156F45; font-weight: 600;">✓ Yes — granted</span>
+              <span style="color: #6B675D;">Granted scope</span><span style="color: #1D1C18;">Read and reply to this account's chats</span>
+              <span style="color: #6B675D;">Arrived</span><span style="color: #1D1C18;">12:44:09 · 8 s after step 2</span>
+            </div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">Nothing is routed from this account yet. Confirming is what turns the line on.</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Yes, this is our account</button>
+            <button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">No — not ours</button>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C03 — pending too long</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">@NaBetHelp</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Waiting for confirmation · 11 minutes</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; color: #4A5460; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">◔ Pending</span>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Nobody has confirmed this account for 11 minutes</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #8F5F08; margin-top: 2px;">Admins were alerted at the 10-minute mark. It is still routing nothing.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C05 — a second admin joins</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 12px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Dawit Bekele started this connection at 12:41.</strong> You are looking at the same one — there is only ever one row per account. Either of you can confirm it.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Yes, this is our account</button>
+            <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Leave it to Dawit</button>
+          </div>
+        </div>
+      
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C04 — rejected, checklist restarts</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Connection deleted</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">You said @NaBetPromo is not your account</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #7A3232; margin-top: 3px;">It was deleted before it could route anything, and the attempt is in the audit trail with the account id. If you did not expect that account to appear at all, someone else granted your bot permission from their phone.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">The checklist has gone back to step 1 so you can try again with the right phone.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start the checklist again</button>
+            <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Not now</button>
+          </div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C09 — reply permission not granted</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">@NaBetVIP</div><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 1px;">bcn_7Fh01Vip22 · VIP line</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">◐</span>Paused</span>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Reply permission not granted — redo step 2</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #8F5F08; margin-top: 3px;">On the support phone: Telegram → Settings → Telegram Business → Chatbots → @nabet_support_bot → turn on <strong style="color: #8F5F08;">Reply to messages</strong>.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Messages from this account are still arriving and are still being read — agents just cannot answer on the account's behalf until the permission is on.</p>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 11px;">
+            <span style="font-size: 11.5px; color: #4A4842;">Inbound in the last hour</span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">23</span>
+            <span style="font-size: 11.5px; color: #4A4842; margin-left: 12px;">Sends blocked</span><span style="font-size: 11.5px; font-weight: 600; color: #8F5F08;">6</span>
+          </div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C02 — the same gate in Amharic</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">ይህ የእናንተ የድጋፍ መለያ ነው?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.7; color: #6B675D;">ቴሌግራም እንደሚለው ይህ መለያ ለቦቱ ፈቃድ ሰጥቷል። ከመቀበልዎ በፊት ስሙን በእጅዎ ካለው ስልክ ጋር ያመሳክሩ።</p>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; margin-top: 10px; font-size: 11.5px; color: #1D1C18;">
+            <div style="font-weight: 600; font-size: 12.5px;">NA BET Support · @NaBetSupport</div>
+            <div style="color: #6B675D; margin-top: 4px; line-height: 1.7;">መልስ መስጠት ይችላል — አዎ · የደረሰው 12:44</div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.7; color: #8F5F08;">እስካሁን ከዚህ መለያ የሚመጣ ምንም መልእክት አልተላለፈም። ማረጋገጥዎ ነው መስመሩን የሚያስጀምረው።</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">አዎ፣ የእኛ መለያ ነው</button>
+            <button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #EFC7C7; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">አይደለም</button>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C04 — rejected, checklist restarts</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Connection deleted</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">You said @NaBetPromo is not your account</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E0A0A0; margin-top: 3px;">It was deleted before it could route anything, and the attempt is in the audit trail with the account id. If you did not expect that account to appear at all, someone else granted your bot permission from their phone.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">The checklist has gone back to step 1 so you can try again with the right phone.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start the checklist again</button>
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Not now</button>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C09 — reply permission not granted</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">@NaBetVIP</div><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 1px;">bcn_7Fh01Vip22 · VIP line</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">◐</span>Paused</span>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Reply permission not granted — redo step 2</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E8C25A; margin-top: 3px;">On the support phone: Telegram → Settings → Telegram Business → Chatbots → @nabet_support_bot → turn on <strong style="color: #F0B54A;">Reply to messages</strong>.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Messages from this account are still arriving and are still being read — agents just cannot answer on the account's behalf until the permission is on.</p>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 11px;">
+            <span style="font-size: 11.5px; color: #C9C5BB;">Inbound in the last hour</span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">23</span>
+            <span style="font-size: 11.5px; color: #C9C5BB; margin-left: 12px;">Sends blocked</span><span style="font-size: 11.5px; font-weight: 600; color: #F0B54A;">6</span>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C02 — the same gate in Amharic</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">ይህ የእናንተ የድጋፍ መለያ ነው?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.7; color: #A6A296;">ቴሌግራም እንደሚለው ይህ መለያ ለቦቱ ፈቃድ ሰጥቷል። ከመቀበልዎ በፊት ስሙን በእጅዎ ካለው ስልክ ጋር ያመሳክሩ።</p>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 11px; margin-top: 10px; font-size: 11.5px; color: #ECEAE4;">
+            <div style="font-weight: 600; font-size: 12.5px;">NA BET Support · @NaBetSupport</div>
+            <div style="color: #A6A296; margin-top: 4px; line-height: 1.7;">መልስ መስጠት ይችላል — አዎ · የደረሰው 12:44</div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.7; color: #F0B54A;">እስካሁን ከዚህ መለያ የሚመጣ ምንም መልእክት አልተላለፈም። ማረጋገጥዎ ነው መስመሩን የሚያስጀምረው።</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">አዎ፣ የእኛ መለያ ነው</button>
+            <button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">አይደለም</button>
+          </div>
+        </div>
+      
+        <div style="height: 14px;"></div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C02 — confirm the account</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Is this your support account?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Telegram says this account granted the bot permission. Check the name against the phone in front of you before you accept it.</p>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 12px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="width: 34px; height: 34px; border-radius: 50%; background: #2F2F29; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex: none;">NS</span>
+              <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">NA BET Support</div><div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #A6A296; margin-top: 1px;">@NaBetSupport</div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 5px 12px; margin-top: 11px; font-size: 11.5px;">
+              <span style="color: #A6A296;">Connection id</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4;">bcn_4Kd82Naa19</span>
+              <span style="color: #A6A296;">Can reply</span><span style="color: #5AD190; font-weight: 600;">✓ Yes — granted</span>
+              <span style="color: #A6A296;">Granted scope</span><span style="color: #ECEAE4;">Read and reply to this account's chats</span>
+              <span style="color: #A6A296;">Arrived</span><span style="color: #ECEAE4;">12:44:09 · 8 s after step 2</span>
+            </div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">Nothing is routed from this account yet. Confirming is what turns the line on.</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Yes, this is our account</button>
+            <button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">No — not ours</button>
+          </div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C03 — pending too long</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">@NaBetHelp</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Waiting for confirmation · 11 minutes</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #262C33; color: #A7B2BE; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">◔ Pending</span>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Nobody has confirmed this account for 11 minutes</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #F0B54A; margin-top: 2px;">Admins were alerted at the 10-minute mark. It is still routing nothing.</div>
+          </div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C05 — a second admin joins</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 12px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">Dawit Bekele started this connection at 12:41.</strong> You are looking at the same one — there is only ever one row per account. Either of you can confirm it.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Yes, this is our account</button>
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Leave it to Dawit</button>
+          </div>
+        </div>
+      </div>
+      </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Connections registry — 1440 dark</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows C06, C07, C08, C15 · Doc 05 FR-08, FR-09, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every column here is one an admin actually acts on: the state, whether it can reply, when it last heard from a customer, and how many sends it has had to refuse. The routing tag is on the row because Doc 05 SS-01's whole story — VIPs to account B — is configured elsewhere but has to be legible here.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">three connections, three states</span></div>
+    <div data-screen-label="C06 connections dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">5</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #A6A296;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #C9C5BB;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F0B54A;"></span>Degraded</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">telegram.connections.manage</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Connected support accounts</span>
+            <span style="font-size: 11.5px; color: #A6A296;">3 lines · 1 active, 1 paused, 1 revoked</span>
+            <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ Connect an account</button>
+          </div>
+
+          <div style="margin-top: 12px; background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 600; color: #F5A7A7;">@NaBetHelp was disconnected from the phone at 09:12</span>
+              <span style="font-size: 11.5px; color: #E0A0A0;">14 open tickets on that line are unreachable and are listed for rescue</span>
+              <a href="#rescue" style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #F5A7A7;">Open the rescue list →</a>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; background: #232320; border-bottom: 1px solid #343430;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Account</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">State</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Can reply</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Routing tag</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Last inbound</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Sends blocked</span>
+              <span style="padding: 9px 14px;"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center; border-bottom: 1px solid #262622;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">NA BET Support</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">@NaBetSupport</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">●</span>Active</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #ECEAE4;">✓ Yes</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #ECEAE4;">General line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #A6A296;">14 s ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #A6A296;">0</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Pause handling</button><button aria-label="More actions for NA BET Support" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center; border-bottom: 1px solid #262622;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">NA BET VIP</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">@NaBetVIP</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">◐</span>Paused</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #F0B54A; font-weight: 600;">✕ Not granted</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #ECEAE4;">VIP line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #A6A296;">12 m ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #F0B54A; font-weight: 600;">6</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">How to fix</button><button aria-label="More actions for NA BET VIP" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">NA BET Help</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">@NaBetHelp</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">✕</span>Revoked</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #A6A296;">—</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #ECEAE4;">Amharic line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #A6A296;">3 h ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #F08A8A; font-weight: 600;">31</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">Reconnect</button><button aria-label="More actions for NA BET Help" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Every state change came from Telegram</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">The platform never pauses or revokes a line by itself. Each transition here arrived as an update from Telegram and notified your admins as it landed.</p>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">C08 · what was sent</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 11.5px; color: #C9C5BB;">
+                <span>09:12 — @NaBetHelp revoked · 4 admins notified</span>
+                <span>08:47 — @NaBetVIP paused · 4 admins notified</span>
+              </div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">C15 · routing by line</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Each connection is its own inbound line: independent health, its own dimension in reports, and a tag rules can route on — the VIP line without touching the general one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same three connections</span></div>
+    <div data-screen-label="C06 connections light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">5</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #6B675D;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #E0A33A;"></span>Degraded</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">telegram.connections.manage</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">Connected support accounts</span>
+            <span style="font-size: 11.5px; color: #6B675D;">3 lines · 1 active, 1 paused, 1 revoked</span>
+            <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ Connect an account</button>
+          </div>
+
+          <div style="margin-top: 12px; background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 600; color: #8E2222;">@NaBetHelp was disconnected from the phone at 09:12</span>
+              <span style="font-size: 11.5px; color: #7A3232;">14 open tickets on that line are unreachable and are listed for rescue</span>
+              <a href="#rescue" style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #8E2222;">Open the rescue list →</a>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Account</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">State</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Can reply</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Routing tag</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last inbound</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Sends blocked</span>
+              <span style="padding: 9px 14px;"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">NA BET Support</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">@NaBetSupport</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">●</span>Active</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #1D1C18;">✓ Yes</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #1D1C18;">General line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #6B675D;">14 s ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #6B675D;">0</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Pause handling</button><button aria-label="More actions for NA BET Support" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">NA BET VIP</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">@NaBetVIP</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">◐</span>Paused</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #8F5F08; font-weight: 600;">✕ Not granted</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #1D1C18;">VIP line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #6B675D;">12 m ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #8F5F08; font-weight: 600;">6</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">How to fix</button><button aria-label="More actions for NA BET VIP" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 0.9fr 1.05fr 1fr 1fr 172px; align-items: center;">
+              <span style="padding: 12px 14px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">NA BET Help</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">@NaBetHelp</span></span>
+              <span style="padding: 12px 14px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;"><span style="font-size: 8px;">✕</span>Revoked</span></span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #6B675D;">—</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #1D1C18;">Amharic line</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #6B675D;">3 h ago</span>
+              <span style="padding: 12px 14px; font-size: 12px; color: #B32B2B; font-weight: 600;">31</span>
+              <span style="padding: 12px 14px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">Reconnect</button><button aria-label="More actions for NA BET Help" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Every state change came from Telegram</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">The platform never pauses or revokes a line by itself. Each transition here arrived as an update from Telegram and notified your admins as it landed.</p>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">C08 · what was sent</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 11.5px; color: #4A4842;">
+                <span>09:12 — @NaBetHelp revoked · 4 admins notified</span>
+                <span>08:47 — @NaBetVIP paused · 4 admins notified</span>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">C15 · routing by line</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Each connection is its own inbound line: independent health, its own dimension in reports, and a tag rules can route on — the VIP line without touching the general one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Losing a line — disconnect, revoke, flap, rename</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows C10–C14 · Doc 05 FR-10, EC-05, EC-06, FS-04, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Disconnecting is the one action here that strands live tickets, so the affected tickets are listed <em>above</em> the confirmation rather than summarised below it — you should have to scroll past the consequence to reach the button.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C11 — disconnect, tickets first</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Disconnect @NaBetSupport?</div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #8E2222; margin-top: 9px;">9 open tickets are being handled on this line right now</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; overflow: hidden; margin-top: 7px;">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #E5E2DB; font-size: 11.5px;"><span style="font-weight: 600; color: #1D1C18;">#4812</span><span style="color: #4A4842; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ — withdrawal not received</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; flex: none;">▲ SLA breached</span></div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #E5E2DB; font-size: 11.5px;"><span style="font-weight: 600; color: #1D1C18;">#4818</span><span style="color: #4A4842; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Hana Girma — bonus not credited</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; flex: none;">⏱ Closes in 41:12</span></div>
+            <div style="padding: 8px 11px; font-size: 11.5px; color: #6B675D;">and 7 more on this line</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">All nine become unreachable the moment this line goes: no reply can be sent until the customer writes again on another channel. They are flagged and listed for rescue, and the conversations stay readable.</p>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #6B675D;">Type <strong style="color: #1D1C18; font-family: ui-monospace, monospace;">@NaBetSupport</strong> to confirm</div>
+          <div style="border: 1px solid #CFCBC1; border-radius: 5px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #726D63; margin-top: 5px;">Type the account name</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;"><button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Disconnect the account</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C12 — the account was renamed</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">@NaBetSupportETH</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">was @NaBetSupport until 31 Jul, 16:20</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">●</span>Active</span>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The name updated itself from Telegram's next message. Older tickets keep showing the name that was in use when they happened, so the history does not silently rewrite itself.</p>
+        </div>
+      
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C10 — revoked, and what it costs</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">@NaBetHelp</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Amharic line · disconnected from the phone at 09:12</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">✕</span>Revoked</span>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">14 open tickets on this line are unreachable</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #7A3232; margin-top: 3px;">Outbound is frozen for this line — queued replies are held, not failed. Reconnect from the phone and they drain automatically.</div>
+            <a href="#rescue" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #8E2222; margin-top: 6px;">Open the rescue list →</a>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin-top: 11px; font-size: 11.5px;">
+            <span style="color: #4A4842;">Sends refused since 09:12</span><span style="color: #1D1C18; font-weight: 600;">31</span>
+            <span style="color: #4A4842;">Inbound still arriving</span><span style="color: #1D1C18; font-weight: 600;">No</span>
+          </div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C13 — bot removed and token revoked together</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Two things failed at once at 09:12</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 4px;">The bot was removed from Telegram Business <em>and</em> its token was revoked in BotFather. Either alone would take the line down; together they also stop the webhook. Fixing only one will not bring it back.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-size: 11.5px; color: #4A4842;">
+            <span>· Connection revoked — from the phone</span>
+            <span>· Webhook failing — 401 from Telegram</span>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">The 14 stranded tickets are listed once, not twice.</p>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">C14 — flapping, collapsed into one alert</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">@NaBetVIP has flipped between active and paused 6 times in the last hour</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #8F5F08; margin-top: 3px;">Further alerts are collapsed into one digest until it settles. Every transition is still recorded truthfully below — the alerts are quietened, the history is not.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">
+            <span>10:41 active → paused</span>
+            <span>10:38 paused → active</span>
+            <span>10:32 active → paused</span>
+            <span style="color: #726D63;">+3 earlier</span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Usually this means the phone is losing connectivity, not that anyone is touching settings.</p>
+        </div>
+      </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C10 — revoked, and what it costs</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">@NaBetHelp</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Amharic line · disconnected from the phone at 09:12</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">✕</span>Revoked</span>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">14 open tickets on this line are unreachable</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E0A0A0; margin-top: 3px;">Outbound is frozen for this line — queued replies are held, not failed. Reconnect from the phone and they drain automatically.</div>
+            <a href="#rescue" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #F5A7A7; margin-top: 6px;">Open the rescue list →</a>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin-top: 11px; font-size: 11.5px;">
+            <span style="color: #C9C5BB;">Sends refused since 09:12</span><span style="color: #ECEAE4; font-weight: 600;">31</span>
+            <span style="color: #C9C5BB;">Inbound still arriving</span><span style="color: #ECEAE4; font-weight: 600;">No</span>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C13 — bot removed and token revoked together</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Two things failed at once at 09:12</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 4px;">The bot was removed from Telegram Business <em>and</em> its token was revoked in BotFather. Either alone would take the line down; together they also stop the webhook. Fixing only one will not bring it back.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-size: 11.5px; color: #C9C5BB;">
+            <span>· Connection revoked — from the phone</span>
+            <span>· Webhook failing — 401 from Telegram</span>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">The 14 stranded tickets are listed once, not twice.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C14 — flapping, collapsed into one alert</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">@NaBetVIP has flipped between active and paused 6 times in the last hour</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E8C25A; margin-top: 3px;">Further alerts are collapsed into one digest until it settles. Every transition is still recorded truthfully below — the alerts are quietened, the history is not.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">
+            <span>10:41 active → paused</span>
+            <span>10:38 paused → active</span>
+            <span>10:32 active → paused</span>
+            <span style="color: #918C80;">+3 earlier</span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Usually this means the phone is losing connectivity, not that anyone is touching settings.</p>
+        </div>
+      
+        <div style="height: 14px;"></div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C11 — disconnect, tickets first</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Disconnect @NaBetSupport?</div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #F5A7A7; margin-top: 9px;">9 open tickets are being handled on this line right now</div>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; overflow: hidden; margin-top: 7px;">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #343430; font-size: 11.5px;"><span style="font-weight: 600; color: #ECEAE4;">#4812</span><span style="color: #C9C5BB; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ — withdrawal not received</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; flex: none;">▲ SLA breached</span></div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #343430; font-size: 11.5px;"><span style="font-weight: 600; color: #ECEAE4;">#4818</span><span style="color: #C9C5BB; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Hana Girma — bonus not credited</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; flex: none;">⏱ Closes in 41:12</span></div>
+            <div style="padding: 8px 11px; font-size: 11.5px; color: #A6A296;">and 7 more on this line</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">All nine become unreachable the moment this line goes: no reply can be sent until the customer writes again on another channel. They are flagged and listed for rescue, and the conversations stay readable.</p>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #A6A296;">Type <strong style="color: #ECEAE4; font-family: ui-monospace, monospace;">@NaBetSupport</strong> to confirm</div>
+          <div style="border: 1px solid #45443E; border-radius: 5px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #918C80; margin-top: 5px;">Type the account name</div>
+          <div style="display: flex; gap: 7px; margin-top: 12px;"><button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Disconnect the account</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+        <div style="height: 14px;"></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">C12 — the account was renamed</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">@NaBetSupportETH</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">was @NaBetSupport until 31 Jul, 16:20</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">●</span>Active</span>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The name updated itself from Telegram's next message. Older tickets keep showing the name that was in use when they happened, so the history does not silently rewrite itself.</p>
+        </div>
+      </div>
+      </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§E</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — the phone-first case</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C01, C02, C06, C09 · Doc 05 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">This is the one surface in the batch the documents put <em>on</em> the phone rather than merely allowing there, so it is designed for the real posture: support phone in one hand, this in the other. Step two's instruction is the largest text on the screen because it is the thing being copied by thumb, and the confirm gate shows the account name at 15 px so it can be checked at arm's length.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · checklist</div>
+        <div data-screen-label="C01 checklist 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Connect an account</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: #6B675D;">Step 2 of 3<span style="flex: 1; height: 4px; background: #EEECE6; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 66%; height: 100%; background: #22211D;"></span></span></div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px; display: flex; gap: 10px;">
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #E4F4EA; color: #156F45; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex: none;">✓</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Business Mode is on in BotFather</div><div style="font-size: 11.5px; color: #156F45; margin-top: 2px;">Done 12:43</div></div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 2px solid #22211D; border-radius: 10px; padding: 13px; margin-top: 10px;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Step 2 · on the support phone</div>
+              <div style="font-size: 15px; font-weight: 600; line-height: 1.5; color: #1D1C18; margin-top: 6px;">Settings → Telegram Business → Chatbots</div>
+              <div style="font-size: 13.5px; line-height: 1.6; color: #1D1C18; margin-top: 8px;">Type <strong style="font-weight: 700;">@nabet_support_bot</strong>, then turn on <strong style="font-weight: 700;">Reply to messages</strong>.</div>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Copy the bot name</button>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px; display: flex; gap: 10px;">
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex: none;">◦</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Then we wait for Telegram</div><div style="font-size: 11.5px; line-height: 1.5; color: #6B675D; margin-top: 2px;">Keep this open — it lands in a few seconds.</div></div>
+            </div>
+
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 10px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">Nothing routes from this account until you confirm it on the next step.</div>
+            <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13px; font-weight: 500; min-height: 44px; margin-top: 10px; cursor: pointer;">Cancel this connection</button>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">C02 at 375 — the confirm gate</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 13px;">
+          <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Is this your support account?</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; margin-top: 9px;">
+            <div style="font-size: 15px; font-weight: 700; color: #1D1C18;">NA BET Support</div>
+            <div style="font-family: ui-monospace, monospace; font-size: 13px; color: #4A4842; margin-top: 2px;">@NaBetSupport</div>
+            <div style="font-size: 12px; color: #156F45; font-weight: 600; margin-top: 7px;">✓ Can reply — permission granted</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 12px; line-height: 1.6; color: #4A4842;">Check the name against the phone in your hand. Nothing is routed from this account until you say yes.</p>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 11px;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer;">Yes, this is our account</button>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 8px; font-size: 13px; font-weight: 500; min-height: 44px; cursor: pointer;">No — not ours</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="C01 checklist 375 dark Amharic" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">መለያ ያገናኙ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #1C1C19; border: 2px solid #ECEAE4; border-radius: 10px; padding: 13px;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ደረጃ 2 · በድጋፍ ስልኩ ላይ</div>
+              <div style="font-size: 15px; font-weight: 600; line-height: 1.6; color: #ECEAE4; margin-top: 6px;">ቅንብሮች → ቴሌግራም ቢዝነስ → ቻትቦቶች</div>
+              <div style="font-size: 13.5px; line-height: 1.75; color: #ECEAE4; margin-top: 8px;"><strong style="font-weight: 700;">@nabet_support_bot</strong> ብለው ይጻፉ፤ ከዚያም <strong style="font-weight: 700;">መልእክቶችን መመለስ</strong> የሚለውን ያብሩ።</div>
+              <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">የቦቱን ስም ቅዳ</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ደረጃ 3 · ቴሌግራም እስኪነግረን እንጠብቃለን</div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 3px;">ይህ ገጽ ክፍት ይሁን። አብዛኛውን ጊዜ በጥቂት ሰከንዶች ውስጥ ይደርሳል።</div>
+            </div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.7; color: #F0B54A;">እስኪያረጋግጡት ድረስ ከዚህ መለያ የሚመጣ ምንም መልእክት አይተላለፍም።</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">C06 · C09 at 375 — the lines, and one that needs a hand</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">@NaBetSupport</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">General line · 14 s ago</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">●</span>Active</span>
+            </div>
+            <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 8px; font-size: 13px; font-weight: 500; min-height: 44px; margin-top: 10px; cursor: pointer;">Pause handling</button>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">@NaBetVIP</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">VIP line · 12 m ago</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;"><span style="font-size: 8px;">◐</span>Paused</span>
+            </div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 11px; margin-top: 9px;">
+              <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Reply permission not granted</div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #E8C25A; margin-top: 3px;">On the phone: Settings → Telegram Business → Chatbots → turn on Reply to messages.</div>
+            </div>
+            <div style="font-size: 11.5px; color: #C9C5BB; margin-top: 9px;">6 replies could not be sent · messages still arriving</div>
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 10px; cursor: pointer;">Show me the steps</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> C01 (§A, §E), C02 (§B light, §B dark in Amharic, §E), C03 (§B), C04 (§B dark), C05 (§B light), C06 (§C, §E dark), C07 (state pills throughout — B1-DS tokens unchanged, plus the proposed Pending pill below), C08 (§C notification log), C09 (§B dark, §E dark), C10 (§D dark), C11 (§D light), C12 (§D light), C13 (§D dark), C14 (§D dark), C15 (§C routing-tag column and note). Both viewports, both themes.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Not here, by design:</strong> the rescue view itself is Doc 07 and Batch 1 law — this screen links to it and states what lands there. Health metrics, the raw-update viewer and test tools are Section F. The reply-window setting is Section D of the contract.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One new token, proposed — not baked in.</strong> Doc 05 SEC-04 and EC-02 require a connection that exists but has not been confirmed, and B1-DS §2 fixes exactly three connection-state pills: Active, Paused, Revoked. A pending line is none of those — it is not healthy, it is not an owner-side pause, and calling it Paused would be a lie about who is holding it. So C03 introduces a fourth pill, <span style="display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; color: #4A5460; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;">◔ Pending</span> in light and <span style="display: inline-flex; align-items: center; gap: 5px; background: #262C33; color: #A7B2BE; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;">◔ Pending</span> in dark, built from B1-DS's existing neutral strip colours rather than a new hue — deliberately the quietest pill in the set, because a pending line is doing nothing. <strong style="font-weight: 600;">If you approve it, it is promoted to a B1-DS addendum and reused from there</strong>, never re-drawn by eye. Reject it and I will bring you alternatives.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the pending pill above, pending your ruling. Doc 05 §9 asks for the connection tab at tablet and the checklist on the phone; both are delivered, the 375 checklist is fully operable, and every control on it is at or above 44 px.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the disconnect dialog lists the stranded tickets <em>before</em> the confirmation field rather than after it. It makes the dialog tall — on a phone it is a scroll — and that is the intent. Tell me if you would rather have a count with a "show tickets" disclosure, and I will change it; it is the only place in the screen where I deliberately spent height on friction.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S06-sessions-devices-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section F · 15 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Sessions and devices</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">This table exists to answer one question in about a second: <em>is that me?</em> Everything is arranged around that — the current device pinned at the top and labelled, the rest sorted by how recently they were used, and each row carrying the three facts a person actually matches against: what the device is, where it was, and when it was last active.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The second job is making revocation believable. “Sign out” controls in most products feel advisory. Here the confirmation states what happens and how fast — the session key is deleted and that device's live connection closes within two seconds — because a security control nobody trusts gets used twice and then ignored.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Profile → Security, in the workspace shell — Doc 07's chrome, Batch 1 law, context only. Amharic is real text, flagged for native review.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The table — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01 · F02 · F06 · F07 · F09 · F14 · Doc 02 FR-10, FR-12, FR-14, FS-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Five sessions is the tenant's cap, so the header states the count against it — reaching six evicts the oldest, and saying so here is what stops that feeling like a bug later. Row four has no location because GeoIP was unavailable when it signed in: it says so plainly rather than guessing a city, which is the difference between a diagnostic and a lie.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · five active sessions</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01 · F02 · F06 · F07 · F09</span></div>
+    <div data-screen-label="F01 devices table light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 214px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">My profile</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Details</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Security</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">API tokens</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <div style="font-size: 11.5px; color: #6B675D;">My profile · Security</div>
+            <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Where you're signed in</h1>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 12.5px; color: #4A4842;"><strong style="font-weight: 600;">5 of 5</strong> sessions in use · signing in on a sixth device signs out the oldest one</span>
+            <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign out all other devices</button>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Device</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Where</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">First seen</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last active</span>
+              <span style="padding: 9px 12px;"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; border-bottom: 1px solid #F0EEE9; background: #F6F5F2; align-items: center;">
+              <span style="padding: 12px; display: flex; align-items: center; gap: 9px; min-width: 0;"><span style="flex: none; font-size: 14px; color: #6B675D;">▭</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Chrome 127 on Windows</span><span style="display: block; font-size: 11px; color: #6B675D;">Desktop · 41.220.16.8</span></span></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Addis Ababa, Ethiopia</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">12 May 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Now</span>
+              <span style="padding: 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 600;">◆ This device</span></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 12px; display: flex; align-items: center; gap: 9px; min-width: 0;"><span style="flex: none; font-size: 14px; color: #6B675D;">▯</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Safari on iPhone 15</span><span style="display: block; font-size: 11px; color: #6B675D;">Phone · 197.156.98.24</span></span></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Addis Ababa, Ethiopia</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">3 Feb 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">3 minutes ago</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Sign out</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 12px; display: flex; align-items: center; gap: 9px; min-width: 0;"><span style="flex: none; font-size: 14px; color: #6B675D;">▯</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Chrome on Android · Tecno Spark 20</span><span style="display: block; font-size: 11px; color: #6B675D;">Phone · 196.188.44.101</span></span></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Bahir Dar, Ethiopia</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">28 Jul 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Yesterday 22:41</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Sign out</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 12px; display: flex; align-items: center; gap: 9px; min-width: 0;"><span style="flex: none; font-size: 14px; color: #6B675D;">▭</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Firefox 129 on Windows</span><span style="display: block; font-size: 11px; color: #6B675D;">Desktop · 10.42.7.19</span></span></span>
+              <span style="padding: 12px; font-size: 12px; color: #6B675D; font-style: italic;">Location unavailable</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">26 Jul 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">28 Jul 2026, 09:12</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Sign out</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 130px 150px 108px; align-items: center;">
+              <span style="padding: 12px; display: flex; align-items: center; gap: 9px; min-width: 0;"><span style="flex: none; font-size: 14px; color: #6B675D;">▭</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Edge on Windows</span><span style="display: block; font-size: 11px; color: #6B675D;">Desktop · 213.55.95.40</span></span></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Adama, Ethiopia</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">14 Jun 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">21 Jul 2026, 17:03</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Sign out</button></span>
+            </div>
+          </div>
+
+          <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #4A5460;">Changing your password or your two-factor setup signs out every device except the one you're using. You don't need to do it here as well.</div>
+          <div style="margin-top: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">F09 — row four has no city because GeoIP was unavailable at sign-in. The IP is still shown; nothing is guessed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Signing something out, and meaning it</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F03 · F04 · F05 · F14 · Doc 02 FR-12, T-04, AC-04, §14</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">One device confirms in place — the row turns into its own question, so nothing covers the list you were just reading. All-others gets a modal, because it is the wide action and deserves the pause. Both say what actually happens: the session is deleted server-side and any live connection on that device closes within two seconds. The dark frame is Amharic, where the dates and the city names localize too.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+            <span style="padding: 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; font-size: 14px; color: #6B675D;">▯</span><span><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Safari on iPhone 15</span><span style="display: block; font-size: 11px; color: #6B675D;">Addis Ababa · 3 minutes ago</span></span></span>
+            <span style="padding: 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 600;">◆ This device</span></span>
+          </div>
+          <div style="background: #FBE5E5; border-bottom: 1px solid #EFC7C7; padding: 14px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Sign out Chrome on Android · Tecno Spark 20?</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #8E2222; margin-top: 4px;">That device is signed out immediately and its live connection closes within two seconds. Anything unsent on it is kept as a draft.</div>
+            <div style="display: flex; gap: 8px; margin-top: 11px;">
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px; cursor: pointer;">Sign it out</button>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Keep it</button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px; align-items: center;">
+            <span style="padding: 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; font-size: 14px; color: #6B675D;">▭</span><span><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Firefox 129 on Windows</span><span style="display: block; font-size: 11px; color: #6B675D;">Location unavailable · 28 Jul</span></span></span>
+            <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Sign out</button></span>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">F03 · F05 · light · en · the row asks its own question, in place</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4; line-height: 1.45;">ሌሎቹን መሣሪያዎች በሙሉ ማስወጣት?</h2>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.8; color: #C9C5BB;">አራት መሣሪያዎች ወዲያውኑ ይወጣሉ። እርስዎ በሚጠቀሙበት በዚህ መሣሪያ ላይ ገብተው ይቆያሉ።</p>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 7px;">
+            <div style="font-size: 12px; color: #C9C5BB; line-height: 1.7;">Safari · iPhone 15 — አዲስ አበባ · ከ3 ደቂቃ በፊት</div>
+            <div style="font-size: 12px; color: #C9C5BB; line-height: 1.7;">Chrome · Tecno Spark 20 — ባህር ዳር · ትናንት 22:41</div>
+            <div style="font-size: 12px; color: #C9C5BB; line-height: 1.7;">Firefox · Windows — ቦታው አይታወቅም · ሐምሌ 21</div>
+            <div style="font-size: 12px; color: #C9C5BB; line-height: 1.7;">Edge · Windows — አዳማ · ሐምሌ 14</div>
+          </div>
+          <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.8; color: #A7B2BE;">እያንዳንዱ መሣሪያ ወዲያውኑ ይወጣል፤ የቀጥታ ግንኙነታቸውም በሁለት ሰከንድ ውስጥ ይዘጋል። ያልተላኩ መልእክቶች እንደ ረቂቅ ይቀመጣሉ።</div>
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #262622; padding-top: 14px;">
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer; line-height: 1.6;">ተወው</button>
+            <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">አራቱንም አስወጣ</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">F04 · F14 · dark · am · Ethiopian month names and localized places</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">When a session ends without you asking</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F08 · F12 · F13 · Doc 02 §8, EC-02, EC-05</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three ways a session can end mid-sentence, and one rule across all of them: never lose what someone typed. The idle warning arrives two minutes early with a one-click stay. A session revoked elsewhere produces a sign-in modal <em>over</em> the page rather than a redirect away from it. And an account disabled while its owner is working says what happened rather than dissolving into 401s.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #22211D; color: #F6F5F2; border-radius: 7px; padding: 11px 12px; display: flex; align-items: center; gap: 10px;">
+          <span style="flex: none; font-size: 13px;">◷</span>
+          <span style="font-size: 12px; line-height: 1.5;">You'll be signed out in 2 minutes — you've been idle for a while.</span>
+          <button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; color: #FFFFFF; font-size: 11.5px; font-weight: 600; cursor: pointer;">Stay signed in</button>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">F08 · the B1-DS toast, unmodified · countdown in text, no pulsing</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Signed out on this device</h2>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #4A4842;">This session was signed out somewhere else — from your devices page, or by an administrator. Sign in again to carry on; <strong style="font-weight: 600;">the reply you were writing is still here</strong>.</p>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Password</label>
+            <input type="password" value="" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+          </div>
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in and continue</button>
+          <div style="font-size: 11px; color: #6B675D;">Ticket #4812 · draft saved 14:02, still on this device</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">F12 · light · en · a modal over the work, never a redirect away from it</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4;">Your account has been switched off</h2>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #C9C5BB;">An administrator disabled this account a moment ago, so this session has ended. Your six open conversations stay assigned to you until someone reassigns them, and your two drafts are saved on this device.</p>
+          <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #C9C5BB;">If this is a surprise, speak to your supervisor — from this screen there is nothing to fix and nothing to retry.</div>
+          <button style="font-family: inherit; align-self: flex-start; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Back to sign in</button>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588;">F13 · dark · en · sockets close within two seconds; drafts survive</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Why F12 and F13 look different</div>
+          <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.7; color: #A6A296;">F12 is recoverable in five seconds, so it asks for a password and stays on the page. F13 is not recoverable by the person reading it, so it explains, tells them who to ask, and offers no action that would fail. Giving F13 a password field would be cruelty dressed as consistency.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Empty, loading, and the phone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F10 · F11 · F15 · Doc 02 §9, NFR-05</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The empty state is the document's own sentence — “You're only signed in here” — which is reassurance rather than absence, so it needs no illustration and no call to action. At 375 the table stops being a table: each session becomes a card with the three matching facts stacked, and sign-out sits at 44 px on the right where a thumb reaches it.</p>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+      <div style="width: 560px;">
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">F10 · F11 · light · en</div>
+        <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 24px 14px; text-align: center;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">You're only signed in here</div>
+            <div style="font-size: 12px; line-height: 1.6; color: #6B675D; margin: 5px auto 0; max-width: 320px;">This is your only active session. Other devices will appear here as you use them.</div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 13px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 46%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 68%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 13px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 38%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 60%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 13px 12px;"><div style="height: 9px; width: 52%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 72%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">Skeleton is B1-DS's, unchanged — three rows, 9 px and 8 px bars.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · sessions as cards</div>
+        <div data-screen-label="F15 devices light en mobile" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">10:22<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">My profile · Security</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Where you're signed in</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="font-size: 11.5px; color: #4A4842;"><strong style="font-weight: 600;">5 of 5</strong> sessions · a sixth signs out the oldest</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; font-size: 15px; color: #6B675D; margin-top: 1px;">▯</span>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Safari on iPhone 15</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 2px;">Addis Ababa · now<br />197.156.98.24</div>
+              </div>
+              <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 5px 10px; font-size: 10.5px; font-weight: 600;">◆ This one</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; font-size: 15px; color: #6B675D; margin-top: 1px;">▭</span>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Chrome 127 on Windows</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 2px;">Addis Ababa · 12 minutes ago<br />41.220.16.8</div>
+              </div>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 11px 12px; min-height: 44px; cursor: pointer;">Sign out</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; font-size: 15px; color: #6B675D; margin-top: 1px;">▯</span>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Chrome · Tecno Spark 20</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 2px;">Bahir Dar · yesterday 22:41<br />196.188.44.101</div>
+              </div>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 11px 12px; min-height: 44px; cursor: pointer;">Sign out</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; font-size: 15px; color: #6B675D; margin-top: 1px;">▭</span>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Firefox 129 on Windows</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 2px;"><em>Location unavailable</em> · 28 Jul<br />10.42.7.19</div>
+              </div>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 11px 12px; min-height: 44px; cursor: pointer;">Sign out</button>
+            </div>
+            <button style="font-family: inherit; width: 100%; margin-top: 2px; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 14px; font-weight: 500; padding: 12px; min-height: 44px; cursor: pointer;">Sign out all other devices</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all fifteen rows. F01, F02, F06, F07 and F09 in §A at 1440; F03, F04, F05 and F14 in §B, with the Amharic modal carrying localized places and Ethiopian month names; F08, F12 and F13 in §C; F10 and F11 in §D; F15 as the phone frame. Every destructive control is the B1-DS danger button, unmodified.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One judgement worth your eye.</strong> The revoke confirmations state a <strong style="font-weight: 600;">two-second</strong> bound out loud. That number is Doc 02's own (AC-04), and putting it in the interface turns an abstract promise into something a person can check with their own phone in their hand. If you would rather it stayed engineering-side, it comes out of three strings.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations, flagged:</strong> none. No new component and no new colour; the table is the B1-DS data table, the skeleton and toast are verbatim, and the mobile cards reuse the list-row anatomy at 44 px.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section G — personal and machine API tokens: eleven rows, the second show-once surface, and a rotation flow with an overlap window.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

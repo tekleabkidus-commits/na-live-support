@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S07-roles-list-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows G01–G03, G12–G14, G19, G20</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Roles — list, compare, lifecycle</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Section G is the densest part of the batch, so I am delivering it in two halves. This is the first: the list an admin lands on, comparing two roles, and the whole lifecycle around a role — cloning it, deleting it, the seeded templates, and the two warnings the documents attach. The permission matrix itself, the scopes, the impact modal and their states are the second half.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The one number that shapes this list is <strong style="font-weight: 600;">users affected</strong>. Every action here — clone, edit, delete — is about people who are working right now, so the count is on the row, on the delete dialog, and on the compare view. Nothing about roles is ever presented as if it only touched configuration.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Tables, buttons, pills, skeletons and diff colours are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim. Staff names and role names are NA BET PLC's; permission keys are Doc 03 §4.1's, unaltered.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Roles list — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G01, G07, G12 · Doc 03 §8, FR-02, FR-10</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Eleven roles: the nine seeded templates plus two this operator built. Seeded ones are marked, because they behave differently — they can be edited but not deleted while anyone holds them. The high-risk count is a shield with a number, never a colour on its own.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G01 · G07 · two selected for compare</span></div>
+    <div data-screen-label="G01 roles list light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 400px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">2</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 202px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">People</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Users</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Roles &amp; permissions</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Channels</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">✈ Telegram</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">💬 Web chat</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">✉ SMS</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">People</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Roles &amp; permissions</h1>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 4px;">11 roles · 53 people · one role each</div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">admin.roles.manage</span>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ New role</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <span style="flex: 1; max-width: 320px; display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12px; color: #726D63; min-height: 36px;">⌕ Filter roles…</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #22211D; color: #F6F5F2; border-radius: 6px; padding: 7px 12px; font-size: 11.5px; font-weight: 600; min-height: 36px;">2 selected</span>
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px; cursor: pointer;">Compare the two</button>
+            <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Sorted by people, most first</span>
+          </div>
+
+          <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 0 9px 14px;"></span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Role</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">What it is for</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">People</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">High-risk</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Updated</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;"></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select Agent" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #7E7A6E; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agent</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Handles tickets in their own department</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">18</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #4A4842;">🛡 None</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">12 Jun</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Agent" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9; background: #FDFCFA;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" checked="checked" aria-label="Select Senior Agent" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Senior Agent</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Agent rights plus merges and escalation</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">6</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 2 high-risk</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">28 Jul</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Senior Agent" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select Junior Agent" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #A29D91; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Junior Agent</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Replies only, no ticket properties</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">7</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #4A4842;">🛡 None</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">12 Jun</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Junior Agent" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9; background: #FDFCFA;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" checked="checked" aria-label="Select Payments Specialist" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #22211D; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Payments Specialist</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Deposits and withdrawals, department scope</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">5</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 3 high-risk</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">2 Aug</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Payments Specialist" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select Team Leader" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #C2BDB2; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Team Leader</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Reassigns and monitors inside their department</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">4</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 3 high-risk</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">19 Jul</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Team Leader" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select Read Only" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #DEDAD1; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Read Only</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Can read, cannot change anything at all</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">3</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #4A4842;">🛡 None</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">12 Jun</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Read Only" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select Manager" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Manager</span><span style="font-size: 9.5px; font-weight: 600; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 3px; padding: 0 4px; flex: none;">SEEDED</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">All departments, reports, no settings</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">3</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 6 high-risk</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">30 Jun</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for Manager" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="Select RG Officer" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #22211D; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">RG Officer</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Responsible-gambling flags and blocks</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">2</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 5 high-risk</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #6B675D;">24 Jul</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Open</button><button aria-label="More actions for RG Officer" style="font-family: inherit; background: #FFFFFF; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+            <span style="font-size: 11.5px; color: #6B675D;">Showing 8 of 11 · Super Admin, Admin and QA are further down</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; color: #4A4842;">🛡 High-risk means a permission that can move money, expose personal data, or change who can do what.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same list · Amharic chrome · G20 soft limit visible</span></div>
+    <div data-screen-label="G01 roles list dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 400px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 202px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">ሰዎች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ተጠቃሚዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ሚናዎች እና ፈቃዶች</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Channels</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">✈ Telegram</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">💬 Web chat</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">✉ SMS</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ሰዎች</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">ሚናዎች እና ፈቃዶች</h1>
+              <div style="font-size: 12px; color: #A6A296; margin-top: 4px;">102 ሚናዎች · 53 ሰዎች · አንድ ሰው አንድ ሚና</div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">admin.roles.manage</span>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ አዲስ ሚና</button>
+            </div>
+          </div>
+
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 13px; margin-top: 14px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">102 ሚናዎች — ከሚመከረው በላይ</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.7; color: #E8C25A;">ከመቶ በላይ ሚና ማስተዳደር ይከብዳል፤ አብዛኛውን ጊዜ ጥቂት ሚናዎችና ለግለሰቦች የሚሰጡ ልዩ ፈቃዶች ይሻላሉ። ገደብ አይደለም — ማስጠንቀቂያ ብቻ ነው። ተመሳሳይ የሆኑትን ማዋሃድ ይፈልጋሉ?</p>
+            <a href="#similar" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #F0B54A; margin-top: 4px;">ተመሳሳይ ሚናዎችን አሳይ →</a>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px;">
+            <span style="flex: 1; max-width: 320px; display: flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12px; color: #918C80; min-height: 36px;">⌕ ሚናዎችን አጣራ…</span>
+            <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">በሰዎች ብዛት ተደርድሯል</span>
+          </div>
+
+          <div style="margin-top: 12px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; background: #232320; border-bottom: 1px solid #343430;">
+              <span style="padding: 9px 0 9px 14px;"></span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ሚና</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ለምን</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ሰዎች</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">አደገኛ</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የተቀየረው</span>
+              <span style="padding: 9px 12px;"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #262622;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="ወኪል ምረጥ" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #A29D91; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ወኪል</span><span style="font-size: 9.5px; font-weight: 600; color: #A6A296; border: 1px solid #45443E; border-radius: 3px; padding: 0 4px; flex: none;">የተዘራ</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">በራሱ ክፍል ውስጥ ትኬቶችን ይይዛል</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">18</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #C9C5BB;">🛡 የለም</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #A6A296;">12 ጁን</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">ክፈት</button><button aria-label="ተጨማሪ" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #262622;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="ከፍተኛ ወኪል ምረጥ" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ከፍተኛ ወኪል</span><span style="font-size: 9.5px; font-weight: 600; color: #A6A296; border: 1px solid #45443E; border-radius: 3px; padding: 0 4px; flex: none;">የተዘራ</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">የወኪል ፈቃዶች እና ማዋሃድ</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">6</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #ECEAE4;">🛡 2 አደገኛ</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #A6A296;">28 ጁላይ</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">ክፈት</button><button aria-label="ተጨማሪ" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center; border-bottom: 1px solid #262622;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="የክፍያ ባለሙያ ምረጥ" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #ECEAE4; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የክፍያ ባለሙያ</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">ገንዘብ ማስገባትና ማውጣት · በክፍል ደረጃ</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">5</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #ECEAE4;">🛡 3 አደገኛ</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #A6A296;">2 ኦገስት</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">ክፈት</button><button aria-label="ተጨማሪ" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 34px 1.5fr 2.1fr 92px 116px 128px 108px; align-items: center;">
+              <span style="padding: 11px 0 11px 14px;"><input type="checkbox" aria-label="ለንባብ ብቻ ምረጥ" /></span>
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 8px; min-width: 0;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #DEDAD1; flex: none;"></span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለንባብ ብቻ</span><span style="font-size: 9.5px; font-weight: 600; color: #A6A296; border: 1px solid #45443E; border-radius: 3px; padding: 0 4px; flex: none;">የተዘራ</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">ማንበብ ይችላል፤ ምንም መቀየር አይችልም</span>
+              <span style="padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">3</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #C9C5BB;">🛡 የለም</span></span>
+              <span style="padding: 11px 12px; font-size: 11.5px; color: #A6A296;">12 ጁን</span>
+              <span style="padding: 11px 12px; display: flex; gap: 6px; justify-content: flex-end;"><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">ክፈት</button><button aria-label="ተጨማሪ" style="font-family: inherit; background: #1C1C19; color: #C9C5BB; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; padding: 6px 9px; min-height: 32px; cursor: pointer;">⋯</button></span>
+            </div>
+          </div>
+          <div style="font-size: 11.5px; color: #A6A296; margin-top: 12px;">🛡 “አደገኛ” ማለት ገንዘብ የሚያንቀሳቅስ፣ የግል መረጃ የሚያጋልጥ ወይም ማንም ምን እንደሚችል የሚቀይር ፈቃድ ነው።</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Compare two roles</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row G02 · Doc 03 §8, §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Grouped by module and showing only what differs, with the identical modules collapsed to a count — a diff that lists all 113 keys twice is a diff nobody reads. Added is green, removed is red, and each row also carries a + or − so the colour is never doing the work alone.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #E5E2DB;">
+            <div style="padding: 12px 14px; border-right: 1px solid #E5E2DB;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Senior Agent</span></div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">47 permissions · 2 high-risk · 6 people</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Tickets scope: Department</div>
+            </div>
+            <div style="padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #22211D;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Payments Specialist</span></div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">42 permissions · 3 high-risk · 5 people</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Tickets scope: Department</div>
+            </div>
+          </div>
+          <div style="padding: 10px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 11.5px; color: #4A4842;">9 differences across 4 modules · 10 modules identical</div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Tickets</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 7px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #E4F4EA; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #156F45;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #156F45;">tickets.merge — only Senior Agent</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #E4F4EA; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #156F45;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #156F45;">tickets.escalate — only Senior Agent</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #B32B2B;">tickets.fields.edit — only Payments Specialist</span></div>
+            </div>
+          </div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Customers</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 7px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #B32B2B;">customers.merge 🛡 — only Payments Specialist</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #B32B2B;">customers.export 🛡 — only Payments Specialist</span></div>
+            </div>
+          </div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">SMS</div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px; margin-top: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #B32B2B;">sms.send — only Payments Specialist</span></div>
+          </div>
+
+          <div style="padding: 11px 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11.5px; color: #6B675D;">Identical in Conversations, Telegram, Web chat, AI, Knowledge Base, Automation, Organization, Users &amp; Roles, Reports, Supervision</span>
+              <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 10px; min-height: 32px; cursor: pointer; flex: none;">Show all</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #343430;">
+            <div style="padding: 12px 14px; border-right: 1px solid #343430;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #A29D91;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Senior Agent</span></div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">47 permissions · 2 high-risk · 6 people</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">Tickets scope: Department</div>
+            </div>
+            <div style="padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #ECEAE4;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Payments Specialist</span></div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">42 permissions · 3 high-risk · 5 people</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">Tickets scope: Department</div>
+            </div>
+          </div>
+          <div style="padding: 10px 14px; background: #232320; border-bottom: 1px solid #343430; font-size: 11.5px; color: #C9C5BB;">9 differences across 4 modules · 10 modules identical</div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #262622;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Tickets</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 7px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #123322; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #5AD190;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #5AD190;">tickets.merge — only Senior Agent</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #123322; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #5AD190;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #5AD190;">tickets.escalate — only Senior Agent</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #F08A8A;">tickets.fields.edit — only Payments Specialist</span></div>
+            </div>
+          </div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #262622;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Customers</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 7px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #F08A8A;">customers.merge 🛡 — only Payments Specialist</span></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #F08A8A;">customers.export 🛡 — only Payments Specialist</span></div>
+            </div>
+          </div>
+
+          <div style="padding: 11px 14px; border-bottom: 1px solid #262622;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">SMS</div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px; margin-top: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #F08A8A;">sms.send — only Payments Specialist</span></div>
+          </div>
+
+          <div style="padding: 11px 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11.5px; color: #A6A296;">Identical in Conversations, Telegram, Web chat, AI, Knowledge Base, Automation, Organization, Users &amp; Roles, Reports, Supervision</span>
+              <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 10px; min-height: 32px; cursor: pointer; flex: none;">Show all</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Lifecycle &amp; states — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G03, G12–G14, G19, G20 · Doc 03 FR-02, FR-08c, FR-10, EC-07, EC-10</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G03 — the role's identity</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <label for="rn-l" style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18;">Name</label>
+          <div id="rn-l" style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #1D1C18; margin-top: 5px; min-height: 36px;">Payments Specialist</div>
+          <label for="rd-l" style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-top: 10px;">What it is for</label>
+          <div id="rd-l" style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: #1D1C18; margin-top: 5px;">Deposits and withdrawals, department scope</div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-top: 10px;">Colour</div>
+          <div style="display: flex; gap: 7px; margin-top: 6px; align-items: center;">
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #22211D; border: 2px solid #1D1C18;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #56534A;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #7E7A6E;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #A29D91;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #C2BDB2;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #DEDAD1;"></span>
+          </div>
+          <p style="margin: 7px 0 0; font-size: 11px; line-height: 1.55; color: #6B675D;">Role colours come from this set deliberately: the six status hues mean something fixed everywhere else in the product, so a role cannot borrow one.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G13 — no custom roles yet</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">You have the nine we seeded, and nothing of your own yet</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Every template is a starting point you can edit, and none of them is locked. Most operators clone the closest one rather than starting from an empty matrix of 113 permissions.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 11px;">
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Super Admin</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Admin</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Manager</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Team Leader</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Senior Agent</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Agent</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Junior Agent</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">QA</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #1D1C18;">Read Only</span>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Clone a template</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from empty</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G14 — delete blocked, people hold it</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Delete “Payments Specialist”?</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Blocked — 5 people have this role right now</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #7A3232; margin-top: 3px;">Everyone has exactly one role, so deleting this would leave five people with none. Move them to another role first.</div>
+          </div>
+          <div style="font-size: 11.5px; line-height: 1.7; color: #4A4842; margin-top: 9px;">Hanna Girma · Yonas Tesfaye · Meron Assefa · Kidist Haile · Selam Alemu</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Delete role</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Move these 5 people →</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G20 — a hundred roles is a smell, not an error</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">102 roles — more than we would recommend</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #8F5F08;">A hundred roles is hard to keep straight; usually a handful of roles plus per-person exceptions is easier to live with. This is a warning, not a limit — nothing is blocked. Want to see which ones are near-identical?</p>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G19 — a release changed the template you edited</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">The shipped “Senior Agent” template gained 2 permissions in this release</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Your copy was edited on 28 July, so nothing was changed for you — a release never overwrites a template you have touched. These are suggestions you can take or ignore.</p>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #4A4842; margin-top: 7px;">+ conversations.history.full<br />+ tickets.follow</div>
+            <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; cursor: pointer;">Add both</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; min-height: 36px; cursor: pointer;">Dismiss</button></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G16 — loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 34%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 58%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+          <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 28%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 64%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+          <div style="padding: 12px 14px;"><div style="height: 9px; width: 40%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 52%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G03 — the role's identity</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <label for="rn-d" style="display: block; font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Name</label>
+          <div id="rn-d" style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #ECEAE4; margin-top: 5px; min-height: 36px;">Payments Specialist</div>
+          <label for="rd-d" style="display: block; font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-top: 10px;">What it is for</label>
+          <div id="rd-d" style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: #ECEAE4; margin-top: 5px;">Deposits and withdrawals, department scope</div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-top: 10px;">Colour</div>
+          <div style="display: flex; gap: 7px; margin-top: 6px; align-items: center;">
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #ECEAE4; border: 2px solid #ECEAE4;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #C2BDB2;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #A29D91;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #7E7A6E;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #56534A;"></span>
+            <span style="width: 30px; height: 30px; border-radius: 6px; background: #343430;"></span>
+          </div>
+          <p style="margin: 7px 0 0; font-size: 11px; line-height: 1.55; color: #A6A296;">Role colours come from this set deliberately: the six status hues mean something fixed everywhere else in the product, so a role cannot borrow one.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G13 — no custom roles yet</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">You have the nine we seeded, and nothing of your own yet</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Every template is a starting point you can edit, and none of them is locked. Most operators clone the closest one rather than starting from an empty matrix of 113 permissions.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 11px;">
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Super Admin</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Admin</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Manager</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Team Leader</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Senior Agent</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Agent</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Junior Agent</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">QA</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 9px; font-size: 11.5px; color: #ECEAE4;">Read Only</span>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Clone a template</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from empty</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G14 — delete blocked, people hold it</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Delete “Payments Specialist”?</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Blocked — 5 people have this role right now</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E0A0A0; margin-top: 3px;">Everyone has exactly one role, so deleting this would leave five people with none. Move them to another role first.</div>
+          </div>
+          <div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 9px;">Hanna Girma · Yonas Tesfaye · Meron Assefa · Kidist Haile · Selam Alemu</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Delete role</button><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Move these 5 people →</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G19 — a release changed the template you edited</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">The shipped “Senior Agent” template gained 2 permissions in this release</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Your copy was edited on 28 July, so nothing was changed for you — a release never overwrites a template you have touched. These are suggestions you can take or ignore.</p>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #C9C5BB; margin-top: 7px;">+ conversations.history.full<br />+ tickets.follow</div>
+            <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; cursor: pointer;">Add both</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; min-height: 36px; cursor: pointer;">Dismiss</button></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G20 — a hundred roles is a smell, not an error</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">102 roles — more than we would recommend</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #E8C25A;">A hundred roles is hard to keep straight; usually a handful of roles plus per-person exceptions is easier to live with. This is a warning, not a limit — nothing is blocked. Want to see which ones are near-identical?</p>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G16 — loading</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 12px 14px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 34%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 58%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+          <div style="padding: 12px 14px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 28%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 64%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+          <div style="padding: 12px 14px;"><div style="height: 9px; width: 40%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 52%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — read-only, per your ruling</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row G23 · Doc 03 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 03 §9's own words are the notice text. The list, the people counts and the high-risk counts all read here — which answers the question someone actually has on a phone: <em>who can do this, and how many people have it?</em></p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · read-only</div>
+        <div data-screen-label="G23 roles 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">People</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Roles</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">A hundred and thirteen checkboxes is not a phone job. You can read every role and who holds it.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #7E7A6E; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Agent</span><span style="margin-left: auto; font-size: 12px; color: #4A4842; flex: none;">18 people</span></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Handles tickets in their own department · 🛡 none</div>
+              </div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Senior Agent</span><span style="margin-left: auto; font-size: 12px; color: #4A4842; flex: none;">6 people</span></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Merges and escalation · 🛡 2 high-risk</div>
+              </div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #22211D; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Payments Specialist</span><span style="margin-left: auto; font-size: 12px; color: #4A4842; flex: none;">5 people</span></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Deposits and withdrawals · 🛡 3 high-risk</div>
+              </div>
+              <div style="padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #22211D; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">RG Officer</span><span style="margin-left: auto; font-size: 12px; color: #4A4842; flex: none;">2 people</span></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Responsible-gambling flags · 🛡 5 high-risk</div>
+              </div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px;">11 roles · 53 people</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ · read-only</div>
+        <div data-screen-label="G23 roles 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ሰዎች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ሚናዎች</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">113 ምልክቶችን በስልክ መያዝ አይመችም። ሁሉንም ሚናዎችና የያዙትን ሰዎች ግን ማንበብ ይችላሉ።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="padding: 11px 12px; border-bottom: 1px solid #262622;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #A29D91; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ወኪል</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB; flex: none;">18 ሰዎች</span></div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">በራሱ ክፍል ትኬቶችን ይይዛል · 🛡 የለም</div>
+              </div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #262622;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #56534A; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ከፍተኛ ወኪል</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB; flex: none;">6 ሰዎች</span></div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">ማዋሃድና ማሳደግ · 🛡 2 አደገኛ</div>
+              </div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #262622;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #ECEAE4; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">የክፍያ ባለሙያ</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB; flex: none;">5 ሰዎች</span></div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">ገንዘብ ማስገባትና ማውጣት · 🛡 3 አደገኛ</div>
+              </div>
+              <div style="padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #DEDAD1; flex: none;"></span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ለንባብ ብቻ</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB; flex: none;">3 ሰዎች</span></div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">ማንበብ ብቻ · 🛡 የለም</div>
+              </div>
+            </div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 10px;">11 ሚናዎች · 53 ሰዎች</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> G01 (§A both themes), G02 (§B both themes), G03 (§C both themes), G07 (the shield with its count, on every row in §A both themes and in §D both themes), G12 (the nine seeded templates named, §C both themes), G13 (§C both themes), G14 (§C both themes), G19 (§C both themes), G20 (§C both themes as the recommendation panel, plus the Amharic banner form in the §A dark frame), G20 (§A dark banner and §C light panel), G16 (list skeleton, §C both themes), G23 (§D both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Every state in §C is drawn in both theme columns:</strong> G03, G13, G14, G19, G20 and the list skeleton. No state in this delivery exists in one theme only.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 variant is read-only behind the explicit notice, per your ruling. Nothing else departs from the documents.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Second half of Section G, next:</strong> the permission matrix itself with the 113 keys and 14 modules (G06), scopes (G04), tri-state select-all (G05), search (G08), the sidebar summary (G09), unsaved-changes guard (G10), impact modal (G11), optimistic toggle and rollback (G15), concurrent edit (G17), teamless Team scope (G18), keyboard operability (G21) and the ≤1024 accordion (G22).</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One decision I want your eye on:</strong> role colours are constrained to the neutral ink ramp rather than a free palette, because all six vivid hues in this product already mean a ticket status. An operator who wants a red role would be borrowing “breached”. If you would rather they had free choice, that is your call to make, not mine — but I would want the picker to warn about the collision.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

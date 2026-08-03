@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S01-login-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section A · 18 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The login card</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">One card, eighteen rows, and the most-seen screen in the product — five hundred agents open it inside ten minutes at shift start, most of them on a phone. Everything here is <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> Direction C verbatim: the button, the banner, the skeleton, the pill, the type scale, the 4pt spacing. Four things had no home in the system yet — three form fields and a link colour for dark surfaces — and are proposed as additions at the foot of this file rather than quietly invented.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The tenant is <strong style="font-weight: 600;">Selam Bet</strong>, an Ethiopian sports-betting operator, and everything branded on this card — the logo slot, the welcome line, the footer links, the copyright — is read from its published theme, never written into this screen. The card itself is neutral: it has to sit under any brand without looking designed for one.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Amharic is real text and is flagged for native review. On your approval these frames export as the Doc 02 AC-09 baselines — en + am × light + dark.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Resting — 1440, both themes, English</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A01–A06 · Doc 02 §8, §9 · Doc 16 FR-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The card is 420 px on a themed background, centred rather than pinned high, because the person reading it on a laptop at 07:00 is looking at the middle of the screen. Forgot-password sits on the password label row where it is visible before anything has gone wrong — Doc 02 puts it there deliberately, since it is also the way out of a lockout. Remember-me carries its own consequence in one line: it lengthens the cookie and never skips the authenticator on a new device.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · idle</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A01 · A02 · A04 · A05 · A06 — A03 partial, see §F</span></div>
+    <div data-screen-label="A01 login idle light en" style="width: 1440px; height: 900px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+            <div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Sign in</h1>
+              <div style="font-size: 12.5px; color: #6B675D; margin-top: 3px;">Selam Bet Support workspace</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label for="a01-email" style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+              <input id="a01-email" type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                <label for="a01-pw" style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Password</label>
+                <a href="#e01" style="margin-left: auto; font-size: 11.5px; font-weight: 500;">Forgot password?</a>
+              </div>
+              <div style="position: relative;">
+                <input id="a01-pw" type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 40px 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                <button type="button" aria-label="Show password" style="font-family: inherit; position: absolute; right: 4px; top: 4px; width: 32px; height: 30px; background: transparent; border: none; border-radius: 5px; color: #6B675D; font-size: 13px; cursor: pointer;">◉</button>
+              </div>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 9px; cursor: pointer;">
+              <span style="flex: none; width: 16px; height: 16px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF; margin-top: 1px;"></span>
+              <span style="min-width: 0;">
+                <span style="display: block; font-size: 12.5px; font-weight: 500; color: #1D1C18;">Remember me on this device</span>
+                <span style="display: block; font-size: 11.5px; line-height: 1.5; color: #6B675D; margin-top: 2px;">Keeps you signed in for up to 72 hours. A device we haven't seen before always asks for your authenticator code.</span>
+              </span>
+            </label>
+          </div>
+
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #F0EEE9; padding-top: 14px;">
+            <span style="font-size: 11.5px; color: #6B675D;">Language</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 500; color: #4A4842; border-radius: 6px; padding: 6px 11px;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #6B675D;">© 2026 Selam Bet Trading PLC</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01">Privacy</a><a href="#o01">Terms</a><a href="#o01">Help</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · idle</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same rows, dark theme</span></div>
+    <div data-screen-label="A01 login idle dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+            <div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Sign in</h1>
+              <div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">Selam Bet Support workspace</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label for="a01d-email" style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Email</label>
+              <input id="a01d-email" type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                <label for="a01d-pw" style="font-size: 11.5px; font-weight: 600; color: #C9C5BB;">Password</label>
+                <a href="#e01" style="margin-left: auto; font-size: 11.5px; font-weight: 500; color: #A9C0F5;">Forgot password?</a>
+              </div>
+              <div style="position: relative;">
+                <input id="a01d-pw" type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 40px 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+                <button type="button" aria-label="Show password" style="font-family: inherit; position: absolute; right: 4px; top: 4px; width: 32px; height: 30px; background: transparent; border: none; border-radius: 5px; color: #A6A296; font-size: 13px; cursor: pointer;">◉</button>
+              </div>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 9px; cursor: pointer;">
+              <span style="flex: none; width: 16px; height: 16px; border: 1px solid #45443E; border-radius: 4px; background: #232320; margin-top: 1px;"></span>
+              <span style="min-width: 0;">
+                <span style="display: block; font-size: 12.5px; font-weight: 500; color: #ECEAE4;">Remember me on this device</span>
+                <span style="display: block; font-size: 11.5px; line-height: 1.5; color: #A6A296; margin-top: 2px;">Keeps you signed in for up to 72 hours. A device we haven't seen before always asks for your authenticator code.</span>
+              </span>
+            </label>
+          </div>
+
+          <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #262622; padding-top: 14px;">
+            <span style="font-size: 11.5px; color: #A6A296;">Language</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; background: #2F2F29; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 500; color: #C9C5BB; border-radius: 6px; padding: 6px 11px;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #A6A296;">© 2026 Selam Bet Trading PLC</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01" style="color: #A9C0F5;">Privacy</a><a href="#o01" style="color: #A9C0F5;">Terms</a><a href="#o01" style="color: #A9C0F5;">Help</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Amharic — 1440, and the submitting state</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A05 · A07 · Doc 02 §14, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The Amharic card is the same card, not a translated afterthought — but the remember-me consequence line runs about a fifth longer, so the card is drawn against the longest real string rather than the shortest. Line-height comes from the Ethiopic metrics, per B1-DS §3. On the right, submitting: spinner in the button, fields locked, nothing else moves and no full-page blocker — you can still read what you typed.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · አማርኛ, idle</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A05 · flagged for native review</span></div>
+    <div data-screen-label="A05 login idle light am" style="width: 1440px; height: 900px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+            <div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18; line-height: 1.35;">ይግቡ</h1>
+              <div style="font-size: 12.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">የሰላም ቤት የድጋፍ መስሪያ ቦታ</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label for="a05-email" style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px; line-height: 1.6;">ኢሜይል</label>
+              <input id="a05-email" type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                <label for="a05-pw" style="font-size: 11.5px; font-weight: 600; color: #4A4842; line-height: 1.6;">የይለፍ ቃል</label>
+                <a href="#e01" style="margin-left: auto; font-size: 11.5px; font-weight: 500; line-height: 1.6;">የይለፍ ቃል ረሱ?</a>
+              </div>
+              <div style="position: relative;">
+                <input id="a05-pw" type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 40px 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                <button type="button" aria-label="የይለፍ ቃል አሳይ" style="font-family: inherit; position: absolute; right: 4px; top: 4px; width: 32px; height: 30px; background: transparent; border: none; border-radius: 5px; color: #6B675D; font-size: 13px; cursor: pointer;">◉</button>
+              </div>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 9px; cursor: pointer;">
+              <span style="flex: none; width: 16px; height: 16px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF; margin-top: 2px;"></span>
+              <span style="min-width: 0;">
+                <span style="display: block; font-size: 12.5px; font-weight: 500; color: #1D1C18; line-height: 1.6;">በዚህ መሣሪያ አስታውሰኝ</span>
+                <span style="display: block; font-size: 11.5px; line-height: 1.7; color: #6B675D; margin-top: 2px;">እስከ 72 ሰዓት ድረስ ሳይወጡ ይቆያሉ። ከዚህ በፊት ያላየነው መሣሪያ ሁልጊዜ የማረጋገጫ መተግበሪያዎን ኮድ ይጠይቃል።</span>
+              </span>
+            </label>
+          </div>
+
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ግባ</button>
+
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #F0EEE9; padding-top: 14px;">
+            <span style="font-size: 11.5px; color: #6B675D; line-height: 1.6;">ቋንቋ</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 500; color: #4A4842; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 6px; padding: 6px 11px; line-height: 1.6;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #6B675D;">© 2026 ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ.</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01">ግላዊነት</a><a href="#o01">ውሎች</a><a href="#o01">እገዛ</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · submitting</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A07 · spinner in button, fields locked</span></div>
+    <div data-screen-label="A07 login submitting dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+            <div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Sign in</h1>
+              <div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">Selam Bet Support workspace</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label for="a07-email" style="display: block; font-size: 11.5px; font-weight: 600; color: #918C80; margin-bottom: 5px;">Email</label>
+              <input id="a07-email" type="email" value="sara.bekele@selambet.et" readonly="readonly" disabled="disabled" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #918C80; min-height: 38px;" />
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                <label for="a07-pw" style="font-size: 11.5px; font-weight: 600; color: #918C80;">Password</label>
+                <span style="margin-left: auto; font-size: 11.5px; font-weight: 500; color: #6B6860;">Forgot password?</span>
+              </div>
+              <input id="a07-pw" type="password" value="••••••••••••" readonly="readonly" disabled="disabled" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #918C80; min-height: 38px;" />
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 9px;">
+              <span style="flex: none; width: 16px; height: 16px; border: 1px solid #343430; border-radius: 4px; background: #232320; margin-top: 1px;"></span>
+              <span style="min-width: 0;">
+                <span style="display: block; font-size: 12.5px; font-weight: 500; color: #918C80;">Remember me on this device</span>
+                <span style="display: block; font-size: 11.5px; line-height: 1.5; color: #6B6860; margin-top: 2px;">Keeps you signed in for up to 72 hours. A device we haven't seen before always asks for your authenticator code.</span>
+              </span>
+            </label>
+          </div>
+
+          <button aria-busy="true" style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; opacity: 0.62; display: inline-flex; align-items: center; justify-content: center; gap: 7px;">◌ Signing in…</button>
+
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #262622; padding-top: 14px;">
+            <span style="font-size: 11.5px; color: #A6A296;">Language</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; background: #2F2F29; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 500; color: #C9C5BB; border-radius: 6px; padding: 6px 11px;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #A6A296;">© 2026 Selam Bet Trading PLC</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01" style="color: #A9C0F5;">Privacy</a><a href="#o01" style="color: #A9C0F5;">Terms</a><a href="#o01" style="color: #A9C0F5;">Help</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The four refusals — both themes, both languages</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A08–A12 · Doc 02 FR-02, FR-03, FR-05, SEC-01, SEC-05</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Shown as the card's message region — everything above and below it is unchanged from §A. Light cells are English, dark cells are Amharic, so each state is proved in both themes and both languages at once. Every message is announced, carries a glyph as well as its tint, and none of them says whether the account exists. The hardest part of this section was copywriting: a generic message can easily read as evasive, so each one names what the person can <em>do</em> instead of what the platform knows.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: flex; flex-direction: column; gap: 20px;">
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A08 · wrong email or wrong password — one message for both</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 FR-02, AC-01</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #8E2222; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span>We couldn't sign you in with those details. Check your email and password, then try again.</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #C93B3B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <div>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;"><label style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Password</label><a href="#e01" style="margin-left: auto; font-size: 11.5px; font-weight: 500;">Forgot password?</a></div>
+                <input type="password" value="••••••••" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #C93B3B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · role="alert" · both fields marked, neither blamed</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; line-height: 1.4;">ይግቡ</div>
+              <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.7; color: #F5A7A7; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span>በእነዚህ መረጃዎች ልናስገባዎት አልቻልንም። ኢሜይልዎንና የይለፍ ቃልዎን አረጋግጠው እንደገና ይሞክሩ።</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px; line-height: 1.6;">ኢሜይል</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #E06B6B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+              </div>
+              <div>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;"><label style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; line-height: 1.6;">የይለፍ ቃል</label><a href="#e01" style="margin-left: auto; font-size: 11.5px; font-weight: 500; color: #A9C0F5; line-height: 1.6;">የይለፍ ቃል ረሱ?</a></div>
+                <input type="password" value="••••••••" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #E06B6B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ግባ</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · am · same message, same length budget</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A09 · locked out — no timer, no attempt counter, always a way out</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 FR-03, EC-11</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="alert" style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #7E650F; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⏱</span><span><strong style="font-weight: 600;">This account is locked for a short time.</strong> Too many sign-in attempts. Try again later, or reset your password — a completed reset unlocks it straight away.</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button style="font-family: inherit; flex: 1; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Reset password</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Try again</button>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · the reset is promoted, because it is the unlock</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; line-height: 1.4;">ይግቡ</div>
+              <div role="alert" style="background: #2C2612; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.7; color: #E8C25A; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⏱</span><span><strong style="font-weight: 600;">ይህ መለያ ለተወሰነ ጊዜ ተቆልፏል።</strong> በጣም ብዙ የመግቢያ ሙከራዎች ተደርገዋል። ቆይተው ይሞክሩ፣ ወይም የይለፍ ቃልዎን ይቀይሩ — የተጠናቀቀ ለውጥ ወዲያውኑ ይከፍተዋል።</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px; line-height: 1.6;">ኢሜይል</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button style="font-family: inherit; flex: 1; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">የይለፍ ቃል ይቀይሩ</button>
+                <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">እንደገና ይሞክሩ</button>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · am · no remaining time is disclosed, in either language</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A10 · disabled user, and A11 · suspended tenant — two different sentences on purpose</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 FR-05</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="alert" style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #4A5460; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">◼</span><span><strong style="font-weight: 600;">This account has been switched off.</strong> Your supervisor or an administrator can switch it back on. Nothing you did caused this.</span></div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; border-top: 1px solid #F0EEE9; padding-top: 12px;">A10 · disabled user. The message is non-technical and does not read as a fault, because for the person in front of it, it isn't one.</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; line-height: 1.4;">ይግቡ</div>
+              <div role="alert" style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.7; color: #A7B2BE; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">◼</span><span><strong style="font-weight: 600;">የሰላም ቤት ድጋፍ ለጊዜው አይገኝም።</strong> ችግሩ ከመለያዎ ጋር አይደለም — የድርጅትዎ የሥራ ቦታ ታግዷል። እባክዎ አስተዳዳሪዎን ያነጋግሩ።</span></div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; border-top: 1px solid #262622; padding-top: 12px;">A11 · suspended tenant. A whole operator is offline; the sentence says so and clears the person of blame in its second clause.</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · am</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A12 · blocked by an IP allowlist — deliberately indistinguishable from A08</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 SEC-05</span></div>
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 15px 17px;">
+          <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">There is no A12 frame, and that is the design. Doc 02 SEC-05 requires an IP-blocked attempt to return <strong style="font-weight: 600;">the generic error</strong> — byte-identical to A08 — because a distinct message would tell an attacker that an allowlist exists and that they are outside it. The event is audited as <code style="font-family: ui-monospace, monospace; font-size: 12px;">auth.ip.blocked</code> where an administrator can see it; the person at the card sees exactly the A08 card above. Drawing a separate screen here would have been the failure, so the row is delivered as a stated absence rather than a picture.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Notices, friction and the outage</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A13–A16 · Doc 02 FR-11, T-03, EC-11, FS-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three of these arrive <em>before</em> anyone has typed anything, so each has to explain itself in one sentence and then get out of the way. The CAPTCHA is the exception: it appears mid-attempt, so its space is reserved in the card from the start and the layout never jumps under someone's cursor.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: flex; flex-direction: column; gap: 20px;">
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A13 · session expired, return URL kept · A14 · new-device notice</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 FR-11, §8 · T-03, EC-03</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="status" style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #4A5460; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">◷</span><span><strong style="font-weight: 600;">Your session ended for security.</strong> Sign in again and we'll take you straight back to <strong style="font-weight: 600;">Ticket #4812 — Withdrawal not received</strong>. Your unsent reply is still saved on this device.</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">A13 · light · en · the draft promise is Doc 07's, kept here</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-size: 11.5px; color: #A6A296;">Signed in · first screen after the challenge</div>
+              <div style="background: #ECEAE4; color: #171714; border-radius: 7px; padding: 11px 12px; font-size: 12px; line-height: 1.6; display: flex; gap: 10px; align-items: flex-start;">
+                <span style="flex: none; font-weight: 700;">◆</span>
+                <span style="min-width: 0;"><strong style="font-weight: 600;">New sign-in from a device we haven't seen before.</strong><br />Chrome on Windows · Addis Ababa · today 07:04. If this wasn't you, change your password now.</span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; color: #4A4842; font-size: 11.5px; font-weight: 600; cursor: pointer;">Review devices</button>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296; border-top: 1px solid #262622; padding-top: 12px;">A14 · the same fact also goes out as the new-device email in Section I. The notice is a tenant setting; when it is off, neither appears.</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">A14 · dark · en · B1-DS toast, verbatim</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A15 · CAPTCHA after repeated failures · A16 · sign-in unavailable</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 EC-11 · FS-01</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #8E2222; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span>We couldn't sign you in with those details. Check your email and password, then try again.</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Password</label>
+                <input type="password" value="••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px; min-height: 78px; display: flex; align-items: center; gap: 10px; background: #F6F5F2;">
+                <span style="flex: none; width: 22px; height: 22px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF;"></span>
+                <span style="font-size: 12.5px; font-weight: 500; color: #1D1C18;">Confirm you're not a robot</span>
+                <span style="margin-left: auto; font-size: 10.5px; color: #6F6A61; text-align: right; line-height: 1.5;">Shown after<br />5 failed attempts</span>
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Sign in</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">A15 · light · en · the 78 px block is reserved from load, so nothing shifts</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+              <div>
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">We can't sign anyone in right now</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #C9C5BB; margin-top: 6px;">The sign-in service is unavailable. This is on our side, not yours, and it is being worked on. Nothing you type will be lost — try again in a few minutes.</div>
+              </div>
+              <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #E8C25A;">Last checked 07:06 · retrying automatically</div>
+              <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Try again</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">A16 · dark · en · fail-closed, and honest about whose fault it is</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">A17 · the step into two-factor — one flow, not a second screen</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 §8, §9, §13 · full challenge is Section B</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button aria-label="Back to email and password" style="font-family: inherit; width: 30px; height: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 13px; cursor: pointer;">←</button>
+                <span style="font-size: 11.5px; color: #6B675D;">Step 2 of 2</span>
+              </div>
+              <div>
+                <h2 tabindex="-1" style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Enter your 6-digit code</h2>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #6B675D; margin-top: 4px;">From your authenticator app, for sara.bekele@selambet.et</div>
+              </div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #22211D; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #1D1C18;">4</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <a href="#b06" style="font-size: 11.5px; font-weight: 500;">Use a recovery code instead</a>
+                <span style="margin-left: auto; font-size: 11px; color: #6B675D;">Submits on the sixth digit</span>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · 150 ms step transition · focus moves to the heading</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button aria-label="ወደ ኢሜይልና የይለፍ ቃል ተመለስ" style="font-family: inherit; width: 30px; height: 30px; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; color: #ECEAE4; font-size: 13px; cursor: pointer;">←</button>
+                <span style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ደረጃ 2 ከ2</span>
+              </div>
+              <div>
+                <h2 tabindex="-1" style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4; line-height: 1.45;">ባለ 6 አኃዝ ኮድዎን ያስገቡ</h2>
+                <div style="font-size: 12.5px; line-height: 1.7; color: #A6A296; margin-top: 4px;">ከማረጋገጫ መተግበሪያዎ፣ ለ sara.bekele@selambet.et</div>
+              </div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #ECEAE4; border-radius: 6px; background: #232320; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #ECEAE4;">4</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <a href="#b06" style="font-size: 11.5px; font-weight: 500; color: #A9C0F5; line-height: 1.6;">በምትኩ የመልሶ ማግኛ ኮድ ይጠቀሙ</a>
+                <span style="margin-left: auto; font-size: 11px; color: #A6A296; line-height: 1.6;">በስድስተኛው አኃዝ ይላካል</span>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · am · six segments, one field for assistive tech</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§E</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — the one most agents actually use</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">A18 · Doc 02 NFR-05, §9 · exempt from every viewport floor</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 02 NFR-05 requires every auth screen to be fully functional in a mobile browser, and your 3 August ruling made that exemption explicit: no read-only variant here, no notice, nothing withheld. Single column below 480 px, every target at 44 px or more — inputs, the button, the visibility toggle, both language pills — and the card breathes rather than shrinking the desktop layout. The keyboard covers the lower third on a real phone, so the button sits directly under the last field instead of at the foot of the page.</p>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · idle</div>
+        <div data-screen-label="A18 login idle light en mobile" style="width: 375px; height: 812px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D;">07:02<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+              <div>
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Sign in</h1>
+                <div style="font-size: 12.5px; color: #6B675D; margin-top: 3px;">Selam Bet Support workspace</div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 12px; font-size: 14px; color: #1D1C18; min-height: 44px;" />
+              </div>
+              <div>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;"><label style="font-size: 12px; font-weight: 600; color: #4A4842;">Password</label><a href="#e01" style="margin-left: auto; font-size: 12px; font-weight: 500;">Forgot password?</a></div>
+                <div style="position: relative;">
+                  <input type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 12px 52px 12px 12px; font-size: 14px; color: #1D1C18; min-height: 44px;" />
+                  <button type="button" aria-label="Show password" style="font-family: inherit; position: absolute; right: 2px; top: 1px; width: 44px; height: 44px; background: transparent; border: none; border-radius: 5px; color: #6B675D; font-size: 15px; cursor: pointer;">◉</button>
+                </div>
+              </div>
+              <label style="display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 4px 0;">
+                <span style="flex: none; width: 20px; height: 20px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF; margin-top: 1px;"></span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 13px; font-weight: 500; color: #1D1C18;">Remember me on this device</span><span style="display: block; font-size: 11.5px; line-height: 1.5; color: #6B675D; margin-top: 2px;">Up to 72 hours. A new device always asks for your code.</span></span>
+              </label>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; padding: 12px 14px; min-height: 44px; cursor: pointer;">Sign in</button>
+              <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #F0EEE9; padding-top: 10px;">
+                <span style="font-size: 12px; color: #6B675D;">Language</span>
+                <span style="margin-left: auto; display: inline-flex; gap: 6px;">
+                  <span style="font-size: 12px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 6px; padding: 12px 14px; min-height: 44px; display: inline-flex; align-items: center;">English</span>
+                  <span style="font-size: 12px; font-weight: 500; color: #4A4842; border-radius: 6px; padding: 12px 14px; min-height: 44px; display: inline-flex; align-items: center;">አማርኛ</span>
+                </span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 0 2px;">
+              <span style="font-size: 10.5px; color: #6B675D;">© 2026 Selam Bet Trading PLC</span>
+              <span style="margin-left: auto; display: inline-flex; gap: 10px; font-size: 10.5px;"><a href="#o01">Privacy</a><a href="#o01">Terms</a><a href="#o01">Help</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · dark · አማርኛ · idle</div>
+        <div data-screen-label="A18 login idle dark am mobile" style="width: 375px; height: 812px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #A6A296;">07:02<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+              <div>
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4; line-height: 1.4;">ይግቡ</h1>
+                <div style="font-size: 12.5px; color: #A6A296; margin-top: 3px; line-height: 1.6;">የሰላም ቤት የድጋፍ መስሪያ ቦታ</div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px; line-height: 1.6;">ኢሜይል</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px; font-size: 14px; color: #ECEAE4; min-height: 44px;" />
+              </div>
+              <div>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;"><label style="font-size: 12px; font-weight: 600; color: #C9C5BB; line-height: 1.6;">የይለፍ ቃል</label><a href="#e01" style="margin-left: auto; font-size: 12px; font-weight: 500; color: #A9C0F5; line-height: 1.6;">ረሱት?</a></div>
+                <div style="position: relative;">
+                  <input type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px 52px 12px 12px; font-size: 14px; color: #ECEAE4; min-height: 44px;" />
+                  <button type="button" aria-label="የይለፍ ቃል አሳይ" style="font-family: inherit; position: absolute; right: 2px; top: 1px; width: 44px; height: 44px; background: transparent; border: none; border-radius: 5px; color: #A6A296; font-size: 15px; cursor: pointer;">◉</button>
+                </div>
+              </div>
+              <label style="display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 4px 0;">
+                <span style="flex: none; width: 20px; height: 20px; border: 1px solid #45443E; border-radius: 4px; background: #232320; margin-top: 2px;"></span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 13px; font-weight: 500; color: #ECEAE4; line-height: 1.6;">በዚህ መሣሪያ አስታውሰኝ</span><span style="display: block; font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 2px;">እስከ 72 ሰዓት። አዲስ መሣሪያ ሁልጊዜ ኮድዎን ይጠይቃል።</span></span>
+              </label>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; padding: 12px 14px; min-height: 44px; cursor: pointer; line-height: 1.6;">ግባ</button>
+              <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #262622; padding-top: 10px;">
+                <span style="font-size: 12px; color: #A6A296; line-height: 1.6;">ቋንቋ</span>
+                <span style="margin-left: auto; display: inline-flex; gap: 6px;">
+                  <span style="font-size: 12px; font-weight: 500; color: #C9C5BB; border-radius: 6px; padding: 12px 14px; min-height: 44px; display: inline-flex; align-items: center;">English</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #ECEAE4; background: #2F2F29; border-radius: 6px; padding: 12px 14px; min-height: 44px; display: inline-flex; align-items: center; line-height: 1.6;">አማርኛ</span>
+                </span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 0 2px;">
+              <span style="font-size: 10.5px; color: #A6A296;">© 2026 ሰላም ቤት ትሬዲንግ</span>
+              <span style="margin-left: auto; display: inline-flex; gap: 10px; font-size: 10.5px;"><a href="#o01" style="color: #A9C0F5;">ግላዊነት</a><a href="#o01" style="color: #A9C0F5;">ውሎች</a><a href="#o01" style="color: #A9C0F5;">እገዛ</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · locked out</div>
+        <div data-screen-label="A18 login locked light en mobile" style="width: 375px; height: 812px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D;">07:09<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Sign in</h1>
+              <div role="alert" style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 7px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #7E650F; display: flex; gap: 9px;"><span style="flex: none; font-weight: 700;">⏱</span><span><strong style="font-weight: 600;">This account is locked for a short time.</strong> Too many sign-in attempts. Try again later, or reset your password — a completed reset unlocks it straight away.</span></div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 12px; font-size: 14px; color: #1D1C18; min-height: 44px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; padding: 12px 14px; min-height: 44px; cursor: pointer;">Reset password</button>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 14px; font-weight: 500; padding: 12px 14px; min-height: 44px; cursor: pointer;">Try again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · dark · en · session expired</div>
+        <div data-screen-label="A18 login session expired dark en mobile" style="width: 375px; height: 812px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #A6A296;">15:41<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 5px 11px;">Selam Bet logo</span>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Sign in</h1>
+              <div role="status" style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #A7B2BE; display: flex; gap: 9px;"><span style="flex: none; font-weight: 700;">◷</span><span><strong style="font-weight: 600;">Your session ended for security.</strong> Sign in again and we'll take you back to Ticket #4812. Your unsent reply is still saved on this phone.</span></div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px; font-size: 14px; color: #ECEAE4; min-height: 44px;" />
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">Password</label>
+                <input type="password" value="" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #ECEAE4; border-radius: 6px; padding: 12px; font-size: 14px; color: #ECEAE4; min-height: 44px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; padding: 12px 14px; min-height: 44px; cursor: pointer;">Sign in</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§F</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Three components the system did not have yet</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">proposed as B1-DS additions · not restyles</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">B1-DS v2 and both addenda have buttons, banners, toasts, skeletons, pills, tables and the search field — but no labelled form field, because until now nothing in the product asked someone to type their own credentials. Nor does it define a link colour for dark surfaces. Rather than matching by eye off a Batch 6 screen, which is the exact drift <a href="B12-R01-drift-report-v1.dc.html">B12-R01</a> corrected, these four are built from existing metrics and proposed here for promotion. Every value below is taken from something already approved.</p>
+
+    <div style="margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">01 · Labelled text field</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">Label 11.5/600 <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#4A4842</code>, 5 px above the control. Field: <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#FFFFFF</code> on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#CFCBC1</code>, radius 6, padding 9 × 11, 13 px text, min-height 38 desktop / <strong style="font-weight: 600;">44 mobile</strong>. Error: border <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#C93B3B</code>, message in the B1-DS error banner, <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">role="alert"</code>, never tint alone. Dark: <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#232320</code> on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#45443E</code>, error <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#E06B6B</code>.</div>
+        <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 8px; border-top: 1px solid #F0EEE9; padding-top: 8px;">Derived from the B1-DS search field (radius, padding, type) and the error banner (hues). Nothing new was invented but the label pairing.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">02 · Password field with visibility toggle</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">The 01 field with 40 px of right padding and a 32 × 30 ghost button inside it (44 × 44 on mobile, per the program floor). The toggle is a real button with an <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">aria-label</code> that changes with state, not an icon-only affordance.</div>
+        <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 8px; border-top: 1px solid #F0EEE9; padding-top: 8px;">Ghost-button colours are B1-DS ghost verbatim: <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#6B675D</code> light, <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#A6A296</code> dark.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">03 · Checkbox with consequence line</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">16 px box (20 px mobile), radius 4, border <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#CFCBC1</code>; label 12.5/500 with an 11.5 px consequence line beneath it. The whole block is the touch target and clears 44 px on mobile.</div>
+        <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 8px; border-top: 1px solid #F0EEE9; padding-top: 8px;">The consequence line is the same pattern Batch 6 used under settings keys — one visual language for “here is what this does”.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">04 · Link colour on dark surfaces</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">B1-DS sets <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">a</code> to <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#2F5AC8</code> / hover <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#1E3E92</code> and stops there — that blue fails on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#1C1C19</code>. Dark surfaces use <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#A9C0F5</code>, the value already in <a href="B7-S00-checklist-v2.dc.html">B7-S00-checklist-v2</a>, so this batch carries one dark-link value rather than two. Light is unchanged.</div>
+        <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 8px; border-top: 1px solid #F0EEE9; padding-top: 8px;">Caught in review: an earlier draft of this file used a second, undeclared blue. Declaring it is the point of this section.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">A03 — delivered in part, and I am not marking it ✅</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">The row pairs the visibility toggle with the localized strength meter. The toggle is here, on the card. <strong style="font-weight: 600;">The meter is not</strong> — nobody chooses a password while signing in, so putting one on this card would be an invention. It has a truthful home on the set-password screen and ships there with Section E. The row stays open until it does.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§G</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Delivery note</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">against B7-S00-checklist-v2, rows A01–A18</span>
+    </div>
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> A01, A02, A04, A05, A06 and A07 in §A and §B; A08–A11 in §C, each in both themes with English light and Amharic dark; A12 as a stated absence in §C with its reason; A13–A16 in §D; A17 in §D as the step into the challenge, whose full screen is Section B; A18 in §E as four phone frames. Both viewports, both themes, both languages, and every message announced rather than only tinted.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Open, not done:</strong> A03 — the toggle is delivered, the strength meter is not, for the reason in §F. Marking it done would be a false ✅, so it stays on the board until Section E.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations, flagged:</strong> one. Mobile raises the B1-DS 36 px button and 38 px field to 44 px, per the standing program floor; desktop keeps the approved metrics exactly. Nothing else departs from B1-DS, and no approved element was restyled.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Two things I want your eye on.</strong> First, the <strong style="font-weight: 600;">logo slot is a dashed placeholder</strong>, deliberately: the mark comes from the tenant's published theme and drawing one here would invent brand personality this card must not have. Second, the <strong style="font-weight: 600;">generic error copy</strong> — “We couldn't sign you in with those details” — is the single sentence an agent will read more than any other in this product. It is honest, it names the next action, and it discloses nothing. If it reads wrong to an Amharic speaker, that is the one string I would most like changed before it becomes an AC-09 baseline.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section B, the two-factor challenge — ten rows, the segmented input at 320 px, the recovery-code path and the five-failure void.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

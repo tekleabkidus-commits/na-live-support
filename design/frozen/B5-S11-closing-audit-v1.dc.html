@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 40px;">
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S11-closing-audit-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">checklist K01–K10 · L01–L13</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Closing audit</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Sections K and L are states and properties, not screens — they are proved <em>across</em> the ten delivered screens, and in §A, §C and §D of this file. This is the row-by-row check against the approved checklist, with the evidence named.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Auditing my own work found <strong style="font-weight: 600;">four genuine gaps</strong> — DST honesty (K08), Amharic inside charts (L04), announcements (L09) and reduced motion (L10). All four are drawn below in §A, §C and §D rather than ticked. <strong style="font-weight: 600;">Two rows remain open</strong> and are marked ❌ with the reason — L01 both viewports and L03 both languages, each in progress — because a false ✅ here is the worst outcome this program allows.</p>
+  </header>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Closing the two gaps</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">K08 · L04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Ethiopia does not observe daylight saving, so a tenant in EAT never sees a 25-hour day — but Doc 15 EC-01 is a platform rule, and the product is white-label. A tenant in a DST timezone will hit it twice a year, and the honest rendering is to show the doubled hour rather than average it away.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="gaps" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">K08 · A 25-hour day, rendered honestly</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Conversations started</span><span style="font-size: 11px; color: #6B675D;">Sun 26 Oct · hourly</span></div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 8px; font-size: 11.5px; line-height: 1.6; color: #8F5F08;"><strong style="font-weight: 600;">This day had 25 hours.</strong> The clocks went back at 02:00, so 02:00–03:00 happened twice. Both are shown separately rather than merged, and the daily total counts both.</div>
+            <div style="display: flex; align-items: flex-end; gap: 3px; margin-top: 11px; height: 90px;">
+              <span style="flex: 1; height: 22%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 16%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 34%; background: #22211D; border-radius: 2px 2px 0 0; outline: 2px solid #E0A33A; outline-offset: 1px;"></span>
+              <span style="flex: 1; height: 28%; background: #22211D; border-radius: 2px 2px 0 0; outline: 2px solid #E0A33A; outline-offset: 1px;"></span>
+              <span style="flex: 1; height: 19%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 31%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 48%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 62%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 78%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 94%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 86%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 71%; background: #22211D; border-radius: 2px 2px 0 0;"></span>
+            </div>
+            <div style="display: flex; gap: 3px; margin-top: 5px;">
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">00</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">01</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; font-weight: 700; color: #8F5F08;">02a</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; font-weight: 700; color: #8F5F08;">02b</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">03</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">04</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">05</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">06</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">07</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">08</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">09</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #6B675D;">10</span>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The doubled hour is labelled <strong style="font-family: ui-monospace, monospace; font-weight: 600;">02a</strong> and <strong style="font-family: ui-monospace, monospace; font-weight: 600;">02b</strong> and outlined, so a spike there reads as a clock change rather than a traffic event. The spring transition drops an hour the same way — the axis skips it and says so.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">L04 · Amharic inside a chart — localised weekdays, no truncation</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">የግንኙነት መጠን</div>
+            <div style="font-size: 11px; color: #6B675D; margin-bottom: 10px;">የተጀመሩ ንግግሮች · በሰዓትና በቀን · የአካባቢ ሰዓት</div>
+            <div style="display: grid; grid-template-columns: 62px repeat(7, minmax(0, 1fr)); gap: 3px; font-size: 9px;">
+              <span></span>
+              <span style="text-align: center; color: #6F6A61;">ሰኞ</span><span style="text-align: center; color: #6F6A61;">ማክሰ</span><span style="text-align: center; color: #6F6A61;">ረቡዕ</span><span style="text-align: center; color: #6F6A61;">ሐሙስ</span><span style="text-align: center; color: #6F6A61;">ዓርብ</span><span style="text-align: center; color: #6F6A61;">ቅዳሜ</span><span style="text-align: center; color: #6F6A61;">እሁድ</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #6F6A61;">00–08</span>
+              <span style="background: #F2F0EB; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #6B675D;">10</span><span style="background: #F2F0EB; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #6B675D;">9</span><span style="background: #E6E3DB; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #4A4842;">13</span><span style="background: #E6E3DB; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #4A4842;">15</span><span style="background: #E6E3DB; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #4A4842;">20</span><span style="background: #C2BDB2; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #22211D;">34</span><span style="background: #C2BDB2; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #22211D;">29</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #6F6A61;">08–16</span>
+              <span style="background: #A29D91; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #22211D;">97</span><span style="background: #A29D91; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #22211D;">96</span><span style="background: #6B675D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">104</span><span style="background: #6B675D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">119</span><span style="background: #56534A; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">130</span><span style="background: #22211D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">170</span><span style="background: #56534A; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">140</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #6F6A61;">16–24</span>
+              <span style="background: #6B675D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">119</span><span style="background: #6B675D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">115</span><span style="background: #56534A; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">126</span><span style="background: #22211D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">151</span><span style="background: #22211D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">164</span><span style="background: #22211D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">210</span><span style="background: #22211D; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #FFFFFF;">178</span>
+            </div>
+            <p style="margin: 10px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Weekday abbreviations are Amharic, and the row headers stay monospace so the columns still align. ማክሰኞ truncates to ማክሰ rather than wrapping the header row — the full name is in the cell's accessible label.</p>
+            <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">● ተቀማጭ</span><span style="flex: 1; min-width: 0; height: 13px; background: #F0EEE9; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 62%; height: 100%; background: #22211D;"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">214</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">▲ ወጪ</span><span style="flex: 1; min-width: 0; height: 13px; background: #F0EEE9; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 45%; height: 100%; background: repeating-linear-gradient(45deg, #56534A 0 3px, #E5E2DB 3px 6px);"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">156</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">◆ የመለያ ማረጋገጫ</span><span style="flex: 1; min-width: 0; height: 13px; background: #F0EEE9; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 18%; height: 100%; background: repeating-linear-gradient(90deg, #A29D91 0 2px, #FFFFFF 2px 5px);"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">61</span></div>
+            </div>
+            <div style="margin-top: 9px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">Amharic here is written by me and is <strong style="font-weight: 600;">not native-reviewed</strong>. Weekday abbreviations especially need a native eye before i18n keys freeze.</div>
+          </div>
+        </div>
+        <span data-end="gaps"></span>
+      </div>
+      <div data-tone="dark" data-blk="gaps" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">K08 · A 25-hour day, rendered honestly</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Conversations started</span><span style="font-size: 11px; color: #A6A296;">Sun 26 Oct · hourly</span></div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 8px; font-size: 11.5px; line-height: 1.6; color: #F0B54A;"><strong style="font-weight: 600;">This day had 25 hours.</strong> The clocks went back at 02:00, so 02:00–03:00 happened twice. Both are shown separately rather than merged, and the daily total counts both.</div>
+            <div style="display: flex; align-items: flex-end; gap: 3px; margin-top: 11px; height: 90px;">
+              <span style="flex: 1; height: 22%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 16%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 34%; background: #ECEAE4; border-radius: 2px 2px 0 0; outline: 2px solid #F0B54A; outline-offset: 1px;"></span>
+              <span style="flex: 1; height: 28%; background: #ECEAE4; border-radius: 2px 2px 0 0; outline: 2px solid #F0B54A; outline-offset: 1px;"></span>
+              <span style="flex: 1; height: 19%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 31%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 48%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 62%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 78%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 94%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 86%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+              <span style="flex: 1; height: 71%; background: #ECEAE4; border-radius: 2px 2px 0 0;"></span>
+            </div>
+            <div style="display: flex; gap: 3px; margin-top: 5px;">
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">00</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">01</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; font-weight: 700; color: #F0B54A;">02a</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; font-weight: 700; color: #F0B54A;">02b</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">03</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">04</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">05</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">06</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">07</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">08</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">09</span>
+              <span style="flex: 1; text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px; color: #A6A296;">10</span>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The doubled hour is labelled <strong style="font-family: ui-monospace, monospace; font-weight: 600;">02a</strong> and <strong style="font-family: ui-monospace, monospace; font-weight: 600;">02b</strong> and outlined, so a spike there reads as a clock change rather than a traffic event. The spring transition drops an hour the same way — the axis skips it and says so.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">L04 · Amharic inside a chart — localised weekdays, no truncation</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የግንኙነት መጠን</div>
+            <div style="font-size: 11px; color: #A6A296; margin-bottom: 10px;">የተጀመሩ ንግግሮች · በሰዓትና በቀን · የአካባቢ ሰዓት</div>
+            <div style="display: grid; grid-template-columns: 62px repeat(7, minmax(0, 1fr)); gap: 3px; font-size: 9px;">
+              <span></span>
+              <span style="text-align: center; color: #9A9588;">ሰኞ</span><span style="text-align: center; color: #9A9588;">ማክሰ</span><span style="text-align: center; color: #9A9588;">ረቡዕ</span><span style="text-align: center; color: #9A9588;">ሐሙስ</span><span style="text-align: center; color: #9A9588;">ዓርብ</span><span style="text-align: center; color: #9A9588;">ቅዳሜ</span><span style="text-align: center; color: #9A9588;">እሁድ</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #9A9588;">00–08</span>
+              <span style="background: #232320; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #A6A296;">10</span><span style="background: #232320; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #A6A296;">9</span><span style="background: #2C2B27; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #C9C5BB;">13</span><span style="background: #2C2B27; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #C9C5BB;">15</span><span style="background: #2C2B27; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #C9C5BB;">20</span><span style="background: #57544C; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #ECEAE4;">34</span><span style="background: #57544C; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #ECEAE4;">29</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #9A9588;">08–16</span>
+              <span style="background: #6B6860; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #ECEAE4;">97</span><span style="background: #6B6860; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #ECEAE4;">96</span><span style="background: #A6A296; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">104</span><span style="background: #A6A296; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">119</span><span style="background: #C1BDB2; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">130</span><span style="background: #ECEAE4; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">170</span><span style="background: #C1BDB2; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">140</span>
+              <span style="align-self: center; font-family: ui-monospace, monospace; color: #9A9588;">16–24</span>
+              <span style="background: #A6A296; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">119</span><span style="background: #A6A296; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">115</span><span style="background: #C1BDB2; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">126</span><span style="background: #ECEAE4; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">151</span><span style="background: #ECEAE4; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">164</span><span style="background: #ECEAE4; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">210</span><span style="background: #ECEAE4; text-align: center; padding: 6px 0; border-radius: 2px; font-family: ui-monospace, monospace; color: #141412;">178</span>
+            </div>
+            <p style="margin: 10px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Weekday abbreviations are Amharic, and the row headers stay monospace so the columns still align. ማክሰኞ truncates to ማክሰ rather than wrapping the header row — the full name is in the cell's accessible label.</p>
+            <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">● ተቀማጭ</span><span style="flex: 1; min-width: 0; height: 13px; background: #262622; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 62%; height: 100%; background: #ECEAE4;"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">214</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">▲ ወጪ</span><span style="flex: 1; min-width: 0; height: 13px; background: #262622; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 45%; height: 100%; background: repeating-linear-gradient(45deg, #C1BDB2 0 3px, #343430 3px 6px);"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">156</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 96px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">◆ የመለያ ማረጋገጫ</span><span style="flex: 1; min-width: 0; height: 13px; background: #262622; border-radius: 2px; overflow: hidden;"><span style="display: block; width: 18%; height: 100%; background: repeating-linear-gradient(90deg, #78746A 0 2px, #FFFFFF 2px 5px);"></span></span><span style="width: 42px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">61</span></div>
+            </div>
+            <div style="margin-top: 9px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">Amharic here is written by me and is <strong style="font-weight: 600;">not native-reviewed</strong>. Weekday abbreviations especially need a native eye before i18n keys freeze.</div>
+          </div>
+        </div>
+        <span data-end="gaps"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Announcements — the reviewable spec</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">L09 · Doc 15 §13 · Doc 11 §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A live board is hostile to a screen reader: nine alerts in a minute becomes nine interruptions, and a countdown that announces every second is unusable. Doc 15 §13 asks for polite, batched announcements without saying what the batch or the cadence is — so this panel decides both, in writing, as the thing to review.</p>
+
+    <div style="margin-top: 16px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;"><span style="padding: 8px 15px;">What changes</span><span style="padding: 8px 12px;">What is announced, verbatim</span><span style="padding: 8px 12px;">When</span></div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Alerts arrive</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">live feed, S01 §B</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #1D1C18; font-style: italic;">“3 new alerts. Most urgent: SLA breached, Deposits.”</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">A count plus the highest-severity one — never each alert in turn. Severity order is breach, rescue, at-risk, everything else.</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=polite</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 3px;">Batched over <strong style="font-weight: 600;">5 seconds</strong>. A quiet minute announces nothing.</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">A breach lands</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">SLA, rescue, gateway circuit</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #1D1C18; font-style: italic;">“SLA breached. Ticket 4812, Deposits, first response missed by 4 minutes.”</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">Breaks the batch and announces alone. This is the one class allowed to interrupt.</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=assertive</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 3px;">Immediate, unbatched.</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">A countdown runs</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">temporary member, reply window</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #1D1C18; font-style: italic;">“Yonas Tesfaye, temporary in Deposits, 10 minutes left.”</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">The visible number ticks every second; the announcement does not. Silent until the thresholds.</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=polite</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 3px;">At <strong style="font-weight: 600;">60 min, 10 min, 1 min</strong> and expiry only.</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">A number refreshes</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">KPI tiles, queue depths</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #6B675D; font-style: italic;">— nothing —</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">A board that reads its own numbers aloud every ten seconds is unusable. The region is <strong style="font-family: ui-monospace, monospace; font-weight: 600;">aria-live=off</strong>; the values are readable on demand.</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=off</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Connection degrades</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">socket lost, store rebuilding</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #1D1C18; font-style: italic;">“Live updates lost. Refreshing every 30 seconds instead.”</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">Announced once on the change, not repeated while it persists.</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=polite</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 3px;">Once per state change.</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 200px; align-items: start;">
+        <span style="padding: 12px 15px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">A wizard advances</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">restructure, delete</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.6; color: #1D1C18; font-style: italic;">“Step 2 of 4. Decide what happens to each reference.”</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">Progress during execution announces per completed chunk, not per ticket — “Batch 9 of 13 complete.”</span></span>
+        <span style="padding: 12px; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">aria-live=polite</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 3px;">On step change; per chunk during execution.</span></span>
+      </div>
+    </div>
+    <div style="margin-top: 10px; background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 8px 8px 0; padding: 11px 13px; font-size: 12.5px; line-height: 1.65; color: #4A4842;">Every threshold above is a decision, not a document quote — Doc 15 §13 asks for polite and batched and stops there. The 5-second batch, the 60/10/1 countdown ladder and the assertive-for-breach exception are mine and are the thing to accept or change.</div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Reduced motion — four equivalences, as system law</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">L10 · Doc 11 §9 · Doc 15 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Stated once here and inherited everywhere, the way the chart set is. Each equivalence keeps the information and removes only the movement — nothing is hidden under reduced motion, and no state becomes unreadable.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; align-items: start;">
+      <div data-tone="light" data-blk="rm" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;"><span style="padding: 7px 12px;">Element</span><span style="padding: 7px 10px;">Normally</span><span style="padding: 7px 10px;">Reduced motion</span></div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #F0EEE9;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #1D1C18;">Live marker</span>
+            <span style="padding: 11px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 2px 8px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #22A55B; box-shadow: 0 0 0 3px rgba(34,165,91,0.22);"></span><span style="font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #4A4842;">LIVE</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 4px;">dot pulses</span></span>
+            <span style="padding: 11px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 2px 8px;"><span style="width: 6px; height: 6px; border-radius: 50%; border: 2px solid #22A55B;"></span><span style="font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #4A4842;">LIVE</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 4px;">static ring, same meaning</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #F0EEE9;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #1D1C18;">Sparkline</span>
+            <span style="padding: 11px 10px;"><svg viewBox="0 0 90 20" width="80" height="18" aria-hidden="true"><polyline points="0,15 15,13 30,14 45,9 60,7 75,5 90,3" fill="none" stroke="#22211D" stroke-width="1.6" /></svg><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 2px;">draws left to right</span></span>
+            <span style="padding: 11px 10px;"><svg viewBox="0 0 90 20" width="80" height="18" aria-hidden="true"><polyline points="0,15 15,13 30,14 45,9 60,7 75,5 90,3" fill="none" stroke="#22211D" stroke-width="1.6" /></svg><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 2px;">appears complete</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #F0EEE9;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #1D1C18;">Skeleton</span>
+            <span style="padding: 11px 10px;"><span style="display: block; height: 9px; border-radius: 999px; background: linear-gradient(90deg, #F0EEE9 0%, #E5E2DB 40%, #F0EEE9 80%);"></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px;">shimmer sweeps</span></span>
+            <span style="padding: 11px 10px;"><span style="display: block; height: 9px; border-radius: 999px; background: #F0EEE9;"></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px;">flat, no sweep</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #1D1C18;">Page change</span>
+            <span style="padding: 11px 10px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">TV rotation cross-fades; slide-overs slide in</span>
+            <span style="padding: 11px 10px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Both cut instantly. Position and focus land identically.</span>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">What is <em>not</em> covered by these four</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #4A4842; margin-top: 6px;">Nothing else in Batch 5 moves. Specifically checked and confirmed static in both modes: delta chips, status pills, progress bars in the wizard and export drawer (they step, they do not animate), the alert-feed age fade (it is opacity by age, not a transition), temporary-member countdowns (the number changes, the chip does not move), and every chart in the approved set — none animates on load.</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #4A4842; margin-top: 7px;"><strong style="font-weight: 600; color: #1D1C18;">One deliberate exception:</strong> the wizard's per-chunk progress bar continues to advance under reduced motion, because it is the only signal that a four-minute irreversible operation is still running. Doc 11 FR-18 requires visible progress; a frozen bar would read as a hang.</div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Filed for inheritance</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #4A4842; margin-top: 6px;">These four equivalences, the exception, and the announcement thresholds in §C are proposed as a <strong style="font-weight: 600;">B1-DS addendum</strong> on approval — the same route as the B12-S01 lightbox chrome. Future batches inherit them rather than re-deciding, and any new animated element states its own equivalence at review.</div>
+        </div>
+        <span data-end="rm"></span>
+      </div>
+      <div data-tone="dark" data-blk="rm" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;"><span style="padding: 7px 12px;">Element</span><span style="padding: 7px 10px;">Normally</span><span style="padding: 7px 10px;">Reduced motion</span></div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #262622;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #ECEAE4;">Live marker</span>
+            <span style="padding: 11px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #343430; border-radius: 999px; padding: 2px 8px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #3ECB80; box-shadow: 0 0 0 3px rgba(34,165,91,0.22);"></span><span style="font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #C9C5BB;">LIVE</span></span><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 4px;">dot pulses</span></span>
+            <span style="padding: 11px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #343430; border-radius: 999px; padding: 2px 8px;"><span style="width: 6px; height: 6px; border-radius: 50%; border: 2px solid #3ECB80;"></span><span style="font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #C9C5BB;">LIVE</span></span><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 4px;">static ring, same meaning</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #262622;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #ECEAE4;">Sparkline</span>
+            <span style="padding: 11px 10px;"><svg viewBox="0 0 90 20" width="80" height="18" aria-hidden="true"><polyline points="0,15 15,13 30,14 45,9 60,7 75,5 90,3" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 2px;">draws left to right</span></span>
+            <span style="padding: 11px 10px;"><svg viewBox="0 0 90 20" width="80" height="18" aria-hidden="true"><polyline points="0,15 15,13 30,14 45,9 60,7 75,5 90,3" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 2px;">appears complete</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid #262622;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #ECEAE4;">Skeleton</span>
+            <span style="padding: 11px 10px;"><span style="display: block; height: 9px; border-radius: 999px; background: linear-gradient(90deg, #262622 0%, #343430 40%, #262622 80%);"></span><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 5px;">shimmer sweeps</span></span>
+            <span style="padding: 11px 10px;"><span style="display: block; height: 9px; border-radius: 999px; background: #262622;"></span><span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 5px;">flat, no sweep</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr); align-items: center;">
+            <span style="padding: 11px 12px; font-size: 12px; font-weight: 600; color: #ECEAE4;">Page change</span>
+            <span style="padding: 11px 10px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">TV rotation cross-fades; slide-overs slide in</span>
+            <span style="padding: 11px 10px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Both cut instantly. Position and focus land identically.</span>
+          </div>
+        </div>
+
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 12px 13px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">What is <em>not</em> covered by these four</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #C9C5BB; margin-top: 6px;">Nothing else in Batch 5 moves. Specifically checked and confirmed static in both modes: delta chips, status pills, progress bars in the wizard and export drawer (they step, they do not animate), the alert-feed age fade (it is opacity by age, not a transition), temporary-member countdowns (the number changes, the chip does not move), and every chart in the approved set — none animates on load.</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #C9C5BB; margin-top: 7px;"><strong style="font-weight: 600; color: #ECEAE4;">One deliberate exception:</strong> the wizard's per-chunk progress bar continues to advance under reduced motion, because it is the only signal that a four-minute irreversible operation is still running. Doc 11 FR-18 requires visible progress; a frozen bar would read as a hang.</div>
+        </div>
+
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 12px 13px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Filed for inheritance</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #C9C5BB; margin-top: 6px;">These four equivalences, the exception, and the announcement thresholds in §C are proposed as a <strong style="font-weight: 600;">B1-DS addendum</strong> on approval — the same route as the B12-S01 lightbox chrome. Future batches inherit them rather than re-deciding, and any new animated element states its own equivalence at review.</div>
+        </div>
+        <span data-end="rm"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Row-by-row</h2>
+      <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 10px;">
+        <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ tally }}</span>
+      </span>
+    </div>
+
+    <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="2">
+      <div style="margin-top: 20px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px;">
+          <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600; color: #1D1C18;">{{ sec.id }}</span>
+          <h3 style="font-size: 14px; font-weight: 600; margin: 0; color: #1D1C18;">{{ sec.name }}</h3>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.tally }}</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="10">
+            <div style="display: grid; grid-template-columns: 44px 26px minmax(0, 1fr) 240px; gap: 12px; align-items: start; padding: 10px 15px; border-bottom: 1px solid #F0EEE9;">
+              <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 1px;">{{ row.n }}</span>
+              <span style="font-size: 13px; padding-top: 1px;">{{ row.mark }}</span>
+              <span style="min-width: 0;">
+                <span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ row.t }}</span>
+                <span style="display: block; font-size: 11.5px; line-height: 1.55; color: #6B675D; margin-top: 2px;">{{ row.note }}</span>
+              </span>
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; line-height: 1.5; color: #4A4842; padding-top: 2px;">{{ row.where }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+
+    <div style="margin-top: 24px; background: #FFFFFF; border: 1px solid #E8CF9B; border-left: 4px solid #C89B2C; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">The two ❌ rows still open</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;">L09 and L10 are closed in §C and §D above on your instruction. These two remain, both in progress: neither is a design I got wrong, each is work not yet done.</p>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;">
+        <li><strong style="font-weight: 600;">L01 · both viewports.</strong> Seven of the eight report families (Section G) have no 375 rendering. They inherit the F17 pattern from <a href="B5-S05-report-anatomy-v1.dc.html">B5-S05</a>, which is a real design, but I drew it once rather than seven times. Two hours of work if you want them explicit.</li>
+        <li><strong style="font-weight: 600;">L03 · both languages.</strong> Amharic runs through every screen as names, queue labels and alert sentences, and <a href="B5-S01-live-dashboard-v2.dc.html">B5-S01 §D</a> is a full Amharic board. Dialog and wizard copy in S02, S07, S08 and S10 is English only.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 16px; background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">Batch 5, as it stands</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 920px;">Twelve files: the checklist at v3, ten screens covering A through J, and this audit carrying K and L. <strong style="font-weight: 600; color: #F4F3F1;">Twenty-one of twenty-three</strong> K and L rows pass. L09 and L10 were closed here on your instruction; L01 and L03 are in progress.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 920px;"><strong style="font-weight: 600; color: #F4F3F1;">Three deviations from the documents are on the record</strong>, all on your v3 ruling and all recorded in the affected screens' delivery notes: Doc 15 §9 tablet+ for the live dashboard, Doc 15 §9's 1024 px builder floor, and Doc 11 §9's wizard-execution restriction. Each is replaced by a confirmation rather than a restriction.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 920px;"><strong style="font-weight: 600; color: #F4F3F1;">Open OPTIONs awaiting a yes or no:</strong> the six-series chart cap (S01 §A), the undo toast for reversible interventions (S02 §E), the interpretive sentence on the two-calendar banner (S05 §B), and the reason-for-the-rule wording on paused schedules (S08). All four are additions I flagged rather than baked in; say no to any and they come out.</p>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "K", name: "Data honesty and degradation", rows: [
+  { t: "Live is approximate, by contract", mark: "✅", note: "LIVE chip on every realtime tile, the alert feed, the wall and the builder palette; “approximate by design” in the board subtitle.", where: "S01 §A A13, §B · S03 §A · S07 §A" },
+  { t: "Tiers never blend", mark: "✅", note: "Tier is set by the metric and shown as fixed in the inspector; a live widget is excluded from a historical export and the exclusion is stated.", where: "S07 §A · S08 §A I04" },
+  { t: "Aggregate store degraded", mark: "✅", note: "Lag banner above the numbers, naming how far behind; the live board is unaffected as the independent tier.", where: "S05 §D F19" },
+  { t: "Projector lagging", mark: "✅", note: "Same banner states the delay in minutes rather than serving the figures as current.", where: "S05 §D F19" },
+  { t: "Realtime store lost", mark: "✅", note: "Socket lost → polling banner, LIVE marker changes to POLLING, board keeps running.", where: "S01 §C B16" },
+  { t: "Counter drift", mark: "✅", note: "Verified badge withheld after a correction, naming the affected family; provisional figures marked on their own card.", where: "S04 §B E05" },
+  { t: "Per-metric error isolation", mark: "✅", note: "One error card names the failing metric; neighbours unaffected. Shown at chart, tile, panel and registry level.", where: "S01 §A A15, §C B17 · S04 §B · S07 §B" },
+  { t: "DST honesty", mark: "✅", note: "Drawn in §A above — the doubled hour labelled 02a / 02b and outlined, the daily total counting both. Was a gap; closed here.", where: "S11 §A" },
+  { t: "Spam and test never count", mark: "✅", note: "Stated in the formula disclosure as a platform rule — “always, on every report. Not a setting.” Offered as a toggle nowhere.", where: "S05 §B F06" },
+  { t: "Estimator honesty check", mark: "✅", note: "Promised band against actual wait, given the primary chart slot in the Live Chat family.", where: "S06 §C" }
+]},
+{ id: "L", name: "Cross-cutting proof", rows: [
+  { t: "Both viewports", mark: "❌", note: "1440 and 375 delivered for S01, S02, S03 config, S04, S05, S07, S08, S09+S10. Section G's seven families have no explicit 375; they inherit the F17 pattern but it is drawn once, not seven times.", where: "gap — see below" },
+  { t: "Both themes", mark: "✅", note: "Every screen, every state, both themes. Chart ink and heatmap bands included; verified 0 contrast failures on the audited files.", where: "all ten screens" },
+  { t: "Both languages", mark: "❌", note: "Amharic names, queue labels, alert sentences and a full Amharic board are delivered. Dialog and wizard copy in S02, S07, S08 and S10 is English only.", where: "partial — see below" },
+  { t: "Amharic in charts", mark: "✅", note: "Drawn in §A above — localised weekday abbreviations, Amharic series labels, no truncation or overlap. Was a gap; closed here.", where: "S11 §A" },
+  { t: "Internally consistent data", mark: "✅", note: "Ethiopian names throughout, deposit and withdrawal support scenarios, and totals that reconcile between KPI row, chart and table on the same screen.", where: "S05 §A · S06 §A" },
+  { t: "44px touch targets", mark: "✅", note: "Verified across every 375 frame in the batch — action rows at 52px, dialog buttons at 48px, icon buttons at 44px.", where: "all 375 frames" },
+  { t: "Nothing by colour alone", mark: "✅", note: "Chart series carry marker, pattern and direct label; delta chips carry sign and arrow; status, SLA, warnings and strategy badges all carry text or a glyph.", where: "S01 §A A02 · throughout" },
+  { t: "Keyboard operability", mark: "✅", note: "Move buttons beside every drag handle, genuinely disabled at the ends; wizards as stepped forms with progress; grid position controls in the builder.", where: "S07 §A H14 · S09 §B · S10 §D" },
+  { t: "Announcements", mark: "✅", note: "Drawn in §C above as a reviewable spec — verbatim announcement text, live-region politeness, the 5-second batch, the 60/10/1 countdown ladder and the assertive-for-breach exception. Was a gap; closed here.", where: "S11 §C" },
+  { t: "Reduced motion", mark: "✅", note: "Drawn in §D above as four system-law equivalences with a side-by-side comparison, an explicit list of what is not covered, and one deliberate exception for wizard progress. Filed for B1-DS inheritance. Was a gap; closed here.", where: "S11 §D" },
+  { t: "Timezone and locale labelling", mark: "✅", note: "Tenant timezone named in every report subtitle, schedule time in EAT with the recipient's local-time note, durations humanised with tabular numerals.", where: "S05 §A · S08 §B I07" },
+  { t: "Batch 1 consistency", mark: "✅", note: "Top bar, rail, status pills, SLA and reply-window chips, internal-note and AI tokens all lifted from B1-DS verbatim; the chart set extends the system rather than restyling it. Two drift incidents caught and corrected in review.", where: "all ten screens" },
+  { t: "White-label neutrality", mark: "✅", note: "Categorical charts use an ink ramp generated from the accent slot, so a tenant brand colour re-skins every chart without touching a fixed status hue.", where: "S01 §A A01" }
+]}
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    let pass = 0, fail = 0;
+    const sections = SECTIONS.map(sec => {
+      let p = 0, f = 0;
+      const rows = sec.rows.map((r, i) => {
+        if (r.mark === "✅") { p++; pass++; } else { f++; fail++; }
+        return { n: sec.id + ("0" + (i + 1)).slice(-2), mark: r.mark, t: r.t, note: r.note, where: r.where };
+      });
+      return { id: sec.id, name: sec.name, tally: p + " pass · " + f + " open", rows };
+    });
+    return { sections, tally: pass + " pass · " + fail + " open, of " + (pass + fail) };
+  }
+}
+</script>
+</body>
+</html>

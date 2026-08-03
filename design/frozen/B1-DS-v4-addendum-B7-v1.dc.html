@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B1-DS-v4-addendum-B7-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">additive only · 7 components · freeze question on delivery</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">B1-DS v4 addendum — Batch 7 components</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 920px; text-wrap: pretty;">Seven components Sections A–J needed and <a href="B1-DS-design-system-v2.dc.html">B1-DS v2</a> plus the <a href="B1-DS-addendum-B5-v1.dc.html">B5</a> and <a href="B1-DS-v3-addendum-B6-v1.dc.html">v3</a> addenda did not have. Every canonical form below is <strong style="font-weight: 600;">measured from the drawn instances</strong>, not designed here — where instances disagreed, the disagreement is named in the reconciliation note at the foot and one form is chosen with a reason.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 920px;">Additive only. Nothing in v2, B5 or v3 is changed, restyled or deprecated. Each entry gives metrics, states and the composition contract — what it must do and what it must never do.</p>
+  </header>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">01</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Labelled text field</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S01, S05, S06, S07, S08, S10</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light</div>
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+        <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin: 12px 0 5px;">Focused</label>
+        <input type="text" value="Nightly reconciliation" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin: 12px 0 5px;">Invalid</label>
+        <input type="text" value="" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #C93B3B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+        <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 8px 10px; font-size: 11.5px; line-height: 1.5; color: #8E2222; margin-top: 7px; display: flex; gap: 7px;"><span style="flex: none; font-weight: 700;">⚠</span><span>The message lives in the banner, never as bare red text.</span></div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark</div>
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Email</label>
+        <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin: 12px 0 5px;">Focused</label>
+        <input type="text" value="Nightly reconciliation" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #ECEAE4; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin: 12px 0 5px;">Invalid</label>
+        <input type="text" value="" readonly="readonly" aria-invalid="true" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #E06B6B; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;" />
+        <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 8px 10px; font-size: 11.5px; line-height: 1.5; color: #F5A7A7; margin-top: 7px; display: flex; gap: 7px;"><span style="flex: none; font-weight: 700;">⚠</span><span>Same construction, dark tokens.</span></div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Label</span><span style="color: #4A4842;">11.5 / 600 <span style="font-family: ui-monospace, monospace; font-size: 11px;">#4A4842</span>, 5px above. 12 / 600 at mobile.</span>
+          <span style="color: #6B675D;">Field</span><span style="color: #4A4842;">Radius 6, padding 9 × 11, 13px text, min-height <strong style="font-weight: 600; color: #1D1C18;">38 desktop / 44 mobile</strong> (padding 12, 14px text).</span>
+          <span style="color: #6B675D;">Border</span><span style="color: #4A4842;">Rest <span style="font-family: ui-monospace, monospace; font-size: 11px;">#CFCBC1</span> · focus <span style="font-family: ui-monospace, monospace; font-size: 11px;">#22211D</span> · invalid <span style="font-family: ui-monospace, monospace; font-size: 11px;">#C93B3B</span>. Dark: <span style="font-family: ui-monospace, monospace; font-size: 11px;">#45443E</span> · <span style="font-family: ui-monospace, monospace; font-size: 11px;">#ECEAE4</span> · <span style="font-family: ui-monospace, monospace; font-size: 11px;">#E06B6B</span>.</span>
+          <span style="color: #6B675D;">Variant</span><span style="color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Transcribed field</strong> — 44px and monospace on every viewport, for values read off paper (recovery codes, S02 B07).</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Tie label to field; announce the error with <span style="font-family: ui-monospace, monospace; font-size: 11px;">role="alert"</span>; keep the message in the B1-DS error banner.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Use a placeholder as the label, or signal invalidity by border colour alone.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">02</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Password field with visibility toggle</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S01, S05</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light · hidden, then shown</div>
+        <div style="position: relative;">
+          <input type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 40px 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+          <button type="button" aria-label="Show password" style="font-family: inherit; position: absolute; right: 4px; top: 4px; width: 32px; height: 30px; background: transparent; border: none; border-radius: 5px; color: #6B675D; font-size: 13px; cursor: pointer;">◉</button>
+        </div>
+        <div style="position: relative; margin-top: 10px;">
+          <input type="text" value="kefita-2026-addis" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 9px 40px 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+          <button type="button" aria-label="Hide password" style="font-family: inherit; position: absolute; right: 4px; top: 4px; width: 32px; height: 30px; background: transparent; border: none; border-radius: 5px; color: #6B675D; font-size: 13px; cursor: pointer;">◎</button>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark · mobile target</div>
+        <div style="position: relative;">
+          <input type="password" value="••••••••••••" readonly="readonly" style="font-family: inherit; width: 100%; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px 52px 12px 12px; font-size: 14px; color: #ECEAE4; min-height: 44px;" />
+          <button type="button" aria-label="Show password" style="font-family: inherit; position: absolute; right: 2px; top: 1px; width: 44px; height: 44px; background: transparent; border: none; border-radius: 5px; color: #A6A296; font-size: 15px; cursor: pointer;">◉</button>
+        </div>
+        <div style="font-size: 11px; line-height: 1.6; color: #A6A296; margin-top: 10px;">44 × 44 on mobile, inset 2px from the field edge so the tap target never overhangs the border.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Field</span><span style="color: #4A4842;">Component 01 with right padding 40 (desktop) / 52 (mobile).</span>
+          <span style="color: #6B675D;">Toggle</span><span style="color: #4A4842;">32 × 30 desktop, 44 × 44 mobile. Ghost colours <span style="font-family: ui-monospace, monospace; font-size: 11px;">#6B675D</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#A6A296</span>. Glyph ◉ hidden, ◎ shown.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Be a real <span style="font-family: ui-monospace, monospace; font-size: 11px;">&lt;button&gt;</span> whose <span style="font-family: ui-monospace, monospace; font-size: 11px;">aria-label</span> changes with state; stay inside the field box.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Appear on a confirm-password field, or reveal on hover.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">03</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Checkbox with consequence line</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S01, S03, S07</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light</div>
+        <label style="display: flex; align-items: flex-start; gap: 9px;">
+          <span style="flex: none; width: 16px; height: 16px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF; margin-top: 1px;"></span>
+          <span><span style="display: block; font-size: 12.5px; font-weight: 500; color: #1D1C18;">Remember me on this device</span><span style="display: block; font-size: 11.5px; line-height: 1.5; color: #6B675D; margin-top: 2px;">Keeps you signed in for up to 72 hours. A new device always asks for your code.</span></span>
+        </label>
+        <label style="display: flex; align-items: flex-start; gap: 9px; margin-top: 14px;">
+          <span style="flex: none; width: 16px; height: 16px; border: 1px solid #22211D; border-radius: 4px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px;">✓</span>
+          <span style="font-size: 12.5px; font-weight: 500; color: #1D1C18;">I have saved these codes</span>
+        </label>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark · mobile box</div>
+        <label style="display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 4px 0;">
+          <span style="flex: none; width: 20px; height: 20px; border: 1px solid #45443E; border-radius: 4px; background: #232320; margin-top: 1px;"></span>
+          <span><span style="display: block; font-size: 13px; font-weight: 500; color: #ECEAE4;">Remember me on this device</span><span style="display: block; font-size: 11.5px; line-height: 1.5; color: #A6A296; margin-top: 2px;">Up to 72 hours. A new device always asks for your code.</span></span>
+        </label>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Box</span><span style="color: #4A4842;">16 × 16 desktop, <strong style="font-weight: 600; color: #1D1C18;">20 × 20 mobile</strong>, radius 4, 1px border, 9px gap (10 on mobile).</span>
+          <span style="color: #6B675D;">Label</span><span style="color: #4A4842;">12.5 / 500, with an optional 11.5px consequence line beneath — same pattern as a Batch 6 settings key.</span>
+          <span style="color: #6B675D;">Target</span><span style="color: #4A4842;">The whole label block; clears 44px on mobile via padding, not by growing the box.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">State the consequence where one exists — the line is the component, not decoration.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Gate a step without saying what completing it does (S03 C06).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">04</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Link colour on dark surfaces</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: every dark frame in S01–S10</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light — unchanged</div>
+        <div style="font-size: 12.5px; line-height: 1.8; color: #4A4842;"><a href="#01">Forgot password?</a><br /><a href="#01">Use a recovery code instead</a><br /><a href="#01">Privacy</a> · <a href="#01">Terms</a></div>
+        <div style="font-size: 11px; color: #6B675D; margin-top: 10px;">B1-DS v2 <span style="font-family: ui-monospace, monospace; font-size: 11px;">#2F5AC8</span>, hover <span style="font-family: ui-monospace, monospace; font-size: 11px;">#1E3E92</span>. Not touched.</div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark — new</div>
+        <div style="font-size: 12.5px; line-height: 1.8; color: #C9C5BB;"><span style="color: #A9C0F5;">Forgot password?</span><br /><span style="color: #A9C0F5;">Use a recovery code instead</span><br /><span style="color: #A9C0F5;">Privacy</span> · <span style="color: #A9C0F5;">Terms</span></div>
+        <div style="font-size: 11px; color: #A6A296; margin-top: 10px;">On <span style="font-family: ui-monospace, monospace; font-size: 11px;">#1C1C19</span> and <span style="font-family: ui-monospace, monospace; font-size: 11px;">#141412</span>, both well clear of AA at body size.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Token</span><span style="color: #4A4842;"><span style="font-family: ui-monospace, monospace; font-size: 11px;">#A9C0F5</span> for links on any dark surface.</span>
+          <span style="color: #6B675D;">Why</span><span style="color: #4A4842;">v2 defines only the light link; <span style="font-family: ui-monospace, monospace; font-size: 11px;">#2F5AC8</span> fails on <span style="font-family: ui-monospace, monospace; font-size: 11px;">#1C1C19</span>. Without a token, screens invent one — two different blues appeared in this batch before it was declared.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Be the only dark-surface link value in the product.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Be used for text that is not a link, or re-mixed per screen.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">05</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Six-segment code input</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S01 (A17), S02, S03</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light · empty, filling, invalid</div>
+        <div style="display: flex; gap: 7px;">
+          <span style="flex: 1; height: 46px; border: 1px solid #22211D; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+        </div>
+        <div style="display: flex; gap: 7px; margin-top: 8px;">
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">4</span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">9</span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">1</span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">2</span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">0</span>
+          <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">7</span>
+        </div>
+        <div style="display: flex; gap: 7px; margin-top: 8px;">
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+          <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark · mobile 52, and 320 floor</div>
+        <div style="display: flex; gap: 7px;">
+          <span style="flex: 1; height: 52px; border: 1px solid #ECEAE4; border-radius: 6px; background: #232320;"></span>
+          <span style="flex: 1; height: 52px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+          <span style="flex: 1; height: 52px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+          <span style="flex: 1; height: 52px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+          <span style="flex: 1; height: 52px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+          <span style="flex: 1; height: 52px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+        </div>
+        <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 10px;">At 320 px the segments compute to <strong style="font-weight: 600; color: #ECEAE4;">38.3 px</strong> each with a 6px gap and stay six — Doc 02 §9's floor, measured not estimated.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Segments</span><span style="color: #4A4842;">Six, equal flex, radius 6. Height <strong style="font-weight: 600; color: #1D1C18;">46 desktop · 52 mobile · 46 at ≤ 320</strong>. Gap 7, tightening to 6 at ≤ 320.</span>
+          <span style="color: #6B675D;">Digit</span><span style="color: #4A4842;">17 / 600, centred; verifying state drops to the muted ink on the raised surface.</span>
+          <span style="color: #6B675D;">Border</span><span style="color: #4A4842;">Active <span style="font-family: ui-monospace, monospace; font-size: 11px;">#22211D</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#ECEAE4</span> · rest <span style="font-family: ui-monospace, monospace; font-size: 11px;">#CFCBC1</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#45443E</span> · invalid all six take <span style="font-family: ui-monospace, monospace; font-size: 11px;">#C93B3B</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#E06B6B</span>.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Be one visually-hidden input with <span style="font-family: ui-monospace, monospace; font-size: 11px;">aria-label</span>, <span style="font-family: ui-monospace, monospace; font-size: 11px;">inputmode="numeric"</span> and <span style="font-family: ui-monospace, monospace; font-size: 11px;">autocomplete="one-time-code"</span>; accept paste; submit on the sixth digit.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Be six inputs, wrap to two rows, or collapse to a single box at any width.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">06</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Password strength meter</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S05 · corrected, see reconciliation</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light · four verdicts</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="display: flex; gap: 4px;"><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Strength: weak</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="display: flex; gap: 4px;"><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Strength: fair</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="display: flex; gap: 4px;"><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #E5E2DB;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Strength: good</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="display: flex; gap: 4px;"><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #22211D;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Strength: strong</span></div>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark · አማርኛ</div>
+        <div style="display: flex; align-items: center; gap: 10px;"><span style="display: flex; gap: 4px;"><span style="width: 34px; height: 5px; border-radius: 3px; background: #ECEAE4;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #ECEAE4;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #ECEAE4;"></span><span style="width: 34px; height: 5px; border-radius: 3px; background: #45443E;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">ጥንካሬ፦ ጥሩ</span></div>
+        <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 12px;">No hue at any level — Doc 02 §13 requires strength as text. The meter is a shape, the verdict is the message.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Segments</span><span style="color: #4A4842;">Four at <strong style="font-weight: 600; color: #1D1C18;">34 × 5</strong>, radius 3, gap 4 — canonical at every viewport.</span>
+          <span style="color: #6B675D;">Fill</span><span style="color: #4A4842;">Primary ink <span style="font-family: ui-monospace, monospace; font-size: 11px;">#22211D</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#ECEAE4</span>; empty <span style="font-family: ui-monospace, monospace; font-size: 11px;">#E5E2DB</span> / <span style="font-family: ui-monospace, monospace; font-size: 11px;">#45443E</span>.</span>
+          <span style="color: #6B675D;">Verdict</span><span style="color: #4A4842;">11.5 / 600 beside the bars, localized: weak · fair · good · strong.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Always render the word. The bars alone are never the answer.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Introduce red/amber/green, or appear on a screen where no password is being chosen (the A03 rule).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 26px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">07</span>
+      <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Account state chip</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">in use: S08</span>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; margin-top: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">Light</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A5460;">◷ Invited</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #7E650F;">⏱ Locked</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;">◼ Disabled</span>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 9px;">Dark</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #C9C5BB;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Active</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #262C33; border: 1px solid #3A424B; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #A7B2BE;">◷ Invited</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #2C2612; border: 1px solid #6B551A; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #E8C25A;">⏱ Locked</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #282822; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #C9C5BB;">◼ Disabled</span>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Contract</div>
+        <div style="display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; margin-top: 8px; font-size: 11.5px; line-height: 1.55;">
+          <span style="color: #6B675D;">Pill</span><span style="color: #4A4842;">Radius 999, padding 4 × 10, 11 / 600, 6px gap. Four states only.</span>
+          <span style="color: #6B675D;">Surfaces</span><span style="color: #4A4842;">Active = the v2 presence pill verbatim; Invited = info; Locked = warning; Disabled = neutral. No new hue.</span>
+          <span style="color: #6B675D;">Must</span><span style="color: #4A4842;">Carry glyph and word together; render dark-theme Active on the dark dot <span style="font-family: ui-monospace, monospace; font-size: 11px;">#3ECB80</span>.</span>
+          <span style="color: #6B675D;">Must not</span><span style="color: #4A4842;">Reuse any fixed ticket-status, priority, SLA or reply-window hue — an account state must never read as a ticket state.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Reconciliation — where the drawn instances disagreed</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;">Every canonical form above was measured across all ten Batch 7 files. Five of the seven were already identical everywhere they appeared. Two needed a decision, and one of those is a correction to shipped screens:</p>
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 14px; font-size: 12.5px; line-height: 1.65; color: #4A4842;">
+        <span style="font-weight: 600; color: #1D1C18;">06 · meter width</span><span><strong style="font-weight: 600;">Correction.</strong> Three widths shipped: 34 px on the reset card (8 bars), 30 px on the invite card (4 bars), 28 px on the mobile reset (4 bars). Nothing justified the variation — the narrower ones were fitted by eye to their cards. <strong style="font-weight: 600;">Canonical is 34 × 5.</strong> S05 needs a v2 to bring the invite card and the mobile card onto it; the meter is unchanged everywhere else.</span>
+        <span style="font-weight: 600; color: #1D1C18;">05 · segment height</span><span><strong style="font-weight: 600;">Kept as a rule, not a conflict.</strong> 46 px appears 54 times and 52 px twelve times, and the split is exactly desktop versus mobile — a deliberate mobile enlargement, now written into the contract rather than left as a pattern someone has to notice.</span>
+        <span style="font-weight: 600; color: #1D1C18;">01 · field height</span><span>38 px (33 instances) and 44 px (11) — desktop versus mobile plus the transcribed-field variant at S02 B07, which is 44 px on desktop too because a recovery code is read off paper. Recorded as a named variant so it cannot be mistaken for drift.</span>
+        <span style="font-weight: 600; color: #1D1C18;">02 · toggle size</span><span>32 × 30 desktop, 44 × 44 mobile, consistent everywhere. No correction.</span>
+        <span style="font-weight: 600; color: #1D1C18;">03 · checkbox</span><span>16 px desktop, 20 px mobile, consistent. No correction.</span>
+        <span style="font-weight: 600; color: #1D1C18;">04 · dark link</span><span>Corrected during Section A review: <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">#8FB0F5</span> appeared in 13 places against <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">#A9C0F5</span> in the checklist. All 13 are now <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">#A9C0F5</span>; zero instances of the other value remain.</span>
+        <span style="font-weight: 600; color: #1D1C18;">07 · state chip</span><span>Single instance set, S08 only. Promoted as drawn.</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 24px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Change note — v3 → v4</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Added:</strong> seven components, listed above, each with metrics, states and a composition contract. <strong style="font-weight: 600;">Changed:</strong> nothing. No v2, B5 or v3 component is restyled, renamed or deprecated; the fixed tokens — status, priority, SLA, reply-window, connection state, channel health, internal note and the violet AI accent — are untouched, and 07 is explicitly barred from reusing any of them.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Provenance:</strong> every value is measured from the shipped Batch 7 instances across S01–S10, not authored here. Where instances disagreed the reconciliation note names the disagreement, the count, and the form chosen.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One correction falls out of this:</strong> the strength meter in <a href="B7-S05-password-reset-invite-v1.dc.html">B7-S05</a> renders at three widths. It needs a v2 to sit on the canonical 34 × 5. I have not touched an approved file to make the addendum look tidy — that is a reopen and it is yours to authorise.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Freeze question, per your instruction:</strong> is v4 frozen as delivered — the seven components, additive-only, with 34 × 5 as the canonical meter and the S05 correction outstanding? Section K waits on that sentence.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

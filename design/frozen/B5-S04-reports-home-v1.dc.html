@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 40px;">
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S04-reports-home-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">checklist E01–E06</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Reports home</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The door to eight report families — and the one screen in the platform whose job is to say <em>how much you should trust the numbers behind this door right now</em>. That is the verified badge, and it is the most consequential small component in this batch: a manager who has been burned once by a wrong figure will look at it before anything else.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Historical tier throughout — no live numbers anywhere on this screen, per Doc 15 BR-03. The sparklines on the family cards are the chart set from <a href="B5-S01-live-dashboard-v2.dc.html">B5-S01 §A</a>, reused unchanged.</p>
+  </header>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">1440 — light</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E01 · E02 · E03 · E04</span>
+    </div>
+
+    <div data-tone="light" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 980px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #726D63;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #4A4842; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E0A33A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #1D1C18; border: 1px solid #E5E2DB; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online<span style="color: #6F6A61;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Supervision" style="width: 240px; flex: none; background: #F6F5F2; border-right: 1px solid #E5E2DB; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 0 8px 8px;">Supervision</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">◉</span>Live floor<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #6B675D;">47</span></span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">⚑</span>Rescue<span style="margin-left: auto; font-size: 11px; font-weight: 600; background: #FBE5E5; color: #B32B2B; border-radius: 999px; padding: 1px 6px;">4</span></span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; background: #22211D; color: #FFFFFF; font-size: 12.5px; font-weight: 600; cursor: pointer;"><span aria-hidden="true">▤</span>Reports</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">◫</span>Dashboards</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">⌗</span>Organization</span>
+          </div>
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 16px 8px 8px;">Report families</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Agent</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Team / Queue</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Customer</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">AI</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Telegram</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Live Chat</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">SMS</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">SLA</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 18px; gap: 14px; overflow-y: auto;">
+          <div style="flex: none; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Reports</h1>
+              <p style="margin: 3px 0 0; font-size: 12.5px; color: #6B675D;">Historical data · tenant timezone (EAT) · spam and test traffic excluded everywhere</p>
+            </div>
+            <div style="margin-left: auto; flex: none; display: flex; align-items: center; gap: 9px;">
+              <span style="display: inline-flex; align-items: center; gap: 7px; background: #E4F4EA; border: 1px solid #B9E0C9; border-radius: 999px; padding: 6px 13px;"><span style="color: #156F45; font-size: 12px; font-weight: 700;">✓</span><span style="font-size: 12px; font-weight: 600; color: #156F45; white-space: nowrap;">Figures verified</span><span style="font-size: 11.5px; color: #2C7A52; white-space: nowrap;">reconciled 04:00 today</span></span>
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; font-size: 12px; font-weight: 600; color: #1D1C18; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Schedules</button>
+            </div>
+          </div>
+
+          <div style="flex: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Agent</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">2m 41s</span></div>
+              <div style="font-size: 11px; color: #6B675D;">median first response</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="First response time trending down over 14 days"><polyline points="0,8 15,10 30,7 45,12 60,11 75,14 90,13 105,16 120,15 135,18 150,17 165,20 180,21 200,23" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Team / Queue</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 8%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">1,284</span></div>
+              <div style="font-size: 11px; color: #6B675D;">backlog across queues</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Backlog trending up over 14 days"><polyline points="0,22 15,21 30,23 45,19 60,20 75,17 90,18 105,14 120,15 135,11 150,12 165,8 180,7 200,5" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Customer</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #ECEEF1; color: #59636F; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">— 0%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4.6</span></div>
+              <div style="font-size: 11px; color: #6B675D;">average satisfaction</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Satisfaction flat over 14 days"><polyline points="0,14 15,13 30,15 45,14 60,13 75,15 90,14 105,13 120,14 135,15 150,13 165,14 180,14 200,13" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">AI</span><span style="display: inline-flex; align-items: center; gap: 3px; background: #F1EDFE; border-left: 3px solid #7C5CFC; color: #5B3FD6; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; white-space: nowrap;">✦</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 4%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">61%</span></div>
+              <div style="font-size: 11px; color: #6B675D;">resolved without a human</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="AI resolution rate rising over 14 days"><polyline points="0,20 15,19 30,20 45,17 60,18 75,15 90,16 105,13 120,14 135,12 150,11 165,10 180,9 200,7" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Telegram</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">◷ degraded</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">98.2%</span></div>
+              <div style="font-size: 11px; color: #6B675D;">delivery success</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Telegram delivery success dipping over 14 days"><polyline points="0,7 15,7 30,8 45,7 60,8 75,7 90,9 105,8 120,10 135,9 150,12 165,14 180,13 200,17" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Live Chat</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 6%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">1,902</span></div>
+              <div style="font-size: 11px; color: #6B675D;">chats started</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Chats started rising over 14 days"><polyline points="0,21 15,20 30,22 45,18 60,19 75,16 90,17 105,15 120,13 135,14 150,11 165,10 180,8 200,6" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">SMS</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 11%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">3.1%</span></div>
+              <div style="font-size: 11px; color: #6B675D;">undelivered rate</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Undelivered rate rising over 14 days"><polyline points="0,22 15,21 30,22 45,20 60,21 75,18 90,19 105,17 120,16 135,14 150,15 165,12 180,11 200,9" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">SLA</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 3%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">94.1%</span></div>
+              <div style="font-size: 11px; color: #6B675D;">attainment, all policies</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="SLA attainment falling over 14 days"><polyline points="0,6 15,7 30,6 45,9 60,8 75,10 90,9 105,12 120,11 135,14 150,13 165,15 180,17 200,18" fill="none" stroke="#22211D" stroke-width="1.6" /></svg>
+            </div>
+          </div>
+
+          <div style="flex: none; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-bottom: 1px solid #F0EEE9;">
+                <h2 style="font-size: 13px; font-weight: 600; margin: 0; color: #1D1C18;">Daily digest</h2>
+                <span style="display: inline-flex; align-items: center; gap: 4px; background: #F1EDFE; border-left: 3px solid #7C5CFC; color: #5B3FD6; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 4px; white-space: nowrap; flex: none;">✦ AI</span>
+                <span style="margin-left: auto; font-size: 11px; color: #6B675D;">for Friday 1 Aug</span>
+              </div>
+              <div style="padding: 11px 13px; display: flex; flex-direction: column; gap: 9px;">
+                <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #1D1C18;">Deposits volume was 34% above its Friday median from 18:00, driven by a match night. First response held at 2m 41s, but three SLA breaches all landed in that window.</p>
+                <div style="display: flex; flex-direction: column; gap: 7px;">
+                  <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; background: #F6F5F2; border-radius: 7px;">
+                    <span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷ Anomaly</span>
+                    <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #1D1C18;">Bonuses handoff rate is 18% above its 7-day median.</span>
+                    <a href="#" style="margin-left: auto; flex: none; font-size: 11px; font-weight: 600; color: #22211D; text-decoration: none;">AI report, last 7 days →</a>
+                  </div>
+                  <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; background: #F6F5F2; border-radius: 7px;">
+                    <span style="display: inline-flex; align-items: center; gap: 4px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">▲ Anomaly</span>
+                    <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #1D1C18;">SMS undelivered rate on gateway B tripled after 19:00.</span>
+                    <a href="#" style="margin-left: auto; flex: none; font-size: 11px; font-weight: 600; color: #22211D; text-decoration: none;">SMS report, yesterday →</a>
+                  </div>
+                </div>
+                <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Each anomaly links to the report <em>and</em> the range that produced it, so the number you land on is the number the digest described.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+                <div style="padding: 11px 13px; border-bottom: 1px solid #F0EEE9; font-size: 13px; font-weight: 600; color: #1D1C18;">Pinned</div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; color: #1D1C18; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Payments — weekly SLA</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">Mon 08:00</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px;"><span style="font-size: 12.5px; color: #1D1C18; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Withdrawals backlog age</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">daily</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+                <div style="padding: 11px 13px; border-bottom: 1px solid #F0EEE9; font-size: 13px; font-weight: 600; color: #1D1C18;">Recent</div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; color: #1D1C18; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Agent — ሃና ግርማ, July</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; color: #1D1C18; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">AI — handoff reasons</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px;"><span style="font-size: 12.5px; color: #1D1C18; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Telegram — window expiries</span></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 26px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">1440 — dark</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same geometry, B1-DS dark tokens</span></div>
+    <div data-tone="dark" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 980px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #918C80;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #F0B54A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #ECEAE4; border: 1px solid #343430; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online<span style="color: #9A9588;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Supervision" style="width: 240px; flex: none; background: #141412; border-right: 1px solid #343430; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 0 8px 8px;">Supervision</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">◉</span>Live floor<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #A6A296;">47</span></span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">⚑</span>Rescue<span style="margin-left: auto; font-size: 11px; font-weight: 600; background: #3D1B1B; color: #F08A8A; border-radius: 999px; padding: 1px 6px;">4</span></span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; background: #ECEAE4; color: #171714; font-size: 12.5px; font-weight: 600; cursor: pointer;"><span aria-hidden="true">▤</span>Reports</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">◫</span>Dashboards</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;"><span aria-hidden="true">⌗</span>Organization</span>
+          </div>
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 16px 8px 8px;">Report families</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Agent</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Team / Queue</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Customer</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">AI</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Telegram</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Live Chat</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">SMS</span>
+            <span style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">SLA</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 18px; gap: 14px; overflow-y: auto;">
+          <div style="flex: none; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Reports</h1>
+              <p style="margin: 3px 0 0; font-size: 12.5px; color: #A6A296;">Historical data · tenant timezone (EAT) · spam and test traffic excluded everywhere</p>
+            </div>
+            <div style="margin-left: auto; flex: none; display: flex; align-items: center; gap: 9px;">
+              <span style="display: inline-flex; align-items: center; gap: 7px; background: #123322; border: 1px solid #245C3C; border-radius: 999px; padding: 6px 13px;"><span style="color: #5AD190; font-size: 12px; font-weight: 700;">✓</span><span style="font-size: 12px; font-weight: 600; color: #5AD190; white-space: nowrap;">Figures verified</span><span style="font-size: 11.5px; color: #79C79C; white-space: nowrap;">reconciled 04:00 today</span></span>
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #343430; border-radius: 7px; font-size: 12px; font-weight: 600; color: #ECEAE4; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Schedules</button>
+            </div>
+          </div>
+
+          <div style="flex: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Agent</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">2m 41s</span></div>
+              <div style="font-size: 11px; color: #A6A296;">median first response</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="First response time trending down over 14 days"><polyline points="0,8 15,10 30,7 45,12 60,11 75,14 90,13 105,16 120,15 135,18 150,17 165,20 180,21 200,23" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Team / Queue</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 8%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">1,284</span></div>
+              <div style="font-size: 11px; color: #A6A296;">backlog across queues</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Backlog trending up over 14 days"><polyline points="0,22 15,21 30,23 45,19 60,20 75,17 90,18 105,14 120,15 135,11 150,12 165,8 180,7 200,5" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Customer</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #272D34; color: #9AA6B2; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">— 0%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4.6</span></div>
+              <div style="font-size: 11px; color: #A6A296;">average satisfaction</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Satisfaction flat over 14 days"><polyline points="0,14 15,13 30,15 45,14 60,13 75,15 90,14 105,13 120,14 135,15 150,13 165,14 180,14 200,13" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">AI</span><span style="display: inline-flex; align-items: center; gap: 3px; background: #292144; border-left: 3px solid #A18BFF; color: #BCA9FF; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; white-space: nowrap;">✦</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 4%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">61%</span></div>
+              <div style="font-size: 11px; color: #A6A296;">resolved without a human</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="AI resolution rate rising over 14 days"><polyline points="0,20 15,19 30,20 45,17 60,18 75,15 90,16 105,13 120,14 135,12 150,11 165,10 180,9 200,7" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Telegram</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">◷ degraded</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">98.2%</span></div>
+              <div style="font-size: 11px; color: #A6A296;">delivery success</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Telegram delivery success dipping over 14 days"><polyline points="0,7 15,7 30,8 45,7 60,8 75,7 90,9 105,8 120,10 135,9 150,12 165,14 180,13 200,17" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Live Chat</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 6%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">1,902</span></div>
+              <div style="font-size: 11px; color: #A6A296;">chats started</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Chats started rising over 14 days"><polyline points="0,21 15,20 30,22 45,18 60,19 75,16 90,17 105,15 120,13 135,14 150,11 165,10 180,8 200,6" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">SMS</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 11%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">3.1%</span></div>
+              <div style="font-size: 11px; color: #A6A296;">undelivered rate</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="Undelivered rate rising over 14 days"><polyline points="0,22 15,21 30,22 45,20 60,21 75,18 90,19 105,17 120,16 135,14 150,15 165,12 180,11 200,9" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px; cursor: pointer;">
+              <div style="display: flex; align-items: baseline; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">SLA</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 3px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 3%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">94.1%</span></div>
+              <div style="font-size: 11px; color: #A6A296;">attainment, all policies</div>
+              <svg viewBox="0 0 200 30" width="100%" height="26" style="margin-top: 7px;" aria-label="SLA attainment falling over 14 days"><polyline points="0,6 15,7 30,6 45,9 60,8 75,10 90,9 105,12 120,11 135,14 150,13 165,15 180,17 200,18" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg>
+            </div>
+          </div>
+
+          <div style="flex: none; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-bottom: 1px solid #262622;">
+                <h2 style="font-size: 13px; font-weight: 600; margin: 0; color: #ECEAE4;">Daily digest</h2>
+                <span style="display: inline-flex; align-items: center; gap: 4px; background: #292144; border-left: 3px solid #A18BFF; color: #BCA9FF; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 4px; white-space: nowrap; flex: none;">✦ AI</span>
+                <span style="margin-left: auto; font-size: 11px; color: #A6A296;">for Friday 1 Aug</span>
+              </div>
+              <div style="padding: 11px 13px; display: flex; flex-direction: column; gap: 9px;">
+                <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">Deposits volume was 34% above its Friday median from 18:00, driven by a match night. First response held at 2m 41s, but three SLA breaches all landed in that window.</p>
+                <div style="display: flex; flex-direction: column; gap: 7px;">
+                  <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; background: #232320; border-radius: 7px;">
+                    <span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷ Anomaly</span>
+                    <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #ECEAE4;">Bonuses handoff rate is 18% above its 7-day median.</span>
+                    <a href="#" style="margin-left: auto; flex: none; font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: none;">AI report, last 7 days →</a>
+                  </div>
+                  <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; background: #232320; border-radius: 7px;">
+                    <span style="display: inline-flex; align-items: center; gap: 4px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">▲ Anomaly</span>
+                    <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #ECEAE4;">SMS undelivered rate on gateway B tripled after 19:00.</span>
+                    <a href="#" style="margin-left: auto; flex: none; font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: none;">SMS report, yesterday →</a>
+                  </div>
+                </div>
+                <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Each anomaly links to the report <em>and</em> the range that produced it, so the number you land on is the number the digest described.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+                <div style="padding: 11px 13px; border-bottom: 1px solid #262622; font-size: 13px; font-weight: 600; color: #ECEAE4;">Pinned</div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; color: #ECEAE4; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Payments — weekly SLA</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296;">Mon 08:00</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px;"><span style="font-size: 12.5px; color: #ECEAE4; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Withdrawals backlog age</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296;">daily</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+                <div style="padding: 11px 13px; border-bottom: 1px solid #262622; font-size: 13px; font-weight: 600; color: #ECEAE4;">Recent</div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; color: #ECEAE4; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Agent — ሃና ግርማ, July</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; color: #ECEAE4; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">AI — handoff reasons</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px;"><span style="font-size: 12.5px; color: #ECEAE4; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Telegram — window expiries</span></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+  </section>
+</div>
+
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The verified badge — and its honest absence</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E04 · E05 · Doc 15 NFR-06, FS-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 15 NFR-06 asks for an integrity indicator with its last-reconciled time. The design problem is that a badge which is <em>always</em> green teaches people to ignore it. So the withheld state is not a smaller version of the same chip — it changes colour, icon, wording and gains a "what this means" line, because it is the state that actually needs reading.</p>
+    <p style="margin: 8px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The wording avoids engineering vocabulary entirely: a payments manager should not need to know what a projector or a truth-sync is to understand that yesterday's figures may move.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="badge" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">E04 · Verified</div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #E4F4EA; border: 1px solid #B9E0C9; border-radius: 999px; padding: 6px 13px;"><span style="color: #156F45; font-size: 12px; font-weight: 700;">✓</span><span style="font-size: 12px; font-weight: 600; color: #156F45; white-space: nowrap;">Figures verified</span><span style="font-size: 11.5px; color: #2C7A52; white-space: nowrap;">reconciled 04:00 today</span></span>
+            <div style="margin-top: 10px; background: #22211D; color: #F4F3F1; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; line-height: 1.6;">
+              <div style="font-weight: 600; margin-bottom: 4px;">What this means</div>
+              <div style="color: #C9C5BB;">Every figure in these reports was checked against the source records at 04:00 this morning and matched. Numbers for today are still settling and are not part of that check.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">E05 · Withheld after a correction</div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 6px 13px;"><span style="color: #8F5F08; font-size: 12px; font-weight: 700;">◷</span><span style="font-size: 12px; font-weight: 600; color: #8F5F08; white-space: nowrap;">Figures not verified</span><span style="font-size: 11.5px; color: #8F5F08; white-space: nowrap;">last clean check 2 days ago</span></span>
+            <div style="margin-top: 10px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #8F5F08;">
+              <div style="font-weight: 600; margin-bottom: 4px;">Some figures did not match their source records</div>
+              <div>Yesterday's check found differences in Telegram delivery counts and we are re-reading them. Other families are unaffected. Treat Telegram figures as provisional until this clears — we expect that by 04:00 tomorrow.</div>
+            </div>
+            <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">It names <strong style="font-weight: 600;">which</strong> family is affected. A blanket "data may be inaccurate" would make a manager distrust eight reports to protect one.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">E05 · Withheld after a recovery</div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #ECEEF1; border: 1px solid #D3D8DE; border-radius: 999px; padding: 6px 13px;"><span style="color: #59636F; font-size: 12px; font-weight: 700;">◌</span><span style="font-size: 12px; font-weight: 600; color: #59636F; white-space: nowrap;">Verification paused</span><span style="font-size: 11.5px; color: #59636F; white-space: nowrap;">rebuilding since 02:14</span></span>
+            <div style="margin-top: 10px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #4A4842;">
+              <div style="font-weight: 600; color: #1D1C18; margin-bottom: 4px;">We are rebuilding the reporting data</div>
+              <div>Reports are running from the last good copy, so history before 1 Aug is reliable. The last two days are incomplete and will fill in as the rebuild finishes — roughly 40 minutes.</div>
+              <div style="margin-top: 8px; height: 5px; background: #E5E2DB; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 64%; height: 100%; background: #59636F;"></span></div>
+              <div style="margin-top: 4px; font-size: 11px; color: #6B675D;">64% rebuilt</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">E06 · Loading, first-run empty, feed failure</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+                <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 46%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 62%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #F6F5F2; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 58%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 48%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #F6F5F2; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 52%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 54%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #F6F5F2; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 40%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 58%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #F6F5F2; border-radius: 4px; margin-top: 8px;"></div></div>
+              </div>
+              <div style="margin-top: 8px; font-size: 11px; color: #6B675D;">Loading — the eight cards exist before their numbers do, so the grid does not reflow.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No history yet</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #6B675D; margin-top: 4px; max-width: 420px; margin-left: auto; margin-right: auto;">Reports start filling in once you have a day of traffic. The families are listed on the left — they will populate on their own.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 10px;">
+                <div style="border: 1px solid #EFC7C7; background: #FBE5E5; border-radius: 8px; padding: 11px 12px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #B32B2B;">▲ The digest could not be loaded</div>
+                  <div style="font-size: 11.5px; line-height: 1.55; color: #8C4646; margin-top: 3px;">Your reports are unaffected — this panel alone failed.</div>
+                  <button style="font-family: inherit; margin-top: 8px; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; font-size: 11px; font-weight: 600; color: #B32B2B; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Retry</button>
+                </div>
+                <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Pinned</div>
+                  <div style="font-size: 11.5px; color: #6B675D; margin-top: 4px;">Payments — weekly SLA</div>
+                  <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Withdrawals backlog age</div>
+                </div>
+              </div>
+              <div style="margin-top: 8px; font-size: 11px; color: #6B675D;">One panel fails, the rest of the page keeps working — Doc 15 FS-05 applied at panel scale.</div>
+            </div>
+          </div>
+        </div>
+        <span data-end="badge"></span>
+      </div>
+      <div data-tone="dark" data-blk="badge" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">E04 · Verified</div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #123322; border: 1px solid #245C3C; border-radius: 999px; padding: 6px 13px;"><span style="color: #5AD190; font-size: 12px; font-weight: 700;">✓</span><span style="font-size: 12px; font-weight: 600; color: #5AD190; white-space: nowrap;">Figures verified</span><span style="font-size: 11.5px; color: #79C79C; white-space: nowrap;">reconciled 04:00 today</span></span>
+            <div style="margin-top: 10px; background: #ECEAE4; color: #171714; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; line-height: 1.6;">
+              <div style="font-weight: 600; margin-bottom: 4px;">What this means</div>
+              <div style="color: #4A4842;">Every figure in these reports was checked against the source records at 04:00 this morning and matched. Numbers for today are still settling and are not part of that check.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">E05 · Withheld after a correction</div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 6px 13px;"><span style="color: #F0B54A; font-size: 12px; font-weight: 700;">◷</span><span style="font-size: 12px; font-weight: 600; color: #F0B54A; white-space: nowrap;">Figures not verified</span><span style="font-size: 11.5px; color: #F0B54A; white-space: nowrap;">last clean check 2 days ago</span></span>
+            <div style="margin-top: 10px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #F0B54A;">
+              <div style="font-weight: 600; margin-bottom: 4px;">Some figures did not match their source records</div>
+              <div>Yesterday's check found differences in Telegram delivery counts and we are re-reading them. Other families are unaffected. Treat Telegram figures as provisional until this clears — we expect that by 04:00 tomorrow.</div>
+            </div>
+            <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">It names <strong style="font-weight: 600;">which</strong> family is affected. A blanket "data may be inaccurate" would make a manager distrust eight reports to protect one.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">E05 · Withheld after a recovery</div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; background: #272D34; border: 1px solid #3A424B; border-radius: 999px; padding: 6px 13px;"><span style="color: #9AA6B2; font-size: 12px; font-weight: 700;">◌</span><span style="font-size: 12px; font-weight: 600; color: #9AA6B2; white-space: nowrap;">Verification paused</span><span style="font-size: 11.5px; color: #9AA6B2; white-space: nowrap;">rebuilding since 02:14</span></span>
+            <div style="margin-top: 10px; background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #C9C5BB;">
+              <div style="font-weight: 600; color: #ECEAE4; margin-bottom: 4px;">We are rebuilding the reporting data</div>
+              <div>Reports are running from the last good copy, so history before 1 Aug is reliable. The last two days are incomplete and will fill in as the rebuild finishes — roughly 40 minutes.</div>
+              <div style="margin-top: 8px; height: 5px; background: #343430; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 64%; height: 100%; background: #9AA6B2;"></span></div>
+              <div style="margin-top: 4px; font-size: 11px; color: #A6A296;">64% rebuilt</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">E06 · Loading, first-run empty, feed failure</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+                <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 46%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 62%; background: #262622; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #232320; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 58%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 48%; background: #262622; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #232320; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 52%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 54%; background: #262622; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #232320; border-radius: 4px; margin-top: 8px;"></div></div>
+                <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 40%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 58%; background: #262622; border-radius: 4px; margin-top: 8px;"></div><div style="height: 18px; background: #232320; border-radius: 4px; margin-top: 8px;"></div></div>
+              </div>
+              <div style="margin-top: 8px; font-size: 11px; color: #A6A296;">Loading — the eight cards exist before their numbers do, so the grid does not reflow.</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">No history yet</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #A6A296; margin-top: 4px; max-width: 420px; margin-left: auto; margin-right: auto;">Reports start filling in once you have a day of traffic. The families are listed on the left — they will populate on their own.</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 10px;">
+                <div style="border: 1px solid #6B3838; background: #3D1B1B; border-radius: 8px; padding: 11px 12px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #F08A8A;">▲ The digest could not be loaded</div>
+                  <div style="font-size: 11.5px; line-height: 1.55; color: #CC8F8F; margin-top: 3px;">Your reports are unaffected — this panel alone failed.</div>
+                  <button style="font-family: inherit; margin-top: 8px; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; font-size: 11px; font-weight: 600; color: #F08A8A; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Retry</button>
+                </div>
+                <div style="border: 1px solid #343430; border-radius: 8px; padding: 11px 12px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Pinned</div>
+                  <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px;">Payments — weekly SLA</div>
+                  <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">Withdrawals backlog age</div>
+                </div>
+              </div>
+              <div style="margin-top: 8px; font-size: 11px; color: #A6A296;">One panel fails, the rest of the page keeps working — Doc 15 FS-05 applied at panel scale.</div>
+            </div>
+          </div>
+        </div>
+        <span data-end="badge"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E01–E06 at phone width</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Reports were always phone-readable in the documents, so nothing here is a deviation. The badge moves directly under the title rather than into a corner — on a phone it is the first thing you should read, not the last thing you find. Family cards go two-up so the sparkline keeps enough width to mean something.</p>
+
+    <div style="display: flex; gap: 24px; margin-top: 16px; align-items: flex-start; flex-wrap: wrap;">
+      <div data-tone="light" data-blk="m1" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375</div>
+        <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Open menu" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #1D1C18; cursor: pointer; min-width: 44px; min-height: 44px;">☰</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #1D1C18;">Reports</span><span style="display: block; font-size: 11px; color: #6B675D;">Historical · EAT</span></span>
+            <button aria-label="Schedules" style="font-family: inherit; background: transparent; border: none; font-size: 15px; color: #4A4842; cursor: pointer; min-width: 44px; min-height: 44px;">⧖</button>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #E4F4EA; border: 1px solid #B9E0C9; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="color: #156F45; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+              <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #156F45;">Figures verified</span><span style="display: block; font-size: 11.5px; color: #2C7A52;">Reconciled 04:00 today</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agent</span><span style="margin-left: auto; display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼12%</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">2m 41s</div><div style="font-size: 10.5px; color: #6B675D;">median FRT</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending down"><polyline points="0,6 20,8 40,7 60,11 80,13 100,16 120,18" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Queue</span><span style="margin-left: auto; display: inline-flex; background: #FBE5E5; color: #B32B2B; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲8%</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">1,284</div><div style="font-size: 10.5px; color: #6B675D;">backlog</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending up"><polyline points="0,18 20,16 40,15 60,12 80,10 100,7 120,5" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Customer</span><span style="margin-left: auto; display: inline-flex; background: #ECEEF1; color: #59636F; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">—</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">4.6</div><div style="font-size: 10.5px; color: #6B675D;">avg CSAT</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Flat"><polyline points="0,11 20,10 40,12 60,11 80,10 100,11 120,11" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">AI</span><span style="display: inline-flex; background: #F1EDFE; border-left: 2px solid #7C5CFC; color: #5B3FD6; font-size: 9.5px; font-weight: 700; padding: 1px 4px; border-radius: 3px;">✦</span><span style="margin-left: auto; display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲4%</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">61%</div><div style="font-size: 10.5px; color: #6B675D;">AI-resolved</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending up"><polyline points="0,16 20,15 40,13 60,12 80,10 100,8 120,6" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</span><span style="margin-left: auto; display: inline-flex; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">◷</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">98.2%</div><div style="font-size: 10.5px; color: #6B675D;">delivered</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Dipping"><polyline points="0,5 20,6 40,5 60,7 80,8 100,11 120,13" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">SLA</span><span style="margin-left: auto; display: inline-flex; background: #FBE5E5; color: #B32B2B; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼3%</span></div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">94.1%</div><div style="font-size: 10.5px; color: #6B675D;">attainment</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Falling"><polyline points="0,5 20,6 40,8 60,9 80,11 100,13 120,15" fill="none" stroke="#22211D" stroke-width="1.6" /></svg></div>
+            </div>
+            <button style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 13px; min-height: 48px; cursor: pointer;">Live Chat and SMS reports</button>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 7px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Daily digest</span><span style="display: inline-flex; background: #F1EDFE; border-left: 2px solid #7C5CFC; color: #5B3FD6; font-size: 9.5px; font-weight: 700; padding: 1px 5px; border-radius: 3px; white-space: nowrap;">✦ AI</span></div>
+              <div style="padding: 11px 12px;">
+                <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #1D1C18;">Deposits volume was 34% above its Friday median from 18:00. Three SLA breaches all landed in that window.</p>
+              </div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: flex-start; gap: 8px; padding: 11px 12px; background: #FFFFFF; border: none; border-top: 1px solid #F0EEE9; text-align: left; min-height: 52px; cursor: pointer;"><span style="display: inline-flex; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷</span><span style="min-width: 0; font-size: 12px; line-height: 1.5; color: #1D1C18;">Bonuses handoff rate 18% above median</span><span style="margin-left: auto; flex: none; color: #6B675D;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: flex-start; gap: 8px; padding: 11px 12px; background: #FFFFFF; border: none; border-top: 1px solid #F0EEE9; text-align: left; min-height: 52px; cursor: pointer;"><span style="display: inline-flex; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">▲</span><span style="min-width: 0; font-size: 12px; line-height: 1.5; color: #1D1C18;">SMS undelivered tripled on gateway B</span><span style="margin-left: auto; flex: none; color: #6B675D;">›</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="dark" data-blk="m1" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Open menu" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #ECEAE4; cursor: pointer; min-width: 44px; min-height: 44px;">☰</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #ECEAE4;">Reports</span><span style="display: block; font-size: 11px; color: #A6A296;">Historical · EAT</span></span>
+            <button aria-label="Schedules" style="font-family: inherit; background: transparent; border: none; font-size: 15px; color: #C9C5BB; cursor: pointer; min-width: 44px; min-height: 44px;">⧖</button>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #123322; border: 1px solid #245C3C; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="color: #5AD190; font-size: 13px; font-weight: 700; flex: none;">✓</span>
+              <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #5AD190;">Figures verified</span><span style="display: block; font-size: 11.5px; color: #79C79C;">Reconciled 04:00 today</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Agent</span><span style="margin-left: auto; display: inline-flex; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼12%</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">2m 41s</div><div style="font-size: 10.5px; color: #A6A296;">median FRT</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending down"><polyline points="0,6 20,8 40,7 60,11 80,13 100,16 120,18" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Queue</span><span style="margin-left: auto; display: inline-flex; background: #3D1B1B; color: #F08A8A; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲8%</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">1,284</div><div style="font-size: 10.5px; color: #A6A296;">backlog</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending up"><polyline points="0,18 20,16 40,15 60,12 80,10 100,7 120,5" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Customer</span><span style="margin-left: auto; display: inline-flex; background: #272D34; color: #9AA6B2; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">—</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">4.6</div><div style="font-size: 10.5px; color: #A6A296;">avg CSAT</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Flat"><polyline points="0,11 20,10 40,12 60,11 80,10 100,11 120,11" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">AI</span><span style="display: inline-flex; background: #292144; border-left: 2px solid #A18BFF; color: #BCA9FF; font-size: 9.5px; font-weight: 700; padding: 1px 4px; border-radius: 3px;">✦</span><span style="margin-left: auto; display: inline-flex; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲4%</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">61%</div><div style="font-size: 10.5px; color: #A6A296;">AI-resolved</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Trending up"><polyline points="0,16 20,15 40,13 60,12 80,10 100,8 120,6" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Telegram</span><span style="margin-left: auto; display: inline-flex; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">◷</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">98.2%</div><div style="font-size: 10.5px; color: #A6A296;">delivered</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Dipping"><polyline points="0,5 20,6 40,5 60,7 80,8 100,11 120,13" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 96px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">SLA</span><span style="margin-left: auto; display: inline-flex; background: #3D1B1B; color: #F08A8A; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼3%</span></div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">94.1%</div><div style="font-size: 10.5px; color: #A6A296;">attainment</div><svg viewBox="0 0 120 22" width="100%" height="20" style="margin-top: 5px;" aria-label="Falling"><polyline points="0,5 20,6 40,8 60,9 80,11 100,13 120,15" fill="none" stroke="#ECEAE4" stroke-width="1.6" /></svg></div>
+            </div>
+            <button style="font-family: inherit; width: 100%; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 13px; min-height: 48px; cursor: pointer;">Live Chat and SMS reports</button>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 7px; padding: 10px 12px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Daily digest</span><span style="display: inline-flex; background: #292144; border-left: 2px solid #A18BFF; color: #BCA9FF; font-size: 9.5px; font-weight: 700; padding: 1px 5px; border-radius: 3px; white-space: nowrap;">✦ AI</span></div>
+              <div style="padding: 11px 12px;">
+                <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">Deposits volume was 34% above its Friday median from 18:00. Three SLA breaches all landed in that window.</p>
+              </div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: flex-start; gap: 8px; padding: 11px 12px; background: #1C1C19; border: none; border-top: 1px solid #262622; text-align: left; min-height: 52px; cursor: pointer;"><span style="display: inline-flex; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷</span><span style="min-width: 0; font-size: 12px; line-height: 1.5; color: #ECEAE4;">Bonuses handoff rate 18% above median</span><span style="margin-left: auto; flex: none; color: #A6A296;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: flex-start; gap: 8px; padding: 11px 12px; background: #1C1C19; border: none; border-top: 1px solid #262622; text-align: left; min-height: 52px; cursor: pointer;"><span style="display: inline-flex; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">▲</span><span style="min-width: 0; font-size: 12px; line-height: 1.5; color: #ECEAE4;">SMS undelivered tripled on gateway B</span><span style="margin-left: auto; flex: none; color: #A6A296;">›</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="light" data-blk="m2" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · badge withheld</div>
+        <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Open menu" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #1D1C18; cursor: pointer; min-width: 44px; min-height: 44px;">☰</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #1D1C18;">Reports</span><span style="display: block; font-size: 11px; color: #6B675D;">Historical · EAT</span></span>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #8F5F08; font-size: 13px; font-weight: 700; flex: none;">◷</span><span style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">Figures not verified</span></div>
+              <p style="margin: 6px 0 0; font-size: 12px; line-height: 1.6; color: #8F5F08;">Yesterday's check found differences in Telegram delivery counts. Other families are unaffected. Treat Telegram figures as provisional until 04:00 tomorrow.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 84px;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agent</div><div style="font-size: 19px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 3px;">2m 41s</div><div style="font-size: 10.5px; color: #6B675D;">median FRT</div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px; min-height: 84px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</span><span style="margin-left: auto; display: inline-flex; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">◷</span></div><div style="font-size: 19px; font-weight: 600; color: #8F5F08; font-variant-numeric: tabular-nums; margin-top: 3px;">98.2%</div><div style="font-size: 10.5px; color: #8F5F08;">provisional</div></div>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The affected family carries the amber on its own card too, so the warning survives being scrolled past.</p>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="m2" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · badge withheld</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Open menu" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #ECEAE4; cursor: pointer; min-width: 44px; min-height: 44px;">☰</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #ECEAE4;">Reports</span><span style="display: block; font-size: 11px; color: #A6A296;">Historical · EAT</span></span>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #F0B54A; font-size: 13px; font-weight: 700; flex: none;">◷</span><span style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">Figures not verified</span></div>
+              <p style="margin: 6px 0 0; font-size: 12px; line-height: 1.6; color: #F0B54A;">Yesterday's check found differences in Telegram delivery counts. Other families are unaffected. Treat Telegram figures as provisional until 04:00 tomorrow.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 84px;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Agent</div><div style="font-size: 19px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 3px;">2m 41s</div><div style="font-size: 10.5px; color: #A6A296;">median FRT</div></div>
+              <div style="background: #1C1C19; border: 1px solid #6B551A; border-radius: 8px; padding: 11px; min-height: 84px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Telegram</span><span style="margin-left: auto; display: inline-flex; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">◷</span></div><div style="font-size: 19px; font-weight: 600; color: #F0B54A; font-variant-numeric: tabular-nums; margin-top: 3px;">98.2%</div><div style="font-size: 10.5px; color: #F0B54A;">provisional</div></div>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The affected family carries the amber on its own card too, so the warning survives being scrolled past.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> E01–E06, both themes, 1440 and 375. Eight family cards with sparklines from the approved chart set, the AI digest and anomaly feed with range-preserving links, pinned and recent, and the verified badge in all four of its states — verified, withheld after a correction, paused during a rebuild, plus loading, first-run empty and panel failure.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Design decision worth your eye:</strong> the withheld badge names the affected family rather than casting doubt on everything. Doc 15 NFR-06 does not specify the granularity; I read a blanket warning as the more damaging default, since it teaches people to distrust reports that are fine. Say the word if you want it blanket instead.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">No deviation here:</strong> reports were already phone-readable in Doc 15 §9, so this screen predates and is unaffected by the v3 mobile ruling. Next is Section F — the report page anatomy, filters and drill-down, which is the frame all eight families are then built on.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

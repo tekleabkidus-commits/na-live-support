@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S11-settings-shell-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows J01–J19</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Settings Backoffice — shell &amp; the per-key contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Fourteen groups and one row. That is the whole design: <strong style="font-weight: 600;">every key in the product renders as the same six-part row</strong> — label, description, typed control, validation, provenance, reset — so that a key registered next quarter appears in its group looking exactly right with nobody drawing it. The IA is data, not layout, and this screen is the proof.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two things the contract buys that are worth naming. A <strong style="font-weight: 600;">consequence is shown before the save, not after</strong> — the timezone key is the worked example, and it is the difference between an admin who understands what they just did to every SLA clock and one who finds out tomorrow. And a <strong style="font-weight: 600;">locked floor looks locked</strong>: a platform minimum uses the same lock as a mandated notification row, because it means the same thing — you may go higher, never lower.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Branding is in the nav as a cross-link only; the editor is Batch 7 by your ruling. Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v2 — scope-limited reopen, 3 Aug 2026.</strong> Adds the shared ◼ stop-controls button to the top bar, giving <a href="B6-S16-incident-page-v1.dc.html">the incident page</a> its second route and meeting Doc 16 AC-10 structurally. Nothing else on this screen changed.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Shell and the General group — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows J01, J03–J08, J10, J11 · Doc 16 FR-08, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light is General with the timezone changed but not yet saved, so the consequence sits under the control where it can still change the decision. Dark is the same shell with search open — ⌘K finds a key by its label, its description or its dotted name, which is how an engineer and an operator each look for the same thing.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · General, unsaved timezone change</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J01 · J03 · J04 · J05 · J06 · J08 · J10</span></div>
+    <div data-screen-label="J01 settings general light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; padding: 5px 11px;">◼ Stop controls</span><span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 214px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px; overflow: hidden;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">General</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Business Hours &amp; Holidays</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Files &amp; Media</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Tickets &amp; SLA</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Routing</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">AI</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">SMS</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Quotas &amp; Usage</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Feature Flags</span>
+            <span style="display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 6px; color: #6B675D;">Branding <span style="margin-left: auto; font-size: 11px;">↗</span></span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Config Export / Import</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Settings</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">General</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.manage</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Discard</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Save 1 change</button>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; margin-top: 14px; overflow: hidden; flex: none;">
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #F0EEE9;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Company name</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">org.company_name</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Used on invoices, exports and anywhere the product refers to your organisation by name.</p>
+              </div>
+              <div style="width: 300px; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #1D1C18; min-height: 38px;">NA BET PLC</div></div>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #F0EEE9; background: #FDFCFA;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 7px;">
+                  <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Timezone</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">Modified</span>
+                </div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">org.timezone</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Business hours, SLA clocks, scheduled reports and every timestamp an agent sees are calculated in this zone.</p>
+                <div style="font-size: 10.5px; color: #6B675D; margin-top: 6px;">Changed by Sara Bekele · 2 Aug 2026, 09:20 · default Africa/Addis_Ababa <button style="font-family: inherit; background: transparent; border: none; color: #22211D; font-size: 10.5px; font-weight: 600; padding: 0 0 0 6px; cursor: pointer;">Reset to default</button></div>
+              </div>
+              <div style="width: 300px; flex: none;">
+                <div style="border: 1.5px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #1D1C18; min-height: 38px; display: flex; align-items: center; gap: 8px;">Asia/Dubai <span style="font-size: 11px; color: #6B675D;">UTC+4</span><span style="margin-left: auto; font-size: 10px; color: #6B675D;">▾</span></div>
+                <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+                  <div style="font-size: 11.5px; font-weight: 600; color: #8F5F08;">Saving this recalculates every open SLA clock <span style="font-weight: 500;">· counted live, a moment ago</span></div>
+                  <div style="font-size: 11px; line-height: 1.55; color: #8F5F08; margin-top: 3px;">Addis Ababa is UTC+3 and Dubai is UTC+4, so every clock moves an hour later. 1,204 open tickets shift by +1 hour and 18 of them move from “due today” to breached. Business hours move with it — the 09:00 opening lands at 08:00 for the team in Addis.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #F0EEE9;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Default language</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">org.default_language</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">What a new customer sees before we know their preference, and the fallback when a translation is missing.</p>
+              </div>
+              <div style="width: 300px; flex: none;">
+                <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden;">
+                  <span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 9px 15px; min-height: 38px; display: inline-flex; align-items: center;">English</span>
+                  <span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 9px 15px; min-height: 38px; display: inline-flex; align-items: center; border-left: 1px solid #E5E2DB;">አማርኛ</span>
+                </span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 14px; padding: 13px 16px;">
+              <div style="min-width: 0;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Business hours and holidays →</div>
+                <p style="margin: 3px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Opening times and the Ethiopian holiday calendar have their own editor.</p>
+              </div>
+              <span style="margin-left: auto; font-size: 15px; color: #6B675D; flex: none;">↗</span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; flex: 1; min-height: 0;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Every key in this product is this row</div>
+              <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 10px; font-size: 11.5px; line-height: 1.55;">
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Label</span><span style="color: #4A4842;">What it is, in the operator's words.</span></div>
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Key name</span><span style="color: #4A4842;">The dotted name, so support and engineering can talk about the same thing.</span></div>
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Description</span><span style="color: #4A4842;">What changes downstream — never a restatement of the label.</span></div>
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Control</span><span style="color: #4A4842;">Typed by the registry: toggle, number, enum, text, duration.</span></div>
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Provenance</span><span style="color: #4A4842;">Who changed it and when, on anything that differs from its default.</span></div>
+                <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px;"><span style="color: #6B675D;">Reset</span><span style="color: #4A4842;">Always available, with the default value stated beside the current one.</span></div>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Two row types that are not settings</div>
+              <div style="border: 1px dashed #CFCBC1; border-radius: 8px; padding: 10px 12px; margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Edit SLA policies →</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">A cross-link. No value, no control, no reset.</div></div>
+                <span style="margin-left: auto; font-size: 14px; color: #6B675D; flex: none;">↗</span>
+              </div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px; margin-top: 9px; display: flex; align-items: center; gap: 10px; background: #F6F5F2;">
+                <div style="min-width: 0;"><div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #1D1C18;">🔒 Session timeout <span style="font-size: 10.5px; font-weight: 500; color: #6B675D;">platform minimum 15 min</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">A locked floor. You may set it higher, never lower.</div></div>
+                <div style="margin-left: auto; border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 10px; font-size: 12px; font-weight: 600; color: #1D1C18; min-height: 34px; flex: none;">30 min</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · search across every group</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J02 · J01 · Amharic chrome</span></div>
+    <div data-screen-label="J02 settings search dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1.5px solid #ECEAE4; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #ECEAE4;">⌕ session<span style="margin-left: auto; font-size: 10px; border: 1px solid #45443E; border-radius: 4px; padding: 1px 5px; color: #A6A296;">esc</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; padding: 5px 11px;">◼ ማቆሚያ</span><span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 214px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px; overflow: hidden;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ቅንብሮች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">አጠቃላይ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">የሥራ ሰዓትና በዓላት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ቋንቋዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ደኅንነት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ፋይሎችና ሚዲያ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ትኬቶችና SLA</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">አቅጣጫ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">AI</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">SMS</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ማሳወቂያዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ኮታና አጠቃቀም</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">የባህሪ መቀየሪያዎች</span>
+            <span style="display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 6px; color: #A6A296;">ብራንዲንግ <span style="margin-left: auto; font-size: 11px;">↗</span></span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ውቅር ማውጣት / ማስገባት</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: baseline; gap: 10px; flex: none;">
+            <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">“session” — 5 keys in 3 groups</h1>
+            <span style="font-size: 11.5px; color: #A6A296;">by label, description or key name</span>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 14px; overflow: hidden; flex: none;">
+            <div style="padding: 8px 16px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ደኅንነት · Security</div>
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #262622;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px;">🔒</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የክፍለ ጊዜ ማብቂያ</span><span style="font-size: 10.5px; color: #A6A296;">platform minimum 15 min</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.session.idle_timeout_min</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ሠራተኛው ምንም ሳይሠራ ሲቆይ በዚህ ጊዜ በኋላ ይወጣል። ከመድረኩ ጣሪያ በታች ማድረግ አይቻልም።</p>
+              </div>
+              <div style="width: 280px; flex: none; display: flex; align-items: center; gap: 9px;">
+                <div style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 38px; min-width: 84px; text-align: right;">30</div>
+                <span style="font-size: 11.5px; color: #A6A296;">ደቂቃ</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #262622;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px;">🔒</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ከፍተኛ የክፍለ ጊዜ ርዝመት</span><span style="font-size: 10.5px; color: #A6A296;">platform maximum 30 days</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.session.absolute_max_days</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ምንም ያህል ንቁ ቢሆን አንድ ክፍለ ጊዜ ከዚህ በላይ አይቆይም።</p>
+              </div>
+              <div style="width: 280px; flex: none; display: flex; align-items: center; gap: 9px;">
+                <div style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 38px; min-width: 84px; text-align: right;">14</div>
+                <span style="font-size: 11.5px; color: #A6A296;">ቀናት</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">በአንድ ጊዜ የሚፈቀዱ ክፍለ ጊዜዎች</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">የተቀየረ</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.session.max_concurrent</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">አንድ ሠራተኛ በስንት መሣሪያ በአንድ ጊዜ መግባት ይችላል። ከዚያ በላይ ሲሆን በጣም የቆየው ይዘጋል።</p>
+                <div style="font-size: 10.5px; color: #A6A296; margin-top: 6px;">የቀየረው ዳዊት በቀለ · ሐምሌ 12 · ነባሪ 5 <button style="font-family: inherit; background: transparent; border: none; color: #ECEAE4; font-size: 10.5px; font-weight: 600; padding: 0 0 0 6px; cursor: pointer;">ወደ ነባሪ መልስ</button></div>
+              </div>
+              <div style="width: 280px; flex: none;"><div style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 38px; min-width: 84px; text-align: right;">3</div></div>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; overflow: hidden; flex: none;">
+            <div style="padding: 8px 16px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ማሳወቂያዎች · Notifications</div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 13px 16px;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የክፍለ ጊዜ ማብቂያ ማስጠንቀቂያ</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">notify.session_expiry_warning</div>
+              </div>
+              <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #ECEAE4; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #171714;"></span></span>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; overflow: hidden; flex: none;">
+            <div style="padding: 8px 16px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የባህሪ መቀየሪያዎች · Feature Flags</div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 13px 16px;">
+              <div style="min-width: 0; flex: 1;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የክፍለ ጊዜ መሣሪያ ዝርዝር</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">flag.session_device_list</div>
+                <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ሠራተኞች የገቡባቸውን መሣሪያዎች እንዲያዩና እንዲያቋርጡ ይፈቅዳል።</p>
+              </div>
+              <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #1C1C19; border: 1px solid #45443E;"></span></span>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px; font-size: 11.5px; line-height: 1.8; color: #A6A296; flex: none;">ፍለጋው በስያሜ፣ በመግለጫና በቁልፍ ስም ይሠራል — ስለዚህ “session” የሚለውን የሚያውቅ መሐንዲስም “ማብቂያ” የሚለውን የሚያውቅ ኦፕሬተርም አንድ ነገር ያገኛሉ።</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The groups — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows J12, J13, J14, J15 · Doc 16 FR-08 · Doc 01 NFR-06 · Doc 02</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Four groups shown as rendered rows rather than described: Security with its floors, Files &amp; Media with the legal-hold note that retention cannot override, the operational groups cross-linking out to the editors other documents own, and Quotas with usage against the 80% alert mark.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J12 — Security, floors visible</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0; flex: 1;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 12.5px;">🔒</span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Minimum password length</span><span style="font-size: 10.5px; color: #6B675D;">platform minimum 10</span></div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">auth.password.min_length</div></div>
+            <div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 66px; text-align: right; flex: none;">12</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Require two-factor for everyone</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">auth.2fa.enforce_all</div><p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: #4A4842;">Staff without 2FA are asked to set it up at their next sign-in; nobody is locked out mid-shift.</p></div>
+            <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Lock the account after failed attempts</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">auth.lockout.threshold</div></div>
+            <div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 66px; text-align: right; flex: none;">5</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J13 — Files &amp; Media, legal hold</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Largest file a customer can send</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">media.max_mb</div></div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 62px; text-align: right;">20</div><span style="font-size: 11.5px; color: #6B675D;">MB</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Delete attachments after</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">media.retention_days</div>
+              <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 8px 10px; margin-top: 7px; font-size: 11px; line-height: 1.55; color: #4A4842;">Files attached to a conversation under legal hold are kept regardless of this setting, and are listed in the audit export.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 62px; text-align: right;">365</div><span style="font-size: 11.5px; color: #6B675D;">days</span></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J14 — Tickets &amp; SLA, Routing, AI, SMS</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Never leave a ticket waiting longer than</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">routing.starvation_cap_min</div>
+              <p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: #4A4842;">Past this, the oldest ticket jumps the queue whatever its priority. This is always on — it is what stops a low-priority ticket waiting forever behind urgent ones.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 62px; text-align: right;">45</div><span style="font-size: 11.5px; color: #6B675D;">min</span></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Edit SLA policies →</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Targets per priority live in their own editor.</div></div>
+            <span style="margin-left: auto; font-size: 14px; color: #6B675D; flex: none;">↗</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Open the AI knowledge base →</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Sources, tone and escalation rules are Doc 09's editor.</div></div>
+            <span style="margin-left: auto; font-size: 14px; color: #6B675D; flex: none;">↗</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J12 — Security, floors visible</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0; flex: 1;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 12.5px;">🔒</span><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Minimum password length</span><span style="font-size: 10.5px; color: #A6A296;">platform minimum 10</span></div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.password.min_length</div></div>
+            <div style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; min-width: 66px; text-align: right; flex: none;">12</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Require two-factor for everyone</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.2fa.enforce_all</div><p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: #C9C5BB;">Staff without 2FA are asked to set it up at their next sign-in; nobody is locked out mid-shift.</p></div>
+            <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #ECEAE4; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #171714;"></span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Lock the account after failed attempts</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.lockout.threshold</div></div>
+            <div style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; min-width: 66px; text-align: right; flex: none;">5</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J13 — Files &amp; Media, legal hold</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Largest file a customer can send</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">media.max_mb</div></div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; min-width: 62px; text-align: right;">20</div><span style="font-size: 11.5px; color: #A6A296;">MB</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Delete attachments after</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">media.retention_days</div>
+              <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 8px 10px; margin-top: 7px; font-size: 11px; line-height: 1.55; color: #C9C5BB;">Files attached to a conversation under legal hold are kept regardless of this setting, and are listed in the audit export.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; min-width: 62px; text-align: right;">365</div><span style="font-size: 11.5px; color: #A6A296;">days</span></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J15 — Quotas &amp; Usage</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Conversations this month</span><span style="margin-left: auto; font-size: 11.5px; color: #C9C5BB;">38,410 of 50,000</span></div>
+              <div style="position: relative; height: 10px; background: #262622; border-radius: 999px; margin-top: 6px; overflow: hidden;">
+                <span style="display: block; width: 77%; height: 100%; background: #ECEAE4;"></span>
+                <span style="position: absolute; top: -2px; bottom: -2px; left: 80%; width: 2px; background: #F0B54A;"></span>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 5px;"><span style="font-size: 10.5px; color: #A6A296;">77% used</span><span style="margin-left: auto; font-size: 10.5px; color: #F0B54A;">▲ alert at 80%</span></div>
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Staff SMS segments</span><span style="margin-left: auto; font-size: 11.5px; color: #C9C5BB;">9,120 of 10,000</span></div>
+              <div style="position: relative; height: 10px; background: #262622; border-radius: 999px; margin-top: 6px; overflow: hidden;">
+                <span style="display: block; width: 91%; height: 100%; background: #ECEAE4;"></span>
+                <span style="position: absolute; top: -2px; bottom: -2px; left: 80%; width: 2px; background: #F0B54A;"></span>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 5px;"><span style="font-size: 10.5px; color: #A6A296;">91% used · past the alert mark</span><span style="margin-left: auto; font-size: 10.5px; color: #A6A296;">3 admins notified 31 Jul</span></div>
+            </div>
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Stored media</span><span style="margin-left: auto; font-size: 11.5px; color: #C9C5BB;">104 GB of 500 GB</span></div>
+              <div style="position: relative; height: 10px; background: #262622; border-radius: 999px; margin-top: 6px; overflow: hidden;">
+                <span style="display: block; width: 21%; height: 100%; background: #ECEAE4;"></span>
+                <span style="position: absolute; top: -2px; bottom: -2px; left: 80%; width: 2px; background: #F0B54A;"></span>
+              </div>
+              <div style="font-size: 10.5px; color: #A6A296; margin-top: 5px;">21% used</div>
+            </div>
+          </div>
+          <p style="margin: 11px 0 0; font-size: 11px; line-height: 1.6; color: #A6A296;">The alert mark sits at 80% on every bar, so its position means the same thing everywhere. Crossing it notifies admins; it never stops the work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">States — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows J09, J16, J17, J18 · Doc 16 FR-10, T-04, AC-05, §8, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">J16 is the claim the whole IA rests on, so it is drawn as a state rather than asserted: a key registered by a backend team appears in its group, correctly typed, with its floor and its description, and no one opened this file to make that happen.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J16 — a newly registered key, no design work</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="padding: 8px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Tickets &amp; SLA</div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0; flex: 1;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Auto-close resolved tickets after</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">tickets.auto_close_days</div></div>
+            <div style="display: flex; align-items: center; gap: 8px; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 60px; text-align: right;">7</div><span style="font-size: 11.5px; color: #6B675D;">days</span></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: #F6F5F2;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Ask for a rating when a ticket closes</span><span style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #CFCBC1; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">New this release</span></div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">tickets.csat.enabled</div>
+              <p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: #4A4842;">Sends a one-tap rating on the channel the conversation happened on.</p>
+            </div>
+            <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+          </div>
+          <div style="padding: 10px 14px; font-size: 11px; line-height: 1.6; color: #6B675D; border-top: 1px solid #F0EEE9;">The highlighted row was added to the registry by the tickets team on 30 July. It arrived here typed as a toggle, in the right group, with its description — no Backoffice screen was edited.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J18 — validation, announced not tinted</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Minimum password length</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">auth.password.min_length</div>
+            </div>
+            <div style="width: 150px; flex: none;">
+              <div role="alert" style="border: 1.5px solid #B32B2B; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; text-align: right;">8</div>
+            </div>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #8E2222;">! 8 is below the platform minimum of 10</div>
+            <div style="font-size: 11px; line-height: 1.55; color: #7A3232; margin-top: 2px;">Set 10 or more. The message is read out by screen readers, not just shown in red.</div>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11.5px; color: #8E2222;">Couldn't save <span style="font-family: ui-monospace, monospace;">auth.lockout.threshold</span> — the other 3 keys saved</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #8E2222; font-size: 11px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">J17 — a brand-new tenant</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 16px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Everything works already — make it yours</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Your workspace is running on sensible defaults and a starter theme. Nothing here is required today; each step makes the product look and behave more like NA BET.</p>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px;">
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-size: 12px; color: #1D1C18;">Company name and timezone</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">Done</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #CFCBC1; flex: none;"></span><span style="font-size: 12px; color: #1D1C18;">Connect your Telegram bot</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #22211D;">Start →</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #CFCBC1; flex: none;"></span><span style="font-size: 12px; color: #1D1C18;">Invite your team and set their roles</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #22211D;">Start →</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #CFCBC1; flex: none;"></span><span style="font-size: 12px; color: #1D1C18;">Put your logo and colours in</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">Branding ↗</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J09 — high-risk confirm, with consequences</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Require two-factor for everyone?</div>
+          <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">This applies to all 53 staff accounts. Nobody is signed out and nobody is blocked mid-shift — 31 people who already use 2FA see no change, and the other 22 are asked to set it up the next time they sign in.</p>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #123322; border-radius: 5px; padding: 5px 8px;"><span style="font-size: 11.5px; font-weight: 700; color: #5AD190;">✓</span><span style="font-size: 11.5px; color: #5AD190;">31 accounts already comply</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3A2D10; border-radius: 5px; padding: 5px 8px;"><span style="font-size: 11.5px; font-weight: 700; color: #F0B54A;">!</span><span style="font-size: 11.5px; color: #F0B54A;">22 will be prompted at next sign-in · 4 of them are on shift now</span></div>
+          </div>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #A6A296;">Type <strong style="color: #ECEAE4; font-family: ui-monospace, monospace;">ENFORCE</strong> to confirm</div>
+          <div style="border: 1px solid #45443E; border-radius: 5px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #918C80; margin-top: 5px;">Type ENFORCE</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Turn it on</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J16 — a newly registered key</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="padding: 8px 14px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Tickets &amp; SLA</div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: #222220;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Ask for a rating when a ticket closes</span><span style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #45443E; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">New this release</span></div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">tickets.csat.enabled</div>
+              <p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: #C9C5BB;">Sends a one-tap rating on the channel the conversation happened on.</p>
+            </div>
+            <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #1C1C19; border: 1px solid #45443E;"></span></span>
+          </div>
+          <div style="padding: 10px 14px; font-size: 11px; line-height: 1.6; color: #A6A296; border-top: 1px solid #262622;">Registered by the tickets team on 30 July. It arrived typed, grouped and described — no Backoffice screen was edited.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J18 — validation and a partial save</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Minimum password length</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">auth.password.min_length</div>
+            </div>
+            <div style="width: 150px; flex: none;"><div role="alert" style="border: 1.5px solid #F08A8A; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; text-align: right;">8</div></div>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #F5A7A7;">! 8 is below the platform minimum of 10</div>
+            <div style="font-size: 11px; line-height: 1.55; color: #E0A0A0; margin-top: 2px;">Set 10 or more. The message is read out by screen readers, not just shown in red.</div>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11.5px; color: #F5A7A7;">Couldn't save <span style="font-family: ui-monospace, monospace;">auth.lockout.threshold</span> — the other 3 keys saved</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #F5A7A7; font-size: 11px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">J17 — a brand-new tenant</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 16px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ሁሉም ነገር እየሠራ ነው — የእርስዎ ያድርጉት</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">የሥራ ቦታዎ በነባሪ ቅንብሮችና በመነሻ ገጽታ እየሠራ ነው። ዛሬ ምንም ግዴታ የለም፤ እያንዳንዱ እርምጃ ግን ምርቱን ወደ ና ቤት ያቀርበዋል።</p>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px;">
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-size: 12px; color: #ECEAE4;">የኩባንያ ስምና የሰዓት ክልል</span><span style="margin-left: auto; font-size: 11px; color: #A6A296;">ተጠናቋል</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #45443E; flex: none;"></span><span style="font-size: 12px; color: #ECEAE4;">የቴሌግራም ቦትዎን ያገናኙ</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #ECEAE4;">ጀምር →</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #45443E; flex: none;"></span><span style="font-size: 12px; color: #ECEAE4;">ቡድንዎን ጋብዘው ሚና ይስጡ</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #ECEAE4;">ጀምር →</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><span style="width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid #45443E; flex: none;"></span><span style="font-size: 12px; color: #ECEAE4;">አርማዎንና ቀለሞችዎን ያስገቡ</span><span style="margin-left: auto; font-size: 11px; color: #A6A296;">ብራንዲንግ ↗</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 read-only — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row J19 · Doc 16 §9 · owner ruling</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every key, its value, its provenance and its locked floor read correctly; the controls are inert behind the notice. A value that cannot be changed is still shown as a value rather than hidden — an admin checking a number from a phone call needs to read it, not be told to come back later.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="J19 settings 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Open settings navigation" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">☰</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Settings</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Security</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Changing settings needs a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Every value, who changed it and every platform floor is readable here.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="padding: 12px;">
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 12.5px;">🔒</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Session timeout</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">auth.session.idle_timeout_min</div>
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 7px;"><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18;">30</span><span style="font-size: 12px; color: #4A4842;">minutes</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">platform minimum 15</span></div>
+              </div>
+              <div style="padding: 12px; border-top: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Concurrent sessions</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">Modified</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">auth.session.max_concurrent</div>
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 7px;"><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18;">3</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">default 5</span></div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 5px;">Changed by Dawit Bekele · 12 Jul 2026</div>
+              </div>
+              <div style="padding: 12px; border-top: 1px solid #F0EEE9;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Two-factor for everyone</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; margin-top: 2px;">auth.2fa.enforce_all</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px;"><span style="font-size: 14px; font-weight: 600; color: #1D1C18;">On</span><span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #DEDAD1; padding: 2px; justify-content: flex-end;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="J19 settings 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ዝርዝር ክፈት" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">☰</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ቅንብሮች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">አጠቃላይ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለመቀየር ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">እያንዳንዱ እሴት፣ የቀየረው ሰው እና የመድረኩ ጣሪያዎች እዚህ ይነበባሉ።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="padding: 12px;">
+                <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">የኩባንያ ስም</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">org.company_name</div>
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">NA BET PLC</div>
+              </div>
+              <div style="padding: 12px; border-top: 1px solid #262622;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">የሰዓት ክልል</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px;">የተቀየረ</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">org.timezone</div>
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">Asia/Dubai</div>
+                <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 5px;">የቀየረችው ሳራ በቀለ · ነሐሴ 2፣ 09:20 · ነባሪ Africa/Addis_Ababa</div>
+              </div>
+              <div style="padding: 12px; border-top: 1px solid #262622;">
+                <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ነባሪ ቋንቋ</div>
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; margin-top: 2px;">org.default_language</div>
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">English</div>
+              </div>
+              <div style="padding: 12px; border-top: 1px solid #262622; display: flex; align-items: center; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">የሥራ ሰዓትና በዓላት</div><div style="font-size: 11px; color: #A6A296; margin-top: 2px;">የራሱ አርታዒ አለው</div></div>
+                <span style="margin-left: auto; font-size: 15px; color: #A6A296; flex: none;">↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> J01 (all fourteen groups in FR-08's order, Branding as a cross-link — §A both themes), J02 (⌘K search resolving “session” across three groups by label, description and key name — §A dark), J03 (the row contract, drawn on every row and named explicitly in §A light), J04 (provenance on timezone and <span style="font-family: ui-monospace, monospace; font-size: 12px;">max_concurrent</span> — §A both themes, §D both themes), J05 (Reset beside the default value — §A both themes), J06 (Modified badge — §A both themes, §D both themes), J07 (locked floors with the lock and “platform minimum” — §A both themes, §B both themes, §D light), J08 (the timezone consequence, before the save — §A light), J09 (high-risk confirm with counted consequences — §C dark), J10 (cross-link rows, dashed and valueless — §A light, §B light), J11 (General — §A light, §D dark), J12 (Security — §B both themes), J13 (Files &amp; Media with the legal-hold note — §B both themes), J14 (Tickets &amp; SLA / Routing / AI / SMS with the starvation cap always-on — §B light), J15 (Quotas with the 80% mark on every bar — §B dark), J16 (registry-rendered new key — §C both themes), J17 (fresh tenant — §C both themes), J18 (validation announced, save failure naming the key — §C both themes), J19 (§D both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> none. Doc 16 §9's phone-readable, tablet-editable rule is met exactly, and every 375 control clears 44 px.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Closed:</strong> the timezone consequence quantifies from live values, per your ruling of 3 Aug — “1,204 open tickets shift by +1 hour, 18 move from due today to breached”, computed against the real offset change from UTC+3 to UTC+4 at the moment the panel renders. The panel says so, so a stale number can never read as a fresh one.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

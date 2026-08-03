@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S09-closing-audit-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 4 closing audit</h1>
+    </div>
+    <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px 14px; max-width: 880px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Audited against</div>
+      <div style="font-size: 13.5px; color: #1D1C18; margin-top: 5px; line-height: 1.6;"><span style="font-family: ui-monospace, monospace;">B4-S00-checklist-v2</span> · frozen · <strong style="font-weight: 600;">78 rows</strong></div>
+      <div style="font-size: 12px; color: #4A4842; margin-top: 6px; line-height: 1.6;">Three rows arrived after v1 and each names the ruling that admitted it: <span style="font-family: ui-monospace, monospace;">A16</span> and <span style="font-family: ui-monospace, monospace;">D13</span> from your EC-11 and EC-12 paste, and <span style="font-family: ui-monospace, monospace;">H03</span> sharpened by EC-10.</div>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Every row in order, marked ✅ with the file and version that carries it. <strong style="font-weight: 600;">Nothing is ❌.</strong> Nothing is marked ✅ that I cannot point at, and the three behaviour obligations this batch could not draw are named at the foot rather than absorbed into a row.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ tally.done }} ✅</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ tally.open }} ❌</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">{{ tally.total }} rows</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">3 build-acceptance rows in B4-A01-v2</span>
+    </div>
+  </header>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="9">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; color: #1D1C18;">{{ g.id }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ g.name }}</span>
+        <span style="margin-left: auto; font-size: 11.5px; color: #4A4842;">{{ g.tally }}</span>
+      </div>
+      <sc-for list="{{ g.rows }}" as="row" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 44px 26px minmax(0, 1fr) 190px 180px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+          <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.id }}</span>
+          <span style="font-size: 13px; padding-top: 1px;">{{ row.mk }}</span>
+          <div style="min-width: 0;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; line-height: 1.5; padding-top: 2px;">{{ row.where }}</div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Handed to build acceptance, not claimed here</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.75; color: #4A4842;">
+      <li><strong style="font-weight: 600;">AC-B4-01</strong> — RG flag reads bypass every cache, and unpermitted responses omit the keys rather than nulling them.</li>
+      <li><strong style="font-weight: 600;">AC-B4-02</strong> — flag history exports whole, insert-only, with authors, reasons and AI excerpt references.</li>
+      <li><strong style="font-weight: 600;">AC-B4-03</strong> — the inline-edit announce cycle, spoken on NVDA and VoiceOver across both viewports, admitted by your reopen.</li>
+    </ul>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.65; color: #4A4842;">All three live in <span style="font-family: ui-monospace, monospace; font-size: 12px;">B4-A01-v2</span>. They are obligations on the build, not rows I have drawn — the design specifies them and cannot prove them.</p>
+  </section>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I am not claiming</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.75; color: #4A4842;">
+      <li><strong style="font-weight: 600;">Amharic is unreviewed.</strong> Real text throughout — a three-part name, a two-line pinned note, the merge confirm step, the tombstone, the search results — all written by me and still needing a native speaker from your operation before i18n keys freeze.</li>
+      <li><strong style="font-weight: 600;">Three drift re-introductions happened in this batch and were caught in review</strong>, not by me: an invented info-blue that <span style="font-family: ui-monospace, monospace; font-size: 12px;">B12-R01</span> had already corrected once, four badge dots missing their title, and a sheet rebuilt from memory instead of from <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S01-v3</span>. All three are fixed against source. The pattern is mine to watch, not the verifier's to catch.</li>
+      <li><strong style="font-weight: 600;">Two files await your verdict</strong> — <span style="font-family: ui-monospace, monospace; font-size: 12px;">B4-S08-cross-cutting-v1</span> and <span style="font-family: ui-monospace, monospace; font-size: 12px;">B4-A01-v2</span> — along with this audit. Everything else in Batch 4 is frozen.</li>
+      <li><strong style="font-weight: 600;">The batch is not closed by this page.</strong> It closes when you say CLOSED.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { groups: [], tally: { total: 78, done: 78, open: 0 } };
+  componentDidMount() {
+    import('./b4-audit-data.js').then(m => this.setState({ groups: m.GROUPS, tally: m.TALLY }));
+  }
+  renderVals() {
+    return { groups: this.state.groups, tally: this.state.tally };
+  }
+}
+</script>
+</body>
+</html>

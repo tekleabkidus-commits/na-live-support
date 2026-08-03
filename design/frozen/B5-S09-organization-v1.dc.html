@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 40px;">
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S09-organization-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">checklist J01–J15</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Backoffice → Organization</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 11 §8. The same supervisor who acts in seconds on the live floor comes here to restructure carefully — so this surface is deliberately slower: inventory before action, warnings that name the specific misconfiguration, and nothing destructive without a list of what breaks.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The strategy panels are the heart of it. A routing strategy is invisible machinery until something goes wrong, so each panel is built as a <strong style="font-weight: 600;">preview of what will actually happen</strong> rather than a form of settings — you see where the rotation pointer sits, who gets skipped, and what a customer will be told.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Rows J16–J21, the restructure and delete wizards, follow in <strong style="font-weight: 600;">B5-S10</strong> — they are a flow of their own and carry your v3 mobile ruling.</p>
+  </header>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">1440 — Queues tab</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J01 · J05 · J06 · J13</span>
+    </div>
+
+    <div data-tone="light" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #726D63;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #4A4842; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E0A33A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #1D1C18; border: 1px solid #E5E2DB; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online<span style="color: #6F6A61;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Backoffice" style="width: 200px; flex: none; background: #F6F5F2; border-right: 1px solid #E5E2DB; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 0 8px 8px;">Backoffice</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; background: #22211D; color: #FFFFFF; font-size: 12.5px; font-weight: 600; cursor: pointer;">Organization</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">People &amp; roles</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Channels</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">SLA policies</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Automation</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Business hours</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 14px 18px 0;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="min-width: 0;">
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Organization</h1>
+                <p style="margin: 3px 0 0; font-size: 12px; color: #6B675D;">4 departments · 3 teams · 7 queues</p>
+              </div>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New queue</button>
+            </div>
+            <div style="display: flex; gap: 2px; margin-top: 13px; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 8px 13px; font-size: 12.5px; color: #4A4842; cursor: pointer; white-space: nowrap;">Departments</span>
+              <span style="padding: 8px 13px; font-size: 12.5px; color: #4A4842; cursor: pointer; white-space: nowrap;">Teams</span>
+              <span style="padding: 8px 13px; font-size: 12.5px; font-weight: 600; color: #1D1C18; border-bottom: 2px solid #22211D; margin-bottom: -1px; cursor: pointer; white-space: nowrap;">Queues</span>
+            </div>
+          </div>
+
+          <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #1D1C18;">Payments</h2><span style="font-size: 11px; color: #6B675D;">3 queues</span></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Deposits</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Default queue</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #4A4842; white-space: nowrap;">↻ Round robin</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሃግ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">SB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">DB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #F6F5F2; border: 1px dashed #CFCBC1; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">YT</span><span style="font-size: 11px; color: #6B675D; margin-left: 4px; white-space: nowrap;">+2</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; text-align: right; font-variant-numeric: tabular-nums;">cap 5</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Deposits queue settings" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; color: #4A4842; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Withdrawals</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #4A4842; white-space: nowrap;">⚖ Load based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">SB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">DB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">ሰኃ</span><span style="font-size: 11px; color: #6B675D; margin-left: 4px; white-space: nowrap;">+2</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; text-align: right; font-variant-numeric: tabular-nums;">cap 5</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Withdrawals queue settings" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; color: #4A4842; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">VIP</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #8F5F08; white-space: nowrap; flex: none;">▲ 1 warning</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #4A4842; white-space: nowrap;">◎ Skill based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሃግ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #F6F5F2; border: 1px dashed #CFCBC1; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">YT</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px dashed #CFCBC1; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none; margin-left: 4px;">2h 41m left</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; text-align: right; font-variant-numeric: tabular-nums;">cap 3</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="VIP queue settings" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; color: #4A4842; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #1D1C18;">Verification</h2><span style="font-size: 11px; color: #6B675D;">1 queue</span></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Verification</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #8F5F08; white-space: nowrap; flex: none;">▲ 2 warnings</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #4A4842; white-space: nowrap;">◎ Skill based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ካአ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">አጸ</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; text-align: right; font-variant-numeric: tabular-nums;">cap 4</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Verification queue settings" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; color: #4A4842; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #1D1C18;">Responsible Gaming</h2><span style="font-size: 11px; color: #6B675D;">1 queue</span></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #6B675D; flex: none;">🔒</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ኃላፊነት የተሞላበት ጨዋታ</span><span style="display: inline-flex; align-items: center; background: #ECEEF1; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #59636F; white-space: nowrap; flex: none;">Routing final</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #4A4842; white-space: nowrap;">↻ Round robin</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሰኃ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">MG</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; text-align: right; font-variant-numeric: tabular-nums;">cap 3</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Responsible Gaming queue settings" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; color: #4A4842; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="padding: 10px 13px; background: #F6F5F2; border-top: 1px solid #E5E2DB; font-size: 11.5px; line-height: 1.55; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">J13 · the RG queue is special.</strong> Routing stops here — nothing re-routes a ticket out of Responsible Gaming. It cannot be deleted without naming a replacement RG target first.</div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #1D1C18;">Bonuses</h2><span style="font-size: 11px; color: #6B675D;">no queues</span></div>
+              <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 9px; padding: 13px 14px;">
+                <div style="font-size: 13px; font-weight: 600; color: #8F5F08;">▲ Bonuses has no queues — intake falls to nothing</div>
+                <div style="font-size: 12px; line-height: 1.6; color: #8F5F08; margin-top: 4px;">Any ticket routed to this department has nowhere to wait and no one to reach. Create a queue, or point the department's default at another queue.</div>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                  <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Create a queue</button>
+                  <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E8CF9B; border-radius: 7px; font-size: 12px; font-weight: 600; color: #8F5F08; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Set a default queue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 26px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">1440 — dark</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same geometry, B1-DS dark tokens</span></div>
+    <div data-tone="dark" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #918C80;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #F0B54A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #ECEAE4; border: 1px solid #343430; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online<span style="color: #9A9588;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Backoffice" style="width: 200px; flex: none; background: #141412; border-right: 1px solid #343430; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 0 8px 8px;">Backoffice</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; background: #ECEAE4; color: #171714; font-size: 12.5px; font-weight: 600; cursor: pointer;">Organization</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">People &amp; roles</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Channels</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">SLA policies</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Automation</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Business hours</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 14px 18px 0;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="min-width: 0;">
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Organization</h1>
+                <p style="margin: 3px 0 0; font-size: 12px; color: #A6A296;">4 departments · 3 teams · 7 queues</p>
+              </div>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New queue</button>
+            </div>
+            <div style="display: flex; gap: 2px; margin-top: 13px; border-bottom: 1px solid #343430;">
+              <span style="padding: 8px 13px; font-size: 12.5px; color: #C9C5BB; cursor: pointer; white-space: nowrap;">Departments</span>
+              <span style="padding: 8px 13px; font-size: 12.5px; color: #C9C5BB; cursor: pointer; white-space: nowrap;">Teams</span>
+              <span style="padding: 8px 13px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px; cursor: pointer; white-space: nowrap;">Queues</span>
+            </div>
+          </div>
+
+          <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #ECEAE4;">Payments</h2><span style="font-size: 11px; color: #A6A296;">3 queues</span></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center; border-bottom: 1px solid #262622;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Deposits</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Default queue</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">↻ Round robin</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሃግ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">SB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">DB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #232320; border: 1px dashed #45443E; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">YT</span><span style="font-size: 11px; color: #A6A296; margin-left: 4px; white-space: nowrap;">+2</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; text-align: right; font-variant-numeric: tabular-nums;">cap 5</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Deposits queue settings" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; color: #C9C5BB; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center; border-bottom: 1px solid #262622;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Withdrawals</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">⚖ Load based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">SB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">DB</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">ሰኃ</span><span style="font-size: 11px; color: #A6A296; margin-left: 4px; white-space: nowrap;">+2</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; text-align: right; font-variant-numeric: tabular-nums;">cap 5</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Withdrawals queue settings" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; color: #C9C5BB; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">VIP</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #F0B54A; white-space: nowrap; flex: none;">▲ 1 warning</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">◎ Skill based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሃግ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #232320; border: 1px dashed #45443E; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">YT</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px dashed #45443E; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none; margin-left: 4px;">2h 41m left</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; text-align: right; font-variant-numeric: tabular-nums;">cap 3</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="VIP queue settings" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; color: #C9C5BB; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #ECEAE4;">Verification</h2><span style="font-size: 11px; color: #A6A296;">1 queue</span></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Verification</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #F0B54A; white-space: nowrap; flex: none;">▲ 2 warnings</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">◎ Skill based</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ካአ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">አጸ</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; text-align: right; font-variant-numeric: tabular-nums;">cap 4</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Verification queue settings" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; color: #C9C5BB; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #ECEAE4;">Responsible Gaming</h2><span style="font-size: 11px; color: #A6A296;">1 queue</span></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 128px 150px 88px 78px; align-items: center;">
+                  <span style="padding: 11px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span aria-hidden="true" style="color: #A6A296; flex: none;">🔒</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ኃላፊነት የተሞላበት ጨዋታ</span><span style="display: inline-flex; align-items: center; background: #272D34; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #9AA6B2; white-space: nowrap; flex: none;">Routing final</span></span>
+                  <span style="padding: 11px 8px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">↻ Round robin</span></span>
+                  <span style="padding: 11px 8px; display: flex; align-items: center; gap: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ሰኃ</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none; margin-left: -7px;">MG</span></span>
+                  <span style="padding: 11px 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; text-align: right; font-variant-numeric: tabular-nums;">cap 3</span>
+                  <span style="padding: 11px 13px 11px 8px; text-align: right;"><button aria-label="Responsible Gaming queue settings" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; color: #C9C5BB; padding: 5px 9px; cursor: pointer;">⋯</button></span>
+                </div>
+                <div style="padding: 10px 13px; background: #232320; border-top: 1px solid #343430; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">J13 · the RG queue is special.</strong> Routing stops here — nothing re-routes a ticket out of Responsible Gaming. It cannot be deleted without naming a replacement RG target first.</div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;"><h2 style="font-size: 12.5px; font-weight: 600; margin: 0; color: #ECEAE4;">Bonuses</h2><span style="font-size: 11px; color: #A6A296;">no queues</span></div>
+              <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 9px; padding: 13px 14px;">
+                <div style="font-size: 13px; font-weight: 600; color: #F0B54A;">▲ Bonuses has no queues — intake falls to nothing</div>
+                <div style="font-size: 12px; line-height: 1.6; color: #F0B54A; margin-top: 4px;">Any ticket routed to this department has nowhere to wait and no one to reach. Create a queue, or point the department's default at another queue.</div>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                  <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Create a queue</button>
+                  <button style="font-family: inherit; background: #1C1C19; border: 1px solid #6B551A; border-radius: 7px; font-size: 12px; font-weight: 600; color: #F0B54A; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Set a default queue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+  </section>
+</div>
+
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Strategy panels — previews, not settings forms</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J07 · J08 · J09 · J10 · J11 · J15</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Each panel answers "what will happen" rather than "what is configured". The starvation row is the design decision I most want your eye on: Doc 11 FR-12 makes it non-negotiable, so it sits pinned and locked <em>inside</em> the drag list rather than in a footnote — a supervisor reordering boosts needs to see the rule that outranks all of them.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="strat" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J07 · Round robin — where the pointer sits</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Next four tickets will go to</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 9px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">next</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">DB</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Dawit Bekele</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">4/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #E5E2DB; border-radius: 7px; opacity: 0.6;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">skip</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሃና ግርማ</span><span style="font-size: 11px; color: #6B675D; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">at capacity</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">5/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #E5E2DB; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">then</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሰላም ኃይሌ</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">1/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px dashed #CFCBC1; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">then</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Yonas Tesfaye</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px dashed #CFCBC1; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">temporary</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">1/5</span></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Skipped agents stay visible with the reason. A rotation that silently omits people is impossible to debug when someone complains they got nothing all shift.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J08 · Load based — and the tiebreak, in words</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሰላም ኃይሌ</span><span style="flex: 1; min-width: 0; height: 14px; background: #F0EEE9; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 20%; height: 100%; background: #22211D;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">1/5 · next</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Yonas Tesfaye</span><span style="flex: 1; min-width: 0; height: 14px; background: #F0EEE9; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 20%; height: 100%; background: #7E7A6E;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">1/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dawit Bekele</span><span style="flex: 1; min-width: 0; height: 14px; background: #F0EEE9; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 80%; height: 100%; background: #7E7A6E;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">4/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #4A4842; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሃና ግርማ</span><span style="flex: 1; min-width: 0; height: 14px; background: #F0EEE9; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 100%; height: 100%; background: #C2BDB2;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">5/5 · full</span></div>
+            </div>
+            <div style="margin-top: 10px; background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Two agents are tied at 1 of 5. The ticket goes to <strong style="font-weight: 600;">ሰላም</strong>, who has been idle longest. If they were also tied on that, it would go alphabetically — so the outcome is always reproducible.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J09 · Skill based — the matcher and its fallback</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 6px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">Ticket language</span>
+              <span style="font-size: 11.5px; color: #6B675D;">must match</span>
+              <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 6px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">Agent language</span>
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; font-size: 11.5px; color: #6B675D; padding: 6px 10px; white-space: nowrap; cursor: pointer;">+ Add a rule</button>
+            </div>
+            <div style="margin-top: 11px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">If nobody matches</div>
+              <div style="display: flex; flex-direction: column; gap: 7px;">
+                <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 11px; border: 2px solid #22211D; border-radius: 7px;"><span style="width: 14px; height: 14px; border-radius: 50%; border: 4px solid #22211D; flex: none; margin-top: 1px;"></span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Hold for a match</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">The ticket waits and raises an SLA-aware alert. Right for Verification, where a wrong-language reply is worse than a slow one.</span></span></div>
+                <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 11px; border: 1px solid #CFCBC1; border-radius: 7px;"><span style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid #CFCBC1; flex: none; margin-top: 1px;"></span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Drop the language requirement</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Anyone in the queue can take it. Faster, but the customer may get a reply in the wrong language.</span></span></div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #8F5F08;"><strong style="font-weight: 600;">Right now this would hold.</strong> No Amharic-speaking agent is online, and 6 tickets are waiting.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J10 · J11 · Priority boosts, with the locked rule pinned</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">1</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Urgent priority</span><button disabled="{{ true }}" aria-label="Move Urgent priority up" style="font-family: inherit; margin-left: auto; flex: none; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #ADA89D; width: 26px; height: 26px; cursor: default;">↑</button><button aria-label="Move Urgent priority down" style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">2</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">VIP customer</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #8F5F08; white-space: nowrap; flex: none;">▲ check the source</span><button aria-label="Move VIP customer up" style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move VIP customer down" style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">3</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Reply window closing</span><button aria-label="Move Reply window closing up" style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Reply window closing down" style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">4</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">SLA at risk</span><button aria-label="Move SLA at risk up" style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move SLA at risk down" style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">5</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Reopened ticket</span><button aria-label="Move Reopened ticket up" style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button disabled="{{ true }}" aria-label="Move Reopened ticket down" style="font-family: inherit; flex: none; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11px; color: #ADA89D; width: 26px; height: 26px; cursor: default;">↓</button></div>
+              <div style="display: flex; align-items: flex-start; gap: 9px; padding: 10px 11px; background: #22211D; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none; margin-top: 1px;">🔒</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #F4F3F1;">After 30 min waiting, any ticket jumps the line</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">Always on. This outranks every boost above and cannot be reordered or switched off.</span></span></div>
+            </div>
+            <div style="margin-top: 10px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #8F5F08;"><strong style="font-weight: 600;">The VIP boost reads an agent-editable tag.</strong> Any agent can add “vip” to a ticket and move it up the queue. Point this at a customer field instead so the priority comes from the account, not from whoever is typing.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J15 · The wait estimate, as the customer will read it</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #F6F5F2; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">under 8 min</span><span style="font-size: 12.5px; color: #1D1C18;">“Typical wait: <strong style="font-weight: 600;">~5 min</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #F6F5F2; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">8–35 min</span><span style="font-size: 12.5px; color: #1D1C18;">“Typical wait: <strong style="font-weight: 600;">~20 min</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #F6F5F2; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">over 35 min</span><span style="font-size: 12.5px; color: #1D1C18;">“Typical wait: <strong style="font-weight: 600;">over an hour</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #F6F5F2; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">closed</span><span style="font-size: 12.5px; color: #1D1C18;">“We reply <strong style="font-weight: 600;">when we open at 08:00</strong>”</span></div>
+            </div>
+            <div style="margin-top: 10px; background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Bands only. A customer is never told how many people are ahead of them or how many agents are online — that is queue intelligence, and Doc 11 SEC-05 keeps it inside. The bands are what the Live Chat report then grades us against.</div>
+          </div>
+        </div>
+        <span data-end="strat"></span>
+      </div>
+      <div data-tone="dark" data-blk="strat" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J07 · Round robin — where the pointer sits</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Next four tickets will go to</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 9px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">next</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">DB</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Dawit Bekele</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">4/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #343430; border-radius: 7px; opacity: 0.6;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">skip</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሃና ግርማ</span><span style="font-size: 11px; color: #A6A296; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">at capacity</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">5/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #343430; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">then</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሰላም ኃይሌ</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">1/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px dashed #45443E; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">then</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Yonas Tesfaye</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px dashed #45443E; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">temporary</span><span style="margin-left: auto; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">1/5</span></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Skipped agents stay visible with the reason. A rotation that silently omits people is impossible to debug when someone complains they got nothing all shift.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J08 · Load based — and the tiebreak, in words</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሰላም ኃይሌ</span><span style="flex: 1; min-width: 0; height: 14px; background: #262622; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 20%; height: 100%; background: #ECEAE4;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">1/5 · next</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Yonas Tesfaye</span><span style="flex: 1; min-width: 0; height: 14px; background: #262622; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 20%; height: 100%; background: #A6A296;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">1/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dawit Bekele</span><span style="flex: 1; min-width: 0; height: 14px; background: #262622; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 80%; height: 100%; background: #A6A296;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">4/5</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 104px; flex: none; font-size: 11.5px; color: #C9C5BB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሃና ግርማ</span><span style="flex: 1; min-width: 0; height: 14px; background: #262622; border-radius: 3px; overflow: hidden;"><span style="display: block; width: 100%; height: 100%; background: #57544C;"></span></span><span style="width: 74px; flex: none; text-align: right; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">5/5 · full</span></div>
+            </div>
+            <div style="margin-top: 10px; background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Two agents are tied at 1 of 5. The ticket goes to <strong style="font-weight: 600;">ሰላም</strong>, who has been idle longest. If they were also tied on that, it would go alphabetically — so the outcome is always reproducible.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J09 · Skill based — the matcher and its fallback</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 6px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">Ticket language</span>
+              <span style="font-size: 11.5px; color: #A6A296;">must match</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 6px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">Agent language</span>
+              <button style="font-family: inherit; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; font-size: 11.5px; color: #A6A296; padding: 6px 10px; white-space: nowrap; cursor: pointer;">+ Add a rule</button>
+            </div>
+            <div style="margin-top: 11px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">If nobody matches</div>
+              <div style="display: flex; flex-direction: column; gap: 7px;">
+                <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 11px; border: 2px solid #ECEAE4; border-radius: 7px;"><span style="width: 14px; height: 14px; border-radius: 50%; border: 4px solid #ECEAE4; flex: none; margin-top: 1px;"></span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Hold for a match</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">The ticket waits and raises an SLA-aware alert. Right for Verification, where a wrong-language reply is worse than a slow one.</span></span></div>
+                <div style="display: flex; align-items: flex-start; gap: 9px; padding: 9px 11px; border: 1px solid #45443E; border-radius: 7px;"><span style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid #45443E; flex: none; margin-top: 1px;"></span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Drop the language requirement</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">Anyone in the queue can take it. Faster, but the customer may get a reply in the wrong language.</span></span></div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #F0B54A;"><strong style="font-weight: 600;">Right now this would hold.</strong> No Amharic-speaking agent is online, and 6 tickets are waiting.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J10 · J11 · Priority boosts, with the locked rule pinned</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">1</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Urgent priority</span><button disabled="{{ true }}" aria-label="Move Urgent priority up" style="font-family: inherit; margin-left: auto; flex: none; background: #282822; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #6B6860; width: 26px; height: 26px; cursor: default;">↑</button><button aria-label="Move Urgent priority down" style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">2</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">VIP customer</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #F0B54A; white-space: nowrap; flex: none;">▲ check the source</span><button aria-label="Move VIP customer up" style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move VIP customer down" style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">3</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Reply window closing</span><button aria-label="Move Reply window closing up" style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Reply window closing down" style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">4</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">SLA at risk</span><button aria-label="Move SLA at risk up" style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move SLA at risk down" style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #232320; border: 1px solid #45443E; border-radius: 7px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">5</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Reopened ticket</span><button aria-label="Move Reopened ticket up" style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button disabled="{{ true }}" aria-label="Move Reopened ticket down" style="font-family: inherit; flex: none; background: #282822; border: 1px solid #45443E; border-radius: 5px; font-size: 11px; color: #6B6860; width: 26px; height: 26px; cursor: default;">↓</button></div>
+              <div style="display: flex; align-items: flex-start; gap: 9px; padding: 10px 11px; background: #ECEAE4; border-radius: 7px;"><span aria-hidden="true" style="color: #6B675D; flex: none; margin-top: 1px;">🔒</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #171714;">After 30 min waiting, any ticket jumps the line</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Always on. This outranks every boost above and cannot be reordered or switched off.</span></span></div>
+            </div>
+            <div style="margin-top: 10px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #F0B54A;"><strong style="font-weight: 600;">The VIP boost reads an agent-editable tag.</strong> Any agent can add “vip” to a ticket and move it up the queue. Point this at a customer field instead so the priority comes from the account, not from whoever is typing.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J15 · The wait estimate, as the customer will read it</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #232320; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">under 8 min</span><span style="font-size: 12.5px; color: #ECEAE4;">“Typical wait: <strong style="font-weight: 600;">~5 min</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #232320; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">8–35 min</span><span style="font-size: 12.5px; color: #ECEAE4;">“Typical wait: <strong style="font-weight: 600;">~20 min</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #232320; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">over 35 min</span><span style="font-size: 12.5px; color: #ECEAE4;">“Typical wait: <strong style="font-weight: 600;">over an hour</strong>”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: #232320; border-radius: 7px;"><span style="width: 96px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">closed</span><span style="font-size: 12.5px; color: #ECEAE4;">“We reply <strong style="font-weight: 600;">when we open at 08:00</strong>”</span></div>
+            </div>
+            <div style="margin-top: 10px; background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Bands only. A customer is never told how many people are ahead of them or how many agents are online — that is queue intelligence, and Doc 11 SEC-05 keeps it inside. The bands are what the Live Chat report then grades us against.</div>
+          </div>
+        </div>
+        <span data-end="strat"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Departments, teams, membership, states</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J02 · J03 · J04 · J06 · J12 · J14 · J20</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 11 FR-04's warning badge is the one component here that does real work. A member who sits outside their department's access, or a rule pointing at an orphaned queue, is invisible until a ticket goes missing — so the badge names the specific misconfiguration rather than saying "check this".</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="dept" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J02 · Departments tab, reorderable</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Payments</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">default: Deposits</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #6B675D;">3 queues</span><button disabled="{{ true }}" aria-label="Move Payments up" style="font-family: inherit; flex: none; background: #EEECE6; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #ADA89D; width: 26px; height: 26px; cursor: default;">↑</button><button aria-label="Move Payments down" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Verification</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">default: Verification</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #6B675D;">1 queue</span><button aria-label="Move Verification up" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Verification down" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Bonuses</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #8F5F08; white-space: nowrap; flex: none;">▲ no default queue</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #6B675D;">0 queues</span><button aria-label="Move Bonuses up" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Bonuses down" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px;"><span aria-hidden="true" style="color: #6B675D; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ኃላፊነት የተሞላበት ጨዋታ</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #6B675D;">1 queue</span><button aria-label="Move Responsible Gaming up" style="font-family: inherit; flex: none; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #1D1C18; width: 26px; height: 26px; cursor: pointer;">↑</button><button disabled="{{ true }}" aria-label="Move Responsible Gaming down" style="font-family: inherit; flex: none; background: #EEECE6; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #ADA89D; width: 26px; height: 26px; cursor: default;">↓</button></div>
+          </div>
+          <p style="margin: 8px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Order here is the order agents see everywhere else. Move buttons sit beside the drag handle rather than behind a menu — Doc 11 §13 wants reordering operable by keyboard, and hiding it would make that the second-class path.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J03 · Department detail, including the danger zone</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 11px;">
+              <div><div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Name</div><div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; font-size: 12.5px; color: #1D1C18;">Payments</div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Slug</div><div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; font-family: ui-monospace, monospace; font-size: 12px; color: #4A4842;">payments</div></div>
+            </div>
+            <div style="margin-top: 11px;"><div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Description</div><div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: #1D1C18;">Deposits, withdrawals and payment verification.</div></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 11px;">
+              <div><div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Default queue</div><div style="display: flex; align-items: center; gap: 7px; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px;"><span style="font-size: 12.5px; color: #1D1C18;">Deposits</span><span style="margin-left: auto; color: #6F6A61;">▾</span></div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Business hours</div><div style="display: flex; align-items: center; gap: 7px; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px;"><span style="min-width: 0; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Override · 08:00–22:00</span><span style="margin-left: auto; flex: none; color: #6F6A61;">▾</span></div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px; margin-top: 11px;"><span style="width: 34px; height: 20px; border-radius: 999px; background: #22211D; position: relative; flex: none;"><span style="position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span><span style="font-size: 12.5px; color: #1D1C18;">Active — accepting new tickets</span></div>
+            <div style="margin-top: 13px; padding-top: 12px; border-top: 1px solid #F0EEE9;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #B32B2B; margin-bottom: 7px;">Danger zone</div>
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px 11px; border: 1px solid #E5E2DB; border-radius: 7px;">
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Deactivate</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Stops new intake. Existing tickets stay put and keep being worked.</span></span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Deactivate</button>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px 11px; border: 1px solid #EFC7C7; border-radius: 7px; margin-top: 7px;">
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #B32B2B;">Delete</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Requires every queue, ticket and rule reference to be reassigned first. Opens the wizard.</span></span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #B32B2B; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Delete…</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J04 · Teams span departments · J06 · the warning, specific</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Night shift</span><span style="font-size: 11px; color: #6B675D;">5 members · spans Payments and Verification</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #F0EEE9;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሰላም ኃይሌ</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Agent · Payments</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Agent · Verification</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #F0EEE9;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">MG</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Marta Gebre</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Supervisor · all</span></div>
+            <div style="padding: 10px 12px; background: #FCF0D9; border-top: 1px solid #E8CF9B;">
+              <div style="display: flex; align-items: flex-start; gap: 8px;"><span aria-hidden="true" style="color: #8F5F08; flex: none;">▲</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.6; color: #8F5F08;"><strong style="font-weight: 600;">Yonas Tesfaye is in this team but has no access to Verification.</strong> Verification tickets routed to Night shift will skip him, so the team is effectively one person smaller at night than it looks.</span></div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Give Verification access</button><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E8CF9B; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #8F5F08; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Remove from team</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J12 · Membership and routing tags · J14 · no eligible agents</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Members of Verification</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #E5E2DB; border-radius: 7px;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ካአ</span><span style="font-size: 12.5px; color: #1D1C18; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="margin-left: auto; flex: none; font-size: 10.5px; color: #6B675D;">direct</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #E5E2DB; border-radius: 7px;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">አጸ</span><span style="font-size: 12.5px; color: #1D1C18; white-space: nowrap;">አቤል ጸጋዬ</span><span style="margin-left: auto; flex: none; font-size: 10.5px; color: #6B675D;">via Night shift</span></div>
+            </div>
+            <div style="font-size: 11px; font-weight: 600; color: #4A4842; margin: 11px 0 6px;">Routing tags</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #1D1C18; white-space: nowrap;">kyc<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #1D1C18; white-space: nowrap;">document-check<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #1D1C18; white-space: nowrap;">የመለያ ማረጋገጫ<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+            </div>
+            <div style="margin-top: 12px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">▲ No eligible agents right now</div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #8F5F08; margin-top: 5px;">2 members · <strong style="font-weight: 600;">1 online</strong> · that one at capacity · 0 with the Amharic skill this queue requires. 6 tickets are holding.</div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Pull an agent in</button><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E8CF9B; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #8F5F08; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Change the fallback</button></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The breakdown behind the number is the useful part. "0 eligible" alone does not tell you whether to call someone in or change the rule.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">J20 · Loading, and a failed save</div>
+          <div style="width: 520px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><span style="height: 10px; width: 26%; background: #F0EEE9; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #F0EEE9; border-radius: 999px; margin-left: auto;"></span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><span style="height: 10px; width: 34%; background: #F0EEE9; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #F0EEE9; border-radius: 999px; margin-left: auto;"></span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px;"><span style="height: 10px; width: 22%; background: #F0EEE9; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #F0EEE9; border-radius: 999px; margin-left: auto;"></span></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 9px; padding: 12px 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #B32B2B;">▲ Your changes to Deposits were not saved</div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842; margin-top: 4px;">Someone else changed this queue's strategy while you were editing. Nothing has been overwritten — reload to see their version, or keep yours and save over it.</div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Reload theirs</button><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #B32B2B; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Keep mine and save</button></div>
+            </div>
+          </div>
+        </div>
+        <span data-end="dept"></span>
+      </div>
+      <div data-tone="dark" data-blk="dept" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J02 · Departments tab, reorderable</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Payments</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">default: Deposits</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #A6A296;">3 queues</span><button disabled="{{ true }}" aria-label="Move Payments up" style="font-family: inherit; flex: none; background: #282822; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #6B6860; width: 26px; height: 26px; cursor: default;">↑</button><button aria-label="Move Payments down" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Verification</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">default: Verification</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #A6A296;">1 queue</span><button aria-label="Move Verification up" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Verification down" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Bonuses</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #F0B54A; white-space: nowrap; flex: none;">▲ no default queue</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #A6A296;">0 queues</span><button aria-label="Move Bonuses up" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button aria-label="Move Bonuses down" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↓</button></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px;"><span aria-hidden="true" style="color: #A6A296; flex: none;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ኃላፊነት የተሞላበት ጨዋታ</span><span style="margin-left: auto; flex: none; font-size: 11.5px; color: #A6A296;">1 queue</span><button aria-label="Move Responsible Gaming up" style="font-family: inherit; flex: none; background: #232320; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #ECEAE4; width: 26px; height: 26px; cursor: pointer;">↑</button><button disabled="{{ true }}" aria-label="Move Responsible Gaming down" style="font-family: inherit; flex: none; background: #282822; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #6B6860; width: 26px; height: 26px; cursor: default;">↓</button></div>
+          </div>
+          <p style="margin: 8px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Order here is the order agents see everywhere else. Move buttons sit beside the drag handle rather than behind a menu — Doc 11 §13 wants reordering operable by keyboard, and hiding it would make that the second-class path.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J03 · Department detail, including the danger zone</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 11px;">
+              <div><div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Name</div><div style="border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px; font-size: 12.5px; color: #ECEAE4;">Payments</div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Slug</div><div style="border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px; font-family: ui-monospace, monospace; font-size: 12px; color: #C9C5BB;">payments</div></div>
+            </div>
+            <div style="margin-top: 11px;"><div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Description</div><div style="border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: #ECEAE4;">Deposits, withdrawals and payment verification.</div></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 11px;">
+              <div><div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Default queue</div><div style="display: flex; align-items: center; gap: 7px; border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px;"><span style="font-size: 12.5px; color: #ECEAE4;">Deposits</span><span style="margin-left: auto; color: #9A9588;">▾</span></div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Business hours</div><div style="display: flex; align-items: center; gap: 7px; border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px;"><span style="min-width: 0; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Override · 08:00–22:00</span><span style="margin-left: auto; flex: none; color: #9A9588;">▾</span></div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px; margin-top: 11px;"><span style="width: 34px; height: 20px; border-radius: 999px; background: #ECEAE4; position: relative; flex: none;"><span style="position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: #171714;"></span></span><span style="font-size: 12.5px; color: #ECEAE4;">Active — accepting new tickets</span></div>
+            <div style="margin-top: 13px; padding-top: 12px; border-top: 1px solid #262622;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #F08A8A; margin-bottom: 7px;">Danger zone</div>
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px 11px; border: 1px solid #343430; border-radius: 7px;">
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Deactivate</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">Stops new intake. Existing tickets stay put and keep being worked.</span></span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Deactivate</button>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px 11px; border: 1px solid #6B3838; border-radius: 7px; margin-top: 7px;">
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #F08A8A;">Delete</span><span style="display: block; font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">Requires every queue, ticket and rule reference to be reassigned first. Opens the wizard.</span></span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #F08A8A; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Delete…</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J04 · Teams span departments · J06 · the warning, specific</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Night shift</span><span style="font-size: 11px; color: #A6A296;">5 members · spans Payments and Verification</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #262622;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሰላም ኃይሌ</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Agent · Payments</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Agent · Verification</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #262622;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">MG</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Marta Gebre</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Supervisor · all</span></div>
+            <div style="padding: 10px 12px; background: #3A2D10; border-top: 1px solid #6B551A;">
+              <div style="display: flex; align-items: flex-start; gap: 8px;"><span aria-hidden="true" style="color: #F0B54A; flex: none;">▲</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.6; color: #F0B54A;"><strong style="font-weight: 600;">Yonas Tesfaye is in this team but has no access to Verification.</strong> Verification tickets routed to Night shift will skip him, so the team is effectively one person smaller at night than it looks.</span></div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Give Verification access</button><button style="font-family: inherit; background: #1C1C19; border: 1px solid #6B551A; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #F0B54A; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Remove from team</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J12 · Membership and routing tags · J14 · no eligible agents</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">Members of Verification</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #343430; border-radius: 7px;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">ካአ</span><span style="font-size: 12.5px; color: #ECEAE4; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="margin-left: auto; flex: none; font-size: 10.5px; color: #A6A296;">direct</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid #343430; border-radius: 7px;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex: none;">አጸ</span><span style="font-size: 12.5px; color: #ECEAE4; white-space: nowrap;">አቤል ጸጋዬ</span><span style="margin-left: auto; flex: none; font-size: 10.5px; color: #A6A296;">via Night shift</span></div>
+            </div>
+            <div style="font-size: 11px; font-weight: 600; color: #C9C5BB; margin: 11px 0 6px;">Routing tags</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">kyc<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">document-check<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">የመለያ ማረጋገጫ<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+            </div>
+            <div style="margin-top: 12px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">▲ No eligible agents right now</div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #F0B54A; margin-top: 5px;">2 members · <strong style="font-weight: 600;">1 online</strong> · that one at capacity · 0 with the Amharic skill this queue requires. 6 tickets are holding.</div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Pull an agent in</button><button style="font-family: inherit; background: #1C1C19; border: 1px solid #6B551A; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #F0B54A; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Change the fallback</button></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The breakdown behind the number is the useful part. "0 eligible" alone does not tell you whether to call someone in or change the rule.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">J20 · Loading, and a failed save</div>
+          <div style="width: 520px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-bottom: 1px solid #262622;"><span style="height: 10px; width: 26%; background: #262622; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #262622; border-radius: 999px; margin-left: auto;"></span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-bottom: 1px solid #262622;"><span style="height: 10px; width: 34%; background: #262622; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #262622; border-radius: 999px; margin-left: auto;"></span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 12px;"><span style="height: 10px; width: 22%; background: #262622; border-radius: 999px;"></span><span style="height: 10px; width: 14%; background: #262622; border-radius: 999px; margin-left: auto;"></span></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #6B3838; border-radius: 9px; padding: 12px 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F08A8A;">▲ Your changes to Deposits were not saved</div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 4px;">Someone else changed this queue's strategy while you were editing. Nothing has been overwritten — reload to see their version, or keep yours and save over it.</div>
+              <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Reload theirs</button><button style="font-family: inherit; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #F08A8A; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Keep mine and save</button></div>
+            </div>
+          </div>
+        </div>
+        <span data-end="dept"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> J01–J15, both themes. Three tabs, departments list and detail with the danger zone, teams spanning departments with role-context chips, queues grouped by department with strategy badges and temporary-member countdowns, the specific warning badge, all three strategy panels, the priority-boost list with the pinned starvation rule, the VIP source warning, membership and routing tags, the RG special case, the no-eligible-agents breakdown, the estimator preview, and loading / conflict-on-save.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One judgement call:</strong> the failed save is drawn as an edit conflict rather than a generic error. Doc 11 §8 asks for "a failed save" without saying which failure — a concurrent edit is the one that actually happens in a shared admin, and it needs a different resolution from a network drop. Say the word if you want the generic version too.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Still to come in Section J:</strong> rows J16–J21 — the restructure and delete wizards, the inventory failure state, and the tablet/375 renderings that carry your v3 ruling. They land next as <strong style="font-weight: 600;">B5-S10</strong>.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S00-checklist-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Step 0 · awaiting your approval · 4 questions open</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 7 — the contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every screen, component and state Doc 02 and Doc 16 require of this batch, with its reference. This is the contract the closing audit is checked against, row by row. I have read both documents in full and designed nothing.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two things shape this batch. First, these are <strong style="font-weight: 600;">the front door and the skin</strong> — the auth screens are the first thing every agent touches, on a phone, at shift start, five hundred people inside ten minutes; the branding editor is the one surface that changes how everything else looks. Second, the auth screens become the build's <strong style="font-weight: 600;">Doc 02 AC-09 pixel-comparison baselines</strong>: every §8 state in English and Amharic, light and dark. That is not a delivery flourish, it is what AC-09 asks for, and it sets the state matrix for Sections A–I.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Both documents are unusually firm about what must <em>not</em> exist: no impersonation surface anywhere, no “publish anyway” on the contrast validator, no admin who can see or set another person's password or 2FA secret, no error copy that reveals whether an account exists. Those four absences are designed for and stated on the surfaces where someone would go looking — see the panel below the rows.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ counts }}</span>
+      <label style="display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 12px; color: #4A4842;">Filter</span><input value="{{ q }}" onInput="{{ onFilter }}" placeholder="lockout, recovery, device, contrast, sender, amharic…" style="font-family: inherit; font-size: 12.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; min-width: 260px;" /></label>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="22">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ sec.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ sec.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 46px minmax(0, 1fr) 230px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">The four absences, and where each one is visible</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Both documents define this product partly by what it refuses to do. A refusal that is merely absent from a design reads as an oversight, so each is stated on the surface where a person would go looking for the missing thing:</p>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+      <li><strong style="font-weight: 600;">No impersonation, anywhere.</strong> Doc 02 SEC-07 makes it a published security stance, not an unbuilt feature. Not in the admin actions, not in the devices table, not in the branding preview. Stated once, plainly — row <strong style="font-weight: 600;">H06</strong>.</li>
+      <li><strong style="font-weight: 600;">No contrast override.</strong> Doc 16 BR-02: the one validator with no escape hatch. The publish dialog has no “publish anyway” — it has failing pairs and nearest-passing suggestions. Rows <strong style="font-weight: 600;">L05</strong>, <strong style="font-weight: 600;">S06</strong>.</li>
+      <li><strong style="font-weight: 600;">No admin-set passwords, no visible secrets.</strong> Doc 02 BR-02: admins trigger resets, never choose. The admin surface offers a reset, an unlock and a 2FA clear — and says why there is nothing else. Rows <strong style="font-weight: 600;">D06</strong>, <strong style="font-weight: 600;">E09</strong>, <strong style="font-weight: 600;">H02</strong>.</li>
+      <li><strong style="font-weight: 600;">No account-existence disclosure.</strong> Doc 02 FR-02 / SEC-01 / AC-01: one generic message on login, one uniform response on reset, byte-identical either way. There is no “user not found” variant to design, and the copy has to not read as evasive. Rows <strong style="font-weight: 600;">A08</strong>, <strong style="font-weight: 600;">E01</strong>, <strong style="font-weight: 600;">E02</strong>.</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Four questions before I design anything — asked one at a time</h2>
+    <p style="margin: 0 0 12px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Each is a place where a document is silent, or where your Step 2 rule and a document say different things. None is a preference; each changes what is in the contract. I am asking <strong style="font-weight: 600;">Q1</strong> in chat now and holding the rest until it is answered.</p>
+
+    <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin: 0 0 10px;">
+      <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">Q1 — asked now · does Section H get a host screen, or only its actions?</div>
+      <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 900px;">Doc 02 names five administrator actions on someone else's account — unlock (FR-03), trigger a reset (FR-16), clear 2FA with a typed-name confirmation (FR-08), invite and resend (FR-17), disable, which revokes sessions and tokens atomically (BR-04, FR-05). It never names the screen they live on: there is no user list, no user record page, no roster anywhere in Doc 02. Batch 6 closed its Silence 1 by ruling that user administration is Batch 7 and pointed at exactly these clauses (<a href="B6-S00-checklist-v2.dc.html">B6-S00-checklist-v2</a>). So the actions are certainly mine; the container may not be. <strong style="font-weight: 600;">Either answer is a clean contract</strong> — H01–H06 as actions hosted on a user's existing profile, or H01–H06 plus a user list and record page as new screens. I will not guess, because inventing a roster the documents never describe is the failure this program forbids.</p>
+    </div>
+
+    <div style="display: grid; gap: 10px;">
+      <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 13px;">
+        <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Q2 — held · the branding editor at 375</div>
+        <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #4A4842; max-width: 900px;">Doc 16 §9: “branding editor desktop (previews need room; fat-finger policy family)”. Your Step 2: both viewports together, a weak mobile version is a rejection. In Batch 6 you ruled that the documents hold for the five editing surfaces, and they shipped 375 read-only behind Doc 03 §9's explicit “editing requires a larger screen” notice. That ruling was scoped to Batch 6, so I am asking whether it carries to Sections J–U rather than assuming it. The auth screens are unaffected either way — Doc 02 NFR-05 requires every auth screen fully functional in a mobile browser, and they will be.</p>
+      </div>
+      <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 13px;">
+        <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Q3 — held · are the three auth emails designed, or previewed only?</div>
+        <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #4A4842; max-width: 900px;">Doc 02 §14 names three: invite, reset, new-device — per language, tenant-branded. Doc 16 FR-01 owns their header, footer, address block and legal line, and §8 previews them. Neither document owns their body copy explicitly. Section I designs all three as full templates in both languages; the alternative is designing only the branded chrome and showing the bodies as slots. Section I is written the first way and is one deletion away from the second.</p>
+      </div>
+      <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 13px;">
+        <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Q4 — held · API tokens are in, unless you read the scope line more narrowly</div>
+        <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #4A4842; max-width: 900px;">Your scope line says “login, two-factor, recovery, reset, device/session management — whatever the document names”. Doc 02 §4.5 also names personal and machine tokens, with visible obligations: plaintext shown once, last-used displayed, individually revocable, a rotation flow with an overlap window. They sit on the same profile → Security page as the devices table, so I have contracted them as Section G. On the narrower reading, G01–G11 come out and the section disappears.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I have deliberately left out</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+      <li><strong style="font-weight: 600;">Auth machinery with no human surface.</strong> Widget visitor tokens (Doc 02 §4.6), inbound webhook authentication (§4.7) and the auth event bus (§4.8) are backend contracts. The one place webhook auth becomes visible — the per-bot secret at registration — shipped in Batch 6's add-bot wizard and is not rebuilt.</li>
+      <li><strong style="font-weight: 600;">The rest of Doc 16.</strong> Settings, notification preferences, feature flags, the translation manager, config export/import and the incident page are Batch 6 and are frozen. This batch touches Doc 16 only where the branding editor and its validators live. The <code style="font-family: ui-monospace, monospace; font-size: 12px;">auth.*</code> keys render in Batch 6's Security group; Sections A–I show the <em>consequences</em> of those keys, never a second copy of the settings rows.</li>
+      <li><strong style="font-weight: 600;">Surfaces the branding inventory only references.</strong> Widget appearance is Doc 13 FR-19, AI persona content is Doc 09 FR-18, SMS sender IDs are Doc 14, exports, watermarks and PDF transcripts are Docs 04 and 15. FR-02 requires each to appear in the inventory as a live thumbnail with a link out — a reference, not a rebuild. Cross-walk 3b, carried over from <a href="B6-X01-crosswalks-v2.dc.html">B6-X01-crosswalks-v2</a>, holds each to exactly one owner.</li>
+      <li><strong style="font-weight: 600;">Build obligations.</strong> Guards and middleware order, argon2id tuning, session and token budgets, CSP and HSTS, the k-anonymity breach check, GeoIP plumbing, the CI string-lint and the hostile-theme sweep are engineering contracts, not screens — except where a document turns one into something a person sees, like “location unavailable” when GeoIP is down (F09) or the ten-second scope-propagation bound (G08), which are rows.</li>
+      <li><strong style="font-weight: 600;">The audit trail itself.</strong> Doc 02 §4.8 and Doc 16 SEC-01 feed a dedicated audit view; that view is Doc 17 and is not in the seven-batch program. This batch states on the surface that a change is recorded, and by whom.</li>
+      <li><strong style="font-weight: 600;">Both §19 future lists.</strong> SSO and SAML, WebAuthn and passkeys, step-up auth, adaptive auth; custom font uploads, per-department sub-branding, a theme marketplace, scheduled publishes, translation memory, per-tenant custom domains. Out of v1 and absent — except where a document requires the absence to be visible, as with the curated-fonts-only note at L02.</li>
+      <li><strong style="font-weight: 600;">Impersonation.</strong> Not an omission, a stance — Doc 02 SEC-07. It is a row precisely so the closing audit records that it was deliberately not built.</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 24px; background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">What happens next</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 900px;">Nothing, until you approve this contract and answer <strong style="font-weight: 600; color: #F4F3F1;">Q1</strong>. On approval, delivery starts with <strong style="font-weight: 600; color: #F4F3F1;">Section A — the login card</strong>, because every other auth surface is a step off it and it is the first AC-09 baseline the build is waiting on: both viewports, both themes, both languages, every state in the section. Then B through V in checklist order, each stopping for your verdict. Components come from <strong style="font-weight: 600; color: #F4F3F1;">B1-DS</strong> and its two approved addenda verbatim — never matched by eye off an approved screen, which is what produced the 79 corrections in <a href="B12-R01-drift-report-v1.dc.html" style="color: #A9C0F5;">B12-R01</a>.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      let k = 0;
+      sec.rows.forEach(r => {
+        total += 1; k += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: sec.id + ("0" + k).slice(-2), t: r.t, r: r.r, d: r.d });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+
+
+SECTIONS.push(
+{ id: "A", name: "Login", note: "Doc 02 §4.1, §8, §9. One card, and more failure states than any other screen in the product. Each has to be calm, unambiguous, and say nothing about whether the account exists.", rows: [
+  { t: "The login card", r: "A single card branded by the tenant's published theme — logo, colours and welcome copy come from Doc 16's theme, never from this screen. Neutral by default so any brand sits in it.", d: "Doc 02 §8, §9 · Doc 16 FR-01, T-01" },
+  { t: "Email and password fields", r: "Labels tied to fields, floating validation, no placeholder standing in for a label.", d: "Doc 02 FR-01, §9, §13" },
+  { t: "Visibility toggle and strength meter", r: "The meter is localized and states strength as text, never colour alone.", d: "Doc 02 §9, §13" },
+  { t: "“Forgot password” always visible", r: "Never behind an error state, never revealed only after a failure — it is the way out of a lockout.", d: "Doc 02 §8, EC-11" },
+  { t: "Language switcher on the card", r: "English and Amharic, switchable before signing in, because the person locked out may not read the tenant's default.", d: "Doc 02 §8, §14" },
+  { t: "Remember me", r: "Extends the cookie to the absolute limit and nothing else; the copy states it never skips two-factor on a new device.", d: "Doc 02 FR-13" },
+  { t: "Submitting state", r: "Spinner in the button, fields locked, no full-page blocker.", d: "Doc 02 §8, §9" },
+  { t: "Generic credential error", r: "One message for an unknown email and for a wrong password, inline and announced. There is no “user not found” variant to design.", d: "Doc 02 FR-02, SEC-01, AC-01, §13" },
+  { t: "Locked account", r: "Neutral copy, “try again later”, no remaining time, no attempt counter — with the reset path as the way out.", d: "Doc 02 FR-03, §9, EC-11" },
+  { t: "Disabled user", r: "A distinct, non-technical message that does not read as a system fault.", d: "Doc 02 FR-05" },
+  { t: "Suspended tenant", r: "Its own message, separate from a disabled user — a whole operator is offline and the person on the card is not at fault.", d: "Doc 02 FR-05" },
+  { t: "IP-restricted", r: "Returns the same generic error as any other failure; the design must not leak that an allowlist exists.", d: "Doc 02 SEC-05" },
+  { t: "Session-expired notice", r: "Shown on the card after an idle or absolute timeout, with the return URL preserved so the person lands back where they were.", d: "Doc 02 FR-11, §8" },
+  { t: "New-device notice", r: "The informational notice after a login from an unrecognized device; toggleable per tenant.", d: "Doc 02 T-03, EC-03" },
+  { t: "CAPTCHA after repeated failures", r: "The optional auth.captcha.after_failures state, appearing without shifting the card's layout.", d: "Doc 02 EC-11" },
+  { t: "Auth unavailable", r: "Redis down means staff auth fails closed: a maintenance state that says the platform cannot sign anyone in right now, not a spinner that never resolves.", d: "Doc 02 FS-01" },
+  { t: "Step transition into 2FA", r: "Login and the challenge are one flow — 150 ms transition, focus to the step heading, no card jump.", d: "Doc 02 §8, §9, §13" },
+  { t: "Mobile card", r: "Single column at ≤ 480 px, 44 px targets, fully functional in a phone browser — the document's own requirement, not the batch rule.", d: "Doc 02 NFR-05, §9" }
+]},
+{ id: "B", name: "Two-factor challenge", note: "Doc 02 FR-07, §8, §9, §13. Six digits typed on a phone at shift start, sometimes off a recovery card in a wallet. Paste has to work, assistive tech meets one field, and the failure path is honest without counting someone down to a lockout.", rows: [
+  { t: "Segmented six-digit input", r: "Auto-focus, paste-friendly, auto-submits on the sixth digit; six segments hold at ≥ 320 px.", d: "Doc 02 §8, §9" },
+  { t: "One field for assistive technology", r: "The segmentation is visual only; screen readers meet a single labelled field.", d: "Doc 02 §13" },
+  { t: "Verifying and success", r: "Spinner in place, success check ≤ 400 ms, still and instant under reduced motion.", d: "Doc 02 §9" },
+  { t: "Wrong code", r: "Announced, with the attempts remaining — the person needs to know before the fifth one.", d: "Doc 02 FR-07, §13" },
+  { t: "Five failures void the attempt", r: "Back to the login card, the attempt counts toward lockout, and the copy says what happened rather than dropping the person silently.", d: "Doc 02 FR-07, AC-03" },
+  { t: "Use a recovery code instead", r: "An alternative on the challenge itself, not buried — it is the path for a lost phone.", d: "Doc 02 FR-07, US-02" },
+  { t: "Recovery-code entry", r: "Its own state, visually distinct from the TOTP input, formatted for a code read off paper.", d: "Doc 02 FR-07, §9" },
+  { t: "Code consumed, count shown", r: "A recovery code is single-use, and the remaining count is stated after it is used.", d: "Doc 02 FR-07, AC-03" },
+  { t: "Two codes remaining", r: "The banner prompting regeneration — the last honest moment before someone is locked out of their own account.", d: "Doc 02 FR-07" },
+  { t: "Clock-skew help", r: "Copy naming time sync as the cause when codes keep failing, since ±1 step covers only thirty seconds of drift.", d: "Doc 02 EC-01" }
+]},
+{ id: "C", name: "Two-factor enrolment wizard", note: "Doc 02 FR-06, SEC-03, §8. Three steps, and the third is the only place in the product where something is shown exactly once. That has to be unmistakable without being alarming.", rows: [
+  { t: "Three-step wizard", r: "Scan → enter code → save recovery codes, focus moving to each step heading, position always visible.", d: "Doc 02 §8, §13" },
+  { t: "QR block with manual secret", r: "The otpauth QR, the secret in copyable text beside it, and the secret exposed as accessible text for anyone who cannot scan.", d: "Doc 02 FR-06, §9, §13" },
+  { t: "Activation requires one valid code", r: "Enrolment is not saved until a code proves the authenticator works; the invalid-code state stays on the step.", d: "Doc 02 FR-06" },
+  { t: "Eight recovery codes", r: "A monospace grid with copy-all and download.", d: "Doc 02 FR-06, §9" },
+  { t: "Shown exactly once — said so", r: "The UI states the fact plainly on the codes step; codes are stored hashed and can never be shown again.", d: "Doc 02 SEC-03, FR-06" },
+  { t: "Continue blocked until saved", r: "The step will not advance until “I have saved these” is checked or the file is downloaded.", d: "Doc 02 §8" },
+  { t: "Regenerate codes", r: "Reached from the two-remaining banner, same show-once contract, old set invalidated.", d: "Doc 02 FR-07, SEC-03" },
+  { t: "Enrolment revokes other sessions", r: "Any 2FA change signs out every other session; the confirmation says so before it happens.", d: "Doc 02 FR-14" },
+  { t: "Two tabs, one enrolment", r: "Single-secret-wins; the losing tab gets a clear invalidation error, not a silently dead QR.", d: "Doc 02 EC-10" },
+  { t: "Enrolment on a phone", r: "The whole wizard works in a mobile browser, including the codes grid and the download.", d: "Doc 02 NFR-05, §9" }
+]},
+{ id: "D", name: "Two-factor enforcement, grace period & admin reset", note: "Doc 02 FR-08, FR-09, BR-02. Policy made visible: who must enrol, how long they have, and the one thing an admin can do about someone else's 2FA — which is not seeing it.", rows: [
+  { t: "Required-roles enforcement", r: "A user whose role sits in auth.2fa.required_roles reaches no screen but enrolment — designed as a full state, not a redirect loop.", d: "Doc 02 FR-09" },
+  { t: "Grace-period countdown banner", r: "auth.2fa.grace_days, default 3, counting down in plain language on every screen until enrolment.", d: "Doc 02 FR-09" },
+  { t: "Grace expired", r: "Enrolment becomes the only route; the copy explains rather than accuses.", d: "Doc 02 FR-09" },
+  { t: "Admin clears a user's 2FA", r: "Typed-name confirmation with the consequence stated: the user re-enrols at next login.", d: "Doc 02 FR-08" },
+  { t: "The audit line in the dialog", r: "auth.2fa.reset_by_admin is high-visibility; the dialog names it so the admin knows the act is recorded and by whom.", d: "Doc 02 FR-08, §4.8" },
+  { t: "Admins never see a secret", r: "The surface says it: reset is the only lever — no admin views or sets a password or a 2FA secret.", d: "Doc 02 BR-02" },
+  { t: "Enforcement in both languages", r: "Banner and enrolment gate carry long Amharic without truncating or wrapping into the chrome.", d: "Doc 02 §14" }
+]});
+
+
+SECTIONS.push(
+{ id: "E", name: "Password reset, invite & set-password", note: "Doc 02 §4.4, §8, §9. Two flows into one screen, and a uniform-response rule that makes the first deliberately uninformative — a copywriting problem before it is a design problem.", rows: [
+  { t: "Request a reset", r: "Email only, one action, language switcher present.", d: "Doc 02 FR-16, §8" },
+  { t: "Uniform response", r: "“If an account exists for that address, we have sent a link” — identical whether or not it does, with no second state to design.", d: "Doc 02 FR-16, SEC-01, AC-01" },
+  { t: "Set a new password", r: "Live policy validation as the person types, with the strength meter.", d: "Doc 02 FR-16, §9" },
+  { t: "Policy rendered from settings", r: "Minimum length (default 12), the character-class toggle, reuse history, breached-password check, and max age where enabled — shown as requirements, not discovered through rejection.", d: "Doc 02 FR-15" },
+  { t: "Breach check never blocks", r: "If the k-anonymity service is down the check is skipped: no failure shown, no delay added.", d: "Doc 02 FS-03, NFR-04" },
+  { t: "Success revokes every session", r: "Stated on the success screen, because the person is about to be signed out everywhere else.", d: "Doc 02 FR-16, FR-14" },
+  { t: "Expired or already-used link", r: "A dedicated error screen with request-again — the document's own illustration-plus-action pattern.", d: "Doc 02 FR-16, §9" },
+  { t: "Invited user set-password", r: "The same screen doubling as profile completion: name, language, optional avatar.", d: "Doc 02 FR-17, §8" },
+  { t: "Invites are links, never passwords", r: "Seven-day validity, resendable, and the plain statement that no admin chose or can see this password.", d: "Doc 02 FR-17, BR-02" },
+  { t: "Invite expired", r: "Self-service resend, rate-limited, with the old link invalidated and that said out loud.", d: "Doc 02 EC-04" },
+  { t: "Reset opened on another device", r: "Allowed; the new-device notice fires after login rather than blocking the reset.", d: "Doc 02 EC-03" },
+  { t: "Email delayed", r: "When the mail provider is down, resets queue and the UI notes the possible delay instead of promising an arrival.", d: "Doc 02 FS-02" }
+]},
+{ id: "F", name: "Sessions & devices", note: "Doc 02 §4.3, §8, §9. The page an admin opens when something looks wrong, and the one that has to answer “is that me?” in a second. Profile → Security.", rows: [
+  { t: "Active sessions table", r: "Device label parsed from the user agent with its icon, first seen, last active, IP, approximate GeoIP city, and the current badge.", d: "Doc 02 FR-12, §9" },
+  { t: "Current device pinned first", r: "Always the top row, never sorted away.", d: "Doc 02 §8" },
+  { t: "Revoke one", r: "Confirms inline on the row.", d: "Doc 02 §8" },
+  { t: "Revoke all others", r: "A modal, because it is the wide action.", d: "Doc 02 §8" },
+  { t: "Revocation is immediate", r: "The session key is deleted and that session's sockets close within two seconds; the row states it rather than fading out ambiguously.", d: "Doc 02 FR-12, T-04, AC-04" },
+  { t: "Concurrent-session cap", r: "auth.session.max_concurrent, default 5, oldest evicted — the eviction is visible on the table, not silent.", d: "Doc 02 FR-10, AC-04" },
+  { t: "Password or 2FA change revokes the rest", r: "Stated where it happens, so nobody meets it as a surprise sign-out.", d: "Doc 02 FR-14" },
+  { t: "Timeout warning toast", r: "At two minutes before idle expiry, with “stay signed in”; drafts persist locally and restore after re-login.", d: "Doc 02 §8 · Doc 07 draft persistence" },
+  { t: "Location unavailable", r: "When GeoIP is down or corrupt the row shows the IP alone and says location is unavailable — never a guessed city.", d: "Doc 02 FS-04, NFR-04" },
+  { t: "Empty state", r: "“You're only signed in here.”", d: "Doc 02 §9" },
+  { t: "Loading skeleton", r: "Table skeleton, no full-page blocker.", d: "Doc 02 §9" },
+  { t: "Revoked in another tab", r: "The next request returns 401 and a re-login modal preserves in-page state rather than discarding the work.", d: "Doc 02 EC-02" },
+  { t: "Disabled while online", r: "Sockets close within two seconds, local drafts are preserved, and the message says what happened.", d: "Doc 02 EC-05, BR-04" },
+  { t: "Locale-aware dates and places", r: "Dates in the user's locale; GeoIP place names localized where the data allows, English fallback where it does not.", d: "Doc 02 §14" },
+  { t: "Devices at 375", r: "The table reads as rows on a phone with every field legible and revoke at 44 px.", d: "Doc 02 NFR-05, §9" }
+]},
+{ id: "G", name: "API tokens — personal & machine", note: "Doc 02 §4.5, contracted subject to Q4. Same profile → Security page as the devices table. A token is a credential with a face: who owns it, what it can do, when it was last used.", rows: [
+  { t: "Personal access tokens list", r: "Name, expiry, scopes, last used, revoke — one row per token.", d: "Doc 02 FR-18" },
+  { t: "Create a token", r: "Name and expiry from 30 / 90 / 365 / none, offered only as the policy setting allows.", d: "Doc 02 FR-18" },
+  { t: "Scope picker", r: "Abilities chosen from the RBAC permission catalog, with the statement that a token can never exceed its owner's live permissions.", d: "Doc 02 FR-18 · Doc 03 §4.1" },
+  { t: "Plaintext shown once", r: "The same show-once contract as recovery codes, with copy and download, and the fact stated on the surface.", d: "Doc 02 FR-18" },
+  { t: "Revoke individually", r: "Per token, immediately, with the consequence named.", d: "Doc 02 FR-18" },
+  { t: "Machine tokens", r: "Admin-created, bound to a visible non-login service account with its own role — never to a person.", d: "Doc 02 FR-19, BR-03" },
+  { t: "Rotation with an overlap window", r: "Create the replacement, run both through the overlap, revoke the old — the flow designed as three states, all audited.", d: "Doc 02 FR-19, SS-04" },
+  { t: "Permission loss propagates", r: "A token's scope is its intersection with the owner's live permissions; losing a permission drops it within ten seconds, and the UI states that bound rather than implying instant.", d: "Doc 02 T-05, EC-06, AC-05" },
+  { t: "Scope failure states", r: "Invalid token, expired token, and insufficient scope naming the missing permission — the three errors an integrator will actually meet.", d: "Doc 02 FR-20, AC-05" },
+  { t: "Empty and loading", r: "No tokens yet with an explanation of what one is for; skeleton rows while the list loads.", d: "Doc 02 §9" },
+  { t: "Unused tokens surfaced", r: "Last-used is a column, not a detail — the sprawl control the document asks for.", d: "Doc 02 R-03" }
+]},
+{ id: "H", name: "Administrator actions on an account", note: "Doc 02 FR-03, FR-05, FR-08, FR-16, FR-17, BR-02, BR-04, SEC-07 — five actions the document names and a host screen it never does. Contracted as actions; the container is Q1.", rows: [
+  { t: "Unlock a locked account", r: "The admin path out of a lockout, alongside the self-service reset that also unlocks; audited.", d: "Doc 02 FR-03, AC-02" },
+  { t: "Trigger a password reset", r: "Sends the link. The admin never chooses, sees or types the password, and the dialog says so.", d: "Doc 02 FR-16, BR-02" },
+  { t: "Clear a user's 2FA", r: "Typed-name confirmation and the high-visibility audit line — the same dialog as D04, referenced once, not rebuilt.", d: "Doc 02 FR-08" },
+  { t: "Invite and resend", r: "Admin-created users start invited with a set-password link, seven-day validity, resendable and rate-limited.", d: "Doc 02 FR-17, EC-04" },
+  { t: "Disable a user", r: "Revokes every session and token atomically; the confirmation states both consequences before the act, and drafts are preserved.", d: "Doc 02 BR-04, FR-05, EC-05" },
+  { t: "No impersonation — stated", r: "The one place an admin would look for “sign in as”, saying plainly that it does not exist and that read-only permissions are the support path instead.", d: "Doc 02 SEC-07" },
+  { t: "Host screen — pending Q1", r: "Whether these six sit on an existing user profile or on a new user list and record page is the open question; the actions themselves do not change either way.", d: "Doc 02 §4.1–§4.4 · Owner ruling pending" }
+]},
+{ id: "I", name: "Auth emails", note: "Doc 02 §14 names three, Doc 16 FR-01 owns their branded chrome. Contracted as full templates subject to Q3 — the one surface in this batch a customer-facing person reads outside the product.", rows: [
+  { t: "Invite email", r: "Set-password link, seven-day validity, tenant-branded header and footer, in both languages.", d: "Doc 02 FR-17, §14 · Doc 16 FR-01" },
+  { t: "Reset email", r: "Single-use link with its sixty-minute validity stated, and the line that says to ignore it if it was not requested.", d: "Doc 02 FR-16, §14" },
+  { t: "New-device email", r: "The informational notice: when, from where, on what — and what to do if it was not you.", d: "Doc 02 T-03, §14" },
+  { t: "Branded chrome from the theme", r: "Logo, address block, legal footer and copyright line come from Doc 16's theme per language, never hardcoded in the template.", d: "Doc 16 FR-01, T-02" },
+  { t: "Plain-text alternative", r: "Always generated — it is the fallback when a rendered template fails after publish.", d: "Doc 16 FS-02" },
+  { t: "Amharic at full length", r: "Both languages laid out with real Amharic, tested at the length Amharic actually runs to in an email client.", d: "Doc 02 §14 · Doc 16 §14" }
+]});
+
+
+SECTIONS.push(
+{ id: "J", name: "Branding editor — shell, navigation & live preview", note: "Doc 16 §8, §9. Left nav by surface group, centre forms, right a live preview that changes with the group. The editor renders in the platform design system, never in the draft theme — so a bad draft can never break the tool editing it.", rows: [
+  { t: "Seven-group left nav", r: "Identity · Colours & Fonts · Login · Emails · Links & Legal · Senders · Inventory, exactly as §8 names them.", d: "Doc 16 §8" },
+  { t: "Three-pane layout", r: "Nav, per-group forms, and a preview pane that switches with the group — login mock, email mock, app-chrome mock.", d: "Doc 16 §8" },
+  { t: "The editor is not themed by the draft", r: "Platform chrome throughout; only previews render the draft. Stated on the surface, because it looks like a bug otherwise.", d: "Doc 16 §9, T-01" },
+  { t: "Draft and published state", r: "Exactly one published theme and at most one draft, both named in the header with what differs between them.", d: "Doc 16 FR-03" },
+  { t: "Permission gate", r: "The whole editor sits behind branding.edit, named on the surface as every Batch 6 backoffice screen names its key.", d: "Doc 03 §4.1 · Doc 16 §4.3" },
+  { t: "Two admins, one draft", r: "Soft lock with takeover: who holds it, since when, and takeover audited.", d: "Doc 16 EC-07" },
+  { t: "Loading and error", r: "Form skeletons and preview placeholders per group; a save failure that names the field rather than the screen.", d: "Doc 16 §8, §13" }
+]},
+{ id: "K", name: "Branding — Identity group", note: "Doc 16 FR-01, FR-04, SEC-06. Names and marks. The smallest group and the one every other surface reads from.", rows: [
+  { t: "Company and product name", r: "Both, separately, because they appear in different places — chrome, emails, legal line.", d: "Doc 16 FR-01" },
+  { t: "Logo, light and dark", r: "Two uploads, previewed on both backgrounds, with the aspect guidance shown before the upload rather than after the rejection.", d: "Doc 16 FR-01" },
+  { t: "Asset constraints validated", r: "SVG or PNG, 512 KB ceiling, dimensions checked — with the failure naming which constraint and by how much.", d: "Doc 16 FR-01, FR-04" },
+  { t: "Favicon set from one upload", r: "One image in, the generated set shown back.", d: "Doc 16 FR-01" },
+  { t: "SVG sanitisation stated", r: "Uploaded SVGs are scanned and stripped of script and foreignObject at ingest; the upload says so.", d: "Doc 16 SEC-06 · Doc 04 media pipeline" },
+  { t: "Empty state", r: "A fresh tenant carries the provisioning-seeded theme and the “make it yours” checklist, not a blank form.", d: "Doc 16 §8" }
+]},
+{ id: "L", name: "Branding — Colours & Fonts", note: "Doc 16 FR-01, FR-04, BR-02, §9. Where the operator's brand meets the accessibility floor, and the only validator in the platform with no escape hatch.", rows: [
+  { t: "Colour tokens", r: "Primary, accent and surface adjustments — the bounded set, with the statement that tokens change values and never layout.", d: "Doc 16 FR-01, R-01" },
+  { t: "Curated fonts only", r: "The curated set including Inter and Noto Sans Ethiopic; custom font upload is deferred and the editor says so rather than hiding an absent control.", d: "Doc 16 FR-01, §19" },
+  { t: "Live preview per group", r: "App-chrome mock updating as tokens change, within the two-second per-surface budget.", d: "Doc 16 §8, NFR-01" },
+  { t: "Contrast matrix as you edit", r: "The pair grid with computed ratios, pass/fail glyph and the value in text — not a colour-coded grid a screen reader cannot read.", d: "Doc 16 §9, §13" },
+  { t: "Suggestions, and no override", r: "Failing pairs offer nearest-passing suggestion chips that apply on click. There is no publish-anyway control here or anywhere, and the surface states that this is deliberate.", d: "Doc 16 BR-02, FR-04, AC-03" },
+  { t: "Fixed tokens are not re-skinnable", r: "Status, priority, SLA, reply-window, connection state, channel health, internal note and the violet AI accent carry meaning and are outside the theme; the editor says which colours a tenant does not own.", d: "Doc 16 R-01 · Doc 09 BR-05 · B1-DS" },
+  { t: "Amharic type previewed", r: "Noto Sans Ethiopic selectable and shown with real Amharic at real length, not Latin stretched to look like it.", d: "Doc 16 FR-01, §14" }
+]},
+{ id: "M", name: "Branding — Login page", note: "Doc 16 FR-01, EC-09. The group that reaches back into Section A, and the one surface in the platform needing image-aware contrast validation.", rows: [
+  { t: "Background image or colour", r: "Either, with the asset constraints and the preview at the real card position.", d: "Doc 16 FR-01" },
+  { t: "Welcome copy per language", r: "English and Amharic, each with its own field and its own completeness state.", d: "Doc 16 FR-01, §14" },
+  { t: "Login preview is the real card", r: "The Section A card rendered under the draft theme — the same component, not a mock of it.", d: "Doc 16 §8, FR-02" },
+  { t: "Image-aware contrast", r: "Contrast computed against sampled regions of the uploaded background; a failure blocks publish and suggests the overlay scrim.", d: "Doc 16 EC-09, FR-04" },
+  { t: "Long-name and long-copy survival", r: "A long tenant name and long Amharic welcome copy render without clipping — the hostile-theme condition, shown as a state.", d: "Doc 16 FR-05, T-08" }
+]},
+{ id: "N", name: "Branding — Emails", note: "Doc 16 FR-01, T-02, SEC-02, FS-02. The branded chrome around every message the platform sends, edited here and previewed before anyone receives it.", rows: [
+  { t: "Header and footer", r: "Logo, address block and legal footer, each per language.", d: "Doc 16 FR-01" },
+  { t: "Template previews", r: "Rendered per template and per language in the preview pane, with the render-test result shown.", d: "Doc 16 T-02, FR-04" },
+  { t: "Send preview to self", r: "The email preview path the document names — you read it in a real client before a customer does.", d: "Doc 16 §8" },
+  { t: "Safe HTML subset", r: "No scripts, no forms; link targets rendered visibly in the preview so a brand surface cannot become a phishing surface.", d: "Doc 16 SEC-02" },
+  { t: "Per-template rollback", r: "Email templates version independently inside the theme's email group, so one broken template rolls back alone.", d: "Doc 16 FS-02" },
+  { t: "Plain-text fallback stated", r: "The alternative part always exists and the surface says so — deliveries continue when a render fails.", d: "Doc 16 FS-02" }
+]},
+{ id: "O", name: "Branding — Links & Legal", note: "Doc 16 FR-01, SEC-02. Small group, sharp rule: a footer link is a place a customer will actually go.", rows: [
+  { t: "Copyright line", r: "Per language, previewed where it renders.", d: "Doc 16 FR-01" },
+  { t: "Footer links", r: "Label and URL pairs, per language, ordered.", d: "Doc 16 FR-01" },
+  { t: "URL validation", r: "https only, no javascript:, and the domain visible in the editor rather than hidden behind the label.", d: "Doc 16 SEC-02, FR-04" },
+  { t: "Missing-language state", r: "A link set complete in English and missing in Amharic shows as incomplete here and blocks publish where Amharic is customer-enabled.", d: "Doc 16 FR-04, §14" }
+]},
+{ id: "P", name: "Branding — Sender identities", note: "Doc 16 FR-01, SEC-03, EC-11, AC-09. Three purposes, one verification status each, read from infrastructure — the group where brand purity yields to deliverability.", rows: [
+  { t: "From-name and from-address per purpose", r: "Auth, notifications and reports as three separate identities.", d: "Doc 16 FR-01" },
+  { t: "Domain verification status inline", r: "Read from Doc 18 and shown on the identity itself, not on a help page.", d: "Doc 16 SEC-03" },
+  { t: "Unverified cannot be published", r: "For customer-facing purposes the gate holds, and the reason is stated where the person is trying to publish.", d: "Doc 16 SEC-03, AC-09" },
+  { t: "Verification lapsed", r: "The identity flips to a warning state, sends fall back to the platform default sender, and the warning states that continuity was chosen over brand purity.", d: "Doc 16 EC-11" },
+  { t: "Cross-link, not a rebuild", r: "DNS and SPF/DKIM execution is Doc 18; this surface shows status and links out.", d: "Doc 16 §3 · Doc 18" }
+]},
+{ id: "Q", name: "Branding — surface inventory", note: "Doc 16 FR-02. A normative checklist rendered as live thumbnails: the preview is the checklist. Eight surfaces, and five of them are owned by other documents and only referenced here.", rows: [
+  { t: "The thumbnail wall", r: "Every themed surface rendered live from the draft, each opening its own full preview.", d: "Doc 16 FR-02, §8" },
+  { t: "Staff app chrome and login", r: "Built in this batch — the app shell and the Section A card under the draft.", d: "Doc 16 FR-02 · Doc 02" },
+  { t: "Emails", r: "Auth, schedule and notification templates, thumbnailed per language.", d: "Doc 16 FR-02" },
+  { t: "Error pages", r: "Themed and in the inventory — the surface everyone forgets until the hostile sweep finds it.", d: "Doc 16 FR-02, FR-05" },
+  { t: "Chat widget", r: "Thumbnail and link out; appearance is owned by Doc 13 and is not rebuilt here.", d: "Doc 16 FR-02 · Doc 13 FR-19" },
+  { t: "Telegram persona surfaces", r: "Thumbnail and link out; content is owned by Docs 05 and 09.", d: "Doc 16 FR-02 · Doc 05, Doc 09" },
+  { t: "AI assistant identity", r: "Name and avatar slots shown for inventory completeness with an edit link into Doc 09's persona screen — and the AI disclosure rule restated, because white-label never extends to hiding it.", d: "Doc 16 FR-01, BR-05 · Doc 09 FR-18, BR-05" },
+  { t: "SMS sender IDs", r: "Referenced, managed in Doc 14.", d: "Doc 16 FR-02 · Doc 14" },
+  { t: "Exports, watermarks and PDF transcripts", r: "Thumbnailed, owned by Docs 04 and 15.", d: "Doc 16 FR-02 · Doc 04, Doc 15" },
+  { t: "Per-surface completeness", r: "A surface missing an asset or a language reads as incomplete here before the publish dialog repeats it.", d: "Doc 16 FR-02, FR-04" }
+]});
+
+
+SECTIONS.push(
+{ id: "R", name: "Draft preview mode", note: "Doc 16 FR-03, BR-03, EC-01. Preview before publish, always — the pipeline enforces it and the design has to make it obvious that what you are looking at is not live.", rows: [
+  { t: "Full-app preview toggle", r: "The editing admin browses the real product under the draft theme; nobody else sees it.", d: "Doc 16 FR-03" },
+  { t: "The preview banner", r: "“PREVIEWING DRAFT — visible only to you”, verbatim, high-contrast in both themes and announced on entry and exit.", d: "Doc 16 FR-03, §9, §13" },
+  { t: "Per-surface thumbnails", r: "The inventory wall rendered from the draft, each within the two-second budget.", d: "Doc 16 FR-03, NFR-01" },
+  { t: "Preview is isolated", r: "Only the editor sees the draft; the surface states it, because publishing by accident is the fear this removes.", d: "Doc 16 FR-03, AC-02" },
+  { t: "Exit preview", r: "Always available, never trapped behind the banner.", d: "Doc 16 FR-03, §13" },
+  { t: "Live swap mid-session", r: "A publish while someone is working swaps CSS variables without a reload and in-flight modals keep functioning — shown as a state, since it is what the sweep snapshots.", d: "Doc 16 EC-01" }
+]},
+{ id: "S", name: "Publish dialog & validators", note: "Doc 16 FR-04, BR-02, SEC-01, §8. The gate. Every validator result, the blast summary, a typed confirmation — and no way past a failing contrast pair.", rows: [
+  { t: "Dialog anatomy", r: "Validator results, then blast summary, then typed confirm — in that order, so nobody types before they read.", d: "Doc 16 §8" },
+  { t: "Contrast results", r: "The full pair matrix with ratios as text, every failing pair listed, each with jump-to-fix.", d: "Doc 16 FR-04, §8, §13" },
+  { t: "Asset checks", r: "Type, size and dimensions per asset, with the specific failure named.", d: "Doc 16 FR-04" },
+  { t: "URL checks", r: "Footer links validated https and javascript-free before anything reaches a customer.", d: "Doc 16 FR-04, SEC-02" },
+  { t: "Email render tests", r: "Variable resolution and client-safe HTML compiled and checked at publish, not only in CI.", d: "Doc 16 FR-04, T-02" },
+  { t: "No override, said in the dialog", r: "Failing contrast blocks publish. The dialog offers suggestions and a way to fix, never a way past — and states that this validator deliberately has no escape hatch.", d: "Doc 16 BR-02, AC-03" },
+  { t: "Completeness warnings", r: "Missing-language warnings are non-blocking for optional surfaces and blocking where that language is customer-enabled; the dialog distinguishes the two.", d: "Doc 16 FR-04, §14" },
+  { t: "Blast summary", r: "“Applies to the staff app, 4 email templates, 2 widgets” — what changes, before it changes.", d: "Doc 16 §8" },
+  { t: "Typed confirmation", r: "The high-risk confirm pattern, consistent with Batch 6's settings and flags dialogs.", d: "Doc 16 FR-10 · Doc 03 §4.1" },
+  { t: "Audit stated", r: "A branding publish is a high-visibility audit event and the dialog says the change is recorded, by whom, with old and new values.", d: "Doc 16 SEC-01, US-06" },
+  { t: "Four-eyes where enabled", r: "Where the tenant has four-eyes on, the publish waits for a second admin and the dialog says so rather than appearing to fail.", d: "Doc 16 SEC-01 · Doc 03 T-06" },
+  { t: "Publishing and published", r: "Progress, then propagation confirmed within sixty seconds cluster-wide — an honest wait, not an instant lie.", d: "Doc 16 FR-03, NFR-01" },
+  { t: "Publish blocked", r: "The blocked state is a worklist: every failure, grouped, each with its jump-to-fix.", d: "Doc 16 §8, FR-04" }
+]},
+{ id: "T", name: "Version history & rollback", note: "Doc 16 FR-03, EC-02, AC-02. Rollback is a publish of a prior version — same pipeline, same gates, same audit. Fifteen minutes and two audit rows is the success scenario.", rows: [
+  { t: "Version list", r: "Every published version with who published it and when, newest first, the live one marked.", d: "Doc 16 FR-03, T-01" },
+  { t: "Visual diffs", r: "Before-and-after thumbnails per surface, not a JSON diff of token names.", d: "Doc 16 §8, AC-02" },
+  { t: "One-click rollback", r: "With the confirmation stating that rollback runs the same validators and is audited identically.", d: "Doc 16 FR-03" },
+  { t: "Rollback blocked on a missing asset", r: "A version referencing a since-deleted asset re-validates and blocks with a re-upload prompt rather than publishing a broken brand.", d: "Doc 16 EC-02" },
+  { t: "Empty state", r: "A tenant with only the seeded theme — one version, and what that means.", d: "Doc 16 §8" }
+]},
+{ id: "U", name: "Branding — degraded states", note: "Doc 16 FS-01, FR-05, T-08. What the operator sees when the theme layer itself is having a bad day, and the proof that no combination of their choices can break a screen.", rows: [
+  { t: "Theme cache loss", r: "The app shell falls back to the platform default — branded-but-generic, never broken — with a banner shown to admins only while the cache rebuilds.", d: "Doc 16 FS-01" },
+  { t: "Hostile-theme survival", r: "Garish colours, very long names and long Amharic rendered across the inventory with nothing clipped, unthemed or overflowing — the sweep's condition, shown as a designed state.", d: "Doc 16 FR-05, T-08, NFR-05" },
+  { t: "Nothing hardcoded", r: "No literal colour, name or string survives a re-skin; where a colour is deliberately fixed it is a meaning token and L06 says which.", d: "Doc 16 FR-05, BR-01" },
+  { t: "Preview render failure", r: "A thumbnail that cannot render says so on its tile instead of showing a stale or blank surface.", d: "Doc 16 §8, NFR-01" }
+]},
+{ id: "V", name: "Cross-cutting — states, access, language, discipline", note: "Applies to every row above; audited per screen, not once at the end.", rows: [
+  { t: "Universal state set", r: "Normal, loading/skeleton, empty and error on every screen, plus each document-named edge state in its own row.", d: "Batch 7 Step 2" },
+  { t: "Both themes", r: "Dark and light on every screen, AA contrast verified in both — including the preview banner and the contrast matrix itself.", d: "Batch 7 Step 2 · Doc 02 §13 · Doc 16 §9, §13" },
+  { t: "Both viewports", r: "1440 and 375 on every screen. Sections A–I are fully functional at 375 by Doc 02 NFR-05; Sections J–U depend on Q2.", d: "Batch 7 Step 2 · Doc 02 NFR-05 · Doc 16 §9" },
+  { t: "44 px touch floor", r: "The program floor holds on mobile variants; where a component's desktop metric conflicts, the floor wins and the deviation is flagged in the delivery note.", d: "Batch 7 design rules · Doc 02 §9" },
+  { t: "Never colour alone", r: "Pass/fail glyphs, verification status, connection and session state, strength meters and validation all carry text or a glyph.", d: "Doc 02 §13 · Doc 16 §9" },
+  { t: "Errors announced", r: "role=\"alert\" on auth errors, aria-describedby tying every message to its field — announced, not merely tinted.", d: "Doc 02 §13 · Doc 16 §13" },
+  { t: "Keyboard operability", r: "Full keyboard operation of the code input, the wizard, the devices table, the contrast matrix and every dialog; focus moves to the step heading on wizard transitions.", d: "Doc 02 §13 · Doc 16 §13" },
+  { t: "Reduced motion", r: "Step transitions and success checks honour prefers-reduced-motion; nothing pulses.", d: "Doc 02 §9 · Doc 16 §9" },
+  { t: "English and Amharic first-class", r: "Every labelled element in both, with real Amharic including long strings on the tightest surfaces — the six-digit input, the recovery grid, the devices row, the contrast matrix. Flagged for native review.", d: "Batch 7 design rules · Doc 02 §14 · Doc 16 §14" },
+  { t: "Realistic operator data", r: "Ethiopian staff names, a real-looking Ethiopian betting-operator tenant brand in the editor, real device strings and Addis Ababa locations. No lorem ipsum.", d: "Batch 7 Step 2" },
+  { t: "RTL-safe markup", r: "Logical properties from day one, as Doc 02 §14 requires, even though neither launch language is RTL.", d: "Doc 02 §14 · Doc 16 §14" },
+  { t: "Permission gating shown", r: "Each surface names the key that guards it — branding.edit for the editor, settings.edit for the auth keys it reflects, the admin keys on Section H.", d: "Doc 03 §4.1 · Doc 16 §4.3" },
+  { t: "Audit honesty", r: "Where a document classes a change as high-visibility — branding publish, admin 2FA reset, disable, token creation and revocation — the UI says the change is recorded and by whom.", d: "Doc 02 §4.8 · Doc 16 SEC-01" },
+  { t: "White-label neutrality", r: "No invented brand personality; the fixed meaning tokens are never re-mixed and no screen restyles an approved element to suit itself.", d: "Batch 7 design rules · Doc 16 R-01" },
+  { t: "The four absences hold", r: "No impersonation, no contrast override, no admin-set passwords, no account-existence disclosure — each stated on its surface and audited as a row.", d: "Doc 02 SEC-01, SEC-07, BR-02 · Doc 16 BR-02" },
+  { t: "B1-DS verbatim", r: "Every reused component comes from B1-DS and its two approved addenda unchanged; anything new is proposed as an addition, never as a restyle of an approved element.", d: "Batch 7 Step 1 · B12-R01 drift report" },
+  { t: "AC-09 baseline pack", r: "On approval of each auth screen, its states are exported en + am × light + dark as the Doc 02 AC-09 pixel-comparison baselines the build is waiting on.", d: "Doc 02 AC-09 · Owner routine" }
+]});
+</script>
+</body>
+</html>

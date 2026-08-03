@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S03-identity-work-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">C02-v2 · out-of-scope frame added</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Identity work</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows C01–C07 · Doc 08 FR-04, FR-05, FR-07, FR-09, FR-10, BR-02, EC-03, EC-05 · US-03 · AC-01. Adding an identity, refusing one that belongs elsewhere, and pulling one off a profile. The confirm-phrase input is taken verbatim from <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-S04</span>.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Every screen here exists because of one refusal in Doc 08: <strong style="font-weight: 600;">the system never links identities by itself</strong>. A phone number typed into a chat stays text. The resolver matches or creates, and consolidation is a person's decision with their name on it — because a wrong silent link in a betting product misroutes somebody's money.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C01, C02, C07 · Adding one, and being told no</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-09 · US-03 · BR-02</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C01 · Light — add a phone</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 13px 16px; border-bottom: 1px solid #E5E2DB;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Add an identity</div><div style="font-size: 12px; color: #6B675D; margin-top: 3px;">አበበ ታደሰ</div></div>
+          <div style="padding: 15px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 6px;">
+              <span style="font-size: 12px; font-weight: 600; background: #22211D; color: #FFFFFF; border-radius: 6px; padding: 7px 13px;">Phone</span>
+              <span style="font-size: 12px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 13px;">Email</span>
+            </div>
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 5px;">Phone number</span><span style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #22211D; border-radius: 8px; padding: 0 12px; min-height: 44px;"><span style="font-size: 12.5px; color: #6F6A61;">🇪🇹 +251</span><span style="font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18;">91 234 4417</span><span style="display: inline-block; width: 1.5px; height: 15px; background: #22211D;"></span></span></label>
+            <div style="background: #F6F5F2; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; color: #4A4842; line-height: 1.6;">Stored as <span style="font-family: ui-monospace, monospace;">+251912344417</span>, shown the way it is dialled here. It becomes an identity on this profile, recorded as added by you — not as something the customer proved.</div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Add phone</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C02 · Light — it already belongs to someone</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 13px 16px; border-bottom: 1px solid #E5E2DB;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Add an identity</div><div style="font-size: 12px; color: #6B675D; margin-top: 3px;">አበበ ታደሰ</div></div>
+          <div style="padding: 15px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 5px;">Phone number</span><span style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #B32B2B; border-radius: 8px; padding: 0 12px; min-height: 44px;"><span style="font-size: 12.5px; color: #6F6A61;">🇪🇹 +251</span><span style="font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18;">91 887 2210</span></span></label>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">That number is already on another profile</div>
+              <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.6;">A phone belongs to one customer at a time. Nothing has changed here.</div>
+              <div style="margin-top: 10px; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 11px; display: flex; align-items: center; gap: 10px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">ኪሃ</span>
+                <span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 12.5px; color: #1D1C18;">ኪዳነ ሃይሉ</span><span style="display: block; font-size: 11px; color: #6B675D; margin-top: 2px;">3 tickets · last contact 2 May</span></span>
+                <a href="#kidane" style="flex: none; font-size: 11.5px; font-weight: 600;">Open</a>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 11px;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 38px; padding: 0 14px; cursor: pointer;">Merge these two instead</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #8E2222; border: 1px solid #EFC7C7; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 38px; padding: 0 14px; cursor: pointer;">Use a different number</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 440px; line-height: 1.5;">The block names the other profile and offers the merge, because the agent's real question is “is this the same person?” — and they cannot answer it from an error message alone. </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C02-v2 · Light — the other profile is outside your scope</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 13px 16px; border-bottom: 1px solid #E5E2DB;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Add an identity</div><div style="font-size: 12px; color: #6B675D; margin-top: 3px;">አበበ ታደሰ</div></div>
+          <div style="padding: 15px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 5px;">Phone number</span><span style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #B32B2B; border-radius: 8px; padding: 0 12px; min-height: 44px;"><span style="font-size: 12.5px; color: #6F6A61;">🇪🇹 +251</span><span style="font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18;">91 550 3382</span></span></label>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">That number is already on 1 profile you can't see</div>
+              <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.6;">It belongs to a customer outside your department. Nothing has changed here, and a merge would move records you don't have access to — so it isn't offered.</div>
+              <div style="display: flex; gap: 8px; margin-top: 11px; flex-wrap: wrap;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 38px; padding: 0 14px; cursor: pointer;">Use a different number</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #8E2222; border: 1px solid #EFC7C7; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 38px; padding: 0 14px; cursor: pointer;">Ask a supervisor to look</button>
+              </div>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; line-height: 1.6;">A count and a boundary — never a name, never a link.</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 440px; line-height: 1.5;">The in-scope card's primary action is “Merge these two instead”. Here that action cannot exist, so “Use a different number” is promoted into its place rather than left as the quiet second option, and the supervisor path is offered because the agent's question is still unanswered — a card that loses its primary action is a different card.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C07 · Dark — a number in the chat stays text</div>
+        <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 14px 16px; background: #171715; display: flex; flex-direction: column; gap: 10px;">
+            <div style="align-self: flex-start; max-width: 84%;"><div style="background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">የወንድሜ ቁጥር 0918872210 ነው፣ እሱን ያግኙት።</div><div style="font-size: 11px; color: #9A9588; margin-top: 4px;">አበበ ታደሰ · 14:22</div></div>
+          </div>
+          <div style="padding: 14px 16px; border-top: 1px solid #343430; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12.5px; color: #C9C5BB; line-height: 1.65;">Nothing happened. The number was recognised as a number and left alone — no identity was created, nothing was attached to anyone, and the profile is unchanged.</div>
+            <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; display: flex; align-items: center; gap: 10px;">
+              <span style="flex: 1 1 auto; min-width: 0; font-size: 12px; color: #ECEAE4; line-height: 1.5;">If it is theirs, add it — with your name on it.</span>
+              <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Add as phone</button>
+            </div>
+            <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">This is a customer asking us to contact their brother — normal, and supported. The contact is recorded under whoever is typing, and the brother's number becomes an identity only if an agent decides it should.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C03, C04 · Unlink — the high-risk one</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-10, §8 Unlink · confirm-phrase from B1-S04</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C03 · Light — exactly what moves</div>
+        <div style="width: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Unlink @abebe_t</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">from አበበ ታደሰ</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 7px;">What moves to a new profile</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 11.5px; line-height: 1.75; color: #4A4842;">
+                <li>The Telegram identity <span style="font-family: ui-monospace, monospace; color: #1D1C18;">@abebe_t</span> and its 2 earlier usernames</li>
+                <li><strong style="color: #1D1C18;">2 conversations</strong> that came in through it</li>
+                <li><strong style="color: #1D1C18;">9 tickets</strong> raised from those conversations, including <span style="font-family: ui-monospace, monospace; color: #1D1C18;">#4812</span>, which is open</li>
+              </ul>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 7px;">What stays here</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 11.5px; line-height: 1.75; color: #4A4842;">
+                <li>The name, tags, notes and betting details</li>
+                <li>The phone <span style="font-family: ui-monospace, monospace; color: #1D1C18;">091 234 4417</span> and the 5 tickets that came through it</li>
+              </ul>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; color: #8F5F08; line-height: 1.6;">Conversations follow the identity that anchors them — that is what makes this different from editing a field. The only way back is to merge the two profiles again.</div>
+            <div>
+              <div style="font-size: 12px; color: #4A4842; margin-bottom: 6px;">Type <strong style="font-family: ui-monospace, monospace; color: #1D1C18;">UNLINK</strong> to confirm</div>
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 0 12px; min-height: 48px; display: flex; align-items: center; font-family: ui-monospace, monospace; font-size: 13px; color: #6F6A61;">UNLINK</div>
+            </div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Unlink and move 9 tickets</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 560px; line-height: 1.5;">Two lists rather than one: what leaves, and what stays. An agent about to move nine tickets needs to see both halves of the split before typing anything, and the button repeats the number so the last thing read is the size of the action.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C04 · Dark — done, both sides linked</div>
+        <div style="width: 460px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 20px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 9px; border-bottom: 1px solid #343430;" role="status">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #123322; color: #5AD190; display: inline-flex; align-items: center; justify-content: center; font-size: 17px;">✓</span>
+            <div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Unlinked</div>
+            <div style="font-size: 12.5px; color: #A6A296; line-height: 1.6;">@abebe_t and its 9 tickets are on a new profile. Both are below.</div>
+          </div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+            <button style="font-family: inherit; text-align: left; background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; cursor: pointer; display: flex; align-items: center; gap: 11px;">
+              <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">አታ</span>
+              <span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 13px; color: #ECEAE4;">አበበ ታደሰ</span><span style="display: block; font-size: 11.5px; color: #A6A296; margin-top: 2px;">kept the name, notes and the phone · 5 tickets</span></span>
+              <span style="flex: none; color: #A6A296;">›</span>
+            </button>
+            <button style="font-family: inherit; text-align: left; background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; cursor: pointer; display: flex; align-items: center; gap: 11px;">
+              <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px dashed #45443E; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">?</span>
+              <span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 13px; color: #ECEAE4;">Customer #b7e0</span><span style="display: block; font-size: 11.5px; color: #A6A296; margin-top: 2px;">@abebe_t · 9 tickets · new</span></span>
+              <span style="flex: none; color: #A6A296;">›</span>
+            </button>
+            <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">The new profile is a shell with nine tickets attached — it has no name until someone gives it one. Recorded against your account, and reversible only by merging them back.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C05, C06 · The two states an identity list can end in</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 EC-05, EC-03</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C05 · Light — no identities left at all</div>
+        <div style="width: 380px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 15px;">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">ኪሃ</span>
+            <div style="flex: 1 1 auto; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="font-size: 15px; font-weight: 600; color: #1D1C18;">ኪዳነ ሃይሉ</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 2px 7px;">unreachable</span></div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 4px;">3 tickets · last contact 2 May</div>
+            </div>
+          </div>
+          <div style="margin-top: 13px;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Identities</div>
+            <div style="border: 1px dashed #CFCBC1; border-radius: 8px; padding: 14px; text-align: center;">
+              <div style="font-size: 12.5px; color: #1D1C18;">No way to reach this customer</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 5px; line-height: 1.6;">Their Telegram was unlinked and moved elsewhere. The profile keeps its history — add a phone or email if they get in touch again.</div>
+              <button style="font-family: inherit; margin-top: 10px; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 13px; cursor: pointer;">Add phone or email</button>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #6B675D; margin-top: 10px; line-height: 1.6;">A profile with nothing to reach is still a profile. The notes an agent wrote in May are the reason it exists.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C06 · Dark — the account went away, the history did not</div>
+        <div style="width: 380px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588; margin-bottom: 7px;">Identities</div>
+          <div style="background: #171715; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; align-items: flex-start; gap: 9px;">
+              <span style="flex: none; font-size: 12px; color: #C9C5BB; margin-top: 1px;">☎</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4;">091 887 2210</div><div style="font-size: 10.5px; color: #A6A296; margin-top: 3px;">added by Dawit Bekele · 2 May</div></div>
+            </div>
+            <div style="padding: 10px 12px; display: flex; align-items: flex-start; gap: 9px;">
+              <span style="flex: none; font-size: 12px; color: #8C877C; margin-top: 1px;">✈</span>
+              <div style="flex: 1 1 auto; min-width: 0;">
+                <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #A6A296;">@kidane_h</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; border-radius: 4px; padding: 2px 7px;">inactive</span></div>
+                <div style="font-size: 10.5px; color: #A6A296; margin-top: 4px; line-height: 1.5;">Sends have failed since 2 Jun — the account was probably deleted.</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #A6A296; margin-top: 10px; line-height: 1.6;">A guess, and labelled as one. The identity stays with its username history so an old ticket still makes sense, and search still finds them by the name they used to have.</div>
+        </div>
+      </div>
+
+      <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">The shared phone, which the design does not try to solve</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">One phone, three brothers, three players — common here, and Doc 08 is explicit that it is not a bug to be fixed with a merge. The number sits on one profile, the others are blocked from adding it, and the agent handles the reality with a note and the duplicate-player-ID hint.</p>
+        <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">Forcing a merge would fuse three people's ticket histories permanently to make one form field behave. The refusal is the feature.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · the same three decisions on a phone</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C02 · Light — the block, as a sheet</div>
+        <div style="width: 375px; height: 640px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 12px;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Already on another profile</div></div>
+            <div style="padding: 0 16px;">
+              <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 10px; padding: 13px;" role="alert">
+                <div style="font-size: 13.5px; color: #8E2222; line-height: 1.6;">091 887 2210 belongs to ኪዳነ ሃይሉ. A phone can only be on one customer.</div>
+              </div>
+              <button style="font-family: inherit; margin-top: 11px; width: 100%; text-align: left; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 14px; min-height: 60px; cursor: pointer; display: flex; align-items: center; gap: 11px;">
+                <span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">ኪሃ</span>
+                <span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14px; color: #1D1C18;">ኪዳነ ሃይሉ</span><span style="display: block; font-size: 12px; color: #6B675D; margin-top: 2px;">3 tickets · 2 May</span></span>
+                <span style="flex: none; color: #6B675D;">›</span>
+              </button>
+              <button style="font-family: inherit; margin-top: 11px; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Merge these two instead</button>
+              <button style="font-family: inherit; margin-top: 9px; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Use a different number</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">C03 · Dark — unlink, full screen</div>
+        <div style="width: 375px; height: 640px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Cancel" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">✕</button>
+            <span style="font-size: 15px; font-weight: 600; color: #ECEAE4; flex: 1 1 auto; min-width: 0;">Unlink @abebe_t</span>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 14px; display: flex; flex-direction: column; gap: 12px; overflow: hidden;">
+            <div style="background: #171715; border: 1px solid #343430; border-radius: 10px; padding: 13px;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4; margin-bottom: 8px;">Moves to a new profile</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 13px; line-height: 1.8; color: #C9C5BB;"><li>@abebe_t and 2 earlier names</li><li>2 conversations</li><li>9 tickets, one of them open</li></ul>
+            </div>
+            <div style="background: #171715; border: 1px solid #343430; border-radius: 10px; padding: 13px;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4; margin-bottom: 8px;">Stays here</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 13px; line-height: 1.8; color: #C9C5BB;"><li>Name, tags, notes, betting details</li><li>The phone and its 5 tickets</li></ul>
+            </div>
+            <div>
+              <div style="font-size: 12.5px; color: #C9C5BB; margin-bottom: 7px;">Type <strong style="font-family: ui-monospace, monospace; color: #ECEAE4;">UNLINK</strong> to confirm</div>
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 0 12px; min-height: 48px; display: flex; align-items: center; font-family: ui-monospace, monospace; font-size: 13px; color: #9A9588;">UNLINK</div>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 16px; border-top: 1px solid #343430;">
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Unlink and move 9 tickets</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Full screen rather than a sheet: this one moves nine tickets, and a half-height card over a dimmed profile makes it look smaller than it is.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

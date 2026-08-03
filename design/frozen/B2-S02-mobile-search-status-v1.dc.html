@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B2-S02-mobile-search-status-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Mobile search, notifications, agent status, reach and density</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows A10, A11, A12, A15, A16 · Doc 07 FR-23, FR-25, FR-26, FR-28, §9. The approved search result layout from <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">B1-S03</span> is unchanged — what is added here are the states it was never shown in. Batch 1 tokens unchanged. Amharic is real text, flagged for native review.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">A10 · Mobile search — the states</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-23, FR-25 · Tickets / Customers / Messages, as approved</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — opened, nothing typed</div>
+        <div style="width: 375px; height: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to list" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <label style="flex: 1 1 auto; min-width: 0;"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Search</span><span style="display: flex; align-items: center; gap: 7px; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 12px; min-height: 44px; background: #FBFAF8;"><span style="font-size: 13px; color: #6B675D;">⌕</span><span style="font-size: 13.5px; color: #8C877C;">Search tickets, customers, messages</span></span></label>
+          </div>
+          <div style="flex: none; display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9; overflow: hidden;">
+            <span style="flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: 999px; background: #22211D; color: #FFFFFF; font-size: 12.5px; font-weight: 600;">✓ Everything I can see</span>
+            <span style="flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: 999px; border: 1px solid #CFCBC1; color: #1D1C18; font-size: 12.5px;">This view · My Open</span>
+          </div>
+          <div style="flex: 1; min-height: 0; overflow: hidden;">
+            <div style="padding: 12px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Recent</div>
+            <div style="padding: 0 14px; display: flex; align-items: center; gap: 10px; min-height: 48px; border-bottom: 1px solid #F0EEE9; font-size: 13.5px; color: #1D1C18;"><span style="color: #6B675D;">↩</span>ማውጣት<span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">yesterday</span></div>
+            <div style="padding: 0 14px; display: flex; align-items: center; gap: 10px; min-height: 48px; border-bottom: 1px solid #F0EEE9; font-size: 13.5px; color: #1D1C18;"><span style="color: #6B675D;">↩</span>telebirr timeout<span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">2d</span></div>
+            <div style="padding: 0 14px; display: flex; align-items: center; gap: 10px; min-height: 48px; border-bottom: 1px solid #F0EEE9; font-size: 13.5px; color: #1D1C18;"><span style="color: #6B675D;">↩</span>#4788<span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">2d</span></div>
+            <div style="padding: 14px; font-size: 11.5px; color: #6B675D; line-height: 1.5;">Search reaches every ticket this agent is permitted to see, not only the open view — the chip above says which, so the scope is never a guess.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — searching (skeleton)</div>
+        <div style="width: 375px; height: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to list" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 7px; border: 1.5px solid #22211D; border-radius: 10px; padding: 0 12px; min-height: 44px; background: #FFFFFF;"><span style="font-size: 13px; color: #1D1C18;">⌕</span><span style="font-size: 13.5px; color: #1D1C18;">withdraw</span><button aria-label="Clear search" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #6B675D; font-size: 13px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button></span>
+          </div>
+          <div style="flex: none; padding: 9px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #4A4842;" role="status">Searching…</div>
+          <div style="flex: 1; min-height: 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="height: 9px; width: 56px; background: #EEECE6; border-radius: 3px;"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 11px; width: 72%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 10px; width: 88%; background: #F4F2ED; border-radius: 3px;"></div></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 11px; width: 64%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 10px; width: 80%; background: #F4F2ED; border-radius: 3px;"></div></div>
+            <div style="height: 9px; width: 76px; background: #EEECE6; border-radius: 3px;"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 11px; width: 58%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 10px; width: 70%; background: #F4F2ED; border-radius: 3px;"></div></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The skeleton keeps the section rhythm so results do not jump when they land.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — no results</div>
+        <div style="width: 375px; height: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to list" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 7px; border: 1.5px solid #22211D; border-radius: 10px; padding: 0 12px; min-height: 44px;"><span style="font-size: 13px; color: #1D1C18;">⌕</span><span style="font-size: 13.5px; color: #1D1C18;">chapa refund 9912</span><button aria-label="Clear search" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #6B675D; font-size: 13px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button></span>
+          </div>
+          <div style="flex: none; display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+            <span style="flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: 999px; border: 1px solid #CFCBC1; color: #1D1C18; font-size: 12.5px;">Everything I can see</span>
+            <span style="flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: 999px; background: #22211D; color: #FFFFFF; font-size: 12.5px; font-weight: 600;">✓ This view · My Open</span>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 34px 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;">
+            <span style="font-size: 22px; color: #A8A398;">⌕</span>
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Nothing in My Open matches that</div>
+            <div style="font-size: 12.5px; color: #6B675D; line-height: 1.55; text-wrap: pretty;">The search only looked inside the view you are standing in. Widening it searches every ticket you are permitted to see.</div>
+            <button style="font-family: inherit; margin-top: 8px; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; font-size: 13.5px; font-weight: 600; min-height: 48px; padding: 0 20px; cursor: pointer;">Search everything I can see</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — results, Amharic query</div>
+        <div style="width: 375px; height: 560px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to list" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #ECEAE4; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 7px; border: 1.5px solid #ECEAE4; border-radius: 10px; padding: 0 12px; min-height: 44px; background: #1C1C19;"><span style="font-size: 13px; color: #ECEAE4;">⌕</span><span style="font-size: 13.5px; color: #ECEAE4;">ማውጣት</span><button aria-label="Clear search" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #A6A296; font-size: 13px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button></span>
+          </div>
+          <div style="flex: none; display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid #262622; background: #1C1C19;"><span style="font-size: 11.5px; color: #C9C5BB;">18 results · everything I can see</span></div>
+          <div style="flex: 1; min-height: 0; overflow: hidden; background: #1C1C19;">
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Tickets</div>
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 48px;"><div style="display: flex; align-items: center; gap: 7px; min-width: 0;"><span style="font-size: 12px; flex: none; color: #ECEAE4;">✈</span><span style="font-size: 12px; color: #C9C5BB; flex: none;">#4812</span><span style="font-size: 13px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ</span><span style="font-size: 11px; color: #C9C5BB; flex: none;">4m</span></div><div style="font-size: 12px; color: #A6A296; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">የገንዘብ <mark style="background: #6B551A; color: #FFF6DC; padding: 0 2px;">ማውጣት</mark> ጥያቄዬ ገና አልተከናወነም</div></div>
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 48px;"><div style="display: flex; align-items: center; gap: 7px; min-width: 0;"><span style="font-size: 12px; flex: none; color: #ECEAE4;">✈</span><span style="font-size: 12px; color: #C9C5BB; flex: none;">#4790</span><span style="font-size: 13px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tigist Worku</span><span style="font-size: 11px; color: #C9C5BB; flex: none;">1h</span></div><div style="font-size: 12px; color: #A6A296; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ስለ <mark style="background: #6B551A; color: #FFF6DC; padding: 0 2px;">ማውጣት</mark> ገደብ ጠይቃለች</div></div>
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Customers</div>
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 48px;"><div style="font-size: 13px; color: #ECEAE4;">አበበ ታደሰ</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">@abebe_t · 6 tickets</div></div>
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Messages</div>
+            <div style="padding: 11px 14px; min-height: 48px;"><div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.6;">“ትናንት ማታ 2,500 ብር ለ<mark style="background: #6B551A; color: #FFF6DC; padding: 0 2px;">ማውጣት</mark> ጠይቄ ነበር፤ ገንዘቡ ከቀሪ ሂሳቤ ተቀንሷል ግን እስካሁን አልደረሰኝም።”</div><div style="font-size: 11px; color: #A6A296; margin-top: 4px;">#4801 · Dawit Assefa · yesterday 21:14</div></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Amharic queries match Amharic message bodies; the highlight sits on the word, not the whole line.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — search failed / offline</div>
+        <div style="width: 375px; height: 560px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to list" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #ECEAE4; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 7px; border: 1.5px solid #ECEAE4; border-radius: 10px; padding: 0 12px; min-height: 44px; background: #1C1C19;"><span style="font-size: 13px; color: #ECEAE4;">⌕</span><span style="font-size: 13.5px; color: #ECEAE4;">withdraw</span></span>
+          </div>
+          <div style="flex: none; padding: 10px 14px; background: #3A1F1F; border-bottom: 1px solid #7A3B3B; display: flex; align-items: center; gap: 8px;" role="alert"><span style="font-size: 12px; color: #FFB4B4; flex: none;">⚠</span><span style="font-size: 11.5px; color: #FFB4B4; line-height: 1.45;">You are offline. Search needs a connection.</span></div>
+          <div style="flex: 1; min-height: 0; padding: 34px 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; background: #1C1C19;">
+            <span style="font-size: 22px; color: #6E6A61;">⚠</span>
+            <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Search could not run</div>
+            <div style="font-size: 12.5px; color: #A6A296; line-height: 1.55; text-wrap: pretty;">Your query is kept. Nothing was lost — try again when the connection returns.</div>
+            <button style="font-family: inherit; margin-top: 8px; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13.5px; font-weight: 600; min-height: 48px; padding: 0 22px; cursor: pointer;">Try again</button>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px;">Tickets already downloaded stay readable in the list.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">A11 · Mobile notification sheet</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-26 · deep-link rows, mark all read, quick mute</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — populated</div>
+        <div style="width: 375px; height: 600px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 14px; max-height: 92%; display: flex; flex-direction: column;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px; flex: none;"></div>
+            <div style="flex: none; padding: 0 16px 10px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 15px; font-weight: 600; color: #1D1C18;">Notifications</span>
+              <span style="font-size: 11.5px; font-weight: 600; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 2px 8px;">6 unread</span>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #1D1C18; font-size: 12.5px; font-weight: 600; min-height: 44px; padding: 0 4px; cursor: pointer;">Mark all read</button>
+            </div>
+            <div style="flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid #F0EEE9;">
+              <div style="display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; background: #FBFAF8; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; background: #22211D; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #1D1C18; font-weight: 600;">Unread · @mention from Selam</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px; line-height: 1.45;">“@you can you check the telebirr reference on #4801?”</div><div style="font-size: 11px; color: #6F6A61; margin-top: 4px;">#4801 · Dawit Assefa · 3m</div></div>
+                <button aria-label="Mute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 8px; color: #4A4842; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">⊘</button>
+              </div>
+              <div style="display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; background: #FBFAF8; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; background: #22211D; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #1D1C18; font-weight: 600;">Unread · SLA breach in 5 min</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px; line-height: 1.45;">First response still owed on a withdrawal complaint.</div><div style="font-size: 11px; color: #6F6A61; margin-top: 4px;">#4776 · Mekdes Alemu · 5m</div></div>
+                <button aria-label="Mute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 8px; color: #4A4842; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">⊘</button>
+              </div>
+              <div style="display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; border: 1px solid #CFCBC1; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #1D1C18;">Read · Assigned to you by Hana</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px; line-height: 1.45;">Moved out of Unassigned into your queue.</div><div style="font-size: 11px; color: #6F6A61; margin-top: 4px;">#4788 · Yonas Tesfaye · 22m</div></div>
+                <button aria-label="Mute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 8px; color: #4A4842; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">⊘</button>
+              </div>
+              <div style="display: flex; gap: 10px; padding: 12px 16px; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; border: 1px solid #CFCBC1; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #1D1C18;">Read · 24-hour window closing</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px; line-height: 1.45;">Reply window ends in 40 minutes.</div><div style="font-size: 11px; color: #6F6A61; margin-top: 4px;">#4744 · Kidist Haile · 1h</div></div>
+                <button aria-label="Mute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 8px; color: #4A4842; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">⊘</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Unread carries a dot <em>and</em> the word “Unread” and a tinted row — never colour alone. Tapping a row opens that ticket; the mute button is a separate target so a thumb does not mute what it meant to open.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — muted confirmation</div>
+        <div style="width: 375px; height: 600px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; padding: 10px 0 14px; max-height: 92%; display: flex; flex-direction: column;">
+            <div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 12px; flex: none;"></div>
+            <div style="flex: none; padding: 0 16px 10px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Notifications</span>
+              <span style="font-size: 11.5px; font-weight: 600; background: #ECEAE4; color: #171714; border-radius: 999px; padding: 2px 8px;">4 unread</span>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #ECEAE4; font-size: 12.5px; font-weight: 600; min-height: 44px; padding: 0 4px; cursor: pointer;">Mark all read</button>
+            </div>
+            <div style="flex: none; margin: 0 12px 8px; padding: 10px 12px; background: #232320; border: 1px solid #45443E; border-radius: 10px; display: flex; align-items: center; gap: 10px;" role="status">
+              <span style="font-size: 12.5px; color: #ECEAE4; flex: 1 1 auto; line-height: 1.45;">Muted #4801 — you will still see it in the list, just not here.</span>
+              <button style="font-family: inherit; flex: none; background: transparent; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 12.5px; font-weight: 600; min-height: 44px; padding: 0 14px; cursor: pointer;">Undo</button>
+            </div>
+            <div style="flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid #262622;">
+              <div style="display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #262622; background: #232320; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; background: #ECEAE4; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #ECEAE4; font-weight: 600;">Unread · New message</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px; line-height: 1.5;">“ገንዘቤ ተቀንሷል ግን ወደ አካውንቴ አልገባም፤ እባክዎ ያረጋግጡልኝ።”</div><div style="font-size: 11px; color: #9A9588; margin-top: 4px;">#4812 · አበበ ታደሰ · 1m</div></div>
+                <button aria-label="Mute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #45443E; border-radius: 8px; color: #C9C5BB; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">⊘</button>
+              </div>
+              <div style="display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #262622; min-height: 60px; align-items: flex-start;">
+                <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; border: 1px solid #45443E; margin-top: 5px;" aria-hidden="true"></span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; color: #ECEAE4;">Muted · #4801</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px; line-height: 1.45;">Notifications off for this ticket.</div><div style="font-size: 11px; color: #9A9588; margin-top: 4px;">Dawit Assefa · 3m</div></div>
+                <button aria-label="Unmute this ticket" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 12px; min-width: 44px; min-height: 44px; cursor: pointer;">◍</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — empty (all caught up)</div>
+        <div style="width: 375px; height: 600px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 10px; display: flex; align-items: center; gap: 10px;"><span style="font-size: 15px; font-weight: 600; color: #1D1C18;">Notifications</span><span style="margin-left: auto; font-size: 12.5px; color: #8C877C;">Mark all read</span></div>
+            <div style="border-top: 1px solid #F0EEE9; padding: 40px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px;">
+              <span style="font-size: 20px; color: #A8A398;">◍</span>
+              <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Nothing waiting</div>
+              <div style="font-size: 12.5px; color: #6B675D; line-height: 1.55; text-wrap: pretty;">Mentions, assignments, SLA warnings and closing windows land here.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">A12 · Agent status on mobile</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-28 · reachable without leaving the list</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — the entry point, in the list header</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button style="font-family: inherit; flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 8px; background: transparent; border: none; min-height: 44px; padding: 0; cursor: pointer; text-align: left;"><span style="font-size: 15px; font-weight: 600; color: #1D1C18;">My Open</span><span style="font-size: 12.5px; color: #6B675D;">12</span><span style="font-size: 11px; color: #6B675D;">▾</span></button>
+            <button aria-label="Search" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #1D1C18; min-width: 44px; min-height: 44px; cursor: pointer;">⌕</button>
+            <button aria-label="Notifications, 6 unread" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #1D1C18; min-width: 44px; min-height: 44px; cursor: pointer; position: relative;">◍<span style="position: absolute; top: 4px; right: 4px; min-width: 16px; height: 16px; border-radius: 999px; background: #22211D; color: #FFFFFF; font-size: 9.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;">6</span></button>
+            <button style="font-family: inherit; flex: none; display: inline-flex; align-items: center; gap: 6px; background: #F1F6F2; border: 1px solid #B8D8C4; border-radius: 999px; min-height: 44px; padding: 0 11px; cursor: pointer;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #156F45;" aria-hidden="true"></span><span style="font-size: 12px; font-weight: 600; color: #156F45;">Online</span></button>
+          </div>
+          <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13.5px; font-weight: 700; color: #1D1C18;">Kidist Haile</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px;">Deposit hasn't arrived after 30 minutes</div></div>
+          <div style="padding: 12px 14px;"><div style="font-size: 13.5px; color: #1D1C18;">Yonas Tesfaye</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 3px;">Waiting on finance</div></div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Status sits in the header as a labelled pill — the word is there, so it does not depend on the dot's colour. One tap opens the sheet; the list never goes away.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — status sheet</div>
+        <div style="width: 375px; height: 480px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 4px;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Your status</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Selam Bekele · agent</div></div>
+            <div style="padding: 8px 8px 0;" role="radiogroup" aria-label="Your status">
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; background: #22211D; color: #FFFFFF;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #5AD190;" aria-hidden="true"></span><span style="font-size: 14px; font-weight: 600;">Online</span><span style="font-size: 12px; color: #DDD9D0; margin-left: 6px;">new chats can reach you</span><span style="margin-left: auto; font-size: 13px;">✓</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; color: #1D1C18;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #8F5F08;" aria-hidden="true"></span><span style="font-size: 14px;">Away</span><span style="font-size: 12px; color: #6B675D; margin-left: 6px;">keep what you hold, get nothing new</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; color: #1D1C18;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #8C877C;" aria-hidden="true"></span><span style="font-size: 14px;">Offline</span><span style="font-size: 12px; color: #6B675D; margin-left: 6px;">off the routing list</span></div>
+            </div>
+            <div style="margin: 10px 16px 0; padding: 10px 12px; background: #F6F5F2; border-radius: 8px; font-size: 11.5px; color: #4A4842; line-height: 1.5;">Tickets already assigned to you stay yours in every status.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — Away chosen, header updated</div>
+        <div style="width: 375px; height: 480px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="flex: none; padding: 8px 12px; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 600; color: #ECEAE4;">My Open</span><span style="font-size: 12.5px; color: #A6A296;">12</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #2C2612; border: 1px solid #6B551A; border-radius: 999px; min-height: 44px; padding: 0 11px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #E8C25A;" aria-hidden="true"></span><span style="font-size: 12px; font-weight: 600; color: #E8C25A;">Away</span></span>
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 4px;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Your status</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">Selam Bekele · agent</div></div>
+            <div style="padding: 8px 8px 0;" role="radiogroup" aria-label="Your status">
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; color: #ECEAE4;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #5AD190;" aria-hidden="true"></span><span style="font-size: 14px;">Online</span><span style="font-size: 12px; color: #A6A296; margin-left: 6px;">new chats can reach you</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; background: #ECEAE4; color: #171714;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #8F5F08;" aria-hidden="true"></span><span style="font-size: 14px; font-weight: 600;">Away</span><span style="font-size: 12px; color: #3A3A34; margin-left: 6px;">keep what you hold, get nothing new</span><span style="margin-left: auto; font-size: 13px;">✓</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 52px; border-radius: 8px; color: #ECEAE4;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #A6A296;" aria-hidden="true"></span><span style="font-size: 14px;">Offline</span><span style="font-size: 12px; color: #A6A296; margin-left: 6px;">off the routing list</span></div>
+            </div>
+            <div style="margin: 10px 16px 0; padding: 10px 12px; background: #232320; border-radius: 8px; font-size: 11.5px; color: #C9C5BB; line-height: 1.5;">Tickets already assigned to you stay yours in every status.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">A15 · Thumb-reach audit at 375</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Batch 2 prompt design rules</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — thread, right-handed arc</div>
+        <div style="width: 375px; height: 640px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative;">
+          <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: radial-gradient(120% 100% at 78% 100%, rgba(21,111,69,0.16) 0%, rgba(21,111,69,0.10) 55%, rgba(21,111,69,0) 72%); pointer-events: none;"></div>
+          <div style="position: absolute; left: 12px; bottom: 246px; font-size: 10.5px; font-weight: 600; color: #156F45; letter-spacing: 0.04em; pointer-events: none;">— easy thumb arc ends here —</div>
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="min-width: 0; flex: 1 1 auto;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">አበበ ታደሰ</div><div style="font-size: 11px; color: #6B675D;">#4812 · Telegram</div></div>
+            <button aria-label="More, including destructive actions" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 16px; color: #1D1C18; min-width: 44px; min-height: 44px; cursor: pointer;">⋯</button>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 14px; background: #FBFAF8; display: flex; flex-direction: column; gap: 9px;">
+            <div style="align-self: flex-start; max-width: 78%; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; color: #1D1C18; line-height: 1.55;">ገንዘቤ ተቀንሷል ግን ወደ አካውንቴ አልገባም።</div>
+            <div style="align-self: flex-end; max-width: 78%; background: #22211D; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; color: #FFFFFF; line-height: 1.55;">አረጋግጣለሁ፤ አንድ ደቂቃ ይስጡኝ።</div>
+          </div>
+          <div style="flex: none; padding: 10px 12px 14px; border-top: 1px solid #E5E2DB; background: #FFFFFF; display: flex; align-items: flex-end; gap: 8px; position: relative;">
+            <div style="flex: 1 1 auto; min-width: 0; border: 1px solid #CFCBC1; border-radius: 20px; padding: 11px 14px; font-size: 12.5px; color: #8C877C; min-height: 44px;">Reply…</div>
+            <button aria-label="Attach" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; cursor: pointer;">＋</button>
+            <button aria-label="Send reply" style="font-family: inherit; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 15px; cursor: pointer;">➤</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Inside the arc: reply, send, attach, claim, and the swipe gestures. Outside it, at the top edge: <span style="font-weight: 600;">⋯</span> — where close, delete and reassign live. The reach is deliberately asymmetric so a destructive tap costs a stretch.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — list, same arc</div>
+        <div style="width: 375px; height: 640px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative;">
+          <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: radial-gradient(120% 100% at 78% 100%, rgba(90,209,144,0.20) 0%, rgba(90,209,144,0.11) 55%, rgba(90,209,144,0) 72%); pointer-events: none;"></div>
+          <div style="position: absolute; left: 12px; bottom: 246px; font-size: 10.5px; font-weight: 600; color: #5AD190; letter-spacing: 0.04em; pointer-events: none;">— easy thumb arc ends here —</div>
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 600; color: #ECEAE4;">My Open</span><span style="font-size: 12.5px; color: #A6A296;">12</span>
+            <button aria-label="Bulk selection and destructive actions" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 16px; color: #ECEAE4; min-width: 44px; min-height: 44px; cursor: pointer;">⋯</button>
+          </div>
+          <div style="flex: 1; min-height: 0;">
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 13.5px; font-weight: 700; color: #ECEAE4;">Kidist Haile</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">Deposit hasn't arrived after 30 minutes</div></div>
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 13.5px; color: #ECEAE4;">Yonas Tesfaye</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">Waiting on finance</div></div>
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 13.5px; color: #ECEAE4;">Mekdes Alemu</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">Withdrawal still pending after three days</div></div>
+          </div>
+          <div style="flex: none; padding: 10px 12px 16px; border-top: 1px solid #343430; background: #1C1C19; display: flex; align-items: center; gap: 8px;">
+            <button style="font-family: inherit; flex: 1 1 auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Views</button>
+            <button style="font-family: inherit; flex: 1 1 auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Search</button>
+            <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Claim next</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Everything an agent does sixty times a shift sits on the bottom bar. Nothing destructive does.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">A16 · Density at 375 — the second line survives</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 §9 · comfortable and compact</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — comfortable · 76px rows</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; min-height: 76px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13.5px; font-weight: 700; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ</span><span style="font-size: 11px; color: #6F6A61; flex: none;">2m</span></div><div style="font-size: 12.5px; color: #6B675D; margin-top: 5px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">ትናንት ማታ 2,500 ብር ለማውጣት ጠይቄ ነበር፤ ገንዘቡ ከቀሪ ሂሳቤ ተቀንሷል ግን እስካሁን አልደረሰኝም።</div></div>
+          <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; min-height: 76px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13.5px; font-weight: 500; color: #1D1C18; flex: 1 1 auto; min-width: 0;">Mekdes Alemu</span><span style="font-size: 11px; color: #6F6A61; flex: none;">18m</span></div><div style="font-size: 12.5px; color: #6B675D; margin-top: 5px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Withdrawal still pending after three days — she has sent the telebirr reference twice already.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — compact · 60px rows</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 9px 14px; border-bottom: 1px solid #F0EEE9; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 700; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ</span><span style="font-size: 11px; color: #6F6A61; flex: none;">2m</span></div><div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ትናንት ማታ 2,500 ብር ለማውጣት ጠይቄ ነበር፤ ገንዘቡ ከቀሪ ሂሳቤ ተቀንሷል</div></div>
+          <div style="padding: 9px 14px; border-bottom: 1px solid #F0EEE9; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 500; color: #1D1C18; flex: 1 1 auto; min-width: 0;">Mekdes Alemu</span><span style="font-size: 11px; color: #6F6A61; flex: none;">18m</span></div><div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal still pending after three days — she has sent</div></div>
+          <div style="padding: 9px 14px; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 500; color: #1D1C18; flex: 1 1 auto; min-width: 0;">Dawit Assefa</span><span style="font-size: 11px; color: #6F6A61; flex: none;">1h</span></div><div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposit reference sent, waiting on finance</div></div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Compact keeps the second line — it clips to one line rather than dropping it, so the preview never disappears. Amharic sets taller than Latin, so the row floor is 60px, not 56px.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — comfortable · 76px rows</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 13px 14px; border-bottom: 1px solid #262622; min-height: 76px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13.5px; font-weight: 700; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ</span><span style="font-size: 11px; color: #A6A296; flex: none;">2m</span></div><div style="font-size: 12.5px; color: #A6A296; margin-top: 5px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">ትናንት ማታ 2,500 ብር ለማውጣት ጠይቄ ነበር፤ ገንዘቡ ከቀሪ ሂሳቤ ተቀንሷል ግን እስካሁን አልደረሰኝም።</div></div>
+          <div style="padding: 13px 14px; min-height: 76px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13.5px; font-weight: 500; color: #ECEAE4; flex: 1 1 auto; min-width: 0;">Mekdes Alemu</span><span style="font-size: 11px; color: #A6A296; flex: none;">18m</span></div><div style="font-size: 12.5px; color: #A6A296; margin-top: 5px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Withdrawal still pending after three days — she has sent the telebirr reference twice already.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — compact · 60px rows</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 9px 14px; border-bottom: 1px solid #262622; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 700; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">አበበ ታደሰ</span><span style="font-size: 11px; color: #A6A296; flex: none;">2m</span></div><div style="font-size: 12px; color: #A6A296; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ትናንት ማታ 2,500 ብር ለማውጣት ጠይቄ ነበር፤ ገንዘቡ ከቀሪ ሂሳቤ ተቀንሷል</div></div>
+          <div style="padding: 9px 14px; border-bottom: 1px solid #262622; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 500; color: #ECEAE4; flex: 1 1 auto; min-width: 0;">Mekdes Alemu</span><span style="font-size: 11px; color: #A6A296; flex: none;">18m</span></div><div style="font-size: 12px; color: #A6A296; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal still pending after three days — she has sent</div></div>
+          <div style="padding: 9px 14px; min-height: 60px;"><div style="display: flex; align-items: center; gap: 6px; min-width: 0;"><span style="font-size: 12px; flex: none;">✈</span><span style="font-size: 13px; font-weight: 500; color: #ECEAE4; flex: 1 1 auto; min-width: 0;">Dawit Assefa</span><span style="font-size: 11px; color: #A6A296; flex: none;">1h</span></div><div style="font-size: 12px; color: #A6A296; margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposit reference sent, waiting on finance</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">One question before this goes further</h2>
+    </div>
+    <div style="max-width: 700px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 14px 16px;">
+      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Row A10 says search must be “scope-correct”, but the two scope labels are mine, not the document's: <span style="font-weight: 600;">Everything I can see</span> and <span style="font-weight: 600;">This view · My Open</span>. Does Doc 07 FR-25 name the scopes? If it does, give me its words and I will use them exactly.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

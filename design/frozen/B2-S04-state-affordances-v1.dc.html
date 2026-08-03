@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B2-S04-state-affordances-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">State affordances and the bulk tail</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows C7–C13, C15, C16 · Doc 06 FR-07, FR-08, FR-09, FR-20, FR-23, FR-25, EC-09, EC-10, BR-07 · Doc 05 FR-10 · Doc 06 §9, §13. Each affordance sits at the top of the thread, above the first message, where it cannot be scrolled past by accident. Every countdown is written in words as well as numbers.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C8 · Resolved &nbsp;·&nbsp; C9 · Closed &nbsp;·&nbsp; C13 · Reopened</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 06 §8, FR-07, FR-08</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 thread — resolved, auto-close running</div>
+          <div style="width: 720px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 12px 16px; background: #F1F6F2; border-bottom: 1px solid #B8D8C4; display: flex; align-items: center; gap: 12px;">
+              <span style="flex: none; font-size: 14px; color: #156F45;">✓</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #14532F;">Resolved by Selam Bekele · today 15:04</div><div style="font-size: 12px; color: #2C6547; margin-top: 2px; line-height: 1.45;">Closes in 41 h unless the customer replies. A reply reopens it automatically and puts it back in her queue.</div></div>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #B8D8C4; border-radius: 8px; color: #14532F; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Reopen now</button>
+            </div>
+            <div style="padding: 16px; background: #FBFAF8; display: flex; flex-direction: column; gap: 9px;">
+              <div style="align-self: flex-start; max-width: 62%; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; color: #1D1C18; line-height: 1.55;">አመሰግናለሁ፣ ገንዘቡ ደርሶኛል።</div>
+              <div style="align-self: flex-end; max-width: 62%; background: #22211D; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; color: #FFFFFF; line-height: 1.55;">Glad it arrived. I'll close this out — write any time if it happens again.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 thread — closed, reopen window lapsed</div>
+          <div style="width: 720px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 12px 16px; background: #F4F3F1; border-bottom: 1px solid #DCD8CF; display: flex; align-items: center; gap: 12px;">
+              <span style="flex: none; font-size: 14px; color: #4A4842;">⊝</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Closed · 12 June, 09:31</div><div style="font-size: 12px; color: #4A4842; margin-top: 2px; line-height: 1.45;">The 7-day reopen window has passed. Reopening now needs a written reason, and the customer is not notified of it.</div></div>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Reopen with a reason</button>
+            </div>
+            <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px; background: #FBFAF8;">
+              <span style="font-size: 12px; color: #6B675D;">Still within the window it would read:</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18;">⏱ Reopens freely for 5 d 6 h</span>
+            </div>
+            <div style="padding: 14px 16px; font-size: 12.5px; color: #6B675D; line-height: 1.55;">The composer is replaced by the reopen control — there is no way to type into a closed ticket and wonder where the message went.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — resolved</div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 11px 14px; background: #123322; border-bottom: 1px solid #1E5638; display: flex; gap: 10px; align-items: flex-start;">
+              <span style="flex: none; font-size: 13px; color: #5AD190; margin-top: 1px;">✓</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #B8ECCE;">Resolved · 15:04</div><div style="font-size: 11.5px; color: #9FD9B8; margin-top: 3px; line-height: 1.5;">Closes in 41 h unless the customer replies.</div><button style="font-family: inherit; margin-top: 8px; background: transparent; border: 1px solid #1E5638; border-radius: 8px; color: #B8ECCE; font-size: 12.5px; font-weight: 600; min-height: 44px; padding: 0 14px; cursor: pointer;">Reopen now</button></div>
+            </div>
+            <div style="padding: 12px 14px; font-size: 12.5px; color: #A6A296; line-height: 1.5;">አመሰግናለሁ፣ ገንዘቡ ደርሶኛል።</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — reopened, count and the earlier ticket</div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 11px 14px; background: #232320; border-bottom: 1px solid #45443E; display: flex; gap: 10px; align-items: flex-start;">
+              <span style="flex: none; font-size: 13px; color: #ECEAE4; margin-top: 1px;">↺</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Reopened · 2nd time</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.5;">Reopened by መቅደስ ዓለሙ today 10:02. The first reopen was inside the window; this one needed a reason.</div><div style="margin-top: 8px; padding: 9px 11px; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; font-size: 11.5px; color: #C9C5BB; line-height: 1.5;">“Customer says the second payout also failed.”</div><button style="font-family: inherit; margin-top: 8px; background: transparent; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 12.5px; font-weight: 600; min-height: 44px; padding: 0 14px; cursor: pointer;">Open #4655, the earlier ticket</button></div>
+            </div>
+            <div style="padding: 12px 14px; font-size: 12.5px; color: #A6A296; line-height: 1.5;">When the window had lapsed the platform opens a new ticket and links it — the link is the row above, not a silent merge.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C10 · Spam &nbsp;·&nbsp; C11 · Escalated &nbsp;·&nbsp; C12 · Channel unreachable</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 06 FR-09, EC-09, FR-23, EC-10, BR-07 · Doc 05 FR-10</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 — marked spam, 7-day unmark running</div>
+          <div style="width: 720px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 12px 16px; background: #FBE5E5; border-bottom: 1px solid #EFC2C2; display: flex; align-items: center; gap: 12px;">
+              <span style="flex: none; font-size: 14px; color: #B32B2B;">⊘</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #8E2020;">Marked as spam by Hana Girma · 30 July, 11:20</div><div style="font-size: 12px; color: #8E2020; margin-top: 2px; line-height: 1.45;">Can be unmarked for 6 more days. After that the decision is final and the ticket stays out of every view.</div></div>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #EFC2C2; border-radius: 8px; color: #8E2020; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Not spam</button>
+            </div>
+            <div style="padding: 12px 16px; background: #FBFAF8; border-bottom: 1px solid #F0EEE9; font-size: 12px; color: #4A4842; line-height: 1.5;">The customer was not blocked — blocking is a separate confirmation and was not taken here.</div>
+            <div style="padding: 14px 16px; font-size: 12.5px; color: #6B675D; line-height: 1.55;">After seven days the banner becomes the terminal one: <span style="color: #1D1C18;">“Spam · final. This ticket can no longer be restored.”</span> — same shape, no button.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 — escalated, clock running</div>
+          <div style="width: 720px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 12px 16px; background: #FCF0D9; border-bottom: 1px solid #E8D9A8; display: flex; align-items: center; gap: 12px;">
+              <span style="flex: none; font-size: 14px; color: #8F5F08;">▲</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #7E5107;">Escalated to supervisor review · 1 h 12 m ago</div><div style="font-size: 12px; color: #7E5107; margin-top: 2px; line-height: 1.45;">Raised by Selam Bekele. Reason: payout over 10,000 ETB with a mismatched reference. Waiting on Meron Assefa — response target 4 h.</div></div>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #E8D9A8; border-radius: 8px; color: #7E5107; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Read the full reason</button>
+            </div>
+            <div style="padding: 14px 16px; font-size: 12.5px; color: #6B675D; line-height: 1.55;">The agent keeps the ticket and keeps replying — escalation adds a reviewer, it does not take the conversation away.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — channel unreachable</div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 11px 14px; background: #2C2612; border-bottom: 1px solid #6B551A; display: flex; gap: 10px; align-items: flex-start;">
+              <span style="flex: none; font-size: 13px; color: #E8C25A; margin-top: 1px;">⚠</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #E8C25A;">Telegram unreachable</div><div style="font-size: 11.5px; color: #D9BE73; margin-top: 3px; line-height: 1.5;">The operator's Telegram connection was revoked, so nothing can be sent to አበበ. <span style="color: #ECEAE4;">SLA paused</span> — and this ticket will not auto-resolve or auto-close while it waits.</div></div>
+            </div>
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #2C2612; border: 1px solid #6B551A; color: #E8C25A; font-size: 11.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px;">⚠ Unreachable</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; color: #C9C5BB; font-size: 11.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px;">⏸ SLA paused</span>
+            </div>
+            <div style="padding: 12px 14px; background: #171715;">
+              <div style="border: 1px dashed #45443E; border-radius: 10px; padding: 12px; font-size: 12px; color: #A6A296; line-height: 1.5;">Composer disabled. Notes to colleagues still work — the block is on sending to the customer, not on working the ticket.</div>
+            </div>
+            <div style="padding: 12px 14px; display: flex; gap: 8px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Add a note</button>
+              <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Open Rescue view</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — spam, terminal</div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 11px 14px; background: #3A1F1F; border-bottom: 1px solid #7A3B3B; display: flex; gap: 10px; align-items: flex-start;">
+              <span style="flex: none; font-size: 13px; color: #FFB4B4; margin-top: 1px;">⊘</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #FFB4B4;">Spam · final</div><div style="font-size: 11.5px; color: #E8A0A0; margin-top: 3px; line-height: 1.5;">Marked 22 July by ሃና ግርማ. The seven days to undo have passed — this ticket can no longer be restored.</div></div>
+            </div>
+            <div style="padding: 12px 14px; font-size: 12px; color: #A6A296; line-height: 1.5;">Kept readable for audit. No composer, no actions.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C7 · Unmerge — inside the window, and refused after it</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 06 FR-20, FS-04</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 — reversal available</div>
+        <div style="width: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Undo merge</div><div style="font-size: 12px; color: #6B675D; margin-top: 3px;">#4655 was merged into #4812 · 3 h 40 m ago</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px;"><span style="font-size: 12.5px; color: #1D1C18;">#4655</span><span style="font-size: 12px; color: #6B675D;">Kidist Haile · 14 messages</span><span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">returns to Open</span></div>
+            <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">The 14 messages go back to #4655 with their original timestamps. Anything written on #4812 after the merge stays on #4812.</div>
+            <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #7E650F; line-height: 1.5;">Reversal is possible for 20 h 20 m more. After 24 hours the snapshot is deleted and this cannot be undone.</div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;"><button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 13px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Undo the merge</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — refused, snapshot pruned</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 12px 14px; border-bottom: 1px solid #343430;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Undo merge</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">#4590 was merged into #4776 · 6 days ago</div></div>
+          <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #3A1F1F; border: 1px solid #7A3B3B; border-radius: 8px; padding: 11px 12px; display: flex; gap: 9px;" role="alert"><span style="flex: none; font-size: 13px; color: #FFB4B4;">⚠</span><div style="font-size: 12px; color: #FFB4B4; line-height: 1.55;">This merge can no longer be undone. The 24-hour snapshot was deleted, so there is nothing to restore from.</div></div>
+            <div style="font-size: 12px; color: #A6A296; line-height: 1.6;">What you can still do: split the messages that belong elsewhere into a new ticket, which keeps the audit trail honest instead of pretending the merge never happened.</div>
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Split messages instead</button>
+            <button style="font-family: inherit; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Close</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">C15 · Bulk progress drawer &nbsp;·&nbsp; C16 · Confirm phrase for wide operations</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 06 FR-25, §8, §9, §13 · announced at 25% increments</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 — running, with failures</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 600; color: #1D1C18;">Closing 63 tickets</span><button aria-label="Hide drawer" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #4A4842; font-size: 14px; min-width: 44px; min-height: 40px; cursor: pointer;">✕</button></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">48 of 63 done</span><span style="font-size: 11.5px; color: #6B675D;">76% · about 20 s left</span></div>
+              <div style="height: 8px; background: #EEECE6; border-radius: 999px; overflow: hidden;" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" aria-label="Bulk close progress"><div style="width: 76%; height: 100%; background: #22211D;"></div></div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 6px;">Progress is announced at 25, 50, 75 and 100 per cent, so it is not a silent bar.</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F1F6F2; color: #156F45; font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px;">✓ 45 closed</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px;">✕ 3 failed</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F4F3F1; color: #4A4842; font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px;">15 waiting</span>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #B32B2B; flex: none;">✕</span><span style="font-size: 12.5px; color: #1D1C18; flex: none;">#4712</span><span style="font-size: 12px; color: #6B675D; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Escalated — a supervisor must close it</span></div>
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #B32B2B; flex: none;">✕</span><span style="font-size: 12.5px; color: #1D1C18; flex: none;">#4688</span><span style="font-size: 12px; color: #6B675D; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Moved to Finance while this was running</span></div>
+              <div style="padding: 9px 12px; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #B32B2B; flex: none;">✕</span><span style="font-size: 12.5px; color: #1D1C18; flex: none;">#4601</span><span style="font-size: 12px; color: #6B675D; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Channel unreachable — never auto-closes</span></div>
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;"><button style="font-family: inherit; background: transparent; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Stop</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Retry the 3 that failed</button></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">Failures name the reason on the row. The agent never has to guess which fifteen went wrong.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · 1440 — confirm phrase, over 50</div>
+          <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Close 63 tickets</div></div>
+            <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">63 is above the 50-ticket line, so this one is typed, not clicked. Customers on 41 of these still have an open reply window.</div>
+              <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 5px;">Type <span style="font-family: ui-monospace, monospace; background: #F4F3F1; padding: 1px 5px; border-radius: 3px;">close 63</span> to continue</span><span style="display: flex; align-items: center; border: 1.5px solid #22211D; border-radius: 8px; padding: 0 12px; min-height: 44px; font-size: 13px; color: #1D1C18;">close 63<span style="display: inline-block; width: 1.5px; height: 15px; background: #22211D; margin-left: 1px;"></span></span></label>
+              <div style="display: flex; gap: 8px; justify-content: flex-end;"><button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 13px; font-weight: 600; min-height: 44px; padding: 0 12px; cursor: pointer;">Cancel</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; padding: 0 16px; cursor: pointer;">Close 63 tickets</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · 375 — progress as a sheet</div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 10px 0 0;"><div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 10px;"></div></div>
+            <div style="padding: 0 16px 12px;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Closing 18 tickets</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">14 of 18 done · 78%</div></div>
+            <div style="padding: 0 16px 12px;"><div style="height: 8px; background: #343430; border-radius: 999px; overflow: hidden;" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="Bulk close progress"><div style="width: 78%; height: 100%; background: #ECEAE4;"></div></div></div>
+            <div style="padding: 0 16px 12px; display: flex; gap: 8px; flex-wrap: wrap;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px;">✓ 13 closed</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #3A1F1F; color: #FFB4B4; font-size: 11.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px;">✕ 1 failed</span></div>
+            <div style="padding: 0 16px 16px; display: flex; gap: 8px;"><button style="font-family: inherit; flex: 1 1 auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Stop</button><button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Retry 1</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

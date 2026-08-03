@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S14-branding-emails-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section N · 6 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Branding — Emails</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The chrome around every message the platform sends, and the group where an operator's edit reaches somebody's inbox rather than their screen. The bodies themselves shipped in <a href="B7-S09-auth-emails-v1.dc.html">Section I</a>; what is edited here is the frame they sit in — logo band, address block, legal line, copyright — per language, once, for all of them.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two constraints are made visible rather than left to the renderer. The <strong style="font-weight: 600;">safe HTML subset</strong> is stated at the editor, with link targets rendered in the preview, because a branded email is the easiest phishing surface an operator could accidentally build. And the <strong style="font-weight: 600;">reset template is byte-invariant to account existence</strong> — one template, no variants, nothing in it that could differ depending on whether the address belongs to anyone.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4. Editing is desktop per Doc 16 §9; 375 is the read-only rendering.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Chrome, templates, and the preview that goes to your own inbox</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N01 · N02 · N03 · N04 · Doc 16 FR-01, T-02, SEC-02, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Eight templates share one frame, so the list shows which of them a chrome change touches before it is made — and send-to-self exists because no rendered preview in a browser tells you what Outlook will do with it. The address block is a legal requirement in most jurisdictions the operator sends into, which is why it is a field here and not an afterthought in a footer string.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · chrome edited, reset template previewed</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N01 · N02 · N03 · N04</span></div>
+    <div data-screen-label="N01 emails group light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Branding</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Emails</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #7E650F;">◈ Chrome edited · affects 8 templates</span>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Send me a test</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish…</button>
+            </div>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; overflow: hidden; display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Header and footer — shared by every template</div>
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">Address block · English</label>
+                    <div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; line-height: 1.6; color: #1D1C18; min-height: 62px;">Selam Bet Trading PLC<br />Bole Road, Addis Ababa, Ethiopia</div>
+                  </div>
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">Address block · አማርኛ</label>
+                    <div style="border: 1px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; line-height: 1.8; color: #1D1C18; min-height: 62px;">ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ.<br />ቦሌ መንገድ፣ አዲስ አበባ፣ ኢትዮጵያ</div>
+                  </div>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">Legal line · both languages</label>
+                  <input type="text" value="You received this because you have an account with Selam Bet Support." readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                </div>
+                <div style="background: #F6F5F2; border-left: 3px solid #CFCBC1; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600;">Formatting is limited on purpose.</strong> Bold, italic, links and line breaks. No scripts, no forms, no embedded images, no remote styles — and every link shows its destination in the preview, so a branded email cannot quietly become a phishing page.</div>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+                <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Templates</span>
+                  <span style="margin-left: auto; font-size: 11px; color: #6B675D;">8 · all inherit the chrome above</span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 116px; align-items: center; border-bottom: 1px solid #F0EEE9; background: #F6F5F2;">
+                  <span style="padding: 10px 16px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Password reset</span><span style="padding: 10px 12px; font-size: 11.5px; color: #6B675D;">en · አማ</span><span style="padding: 10px 12px; font-size: 11px; font-weight: 600; color: #1D1C18;">Previewing</span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 116px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+                  <span style="padding: 10px 16px; font-size: 12.5px; color: #1D1C18;">Invitation</span><span style="padding: 10px 12px; font-size: 11.5px; color: #6B675D;">en · አማ</span><span style="padding: 10px 12px;"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 116px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+                  <span style="padding: 10px 16px; font-size: 12.5px; color: #1D1C18;">New device signed in</span><span style="padding: 10px 12px; font-size: 11.5px; color: #6B675D;">en · አማ</span><span style="padding: 10px 12px;"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 116px; align-items: center; border-bottom: 1px solid #F0EEE9;">
+                  <span style="padding: 10px 16px; font-size: 12.5px; color: #1D1C18;">Ticket resolved · CSAT</span><span style="padding: 10px 12px; font-size: 11.5px; color: #6B675D;">en · አማ</span><span style="padding: 10px 12px;"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 116px; align-items: center;">
+                  <span style="padding: 10px 16px; font-size: 12.5px; color: #1D1C18;">Scheduled report</span><span style="padding: 10px 12px; font-size: 11.5px; color: #6B675D;">en only</span><span style="padding: 10px 12px;"><span style="font-size: 10.5px; font-weight: 600; color: #7E650F; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 3px 8px;">◈ አማ missing</span></span>
+                </div>
+              </div>
+            </div>
+
+            <div style="width: 512px; flex: none; border-left: 1px solid #E5E2DB; background: #FFFFFF; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Preview</span><span style="font-size: 11px; color: #6B675D;">Password reset</span>
+                <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="font-size: 11px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 5px; padding: 5px 9px;">EN</span><span style="font-size: 11px; font-weight: 500; color: #4A4842; border-radius: 5px; padding: 5px 9px;">አማ</span></span>
+              </div>
+              <div style="flex: 1; padding: 16px; background: #EEECE6; overflow: hidden;">
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+                  <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #2F5AC8;"></span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span></div>
+                  <div style="padding: 16px;">
+                    <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Reset your password</div>
+                    <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842; margin-top: 7px;">A password reset was requested for this email address. If that was you, choose a new password now.</div>
+                    <div style="margin: 13px 0;"><span style="display: inline-block; background: #2F5AC8; color: #FFFFFF; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 11px 18px;">Choose a new password</span></div>
+                    <div style="font-size: 11px; line-height: 1.6; color: #6B675D;">Links to <span style="font-family: ui-monospace, monospace; color: #2F5AC8;">support.selambet.et/reset/…</span></div>
+                  </div>
+                  <div style="padding: 13px 16px; background: #F6F5F2; border-top: 1px solid #F0EEE9; font-size: 10.5px; line-height: 1.7; color: #6B675D;">Selam Bet Trading PLC · Bole Road, Addis Ababa, Ethiopia<br />You received this because you have an account with Selam Bet Support.</div>
+                </div>
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; margin-top: 12px; font-size: 11px; line-height: 1.65; color: #4A4842;"><strong style="font-weight: 600;">One template, no variants.</strong> There is no second version of this email for an address without an account — that address receives nothing at all. Nothing in the copy, the subject or the structure can differ by recipient, which is what keeps the reset screen's uniform response true all the way into the inbox.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Rolling one template back, and the part that always sends</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N05 · N06 · Doc 16 FS-02, T-02</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Email templates version inside the theme's email group, so a template that renders badly in one client rolls back alone rather than taking the whole brand with it. The restore point is named — which version, published when, by whom — because “roll back” without a named destination is a leap in the dark at the exact moment nobody wants one.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · one template rolled back · አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N05 · N06</span></div>
+    <div data-screen-label="N05 email rollback dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ብራንዲንግ</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB; line-height: 1.7;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ማንነት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ቀለሞችና ፊደላት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">መግቢያ</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ኢሜይሎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">አገናኞችና ሕጋዊ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ላኪዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ዝርዝር</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ቅንብሮች · ብራንዲንግ</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4; line-height: 1.4;">ኢሜይሎች</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer; line-height: 1.6;">የሙከራ ኢሜይል ላክልኝ</button>
+            </div>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">የተፈታ ትኬት · CSAT</span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; background: #262C33; border: 1px solid #3A424B; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #A7B2BE; line-height: 1.6;">◷ ወደ ቀድሞው ተመልሷል</span>
+                </div>
+                <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 13px; font-size: 12px; line-height: 1.8; color: #C9C5BB;">
+                  <strong style="font-weight: 600; color: #ECEAE4;">አሁን ሥራ ላይ ያለው፦ ስሪት 6</strong> — በሐምሌ 7 በሐና ግርማ የታተመ።<br />ስሪት 7 በአንዳንድ የኢሜይል መተግበሪያዎች ላይ አልታየም ነበር፤ ስለዚህ ይህ አብነት ብቻ ወደ ኋላ ተመልሷል። ሌሎቹ ሰባቱ አብነቶችና መላው ገጽታ አልተነኩም።
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer; line-height: 1.6;">ስሪት 7ን እንደገና ተመልከት</button>
+                  <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer; line-height: 1.6;">የስሪት ታሪክ</button>
+                </div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 10px; line-height: 1.6;">ሁልጊዜ የሚላከው ክፍል</div>
+                <div style="font-size: 12px; line-height: 1.8; color: #C9C5BB;">እያንዳንዱ ኢሜይል ከHTML ጋር አብሮ <strong style="font-weight: 600; color: #ECEAE4;">የጽሑፍ ቅጂ</strong> ይዞ ይላካል። ቀላል የኢሜይል መተግበሪያዎች የሚያሳዩት ይህንኑ ነው፤ የማያዩ ሰዎችም መጀመሪያ የሚያዳምጡት ይህንኑ ነው። አንድ አብነት ከታተመ በኋላ መታየት ቢያቆም፣ መልእክቱ በዚህ ቅጂ መላኩን ይቀጥላል።</div>
+                <code style="display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; line-height: 1.8; color: #C9C5BB; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px; margin-top: 11px; white-space: pre-wrap;">ትኬትዎ ተፈትቷል
+
+እባክዎ አገልግሎታችንን ይገምግሙ፦
+https://support.selambet.et/csat/8fK2
+
+ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ.</code>
+              </div>
+              <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 11px 13px; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">ቅርጸቱ ሆን ተብሎ የተገደበ ነው።</strong> ደማቅ፣ ሰያፍ፣ አገናኞችና የመስመር መግቢያ ብቻ። ስክሪፕቶች፣ ቅጾችና የውጭ ቅጦች አይፈቀዱም፤ እያንዳንዱ አገናኝም መድረሻውን በቅድመ-እይታ ያሳያል — የምርት ስም ያለው ኢሜይል በስውር የማጭበርበሪያ ገጽ እንዳይሆን።</div>
+            </div>
+            <div style="width: 512px; flex: none; border-left: 1px solid #343430; background: #1C1C19; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 12px 16px; border-bottom: 1px solid #262622; font-size: 11.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">ቅድመ-እይታ — ስሪት 6፣ አሁን ሥራ ላይ</div>
+              <div style="flex: 1; padding: 16px; background: #232320;">
+                <div style="background: #FFFFFF; border-radius: 8px; overflow: hidden;">
+                  <div style="padding: 13px 15px; border-bottom: 1px solid #F0EEE9;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #2F5AC8;"></span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span></div>
+                  <div style="padding: 15px;">
+                    <div style="font-size: 14.5px; font-weight: 600; color: #1D1C18; line-height: 1.45;">ትኬትዎ ተፈትቷል</div>
+                    <div style="font-size: 12.5px; line-height: 1.8; color: #4A4842; margin-top: 7px;">አገልግሎታችን እንዴት ነበር? በአንድ ጠቅታ ይንገሩን።</div>
+                    <div style="margin: 13px 0;"><span style="display: inline-block; background: #2F5AC8; color: #FFFFFF; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 11px 18px; line-height: 1.6;">ግምገማ ይስጡ</span></div>
+                  </div>
+                  <div style="padding: 12px 15px; background: #F6F5F2; border-top: 1px solid #F0EEE9; font-size: 10.5px; line-height: 1.85; color: #6B675D;">ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ. · ቦሌ መንገድ፣ አዲስ አበባ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 14px;">
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ቅድመ-እይታ — የይለፍ ቃል መቀየሪያ</div>
+          <div style="background: #FFFFFF; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 13px 15px; border-bottom: 1px solid #F0EEE9;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #2F5AC8;"></span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span></div>
+            <div style="padding: 15px;">
+              <div style="font-size: 14.5px; font-weight: 600; color: #1D1C18; line-height: 1.45;">የይለፍ ቃልዎን ይቀይሩ</div>
+              <div style="font-size: 12.5px; line-height: 1.8; color: #4A4842; margin-top: 7px;">ለዚህ ኢሜይል አድራሻ የይለፍ ቃል መቀየሪያ ተጠይቋል። እርስዎ ከሆኑ አሁን አዲስ የይለፍ ቃል ይምረጡ።</div>
+              <div style="margin: 13px 0;"><span style="display: inline-block; background: #2F5AC8; color: #FFFFFF; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 11px 18px; line-height: 1.6;">አዲስ የይለፍ ቃል ይምረጡ</span></div>
+            </div>
+            <div style="padding: 12px 15px; background: #F6F5F2; border-top: 1px solid #F0EEE9; font-size: 10.5px; line-height: 1.85; color: #6B675D;">ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ. · ቦሌ መንገድ፣ አዲስ አበባ</div>
+          </div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">አንድ አብነት ብቻ ነው፤ ልዩ ዓይነት የለም።</strong> መለያ ለሌለው አድራሻ ሁለተኛ ዓይነት ኢሜይል የለም — ያ አድራሻ ምንም አይደርሰውም። በጽሑፉ፣ በርዕሱ ወይም በአወቃቀሩ ውስጥ በተቀባዩ ላይ ተመሥርቶ የሚለወጥ ምንም የለም።</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">N04 · dark · am · the SEC-01 statement, in the language the English pane states it in</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Parity, checked mechanically before this note was written</div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Four claims are made in this section: the rollback restore point, the plain-text guarantee, the safe-subset constraint, and the reset template’s invariance. Each one now appears in an English surface and an Amharic surface, and the list above is the checklist I ran against the file rather than a sentence I wrote from memory — which is how the previous two sections got this wrong.</p>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Ticket resolved · CSAT</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A5460;">◷ Rolled back</span>
+          </div>
+          <div role="status" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.65; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Now live: version 6</strong> — published 7 July by Hanna Girma.<br />Version 7 failed to render in some mail clients, so this template alone went back. The other seven templates and the rest of the theme were untouched.</div>
+          <div style="display: flex; gap: 8px;">
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Look at version 7 again</button>
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Version history</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">N05 · light · en · the restore point is named, in both languages</div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · read-only</div>
+        <div data-screen-label="N01 emails 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">11:06<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Branding</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Emails</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Editing requires a larger screen.</strong> Template previews need the width to be worth trusting.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 11px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Password reset</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">en · አማ · version 6, live</div></div>
+              <div style="padding: 11px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Invitation</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">en · አማ · version 6, live</div></div>
+              <div style="padding: 11px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">New device signed in</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">en · አማ · version 6, live</div></div>
+              <div style="padding: 11px 13px; display: flex; align-items: flex-start; gap: 9px;">
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Ticket resolved · CSAT</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Rolled back to version 6</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #4A5460;">◷ Rolled back</span>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; font-size: 11.5px; line-height: 1.65; color: #4A4842;"><strong style="font-weight: 600;">Every email also sends as plain text.</strong> That copy is what a stripped-down client shows, and what still arrives if a template stops rendering.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all six rows. N01–N04 in §A at 1440 light; N05 and N06 in §B at 1440 dark in Amharic, with the Amharic reset preview, the English rollback card and the read-only 375 beneath it.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Language parity — corrected, and the method changed.</strong> A first pass shipped the safe-subset constraint and the reset-invariance statement in English only while the note claimed all four claims shipped twice. Both now have Amharic surfaces, and the note is written <em>after</em> a claim-by-claim check of the file rather than before one. This was the third recurrence of the same class, so the fix is the procedure, not just the strings.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Preview marks corrected to the 3 August ruling.</strong> The three email previews rendered the dashed slot — the empty state — for a tenant whose logo is uploaded and live at version 6. They now carry the labelled fixture mark, matching Sections K and M. The dashed slot stays where it belongs: the app top bar, outside every preview pane.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">The reset template's invariance is shown, not asserted.</strong> The preview pane states it where an operator edits: one template, no variants, and an address with no account receives nothing at all. That is the only place SEC-01 can quietly break after the screens are right, because a well-meaning operator personalising a subject line would do it here.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">No ratios are stated in this section.</strong> Nothing here computes contrast — the email chrome renders on white in a client the platform does not control — so rather than print a number I would be guessing, the group defers to §L's matrix for the token pairs and says nothing about the rest.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section O — links and legal, where a footer URL is validated https and its domain shown before a customer can be sent anywhere.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

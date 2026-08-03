@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #F4F3F1; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #1E3E92; }
+  input { font: inherit; }
+</style>
+</helmet>
+
+<div style="max-width: 1240px; margin: 0 auto; padding: 40px 28px 96px;">
+
+  <header style="display: flex; flex-direction: column; gap: 14px; padding-bottom: 22px; border-bottom: 2px solid #1B1B18;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B2-S00-checklist-v1</span>
+      <h1 style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">THE CHECKLIST — Batch 2</h1>
+    </div>
+    <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #4A4842; max-width: 860px; text-wrap: pretty;">Inbox mobile refinement + Ticket detail. Most rows trace to Doc 07 or Doc 06; six render components those two documents explicitly delegate elsewhere, named in the third card so you can still verify them. Batch 1's approved work is settled law here — fonts, colours, spacing and component shapes carry over unchanged from <a href="#b1">B1-DS</a> and the four B1 screen sets.</p>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #DEDCD7; border: 1px solid #DEDCD7; margin-top: 26px;">
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Scope documents</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Doc 07 — Unified Inbox (mobile contract)<br />Doc 06 — Ticketing System (property contract)</div>
+    </div>
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Inherited, not re-opened</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">All Batch 1 tokens, components and approved screens. A consistency violation is a rejection; nothing approved gets restyled to suit a new screen.</div>
+    </div>
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Rendered here, defined elsewhere</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Doc 05 — reply-window chip, channel-unreachable, rescue<br />Doc 04 — reply-to anchor fetch<br />Doc 03 — scope-change behaviour<br />Doc 17 — the ticket timeline's entries</div>
+    </div>
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Out of scope</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Customer panel (Doc 08) · Copilot (Doc 09) · queue config (Doc 11) · SLA and macro definitions (Doc 12) · supervisor dashboard (Doc 15)</div>
+    </div>
+  </section>
+
+  <div style="margin-top: 20px; padding: 14px 18px; background: #FFF8E6; border: 1px solid #E8D9A8; font-size: 13.5px; line-height: 1.6; color: #4A4239;">
+    <strong style="font-weight: 600;">Two rows of Batch 1 business are still open and affect this contract.</strong> The seventeen rows badged <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; background: #1B1B18; color: #F4F3F1; padding: 2px 6px; border-radius: 3px;">carried</span> below were already built in Batch 1 — the ticket property controls, the handoff card, the bulk bar, and the merge, split, escalate, spam, transfer and new-ticket dialogs. They need your ruling on which batch owns them, not redrawing. And Batch 1's 28 ❌ rows are not repeated here; tell me if you want them folded into this batch.
+  </div>
+
+  <div style="position: sticky; top: 0; z-index: 20; background: #F4F3F1; padding: 20px 0 12px; margin-top: 8px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; border-bottom: 1px solid #DEDCD7;">
+    <input type="search" placeholder="Filter rows — try “sheet”, “swipe”, “Doc 06”" aria-label="Filter checklist rows" value="{{ q }}" onInput="{{ onFilter }}" style="flex: 1 1 280px; min-width: 240px; padding: 9px 12px; border: 1px solid #C9C6BF; border-radius: 4px; background: #FFFFFF; font-size: 13.5px; color: #1B1B18;" />
+    <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #4A4842;">{{ counts }}</span>
+  </div>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+    <section style="margin-top: 34px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600; color: #1B1B18;">{{ sec.id }}</span>
+        <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 8px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842; max-width: 900px;">{{ sec.note }}</p>
+
+      <div role="table" style="margin-top: 12px; border: 1px solid #DEDCD7; background: #DEDCD7; display: flex; flex-direction: column; gap: 1px;">
+        <div role="row" style="display: grid; grid-template-columns: 54px minmax(180px, 1.1fr) minmax(280px, 2.2fr) 168px 96px; background: #EEEDEA;">
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4842;">№</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4842;">Item</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4842;">What the spec requires</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4842;">Source</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4842;">Done</div>
+        </div>
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="10">
+          <div role="row" style="display: grid; grid-template-columns: 54px minmax(180px, 1.1fr) minmax(280px, 2.2fr) 168px 96px; background: #FFFFFF;">
+            <div role="cell" style="padding: 9px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: #6F6A61;">{{ row.n }}</div>
+            <div role="cell" style="padding: 9px 10px; font-size: 13px; font-weight: 500; line-height: 1.45; color: #1B1B18; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap;">
+              <span>{{ row.t }}</span>
+              <sc-if value="{{ row.b }}" hint-placeholder-val="{{ false }}"><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; background: #1B1B18; color: #F4F3F1; padding: 2px 5px; border-radius: 3px; font-weight: 500;">carried</span></sc-if>
+            </div>
+            <div role="cell" style="padding: 9px 10px; font-size: 13px; line-height: 1.5; color: #4A4842; text-wrap: pretty;">{{ row.r }}</div>
+            <div role="cell" style="padding: 9px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.5; color: #4A4842;">{{ row.d }}</div>
+            <div role="cell" style="padding: 9px 10px; font-size: 12.5px; color: #4A4842; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.s }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <footer style="margin-top: 46px; padding-top: 18px; border-top: 1px solid #DEDCD7; font-size: 12.5px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+    <p style="margin: 0;">Rows sourced to “Batch 2 prompt” are the universal requirements you set in the prompt rather than in a document — both viewports, both themes, both languages, the universal state set — marked as such so you can tell spec law from program law when you audit.</p>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const SECTIONS = [
+{ id: "A", name: "Mobile refinement — the 375 contract in full", note: "Doc 07 FR-02 and §8 define a two-level phone workspace. Batch 1 proved the layout; this batch designs the interactions and the states that only exist on a phone.", rows: [
+  { t: "List ↔ Thread transition", r: "Two-level navigation with a real back affordance and preserved scroll position on return.", d: "Doc 07 FR-02, FR-12" },
+  { t: "Views modal sheet", r: "Full view list from the header, including queue, shared and personal sections with live counts.", d: "Doc 07 FR-02, FR-05–FR-08" },
+  { t: "Context bottom sheet", r: "Swipe-up sheet carrying the same three tabs in fixed order — Ticket, Customer, Copilot — with drag-to-dismiss.", d: "Doc 07 FR-02, §9" },
+  { t: "Swipe-right — quick claim", r: "Reveals claim, commits with haptic feedback; undo path on the resulting toast.", d: "Doc 07 §8" },
+  { t: "Swipe-left — quick actions", r: "Action sheet: resolve, pending, priority — each 44px minimum.", d: "Doc 07 §8" },
+  { t: "Pull-to-refresh", r: "On the list, with its own in-progress and completed states.", d: "Doc 07 §8" },
+  { t: "Composer above the keyboard", r: "Sticky composer with the keyboard raised; the thread stays scrolled to the latest message.", d: "Doc 07 §8" },
+  { t: "Attachment overflow sheet", r: "Attachments move into an overflow sheet rather than crowding the composer row.", d: "Doc 07 §8" },
+  { t: "Mobile bulk selection", r: "Long-press to enter selection; capped at 25 items, deliberately lower than desktop.", d: "Doc 07 §8 · Doc 06 §9" },
+  { t: "Mobile search", r: "Full-screen search with the same three result sections, scope-correct.", d: "Doc 07 FR-23, FR-25" },
+  { t: "Mobile notification panel", r: "Bell contents as a sheet, deep-linking rows, mark-all-read, quick mute.", d: "Doc 07 FR-26" },
+  { t: "Mobile agent status", r: "Online / Away / Offline control reachable without leaving the list.", d: "Doc 07 FR-28" },
+  { t: "Breakpoint 1024–1279", r: "R4 becomes an overlay drawer over the thread.", d: "Doc 07 FR-02" },
+  { t: "Breakpoint 768–1023", r: "R1 collapses to icons permanently; list and thread share the remaining width.", d: "Doc 07 FR-02" },
+  { t: "Thumb-reach audit", r: "Primary actions inside the thumb arc on a 375 screen; destructive actions deliberately outside it.", d: "Batch 2 prompt design rules" },
+  { t: "Mobile density", r: "Comfortable and compact row heights hold at 375 without truncating the second line.", d: "Doc 07 §9" }
+]},
+{ id: "B", name: "Ticket detail — the property contract", note: "Doc 06 §8 is the contract Doc 07 renders. Rows marked carried were drawn in Batch 1 and need your ruling on ownership, not redrawing.", rows: [
+  { t: "Status control", r: "Renders only legal next states; illegal targets are absent, not disabled. Radiogroup with consequences described.", d: "Doc 06 §8, FR-04, §13", b: true },
+  { t: "Priority select", r: "Four levels with colour dots and labels.", d: "Doc 06 §8, FR-17", b: true },
+  { t: "Assignee combo", r: "Searchable, presence dots, “assign to me”; rejects an assignee without view scope.", d: "Doc 06 §8, FR-15", b: true },
+  { t: "Department / queue cascade", r: "Two-level selection that re-routes on change.", d: "Doc 06 §8, FR-22", b: true },
+  { t: "Tags input", r: "Free-form per tenant with autocomplete and bulk management.", d: "Doc 06 §8, FR-19", b: true },
+  { t: "Followers stack", r: "Follow / unfollow yourself; assigners can add others.", d: "Doc 06 §8, FR-18", b: true },
+  { t: "SLA chips", r: "The Doc 12 instance rendered in-panel, first-response and resolution.", d: "Doc 06 §8", b: true },
+  { t: "Reply-window chip", r: "The Doc 05 component, identical to the one in list rows.", d: "Doc 06 §8 · Doc 05 §9", b: true },
+  { t: "Pending-reason selector", r: "Appears contextually: awaiting customer, or awaiting internal with department / named user / external.", d: "Doc 06 §8, FR-01" },
+  { t: "Linked tickets list", r: "Merged, split and previous relationships with explicit relationship labels.", d: "Doc 06 §8, FR-20, FR-21", b: true },
+  { t: "Handoff packet card", r: "Pinned and collapsible: summary, intent + confidence meter, sentiment and urgency chips, suggested routing with applied / overridden indicator, KB articles the customer already saw with hover previews.", d: "Doc 06 FR-11, §8", b: true },
+  { t: "Ticket timeline", r: "The per-object event trail embedded in the panel — status changes, assignments, transfers, escalations with actor and time.", d: "Doc 06 FR-26 · Doc 17 FR-07" },
+  { t: "Subject field", r: "Editable; AI-generated subjects carry their source and stay editable by staff.", d: "Doc 06 FR-03" },
+  { t: "Mobile property sheet", r: "Identical controls as a bottom sheet — no reduced feature set.", d: "Doc 06 §9" }
+]},
+{ id: "C", name: "Ticket detail — operations and state affordances", note: "The operations were drawn in Batch 1; the state affordances below were the largest group of ❌ rows in Batch 1's audit and are the real work of this batch.", rows: [
+  { t: "Merge dialog", r: "Side-by-side timelines, direction arrow, consequences checklist, confirm phrase above two sources, 24-hour reversal stated.", d: "Doc 06 FR-20, §8", b: true },
+  { t: "Split dialog", r: "Message multi-select with count pill, then destination step; linked-work cap of 3 surfaced.", d: "Doc 06 FR-21, §8", b: true },
+  { t: "Escalate dialog", r: "Path picker and reason with a minimum-length meter.", d: "Doc 06 FR-23, §8", b: true },
+  { t: "Spam dialog", r: "Consequences note plus separately-confirmed block-customer option.", d: "Doc 06 FR-09, §8", b: true },
+  { t: "Transfer", r: "Department or queue change re-routes, resets the assignee unless the target department retains them, and badges the SLA when it keeps its original targets.", d: "Doc 06 FR-22, §8", b: true },
+  { t: "New ticket from conversation", r: "Pre-fills customer and channel; blocked when an open-family ticket exists, offering a jump link instead.", d: "Doc 06 FR-12", b: true },
+  { t: "Unmerge", r: "Reversal inside the 24-hour window, and the refusal state once the snapshot has been pruned.", d: "Doc 06 FR-20, FS-04" },
+  { t: "Resolved affordance", r: "Auto-close countdown: “closes in 41 h unless the customer replies”.", d: "Doc 06 §8, FR-07" },
+  { t: "Closed affordance", r: "Reopen-window countdown, or the reason-required notice once it has lapsed.", d: "Doc 06 §8, FR-08" },
+  { t: "Spam affordance", r: "Banner with the 7-day unmark countdown, and the terminal state after it.", d: "Doc 06 §8, FR-09, EC-09" },
+  { t: "Escalated affordance", r: "Path, reason and who it went to, with the escalation clock running.", d: "Doc 06 FR-23" },
+  { t: "Channel-unreachable affordance", r: "Unreachable chip with the SLA-pause flag; never auto-resolves or auto-closes.", d: "Doc 06 EC-10, BR-07 · Doc 05 FR-10" },
+  { t: "Reopened ticket", r: "Reopen count and the link to the previous ticket when the window had lapsed.", d: "Doc 06 FR-08" },
+  { t: "Bulk bar", r: "Selection count with actions computed from the per-item permission intersection; disabled actions state why.", d: "Doc 06 §8, FR-25", b: true },
+  { t: "Bulk progress drawer", r: "Per-item results with retry-failed, announced at 25% increments.", d: "Doc 06 §8, FR-25, §13" },
+  { t: "Bulk confirm phrase", r: "Required for wide operations — closing more than 50.", d: "Doc 06 §9" }
+]},
+{ id: "D", name: "States", note: "The universal set for every surface above, plus every state Doc 06 and Doc 07 name.", rows: [
+  { t: "Panel — loading", r: "Property-panel skeleton; inline spinners on individual transitions.", d: "Doc 06 §8" },
+  { t: "Panel — optimistic transition", r: "Status changes immediately, reverts visibly with the rejection reason surfaced.", d: "Doc 06 §8, NFR-02" },
+  { t: "Panel — illegal transition refused", r: "Rejected with from and to named.", d: "Doc 06 FR-04" },
+  { t: "Panel — moved out of scope", r: "A ticket transferred out of the agent's department mid-view shows a moved-out state; they remain a follower.", d: "Doc 06 SEC-01 · Doc 07 BR-03 · derives from Doc 03 EC-05" },
+  { t: "Panel — empty", r: "New ticket with nothing set yet.", d: "Batch 2 prompt Step 2" },
+  { t: "Panel — error", r: "Property load failure with retry.", d: "Batch 2 prompt Step 2" },
+  { t: "Claim race", r: "First commit wins; the loser sees an inline avatar swap, not an error modal.", d: "Doc 06 FR-16" },
+  { t: "Simultaneous resolve", r: "The second identical transition succeeds as a no-op and the panel refreshes.", d: "Doc 06 EC-07" },
+  { t: "Assignee deactivated", r: "Tickets hand back with a system note and re-route.", d: "Doc 06 EC-06" },
+  { t: "Escalation target lost", r: "A named target who is disabled or out of scope falls back to supervisor review with a note.", d: "Doc 06 EC-05" },
+  { t: "Split cap reached", r: "Refused with guidance once three linked-work tickets exist.", d: "Doc 06 EC-04" },
+  { t: "Merge chain", r: "A target later merged resolves transitively; banners point at the final survivor.", d: "Doc 06 EC-03" },
+  { t: "Mobile — list loading, empty, error", r: "The universal set at 375, not a scaled desktop.", d: "Doc 07 §8" },
+  { t: "Mobile — thread loading, empty, error", r: "Same, for the thread screen.", d: "Doc 07 §8" },
+  { t: "Mobile — offline", r: "Offline banner with the cached last view read-only, and queued sends visible.", d: "Doc 07 FR-29" },
+  { t: "Mobile — swipe states", r: "Mid-swipe reveal, commit, and the undo window afterwards.", d: "Doc 07 §8" },
+  { t: "Mobile — selection mode", r: "Entered, partial, and at the 25-item cap.", d: "Doc 07 §8 · Doc 06 §9" },
+  { t: "Mobile — sheet states", r: "Views sheet and context sheet: opening, at rest, dragging to dismiss.", d: "Doc 07 FR-02" },
+  { t: "Rescue view populated", r: "Tickets flagged channel-unreachable after a connection is revoked.", d: "Doc 07 FR-05 · Doc 05 FR-10" },
+  { t: "Reply-to anchor fetch", r: "Tapping a reply reference fetches the context window and scrolls to it.", d: "Doc 07 FR-15 · Doc 04 EC-08" }
+]},
+{ id: "E", name: "Cross-cutting proof", note: "Audited as its own set so nothing is proved on one viewport, theme or language only.", rows: [
+  { t: "Both viewports", r: "1440 and 375 delivered together for every row.", d: "Batch 2 prompt Step 2" },
+  { t: "Both themes", r: "Dark and light, complete.", d: "Batch 2 prompt Step 2" },
+  { t: "Both languages", r: "English and Amharic, real text including long strings.", d: "Batch 2 prompt Step 2 · Doc 06 §14" },
+  { t: "44 px touch targets", r: "Every interactive element on mobile, including inside sheets and dialogs.", d: "Batch 2 prompt design rules" },
+  { t: "Nothing by colour alone", r: "Status, priority and countdown states all carry icon or text.", d: "Doc 06 §9, §13" },
+  { t: "Batch 1 consistency", r: "No approved token, component or layout restyled; new work composes from the existing set.", d: "Batch 2 prompt Step 1" },
+  { t: "Announcements", r: "Transitions, bulk progress and dialog steps announced, not just tinted.", d: "Doc 06 §13" },
+  { t: "Hard product rules", r: "Notes structurally distinct, AI labelled, no impersonation, staff-collected not verified, SMS notification-only.", d: "Batch 2 prompt design rules" }
+]}
+];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let n = 0, total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      sec.rows.forEach(r => {
+        n += 1; total += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: ("00" + n).slice(-3), t: r.t, r: r.r, d: r.d, b: !!r.b, s: "—" });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

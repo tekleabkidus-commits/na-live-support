@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S19-publish-dialog-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section S · 13 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The publish dialog</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The gate. Every validator result, then what the publish will actually change, then a name typed by hand — in that order, so nobody types before they read. It is the program's one absolute: a failing contrast pair stops the publish, and no state of this dialog contains a way past it. Not the blocked state, not an error, not the state where the validator itself is unavailable.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The design idea worth arguing about is the ordering. Validators sit <em>above</em> the blast summary because a person who reads “applies to 8 email templates and 2 widgets” first will scroll looking for the button, not the failures. Read the problems, then the reach, then commit.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4. Two bilingual gaps and one fixed-token misuse were caught in review here, not by my own check — both corrections are named in the delivery note. Scheduled publishing is Doc 16 §19 and absent by design — §D says so where an operator would look for it.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Everything passing — the dialog as it should look</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">S01 · S02 · S03 · S04 · S05 · S08 · S09 · S10 · Doc 16 FR-04, SEC-01, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Five validator groups, each collapsed to its count when it passes and expanded when it does not — a green wall teaches nothing, so a passing group states only what it checked and how many. The blast summary is concrete, drawn from the inventory rather than described in the abstract: eight named templates, two widgets, the staff app, the error pages.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · all validators clear</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">S01 · S02 · S03 · S04 · S05 · S08 · S09 · S10</span></div>
+    <div data-screen-label="S01 publish dialog passing light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="position: absolute; inset: 0; background: #FFFFFF; opacity: 0.55;"></div>
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px;">
+        <div style="width: 660px; max-height: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.14); display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 18px 22px 14px; border-bottom: 1px solid #F0EEE9;">
+            <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Publish this theme?</h2>
+            <div style="font-size: 12.5px; line-height: 1.6; color: #6B675D; margin-top: 4px;">Draft saved 09:42 by Hanna Girma · 6 changes since the live version</div>
+          </div>
+
+          <div style="flex: 1; padding: 16px 22px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+            <div>
+              <div style="display: flex; align-items: baseline; gap: 9px; margin-bottom: 9px;">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Checks</span>
+                <span style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #1D1C18;">All 5 groups clear</span>
+              </div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12.5px; color: #1D1C18;">Contrast — 14 pairs, light and dark</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">lowest 4.6:1</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12.5px; color: #1D1C18;">Assets — 3 images, type, size, dimensions</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">largest 14 KB</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12.5px; color: #1D1C18;">Links — 4 footer URLs, https only</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">1 domain</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12.5px; color: #1D1C18;">Email templates — 8 rendered, both languages</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">16 renders</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 13px;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12.5px; color: #1D1C18;">Senders — 3 identities, domains verified</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">checked 09:40</span></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">What this changes</div>
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px;">
+                <div style="font-size: 12.5px; line-height: 1.75; color: #1D1C18;">The staff app for <strong style="font-weight: 600;">53 people</strong> · the sign-in card · <strong style="font-weight: 600;">8 email templates</strong> in 2 languages · <strong style="font-weight: 600;">2 chat widgets</strong> on selambet.et · the error pages · PDF transcripts from now on.</div>
+                <div style="font-size: 11.5px; line-height: 1.65; color: #6B675D; margin-top: 8px; border-top: 1px solid #E5E2DB; padding-top: 8px;">Anyone signed in right now sees the colours change without losing what they are doing. Emails already queued keep the old templates.</div>
+              </div>
+            </div>
+
+            <div>
+              <label for="s01-confirm" style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Type <strong style="font-weight: 700;">Selam Bet Support</strong> to confirm</label>
+              <input id="s01-confirm" type="text" value="Selam Bet Support" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 10px 11px; font-size: 13px; color: #1D1C18; min-height: 40px;" />
+              <div style="font-size: 11px; line-height: 1.6; color: #6B675D; margin-top: 6px;">Recorded in the audit trail as a branding publish by <strong style="font-weight: 600; color: #4A4842;">Hanna Girma</strong>, with the old and new values kept.</div>
+            </div>
+          </div>
+
+          <div style="flex: none; padding: 14px 22px; border-top: 1px solid #F0EEE9; display: flex; align-items: center; gap: 12px; background: #F6F5F2;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer;">Keep editing</button>
+            <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 16px; min-height: 36px; cursor: pointer;">Publish to everyone</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1180px; margin-top: 10px; font-size: 12.5px; line-height: 1.65; color: #4A4842;">S08 — “53 people”, “8 templates”, “2 widgets on selambet.et”: counted from the inventory, not described. An operator who cannot picture the reach cannot consent to it.</div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Blocked — the dialog as a worklist</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">S06 · S07 · S13 · Doc 16 BR-02, FR-04, AC-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three failures and two warnings, grouped, each naming its fix and each opening the field that fixes it. The typed confirmation is gone rather than disabled — a confirmation field on a dialog that cannot publish invites someone to fill it in and then be refused, which is how a gate teaches people to resent it. What replaces it is the count of what to fix and where.</p>
+    <p style="margin: 8px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Warnings and failures are visibly different in kind: a failure has no path around it, a warning publishes. The scheduled-report template missing Amharic is a warning because it is staff-only; the same gap on a customer-facing surface is a failure, per the scope you set at Section O.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · 3 failures, 2 warnings · አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">S06 · S07 · S13</span></div>
+    <div data-screen-label="S13 publish blocked dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="position: absolute; inset: 0; background: #0C0C0B; opacity: 0.62;"></div>
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px;">
+        <div style="width: 680px; max-height: 100%; background: #1C1C19; border: 1px solid #45443E; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 18px 22px 14px; border-bottom: 1px solid #262622;">
+            <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4; line-height: 1.45;">ገና ማተም አይቻልም</h2>
+            <div style="font-size: 12.5px; line-height: 1.75; color: #A6A296; margin-top: 5px;">ሦስት ነገሮች መስተካከል አለባቸው። ሁለት ማስጠንቀቂያዎችም አሉ — እነሱ ግን ማተምን አያግዱም።</div>
+          </div>
+
+          <div style="flex: 1; padding: 16px 22px; display: flex; flex-direction: column; gap: 15px; overflow: hidden;">
+            <div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; color: #F5A7A7; margin-bottom: 9px; line-height: 1.7;">መስተካከል ያለባቸው — 3</div>
+              <div style="display: flex; flex-direction: column; gap: 9px;">
+                <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 11px;">
+                  <span style="flex: none; font-size: 12px; font-weight: 700; color: #F5A7A7;">✕</span>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">ነጭ በዋና ቀለም ላይ 1.9:1 ነው</div>
+                    <div style="font-size: 12px; color: #F5A7A7; margin-top: 3px; line-height: 1.8;">የሚያልፈው ቅርብ ጥላ <span style="font-family: ui-monospace, monospace;">#91722A</span> ሲሆን 4.5:1 ነው።</div>
+                  </div>
+                  <button style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; color: #F5A7A7; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 11px; cursor: pointer; line-height: 1.6;">ወደ ቀለሞች</button>
+                </div>
+                <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 11px;">
+                  <span style="flex: none; font-size: 12px; font-weight: 700; color: #F5A7A7;">✕</span>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">“እገዛ” የተባለው አገናኝ https አይደለም</div>
+                    <div style="font-size: 12px; color: #F5A7A7; margin-top: 3px; line-height: 1.8;"><span style="font-family: ui-monospace, monospace;">http://help.selambet.et</span> — ደንበኛ ከኢሜይል ተከትሎ ቢሄድ ያልተመሰጠረ ግንኙነት ላይ ይወጣል።</div>
+                  </div>
+                  <button style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; color: #F5A7A7; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 11px; cursor: pointer; line-height: 1.6;">ወደ አገናኞች</button>
+                </div>
+                <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 11px;">
+                  <span style="flex: none; font-size: 12px; font-weight: 700; color: #F5A7A7;">✕</span>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">notify.selambet.et ገና አልተረጋገጠም</div>
+                    <div style="font-size: 12px; color: #F5A7A7; margin-top: 3px; line-height: 1.8;">DKIM በDNS ውስጥ አልታየም። ለደንበኞች የሚላክ ኢሜይል ከዚህ አድራሻ መታተም አይችልም።</div>
+                  </div>
+                  <button style="font-family: inherit; flex: none; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; color: #F5A7A7; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 11px; cursor: pointer; line-height: 1.6;">ወደ ላኪዎች</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; color: #E8C25A; margin-bottom: 9px; line-height: 1.7;">ማስጠንቀቂያዎች — 2 · ማተምን አያግዱም</div>
+              <div style="display: flex; flex-direction: column; gap: 9px;">
+                <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 13px; display: flex; align-items: flex-start; gap: 11px;">
+                  <span style="flex: none; font-size: 12px; font-weight: 700; color: #E8C25A;">◈</span>
+                  <div style="font-size: 12px; line-height: 1.8; color: #E8C25A;">“የተያዘለት ሪፖርት” አብነት የአማርኛ ቅጂ የለውም። ለሠራተኞች ብቻ ስለሚላክ ማተምን አያግድም።</div>
+                </div>
+                <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 13px; display: flex; align-items: flex-start; gap: 11px;">
+                  <span style="flex: none; font-size: 12px; font-weight: 700; color: #E8C25A;">◈</span>
+                  <div style="font-size: 12px; line-height: 1.8; color: #E8C25A;">የተጫነው አርማ 1:1 ነው። መመሪያው 4:1 አካባቢ ነው — በመግቢያ ካርዱ ላይ ትንሽ ሆኖ ይታያል።</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 12px 13px; font-size: 11.5px; line-height: 1.85; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">“ለማንኛውም አትም” የሚል አማራጭ የለም።</strong> ይህ ሆን ተብሎ የተደረገ ነው። የንጽጽር ማረጋገጫው መተላለፊያ የለውም — በዚህ መስኮት ላይም፣ በስህተት ጊዜም፣ ማረጋገጫው ራሱ ባይሠራም እንኳ።</div>
+          </div>
+
+          <div style="flex: none; padding: 14px 22px; border-top: 1px solid #262622; display: flex; align-items: center; gap: 12px; background: #232320;">
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer; line-height: 1.6;">ዘጋ</button>
+            <span style="margin-left: auto; font-size: 11.5px; color: #A6A296; line-height: 1.7;">3 ነገር ከተስተካከለ በኋላ ማተም ይቻላል</span>
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ወደ መጀመሪያው ችግር</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Can't publish yet</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 12px; display: flex; align-items: flex-start; gap: 10px;">
+            <span style="flex: none; font-size: 12px; font-weight: 700; color: #8E2222;">✕</span>
+            <div style="flex: 1; min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">White on primary is 1.9:1</div><div style="font-size: 12px; color: #8E2222; margin-top: 3px; line-height: 1.55;">The nearest passing shade of the same hue is <span style="font-family: ui-monospace, monospace;">#91722A</span> at 4.5:1.</div></div>
+            <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; color: #8E2222; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 11px; cursor: pointer;">Fix in Colours</button>
+          </div>
+          <div style="font-size: 12px; line-height: 1.7; color: #4A4842; font-weight: 600;">There is no “publish anyway”. Deliberately — the contrast validator has no way past it, on this dialog, in an error, or when the validator itself is down.</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">S06 · light · en · the same absence, stated in both languages</div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">S06 · the six states checked for an override, and the seventh</div>
+        <div style="font-size: 12.5px; line-height: 1.8; color: #4A4842; margin-top: 8px;">Section L listed six places an escape hatch could hide. This dialog adds the seventh and hardest: <strong style="font-weight: 600;">the validator service being unavailable</strong>. A publish gate that fails open the moment its checker is down is not a gate — so when contrast cannot be computed, publishing waits rather than proceeding. §C draws that state.</div>
+        <div style="font-size: 12px; line-height: 1.75; color: #6B675D; margin-top: 10px; border-top: 1px solid #F0EEE9; padding-top: 10px;">Note what this is not: it is not the breached-password check from Doc 02, which is explicitly allowed to fail open because it protects one account and blocking would lock a person out of their own reset. Contrast protects every reader of every surface, and its failure mode is that a brand ships unreadable. Different stakes, opposite defaults — and both are the document's own choices, not a house style.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Publishing, published, four-eyes, and the validator being down</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">S11 · S12 · S06 · Doc 16 FR-03, SEC-01, NFR-01 · Doc 03 T-06</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Four states after the button. Propagation is an honest wait with a real bound — sixty seconds cluster-wide — rather than a spinner that implies instant. Four-eyes is the state most likely to be mistaken for a failure, so it says who is waiting and what happens next. And the last one is the door rule: when the validator cannot run, publishing waits.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Publishing…</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #22211D; color: #FFFFFF; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">✓</span><span style="font-size: 12.5px; color: #1D1C18;">Theme written · version 7</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #22211D; color: #FFFFFF; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">✓</span><span style="font-size: 12.5px; color: #1D1C18;">Email templates compiled · 16 renders</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; border: 1px solid #CFCBC1; color: #6B675D; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">◌</span><span style="font-size: 12.5px; color: #1D1C18;">Reaching every server — up to 60 seconds</span></div>
+          </div>
+          <div style="height: 5px; background: #EEECE6; border-radius: 3px; overflow: hidden;"><div style="width: 68%; height: 100%; background: #22211D;"></div></div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #6B675D;">You can close this — publishing continues. Nothing is half-applied: a server either has version 7 or version 6, never a mixture.</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">S12 · light · en · a real bound, not a spinner implying instant</div>
+      </div>
+
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Version 7 is live</div>
+          <div style="font-size: 12.5px; line-height: 1.7; color: #4A4842;">Published 09:47 by Hanna Girma. Every server has it. Anyone signed in saw the colours change without losing their work.</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">If something looks wrong:</strong> rolling back to <strong style="font-weight: 600;">version 6 — published 7 July by Hanna Girma</strong> takes one click and runs these same checks.</div>
+          <div style="display: flex; gap: 8px;">
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer;">Roll back to version 6</button>
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer;">See it live</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">S12 · light · en · the restore point is named on the success screen, not hidden in history</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-size: 14px; font-weight: 600; color: #ECEAE4; line-height: 1.45;">ሁለተኛ አስተዳዳሪ እየተጠበቀ ነው</div>
+          <div style="font-size: 12.5px; line-height: 1.85; color: #C9C5BB;">ይህ ድርጅት የአራት-ዓይን ደንብ አለው፦ ብራንዲንግ ማተም በሁለተኛ አስተዳዳሪ መጽደቅ አለበት። ጥያቄው ተልኳል — <strong style="font-weight: 600; color: #ECEAE4;">አልተሳካም ማለት አይደለም</strong>።</div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.85; color: #C9C5BB;">ለ <strong style="font-weight: 600; color: #ECEAE4;">ሰላማዊት ግርማ</strong> እና <strong style="font-weight: 600; color: #ECEAE4;">ዳዊት ኃይሌ</strong> በ09:47 ተልኳል። አንዳቸው ሲያጸድቁ ማተሙ በራሱ ይቀጥላል፤ ረቂቁ እንዳለ ይቆያል።</div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer; line-height: 1.6;">ጥያቄውን መልስ</button>
+            <span style="font-size: 11.5px; color: #A6A296; line-height: 1.7;">ጥያቄውና ማጽደቁ ሁለቱም በኦዲት መዝገብ ይመዘገባሉ</span>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">S11 · dark · am · the state most easily mistaken for a failure, so it says it is not one</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-size: 14px; font-weight: 600; color: #ECEAE4; line-height: 1.45;">ማረጋገጫው አሁን ሊሠራ አልቻለም</div>
+          <div role="alert" style="background: #2C2612; border: 1px solid #6B551A; border-radius: 8px; padding: 12px 13px; font-size: 12px; line-height: 1.85; color: #E8C25A;">የንጽጽር ማረጋገጫው አገልግሎት አልመለሰም፤ ስለዚህ ቀለሞቹ መነበባቸውን ማረጋገጥ አልተቻለም። <strong style="font-weight: 600;">ማተም ይጠብቃል።</strong> ሳይረጋገጥ ማተም አይፈቀድም — ማረጋገጫው ስላልሠራ ብቻ በሩ አይከፈትም።</div>
+          <div style="font-size: 12px; line-height: 1.85; color: #C9C5BB;">ረቂቁ እንዳለ ተቀምጧል። ምንም አልጠፋም። በየ30 ሰከንዱ በራሱ እንደገና ይሞክራል።</div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #262622; padding-top: 13px;">
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer; line-height: 1.6;">ዘጋ</button>
+            <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">አሁን እንደገና ሞክር</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">S06 · dark · am · the seventh state — no override here either</div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-size: 14px; font-weight: 600; color: #ECEAE4; line-height: 1.45;">ስሪት 7 አሁን ሥራ ላይ ነው</div>
+          <div style="font-size: 12.5px; line-height: 1.85; color: #C9C5BB;">በ09:47 በሐና ግርማ ታትሟል። ሁሉም አገልጋዮች ተቀብለውታል። አሁን ገብተው የነበሩ ሰዎች ቀለሞቹ ሲቀየሩ አይተዋል፤ የሚሠሩበት ሥራ ግን አልጠፋም።</div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.85; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">የሚያሳስብ ነገር ካለ፦</strong> ወደ <strong style="font-weight: 600; color: #ECEAE4;">ስሪት 6 — ሐምሌ 7 በሐና ግርማ የታተመው</strong> መመለስ በአንድ ጠቅታ ይሆናል፤ እነዚሁ ማረጋገጫዎችም እንደገና ይሠራሉ።</div>
+          <div style="font-size: 11.5px; line-height: 1.85; color: #A6A296;">ማተሙ በኦዲት መዝገብ ውስጥ በእርስዎ ስም፣ ከአሮጌውና ከአዲሱ እሴቶች ጋር ተመዝግቧል።</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">S12 · dark · am · the restore point named in Amharic, with the old/new-values half of the audit line</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The absent control, and 375</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 16 §19 · §9</span>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · blocked, read-only</div>
+        <div data-screen-label="S13 publish blocked 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">09:46<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Branding</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Publish</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Publishing requires a larger screen.</strong> You can read every check here.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Can't publish yet — 3 to fix</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 11px; font-size: 12px; line-height: 1.55; color: #8E2222;">White on primary is 1.9:1 — nearest passing <span style="font-family: ui-monospace, monospace;">#91722A</span> at 4.5:1</div>
+                <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 11px; font-size: 12px; line-height: 1.55; color: #8E2222;">“Help” link is http, not https</div>
+                <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 11px; font-size: 12px; line-height: 1.55; color: #8E2222;">notify.selambet.et is not verified yet</div>
+              </div>
+              <div style="font-size: 12px; line-height: 1.65; color: #4A4842; font-weight: 600; margin-top: 11px; border-top: 1px solid #F0EEE9; padding-top: 10px;">There is no “publish anyway”, here or anywhere.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px; font-size: 12px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">2 warnings</strong> — a staff-only template missing Amharic, and a 1:1 logo. Neither blocks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 700px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No “publish at 06:00 on Monday” — and the dialog says why</div>
+          <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Scheduled publishing is Doc 16 §19, out of v1. It is the single control an operator most expects on a gate like this — rebranding at midnight is exactly when you would want to queue it — so the footer states it rather than leaving someone hunting: publishing happens when you press the button, and the way to do it out of hours is to be there. Building it silently would have been the easy invention; leaving it silently absent would have been the quiet one.</p>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Delivered:</strong> all thirteen rows. S01–S05, S08, S09 and S10 in §A at 1440 light; S06, S07 and S13 in §B at 1440 dark in Amharic with the English refusal beneath it; S11 and S12 in §C, plus the validator-unavailable state; the read-only 375 in §D.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Parity, corrected after review.</strong> A first pass claimed all four claims were bilingual; two were not. The named restore point and the old/new-values half of the audit line existed only in English. §C now carries an Amharic published-state card with both, so all four claims — no “publish anyway” in any state, warnings publish and failures do not, the restore point is named, the publish is audited with old and new values — appear in each language. §A and §D remain English-only frames by design, as the English side of every pair.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Removing ceremony is not hiding an action.</strong> The bulk-bar law says an unavailable action stays visible with its reason, and this dialog honours it: the blocked header, the three named failures and their jump-to-fix buttons are all present and all explain themselves. The typed-name field is not an action — it is ceremony attached to an act that cannot proceed, and leaving it enabled invites someone to complete a ritual that ends in refusal. Actions keep their reasons; ceremony for an impossible act is removed.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Standing rule adopted, 3 August.</strong> Status hues — the eight pills, priority dots and SLA states — are reserved to their semantic components; generic pass/fail indicators use neutral success and danger tokens. This is the third recurrence of the same leak in this batch, so it graduates from note to law, and folds into the design system at its next legitimate version bump rather than reopening v4 for prose.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">One correction, disclosed.</strong> The five validator pass glyphs rendered in <code style="font-family: ui-monospace, monospace; font-size: 12px;">#156F45</code> — B1-DS §2’s <em>Open</em> status text colour, carried forward by memory for a meaning that is not a ticket state. This is the third recurrence of that class in this batch, and the same one Section L corrected. They are now ink <code style="font-family: ui-monospace, monospace; font-size: 12px;">#1D1C18</code>; pass and fail are carried by the glyph and the adjacent text, so nothing is lost. The lesson I am taking forward: read the token table for the label in front of me, never reuse a hex because it was correct somewhere else.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">One judgement.</strong> The blocked dialog <em>removes</em> the typed-confirmation field rather than disabling it. A confirmation input on a dialog that cannot publish invites someone to fill it in and be refused, which teaches people to resent the gate. What sits there instead is the count of what to fix and a button that goes to the first one.</p>
+          <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Next on your word:</strong> Section T — version history and rollback, five rows, with visual diffs per surface rather than a JSON diff of token names.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B1-S02-inbox-states-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFF8E6; border: 1px solid #E8D9A8; color: #7E650F; padding: 4px 8px; border-radius: 3px;">reopened · bulk-bar disabled reason is visible and focusable (Doc 06 §8, §13 · Doc 07 §13)</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Screen 1 — state matrix</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows 101–168. Each state is drawn at the width of the region it lives in inside the approved shell — list 360px, thread and composer 458px, mobile 375px — so nothing here re-opens <a href="#s01">B1-S01</a>. Light and dark for every one.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">List — R2, 360px</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 §8, FR-11, FR-13, EC-02</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Loading — 8 skeleton rows</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 360px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px 8px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">My Open</span><span style="font-size: 11.5px; color: #6F6A61;">—</span></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 58%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 82%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 44%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 70%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 62%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 76%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 50%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 55%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 79%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 47%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 73%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 60%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 68%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px;"><div style="height: 9px; width: 52%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 81%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+          </div>
+          <div style="width: 360px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px 8px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">My Open</span><span style="font-size: 11.5px; color: #9A9588;">—</span></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 58%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 82%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 44%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 70%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 62%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 76%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 50%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 55%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 79%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 47%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 73%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 60%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 68%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div><div style="padding: 11px 12px;"><div style="height: 9px; width: 52%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 81%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">Count shows an em-dash until the first real value — never 0-then-jump.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Empty — My Open, and Unassigned</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 360px; height: 415px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; display: flex; flex-direction: column;">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+              <div style="font-size: 26px; margin-bottom: 8px;">🎉</div>
+              <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Inbox zero</div>
+              <div style="font-size: 12.5px; color: #6B675D; margin: 5px 0 12px; line-height: 1.5;">Nothing is assigned to you right now.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 15px; cursor: pointer;">Check Unassigned (8)</button>
+            </div>
+            <div style="border-top: 1px solid #F0EEE9; padding: 12px; text-align: center;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">All caught up</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Unassigned is empty — nothing is waiting for an owner.</div>
+            </div>
+          </div>
+          <div style="width: 360px; height: 415px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; display: flex; flex-direction: column;">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+              <div style="font-size: 26px; margin-bottom: 8px;">🎉</div>
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Inbox zero</div>
+              <div style="font-size: 12.5px; color: #A6A296; margin: 5px 0 12px; line-height: 1.5;">Nothing is assigned to you right now.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 15px; cursor: pointer;">Check Unassigned (8)</button>
+            </div>
+            <div style="border-top: 1px solid #262622; padding: 12px; text-align: center;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">All caught up</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">Unassigned is empty — nothing is waiting for an owner.</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">The 🎉 is a token an operator can replace (Doc 07 §14).</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Error — inline retry, rail stays usable</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 360px; height: 180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 14px;">
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Couldn't load this view</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #7A3232; margin: 4px 0 10px;">Your other views still work. Reference <span style="font-family: ui-monospace, monospace;">e3f19c</span>.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Retry</button>
+            </div>
+          </div>
+          <div style="width: 360px; height: 180px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7;">Couldn't load this view</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #E0A0A0; margin: 4px 0 10px;">Your other views still work. Reference <span style="font-family: ui-monospace, monospace;">e3f19c</span>.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Retry</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Live resort held · selection · bulk bar · drift tray</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 360px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 8px 12px; display: flex; justify-content: center; border-bottom: 1px solid #F0EEE9;"><span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 6px 12px; font-size: 11.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">↻ List changed · Resort</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; background: #F6F5F2; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-weight: 600; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Kidist Haile</span><span style="color: #6F6A61; font-size: 11.5px; flex: none;">#4810</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; background: #F6F5F2; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-weight: 500; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Hana Girma</span><span style="color: #6F6A61; font-size: 11.5px; flex: none;">#4807</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #CFCBC1; flex: none;"></span><span style="font-weight: 500; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ትዕግስት ወልደ</span><span style="color: #6F6A61; font-size: 11.5px; flex: none;">#4798</span></div>
+            <div style="background: #FFF8E6; border-bottom: 1px solid #E8D9A8; padding: 7px 12px; font-size: 11px; color: #7E650F;">1 selected ticket is no longer in this view — it will be skipped.</div>
+            <div style="background: #22211D; color: #F6F5F2; padding: 10px 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span style="font-size: 12px; font-weight: 600;">3 selected</span>
+              <span style="font-size: 11.5px; color: #DDD9D0; cursor: pointer;">Assign</span><span style="font-size: 11.5px; color: #DDD9D0; cursor: pointer;">Tag</span><span style="font-size: 11.5px; color: #DDD9D0; cursor: pointer;">Priority</span>
+              <button type="button" aria-disabled="true" aria-describedby="bulk-close-why-l" style="font-family: inherit; background: transparent; border: none; padding: 0; font-size: 11.5px; color: #918C80; text-decoration: underline dotted; cursor: not-allowed;">Close</button>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #DDD9D0; font-size: 11.5px; cursor: pointer;">Clear</button>
+              <div id="bulk-close-why-l" style="flex: 0 0 100%; margin-top: 2px; font-size: 11px; color: #C9C5BB; line-height: 1.45;">Close is off: you don’t hold <span style="font-family: ui-monospace, monospace;">tickets.close</span> on 1 of the 3 — #4788, in Finance. Assign, Tag and Priority apply to all 3.</div>
+            </div>
+          </div>
+          <div style="width: 360px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 8px 12px; display: flex; justify-content: center; border-bottom: 1px solid #262622;"><span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 999px; padding: 6px 12px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">↻ List changed · Resort</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #262622; background: #232320; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-weight: 600; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Kidist Haile</span><span style="color: #9A9588; font-size: 11.5px; flex: none;">#4810</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #262622; background: #232320; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="font-weight: 500; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Hana Girma</span><span style="color: #9A9588; font-size: 11.5px; flex: none;">#4807</span></div>
+            <div style="padding: 9px 12px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px; font-size: 12.5px;"><span style="width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #45443E; flex: none;"></span><span style="font-weight: 500; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ትዕግስት ወልደ</span><span style="color: #9A9588; font-size: 11.5px; flex: none;">#4798</span></div>
+            <div style="background: #2C2612; border-bottom: 1px solid #6B551A; padding: 7px 12px; font-size: 11px; color: #E8C25A;">1 selected ticket is no longer in this view — it will be skipped.</div>
+            <div style="background: #ECEAE4; color: #171714; padding: 10px 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span style="font-size: 12px; font-weight: 600;">3 selected</span>
+              <span style="font-size: 11.5px; color: #3A3A34; cursor: pointer;">Assign</span><span style="font-size: 11.5px; color: #3A3A34; cursor: pointer;">Tag</span><span style="font-size: 11.5px; color: #3A3A34; cursor: pointer;">Priority</span>
+              <button type="button" aria-disabled="true" aria-describedby="bulk-close-why-d" style="font-family: inherit; background: transparent; border: none; padding: 0; font-size: 11.5px; color: #6E6A61; text-decoration: underline dotted; cursor: not-allowed;">Close</button>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #3A3A34; font-size: 11.5px; cursor: pointer;">Clear</button>
+              <div id="bulk-close-why-d" style="flex: 0 0 100%; margin-top: 2px; font-size: 11px; color: #3A3A34; line-height: 1.45;">Close is off: you don’t hold <span style="font-family: ui-monospace, monospace;">tickets.close</span> on 1 of the 3 — #4788, in Finance. Assign, Tag and Priority apply to all 3.</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">Resort is held while the pointer is in the list and auto-runs 3 s after it leaves. Disabled bulk actions carry their reason as text under the bar — reachable by keyboard, read by a screen reader, never hover-only.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Thread — R3, 458px</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 §8, FR-14/15/16, EC-10 · Doc 04 §9</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">No selection · loading · error</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 26px 20px; text-align: center; border-bottom: 1px solid #F0EEE9;">
+              <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Pick a conversation</div>
+              <div style="font-size: 12px; color: #6B675D; margin: 5px 0 12px;">Or work the list from the keyboard:</div>
+              <div style="display: inline-flex; flex-direction: column; gap: 5px; font-size: 11.5px; color: #4A4842; text-align: left;">
+                <span><span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">J</span> <span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">K</span> move · <span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">Enter</span> open</span>
+                <span><span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">I</span> assign to me · <span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">E</span> resolve</span>
+                <span><span style="font-family: ui-monospace, monospace; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px;">?</span> all shortcuts</span>
+              </div>
+            </div>
+            <div style="padding: 14px 20px; border-bottom: 1px solid #F0EEE9; display: flex; flex-direction: column; gap: 9px;">
+              <div style="align-self: flex-start; width: 58%; height: 34px; background: #F2F1ED; border-radius: 10px 10px 10px 3px;"></div>
+              <div style="align-self: flex-end; width: 66%; height: 42px; background: #EEECE6; border-radius: 10px 10px 3px 10px;"></div>
+              <div style="align-self: flex-start; width: 44%; height: 34px; background: #F2F1ED; border-radius: 10px 10px 10px 3px;"></div>
+            </div>
+            <div style="padding: 14px 20px;">
+              <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Couldn't load this conversation</div>
+                <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Retry</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Open customer instead</button></div>
+              </div>
+            </div>
+          </div>
+          <div style="width: 458px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 26px 20px; text-align: center; border-bottom: 1px solid #262622;">
+              <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Pick a conversation</div>
+              <div style="font-size: 12px; color: #A6A296; margin: 5px 0 12px;">Or work the list from the keyboard:</div>
+              <div style="display: inline-flex; flex-direction: column; gap: 5px; font-size: 11.5px; color: #C9C5BB; text-align: left;">
+                <span><span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">J</span> <span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">K</span> move · <span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">Enter</span> open</span>
+                <span><span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">I</span> assign to me · <span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">E</span> resolve</span>
+                <span><span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px;">?</span> all shortcuts</span>
+              </div>
+            </div>
+            <div style="padding: 14px 20px; border-bottom: 1px solid #262622; display: flex; flex-direction: column; gap: 9px;">
+              <div style="align-self: flex-start; width: 58%; height: 34px; background: #262622; border-radius: 10px 10px 10px 3px;"></div>
+              <div style="align-self: flex-end; width: 66%; height: 42px; background: #2F2F29; border-radius: 10px 10px 3px 10px;"></div>
+              <div style="align-self: flex-start; width: 44%; height: 34px; background: #262622; border-radius: 10px 10px 10px 3px;"></div>
+            </div>
+            <div style="padding: 14px 20px;">
+              <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7;">Couldn't load this conversation</div>
+                <div style="display: flex; gap: 7px; margin-top: 9px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Retry</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Open customer instead</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Collapsed events · first-unread · long-message clamp · tombstone · failed send</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; background: #FBFAF8; border: 1px solid #CFCBC1; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="align-self: center; display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">↑ Jump to first unread</div>
+            <div style="align-self: center; font-size: 11px; color: #4A4842; border: 1px dashed #CFCBC1; border-radius: 6px; padding: 5px 11px; cursor: pointer;">Show 12 events</div>
+            <div style="align-self: flex-start; max-width: 72%;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 12px 0; font-size: 12.5px; line-height: 20px; color: #1D1C18; max-height: 91px; overflow: hidden;">ሰላም፣ ትናንት ማታ ብር 2,500 ለማውጣት ጠይቄ ነበር። የባንክ ደረሰኙን ወዲያውኑ ልኬላችኋለሁ። ከዚያ በኋላ ሁለት ጊዜ ጠይቄ ነበር ግን ምንም መልስ አላገኘሁም። ባለፈው ወር ተመሳሳይ ችግር ገጥሞኝ ነበር እና ሶስት ቀን ፈጅቶ ነበር። እባክዎ ዛሬ ይጠናቀቅልኝ፣ ምክንያቱም ገንዘቡ ለልጄ የትምህርት ክፍያ በጣም ያስፈልገኛል። አመሰግናለሁ።</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 600; color: #1D1C18; text-decoration: underline; cursor: pointer;">Show more</span><span style="font-size: 10.5px; color: #6F6A61;">Abebe Tadesse · 09:14</span></div>
+            </div>
+            <div style="align-self: flex-start; max-width: 72%; background: #F2F1ED; border: 1px dashed #CFCBC1; border-radius: 10px; padding: 8px 12px; font-size: 12px; color: #6F6A61; font-style: italic;">Message deleted by customer</div>
+            <div style="align-self: flex-end; max-width: 72%;">
+              <div style="background: #EEECE6; border: 1px solid #E3B6B6; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">I've released the payment — it should land within 10 minutes.</div>
+              <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end; margin-top: 3px;"><span style="font-size: 10.5px; font-weight: 600; color: #B32B2B;">! Not delivered — customer has blocked this channel</span><button style="font-family: inherit; background: transparent; border: 1px solid #CFCBC1; border-radius: 4px; font-size: 10.5px; color: #1D1C18; padding: 2px 8px; cursor: pointer;">Retry</button></div>
+            </div>
+          </div>
+          <div style="width: 458px; background: #171715; border: 1px solid #343430; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="align-self: center; display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">↑ Jump to first unread</div>
+            <div style="align-self: center; font-size: 11px; color: #C9C5BB; border: 1px dashed #45443E; border-radius: 6px; padding: 5px 11px; cursor: pointer;">Show 12 events</div>
+            <div style="align-self: flex-start; max-width: 72%;">
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px 0; font-size: 12.5px; line-height: 20px; color: #ECEAE4; max-height: 91px; overflow: hidden;">ሰላም፣ ትናንት ማታ ብር 2,500 ለማውጣት ጠይቄ ነበር። የባንክ ደረሰኙን ወዲያውኑ ልኬላችኋለሁ። ከዚያ በኋላ ሁለት ጊዜ ጠይቄ ነበር ግን ምንም መልስ አላገኘሁም። ባለፈው ወር ተመሳሳይ ችግር ገጥሞኝ ነበር እና ሶስት ቀን ፈጅቶ ነበር። እባክዎ ዛሬ ይጠናቀቅልኝ፣ ምክንያቱም ገንዘቡ ለልጄ የትምህርት ክፍያ በጣም ያስፈልገኛል። አመሰግናለሁ።</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: underline; cursor: pointer;">Show more</span><span style="font-size: 10.5px; color: #9A9588;">Abebe Tadesse · 09:14</span></div>
+            </div>
+            <div style="align-self: flex-start; max-width: 72%; background: #1F1F1C; border: 1px dashed #45443E; border-radius: 10px; padding: 8px 12px; font-size: 12px; color: #9A9588; font-style: italic;">Message deleted by customer</div>
+            <div style="align-self: flex-end; max-width: 72%;">
+              <div style="background: #2F2F29; border: 1px solid #6B3838; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">I've released the payment — it should land within 10 minutes.</div>
+              <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end; margin-top: 3px;"><span style="font-size: 10.5px; font-weight: 600; color: #F08A8A;">! Not delivered — customer has blocked this channel</span><button style="font-family: inherit; background: transparent; border: 1px solid #45443E; border-radius: 4px; font-size: 10.5px; color: #ECEAE4; padding: 2px 8px; cursor: pointer;">Retry</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Brand-new conversation — identity card, no messages yet</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; background: #FBFAF8; border: 1px solid #CFCBC1; border-radius: 8px; padding: 18px; text-align: center;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">ኪኃ</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18; margin-top: 8px;">Kidist Haile</div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Telegram · @kidisth · first contact · staff-collected phone +251 91 ••• ••42</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 12px;">No messages yet.</div>
+          </div>
+          <div style="width: 458px; background: #171715; border: 1px solid #343430; border-radius: 8px; padding: 18px; text-align: center;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">ኪኃ</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4; margin-top: 8px;">Kidist Haile</div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">Telegram · @kidisth · first contact · staff-collected phone +251 91 ••• ••42</div>
+            <div style="font-size: 12px; color: #A6A296; margin-top: 12px;">No messages yet.</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">“Staff-collected”, never “verified” — the platform makes no verification claim about customer-supplied detail.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Composer — every channel state</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-17/20/21/22 · Doc 05 §8, FR-23 · Doc 06 EC-08</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Note mode — the one an agent must never mistake</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px;">
+            <div style="background: #FBF3D6; border: 2px solid #E3C455; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; font-weight: 500; color: #7E650F; padding: 5px 12px; cursor: pointer;">Reply</span>
+                <span style="font-size: 11.5px; font-weight: 700; background: #E3C455; color: #4A3B06; border-radius: 6px; padding: 5px 12px;">🔒 Internal note</span>
+                <span style="font-size: 11px; font-weight: 600; color: #7E650F;">Not sent to the customer</span>
+              </div>
+              <div style="font-size: 12.5px; color: #7E650F; min-height: 42px; line-height: 1.5;">@Dawit ደንበኛው የክፍያ ማስረጃ ልኳል — finance says the batch is stuck, can you push it?</div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                <span style="font-size: 13px; color: #7E650F;">📎</span><span style="font-size: 11.5px; color: #7E650F;">@ mention</span>
+                <button style="font-family: inherit; margin-left: auto; background: #7E650F; color: #FFFDF4; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer;">Add note</button>
+              </div>
+            </div>
+          </div>
+          <div style="width: 458px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <div style="background: #332B12; border: 2px solid #8A6D1A; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; font-weight: 500; color: #C4A650; padding: 5px 12px; cursor: pointer;">Reply</span>
+                <span style="font-size: 11.5px; font-weight: 700; background: #8A6D1A; color: #FFF6DC; border-radius: 6px; padding: 5px 12px;">🔒 Internal note</span>
+                <span style="font-size: 11px; font-weight: 600; color: #E8C25A;">Not sent to the customer</span>
+              </div>
+              <div style="font-size: 12.5px; color: #E8C25A; min-height: 42px; line-height: 1.5;">@Dawit ደንበኛው የክፍያ ማስረጃ ልኳል — finance says the batch is stuck, can you push it?</div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                <span style="font-size: 13px; color: #C4A650;">📎</span><span style="font-size: 11.5px; color: #C4A650;">@ mention</span>
+                <button style="font-family: inherit; margin-left: auto; background: #E8C25A; color: #332B12; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer;">Add note</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">Background, border and label all change together, and the send button reads “Add note”. Screen readers hear “Internal note mode” on the switch.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Window expired · connection paused · conversation blocked</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18; margin-bottom: 4px;">⊘ Reply window expired</div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #6B675D; margin-bottom: 10px;">You can reply here again after the customer writes back. Until then:</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 12px; cursor: pointer;">Send SMS re-engagement</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Reply from the phone</button>
+                <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; font-size: 11.5px; font-weight: 500; padding: 8px 10px; cursor: pointer;">Wait</button>
+              </div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 8px;">SMS is notification-only — the customer cannot reply to it.</div>
+            </div>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Connection paused — @BrandSupport</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #7A3232; margin-top: 3px;">Replies are blocked until the account reconnects. <a href="#health" style="color: #8E2222;">Open channel health</a></div>
+            </div>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Customer has blocked this channel</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #7A3232; margin-top: 3px;">Nothing more can reach them on Telegram. Consider SMS — it is notification-only, so they cannot reply to it.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; margin-top: 9px; cursor: pointer;">Send SMS</button>
+            </div>
+            <div style="background: #F4E8E8; border: 1px solid #E3C7C7; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #8C4646;">This conversation is blocked</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #8C4646; margin-top: 3px;">No message can be sent, including by automation. Incoming messages are still stored.</div>
+            </div>
+          </div>
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; margin-bottom: 4px;">⊘ Reply window expired</div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #A6A296; margin-bottom: 10px;">You can reply here again after the customer writes back. Until then:</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 12px; cursor: pointer;">Send SMS re-engagement</button>
+                <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Reply from the phone</button>
+                <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; font-size: 11.5px; font-weight: 500; padding: 8px 10px; cursor: pointer;">Wait</button>
+              </div>
+              <div style="font-size: 10.5px; color: #A6A296; margin-top: 8px;">SMS is notification-only — the customer cannot reply to it.</div>
+            </div>
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Connection paused — @BrandSupport</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #E0A0A0; margin-top: 3px;">Replies are blocked until the account reconnects. <a href="#health" style="color: #F5A7A7;">Open channel health</a></div>
+            </div>
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Customer has blocked this channel</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #E0A0A0; margin-top: 3px;">Nothing more can reach them on Telegram. Consider SMS — it is notification-only, so they cannot reply to it.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; margin-top: 9px; cursor: pointer;">Send SMS</button>
+            </div>
+            <div style="background: #342325; border: 1px solid #5E3B3B; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #E9A5A5;">This conversation is blocked</div>
+              <div style="font-size: 11.5px; line-height: 1.5; color: #CC8F8F; margin-top: 3px;">No message can be sent, including by automation. Incoming messages are still stored.</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">The SMS button only appears when a phone number is on file (Doc 05 FR-23).</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Collision · send race · offline queue · partial failure · draft guard</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #7E650F; display: flex; align-items: center; gap: 8px;">✎ Sara Bekele is replying…<button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #7E650F; font-size: 14px; cursor: pointer;">×</button></div>
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 11px 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Sara just replied — send anyway?</div>
+              <div style="display: flex; gap: 7px; margin-top: 8px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Send anyway</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Read hers first</button></div>
+            </div>
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #3F4954;">You're offline — 2 replies will send when you reconnect.</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;"><span style="font-size: 10.5px; background: #EDEEF2; color: #3F4954; border-radius: 999px; padding: 3px 9px;">◷ Will send when online</span><span style="font-size: 10.5px; background: #EDEEF2; color: #3F4954; border-radius: 999px; padding: 3px 9px;">◷ Will send when online</span></div>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; color: #8E2222; display: flex; align-items: center; gap: 10px;"><span style="min-width: 0;">Reply sent, but couldn't resolve the ticket.</span><button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: 1px solid #E3B6B6; border-radius: 4px; color: #8E2222; font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer;">Retry resolve</button></div>
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 11px 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Keep your unsent reply?</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">You've written 84 characters that haven't been sent.</div>
+              <div style="display: flex; gap: 7px; margin-top: 8px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Keep</button><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Discard</button></div>
+            </div>
+            <div style="background: #22211D; color: #F6F5F2; border-radius: 7px; padding: 9px 12px; font-size: 11.5px;">Draft updated on another device</div>
+          </div>
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #E8C25A; display: flex; align-items: center; gap: 8px;">✎ Sara Bekele is replying…<button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #E8C25A; font-size: 14px; cursor: pointer;">×</button></div>
+            <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 11px 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Sara just replied — send anyway?</div>
+              <div style="display: flex; gap: 7px; margin-top: 8px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Send anyway</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Read hers first</button></div>
+            </div>
+            <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #BAC5D1;">You're offline — 2 replies will send when you reconnect.</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;"><span style="font-size: 10.5px; background: #262C33; color: #BAC5D1; border-radius: 999px; padding: 3px 9px;">◷ Will send when online</span><span style="font-size: 10.5px; background: #262C33; color: #BAC5D1; border-radius: 999px; padding: 3px 9px;">◷ Will send when online</span></div>
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; color: #F5A7A7; display: flex; align-items: center; gap: 10px;"><span style="min-width: 0;">Reply sent, but couldn't resolve the ticket.</span><button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: 1px solid #6B3838; border-radius: 4px; color: #F5A7A7; font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer;">Retry resolve</button></div>
+            <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 11px 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Keep your unsent reply?</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">You've written 84 characters that haven't been sent.</div>
+              <div style="display: flex; gap: 7px; margin-top: 8px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; cursor: pointer;">Keep</button><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 5px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; cursor: pointer;">Discard</button></div>
+            </div>
+            <div style="background: #ECEAE4; color: #171714; border-radius: 7px; padding: 9px 12px; font-size: 11.5px;">Draft updated on another device</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">The draft guard only appears above 20 characters. A partial failure never claims the reply failed — it was sent, only the status change wasn't.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Resolved by a rule while typing</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">This ticket was resolved by the rule “Auto-resolve after payment confirmed”.</div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 4px; line-height: 1.5;">Your reply hasn't been sent yet.</div>
+            <div style="display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 12px; cursor: pointer;">Send and reopen</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Discard my reply</button></div>
+          </div>
+          <div style="width: 458px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 13px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">This ticket was resolved by the rule “Auto-resolve after payment confirmed”.</div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px; line-height: 1.5;">Your reply hasn't been sent yet.</div>
+            <div style="display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 12px; cursor: pointer;">Send and reopen</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Discard my reply</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Whole-workspace states</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-28/29/30, FS-01/03/04/05, EC-01/09 · Doc 05 FS-01</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Connection, deploy, and channel-health banners</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #8F5F08;">◌ Reconnecting… your list is read-only for now</div>
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #3F4954;">Live updates delayed — showing everything as of 10:42</div>
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #8E2222;">Telegram is down — replies are queuing and will send automatically</div>
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #1D1C18; display: flex; align-items: center; gap: 10px;">A new version is available.<button style="font-family: inherit; margin-left: auto; background: transparent; border: 1px solid #CFCBC1; border-radius: 4px; color: #1D1C18; font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer;">Refresh</button></div>
+            <div style="background: #22211D; color: #F6F5F2; border-radius: 7px; padding: 9px 12px; font-size: 11.5px;">The queue “Bonuses” was removed — showing My Open instead.</div>
+          </div>
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #F0B54A;">◌ Reconnecting… your list is read-only for now</div>
+            <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #BAC5D1;">Live updates delayed — showing everything as of 10:42</div>
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #F5A7A7;">Telegram is down — replies are queuing and will send automatically</div>
+            <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #ECEAE4; display: flex; align-items: center; gap: 10px;">A new version is available.<button style="font-family: inherit; margin-left: auto; background: transparent; border: 1px solid #45443E; border-radius: 4px; color: #ECEAE4; font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer;">Refresh</button></div>
+            <div style="background: #ECEAE4; color: #171714; border-radius: 7px; padding: 9px 12px; font-size: 11.5px;">The queue “Bonuses” was removed — showing My Open instead.</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">The refresh prompt is passive — it never interrupts a half-written reply.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Agent status — away countdown, forced status</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 12px;">
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Going Away in 47 s</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">You'll stop receiving new work, but keep everything assigned to you.</div></div>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 9px 13px; cursor: pointer;">I'm still here</button>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #7E650F;"><strong style="font-weight: 700;">Away</strong> — set by Dawit Bekele at 14:20</div>
+          </div>
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 12px;">
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Going Away in 47 s</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">You'll stop receiving new work, but keep everything assigned to you.</div></div>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 9px 13px; cursor: pointer;">I'm still here</button>
+            </div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 12px; font-size: 11.5px; color: #F0B54A;"><strong style="font-weight: 700;">Away</strong> — set by Dawit Bekele at 14:20</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">Away is generous and cancellable — status is for routing, not for watching people.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Search — no hits, and search unavailable · out-of-scope link · notifications</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; font-size: 12px; color: #1D1C18;">⌕ kidsit hail</div>
+              <div style="padding: 12px; font-size: 11.5px; color: #6B675D;">No tickets, customers or messages match <strong style="color: #1D1C18;">“kidsit hail”</strong>.</div>
+              <div style="padding: 9px 12px; border-top: 1px solid #F0EEE9; background: #F6F5F2; font-size: 11.5px; color: #6B675D;">Search is unavailable right now — Actions and Views still work.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 14px; text-align: center;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Not found</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin: 4px 0 10px;">This link doesn't point at anything you can open.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 13px; cursor: pointer;">Search instead</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px; font-size: 11.5px; color: #6B675D;">Desktop notifications are blocked in your browser — the bell still works. <span style="color: #1D1C18; font-weight: 600; text-decoration: underline; cursor: pointer;">How to allow them</span></div>
+          </div>
+          <div style="width: 458px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 9px 12px; border-bottom: 1px solid #262622; font-size: 12px; color: #ECEAE4;">⌕ kidsit hail</div>
+              <div style="padding: 12px; font-size: 11.5px; color: #A6A296;">No tickets, customers or messages match <strong style="color: #ECEAE4;">“kidsit hail”</strong>.</div>
+              <div style="padding: 9px 12px; border-top: 1px solid #262622; background: #232320; font-size: 11.5px; color: #A6A296;">Search is unavailable right now — Actions and Views still work.</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; text-align: center;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Not found</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin: 4px 0 10px;">This link doesn't point at anything you can open.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 8px 13px; cursor: pointer;">Search instead</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px; font-size: 11.5px; color: #A6A296;">Desktop notifications are blocked in your browser — the bell still works. <span style="color: #ECEAE4; font-weight: 600; text-decoration: underline; cursor: pointer;">How to allow them</span></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px;">An out-of-scope ticket returns the same “not found” as a ticket that doesn't exist — the design never confirms something is there but forbidden.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Mobile — offline, and the empty list · 375px</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 375px; height: 400px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background: #EDEEF2; border-bottom: 1px solid #D5D8DE; padding: 11px 14px; font-size: 12px; font-weight: 600; color: #3F4954;">You're offline — showing your last view</div>
+            <div style="flex: 1; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center;">
+              <div style="font-size: 26px; margin-bottom: 8px;">🎉</div>
+              <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Inbox zero</div>
+              <div style="font-size: 12.5px; color: #6B675D; margin: 5px 0 14px;">Nothing is assigned to you right now.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 999px; font-size: 13px; font-weight: 600; min-height: 44px; padding: 0 20px; cursor: pointer;">Check Unassigned (8)</button>
+            </div>
+          </div>
+          <div style="width: 375px; height: 400px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background: #262C33; border-bottom: 1px solid #3A424B; padding: 11px 14px; font-size: 12px; font-weight: 600; color: #BAC5D1;">You're offline — showing your last view</div>
+            <div style="flex: 1; background: #1C1C19; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center;">
+              <div style="font-size: 26px; margin-bottom: 8px;">🎉</div>
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Inbox zero</div>
+              <div style="font-size: 12.5px; color: #A6A296; margin: 5px 0 14px;">Nothing is assigned to you right now.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 999px; font-size: 13px; font-weight: 600; min-height: 44px; padding: 0 20px; cursor: pointer;">Check Unassigned (8)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer style="max-width: 900px; font-size: 12.5px; line-height: 1.7; color: #4A4842; border-top: 1px solid #CFCBC1; padding-top: 16px;">
+    <p style="margin: 0;">Still open for screen 1: the views rail's own empty state, the ⌘K palette, the notification panel body, the first-run coach marks and the shortcut overlay — each is a surface rather than a state, so they come as their own deliverables in checklist order.</p>
+  </footer>
+</div>
+
+</x-dc>
+</body>
+</html>

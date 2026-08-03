@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S06-channel-health-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows F01–F12</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Channel health &amp; observability</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The page someone opens when a player says “the bot is dead”. Every number on it is a diagnostic that changes what you do next — and the screen is ordered by that: <strong style="font-weight: 600;">what is wrong, since when, what it is costing, what to press</strong>. The action sits with the symptom rather than in a toolbar, because at 2 AM nobody reads a toolbar.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Health dots, banners, tables, skeletons and buttons are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell is <a href="B6-S01-telegram-bots-connection-v1.dc.html">B6-S01</a>'s; the throughput bars use the ink ramp approved with the <a href="B5-S01-live-dashboard-v2.dc.html">B5 chart set</a>, static and never colour-only.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">One placement question sits at the end of this note: the documents never say what screen size the health panel needs.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v2 — 3 Aug 2026.</strong> Approved as drawn: phone-readable, configuration read-only at 375. Re-register now goes through a confirmation that names its idempotent effect before it runs, in both viewports. §K adds the drawn keyboard traversal for the update viewer with its acceptance-list row.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Health panel — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows F01–F05, F08, F10 · Doc 05 FR-29, FR-30, FR-20, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light shows a bot in trouble — a webhook that has gone quiet, which is the failure Doc 05 FS-02 says you detect from growing pending updates rather than from an error. Dark shows the same panel healthy, so you can see what “fine” looks like; a health page you have only ever seen broken is one you cannot read quickly.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · webhook gone quiet</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01 · F02 · F03 · F10</span></div>
+    <div data-screen-label="F01 health light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 400px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">7</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #C93B3B;"></span>Telegram down</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 190px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram<span style="margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: #C93B3B;"></span></span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram · @nabet_promo_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Health</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">telegram.health.view</span>
+              <span style="font-size: 11.5px; color: #6B675D;">Refreshed 12 s ago</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Health</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px 14px; margin-top: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #C93B3B; flex: none;"></span>
+              <span style="font-size: 13px; font-weight: 600; color: #8E2222;">Down — Telegram has not reached this bot for 41 minutes</span>
+              <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Re-register the webhook</button>
+            </div>
+            <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.6; color: #7A3232;">Nothing has failed loudly — updates are simply piling up on Telegram's side, which is what a broken webhook looks like.</p>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 13px; margin-top: 9px;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Re-register the webhook?</div>
+              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 6px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">
+                <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #156F45;">✓</span><span><strong style="font-weight: 600; color: #1D1C18;">Safe to run at any time, as often as you like.</strong> Running it twice does exactly what running it once does.</span></div>
+                <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #156F45;">✓</span><span>Nothing is dropped — Telegram redelivers all 912 waiting updates.</span></div>
+                <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #6B675D;">↻</span><span>The webhook secret is rotated at the same time.</span></div>
+              </div>
+              <div style="display: flex; gap: 7px; margin-top: 10px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Re-register now</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Not yet</button></div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; margin-top: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Messages in and out</span>
+                <span style="font-size: 11px; color: #6B675D;">per hour, last 12 hours · tenant time</span>
+              </div>
+              <div style="display: flex; align-items: flex-end; gap: 5px; height: 74px; margin-top: 12px;">
+                <span style="flex: 1; background: #22211D; height: 62%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 71%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 88%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 74%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 95%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 81%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #22211D; height: 66%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #A29D91; height: 34%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #DEDAD1; height: 6%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #DEDAD1; height: 4%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #DEDAD1; height: 3%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #DEDAD1; height: 2%; border-radius: 2px 2px 0 0;"></span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: #6B675D; margin-top: 5px;"><span>00:00</span><span>06:00</span><span>11:23 — inbound stops</span></div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 12px;">
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Pending updates</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #B32B2B; margin-top: 3px;">912</div><div style="font-size: 10.5px; color: #6B675D;">was 0 at 11:22</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">In / hour</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 3px;">0</div><div style="font-size: 10.5px; color: #6B675D;">avg 148</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Out / hour</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 3px;">3</div><div style="font-size: 10.5px; color: #6B675D;">retries only</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Failure rate</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 3px;">4.1%</div><div style="font-size: 10.5px; color: #6B675D;">of attempted sends</div></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Webhook</div>
+                <div style="display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 6px 12px; margin-top: 9px; font-size: 11.5px;">
+                  <span style="color: #6B675D;">Status</span><span style="color: #B32B2B; font-weight: 600;">! No traffic since 11:23</span>
+                  <span style="color: #6B675D;">Address</span><span style="font-family: ui-monospace, monospace; color: #1D1C18; overflow-wrap: break-word;">/hooks/telegram/1a77bd90c2</span>
+                  <span style="color: #6B675D;">Last error</span><span style="color: #1D1C18;">None reported by Telegram</span>
+                  <span style="color: #6B675D;">Secret</span><span style="color: #1D1C18;">Set · rotates on re-register</span>
+                </div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Failures by kind</span>
+                  <span style="font-size: 11px; color: #6B675D;">last 24 h</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #1D1C18; width: 128px; flex: none;">Blocked by user</span><span style="flex: 1; height: 8px; background: #F0EEE9; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 62%; height: 100%; background: #22211D;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; width: 26px; text-align: right; flex: none;">18</span></div>
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #1D1C18; width: 128px; flex: none;">Window expired</span><span style="flex: 1; height: 8px; background: #F0EEE9; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 31%; height: 100%; background: #56534A;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; width: 26px; text-align: right; flex: none;">9</span></div>
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #1D1C18; width: 128px; flex: none;">Rate limited</span><span style="flex: 1; height: 8px; background: #F0EEE9; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 17%; height: 100%; background: #7E7A6E;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; width: 26px; text-align: right; flex: none;">5</span></div>
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #1D1C18; width: 128px; flex: none;">Bad content</span><span style="flex: 1; height: 8px; background: #F0EEE9; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 7%; height: 100%; background: #A29D91;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; width: 26px; text-align: right; flex: none;">2</span></div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; border-top: 1px solid #F0EEE9; margin-top: 11px; padding-top: 11px;">
+                  <div style="min-width: 0;"><div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Waiting to be sent</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">34 messages held · nothing dropped</div></div>
+                  <a href="#queue" style="margin-left: auto; display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #22211D; flex: none;">Open the queue →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr) minmax(0, 0.95fr); gap: 14px; margin-top: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">The two connected accounts</div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; margin-top: 10px; padding-bottom: 7px; border-bottom: 1px solid #E5E2DB;">
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Account</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Can reply</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last inbound</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Sends blocked</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; padding: 9px 0; border-bottom: 1px solid #F0EEE9; font-size: 12px; align-items: center;">
+                <span style="color: #1D1C18;">@NaBetSupport <span style="display: inline-flex; align-items: center; gap: 4px; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">● Active</span></span>
+                <span style="color: #1D1C18;">✓ Yes</span>
+                <span style="color: #6B675D;">41 m ago</span>
+                <span style="color: #6B675D;">0</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; padding: 9px 0; font-size: 12px; align-items: center;">
+                <span style="color: #1D1C18;">@NaBetVIP <span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">◐ Paused</span></span>
+                <span style="color: #8F5F08; font-weight: 600;">✕ Not granted</span>
+                <span style="color: #6B675D;">44 m ago</span>
+                <span style="color: #8F5F08; font-weight: 600;">6</span>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Tools</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left; cursor: pointer;">Send a test message to the sandbox chat</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left; cursor: pointer;">View the last 50 updates</button>
+                <button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left;">Simulate window expiry · staging only</button>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Sending speed</div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 88px; gap: 8px 10px; align-items: center; margin-top: 9px; font-size: 11.5px;">
+                  <span style="color: #4A4842;">Messages a second, this bot</span><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 34px;">25</div>
+                  <span style="color: #4A4842;">Messages a second, one chat</span><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 34px;">1</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 11px; color: #6B675D;"><span>🔒 Platform maximums: 30 and 1</span></div>
+                <p style="margin: 7px 0 0; font-size: 11px; line-height: 1.55; color: #6B675D;">If Telegram pushes back, the platform slows itself down for a minute and then eases back up. You do not need to change anything for a burst.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · healthy, for comparison</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01–F05, F08 · Amharic chrome</span></div>
+    <div data-screen-label="F01 health dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 400px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #C9C5BB;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #3ECB80;"></span>ጤናማ</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 190px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram<span style="margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: #3ECB80;"></span></span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram · @nabet_support_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">ጤና</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">telegram.health.view</span>
+              <span style="font-size: 11.5px; color: #A6A296;">ከ12 ሰከንድ በፊት ታድሷል</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Health</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px 14px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #3ECB80; flex: none;"></span>
+            <span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Healthy — no banner, just the dot</span>
+            <span style="font-size: 11.5px; color: #A6A296;">1,412 in · 1,388 out in the last 24 hours · 0 pending</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; margin-top: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የገቡ እና የወጡ መልእክቶች</span>
+                <span style="font-size: 11px; color: #A6A296;">በሰዓት · ባለፉት 12 ሰዓታት</span>
+              </div>
+              <div style="display: flex; align-items: flex-end; gap: 5px; height: 74px; margin-top: 12px;">
+                <span style="flex: 1; background: #ECEAE4; height: 58%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 66%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 79%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 71%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 92%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 84%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 88%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 76%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 81%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 69%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 74%; border-radius: 2px 2px 0 0;"></span>
+                <span style="flex: 1; background: #ECEAE4; height: 63%; border-radius: 2px 2px 0 0;"></span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: #A6A296; margin-top: 5px;"><span>00:00</span><span>06:00</span><span>12:00</span></div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; border-top: 1px solid #262622; margin-top: 12px; padding-top: 12px;">
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የተጠባበቁ</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">0</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በሰዓት የገቡ</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">148</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በሰዓት የወጡ</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">141</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የስህተት መጠን</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">0.4%</div></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Webhook</div>
+                <div style="display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 6px 12px; margin-top: 9px; font-size: 11.5px;">
+                  <span style="color: #A6A296;">Status</span><span style="color: #5AD190; font-weight: 600;">✓ Verified 12:04</span>
+                  <span style="color: #A6A296;">Address</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4; overflow-wrap: break-word;">/hooks/telegram/9f3c2a7b41d8</span>
+                  <span style="color: #A6A296;">Last error</span><span style="color: #ECEAE4;">None</span>
+                  <span style="color: #A6A296;">Secret</span><span style="color: #ECEAE4;">Set · rotates on re-register</span>
+                </div>
+                <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; margin-top: 11px; cursor: pointer;">Re-register anyway</button>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Failures by kind</span>
+                  <span style="font-size: 11px; color: #A6A296;">last 24 h</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #ECEAE4; width: 128px; flex: none;">Blocked by user</span><span style="flex: 1; height: 8px; background: #262622; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 55%; height: 100%; background: #ECEAE4;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; width: 26px; text-align: right; flex: none;">5</span></div>
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #ECEAE4; width: 128px; flex: none;">Window expired</span><span style="flex: 1; height: 8px; background: #262622; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 22%; height: 100%; background: #A6A296;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; width: 26px; text-align: right; flex: none;">2</span></div>
+                  <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 11.5px; color: #ECEAE4; width: 128px; flex: none;">Rate limited</span><span style="flex: 1; height: 8px; background: #262622; border-radius: 999px; overflow: hidden;"><span style="display: block; width: 11%; height: 100%; background: #918C80;"></span></span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; width: 26px; text-align: right; flex: none;">1</span></div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; border-top: 1px solid #262622; margin-top: 11px; padding-top: 11px;">
+                  <div style="min-width: 0;"><div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Waiting to be sent</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">0 held</div></div>
+                  <a href="#queue" style="margin-left: auto; display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; flex: none;">Open the queue →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr) minmax(0, 0.95fr); gap: 14px; margin-top: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የተገናኙ መለያዎች</div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; margin-top: 10px; padding-bottom: 7px; border-bottom: 1px solid #343430;">
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">መለያ</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">መመለስ</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የመጨረሻ ገቢ</span>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የታገዱ</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; padding: 9px 0; border-bottom: 1px solid #262622; font-size: 12px; align-items: center;">
+                <span style="color: #ECEAE4;">@NaBetSupport <span style="display: inline-flex; align-items: center; gap: 4px; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">● Active</span></span>
+                <span style="color: #ECEAE4;">✓ አዎ</span>
+                <span style="color: #A6A296;">14 ሰከንድ</span>
+                <span style="color: #A6A296;">0</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 8px; padding: 9px 0; font-size: 12px; align-items: center;">
+                <span style="color: #ECEAE4;">@NaBetVIP <span style="display: inline-flex; align-items: center; gap: 4px; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">● Active</span></span>
+                <span style="color: #ECEAE4;">✓ አዎ</span>
+                <span style="color: #A6A296;">12 ደቂቃ</span>
+                <span style="color: #A6A296;">0</span>
+              </div>
+            </div>
+
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">መሣሪያዎች</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left; cursor: pointer;">የፍተሻ መልእክት ላክ</button>
+                <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left; cursor: pointer;">የመጨረሻዎቹን 50 ዝመናዎች ተመልከት</button>
+                <button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 9px 12px; min-height: 36px; text-align: left;">የመስኮት ማብቂያ ማስመሰል · ስቴጂንግ ብቻ</button>
+              </div>
+            </div>
+
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የመላክ ፍጥነት</div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 88px; gap: 8px 10px; align-items: center; margin-top: 9px; font-size: 11.5px;">
+                  <span style="color: #C9C5BB;">በሰከንድ · ለዚህ ቦት</span><div style="border: 1px solid #45443E; border-radius: 6px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 34px;">25</div>
+                  <span style="color: #C9C5BB;">በሰከንድ · ለአንድ ውይይት</span><div style="border: 1px solid #45443E; border-radius: 6px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 34px;">1</div>
+                </div>
+                <div style="font-size: 11px; color: #A6A296; margin-top: 7px;">🔒 የመድረኩ ጣሪያ፦ 30 እና 1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Raw update viewer &amp; failure states — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows F06, F07, F09, F11, F12 · Doc 05 FR-30, SEC-03, FS-01, FS-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The viewer is the most sensitive thing on the page: it shows what Telegram actually sent, which includes personal data. Masked fields are greyed and labelled as masked rather than removed, so an engineer can see the shape of the payload without reading a player's phone number — and the whole viewer is gated behind its own permission.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">F06 · F07 — the last 50 updates</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #E5E2DB; background: #F6F5F2;">
+            <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Raw updates</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px;">telegram.health.view</span>
+            <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 10px; min-height: 32px; cursor: pointer;">Copy</button>
+          </div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">12:04:11</span><span style="font-size: 11px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 1px 7px;">business_message</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-left: auto;">id 90412</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #4A4842; margin-top: 6px; overflow-wrap: break-word;">"connection_id": "bcn_4Kd82Naa19",<br />"from": &#123; "first_name": "Abebe", "phone": <span style="background: #EEECE6; color: #ADA89D; border-radius: 3px; padding: 0 5px;">masked</span> &#125;,<br />"text": "ብር 2,500 ለማውጣት ሞክሬ ነበር"</div>
+          </div>
+          <div style="padding: 10px 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">12:03:52</span><span style="font-size: 11px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 1px 7px;">business_connection</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-left: auto;">id 90411</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #4A4842; margin-top: 6px;">"can_reply": true, "is_enabled": true</div>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">What is hidden, and why</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Phone numbers, shared contacts and the author of anything forwarded are masked for everyone, including you. The field stays visible so the payload still makes sense.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">F12 — nothing yet</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 20px 16px; text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Waiting for the first message</div>
+          <div style="font-size: 12px; line-height: 1.55; color: #6B675D; margin: 5px auto 10px; max-width: 320px;">Nothing has arrived through this bot yet. Send yourself a test message to prove the pipe works.</div>
+          <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Send a test message</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">F09 — Telegram outage</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Telegram is not answering — since 21:48</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">Replies are queuing and will send themselves when it comes back. Nothing is lost.</div>
+          </div>
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 9px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Reply windows are frozen for now.</strong> While Telegram is unreachable the platform stops expiring windows, so nobody gets told a conversation closed when it was only our view that broke. Expiry resumes, recalculated, on recovery.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">F11 — credentials unavailable</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Cannot reach the token store</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">Sends are held and will retry. There is no second copy of the token anywhere by design, so this waits for the vault rather than working around it.</div>
+          </div>
+          <div style="font-size: 11.5px; color: #6B675D; margin-top: 9px;">34 messages held · 3 admins alerted at 21:49</div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">F06 · F07 — the last 50 updates</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #343430; background: #232320;">
+            <span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Raw updates</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px;">telegram.health.view</span>
+            <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 10px; min-height: 32px; cursor: pointer;">Copy</button>
+          </div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #262622;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">12:04:11</span><span style="font-size: 11px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 1px 7px;">business_message</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-left: auto;">id 90412</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #C9C5BB; margin-top: 6px; overflow-wrap: break-word;">"connection_id": "bcn_4Kd82Naa19",<br />"from": &#123; "first_name": "Abebe", "phone": <span style="background: #2F2F29; color: #6B6860; border-radius: 3px; padding: 0 5px;">masked</span> &#125;,<br />"text": "ብር 2,500 ለማውጣት ሞክሬ ነበር"</div>
+          </div>
+          <div style="padding: 10px 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">12:03:52</span><span style="font-size: 11px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 1px 7px;">business_connection</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-left: auto;">id 90411</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #C9C5BB; margin-top: 6px;">"can_reply": true, "is_enabled": true</div>
+          </div>
+        </div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">What is hidden, and why</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Phone numbers, shared contacts and the author of anything forwarded are masked for everyone, including you. The field stays visible so the payload still makes sense.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">F12 — nothing yet</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 20px 16px; text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Waiting for the first message</div>
+          <div style="font-size: 12px; line-height: 1.55; color: #A6A296; margin: 5px auto 10px; max-width: 320px;">Nothing has arrived through this bot yet. Send yourself a test message to prove the pipe works.</div>
+          <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Send a test message</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">F09 — Telegram outage</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Telegram is not answering — since 21:48</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">Replies are queuing and will send themselves when it comes back. Nothing is lost.</div>
+          </div>
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 9px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">Reply windows are frozen for now.</strong> While Telegram is unreachable the platform stops expiring windows, so nobody gets told a conversation closed when it was only our view that broke. Expiry resumes, recalculated, on recovery.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">F11 — credentials unavailable</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Cannot reach the token store</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">Sends are held and will retry. There is no second copy of the token anywhere by design, so this waits for the vault rather than working around it.</div>
+          </div>
+          <div style="font-size: 11.5px; color: #A6A296; margin-top: 9px;">34 messages held · 3 admins alerted at 21:49</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01, F02, F05, F10 at phone width</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The documents are silent about this panel's minimum size — see the question at the end. My call: it reads fully on a phone and <strong style="font-weight: 600;">the one repair it offers, re-registering the webhook, stays operable</strong>, because it is the single action that fixes the most common outage and it is idempotent, so a mis-tap costs nothing. Everything that changes configuration — the speed limits, the simulator — is read-only here.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="F01 health 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_promo_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Health</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #C93B3B;"></span>Down</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 13px; font-weight: 600; color: #8E2222;">Telegram has not reached this bot for 41 minutes</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #7A3232; margin-top: 4px;">912 messages are waiting on their side.</div><div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 11px; margin-top: 9px; font-size: 12px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Safe to run at any time.</strong> Running it twice does what running it once does. Nothing is dropped — all 912 are redelivered — and the secret is rotated.</div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Re-register the webhook</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Pending</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #B32B2B; margin-top: 2px;">912</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">In / hour</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 2px;">0</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Held sends</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 2px;">34</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Since</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 2px;">11:23</div></div>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Accounts on this bot</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #1D1C18;">@NaBetSupport</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">● Active</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #1D1C18;">@NaBetVIP</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">◐ Paused</span>
+              </div>
+            </div>
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 11px 12px; margin-top: 10px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Settings need a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Sending speed and the staging simulator are read-only here. Re-registering the webhook is not — it is safe to repeat.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="F01 health 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_promo_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ጤና</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #C9C5BB;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #E06B6B;"></span>ተቋርጧል</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 13px; font-weight: 600; color: #F5A7A7;">ቴሌግራም ለ41 ደቂቃ ወደዚህ ቦት አልደረሰም</div>
+              <div style="font-size: 12px; line-height: 1.7; color: #E0A0A0; margin-top: 4px;">912 መልእክቶች በእነሱ በኩል ተጠባብቀዋል።</div><div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 10px 11px; margin-top: 9px; font-size: 12px; line-height: 1.8; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">በማንኛውም ጊዜ ማድረግ ይቻላል።</strong> ሁለት ጊዜ ቢያደርጉት እንደ አንድ ጊዜ ነው። ምንም አይጠፋም — 912ቱም እንደገና ይላካሉ — ሚስጥሩም ይታደሳል።</div>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">ዌብሁክ እንደገና አስመዝግብ</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የተጠባበቁ</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #F08A8A; margin-top: 2px;">912</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በሰዓት የገቡ</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 2px;">0</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የተያዙ</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 2px;">34</div></div>
+                <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ከመቼ</div><div style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 2px;">11:23</div></div>
+              </div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የዚህ ቦት መለያዎች</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #ECEAE4;">@NaBetSupport</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">● Active</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #ECEAE4;">@NaBetVIP</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">◐ Paused</span>
+              </div>
+            </div>
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 10px; padding: 11px 12px; margin-top: 10px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቅንብሮች ሰፊ ማያ ገጽ ይፈልጋሉ</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">የመላክ ፍጥነት እና የስቴጂንግ ማስመሰያ እዚህ ለንባብ ብቻ ናቸው። ዌብሁክ እንደገና ማስመዝገብ ግን ይቻላል።</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§K</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Keyboard — traversing the update viewer</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows F06, F07 · Doc 05 §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Fifty entries with expandable payloads is a list, not a table, and it is navigated as one: arrows move, Enter opens, and the focused entry says where it sits. Masked fields stay masked in every path — the keyboard is not a way around SEC-03.</p>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light · focused</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;"><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Raw updates</span><span style="font-size: 11px; color: #6B675D;">50 entries · list</span></div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">12:04:11</span><span style="font-size: 11px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 1px 7px;">business_message</span></div></div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; outline: 2px solid #22211D; outline-offset: -2px; background: #FDFCFA;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">12:03:52</span><span style="font-size: 11px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 1px 7px;">business_connection</span><span style="margin-left: auto; font-size: 10.5px; color: #6B675D;">2 of 50 · expanded</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #4A4842; margin-top: 6px;">"can_reply": true, "is_enabled": true</div>
+          </div>
+          <div style="padding: 10px 12px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">12:03:40</span><span style="font-size: 11px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 1px 7px;">message</span></div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px; font-size: 11.5px; color: #4A4842;">
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">↑ ↓</span>Entry to entry · position announced</div>
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">Enter</span>Expand or collapse the payload</div>
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">Home / End</span>First and last of the 50</div>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark · focused</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #232320; border-bottom: 1px solid #343430;"><span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Raw updates</span><span style="font-size: 11px; color: #A6A296;">50 entries · list</span></div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">12:04:11</span><span style="font-size: 11px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 1px 7px;">business_message</span></div></div>
+          <div style="padding: 10px 12px; border-bottom: 1px solid #262622; outline: 2px solid #ECEAE4; outline-offset: -2px; background: #222220;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">12:03:52</span><span style="font-size: 11px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 1px 7px;">business_connection</span><span style="margin-left: auto; font-size: 10.5px; color: #A6A296;">2 ከ50 · ተከፍቷል</span></div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; line-height: 1.7; color: #C9C5BB; margin-top: 6px;">"can_reply": true, "is_enabled": true</div>
+          </div>
+          <div style="padding: 10px 12px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">12:03:40</span><span style="font-size: 11px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 1px 7px;">message</span></div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px; font-size: 11.5px; color: #C9C5BB;">
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">↑ ↓</span>ከግቤት ወደ ግቤት</div>
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">Enter</span>መክፈት · መዝጋት</div>
+          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">Home / End</span>መጀመሪያ እና መጨረሻ</div>
+        </div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 14px 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Acceptance-list row · AC-B4-03 pattern</div>
+      <div style="display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 7px 12px; margin-top: 9px; font-size: 12px; line-height: 1.6;">
+        <span style="color: #6B675D;">Drawn here</span><span style="color: #1D1C18;">The focused entry expanded, its position stated, and the three-key map — both themes.</span>
+        <span style="color: #6B675D;">Demonstrated build-side</span><span style="color: #1D1C18;">Arrow keys move focus and announce “n of 50”, Enter toggles the payload, Home and End jump the ends, focus never enters a masked value.</span>
+        <span style="color: #6B675D;">Passes when</span><span style="color: #1D1C18;">All fifty updates can be read and expanded without a pointer, and masking holds on every one.</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> F01 (status banner, throughput, failure breakdown, held-queue with drill-in — §A both themes), F02 (webhook status, pending count, last error, in/out per hour, failure rate by class — §A both themes), F03 (per-connection state, can-reply, last inbound, sends blocked — §A both themes, §C both themes), F04 (the rollup as banner-or-dot, with the healthy case in §A dark and the down case in §A light), F05 (test message, update viewer, staging simulator — §A both themes), F06 and F07 (§B both themes), F08 (speed limits with their platform ceilings — §A both themes), F09 (§B both themes), F10 (§A light banner and §C both themes), F11 (§B both themes), F12 (§B both themes). Both viewports, both themes.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 variant is read-only for configuration but keeps <em>re-register webhook</em> operable, behind a confirmation naming its idempotent effect. Approved by the owner on 3 Aug; Doc 05 §9 is silent on this panel, so the ruling is the authority.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Closed:</strong> the health panel is phone-operable for that one repair, as drawn. A silent webhook is the most common Telegram outage and the fix is idempotent — which the confirmation now says in the first line rather than leaving to the operator's trust.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">And one thing I want your eye on:</strong> the throughput bars use the approved ink ramp rather than a red “bad” colour, with the collapse shown by the bars going flat and stated in words underneath. Colour is not carrying the message. If you would rather the outage hours were tinted like the SLA-breach token, that is a one-line change — but it would be the first time a chart in this system used a state colour as a category.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

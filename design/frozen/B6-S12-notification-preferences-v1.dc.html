@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S12-notification-preferences-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows K01–K11</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Notification preferences</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Twelve categories, three channels, three layers of setting stacked on top of each other — and one rule that decides the whole design: <strong style="font-weight: 600;">mandated means cannot mute, never must-SMS</strong>. Silent force and silent suppression are both prohibited, so every cell in this grid says what will actually happen and, where it differs from what the person chose, why.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The hard part is not the matrix, it is the honesty. A locked row has to explain that it is locked against muting and not against choosing a channel. An SMS column has to say why it is unavailable rather than sitting greyed and mute. And when a role default changes underneath somebody's own choice, the admin's affected-count has to exclude them and say it did.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Rows use Section J's per-key anatomy where a preference is a key. Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell is <a href="B6-S11-settings-shell-v1.dc.html">B6-S11</a>'s.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">My notifications — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows K01–K04, K06, K08, K10 · Doc 16 FR-09, §8, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">All twelve registered categories against in-app, email and staff-SMS. Every cell carries a glyph <em>and</em> a word, because the three layers are the information and a symbol alone cannot carry it. Light is a supervisor with a phone and SMS opted in; dark is an agent without one, so the SMS column explains itself instead of sitting grey.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · supervisor, SMS available</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">K01 · K03 · K04 · K06 · K10</span></div>
+    <div data-screen-label="K01 my notifications light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">MA</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 186px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Tickets &amp; SLA</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Quotas &amp; Usage</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+          <div style="padding: 6px 0 0 16px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">Mine</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">Role defaults</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Notifications</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Mine — Meron Assefa, Supervisor</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11.5px; color: #6B675D;">Timezone Africa/Addis_Ababa</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Mute for 2 hours</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 10px 14px; margin-top: 12px; flex: none; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Key</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="font-size: 12px;">●</span>On — your choice</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="font-size: 12px;">○</span>Off — your choice</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="font-size: 12px;">◐</span>Following the default for your role</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="font-size: 12px;">🔒</span>Mandated — you cannot mute this</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="font-size: 12px;">—</span>Not available on this channel</span>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">What happens</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">In-app</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Email</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Staff SMS</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A ticket is assigned to me</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">◐ Role · on</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">Someone mentions me in a note</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A ticket I follow changes</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">◐ Role · on</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A ticket is escalated to me</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center; background: #FDFCFA;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">An SLA target is about to be missed <span style="font-size: 11px;">🔒</span><span style="font-size: 10.5px; color: #6B675D;">mandated · in-app</span></span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">🔒 On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A reply window is closing</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">◐ Role · off</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A bulk action finishes</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A broadcast note goes out</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">◐ Role · on</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">A scheduled report is delivered</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center; background: #FDFCFA;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">A channel goes down <span style="font-size: 11px;">🔒</span><span style="font-size: 10.5px; color: #6B675D;">mandated · in-app</span></span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">🔒 On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">The SMS gateway has a problem</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 128px 128px 148px; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #1D1C18;">The AI does something unusual</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #1D1C18;">● On</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">◐ Role · on</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #4A4842;">○ Off</span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why “SLA about to be missed” is locked on</div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Mandated by Sara Bekele on 14 June, for every supervisor: “A missed SLA that nobody saw coming is the one thing we cannot explain to a regulator.” The mandate holds one channel open — in-app — so it can never be muted entirely. Email and SMS remain yours to choose: you have email on and SMS off.</p>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Reply-window alerts, in full</div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Role default: off for email. Your setting: on for in-app and SMS. Effective: you get it in the app and by SMS, not by email.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · agent with no phone on file</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">K02 · K04 · K08 · K09 · Amharic chrome</span></div>
+    <div data-screen-label="K02 my notifications dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">AT</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 186px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ቅንብሮች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">አጠቃላይ</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ደኅንነት</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ማሳወቂያዎች</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ኮታና አጠቃቀም</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ቅንብሮች · ማሳወቂያዎች</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">የእኔ — አበበ ታደሰ፣ ወኪል</h1>
+            </div>
+            <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">ለ2 ሰዓት ዝጋ</button>
+          </div>
+
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 10px; padding: 11px 14px; margin-top: 12px; flex: none; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; font-weight: 600; color: #F0B54A;">የSMS አምድ አልተከፈተም — ስልክ ቁጥር የለም</span>
+            <span style="font-size: 11.5px; color: #E8C25A;">ቁጥር ካስገቡና ከተስማሙ በኋላ ይከፈታል። ግዴታ አይደለም።</span>
+            <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 34px; cursor: pointer;">ስልክ አክል</button>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; background: #232320; border-bottom: 1px solid #343430;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ምን ሲሆን</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በመተግበሪያ</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ኢሜይል</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">SMS</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">ትኬት ሲመደብልኝ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">◐ የሚና · በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">በማስታወሻ ውስጥ ሲጠቅሱኝ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የምከታተለው ትኬት ሲቀየር</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">◐ የሚና · በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">ትኬት ወደ እኔ ሲሸጋገር</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center; background: #222220;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4; display: flex; align-items: center; gap: 7px;">SLA ሊያመልጥ ሲቃረብ <span style="font-size: 11px;">🔒</span><span style="font-size: 10.5px; color: #A6A296;">ግዴታ · SMS</span></span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #F0B54A;">🔒 በርቷል · በምትኩ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">🔒 — ስልክ የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የመልስ መስኮት ሲዘጋ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">◐ የሚና · ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የጅምላ ሥራ ሲጠናቀቅ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የስርጭት ማስታወሻ ሲወጣ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">◐ የሚና · በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የታቀደ ሪፖርት ሲደርስ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center; background: #222220;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4; display: flex; align-items: center; gap: 7px;">ቻናል ሲቋረጥ <span style="font-size: 11px;">🔒</span><span style="font-size: 10.5px; color: #A6A296;">ግዴታ · በመተግበሪያ</span></span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">🔒 በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #ECEAE4;">● በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">የSMS መተላለፊያ ችግር ሲኖር</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 124px 124px 190px; align-items: center;">
+              <span style="padding: 8px 14px; font-size: 12px; color: #ECEAE4;">AI ያልተለመደ ነገር ሲያደርግ</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">◐ የሚና · በርቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #C9C5BB;">○ ጠፍቷል</span>
+              <span style="padding: 8px 14px; font-size: 11.5px; color: #A6A296;">— የለም</span>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px; margin-top: 12px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">“SLA ሊያመልጥ ሲቃረብ” በSMS ግዴታ ነው — ግን ስልክ የለዎትም፤ ስለዚህ በኢሜይል ደርሷል</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ግዴታ ማለት “ማጥፋት አይችሉም” ማለት ነው እንጂ “በSMS መድረስ አለበት” ማለት አይደለም። ሁለቱንም ሌሎች ቻናሎች እርስዎ አጥፍተዋቸዋል፤ ስልክም የለዎትም። ስለዚህ ማሳወቂያው በቀጣዩ ቻናል — በኢሜይል — ደርሶዎታል። የኢሜይሉ ሕዋስ “በርቷል · በምትኩ” ይላል፤ ግዴታ ስለሆነ ምርጫዎን ሽሮ እዚያ ደርሷል እንጂ በዝምታ አልጠፋም።</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Role defaults, effective results, states — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows K04, K05, K07, K09, K11 · Doc 16 FR-09, EC-04, EC-12, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The admin view edits the middle layer only, and its affected-count is the honest one: people who made their own choice are excluded, and the screen says how many and why. That subtraction is the difference between an admin who trusts the number and one who learns not to.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">K05 · K07 — role defaults, affected count</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Role defaults · Agent</span>
+            <span style="font-size: 11.5px; color: #6B675D;">31 people</span>
+          </div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">This is the middle layer. It decides what an agent gets unless they have chosen for themselves.</p>
+          <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Email · a ticket I follow changes</span>
+              <span style="margin-left: auto; display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden; flex: none;"><span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 7px 13px; min-height: 34px; display: inline-flex; align-items: center;">Off</span><span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 13px; min-height: 34px; display: inline-flex; align-items: center;">On</span></span>
+            </div>
+            <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 9px 11px; margin-top: 9px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">This will change what 24 people receive</div>
+              <div style="font-size: 11px; line-height: 1.55; color: #4A4842; margin-top: 3px;">Seven of the 31 agents have already chosen for themselves on this row, so their setting stays as it is — a default never overrides a person's own choice.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Save for 24 people</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">K04 — the effective result, spelled out</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Email · a ticket I follow changes</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 9px;">
+            <div style="display: grid; grid-template-columns: 138px minmax(0, 1fr); gap: 10px; padding: 5px 8px;"><span style="font-size: 11.5px; color: #6B675D;">Platform default</span><span style="font-size: 11.5px; color: #4A4842;">On</span></div>
+            <div style="display: grid; grid-template-columns: 138px minmax(0, 1fr); gap: 10px; padding: 5px 8px;"><span style="font-size: 11.5px; color: #6B675D;">Your role's default</span><span style="font-size: 11.5px; color: #4A4842;">On</span></div>
+            <div style="display: grid; grid-template-columns: 138px minmax(0, 1fr); gap: 10px; background: #EEECE6; border-radius: 5px; padding: 5px 8px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Your setting</span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Muted</span></div>
+            <div style="display: grid; grid-template-columns: 138px minmax(0, 1fr); gap: 10px; padding: 5px 8px;"><span style="font-size: 11.5px; color: #6B675D;">What happens</span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">No email — your choice wins</span></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">K11 — loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 92px 92px 92px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; padding: 9px 12px; gap: 10px;">
+            <div style="height: 8px; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; background: #EEECE6; border-radius: 3px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 92px 92px 92px; padding: 10px 12px; gap: 10px; border-bottom: 1px solid #F0EEE9;">
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 92px 92px 92px; padding: 10px 12px; gap: 10px; border-bottom: 1px solid #F0EEE9;">
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.9fr) 92px 92px 92px; padding: 10px 12px; gap: 10px;">
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">K09 — quick-mute from the inbox bell</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Mute for two hours?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Until <strong style="font-weight: 600; color: #ECEAE4;">16:40 today</strong>, in your own timezone — Africa/Addis_Ababa, not the tenant's. This writes to the same preferences as this screen, so you will see it here.</p>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #F0B54A;">Two mandated categories keep coming through</div>
+            <div style="font-size: 11px; line-height: 1.55; color: #E8C25A; margin-top: 3px;">SLA warnings and channel outages keep arriving on their mandated channel. Everything else goes quiet.</div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Mute until 16:40</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">K11 — a category set with nothing registered</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 20px 16px; text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Nothing to configure here yet</div>
+          <div style="font-size: 12px; line-height: 1.8; color: #A6A296; margin: 5px auto 0; max-width: 340px;">The Surveys module has no notification categories registered. When it registers one, it appears in this grid on its own — nobody has to design it.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">K11 — save failure, naming the row</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11.5px; color: #F5A7A7;">Couldn't save <strong style="font-weight: 600;">Email · a bulk action finishes</strong> — put back to off</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #F5A7A7; font-size: 11px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">The other eleven rows saved. A failure names the row it belongs to, so nobody has to guess which cell went back.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">K10 — what a screen reader hears</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Ordinary cell</div><div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 4px;">“A ticket is assigned to me, Email, following the default for your role, on.”</div></div>
+            <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Locked cell</div><div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 4px;">“An SLA target is about to be missed, In-app, on, locked. Mandated by Sara Bekele — you cannot mute this, but you can choose which channels carry it.”</div></div>
+            <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Unavailable cell</div><div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 4px;">“A ticket is assigned to me, Staff SMS, not available — no phone number on your profile.”</div></div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11px; line-height: 1.6; color: #A6A296;">Real row and column headers, so each cell announces both. The layer and the lock reason are text, never a glyph alone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 16 §9 · owner ruling</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A grid does not survive 375, so the matrix becomes one card per category with its three channels stacked. Read-only, like the rest of Settings — except quick-mute, which is a bell action that lands in this model and stays operable wherever the bell is.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="K 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Settings</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">My notifications</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer;">Mute everything for 2 hours</button>
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; margin-top: 10px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Changing these needs a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Muting for a couple of hours works anywhere. Two mandated categories always come through.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">A ticket is escalated to me</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="color: #4A4842;">In-app</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Email</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Staff SMS</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">SLA about to be missed</span><span style="font-size: 12px;">🔒</span></div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #6B675D; margin-top: 3px;">Mandated by Sara Bekele — in-app cannot be muted. Email and SMS are yours to choose.</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="color: #4A4842;">In-app</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">🔒 On</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Email</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Staff SMS</span><span style="margin-left: auto; color: #4A4842;">○ Off</span></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">A reply window is closing</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="color: #4A4842;">In-app</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Email</span><span style="margin-left: auto; color: #4A4842;">◐ Role · off</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #4A4842;">Staff SMS</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">● On</span></div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px;">9 more categories</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="K 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ቅንብሮች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">የእኔ ማሳወቂያዎች</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer;">ሁሉንም ለ2 ሰዓት ዝጋ</button>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 11px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">SMS አልተከፈተም — ስልክ የለም</div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #E8C25A; margin-top: 2px;">ግዴታ የሆኑ ማሳወቂያዎች በኢሜይል ይደርሱዎታል — ሕዋሱ “በርቷል · በምትኩ” ብሎ ይነግርዎታል፤ በዝምታ አይጠፉም።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">SLA ሊያመልጥ ሲቃረብ</span><span style="font-size: 12px;">🔒</span></div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 3px;">በሳራ በቀለ በSMS ግዴታ የተደረገ — ማጥፋት አይቻልም። ስልክ ስለሌለ ወደ ኢሜይል ይወርዳል።</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="color: #C9C5BB;">በመተግበሪያ</span><span style="margin-left: auto; color: #C9C5BB;">○ ጠፍቷል</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #C9C5BB;">ኢሜይል</span><span style="margin-left: auto; color: #F0B54A;">🔒 በርቷል · በምትኩ</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #C9C5BB;">SMS</span><span style="margin-left: auto; color: #A6A296;">🔒 — ስልክ የለም</span></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">ትኬት ሲመደብልኝ</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="color: #C9C5BB;">በመተግበሪያ</span><span style="margin-left: auto; color: #ECEAE4; font-weight: 600;">● በርቷል</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #C9C5BB;">ኢሜይል</span><span style="margin-left: auto; color: #C9C5BB;">◐ የሚና · በርቷል</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 12px;"><span style="color: #C9C5BB;">SMS</span><span style="margin-left: auto; color: #A6A296;">— የለም</span></div>
+            </div>
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 10px; padding: 11px 12px; margin-top: 10px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለመቀየር ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">እዚህ ሁሉንም ማንበብ ይችላሉ። ለጥቂት ሰዓት ማጥፋት ግን ከየትም ይሠራል።</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> K01 (all twelve registered categories against in-app, email and staff-SMS — §A both themes), K02 (SMS offered where there is a phone and an opt-in, and explaining itself where there is not — §A dark, §C dark), K03 (the three layers plus mandated, each with glyph and word, with the key printed on the screen — §A light), K04 (effective result with its four-line why — §A light cards, §B light), K05 (role-defaults admin view — §B light), K06 (mandated rows naming who mandated them, on which single channel, and why — in-app for the supervisor in §A light and §C light, SMS for the agent in §A dark and §C dark), K07 (override beats role default, with the affected-count excluding those seven people and saying so — §B light), K08 (SMS-mandated with no phone falling back to email in channel-priority order — genuinely, because the agent has muted in-app and email herself — with the “cannot mute, not must-SMS” statement beside it, §A dark and §C dark), K09 (quick-mute writing to this model, computed in the user's own timezone — §B dark, §A both themes, §C both themes), K10 (grid accessibility, with the three announcements written out — §B dark), K11 (loading, empty and save failure — §B both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> quick-mute stays operable at 375 while the grid is read-only. It is a bell action that happens to write here, and the bell is on the phone; a read-only mute button would be a button that does nothing.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> every cell spells out its layer in words — “Role · on” rather than a half-filled dot. It makes the grid wordier than the usual three-state matrix, and at twelve rows by three columns that is thirty-six small labels. I think it is right, because the layer is the whole point of the feature and a dot is exactly the kind of thing an operator learns wrong once and then trusts. Worth your call before it goes to i18n — it is thirty-six more strings per language.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

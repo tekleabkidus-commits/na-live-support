@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S08-permission-matrix-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows G04–G06, G08–G11, G15, G17, G18, G21, G22</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The permission matrix</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Section G's second half, and the hardest screen in the batch: <strong style="font-weight: 600;">113 checkboxes that have to stay comprehensible</strong>. Three things carry it. Scope is settled first, at the top, in a sentence — “can see tickets belonging to: their department” — because a permission means nothing until you know over which records. The matrix is then grouped by module with a tri-state header, so an admin works a module at a time rather than a list of a hundred. And the summary stays visible, counting people rather than permissions, because that is the number that matters when you press Save.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every key shown is verbatim from Doc 03 §4.1, plus the two registered additions the doc owner named on 3 Aug — <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">views.share</span> in Reports and <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">ai.providers.manage</span> in AI, both rendered in their own modules. Tables, checkboxes, shields, diff colours, skeletons and toasts are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a>; the shell and roles list are <a href="B6-S07-roles-list-v1.dc.html">B6-S07</a>'s, unchanged.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Matrix — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G04–G06, G08, G09, G21 · Doc 03 §8, §9, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">All fourteen module groups are listed with their key counts, and every one is reachable inside the frame. Telegram is expanded to its complete six keys as the rendering proof — a hundred and thirteen rows do not fit one screen, which is exactly why the matrix is grouped. Light shows the resting state with one module open; dark shows a live search, a module header in its indeterminate state, and a focused cell.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G04 scope · G05 tri-state · G06 keys · G09 summary</span></div>
+    <div data-screen-label="G05 matrix light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">People</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Users</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Roles &amp; permissions</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Channels</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">✈ Telegram</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">💬 Web chat</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">People · Roles</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #22211D;"></span>
+                <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Payments Specialist</h1>
+              </div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">admin.roles.manage</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Discard</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Review &amp; save</button>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px; margin-top: 12px; flex: none;">
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">What records this role can work on</span>
+              <span style="font-size: 11px; color: #6B675D;">set per module · decide this before the checkboxes</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 10px;">
+              <div>
+                <div style="font-size: 11.5px; color: #4A4842;">Tickets</div>
+                <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px;">Own</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">Team</span>
+                  <span style="font-size: 11px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 10px;">Department</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">All</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.5; color: #6B675D; margin-top: 5px;">Can see tickets belonging to <strong style="color: #1D1C18; font-weight: 600;">their own departments</strong> — Payments and Finance.</div>
+              </div>
+              <div>
+                <div style="font-size: 11.5px; color: #4A4842;">Customers</div>
+                <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px;">Own</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">Team</span>
+                  <span style="font-size: 11px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 10px;">Department</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">All</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.5; color: #6B675D; margin-top: 5px;">Can open the profile of <strong style="color: #1D1C18; font-weight: 600;">any customer their departments have handled</strong>.</div>
+              </div>
+              <div>
+                <div style="font-size: 11.5px; color: #4A4842;">Reports</div>
+                <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 10px;">Own</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">Team</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">Department</span>
+                  <span style="font-size: 11px; color: #1D1C18; background: #FFFFFF; padding: 7px 10px; border-left: 1px solid #E5E2DB;">All</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.5; color: #6B675D; margin-top: 5px;">Numbers cover <strong style="color: #1D1C18; font-weight: 600;">only their own work</strong>, not their colleagues'.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 14px; margin-top: 12px; flex: 1; min-height: 0;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #E5E2DB; flex: none;">
+                <span style="flex: 1; max-width: 260px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 10px; font-size: 12px; color: #726D63; min-height: 34px;">⌕ Find a permission<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 1px 5px;">/</span></span>
+                <span style="font-size: 11.5px; color: #6B675D;">14 modules · 113 permissions</span>
+                <span style="margin-left: auto; font-size: 11px; color: #6B675D;">Arrow keys move · space toggles</span>
+              </div>
+
+              <div style="flex: 1; min-height: 0; overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #22211D;"></span></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Tickets</span><span style="font-size: 11px; color: #6B675D;">12 of 21 · scoped · 🛡 1 high-risk on</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #F6F5F2; border-top: 1px solid #E5E2DB; border-bottom: 1px solid #E5E2DB;">
+                  <span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #22211D;"></span></span>
+                  <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Telegram</span>
+                  <span style="font-size: 11px; color: #6B675D;">2 of 6 · module admin is unscoped</span>
+                  <span style="margin-left: auto; font-size: 11px; color: #6B675D;">▾</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));">
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>Send on Telegram <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">telegram.send</span></span>
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>Delete a message <span style="font-family: ui-monospace, monospace; font-size: 10px;">telegram.message.delete</span></span>
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>See the bots <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">telegram.bots.view</span></span>
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>Manage bots 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">telegram.bots.manage</span></span>
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>Manage connections 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">telegram.connections.manage</span></span>
+                  <span style="display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>See channel health <span style="font-family: ui-monospace, monospace; font-size: 10px;">telegram.health.view</span></span>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Conversations</span><span style="font-size: 11px; color: #6B675D;">1 of 3 · scoped</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #22211D;"></span></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Customers</span><span style="font-size: 11px; color: #6B675D;">9 of 13 · scoped · 🛡 3 high-risk on</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Web chat</span><span style="font-size: 11px; color: #6B675D;">0 of 3</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #22211D;"></span></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">SMS</span><span style="font-size: 11px; color: #6B675D;">3 of 8</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">AI</span><span style="font-size: 11px; color: #6B675D;">2 of 8 · incl. ai.providers.manage 🛡</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Knowledge Base</span><span style="font-size: 11px; color: #6B675D;">1 of 7</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Automation &amp; Workflow</span><span style="font-size: 11px; color: #6B675D;">2 of 11</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Organization</span><span style="font-size: 11px; color: #6B675D;">0 of 5</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Users &amp; Roles</span><span style="font-size: 11px; color: #6B675D;">0 of 7</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #22211D;"></span></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Reports</span><span style="font-size: 11px; color: #6B675D;">2 of 8 · scoped · incl. views.share</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Supervision</span><span style="font-size: 11px; color: #6B675D;">0 of 5</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span><span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Platform settings</span><span style="font-size: 11px; color: #6B675D;">0 of 8</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">▸</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; min-height: 0;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">This role, as it stands</div>
+                <div style="font-size: 25px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18; margin-top: 8px;">42</div>
+                <div style="font-size: 11.5px; color: #6B675D;">permissions of 113</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 11px; font-size: 11.5px;">
+                  <div style="display: flex; gap: 8px;"><span style="color: #4A4842;">🛡 High-risk</span><span style="margin-left: auto; font-weight: 600; color: #1D1C18;">3</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #4A4842;">People affected</span><span style="margin-left: auto; font-weight: 600; color: #1D1C18;">5</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #4A4842;">Unsaved changes</span><span style="margin-left: auto; font-weight: 600; color: #1D1C18;">4</span></div>
+                </div>
+                <div style="border-top: 1px solid #F0EEE9; margin-top: 11px; padding-top: 10px; font-size: 11px; line-height: 1.55; color: #6B675D;">The two registered additions are named and rendered: <span style="font-family: ui-monospace, monospace;">views.share</span> (Reports) and <span style="font-family: ui-monospace, monospace;">ai.providers.manage</span> (AI, high-risk). The seven-key discrepancy inside §4.1 remains open with the doc author.</div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Changed just now</div>
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 8px;">
+                  <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 7px; background: #E4F4EA; border-radius: 5px; padding: 4px 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; color: #156F45;">+</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #156F45; overflow-wrap: break-word;">tickets.export</span></div>
+                  <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 7px; background: #E4F4EA; border-radius: 5px; padding: 4px 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; color: #156F45;">+</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #156F45; overflow-wrap: break-word;">tickets.escalate</span></div>
+                  <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 7px; background: #FBE5E5; border-radius: 5px; padding: 4px 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #B32B2B; overflow-wrap: break-word;">tickets.merge</span></div>
+                  <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 7px; background: #FBE5E5; border-radius: 5px; padding: 4px 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #B32B2B; overflow-wrap: break-word;">sms.templates.delete</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · search active, one cell focused</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G08 search · G21 keyboard · Amharic labels</span></div>
+    <div data-screen-label="G08 matrix dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">ሰዎች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ተጠቃሚዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ሚናዎች እና ፈቃዶች</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ሰዎች · ሚናዎች</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #ECEAE4;"></span>
+                <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">የክፍያ ባለሙያ</h1>
+              </div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">ገምግመህ አስቀምጥ</button>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px; margin-top: 12px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ይህ ሚና በየትኞቹ መዝገቦች ላይ ይሠራል</div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 10px;">
+              <div>
+                <div style="font-size: 11.5px; color: #C9C5BB;">ትኬቶች</div>
+                <span style="display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px;">የራሱ</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ቡድን</span>
+                  <span style="font-size: 11px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 7px 10px;">ክፍል</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ሁሉም</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 5px;">የ<strong style="color: #ECEAE4; font-weight: 600;">ራሱ ክፍሎች</strong> የሆኑትን ትኬቶች ማየት ይችላል።</div>
+              </div>
+              <div>
+                <div style="font-size: 11.5px; color: #C9C5BB;">ደንበኞች</div>
+                <span style="display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px;">የራሱ</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ቡድን</span>
+                  <span style="font-size: 11px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 7px 10px;">ክፍል</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ሁሉም</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 5px;">ክፍሎቻቸው ያስተናገዱትን ደንበኛ መክፈት ይችላል።</div>
+              </div>
+              <div>
+                <div style="font-size: 11.5px; color: #C9C5BB;">ሪፖርቶች</div>
+                <span style="display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                  <span style="font-size: 11px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 7px 10px;">የራሱ</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ቡድን</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ክፍል</span>
+                  <span style="font-size: 11px; color: #ECEAE4; background: #1C1C19; padding: 7px 10px; border-left: 1px solid #343430;">ሁሉም</span>
+                </span>
+                <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 5px;">ቁጥሮቹ የራሱን ሥራ ብቻ ይሸፍናሉ።</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 14px; margin-top: 12px; flex: 1; min-height: 0;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #343430; flex: none;">
+                <span style="flex: 1; max-width: 260px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1.5px solid #ECEAE4; border-radius: 6px; padding: 7px 10px; font-size: 12px; color: #ECEAE4; min-height: 34px;">⌕ export</span>
+                <span style="font-size: 11.5px; color: #A6A296;">4 matches in 3 modules</span>
+                <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 10px; min-height: 32px; cursor: pointer;">Clear</button>
+              </div>
+
+              <div style="flex: 1; min-height: 0; overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #232320; border-bottom: 1px solid #343430;">
+                  <span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #1C1C19; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #ECEAE4;"></span></span>
+                  <span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">ትኬቶች · Tickets</span>
+                  <span style="font-size: 11px; color: #A6A296;">1 match</span>
+                </div>
+                <div style="padding: 8px 14px; border-bottom: 1px solid #262622;">
+                  <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; color: #ECEAE4; outline: 2px solid #ECEAE4; outline-offset: 3px; border-radius: 3px;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>ትኬቶችን ማውረድ 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #A6A296;">tickets.export</span></span>
+                  <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 7px;">የተመረጠው ሕዋስ — ክፍተት አዝራሩ ያበራል/ያጠፋል፣ ቀስቶቹ ያንቀሳቅሳሉ።</div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #232320; border-bottom: 1px solid #343430;">
+                  <span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #1C1C19; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #ECEAE4;"></span></span>
+                  <span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">ደንበኞች · Customers</span>
+                  <span style="font-size: 11px; color: #A6A296;">1 match · 🛡</span>
+                </div>
+                <div style="padding: 8px 14px; border-bottom: 1px solid #262622;">
+                  <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; color: #ECEAE4;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>ደንበኞችን ማውረድ 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #A6A296;">customers.export</span></span>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #232320; border-bottom: 1px solid #343430;">
+                  <span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>
+                  <span style="font-size: 12px; font-weight: 600; color: #ECEAE4;">ሪፖርቶች · Reports</span>
+                  <span style="font-size: 11px; color: #A6A296;">2 matches</span>
+                </div>
+                <div style="padding: 8px 14px; border-bottom: 1px solid #262622; display: flex; flex-direction: column; gap: 8px;">
+                  <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; color: #A6A296;"><span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>ሪፖርት ማውረድ 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">reports.export</span></span>
+                  <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; color: #A6A296;"><span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>የውይይት ግልባጭ ማውረድ 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">conversations.transcript.export</span></span>
+                </div>
+
+                <div style="padding: 11px 14px; font-size: 11px; line-height: 1.7; color: #A6A296;">ሌሎቹ 11 ክፍሎች በዚህ ፍለጋ ውስጥ ተስማሚ ፈቃድ አልነበራቸውም። ፍለጋውን ሲያጠፉ ሁሉም 113 ፈቃዶች ተመልሰው ይታያሉ።</div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; min-height: 0;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ይህ ሚና እንደ አሁኑ</div>
+                <div style="font-size: 25px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 8px;">42</div>
+                <div style="font-size: 11.5px; color: #A6A296;">ከ113 ፈቃዶች</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 11px; font-size: 11.5px;">
+                  <div style="display: flex; gap: 8px;"><span style="color: #C9C5BB;">🛡 አደገኛ</span><span style="margin-left: auto; font-weight: 600; color: #ECEAE4;">3</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #C9C5BB;">የሚነኩ ሰዎች</span><span style="margin-left: auto; font-weight: 600; color: #ECEAE4;">5</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #C9C5BB;">ያልተቀመጡ ለውጦች</span><span style="margin-left: auto; font-weight: 600; color: #ECEAE4;">4</span></div>
+                </div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የቁልፍ አሠራር</div>
+                <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 9px; font-size: 11.5px; color: #C9C5BB;">
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">← → ↑ ↓</span>ከሕዋስ ሕዋስ</div>
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">Space</span>ማብራት / ማጥፋት</div>
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">/</span>ወደ ፍለጋ</div>
+                </div>
+                <div style="border-top: 1px solid #262622; margin-top: 10px; padding-top: 9px; font-size: 11px; line-height: 1.7; color: #A6A296;">የክፍል አርዕስት ምልክት ሲቀላቀል “ከፊል” ተብሎ ይነገራል — ለማያዩ ተጠቃሚዎችም ግልጽ ነው።</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">States — every one in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G10, G11, G15, G17, G18, G16 · Doc 03 §8, EC-03, EC-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The impact modal is the one that matters. It counts people before it lists keys, and it names them, because “13 users affected” is abstract and “Hanna, Yonas and three others lose the ability to merge customers” is not.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G11 — impact before commit</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Save changes to “Payments Specialist”?</div>
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">5 people are working with this role right now</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842; margin-top: 3px;">Hanna Girma, Yonas Tesfaye, Meron Assefa, Kidist Haile and Selam Alemu. Their open tabs pick this up within ten seconds — nobody has to sign out.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #E4F4EA; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #156F45;">+</span><span style="font-size: 11.5px; color: #156F45;">They gain: export tickets 🛡, escalate</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-size: 11.5px; color: #B32B2B;">They lose: merge tickets, delete SMS templates</span></div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">One of these is high-risk. Granting it is recorded with your name against it.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Save for 5 people</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G10 — leaving with changes pending</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">You have 4 unsaved changes</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Two added, two removed. Leaving now discards them and nobody's access changes.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Keep editing</button><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Discard the 4</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G15 — the toggle answered, the save did not</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; color: #8E2222;">Couldn't save “merge tickets” — put back</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #8E2222; font-size: 11.5px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">The checkbox answers immediately and reverts itself if the save fails, so what you see always matches what is stored.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G18 — Team scope with nobody in a team</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Team scope, but 3 of these 5 people are in no team</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #8F5F08; margin-top: 3px;">Those three will see nothing at all — an empty team means an empty list, not everything. Put them in teams, or use Department.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G17 — someone else saved first</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Dawit Bekele saved this role two minutes ago</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Your four changes were not lost. Here is what he changed — apply yours on top, or start again from his version.</p>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #E4F4EA; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #156F45;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #156F45;">customers.notes.add — his change</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #FBE5E5; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #B32B2B;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #B32B2B;">sms.send — his change</span></div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply mine on top</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from his</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">G16 — matrix loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 9px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;"><div style="height: 9px; width: 22%; background: #EEECE6; border-radius: 3px;"></div></div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 11px 12px;">
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+          </div>
+          <div style="padding: 9px 12px; background: #F6F5F2; border-top: 1px solid #E5E2DB; border-bottom: 1px solid #E5E2DB;"><div style="height: 9px; width: 28%; background: #EEECE6; border-radius: 3px;"></div></div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 11px 12px;">
+            <div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 8px; background: #F2F1ED; border-radius: 3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G11 — impact before commit</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Save changes to “Payments Specialist”?</div>
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">5 people are working with this role right now</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 3px;">Hanna Girma, Yonas Tesfaye, Meron Assefa, Kidist Haile and Selam Alemu. Their open tabs pick this up within ten seconds — nobody has to sign out.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #123322; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #5AD190;">+</span><span style="font-size: 11.5px; color: #5AD190;">They gain: export tickets 🛡, escalate</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-size: 11.5px; color: #F08A8A;">They lose: merge tickets, delete SMS templates</span></div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">One of these is high-risk. Granting it is recorded with your name against it.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Save for 5 people</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G10 — leaving with changes pending</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">You have 4 unsaved changes</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Two added, two removed. Leaving now discards them and nobody's access changes.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Keep editing</button><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Discard the 4</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G15 — the toggle answered, the save did not</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; color: #F5A7A7;">Couldn't save “merge tickets” — put back</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #F5A7A7; font-size: 11.5px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">The checkbox answers immediately and reverts itself if the save fails, so what you see always matches what is stored.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G18 — Team scope with nobody in a team</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Team scope, but 3 of these 5 people are in no team</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E8C25A; margin-top: 3px;">Those three will see nothing at all — an empty team means an empty list, not everything. Put them in teams, or use Department.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G17 — someone else saved first</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Dawit Bekele saved this role two minutes ago</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Your four changes were not lost. Here is what he changed — apply yours on top, or start again from his version.</p>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #123322; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #5AD190;">+</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #5AD190;">customers.notes.add — his change</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; background: #3D1B1B; border-radius: 5px; padding: 5px 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #F08A8A;">−</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #F08A8A;">sms.send — his change</span></div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply mine on top</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from his</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">G16 — matrix loading</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 9px 12px; background: #232320; border-bottom: 1px solid #343430;"><div style="height: 9px; width: 22%; background: #2F2F29; border-radius: 3px;"></div></div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 11px 12px;">
+            <div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div>
+            <div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div>
+          </div>
+          <div style="padding: 9px 12px; background: #232320; border-top: 1px solid #343430; border-bottom: 1px solid #343430;"><div style="height: 9px; width: 28%; background: #2F2F29; border-radius: 3px;"></div></div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 11px 12px;">
+            <div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div><div style="height: 8px; background: #262622; border-radius: 3px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Accordion at 1024, and 375 read-only</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G22, G23 · Doc 03 §9, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">At tablet width the three-column matrix becomes one module at a time, still editable — Doc 03 §9's accordion. At 375 it is the same accordion with every control inert behind the notice, which is your ruling. Both are drawn in both themes.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · accordion below 1024 · editable</div>
+        <div data-screen-label="G22 accordion sub-1024 light" style="width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-bottom: 1px solid #E5E2DB;">
+            <span style="flex: 1; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #726D63; min-height: 36px;">⌕ Find a permission</span>
+            <span style="font-size: 11.5px; color: #6B675D; flex: none;">42 of 113</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;" aria-expanded="true">
+            <span aria-checked="mixed" role="checkbox" style="width: 16px; height: 16px; border: 1.5px solid #22211D; border-radius: 3px; background: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 8px; height: 2px; background: #22211D;"></span></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Tickets</span>
+            <span style="font-size: 11.5px; color: #6B675D;">12 of 21</span>
+            <span style="margin-left: auto; font-size: 12px; color: #4A4842;">▾</span>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9; font-size: 12px; color: #1D1C18;"><span style="width: 16px; height: 16px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>View tickets<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; flex: none;">tickets.view</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9; font-size: 12px; color: #1D1C18;"><span style="width: 16px; height: 16px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>Reply<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; flex: none;">tickets.reply</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #F0EEE9; font-size: 12px; color: #6B675D;"><span style="width: 16px; height: 16px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>Merge<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; flex: none;">tickets.merge</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; font-size: 12px; color: #6B675D;"><span style="width: 16px; height: 16px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>Delete 🛡<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; flex: none;">tickets.delete</span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-top: 1px solid #E5E2DB;" aria-expanded="false">
+            <span style="width: 16px; height: 16px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Customers</span>
+            <span style="font-size: 11.5px; color: #6B675D;">9 of 13</span>
+            <span style="margin-left: auto; font-size: 12px; color: #4A4842;">▸</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-top: 1px solid #F0EEE9;" aria-expanded="false">
+            <span style="width: 16px; height: 16px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</span>
+            <span style="font-size: 11.5px; color: #6B675D;">2 of 6</span>
+            <span style="margin-left: auto; font-size: 12px; color: #4A4842;">▸</span>
+          </div>
+          <div style="padding: 10px 13px; border-top: 1px solid #F0EEE9; font-size: 11px; color: #6B675D;">Move up and down with the arrow keys; the header checkbox reports “partly on” when only some of a module is granted.</div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · accordion below 1024 · editable</div>
+        <div data-screen-label="G22 accordion sub-1024 dark" style="width: 100%; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-bottom: 1px solid #343430;">
+            <span style="flex: 1; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #918C80; min-height: 36px;">⌕ ፈቃድ ፈልግ</span>
+            <span style="font-size: 11.5px; color: #A6A296; flex: none;">42 ከ113</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; background: #232320; border-bottom: 1px solid #343430;" aria-expanded="true">
+            <span aria-checked="mixed" role="checkbox" style="width: 16px; height: 16px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #1C1C19; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 8px; height: 2px; background: #ECEAE4;"></span></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ትኬቶች</span>
+            <span style="font-size: 11.5px; color: #A6A296;">12 ከ21</span>
+            <span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">▾</span>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #262622; font-size: 12px; color: #ECEAE4;"><span style="width: 16px; height: 16px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>ትኬቶችን ማየት<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #A6A296; flex: none;">tickets.view</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #262622; font-size: 12px; color: #ECEAE4;"><span style="width: 16px; height: 16px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>መመለስ<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #A6A296; flex: none;">tickets.reply</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-bottom: 1px solid #262622; font-size: 12px; color: #A6A296;"><span style="width: 16px; height: 16px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>ማዋሃድ<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; flex: none;">tickets.merge</span></span>
+            <span style="display: flex; align-items: center; gap: 10px; padding: 9px 13px; font-size: 12px; color: #A6A296;"><span style="width: 16px; height: 16px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>መሰረዝ 🛡<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; flex: none;">tickets.delete</span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-top: 1px solid #343430;" aria-expanded="false">
+            <span style="width: 16px; height: 16px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ደንበኞች</span>
+            <span style="font-size: 11.5px; color: #A6A296;">9 ከ13</span>
+            <span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">▸</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-top: 1px solid #262622;" aria-expanded="false">
+            <span style="width: 16px; height: 16px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; flex: none;"></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቴሌግራም</span>
+            <span style="font-size: 11.5px; color: #A6A296;">2 ከ6</span>
+            <span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">▸</span>
+          </div>
+          <div style="padding: 10px 13px; border-top: 1px solid #262622; font-size: 11px; line-height: 1.7; color: #A6A296;">በቀስቶች መንቀሳቀስ ይቻላል፤ የክፍሉ ምልክት የተወሰነው ብቻ ሲፈቀድ “ከፊል” ይላል።</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · read-only</div>
+        <div data-screen-label="G23 matrix 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Roles</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Payments Specialist</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">You can read every permission this role has. Changing them needs a tablet or a computer.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Works on</div>
+              <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 5px;">Tickets and customers in <strong style="font-weight: 600; color: #1D1C18;">their own departments</strong>. Reports cover <strong style="font-weight: 600; color: #1D1C18;">their own work only</strong>.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Tickets</span><span style="margin-left: auto; font-size: 12px; color: #4A4842;">12 of 21</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Customers</span><span style="margin-left: auto; font-size: 12px; color: #4A4842;">9 of 13 · 🛡 3</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</span><span style="margin-left: auto; font-size: 12px; color: #4A4842;">2 of 6</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px;"><span style="font-size: 12.5px; color: #6B675D;">11 more modules</span><span style="margin-left: auto; font-size: 12px; color: #6B675D;">19 of 73</span></div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px;">42 of 113 permissions · 3 high-risk · 5 people</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ · read-only</div>
+        <div data-screen-label="G23 matrix 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ሚናዎች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">የክፍያ ባለሙያ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">የዚህን ሚና ፈቃዶች ማንበብ ይችላሉ። ለመቀየር ግን ታብሌት ወይም ኮምፒውተር ያስፈልጋል።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የሚሠራው በ</div>
+              <div style="font-size: 12px; line-height: 1.8; color: #C9C5BB; margin-top: 5px;">በ<strong style="font-weight: 600; color: #ECEAE4;">ራሱ ክፍሎች</strong> ውስጥ ባሉ ትኬቶችና ደንበኞች ላይ። ሪፖርቶች <strong style="font-weight: 600; color: #ECEAE4;">የራሱን ሥራ ብቻ</strong> ይሸፍናሉ።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ትኬቶች</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">12 ከ21</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ደንበኞች</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">9 ከ13 · 🛡 3</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቴሌግራም</span><span style="margin-left: auto; font-size: 12px; color: #C9C5BB;">2 ከ6</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 11px 12px;"><span style="font-size: 12.5px; color: #A6A296;">ሌሎች 11 ክፍሎች</span><span style="margin-left: auto; font-size: 12px; color: #A6A296;">19 ከ73</span></div>
+            </div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 10px;">42 ከ113 ፈቃዶች · 3 አደገኛ · 5 ሰዎች</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§K</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Keyboard — the impact dialog holds focus</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows G11, G21 · Doc 03 §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The impact dialog is the one modal in this batch that can change access for five people, so it is the one that must not leak focus to the page behind it. Drawn with the trap visible: the dialog outlined, the primary action focused, and the three rules stated where the behaviour is claimed. The same trap governs every confirm in this batch.</p>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light · focused</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; outline: 2px solid #22211D; outline-offset: 3px;">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Dialog · focus is held inside</span></div>
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18; margin-top: 7px;">Save changes to “Payments Specialist”?</div>
+          <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842; margin-top: 4px;">5 people are working with this role right now.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; outline: 2px solid #22211D; outline-offset: 2px; cursor: pointer;">Save for 5 people</button>
+            <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to editing</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px; font-size: 11.5px; color: #4A4842;">
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">Tab</span>Cycles the two buttons and the close control — never leaves the dialog</div>
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">Esc</span>Same as “Back to editing”; nothing is saved</div>
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; color: #1D1C18; flex: none;">On close</span>Focus returns to the button that opened it</div>
+          </div>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark · focused</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; outline: 2px solid #ECEAE4; outline-offset: 3px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Dialog · focus is held inside</div>
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">Save changes to “Payments Specialist”?</div>
+          <div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB; margin-top: 4px;">5 people are working with this role right now.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; outline: 2px solid #ECEAE4; outline-offset: 2px; cursor: pointer;">Save for 5 people</button>
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to editing</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 11px; font-size: 11.5px; color: #C9C5BB;">
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">Tab</span>Cycles inside the dialog only</div>
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">Esc</span>Closes without saving</div>
+            <div style="display: flex; align-items: center; gap: 9px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; color: #ECEAE4; flex: none;">On close</span>Focus returns to its opener</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 14px 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Acceptance-list row · AC-B4-03 pattern</div>
+      <div style="display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 7px 12px; margin-top: 9px; font-size: 12px; line-height: 1.6;">
+        <span style="color: #6B675D;">Drawn here</span><span style="color: #1D1C18;">The dialog in its focus-trapped state with the primary action focused, plus the Tab / Esc / return-focus rules — both themes.</span>
+        <span style="color: #6B675D;">Demonstrated build-side</span><span style="color: #1D1C18;">Tab and Shift-Tab cycle within the dialog, Esc closes without saving, and focus returns to the invoking control on close.</span>
+        <span style="color: #6B675D;">Passes when</span><span style="color: #1D1C18;">A keyboard user can open, read, decide and dismiss the dialog without focus ever reaching the matrix behind it.</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> G04 (scope per module with its plain-language sentence — §A both themes, summarised at 375 both themes), G05 (module grouping with tri-state headers — §A both themes, §C both themes), G06 (all fourteen module groups with their key counts, every one reachable inside the frame in §A light; Telegram expanded to its full 6 keys, verbatim; the two additions awaiting sign-off are stated in the summary rather than invented), G08 (search idle in §A light, active with match counts in §A dark), G09 (the summary panel counting people, §A both themes), G10, G11, G15, G17, G18 and G16 (§B, each in <em>both</em> theme columns), G21 (aria-checked mixed on every module header in both themes, the focused cell in §A dark, and the key map in the dark sidebar), G22 (§C both themes), G23 (§C both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">v2 — 3 Aug 2026:</strong> the two additions are named and rendered in their modules; the count stays 113 and the §4.1 seven-key discrepancy is recorded open. §K adds the drawn focus-trap state for the impact dialog, with its acceptance-list row, closing that third of Q09.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">What is not claimed:</strong> thirteen of the fourteen modules are shown as group rows with counts rather than expanded key lists — 113 rows do not fit one 900px frame, and Telegram's six keys prove the row rendering. Telegram is the only module whose complete key list is drawn; Tickets appears expanded in part in the §C accordion. If you want a full 113-key audit sheet, I will produce one at any length. If you want the full expansion as a separate audit artefact, I will produce one at any length you like.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> 375 is read-only behind the explicit notice, per your ruling. The accordion stays editable below 1024, which is Doc 03 §9's own instruction; it is drawn here at review width rather than at a literal 1024 px.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the plain-language scope sentence resolves the actual department names — “Payments and Finance” — rather than saying “their departments” abstractly. It is the difference between a helper that explains and one that restates the control. It does mean the sentence changes per role, which is more strings for your translators.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

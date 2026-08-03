@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Na Live Support — B1-DS-color-directions-v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter','Noto Sans Ethiopic',sans-serif; background:#EDEDEA; color:#1C1B18; padding:32px 24px 64px; }
+  .page-head { max-width:1180px; margin:0 auto 28px; }
+  .page-head h1 { font-size:20px; font-weight:600; letter-spacing:-0.01em; }
+  .page-head p { font-size:13px; color:#66625A; margin-top:6px; max-width:760px; line-height:1.55; }
+  .dir { max-width:1180px; margin:0 auto 40px; }
+  .dir-head { display:flex; align-items:baseline; gap:12px; margin-bottom:4px; }
+  .dir-head h2 { font-size:16px; font-weight:600; }
+  .dir-head .tagline { font-size:12.5px; color:#66625A; }
+  .dir-note { font-size:12px; color:#66625A; margin-bottom:12px; }
+  .panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:980px){ .panels { grid-template-columns:1fr; } }
+  .panel { border-radius:12px; padding:16px; border:1px solid rgba(0,0,0,.08); }
+  .panel-label { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin-bottom:12px; opacity:.55; }
+  .sec-label { font-size:10px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; margin:16px 0 6px; opacity:.5; }
+  .row-flex { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+</style>
+</head>
+<body>
+<div class="page-head">
+  <h1>Batch 1 · Step 1a — Color directions <span style="font-weight:400;color:#8A867C">· B1-DS-color-directions-v1</span></h1>
+  <p>Three neutral, tenant-brandable directions. Everything fixed by the documents is identical across all three — status pill hues (Doc 06 §9), priority dots (Doc 06 §9), SLA states green→amber→red, note-yellow (Doc 07 FR-17), AI accent (Doc 07 §9) — so you are choosing only the neutral base and accent. Type: Inter + Noto Sans Ethiopic. 4pt grid.</p>
+</div>
+<div id="root"></div>
+
+<script>
+const DIRS = [
+  {
+    id:'A', name:'Direction A — Slate', tag:'Cool blue-tinted grays · clear blue accent',
+    note:'Familiar helpdesk temperature (Zendesk/Intercom family). Cool neutrals keep long shifts calm; the blue accent reads as "action" without fighting the status hues.',
+    light:{ bg:'#F4F6F9', surface:'#FFFFFF', surface2:'#FAFBFD', border:'#DEE4EB', borderStrong:'#C6CFDA', text:'#1B2733', sec:'#5B6B7B', mut:'#8B99A8', accent:'#2563EB', onAccent:'#FFFFFF', accentSoft:'#EBF1FE', focus:'#2563EB' },
+    dark:{ bg:'#0F151C', surface:'#161E28', surface2:'#1C2632', border:'#2A3543', borderStrong:'#3A4757', text:'#E9EEF3', sec:'#96A5B5', mut:'#6C7B8A', accent:'#5C95FF', onAccent:'#0B1524', accentSoft:'#17293F', focus:'#5C95FF' }
+  },
+  {
+    id:'B', name:'Direction B — Graphite', tag:'Pure neutral grays · indigo accent',
+    note:'Crisp, tool-like (Linear family). Zero-temperature grays are the most white-label-safe base; indigo accent stays clearly distinct from the status blue and the AI violet.',
+    light:{ bg:'#F7F7F8', surface:'#FFFFFF', surface2:'#FBFBFC', border:'#E4E4E8', borderStrong:'#CFCFD6', text:'#18181B', sec:'#5F5F6A', mut:'#8E8E99', accent:'#5B5BD6', onAccent:'#FFFFFF', accentSoft:'#EEEEFB', focus:'#5B5BD6' },
+    dark:{ bg:'#111113', surface:'#19191C', surface2:'#202024', border:'#2E2E34', borderStrong:'#3E3E46', text:'#ECECEF', sec:'#9C9CA6', mut:'#6F6F7A', accent:'#8585EC', onAccent:'#121216', accentSoft:'#232338', focus:'#8585EC' }
+  },
+  {
+    id:'C', name:'Direction C — Ink', tag:'Warm stone grays · near-monochrome ink accent',
+    note:'Quietest and most brand-neutral (Superhuman family). Primary actions are ink-on-paper, so a tenant logo or brand color dropped in later owns the screen; color is reserved almost entirely for status meaning.',
+    light:{ bg:'#F6F5F2', surface:'#FFFFFF', surface2:'#FBFAF8', border:'#E5E2DB', borderStrong:'#CFCBC1', text:'#1D1C18', sec:'#6B675D', mut:'#98938A', accent:'#22211D', onAccent:'#FFFFFF', accentSoft:'#EEECE6', focus:'#3B6FD4' },
+    dark:{ bg:'#141412', surface:'#1C1C19', surface2:'#232320', border:'#343430', borderStrong:'#45443E', text:'#ECEAE4', sec:'#A6A296', mut:'#787468', accent:'#ECEAE4', onAccent:'#171714', accentSoft:'#282822', focus:'#7BA3F0' }
+  }
+];
+
+const FIXED = {
+  status: [
+    { key:'new', label:'New', l:['#E7EFFE','#1D4FD7'], d:['#182B50','#8FB6FF'] },
+    { key:'open', label:'Open', l:['#E4F4EA','#156F45'], d:['#123322','#5AD190'] },
+    { key:'pending_customer', label:'Pending customer', l:['#FCF0D9','#8F5F08'], d:['#3A2D10','#F0B54A'] },
+    { key:'pending_internal', label:'Pending internal', l:['#F0EAFD','#6231C7'], d:['#2A2047','#B69CF5'] },
+    { key:'escalated', label:'Escalated', l:['#FCEBDC','#AF4910'], d:['#3B2210','#F5945A'] },
+    { key:'resolved', label:'Resolved', l:['#DEF4F1','#0A7266'], d:['#0F312E','#52D0BF'] },
+    { key:'closed', label:'Closed', l:['#ECEEF1','#59636F'], d:['#272D34','#9AA6B2'] },
+    { key:'spam', label:'Spam', l:['#F4E8E8','#8C4646'], d:['#342325','#CC8F8F'] }
+  ],
+  priority: [
+    { label:'Low', c:'#8A94A0' }, { label:'Normal', c:'#3B82F6' }, { label:'High', c:'#F97316' }, { label:'Urgent', c:'#EF4444' }
+  ],
+  sla: [
+    { label:'SLA 2h 10m', l:['#E4F4EA','#156F45'], d:['#123322','#5AD190'], icon:'●' },
+    { label:'SLA 24m', l:['#FCF0D9','#8F5F08'], d:['#3A2D10','#F0B54A'], icon:'●' },
+    { label:'SLA breached', l:['#FBE5E5','#B32B2B'], d:['#3D1B1B','#F08A8A'], icon:'●' }
+  ],
+  win: { label:'⏱ Window 3h 12m', l:['#EDEEF2','#4A5460'], d:['#262C33','#A7B2BE'] },
+  note: { lBg:'#FBF3D6', lBorder:'#E3C455', lText:'#7E650F', dBg:'#332B12', dBorder:'#8A6D1A', dText:'#E8C25A' },
+  ai: { l:'#7C5CFC', lSoft:'#F1EDFE', d:'#A18BFF', dSoft:'#292144' }
+};
+
+function pill(bg, fg, label, icon){
+  return `<span style="display:inline-flex;align-items:center;gap:5px;background:${bg};color:${fg};font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;line-height:1.4;white-space:nowrap">${icon?`<span style="font-size:8px">${icon}</span>`:''}${label}</span>`;
+}
+
+function panel(dir, mode){
+  const t = dir[mode];
+  const m = mode==='light' ? 'l' : 'd';
+  const ai = mode==='light' ? FIXED.ai.l : FIXED.ai.d;
+  const aiSoft = mode==='light' ? FIXED.ai.lSoft : FIXED.ai.dSoft;
+  const nb = mode==='light' ? FIXED.note.lBg : FIXED.note.dBg;
+  const nbr = mode==='light' ? FIXED.note.lBorder : FIXED.note.dBorder;
+  const nt = mode==='light' ? FIXED.note.lText : FIXED.note.dText;
+  const st = k => FIXED.status.find(s=>s.key===k)[m];
+  const sla = i => FIXED.sla[i][m];
+  const wn = FIXED.win[m];
+
+  return `
+  <div class="panel" style="background:${t.bg};color:${t.text}">
+    <div class="panel-label" style="color:${t.text}">${mode} theme</div>
+
+    <div style="background:${t.surface};border:1px solid ${t.border};border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:12px;font-weight:600;color:${t.sec};border:1px dashed ${t.borderStrong};border-radius:6px;padding:2px 8px">Tenant logo</span>
+      <span style="flex:1;display:flex;align-items:center;gap:6px;background:${t.surface2};border:1px solid ${t.border};border-radius:6px;padding:5px 10px;font-size:12px;color:${t.mut}">⌕ Search… <span style="margin-left:auto;font-size:10px;border:1px solid ${t.border};border-radius:4px;padding:1px 5px">⌘K</span></span>
+      <span style="position:relative;font-size:15px;color:${t.sec}">🔔<span style="position:absolute;top:-4px;right:-7px;background:#EF4444;color:#fff;font-size:9px;font-weight:700;border-radius:999px;padding:0 4px">3</span></span>
+      <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:${t.sec};border:1px solid ${t.border};border-radius:999px;padding:3px 9px"><span style="width:7px;height:7px;border-radius:50%;background:#22A55B"></span>Online</span>
+      <span title="Channel health" style="width:8px;height:8px;border-radius:50%;background:#22A55B"></span>
+      <span style="width:26px;height:26px;border-radius:50%;background:${t.accentSoft};color:${mode==='light'?t.accent:t.text};display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">SA</span>
+    </div>
+
+    <div class="sec-label" style="color:${t.text}">List rows</div>
+    <div style="background:${t.surface};border:1px solid ${t.border};border-radius:8px;overflow:hidden">
+      <div style="padding:9px 12px;border-bottom:1px solid ${t.border};background:${t.surface2}">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12.5px">
+          <span style="font-size:13px">✈️</span>
+          <span style="font-weight:700">አበበ ታደሰ (Abebe Tadesse)</span>
+          <span style="color:${t.mut};font-size:11.5px">#4812</span>
+          ${pill(sla(2)[0], sla(2)[1], 'SLA breached','●')}
+          <span style="margin-left:auto;color:${t.mut};font-size:11px">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;margin-top:4px;font-size:12px">
+          <span style="font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ብር 2,500 ለማውጣት ሞክሬ ነበር ግን እስካሁን አልደረሰኝም፣ እባክዎ በአስቸኳይ ይመልከቱልኝ</span>
+          <span style="font-size:10px;font-weight:600;color:${t.sec};border:1px solid ${t.border};border-radius:4px;padding:0 4px">AM</span>
+          <span title="Priority: Urgent" style="width:8px;height:8px;border-radius:50%;background:#EF4444"></span>
+          <span style="width:20px;height:20px;border-radius:50%;border:1.5px dashed ${t.borderStrong}"></span>
+          <span style="background:${t.accent};color:${t.onAccent};font-size:10px;font-weight:700;border-radius:999px;padding:1px 6px">2</span>
+        </div>
+      </div>
+      <div style="padding:9px 12px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12.5px">
+          <span style="font-size:13px">💬</span>
+          <span style="font-weight:500">Hana Girma</span>
+          <span style="color:${t.mut};font-size:11.5px">#4807</span>
+          ${pill(wn[0], wn[1], 'Window 3h 12m')}
+          <span style="margin-left:auto;color:${t.mut};font-size:11px">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;margin-top:4px;font-size:12px;color:${t.sec}">
+          <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Thanks, the deposit arrived. One more question about the bonus…</span>
+          <span style="font-size:10px;font-weight:600;border:1px solid ${t.border};border-radius:4px;padding:0 4px">EN</span>
+          <span title="Priority: Normal" style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>
+          <span title="Draft">✏️</span>
+          <span style="width:20px;height:20px;border-radius:50%;background:${t.accentSoft};color:${mode==='light'?t.accent:t.text};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:600">DB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label" style="color:${t.text}">Status pills (Doc 06 §9 — fixed)</div>
+    <div class="row-flex">${FIXED.status.map(s=>pill(s[m][0], s[m][1], s.label,'●')).join('')}</div>
+
+    <div class="sec-label" style="color:${t.text}">Priority · SLA · window chips</div>
+    <div class="row-flex">
+      ${FIXED.priority.map(p=>`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:${t.sec}"><span style="width:8px;height:8px;border-radius:50%;background:${p.c}"></span>${p.label}</span>`).join('')}
+      <span style="width:10px"></span>
+      ${pill(sla(0)[0],sla(0)[1],'SLA 2h 10m','●')}
+      ${pill(sla(1)[0],sla(1)[1],'SLA 24m','●')}
+      ${pill(sla(2)[0],sla(2)[1],'SLA breached','●')}
+    </div>
+
+    <div class="sec-label" style="color:${t.text}">Buttons</div>
+    <div class="row-flex">
+      <button style="font-family:inherit;background:${t.accent};color:${t.onAccent};border:none;border-radius:7px;font-size:12.5px;font-weight:600;padding:7px 14px;cursor:pointer">Send reply</button>
+      <span style="display:inline-flex">
+        <button style="font-family:inherit;background:${t.accent};color:${t.onAccent};border:none;border-radius:7px 0 0 7px;font-size:12.5px;font-weight:600;padding:7px 12px;cursor:pointer">Send</button>
+        <button style="font-family:inherit;background:${t.accent};color:${t.onAccent};border:none;border-left:1px solid ${mode==='light'?'rgba(255,255,255,.35)':'rgba(0,0,0,.25)'};border-radius:0 7px 7px 0;font-size:11px;padding:7px 8px;cursor:pointer">▾</button>
+      </span>
+      <button style="font-family:inherit;background:${t.surface};color:${t.text};border:1px solid ${t.borderStrong};border-radius:7px;font-size:12.5px;font-weight:500;padding:7px 14px;cursor:pointer">Assign to me</button>
+      <button style="font-family:inherit;background:transparent;color:#C93B3B;border:1px solid #C93B3B55;border-radius:7px;font-size:12.5px;font-weight:500;padding:7px 14px;cursor:pointer">Mark spam</button>
+      <button style="font-family:inherit;background:${t.accent};color:${t.onAccent};border:none;border-radius:7px;font-size:12.5px;font-weight:600;padding:7px 14px;opacity:.75">◌ Sending…</button>
+    </div>
+
+    <div class="sec-label" style="color:${t.text}">Composer modes (Doc 07 FR-17 — hard differentiation)</div>
+    <div style="background:${t.surface};border:1px solid ${t.border};border-radius:8px;padding:8px 10px;margin-bottom:6px">
+      <div style="display:flex;gap:6px;margin-bottom:6px">
+        <span style="font-size:11px;font-weight:600;background:${t.accentSoft};color:${mode==='light'?t.accent:t.text};border-radius:6px;padding:2px 9px">Reply</span>
+        <span style="font-size:11px;font-weight:500;color:${t.mut};padding:2px 9px">Note</span>
+      </div>
+      <div style="font-size:12px;color:${t.mut}">Reply to the customer…</div>
+      <div style="text-align:right;margin-top:6px"><button style="font-family:inherit;background:${t.accent};color:${t.onAccent};border:none;border-radius:6px;font-size:11.5px;font-weight:600;padding:5px 12px">Send reply</button></div>
+    </div>
+    <div style="background:${nb};border:1.5px solid ${nbr};border-radius:8px;padding:8px 10px">
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+        <span style="font-size:11px;font-weight:500;color:${nt};opacity:.7;padding:2px 9px">Reply</span>
+        <span style="font-size:11px;font-weight:700;background:${nbr};color:${mode==='light'?'#FFFDF4':'#1E1908'};border-radius:6px;padding:2px 9px">🔒 Internal note</span>
+        <span style="font-size:10.5px;font-weight:600;color:${nt}">Only your team sees this</span>
+      </div>
+      <div style="font-size:12px;color:${nt};opacity:.85">@Sara ደንበኛው የክፍያ ማስረጃ ልኳል — check the payment proof…</div>
+      <div style="text-align:right;margin-top:6px"><button style="font-family:inherit;background:${nt};color:${nb};border:none;border-radius:6px;font-size:11.5px;font-weight:600;padding:5px 12px">Add note</button></div>
+    </div>
+
+    <div class="sec-label" style="color:${t.text}">Bubbles — customer · agent · AI (Doc 07 §9 AI accent)</div>
+    <div style="background:${t.surface};border:1px solid ${t.border};border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+      <div style="align-self:flex-start;max-width:78%;background:${t.surface2};border:1px solid ${t.border};border-radius:10px 10px 10px 3px;padding:6px 10px;font-size:12px">ስንት ሰዓት ነው ብሩ የሚደርሰኝ?</div>
+      <div style="align-self:flex-end;max-width:78%;background:${t.accentSoft};border:1px solid ${mode==='light'?t.accent+'33':t.borderStrong};border-radius:10px 10px 3px 10px;padding:6px 10px;font-size:12px">Withdrawals take up to 2 hours. I'm checking yours now. <span style="font-size:10px;color:${t.mut}">✓✓</span></div>
+      <div style="align-self:flex-end;max-width:78%;background:${aiSoft};border-left:3px solid ${ai};border-radius:10px 10px 3px 10px;padding:6px 10px;font-size:12px">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:${ai};letter-spacing:.05em;text-transform:uppercase">✦ AI assistant</span><br>
+        ሰላም! የመውጫ ጥያቄዎ ተቀብለናል። አንድ ወኪል በቅርቡ ያግዝዎታል።
+      </div>
+    </div>
+  </div>`;
+}
+
+const root = document.getElementById('root');
+root.innerHTML = DIRS.map(d => `
+  <section class="dir">
+    <div class="dir-head"><h2>${d.name}</h2><span class="tagline">${d.tag}</span></div>
+    <div class="dir-note">${d.note}</div>
+    <div class="panels">${panel(d,'light')}${panel(d,'dark')}</div>
+  </section>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S22-cross-cutting-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FBE5E5; border: 1px solid #EFC7C7; color: #8E2222; padding: 4px 8px; border-radius: 3px;">Section V · 17 rows · 15 ✅ · 2 ❌ · after the reopens</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Cross-cutting compliance</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Section V draws nothing. Its seventeen rows are properties of the twenty-one delivered files, so it is delivered as a measurement of them — every count below was taken from the files themselves, not from my memory of building them, and where the measurement disagrees with something a delivery note claimed, the measurement wins.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Fifteen rows pass and two are <strong style="font-weight: 600;">❌</strong> after the reopens: <strong style="font-weight: 600;">V09</strong>, which waits on the owner’s Amharic clearance, and <strong style="font-weight: 600;">V17</strong>, the AC-09 export, held until the reopened frames are final. Five of the seven findings are closed in the files named against them. The one that mattered most is fixed: <a href="B7-S10-branding-editor-shell-v3.dc.html">S10-v3</a> laid Amharic into the editor shell, which had shipped a whole screen in one language while its own delivery note passed.</p>
+  </header>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The seventeen rows, measured</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">V01–V17 · across 21 files</span>
+    </div>
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 46px minmax(0, 1.25fr) minmax(0, 1.5fr) 68px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Row</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Requirement</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Measured</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Status</span>
+      </div>
+      <sc-for list="{{ rows }}" as="row" hint-placeholder-count="17">
+        <div style="display: grid; grid-template-columns: 46px minmax(0, 1.25fr) minmax(0, 1.5fr) 68px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D;">{{ row.n }}</span>
+          <span style="padding: 11px 12px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">{{ row.req }}</span>
+          <span style="padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #4A4842;">{{ row.got }}</span>
+          <span style="padding: 11px 12px; font-size: 12px; font-weight: 600;"><sc-if value="{{ row.pass }}" hint-placeholder-val="{{ true }}"><span style="color: #156F45;">✅</span></sc-if><sc-if value="{{ row.warn }}" hint-placeholder-val="{{ true }}"><span style="color: #8F5F08;">⚠</span></sc-if><sc-if value="{{ row.fail }}" hint-placeholder-val="{{ true }}"><span style="color: #B32B2B;">❌</span></sc-if></span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The seven findings, each with the reopen it needs</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">5 ✅ · 2 ❌ · 5 of 7 closed</span>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #156F45; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">✅ F1 · fixed in S10-v3 — the editor shell had no Amharic at all</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V09 · fixed in S10-v3</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Zero Ethiopic runs in the file. Every other screen in the batch carries between 21 and 285; this one carries none — the seven-group nav, the draft/published header, the soft-lock takeover and the save-failure state are all English-only. It passed because its delivery note was written before the parity method changed at Section N, and nothing re-checked it afterwards. The fix is a scope-limited reopen laying Amharic into the shell's chrome and its two error states, with layout proven under expansion — the seven nav labels are the risk, since <em>ኃላፊነት የተሞላበት ጨዋታ</em>-length strings in a 196 px rail will wrap.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #156F45; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">✅ F2 · fixed — three sections never rendered their primary screen dark</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V02 · fixed in S06-v3, S07-v4, S11-v2</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">S06</strong> (sessions and devices), <strong style="font-weight: 600;">S07</strong> (API tokens) and <strong style="font-weight: 600;">S11</strong> (identity) have dark surfaces — 2, 5 and 4 respectively — but every one is an inline dialog or panel cell. None has a labelled dark frame of the screen itself: the devices table, the token list and the identity form have no dark rendering at any viewport. This is the defect Section T was corrected for; these three predate that correction and were never swept. S06 is the sharpest case — a table of stacked white rows is exactly what needs proving on <code style="font-family: ui-monospace, monospace; font-size: 12px;">#141412</code>.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #B32B2B; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">❌ F3 · G and H remain unclearable from my side</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V09 · owner action</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">S07-v4 and S08-v2 laid Amharic into the token and admin dialogs, but your tier's two deferred lines (H05, and 4b token revoke/rotation) and two flagged verdicts (H15's added clause, the <em>ሀ–ፐ</em> sort label) are yours to write. Both files say so in their own notes. Recorded here as ❌ so the closing audit inherits it rather than discovering it.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #B32B2B; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">❌ F4 · the AC-09 baseline pack has not been produced</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V17 · after the reopens</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Doc 02 AC-09 wants each auth screen's states exported en + am × light + dark as the build's pixel-comparison baselines. The frames exist across S01–S09 (40 labelled frames in the auth sections) but nothing has been exported, and exporting before F1 and F2 are fixed would bake the gaps into the baselines. Sequence: reopens, then the pack.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #156F45; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">✅ F5 · resolved — S09-v2 adds 360 px; S21 exempt by owner ruling</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V03 · ruled 3 Aug · S09-v2</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">S09</strong> (auth emails) — an email has no viewport; it has a client width, and the templates are built to reflow. <strong style="font-weight: 600;">S21</strong> (degraded states) — each row is a state of a screen delivered elsewhere, and both hosts ship at 375 in their own sections. Both are flagged in their own notes rather than silently absent. ⚠ not ❌ because the reason is stated, but it is your rule and your call.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #156F45; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">✅ F6 · fixed in S21-v2 — dark fixed tokens exist in B1-DS and were not used</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V05 · V16 · fixed in S21-v2</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">This row said B1-DS §2 defines the fixed tokens in light only and asked you to ratify light chips on dark shells. <strong style="font-weight: 600;">It was wrong.</strong> §2 carries a complete dark column — status pills (Open <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#123322</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#5AD190</code>), priority dots, SLA, reply-window, connection state, channel health, note tokens and the AI accent (<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#292144</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#BCA9FF</code>), each with its own dark value. S21’s hostile frame is corrected to those values in <a href="B7-S21-branding-degraded-v2.dc.html">S21-v2</a>; a sweep of all 21 files found no other fixed token rendered in the wrong colourway inside a dark frame. No B1-DS v5 is needed and the question I raised is withdrawn — the answer was in the file.</p>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #156F45; border-radius: 10px; padding: 15px 17px;">
+        <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">✅ F7 · fixed — six error states carried no announcement role</span>
+          <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">V06 · fixed in six version bumps</span>
+        </div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">S04's grace-expired gate, S05's expired-link screen, S06's disabled-while-online, S07's insufficient-scope error, S14's render-failure and S18's swap notice all present failure or state-change copy without an announcement role. Each is one attribute. Grouped as ⚠ rather than ❌ because none is a missing state — they are states that do not announce, and Doc 02 §13 requires announcement.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Delivered as a measurement, not a claim.</strong> Fifteen of seventeen rows pass on the evidence in §A; two are ❌. Every count came out of the files rather than my recollection — the only way this section is worth anything, since its subject is whether the other twenty-one told the truth. Its own numbers were restated twice after review for exactly that reason.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">All four reopens are delivered:</strong> <a href="B7-S10-branding-editor-shell-v3.dc.html">S10-v3</a> (Amharic), and <a href="B7-S06-sessions-devices-v3.dc.html">S06-v3</a>, <a href="B7-S07-api-tokens-v4.dc.html">S07-v4</a>, <a href="B7-S11-branding-identity-v2.dc.html">S11-v2</a> (dark frames), plus <a href="B7-S09-auth-emails-v2.dc.html">S09-v2</a> (360 px client) and <a href="B7-S21-branding-degraded-v2.dc.html">S21-v2</a> (dark tokens from B1-DS §2). F7’s six announcement roles shipped as six version bumps. What remains is V09, yours, and V17, held by sequence.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">What I want on the record:</strong> S10 shipped a whole screen in one language and its own note passed it. The parity method that would have caught it was adopted two sections later and never applied backwards. That is the lesson worth carrying out of this batch — a method change is retroactive or it is decoration.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const R = [
+["V01","Universal state set — normal, loading, empty, error, plus each document-named edge state","Every section carries its named states; 40 labelled frames across S01–S09, 34 across S10–S21, 74 in the batch","✅"],
+["V02","Both themes on every screen","All 21 files now render a labelled dark frame of their primary screen — S06-v3, S07-v4 and S11-v2 added the three that were missing","✅"],
+["V03","Both viewports on every screen","20 of 21 ship a narrow frame — S09-v2 added a 360 px client rendering on owner ruling. S21 is exempt: every row is a state of a screen that ships at 375 elsewhere","✅"],
+["V04","44 px touch floor on mobile","Present in every 375 frame that carries controls; 20 explicit declarations in S01 alone. Desktop keeps B1-DS metrics","✅"],
+["V05","Never colour alone","Every status, validator result and verification state carries a glyph or text. Fixed tokens now render from B1-DS §2’s correct colourway in both themes — see F6","✅"],
+["V06","Errors announced, not merely tinted","39 announcement roles across the batch after the F7 pass; the six unannounced surfaces now carry alert or status — see F7","✅"],
+["V07","Keyboard operability","Segmented code input as one field, wizard focus to step headings, the truncated name focusable with its full value as accessible name","✅"],
+["V08","Reduced motion honoured","Step transitions and success checks stated as still under prefers-reduced-motion; nothing in the batch pulses or auto-animates","✅"],
+["V09","English and Amharic first-class","All 21 files carry Amharic after S10-v3 (124 runs, was zero). Clearance for G and H is outstanding — see F3","❌"],
+["V10","Realistic Ethiopian operator data","Selam Bet and Habesha Games throughout; real staff names, Addis Ababa / Bahir Dar / Adama locations, +251 numbers, birr amounts. No lorem ipsum anywhere","✅"],
+["V11","RTL-safe markup","Flex and grid with gap throughout; no directional margins carrying layout. Neither launch language is RTL","✅"],
+["V12","Permission gating named on the surface","branding.edit on the editor, the admin keys on Section H, settings.edit where auth keys are reflected","✅"],
+["V13","Audit honesty","Every high-visibility change says it is recorded and by whom: branding publish, admin 2FA reset, disable, token create and revoke, rollback","✅"],
+["V14","White-label neutrality","No invented brand personality; fixed tokens never re-mixed after the Section L and U corrections; no approved element restyled","✅"],
+["V15","The four absences hold","No impersonation (H06), no contrast override (7 states checked, L/S), no admin-set passwords (D06/E09/H02), no account-existence disclosure (A08/E01/E02)","✅"],
+["V16","B1-DS verbatim","v4 is system of record from Section K. Three status-hue leaks found and corrected; the standing rule adopted at S makes it law","✅"],
+["V17","AC-09 baseline pack","Not produced. Frames exist; export is blocked behind F1 and F2 — see F4","❌"]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { rows: R.map(([n, req, got, st]) => ({
+      n, req, got,
+      pass: st === "✅", warn: st === "⚠", fail: st === "❌"
+    })) };
+  }
+}
+</script>
+</body>
+</html>

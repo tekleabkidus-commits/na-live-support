@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-X01-crosswalks-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">pre-approval evidence · one finding needs your ruling</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Three cross-walks, with row numbers</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Row numbers refer to <strong style="font-weight: 600;">B6-S00-checklist-v2</strong>, which now carries your viewport ruling and both silence dispositions. Two of the three cross-walks came out clean. The first one did not — the catalog does not add up to the number the same section states, and I am not choosing which figure is right.</p>
+  </header>
+
+  <sc-for list="{{ walks }}" as="w" hint-placeholder-count="4">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ w.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ w.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ w.tag }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ w.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: {{ w.cols }}; gap: 12px; padding: 9px 16px; background: #F4F3F1; border-bottom: 1px solid #CFCBC1;">
+          <sc-for list="{{ w.head }}" as="h" hint-placeholder-count="5">
+            <span style="font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #6B675D;">{{ h }}</span>
+          </sc-for>
+        </div>
+        <sc-for list="{{ w.rows }}" as="row" hint-placeholder-count="12">
+          <div style="display: grid; grid-template-columns: {{ w.cols }}; gap: 12px; align-items: start; padding: 10px 16px; border-bottom: 1px solid #F0EEE9;">
+            <sc-for list="{{ row }}" as="cell" hint-placeholder-count="5">
+              <span style="font-size: 12px; line-height: 1.5; color: #3A3833; min-width: 0; overflow-wrap: break-word;">{{ cell }}</span>
+            </sc-for>
+          </div>
+        </sc-for>
+        <div style="display: grid; grid-template-columns: {{ w.cols }}; gap: 12px; padding: 11px 16px; background: #F4F3F1;">
+          <sc-for list="{{ w.foot }}" as="f" hint-placeholder-count="5">
+            <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">{{ f }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Finding 1 — Doc 03 states four different sizes for its own catalog</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">I counted the keys §4.1 literally names, module by module. The four passages, verbatim:</p>
+    <p style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px; border-left: 2px solid #CFCBC1; padding-left: 12px;"><strong style="font-weight: 600;">§4.1, closing line:</strong> “(Catalog count: 118 v1 keys + reserved namespaces; additions require doc-owner sign-off per Doc 01 R-03.)”<br /><strong style="font-weight: 600;">§4.1, the list itself:</strong> 111 keys named across the 14 module groups — the count in the table above.<br /><strong style="font-weight: 600;">§1:</strong> “a catalog of ~130 atomic permissions across 14 modules”.<br /><strong style="font-weight: 600;">NFR-05:</strong> “The matrix UI remains usable at 130+ permissions”.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">§1's “~130” is explicitly approximate and NFR-05's “130+” is a headroom budget, not a count — those two I read as consistent with either figure. The hard discrepancy is <strong style="font-weight: 600;">111 named against 118 stated, inside the same section</strong>. Seven keys are either missing from the list or double-counted in the total, and nothing in the document tells me which.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">What I will build either way:</strong> row <strong style="font-weight: 600;">G06</strong> renders the 111 keys the document actually names, verbatim, never renamed or merged — BR-03 forbids inventing the missing seven. The matrix is designed to NFR-05's 130+, so if the doc owner supplies seven more keys, nothing about the layout, the accordion, the search or the sidebar summary changes; the keys drop into their module groups. <strong style="font-weight: 600;">Nothing is blocked by this</strong> — but a closing audit that says “✅ full catalog rendered” has to state which number it means.</p>
+    <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin: 0;">
+      <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">▲ For the doc owner, not for me to settle</div>
+      <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 900px;">Either §4.1's list is short by seven keys, or its stated total is wrong. Row G06 and the closing audit will record whichever you rule, with the count I actually rendered.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Finding 2 — Doc 16's fourteen groups have nowhere to put a channel or an RBAC key</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Doc 16 FR-08 names its information architecture exhaustively: General, Business Hours &amp; Holidays, Languages, Security, Files &amp; Media, Tickets &amp; SLA, Routing, AI, SMS, Notifications, Quotas &amp; Usage, Feature Flags, Branding, Config Export/Import. There is no Channels group and no Roles group. Meanwhile Doc 05 FR-05 puts its own mode setting at “Backoffice → Channels → Telegram → Connection tab”, and Doc 03 surfaces <code style="font-family: ui-monospace, monospace; font-size: 12px;">rbac.four_eyes</code>, <code style="font-family: ui-monospace, monospace; font-size: 12px;">rbac.strict_grant</code> and <code style="font-family: ui-monospace, monospace; font-size: 12px;">rbac.override.warn_threshold</code> on its own admin screens.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">The decision I have taken, which you can overturn:</strong> each of those keys renders <em>exactly once</em>, on the surface its own document names, wearing Doc 16's per-key row contract — label, description, typed control, validation, provenance, reset (rows J03–J06), with platform maximums as locked floors (J07). I have not invented a fifteenth settings group, and I have not mirrored any key into two places. Doc 16 T-04 supports this: the IA is data, so a key registered with group metadata appears wherever the registry says — row <strong style="font-weight: 600;">J16</strong> is the state that proves it.</p>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">The alternative — adding a Channels group and a Roles group to the Settings nav — would contradict FR-08's enumeration and duplicate Doc 05's own navigation path. Say the word if you want it and I will add the rows.</p>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">My one question — the branding rows</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Your scope correction reads two ways and I will not guess between them: <em>“branding-editor rows (M-section) move to Batch 7 per the fixed batch table [or: I pull them forward — owner's word]”</em>.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">What hangs on it: Section M is 27 rows — the largest in the batch — and it owns the contrast validator (M15, M16), which Doc 16 FR-04 says is <em>the same validator</em> Doc 13 uses. It also owns the surface inventory (M11), which is where the Telegram persona surfaces from this batch's own Doc 05 appear as thumbnails. Cross-walk 3b below is written on the assumption M stays; if it moves, rows M01–M27 come out of Batch 6 wholesale, cross-walk 3b moves with them, and the Branding entry in the Settings nav (J01) becomes a cross-link to a Batch 7 screen rather than an in-batch destination — one row's change, cleanly.</p>
+    <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin: 0;">
+      <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">Does Section M stay in Batch 6, or move to Batch 7?</div>
+      <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 900px;">Either answer is one edit to the checklist and a version bump. Sections A and B do not depend on it, so I can start them the moment you approve the contract — I only need the answer before the batch closes.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 24px; background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">Recorded from your last message</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 900px;">
+      <li><strong style="font-weight: 600; color: #F4F3F1;">Viewport: documents hold.</strong> E13, G23, H12, J19, M27 and N13 ship 375 as read-only behind Doc 03 §9's explicit “editing requires a larger screen” notice, with editing at each document's own floor. The connect checklist (C01), the incident page (P03) and the flag confirm dialogs (L04) stay phone-operable because the documents require it. Recorded in the rows themselves and in every delivery note.</li>
+      <li><strong style="font-weight: 600; color: #F4F3F1;">Silence 1 closed.</strong> User list and lifecycle are Doc 02 FR-17 / FR-05 / FR-03 / §8 and belong to Batch 7. Section H stays RBAC-only; the checklist records the reference so the closing audit does not read it as a gap.</li>
+      <li><strong style="font-weight: 600; color: #F4F3F1;">Silence 2 closed.</strong> No deep-link builder. Doc 05 FR-26's payload schema stays a bot-side contract with no admin surface.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CW1 = [
+  ["Tickets", "21", "2", "G06 · matrix", "—"],
+  ["Conversations", "3", "1", "G06 · matrix", "—"],
+  ["Customers", "13", "6", "G06 · matrix", "—"],
+  ["Telegram", "6", "2", "G06 · matrix", "telegram.bots.manage → A02, A06 · telegram.connections.manage → C06, C11 · telegram.health.view → F07"],
+  ["Web chat", "3", "1", "G06 · matrix", "—"],
+  ["SMS", "8", "1", "G06 · matrix", "—"],
+  ["AI", "7", "4", "G06 · matrix", "ai.guardrails.edit → N02 (gates the RG template row)"],
+  ["Knowledge Base", "7", "0", "G06 · matrix", "—"],
+  ["Automation & Workflow", "11", "4", "G06 · matrix", "sla.policies.edit → J14 cross-link"],
+  ["Organization", "5", "1", "G06 · matrix", "org.business_hours.edit → J14 cross-link"],
+  ["Users & Roles", "7", "5", "G06 · matrix", "admin.roles.manage → G01 · admin.overrides.manage → H04"],
+  ["Reports", "7", "2", "G06 · matrix", "—"],
+  ["Supervision", "5", "3", "G06 · matrix", "—"],
+  ["Platform settings", "8", "6", "G06 · matrix", "settings.view / settings.edit → J01 · branding.edit → M01 · features.toggle → L01 · languages.manage → N09"]
+];
+
+const CW2 = [
+  ["telegram.business.window_hours", "Doc 05 FR-21", "D01, D02", "no FR-08 group — Channels → Telegram (Doc 05 FR-05's own path)", "J03–J06 · min 1 / max 24 as J07 floor"],
+  ["window closing threshold + agent notification", "Doc 05 FR-22", "D03", "same surface", "J03–J06"],
+  ["health rollup thresholds (healthy/degraded/down)", "Doc 05 FR-29", "F04", "same surface", "J03–J06"],
+  ["rate-limit buckets, per bot and per chat", "Doc 05 FR-20", "F08", "same surface", "J03–J06 · platform maximums as J07 floor"],
+  ["connection mode: direct | business | hybrid", "Doc 05 FR-05", "B01", "same surface", "J03–J06 · J08 consequence before save (B06)"],
+  ["bot templates · menus · redirect copy", "Doc 05 FR-27, FR-28", "E01, E07, B03", "not a setting — operator content", "N02 translation manager, not the registry"],
+  ["rbac.four_eyes", "Doc 03 FR-08b", "I02, I04", "no FR-08 group — RBAC admin surface", "J03–J06 · EC-08 refusal state at I04"],
+  ["rbac.strict_grant", "Doc 03 BR-04", "I05", "same surface", "J03–J06"],
+  ["rbac.override.warn_threshold", "Doc 03 BR-02", "I06, H09", "same surface", "J03–J06"],
+  ["auth.* — password, 2FA, sessions, IP, lockout", "Doc 02 via Doc 16 FR-08", "J12", "Security ✓ (a named group)", "J03–J06 · floors at J07"],
+  ["media.max_mb + retention keys", "Doc 16 FR-08", "J13", "Files & Media ✓", "J03–J06 · legal-hold notes"],
+  ["quota keys + 80% alert thresholds", "Doc 01 NFR-06 via FR-08", "J15", "Quotas & Usage ✓", "J03–J06 · usage bars"]
+];
+
+const CW3A = [
+  ["Flag registry cards, state switches, provenance", "L01", "P01 — mandated by Doc 16 AC-10, not a duplicate"],
+  ["Blast-radius stats per flag", "L02", "—"],
+  ["Dependency graph + text-list equivalent", "L03", "—"],
+  ["Confirm dialog with dependents / dependency prompts", "L04", "P03 — full-screen at 375, Doc 16 §9's stated exception"],
+  ["Off-behaviour copy (nav gone, feature_disabled, work parked)", "L05", "—"],
+  ["“Nothing is destroyed” copy", "L06", "—"],
+  ["Parked-count live on card", "L07", "—"],
+  ["Last customer-facing channel consequence", "L08", "—"],
+  ["“Flags are tenant-wide, roles are Doc 03's job”", "L09", "—"],
+  ["Fail-static state during a flag-store outage", "L10", "—"],
+  ["“All stop buttons” link", "L11", "P02 is its target"],
+  ["AI kill switches · rules-pause", "P01", "switches owned by Doc 09 / Doc 12 — this batch only places them"],
+  ["Telegram OFF: webhooks ACK-and-park", "L05", "not repeated in Section F — F09 is a Telegram-side outage, a different cause"]
+];
+
+const CW3B = [
+  ["Company name, product name, logos, favicon", "M03", "Doc 16 FR-01 — built here", "thumbnail only at M11"],
+  ["Colour tokens (primary, accent, surface)", "M04", "Doc 16 FR-01 — built here", "validated at M15, M16, M18"],
+  ["Fonts (curated set incl. Noto Sans Ethiopic)", "M04", "Doc 16 FR-01 — built here", "—"],
+  ["Login background + welcome copy per language", "M05", "Doc 16 FR-01 — built here", "image-aware contrast at M18"],
+  ["Email header, footer, address block, legal", "M06", "Doc 16 FR-01 — built here", "per-template rollback at M25"],
+  ["Copyright line + footer links per language", "M07", "Doc 16 FR-01, SEC-02 — built here", "—"],
+  ["Sender identities per purpose", "M08", "Doc 16 FR-01, SEC-03 — built here", "gate at M09, lapse at M10"],
+  ["Widget brand tokens", "—", "Doc 13 FR-19 owns widget appearance", "reference only, thumbnail at M11"],
+  ["AI assistant name + avatar", "—", "Doc 09 FR-18 owns persona content", "reference + edit link at M12"],
+  ["SMS sender IDs", "—", "Doc 14 owns them", "reference only, thumbnail at M11"],
+  ["Telegram persona surfaces", "—", "Doc 05 / Doc 09 own the content", "reference only, thumbnail at M11"],
+  ["Exports & watermarks · error pages · PDF transcripts", "—", "Docs 04 / 15 own them", "reference only, thumbnails at M11"]
+];
+
+const WALKS = [
+  { id: "1", name: "Doc 03 §4.1 — every catalog key, matrix or build-side", tag: "14 modules",
+    note: "Every key in the catalog renders in the role matrix (G06); none is build-side-only. What is build-side and therefore absent from the design: FR-11's denial logging, T-02's resolver cache, T-04's per-page capability map and T-05's CI gates — none of them are keys.",
+    cols: "180px 62px 76px 128px minmax(0, 1fr)",
+    head: ["Module", "Keys", "High-risk", "Renders in", "Also gates a Batch 6 surface"],
+    rows: CW1,
+    foot: ["14 modules", "111", "38", "all in G06", "9 keys gate this batch's own screens — listed at Q13"] },
+  { id: "2", name: "Wizard & channel settings → the Doc 16 registry", tag: "12 keys",
+    note: "Every configurable this batch's wizard, health and RBAC screens expose, matched to where it renders and which FR-08 group owns it. No key renders twice. Three of them have no group to belong to — see Finding 2.",
+    cols: "220px 132px 92px minmax(0, 1fr) 190px",
+    head: ["Setting / control", "Named by", "Renders at", "Group under Doc 16 FR-08", "Contract applied"],
+    rows: CW2,
+    foot: ["12 keys", "3 documents", "—", "9 on their own surface · 3 in a named group", "all wear J03–J06"] },
+  { id: "3a", name: "Flag controls — each exactly once", tag: "13 controls",
+    note: "One row per control. The only control that appears on two surfaces is the flag switch itself, because Doc 16 AC-10 requires every stop control to also be reachable on the incident page in two clicks — that is a mandate, and P01 states it.",
+    cols: "minmax(0, 1fr) 96px minmax(0, 1.05fr)",
+    head: ["Control", "Its row", "Second surface, and why"],
+    rows: CW3A,
+    foot: ["13 controls", "12 unique rows", "1 mandated duplication (AC-10), 0 accidental"] },
+  { id: "3b", name: "Re-skin controls — each exactly once", tag: "12 surfaces",
+    note: "Doc 16 FR-02's inventory names eight brandable surface groups; FR-01 gives this batch seven editors. Five surfaces are branded from the same token set but their content is edited in another document — they appear as inventory thumbnails and nothing else. Section M builds no editor another document owns.",
+    cols: "minmax(0, 1fr) 78px minmax(0, 0.95fr) 200px",
+    head: ["Re-skin control", "Its row", "Owned by", "Appears elsewhere as"],
+    rows: CW3B,
+    foot: ["12 entries", "7 editors", "5 owned elsewhere", "0 rebuilt, 0 duplicated"] }
+];
+
+class Component extends DCLogic {
+  renderVals() { return { walks: WALKS }; }
+}
+</script>
+</body>
+</html>

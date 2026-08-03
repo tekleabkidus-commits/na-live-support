@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 26px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B2-S06-closing-audit-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 2 closing audit</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 860px; text-wrap: pretty;">Every row of <span style="font-family: ui-monospace, monospace; font-size: 13px;">B2-S00-checklist-v1</span>, in order, marked ✅ with the screen that carries it or ❌ with what is missing. Rows the checklist marked <em>carried</em> were drawn in Batch 1; they are marked against that version and still need your ownership ruling. <span style="color: #1D1C18; font-weight: 600;">Six rows are ❌.</span> I have not marked anything ✅ that I could not point at.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ doneCount }} ✅</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FBE5E5; border: 1px solid #EFC2C2; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #8E2020;">{{ openCount }} ❌</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">{{ totalCount }} rows total</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #7E650F;">1 open question — search scope wording</span>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; color: #1D1C18;">{{ sec.id }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ sec.name }}</span>
+        <span style="margin-left: auto; font-size: 11.5px; color: #4A4842;">{{ sec.tally }}</span>
+      </div>
+      <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: 44px 26px minmax(0, 1fr) 220px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+          <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+          <span style="font-size: 13px; padding-top: 1px;">{{ row.mark }}</span>
+          <div style="min-width: 0;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.note }}</div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.where }}</div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+
+  <section style="background: #FBE5E5; border: 1px solid #EFC2C2; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #8E2020;">The six ❌ rows, plainly</h2>
+    <ol style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #7A1D1D;">
+      <li><strong>A1</strong> — both screens and the back arrow exist, but nothing shows the list returning to where the agent left it. It is a behaviour I never drew a state for.</li>
+      <li><strong>A2</strong> — the views sheet is delivered and approved, but its queue, shared and personal groups are not labelled as sections; there is only a divider.</li>
+      <li><strong>B3</strong> — the assignee control is carried from Batch 1; its refusal when the chosen person cannot see the ticket is drawn nowhere.</li>
+      <li><strong>B5</strong> — tags are carried, but autocomplete and the bulk tag management the row names are not drawn.</li>
+      <li><strong>B11</strong> — the handoff packet is carried; the KB articles the customer already saw do not have their hover previews.</li>
+      <li><strong>C14</strong> — the bulk bar exists, but I could not find the per-item permission intersection or the “why this is disabled” wording in the Batch 1 file. If it is there, point me at the frame and I will flip this row.</li>
+    </ol>
+    <p style="margin: 12px 0 0; font-size: 13px; line-height: 1.6; color: #7A1D1D;">Six rows of designs, roughly one screen. I have not started them because closing them changes approved Batch 1 screens (A2, B3, B5, B11, C14), and I do not reopen approved work without you saying so.</p>
+  </section>
+
+  <section style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #7E650F;">Still owed by you, not by me</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #7E650F;">
+      <li>A verdict on <span style="font-family: ui-monospace, monospace;">B2-S01</span>, which I designed on without one.</li>
+      <li>Doc 07 FR-25's own words for the two search scopes — mine are invented and labelled as such.</li>
+      <li>The ownership ruling on the fifteen <em>carried</em> rows: do they belong to Batch 1's approval or to this batch's?</li>
+      <li>Batch 1 is still open with 28 ❌ rows. Batch 2 cannot be closed cleanly while its foundation is.</li>
+      <li>Amharic throughout both batches is real text but has not been through native review.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "A", name: "Mobile refinement — the 375 contract in full", rows: [
+  ["List ↔ Thread transition", 0, "Both screens and a real back affordance are drawn; scroll position preserved on return is not shown as a state anywhere.", "B1-S01 · B2-S01 — incomplete"],
+  ["Views modal sheet", 0, "Sheet delivered with live counts, but queue / shared / personal are not labelled as sections — only a divider separates them.", "B1-S03 — incomplete"],
+  ["Context bottom sheet", 1, "Three tabs in fixed order, drag-to-dismiss; opening / at rest / dragging drawn separately.", "B2-S01 · B2-S05 D18"],
+  ["Swipe-right — quick claim", 1, "Reveal, commit, undo window. Haptic fires on commit only.", "B2-S01"],
+  ["Swipe-left — quick actions", 1, "Resolve, pending, priority — 44px each.", "B2-S01"],
+  ["Pull-to-refresh", 1, "In-progress and completed states.", "B2-S01"],
+  ["Composer above the keyboard", 1, "Keyboard raised, thread pinned to the latest message.", "B2-S01"],
+  ["Attachment overflow sheet", 1, "Photo / document / voice note, with the 25 MB limit stated.", "B2-S01"],
+  ["Mobile bulk selection", 1, "Long-press entry, partial, and the 25-item cap with its notice.", "B2-S01"],
+  ["Mobile search", 1, "Tickets / Customers / Messages as approved, plus idle, loading, no-results and offline. Scope labels are mine and await your ruling.", "B1-S03 · B2-S02"],
+  ["Mobile notification panel", 1, "Deep-linking rows, mark-all-read, per-row mute with undo, and the empty state.", "B2-S02"],
+  ["Mobile agent status", 1, "Online / Away / Offline from the list header; the list never leaves the screen.", "B2-S02"],
+  ["Breakpoint 1024–1279", 1, "R4 as an overlay drawer over the thread.", "B2-S01"],
+  ["Breakpoint 768–1023", 1, "R1 permanently collapsed to icons; list and thread share the rest.", "B2-S01"],
+  ["Thumb-reach audit", 1, "Arc drawn over both a thread and a list; destructive actions sit outside it at the top edge.", "B2-S02"],
+  ["Mobile density", 1, "76px comfortable and 60px compact, both holding a long Amharic second line.", "B2-S02"]
+]},
+{ id: "B", name: "Ticket detail — the property contract", rows: [
+  ["Status control", 1, "Carried. Legal-only rendering proved again in this batch's refusal state.", "B1-S04 · B2-S05 D3"],
+  ["Priority select", 1, "Carried. Four levels, dot plus label.", "B1-S04"],
+  ["Assignee combo", 0, "Carried, but the refusal when the chosen assignee has no view scope is not drawn in either batch.", "B1-S04 — incomplete"],
+  ["Department / queue cascade", 1, "Carried on desktop; redrawn at 375 inside the property sheet.", "B1-S04 · B2-S03"],
+  ["Tags input", 0, "Carried as chips, but autocomplete and bulk tag management are not drawn.", "B1-S04 — incomplete"],
+  ["Followers stack", 1, "Carried; follow / unfollow control shown again on the mobile sheet.", "B1-S04 · B2-S03"],
+  ["SLA chips", 1, "Carried; shown in the mobile sheet at 375.", "B1-S04 · B2-S03"],
+  ["Reply-window chip", 1, "Carried; identical component in list rows and panel.", "B1-S01 · B2-S03"],
+  ["Pending-reason selector", 1, "Awaiting customer, or awaiting internal with department / named person / external as a second level. Desktop and 375.", "B2-S03"],
+  ["Linked tickets list", 1, "Carried; relationship words spelled out — merged into, split from.", "B1-S04 · B2-S03"],
+  ["Handoff packet card", 0, "Carried, but the KB articles the customer already saw have no hover previews.", "B1-S04 — incomplete"],
+  ["Ticket timeline", 1, "Status, assignment, transfer, priority, escalation and subject events, each with actor and time; automated events name the system.", "B2-S03"],
+  ["Subject field", 1, "At rest, editing, and after staff edit — the Copilot source label survives the edit.", "B2-S03"],
+  ["Mobile property sheet", 1, "Full control set at 375 across two scroll positions; nothing dropped versus desktop.", "B2-S03"]
+]},
+{ id: "C", name: "Ticket detail — operations and state affordances", rows: [
+  ["Merge dialog", 1, "Carried. Side-by-side, direction, consequences, confirm phrase, 24-hour reversal.", "B1-S04"],
+  ["Split dialog", 1, "Carried. Two steps, count pill, linked-work cap surfaced.", "B1-S04"],
+  ["Escalate dialog", 1, "Carried. Path picker and reason with a minimum-length meter.", "B1-S04"],
+  ["Spam dialog", 1, "Carried. Consequences plus a separately-confirmed block option.", "B1-S04"],
+  ["Transfer", 1, "Carried. Re-routes, resets assignee, badges the SLA.", "B1-S04"],
+  ["New ticket from conversation", 1, "Carried. Blocked by an open-family ticket, with the jump link offered.", "B1-S04"],
+  ["Unmerge", 1, "Inside the 24-hour window, and the refusal once the snapshot is pruned — with the honest alternative offered.", "B2-S04"],
+  ["Resolved affordance", 1, "“Closes in 41 h unless the customer replies”, with reopen-now.", "B2-S04"],
+  ["Closed affordance", 1, "Reopen-window countdown and the reason-required notice after it lapses.", "B2-S04"],
+  ["Spam affordance", 1, "7-day unmark countdown and the terminal state after it.", "B2-S04"],
+  ["Escalated affordance", 1, "Path, reason, target and the escalation clock.", "B2-S04"],
+  ["Channel-unreachable affordance", 1, "Unreachable chip, SLA-paused flag, composer disabled but notes still open, never auto-resolves.", "B2-S04"],
+  ["Reopened ticket", 1, "Reopen count, the written reason, and the link to the earlier ticket.", "B2-S04"],
+  ["Bulk bar", 0, "The bar is carried, but I could not find the per-item permission intersection or the reason a disabled action is disabled.", "B1-S04 — unverified"],
+  ["Bulk progress drawer", 1, "Per-item results, named failure reasons, retry-failed, 25% announcements. Desktop and 375.", "B2-S04"],
+  ["Bulk confirm phrase", 1, "Typed phrase above 50, with the reply-window consequence stated.", "B2-S04"]
+]},
+{ id: "D", name: "States", rows: [
+  ["Panel — loading", 1, "Skeleton that keeps the field rhythm.", "B2-S05 D1"],
+  ["Panel — optimistic transition", 1, "Sends, then reverts with the server's reason and a way forward.", "B2-S05 D2"],
+  ["Panel — illegal transition refused", 1, "From and to both named; illegal targets absent rather than disabled.", "B2-S05 D3"],
+  ["Panel — moved out of scope", 1, "Read-only, still following, editing off.", "B2-S05 D4"],
+  ["Panel — empty", 1, "Dashed fields that say what would fill them.", "B2-S05 D5"],
+  ["Panel — error", 1, "Panel-only failure with retry; the conversation is unaffected.", "B2-S05 D6"],
+  ["Claim race", 1, "Avatar swaps in place, no modal, next-one offered.", "B2-S05 D7"],
+  ["Simultaneous resolve", 1, "Succeeds as a no-op and refreshes.", "B2-S05 D8"],
+  ["Assignee deactivated", 1, "Handed back with a system note, re-routed, assign-to-me offered.", "B2-S05 D9"],
+  ["Escalation target lost", 1, "Falls back to supervisor review, written into the timeline.", "B2-S05 D10"],
+  ["Split cap reached", 1, "Refused at three, with the three named.", "B2-S05 D11"],
+  ["Merge chain", 1, "Banner points at the final survivor, chain shown.", "B2-S05 D12"],
+  ["Mobile — list loading, empty, error", 1, "All three at 375, error offering the cached list.", "B2-S05 D13"],
+  ["Mobile — thread loading, empty, error", 1, "All three at 375.", "B2-S05 D14"],
+  ["Mobile — offline", 1, "Read-only cached view, queued send marked as queued.", "B2-S05 D15"],
+  ["Mobile — swipe states", 1, "Reveal, commit, undo window — drawn in Step 1, not redrawn.", "B2-S01"],
+  ["Mobile — selection mode", 1, "Entered, partial, and at the 25 cap — drawn in Step 1.", "B2-S01"],
+  ["Mobile — sheet states", 1, "Opening, at rest, dragging to dismiss with the grabber thickened.", "B2-S05 D18"],
+  ["Rescue view populated", 1, "Three unreachable tickets with the revocation time and paused clocks.", "B2-S05 D19"],
+  ["Reply-to anchor fetch", 1, "Fetch announced, anchor outlined, and a way back to the latest.", "B2-S05 D20"]
+]},
+{ id: "E", name: "Cross-cutting proof", rows: [
+  ["Both viewports", 1, "Every Batch 2 row is drawn at 1440 and at 375, plus the two intermediate breakpoints.", "B2-S01 – B2-S05"],
+  ["Both themes", 1, "Light and dark on every screen set.", "B2-S01 – B2-S05"],
+  ["Both languages", 1, "Real Amharic including long strings that force two-line clamping; flagged for native review, which has not happened.", "B2-S01 – B2-S05"],
+  ["44 px touch targets", 1, "Every interactive element at 375, including inside sheets and dialogs; primary bars use 48px.", "B2-S01 – B2-S05"],
+  ["Nothing by colour alone", 1, "Every status, countdown and unread carries a word or a glyph. The channel glyph inherits row colour, consistent with approved Batch 1.", "B2-S01 – B2-S05"],
+  ["Batch 1 consistency", 1, "No approved token, component or layout restyled; new work composes from the existing set.", "B2-S01 – B2-S05"],
+  ["Announcements", 1, "Roles marked on transitions, progress, refusals and fetches. Whether a screen reader actually speaks them is a build acceptance test, not something a static screen can prove.", "B2-S04 · B2-S05"],
+  ["Hard product rules", 1, "Notes structurally distinct, AI output labelled with its source, no impersonation surface, no “verified” language. SMS did not arise in this batch's scope.", "B2-S01 – B2-S05"]
+]}
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    let n = 0, done = 0, open = 0;
+    const sections = SECTIONS.map(sec => {
+      let d = 0, o = 0;
+      const rows = sec.rows.map(r => {
+        n += 1;
+        if (r[1]) { done += 1; d += 1; } else { open += 1; o += 1; }
+        return { n: sec.id + ("0" + (d + o)).slice(-2), mark: r[1] ? "✅" : "❌", t: r[0], note: r[2], where: r[3] };
+      });
+      return { id: sec.id, name: sec.name, tally: o ? (d + " ✅ · " + o + " ❌") : (d + " ✅"), rows };
+    });
+    return { sections, doneCount: done, openCount: open, totalCount: n };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S15-config-export-import-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows O01–O07</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Config export &amp; import</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Bulk convenience without bulk opacity. An import is not one action that either worked or did not — it is <strong style="font-weight: 600;">a list of individual changes, each previewed, each ticked or not, each audited</strong>. The diff table is therefore the screen; the upload is a formality before it and the apply is a consequence after it.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The hardest thing to design here is the failure. When an apply stops halfway, the instinct is to roll back — and that instinct is wrong: <strong style="font-weight: 600;">these are 200 unrelated settings, not one transaction</strong>. Undoing 84 good changes because the 85th failed leaves the tenant in a state nobody chose. So the results screen shows applied, failed and not-attempted as three separate lists, says plainly why nothing was reversed, and becomes the worklist for finishing the job.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell and the per-key anatomy are <a href="B6-S11-settings-shell-v1.dc.html">B6-S11</a>'s.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Export, and the diff preview — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows O01, O02, O04, O07 · Doc 16 FR-13, BR-07, SEC-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light is the export side: what goes in the bundle, and — stated as prominently — what deliberately does not. Dark is the diff preview after an upload: grouped by area, a validation badge per row, checkboxes that start ticked only where the row is valid.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · export</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">O01 · O07</span></div>
+    <div data-screen-label="O01 export light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 200px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Quotas &amp; Usage</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+            <span style="padding: 6px 10px; border-radius: 6px; color: #6B675D;">Branding ↗</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Config Export / Import</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Settings</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Config export &amp; import</h1>
+            </div>
+            <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.manage</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Export this workspace's configuration</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">A single file you can keep as a record, review offline, or apply to a staging workspace before you make the same changes here.</p>
+              <div style="border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 11px;">
+                <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">What is in it</div>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 14px; margin-top: 8px; font-size: 11.5px;">
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Every settings value <span style="color: #6B675D;">· 214 keys</span></span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Theme version <span style="color: #6B675D;">· v7, published 21 Jul</span></span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Feature flags <span style="color: #6B675D;">· 13 modules</span></span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Translation overrides <span style="color: #6B675D;">· 26</span></span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Business calendars <span style="color: #6B675D;">· hours + 13 holidays</span></span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #156F45;">✓</span><span style="color: #1D1C18;">Notification role defaults</span></div>
+                </div>
+              </div>
+              <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 11px 12px; margin-top: 12px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">What is deliberately left out</div>
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 6px; font-size: 11.5px; line-height: 1.55;">
+                  <div style="display: flex; gap: 8px;"><span style="color: #6B675D;">✕</span><span style="color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Secrets and credentials.</strong> Bot tokens, the SMS gateway key and the webhook secret never leave the vault — an exported file is not a way to move them.</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #6B675D;">✕</span><span style="color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Per-user preferences.</strong> What each person chose for their own notifications is theirs, and would be meaningless in another workspace.</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="color: #6B675D;">✕</span><span style="color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Conversations, tickets and customers.</strong> This is configuration, not data.</span></div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 13px;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Export configuration</button>
+                <span style="font-size: 11px; color: #6B675D;">nabet-config-2026-08-02.json · about 180 KB</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Import a configuration file</div>
+                <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">You will see every change it would make before anything is applied, and you tick the ones you want.</p>
+                <div style="border: 1px dashed #CFCBC1; border-radius: 9px; padding: 20px 14px; text-align: center; margin-top: 11px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Drop a .json file here</div>
+                  <div style="font-size: 11px; color: #6B675D; margin-top: 3px;">or</div>
+                  <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; margin-top: 7px; cursor: pointer;">Choose a file</button>
+                </div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Into this workspace only</div>
+                <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">An import always applies to NA BET. There is no way to push configuration into another operator's workspace from here, and a file exported from one cannot be aimed at another — that is a platform-operator action, not a tenant one.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px; margin-top: 14px; flex: none;">
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Recent</span>
+              <span style="font-size: 11px; color: #6B675D;">exports and imports are both audited</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 128px minmax(0, 1.4fr) minmax(0, 1fr) 128px; gap: 10px; margin-top: 10px; padding-bottom: 7px; border-bottom: 1px solid #E5E2DB;">
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">When</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">What</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Who</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Result</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 128px minmax(0, 1.4fr) minmax(0, 1fr) 128px; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; align-items: center;">
+              <span style="color: #6B675D;">31 Jul, 16:20</span><span style="color: #1D1C18;">Import · staging-config-jul.json</span><span style="color: #4A4842;">Sara Bekele</span><span style="color: #1D1C18;">84 applied, 1 failed</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 128px minmax(0, 1.4fr) minmax(0, 1fr) 128px; gap: 10px; padding: 9px 0; font-size: 11.5px; align-items: center;">
+              <span style="color: #6B675D;">28 Jul, 09:02</span><span style="color: #1D1C18;">Export · nabet-config-2026-07-28.json</span><span style="color: #4A4842;">Dawit Bekele</span><span style="color: #1D1C18;">Downloaded</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · diff preview</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">O02 · O04 · Amharic chrome</span></div>
+    <div data-screen-label="O02 diff preview dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 200px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ቅንብሮች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">አጠቃላይ</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ቋንቋዎች</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ደኅንነት</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">የባህሪ መቀየሪያዎች</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ውቅር ማውጣት / ማስገባት</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ውቅር ማስገባት · staging-config-aug.json</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">201 ለውጦች ይጠብቃሉ</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">የተመረጡትን 193 ተግብር</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 11px 14px; margin-top: 12px; flex: none; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">✓ 193 ready</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⚠ 5 need a look</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F5A7A7; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">✕ 3 cannot be applied</span>
+            <span style="font-size: 11.5px; color: #A6A296;">Nothing is applied until you press the button. Unticked rows are simply not touched.</span>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; background: #232320; border-bottom: 1px solid #343430;">
+              <span style="padding: 9px 12px;"></span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Key</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Now</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">In the file</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Check</span>
+            </div>
+
+            <div style="padding: 7px 12px; background: #1F1F1C; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;">
+              <span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Tickets &amp; SLA</span><span style="font-size: 11px; color: #A6A296;">42 changes</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">tickets.auto_close_days</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">7</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">14</span>
+              <span style="padding: 8px 12px; font-size: 11px; color: #5AD190;">✓ Valid</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">routing.starvation_cap_min</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">45</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">30</span>
+              <span style="padding: 8px 12px; font-size: 11px; color: #5AD190;">✓ Valid</span>
+            </div>
+
+            <div style="padding: 7px 12px; background: #1F1F1C; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;">
+              <span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #1C1C19; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #ECEAE4;"></span></span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Security</span><span style="font-size: 11px; color: #A6A296;">6 changes · 2 blocked</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; display: inline-block;"></span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">auth.password.min_length</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">12</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">8</span>
+              <span style="padding: 8px 12px; font-size: 11px; line-height: 1.5; color: #F5A7A7;">✕ Below the platform minimum of 10</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; display: inline-block;"></span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">auth.sso.client_secret</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">—</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">•••••</span>
+              <span style="padding: 8px 12px; font-size: 11px; line-height: 1.5; color: #F5A7A7;">✕ Secrets are never imported</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">auth.2fa.enforce_all</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">On</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">On</span>
+              <span style="padding: 8px 12px; font-size: 11px; color: #F0B54A;">— No change</span>
+            </div>
+
+            <div style="padding: 7px 12px; background: #1F1F1C; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;">
+              <span aria-checked="mixed" role="checkbox" style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #1C1C19; display: inline-flex; align-items: center; justify-content: center; flex: none;"><span style="width: 7px; height: 2px; background: #ECEAE4;"></span></span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Feature flags</span><span style="font-size: 11px; color: #A6A296;">4 changes · 1 needs a look</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #45443E; border-radius: 3px; background: #1C1C19; display: inline-block;"></span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">flag.sms</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">On</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">Off</span>
+              <span style="padding: 8px 12px; font-size: 11px; line-height: 1.5; color: #F0B54A;">⚠ Turns off a live channel</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 168px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 8px 12px;"><span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span></span>
+              <span style="padding: 8px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; overflow-wrap: anywhere;">flag.surveys</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #A6A296;">Off</span>
+              <span style="padding: 8px 12px; font-size: 11.5px; color: #ECEAE4;">On</span>
+              <span style="padding: 8px 12px; font-size: 11px; color: #5AD190;">✓ Valid</span>
+            </div>
+
+            <div style="padding: 7px 12px; background: #1F1F1C; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;">
+              <span style="width: 15px; height: 15px; border: 1.5px solid #ECEAE4; border-radius: 3px; background: #ECEAE4; color: #171714; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Translations</span><span style="font-size: 11px; color: #A6A296;">26 overrides</span>
+            </div>
+            <div style="padding: 9px 12px; font-size: 11px; line-height: 1.7; color: #A6A296;">Business calendars · Notifications · Routing · AI · Quotas — 123 more changes, all valid, collapsed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Apply, partial, failure — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows O03, O04, O05, O06, O07 · Doc 16 §8, BR-07, EC-08, FS-04, SEC-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">All five states in both theme columns. The mid-apply failure is the one to read closely: three lists, no rollback, and a sentence explaining why leaving 84 good changes in place is the correct behaviour rather than a shortcut.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">O03 — applying</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Applying 193 changes</div>
+          <div style="height: 8px; background: #F0EEE9; border-radius: 999px; margin-top: 9px; overflow: hidden;"><span style="display: block; width: 44%; height: 100%; background: #22211D;"></span></div>
+          <div style="display: flex; gap: 8px; margin-top: 6px;"><span style="font-size: 11.5px; color: #4A4842;">85 of 193</span><span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Tickets &amp; SLA · Security · Feature flags</span></div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Each key is written and audited on its own. You can leave this page — the run continues and the results are waiting when you come back.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">O03 · O06 — mid-apply failure, the worklist</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">The run stopped at change 85 of 193</div>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 10px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11.5px; font-weight: 600; color: #156F45;">✓ 84 applied</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #22211D;">Audit log →</span></div>
+              <div style="font-size: 11px; line-height: 1.55; color: #4A4842; margin-top: 3px;">These are live now. Each has its own audit entry with your name on it.</div>
+            </div>
+            <div style="border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; background: #FBE5E5;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #8E2222;">✕ 1 failed</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #7A3232; margin-top: 3px;">media.retention_days — rejected by the storage service</div>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 11px; min-height: 32px; margin-top: 7px; cursor: pointer;">Retry this one</button>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #4A4842;">◦ 108 not attempted</div>
+              <div style="font-size: 11px; line-height: 1.55; color: #4A4842; margin-top: 3px;">The run stopped before reaching them. Nothing about them has changed.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 11px; min-height: 32px; margin-top: 7px; cursor: pointer;">Continue with the remaining 108</button>
+            </div>
+          </div>
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">The 84 were not rolled back, and that is deliberate.</strong> These are separate settings, not one transaction. Undoing good changes because a later one failed would leave you in a state you never chose — and half of them are already affecting live conversations.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">O05 — a file from a newer version</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">This file is from a newer version of the platform</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">The file was written by <strong style="font-weight: 600;">v4.6</strong>; this workspace runs <strong style="font-weight: 600;">v4.3</strong>. It may contain keys and value shapes this version does not understand.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Nothing was read from it and no partial import is offered — applying the half we recognise would leave a configuration neither version intended. Export again from a v4.3 workspace, or wait for this one to be upgraded.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">O07 — this workspace only</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">The file names a different workspace</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">It was exported from <strong style="font-weight: 600;">Habesha Bet</strong>. You can still apply its values here — they are just settings — but it will import into <strong style="font-weight: 600;">NA BET</strong>, the only workspace you administer. There is no way to send configuration the other way.</p>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">O03 — applying</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Applying 193 changes</div>
+          <div style="height: 8px; background: #262622; border-radius: 999px; margin-top: 9px; overflow: hidden;"><span style="display: block; width: 44%; height: 100%; background: #ECEAE4;"></span></div>
+          <div style="display: flex; gap: 8px; margin-top: 6px;"><span style="font-size: 11.5px; color: #C9C5BB;">85 of 193</span><span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">Tickets &amp; SLA · Security · Feature flags</span></div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Each key is written and audited on its own. You can leave this page — the run continues and the results are waiting when you come back.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">O03 · O06 — mid-apply failure, the worklist</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">The run stopped at change 85 of 193</div>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 10px;">
+            <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11.5px; font-weight: 600; color: #5AD190;">✓ 84 applied</span><span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #ECEAE4;">Audit log →</span></div>
+              <div style="font-size: 11px; line-height: 1.55; color: #C9C5BB; margin-top: 3px;">These are live now. Each has its own audit entry with your name on it.</div>
+            </div>
+            <div style="border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; background: #3D1B1B;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #F5A7A7;">✕ 1 failed</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #E0A0A0; margin-top: 3px;">media.retention_days — rejected by the storage service</div>
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 11px; min-height: 32px; margin-top: 7px; cursor: pointer;">Retry this one</button>
+            </div>
+            <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB;">◦ 108 not attempted</div>
+              <div style="font-size: 11px; line-height: 1.55; color: #C9C5BB; margin-top: 3px;">The run stopped before reaching them. Nothing about them has changed.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 6px 11px; min-height: 32px; margin-top: 7px; cursor: pointer;">Continue with the remaining 108</button>
+            </div>
+          </div>
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">The 84 were not rolled back, and that is deliberate.</strong> These are separate settings, not one transaction. Undoing good changes because a later one failed would leave you in a state you never chose — and half of them are already affecting live conversations.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">O05 — a file from a newer version</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">This file is from a newer version of the platform</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">The file was written by <strong style="font-weight: 600;">v4.6</strong>; this workspace runs <strong style="font-weight: 600;">v4.3</strong>. It may contain keys and value shapes this version does not understand.</div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Nothing was read from it and no partial import is offered — applying the half we recognise would leave a configuration neither version intended. Export again from a v4.3 workspace, or wait for this one to be upgraded.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">O04 — applying only the valid subset</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Apply 193 of 201?</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Three rows cannot be applied and five you have left unticked. They stay in the file with their annotations, and nothing about them is merged, guessed or silently skipped — the results screen will list them as not attempted.</p>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-size: 11px; line-height: 1.6;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #F5A7A7; font-weight: 700;">✕</span><span style="font-family: ui-monospace, monospace; color: #E0A0A0; overflow-wrap: anywhere;">auth.password.min_length · auth.sso.client_secret · media.legal_hold_days</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #F0B54A; font-weight: 700;">⚠</span><span style="color: #E8C25A;">5 unticked by you, including turning off the SMS channel</span></div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply the 193</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to the list</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">O04 — applying only the valid subset</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Apply 193 of 201?</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Three rows cannot be applied and five you have left unticked. They stay in the file with their annotations, and nothing about them is merged, guessed or silently skipped — the results screen will list them as not attempted.</p>
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 9px; font-size: 11px; line-height: 1.6;">
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #B32B2B; font-weight: 700;">✕</span><span style="font-family: ui-monospace, monospace; color: #7A3232; overflow-wrap: anywhere;">auth.password.min_length · auth.sso.client_secret · media.legal_hold_days</span></div>
+            <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px;"><span style="color: #8F5F08; font-weight: 700;">⚠</span><span style="color: #8F5F08;">5 unticked by you, including turning off the SMS channel</span></div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply the 193</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Back to the list</button></div>
+        </div>
+      </div>
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">O07 — this workspace only</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">The file names a different workspace</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">It was exported from <strong style="font-weight: 600;">Habesha Bet</strong>. You can still apply its values here — they are just settings — but it will import into <strong style="font-weight: 600;">NA BET</strong>, the only workspace you administer. There is no way to send configuration the other way.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 read-only — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 16 §9 · owner ruling</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Settings are read-only at 375 and a bulk import is the last thing that should be an exception — but the <em>result</em> of a run is worth reading from anywhere, so the results worklist renders in full and only its actions are inert.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="O 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Settings</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Config import</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Importing needs a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Two hundred changes are not a phone review. The result of the last run reads here in full.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Last run · 31 Jul, 16:20</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">staging-config-jul.json · Sara Bekele</div>
+              <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 10px;">
+                <div style="border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #156F45;">✓ 84 applied</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Live now, each with its own audit entry.</div></div>
+                <div style="border: 1px solid #EFC7C7; background: #FBE5E5; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #8E2222;">✕ 1 failed</div><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #7A3232; margin-top: 2px;">media.retention_days</div></div>
+                <div style="border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #4A4842;">◦ 108 not attempted</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Unchanged. Nothing was rolled back.</div></div>
+                <div style="display: flex; flex-direction: column; gap: 8px;"><button style="font-family: inherit; width: 100%; background: #EEECE6; color: #ADA89D; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px;">Retry the failed one</button><button style="font-family: inherit; width: 100%; background: #EEECE6; color: #ADA89D; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px;">Continue with the remaining 108</button><div style="font-size: 11px; color: #6B675D;">Both need a larger screen.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="O 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ቅንብሮች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ውቅር ማስገባት</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስገባት ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">200 ለውጦችን በስልክ መገምገም አይቻልም። የመጨረሻው ሩጫ ውጤት ግን እዚህ ይነበባል።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">የመጨረሻው ሩጫ · ሐምሌ 31፣ 16:20</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">staging-config-jul.json · ሳራ በቀለ</div>
+              <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 10px;">
+                <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #5AD190;">✓ 84 ተተግብረዋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">አሁን በሥራ ላይ ናቸው፤ እያንዳንዱ የራሱ መዝገብ አለው።</div></div>
+                <div style="border: 1px solid #6B3838; background: #3D1B1B; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">✕ 1 አልተሳካም</div><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #E0A0A0; margin-top: 2px;">media.retention_days</div></div>
+                <div style="border: 1px solid #343430; border-radius: 7px; padding: 9px 11px;"><div style="font-size: 12px; font-weight: 600; color: #C9C5BB;">◦ 108 አልተሞከሩም</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">ምንም አልተቀየረም። የተተገበሩትም አልተመለሱም።</div></div>
+                <div style="display: flex; flex-direction: column; gap: 8px;"><button style="font-family: inherit; width: 100%; background: #282822; color: #6B6860; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px;">ያልተሳካውን እንደገና ሞክር</button><button style="font-family: inherit; width: 100%; background: #282822; color: #6B6860; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px;">የቀሩትን 108 ቀጥል</button><div style="font-size: 11px; color: #A6A296;">ሁለቱም ሰፊ ማያ ገጽ ይፈልጋሉ።</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> O01 (export with its content summary and the three exclusions stated as prominently as the inclusions — §A light), O02 (diff table grouped by area, per-row checkboxes with tri-state group headers, a validation badge on every row — §A dark), O03 (progress, then the three-list results with audit links — §B both themes, §C both themes), O04 (partial apply, valid subset only, nothing merged silently — §B both themes), O05 (version incompatibility with the delta named and no partial-schema attempt — §B both themes), O06 (mid-apply failure with applied / failed / not-attempted separated and the no-rollback reasoning — §B both themes, §C both themes), O07 (cross-tenant stated, not mysteriously failed — §A light, §B both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> none. 375 is read-only per the ruling, with the results worklist fully legible.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the no-rollback explanation is copy doing engineering's job. It is the right behaviour and the screen defends it well, but an operator who disagrees has no recourse in this design — there is no “undo this run”. If you want one, it is a real feature with its own reverse-diff and its own confirm, not a button; worth deciding now rather than after someone asks for it mid-incident.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

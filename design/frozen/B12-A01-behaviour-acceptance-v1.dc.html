@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B12-A01-behaviour-acceptance-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Nine behaviours, handed to build acceptance</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 860px; text-wrap: pretty;">These nine rows cannot be proved by a still frame. Each one below states what must be true, how a builder demonstrates it, and the document it answers to. In the combined audit they close as <strong style="font-weight: 600;">handed to build acceptance</strong> — not as ✅ designed. Nothing here is a new requirement; every line traces to a passage that already exists.</p>
+  </header>
+
+  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="9">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #6B675D;">{{ r.n }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ r.t }}</span>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">{{ r.d }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0;">
+        <div style="padding: 12px 16px; border-right: 1px solid #F0EEE9;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">What must be true</div>
+          <div style="font-size: 12.5px; color: #1D1C18; line-height: 1.6;">{{ r.must }}</div>
+        </div>
+        <div style="padding: 12px 16px; background: #FBFAF8;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">How it is demonstrated</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ r.proof }}</div>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 10px; padding: 16px 18px;">
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #7E650F;">Two of these carry a design consequence worth naming now. <strong style="font-weight: 600;">RTL</strong> is not exercised by Amharic, which is left-to-right — it only bites if a tenant ever ships Arabic, so the cost of ignoring it is a rebuild, not a bug. And <strong style="font-weight: 600;">focus order</strong> is the one an eight-hour agent feels every day: if tab order in the composer and the property panel doesn't match reading order, the keyboard shortcuts the design promises are worth nothing.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROWS = [
+  ["Focus system", "Doc 07 §13",
+   "Every interactive element takes visible focus, in reading order, in both themes. Dialogs, sheets and the ⌘K palette trap focus while open and return it to the control that opened them on close. The focus ring is never removed for aesthetics.",
+   "Keyboard-only pass through the inbox: tab from top bar to views to list to thread to composer to panel, open and dismiss each dialog and sheet, and confirm focus lands back where it started. Recorded once per theme."],
+  ["Landmarks + skip links", "Doc 07 §13",
+   "The four regions are announced as landmarks, and a skip link jumps past the views rail straight into the list.",
+   "Screen-reader landmark list names R1–R4. First tab press on a cold load reveals the skip link."],
+  ["Bidi / RTL-ready layout", "Doc 04 §14 · Doc 07 §14",
+   "Layout mirrors under a right-to-left locale: rail, list, thread and panel reverse; bubbles swap sides; icons that carry direction flip, icons that don't stay put. Amharic is left-to-right and does not exercise this.",
+   "Force an RTL locale and screenshot the four regions. No clipped text, no reversed timestamps, no bubbles on the wrong side."],
+  ["List — row enter / leave", "Doc 07 FR-11 · Doc 07 AC-03",
+   "Rows entering and leaving the live list animate within the motion tokens and honour reduced-motion. A row never moves under a pointer or thumb that is already on it.",
+   "Drive live updates into a scrolled list and confirm the resort hold, the animation, and that reduced-motion disables it."],
+  ["Composer — optimistic send", "Doc 07 FR-21 · Doc 04 FR-13",
+   "The bubble appears immediately in sending state, settles to sent on acknowledgement, and reconciles to failed with its reason if the send loses. No duplicate on retry.",
+   "Send with a throttled network; confirm one bubble through all three states, and that a retry after failure produces one message, not two."],
+  ["Composer — attachment caps", "Doc 07 FR-18 · Doc 04 §8, EC-02",
+   "Per-channel size and type caps are enforced before upload, with the refusal naming the cap and the channel. The 25 MB Telegram figure shown in the attachment sheet is one instance, not the rule.",
+   "Attempt an over-cap and a wrong-type file on each channel; the refusal states the limit and nothing is uploaded."],
+  ["Store recovery", "Doc 07 FS-05",
+   "A corrupt or unreadable local store recovers to a working session without losing queued sends, and tells the agent plainly that it rebuilt.",
+   "Corrupt the store, reload, confirm the session rebuilds and queued sends survive or are reported as lost — never silently dropped."],
+  ["Draft survives merge", "Doc 07 EC-12 · Doc 04 AC-08",
+   "A draft on a ticket that is merged away moves to the surviving ticket and says so with an info chip.",
+   "Type a draft, merge the ticket from another session, confirm the draft is on the survivor with its chip."],
+  ["Live-region announcements", "Doc 07 §13 · Doc 04 §13 · Doc 07 AC-03, AC-07",
+   "Status transitions, refusals, bulk progress at 25% increments, new-message arrivals and offline flush are announced to assistive technology — not conveyed by tint or movement alone. The roles are marked in the designs; being marked is not being spoken.",
+   "Screen-reader run through: change a status, trigger a refusal, run a bulk close, go offline and back. Each event is heard once, in order, without flooding."]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { rows: ROWS.map((r, i) => ({ n: "AC-" + ("0" + (i + 1)).slice(-2), t: r[0], d: r[1], must: r[2], proof: r[3] })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-A01-behaviour-acceptance-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 4 — build acceptance rows</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Requirements a static screen cannot hold, written so the build can be checked against them. Same shape as <span style="font-family: ui-monospace, monospace; font-size: 13px;">B12-A01</span> and <span style="font-family: ui-monospace, monospace; font-size: 13px;">B3-A01</span>: what must be true, how it is demonstrated, and the passage it answers to. This list grows as the batch runs and closes with it.</p>
+  </header>
+
+  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="2">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #6B675D;">{{ r.n }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ r.t }}</span>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">{{ r.d }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
+        <div style="padding: 12px 16px; border-right: 1px solid #F0EEE9;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">What must be true</div>
+          <div style="font-size: 12.5px; color: #1D1C18; line-height: 1.6;">{{ r.must }}</div>
+        </div>
+        <div style="padding: 12px 16px; background: #FBFAF8;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">How it is demonstrated</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ r.proof }}</div>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 880px;">Both rows here protect the same thing from two directions. A stale RG read means an agent acts on a flag that was cleared an hour ago, or misses one set five minutes ago — and the design cannot show freshness, only the build can guarantee it. The export is the other half: the flag's value to compliance is the trail, and a trail that cannot leave the system is not a trail.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROWS = [
+  ["AC-B4-01", "RG flag reads are never cached", "Doc 08 NFR-06, SEC-01, T-05 · Doc 03 recommendation 4",
+   "Every read of the responsible-gaming flag bypasses every cache and returns the current value. A flag set or cleared moments ago is correct on the next panel open, on every surface that shows it, for every permitted viewer — and for staff without the permission the columns are never loaded at all, so there is nothing cached to leak either.",
+   "Set a flag and immediately read the panel, the profile page and the directory filter from a second session: all three show it. Clear it and repeat. Then hit the panel endpoint as an unpermitted role and assert the response has no rg keys — absent, not null. Run it against a warm cache; a passing result on a cold one proves nothing."],
+  ["AC-B4-02", "Flag history exports whole, with authors and reasons", "Doc 08 FR-15, US-05, SEC-04, T-05",
+   "Every set and every clear is exportable with its author, timestamp, reason and source — manual or detection — including entries whose flag has since been cleared. The history is insert-only: nothing in the product deletes or edits a past entry, and an export run twice a year apart still contains the same early rows.",
+   "Seed a customer with set, AI-set and clear entries; export as a compliance role and diff against the table. Attempt an edit and a delete through every available path and assert both fail. Confirm the export carries the triggering excerpt reference for AI-set entries, and that an unpermitted role cannot run it at all."],
+  ["AC-B4-03", "The inline-edit announce cycle is spoken, not just marked", "Doc 08 §13, FR-21 · admitted by the owner's reopen of B4-A01",
+   "Editing a profile field in place is completable and comprehensible without sight. The field is reachable by keyboard and announces its label and current value on focus; entering edit mode is announced; Escape cancels and says so; saving announces both the outcome and the new provenance — “saved, staff, you, just now” — so the agent hears that the value is now theirs rather than the channel's. A save that fails announces the failure and the value it reverted to.",
+   "Screen-reader run on NVDA and VoiceOver over the panel and the profile page: tab to a field, edit, cancel, edit again, save, and force a save failure. Each of the five moments must be spoken once, in order, without the region re-reading the whole card. Run it on both viewports — the 375 sheet has the same contract, and its larger targets do not change what is announced."]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { rows: ROWS.map(r => ({ n: r[0], t: r[1], d: r[2], must: r[3], proof: r[4] })) };
+  }
+}
+</script>
+</body>
+</html>

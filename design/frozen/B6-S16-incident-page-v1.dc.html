@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S16-incident-page-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows P01–P04</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The incident page</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Four rows, and the whole batch's mobile rule is really about this one screen. It is designed for a specific person: <strong style="font-weight: 600;">an operator woken at two in the morning, holding a phone in one hand</strong>, who needs to stop something in under a minute and be able to explain it at nine. Every decision here follows from that.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">So: <strong style="font-weight: 600;">one page</strong>, not three linked by a breadcrumb — AI kill switches, rules-pause and module flags together, because in an incident you do not know yet which one you need. <strong style="font-weight: 600;">The consequence is named before the tap</strong>, never after. And the page keeps a plain-language record of what is currently stopped, who stopped it and when, so the morning after reads itself.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the flags themselves are <a href="B6-S13-feature-flags-v1.dc.html">B6-S13</a>'s, surfaced here rather than rebuilt.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">One page, every stop control — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows P01, P02, P04 · Doc 16 §8, AC-10 · Doc 12 R-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light is the page at rest — nothing stopped, which is how it should look almost always. Dark is fifteen minutes into an incident: the AI is off, automation is paused, and the page has become the record of what was done.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · at rest</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P01 · P02</span></div>
+    <div data-screen-label="P01 incident at rest light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; padding: 5px 11px;">◼ Stop controls</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+          <div style="min-width: 0;">
+            <h1 style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Stop controls</h1>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 3px;">Everything that can be paused or switched off, on one page. Reached today from the flags screen's “all stop buttons” link; the ◼ top-bar button shown here is the proposed second route.</div>
+          </div>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #E4F4EA; color: #156F45; font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 999px;">● Nothing is stopped</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.features.manage</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 16px; flex: none;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">AI</div>
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18; margin-top: 5px;">Stop the chatbot answering</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Customers keep writing and everything is stored. Their messages go straight into the queue for a human instead of getting an AI reply.</p>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 8px;">Now: answering ~740 first messages a day</div>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Stop the chatbot</button>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">AI</div>
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18; margin-top: 5px;">Stop suggesting replies to agents</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Copilot disappears from the composer. Agents carry on writing by hand; nothing they have drafted is lost.</p>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 8px;">Now: 41 agents used it this week</div>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Stop Copilot</button>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Automation</div>
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18; margin-top: 5px;">Pause all automatic rules</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Routing, escalations, auto-replies and scheduled sends stop firing. Work that would have triggered a rule waits in a list you can run later.</p>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 8px;">Now: 11 rules live · ~340 firings a day</div>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Pause the rules</button>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px; margin-top: 14px; flex: none;">
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Channels</span>
+            <span style="font-size: 11.5px; color: #6B675D;">Turning one off parks incoming messages — nothing is lost, and customers get no error</span>
+            <a href="B6-S13-feature-flags-v1.dc.html" style="margin-left: auto; font-size: 11.5px; font-weight: 600;">All feature flags →</a>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 12px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>On</span></div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 4px;">3 bots · ~1,200 a day</div>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 44px; margin-top: 9px; cursor: pointer;">Stop</button>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Live Chat</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>On</span></div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 4px;">1 widget · ~340 a day</div>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 44px; margin-top: 9px; cursor: pointer;">Stop</button>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">SMS</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>On</span></div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 4px;">~180 a day</div>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 44px; margin-top: 9px; cursor: pointer;">Stop</button>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px 13px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Outgoing messages</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>On</span></div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 4px;">Everything the platform sends</div>
+              <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 44px; margin-top: 9px; cursor: pointer;">Hold all sends</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; flex: none;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Nothing here deletes anything</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Every control on this page stops something happening. None of them removes data, configuration or conversations. Whatever arrives while a channel is stopped is parked and delivered when you turn it back on, and the page tells you how much is waiting.</p>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Recently stopped</div>
+            <div style="font-size: 11.5px; line-height: 1.7; color: #4A4842; margin-top: 6px;">29 Jul, 21:10 — Voice Messages stopped by Dawit Bekele, still off</div>
+            <div style="font-size: 11.5px; line-height: 1.7; color: #6B675D;">14 Jun, 08:02 — Chatbot paused by Sara Bekele, resumed after 22 minutes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · fifteen minutes in</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P04 · Amharic chrome</span></div>
+    <div data-screen-label="P04 incident live dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 340px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #F0B54A; border: 1px solid #6B551A; background: #3A2D10; border-radius: 6px; padding: 5px 11px;">◼ 2 stopped</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+          <div style="min-width: 0;">
+            <h1 style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">የማቆሚያ መቆጣጠሪያዎች</h1>
+            <div style="font-size: 12px; color: #A6A296; margin-top: 3px;">ማቆም የሚቻለው ሁሉ በአንድ ገጽ።</div>
+          </div>
+          <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #3A2D10; color: #F0B54A; font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 999px;">◼ ሁለት ነገር ቆሟል</span>
+        </div>
+
+        <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 10px; padding: 14px 16px; margin-top: 14px; flex: none;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #F0B54A;">አሁን የቆመው ምንድን ነው</div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px;">
+            <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቻትቦት — ከ21:48 ጀምሮ ጠፍቷል</div>
+              <div style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB; margin-top: 3px;">ያቆመው ዳዊት በቀለ · ከ15 ደቂቃ በፊት። 186 መልእክቶች በቀጥታ ወደ ወረፋ ገብተዋል፤ ወኪሎች እየመለሱ ናቸው።</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 7px 13px; min-height: 36px; margin-top: 9px; cursor: pointer;">እንደገና አስጀምር</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ራስ-ሰር ሕጎች — ከ21:49 ጀምሮ ቆመዋል</div>
+              <div style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB; margin-top: 3px;">ያቆመው ዳዊት በቀለ · ከ14 ደቂቃ በፊት። 32 ሕጎች ሊሠሩ ሲገባ ጠብቀዋል፤ ሲመለሱ በቅደም ተከተል ይሠራሉ።</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 7px 13px; min-height: 36px; margin-top: 9px; cursor: pointer;">ሕጎቹን መልስ</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; flex: none;">
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">AI</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4; margin-top: 5px;">ለወኪሎች የሚሰጠውን ሐሳብ አቁም</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">Copilot ከመጻፊያው ይጠፋል። ወኪሎች በእጃቸው ይጽፋሉ፤ የተጀመረ ረቂቅ አይጠፋም።</p>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">Copilot አቁም</button>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">ቻናሎች</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4; margin-top: 5px;">የወጪ መልእክቶችን ያዝ</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">መድረኩ የሚልከው ሁሉ ይቆማል። ደንበኞች መጻፍ ይቀጥላሉ፤ መልስ ግን አይደርሳቸውም።</p>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">ሁሉንም ላኪ ያዝ</button>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">ቻናሎች</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4; margin-top: 5px;">ቴሌግራምን አቁም</div>
+            <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">3 ቦቶች · በቀን ~1,200። የሚመጡ መልእክቶች ይቆማሉ እንጂ አይጠፉም።</p>
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 11px; cursor: pointer;">ቴሌግራም አቁም</button>
+          </div>
+        </div>
+
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px; margin-top: 14px; flex: none;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ማን ምን አደረገ</div>
+          <div style="display: grid; grid-template-columns: 112px minmax(0, 2fr) minmax(0, 1fr); gap: 10px; margin-top: 10px; padding-bottom: 7px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">መቼ</span>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ምን</span>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ማን</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 112px minmax(0, 2fr) minmax(0, 1fr); gap: 10px; padding: 8px 0; border-bottom: 1px solid #262622; font-size: 11.5px; align-items: center;">
+            <span style="color: #A6A296;">21:49</span><span style="color: #ECEAE4;">ራስ-ሰር ሕጎች ቆሙ — “AI ተሳስቶ ትኬቶችን እየዘጋ ነው”</span><span style="color: #C9C5BB;">ዳዊት በቀለ</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 112px minmax(0, 2fr) minmax(0, 1fr); gap: 10px; padding: 8px 0; border-bottom: 1px solid #262622; font-size: 11.5px; align-items: center;">
+            <span style="color: #A6A296;">21:48</span><span style="color: #ECEAE4;">ቻትቦት ጠፋ — “ተሳሳተ መልስ ለ40 ደንበኞች ልኳል”</span><span style="color: #C9C5BB;">ዳዊት በቀለ</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 112px minmax(0, 2fr) minmax(0, 1fr); gap: 10px; padding: 8px 0; font-size: 11.5px; align-items: center;">
+            <span style="color: #A6A296;">21:46</span><span style="color: #C9C5BB;">የመጀመሪያው ማንቂያ — AI ያልተለመደ ባህሪ</span><span style="color: #C9C5BB;">ራስ-ሰር</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375, phone-first — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows P03, P04 · Doc 16 §9, SS-04 · Batch 6 Step 2</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The document's own deliberate exception, and the one place in this batch where the phone is the primary viewport rather than a reduction of the desktop. Stop buttons are 56 px, not 44; the consequence sits above the button, not behind a tooltip; and the confirm is full-screen with the destructive action at the bottom where a thumb reaches it — but requiring a deliberate second tap, never a swipe.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · the page</div>
+        <div data-screen-label="P03 incident 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 16px; font-weight: 600; color: #1D1C18;">Stop controls</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;">● All running</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Stop the chatbot answering</div>
+              <p style="margin: 5px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842;">Customers keep writing. Their messages go to the queue for a human instead of an AI reply. Nothing is lost.</p>
+              <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; margin-top: 11px; cursor: pointer;">Stop the chatbot</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; margin-top: 10px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Pause all automatic rules</div>
+              <p style="margin: 5px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842;">Routing, escalations and scheduled sends stop firing. What would have triggered waits in a list.</p>
+              <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; margin-top: 11px; cursor: pointer;">Pause the rules</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; margin-top: 10px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Hold everything we send</div>
+              <p style="margin: 5px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842;">Every outgoing message waits. Customers can still write to you.</p>
+              <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; margin-top: 11px; cursor: pointer;">Hold all sends</button>
+            </div>
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Nothing here deletes anything</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #4A4842; margin-top: 3px;">Every control stops something happening. Messages that arrive while something is stopped are parked and delivered afterwards.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; margin-top: 10px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Channels</div>
+              <p style="margin: 5px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842;">Stopping one parks what arrives. Customers see no error and nothing is lost.</p>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Telegram</div><div style="font-size: 12px; color: #6B675D; margin-top: 2px;">3 bots · ~1,200 a day</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">Stop</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px; border-top: 1px solid #F0EEE9; padding-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Live Chat</div><div style="font-size: 12px; color: #6B675D; margin-top: 2px;">1 widget · ~340 a day</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">Stop</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px; border-top: 1px solid #F0EEE9; padding-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">SMS</div><div style="font-size: 12px; color: #6B675D; margin-top: 2px;">~180 a day</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">Stop</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · full-screen confirm</div>
+        <div data-screen-label="P03 confirm 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ዝጋ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+            <div style="min-width: 0;"><div style="font-size: 16px; font-weight: 600; color: #ECEAE4;">ቻትቦትን ማቆም</div></div>
+          </div>
+          <div style="padding: 14px 12px; flex: 1;">
+            <div style="font-size: 15px; line-height: 1.8; color: #ECEAE4;">ቻትቦቱ መመለስ ያቆማል። ደንበኞች መጻፋቸውን ይቀጥላሉ፤ መልእክቶቻቸው በቀጥታ ወደ ወኪሎች ወረፋ ይገባሉ።</div>
+            <div style="display: flex; flex-direction: column; gap: 9px; margin-top: 13px;">
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #5AD190;">✓</span><span style="font-size: 13px; line-height: 1.8; color: #C9C5BB;">ምንም አይጠፋም። ሁሉም መልእክት ተከማችቶ ይቆያል።</span></div>
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #F0B54A;">!</span><span style="font-size: 13px; line-height: 1.8; color: #C9C5BB;">በቀን ~740 መልእክቶች ወደ 12 ወኪሎች ወረፋ ይታከላሉ።</span></div>
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #C9C5BB;">↺</span><span style="font-size: 13px; line-height: 1.8; color: #C9C5BB;">በማንኛውም ጊዜ በአንድ ንክኪ መመለስ ይችላሉ።</span></div>
+            </div>
+            <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 11px 12px; margin-top: 13px;">
+              <div style="font-size: 12.5px; line-height: 1.8; color: #C9C5BB;">ውሳኔዎ በስምዎና በሰዓቱ ይመዘገባል፤ ጠዋት ላይ ማን ምን እንዳደረገ ግልጽ ይሆናል።</div>
+            </div>
+          </div>
+          <div style="border-top: 1px solid #343430; padding: 12px; display: flex; flex-direction: column; gap: 9px;">
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; cursor: pointer;">አዎ፣ ቻትቦቱን አቁም</button>
+            <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 15px; font-weight: 500; min-height: 56px; cursor: pointer;">ተወው</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · full-screen confirm</div>
+        <div data-screen-label="P03 confirm 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Close" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+            <div style="min-width: 0;"><div style="font-size: 16px; font-weight: 600; color: #1D1C18;">Hold all sends</div></div>
+          </div>
+          <div style="padding: 14px 12px; flex: 1;">
+            <div style="font-size: 15px; line-height: 1.6; color: #1D1C18;">Everything the platform would send stops leaving. Customers can still write to you, and agents can still work.</div>
+            <div style="display: flex; flex-direction: column; gap: 9px; margin-top: 13px;">
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #156F45;">✓</span><span style="font-size: 13px; line-height: 1.6; color: #4A4842;">Nothing is lost — replies queue and go out when you release them.</span></div>
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #8F5F08;">!</span><span style="font-size: 13px; line-height: 1.6; color: #4A4842;">41 conversations are waiting on a reply right now. Those people will hear nothing until you release.</span></div>
+              <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px;"><span style="font-size: 13px; color: #8F5F08;">!</span><span style="font-size: 13px; line-height: 1.6; color: #4A4842;">Reply windows keep closing while sends are held. 6 of those conversations close within the hour.</span></div>
+            </div>
+            <div style="background: #EEECE6; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 11px 12px; margin-top: 13px;">
+              <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842;">Recorded with your name and the time. The morning after should read itself.</div>
+            </div>
+          </div>
+          <div style="border-top: 1px solid #E5E2DB; padding: 12px; display: flex; flex-direction: column; gap: 9px;">
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #B32B2B; border: 1.5px solid #E3B6B6; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; cursor: pointer;">Yes, hold all sends</button>
+            <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 10px; font-size: 15px; font-weight: 500; min-height: 56px; cursor: pointer;">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · the morning after</div>
+        <div data-screen-label="P04 incident 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 16px; font-weight: 600; color: #ECEAE4;">የማቆሚያ መቆጣጠሪያዎች</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;">◼ 2</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 10px; padding: 12px;">
+              <div style="font-size: 14px; font-weight: 600; color: #F0B54A;">አሁን ሁለት ነገር ቆሟል</div>
+              <div style="font-size: 12.5px; line-height: 1.8; color: #E8C25A; margin-top: 4px;">ቻትቦት እና ራስ-ሰር ሕጎች። ሁለቱንም ያቆመው ዳዊት በቀለ ትናንት 21:48 እና 21:49።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ቻትቦት</div>
+              <div style="font-size: 12.5px; line-height: 1.8; color: #C9C5BB; margin-top: 3px;">ከ11 ሰዓት ጀምሮ ጠፍቷል · 186 መልእክቶች ወደ ወረፋ ገብተዋል</div>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; margin-top: 10px; cursor: pointer;">እንደገና አስጀምር</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ራስ-ሰር ሕጎች</div>
+              <div style="font-size: 12.5px; line-height: 1.8; color: #C9C5BB; margin-top: 3px;">32 ሕጎች ጠብቀዋል · ሲመለሱ በቅደም ተከተል ይሠራሉ</div>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; min-height: 56px; margin-top: 10px; cursor: pointer;">ሕጎቹን መልስ</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ቻናሎች</div>
+              <div style="font-size: 12.5px; line-height: 1.8; color: #C9C5BB; margin-top: 3px;">ሦስቱም እየሠሩ ናቸው። ማቆም የሚመጡትን ያቆማል እንጂ አያጠፋም።</div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ቴሌግራም</div><div style="font-size: 12px; color: #A6A296; margin-top: 2px;">3 ቦቶች · በቀን ~1,200</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">አቁም</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px; border-top: 1px solid #262622; padding-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ቀጥታ ውይይት</div><div style="font-size: 12px; color: #A6A296; margin-top: 2px;">በቀን ~340</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">አቁም</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px; border-top: 1px solid #262622; padding-top: 11px;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">SMS</div><div style="font-size: 12px; color: #A6A296; margin-top: 2px;">በቀን ~180</div></div>
+                <button style="font-family: inherit; margin-left: auto; background: transparent; color: #F08A8A; border: 1.5px solid #6B3838; border-radius: 10px; font-size: 14px; font-weight: 600; padding: 0 20px; min-height: 56px; flex: none; cursor: pointer;">አቁም</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> P01 (AI kill switches, rules-pause and channel flags on one page — §A both themes, §B both themes), P02 (<strong style="font-weight: 600;">partially delivered</strong>: the flags screen's “all stop buttons” link exists and is live in <a href="B6-S13-feature-flags-v1.dc.html">B6-S13</a>, and this page carries the ◼ affordance in its own top bar. The second route AC-10 implies — that button on <em>every</em> Backoffice screen — is not in the delivered files; see the note below), P03 (phone-first: 56 px stop buttons, consequence above the button, full-screen confirms with a deliberate second tap — §B, confirms in both themes), P04 (state after the stop — what is off, what is parked, who and when — §A dark, §B dark, and the recently-stopped card in §A light).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Open — P02 needs your word.</strong> Doc 16 AC-10 requires this page within two clicks from anywhere in Backoffice. One route exists. The other is a ◼ button in the shared top bar, which means editing S11, S12, S13 and S15 — approved files — so I have drawn it here and left them alone. Say the word and it becomes a scope-limited reopen with a version bump on each; otherwise AC-10 is met by one route only and should be recorded as such.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> stop buttons at 375 are 56 px rather than the 44 px floor. The floor is a minimum and this is deliberately above it — a half-asleep thumb in the dark is the design case the document names. Flagged as a deviation from the component's desktop metric, per the program rule.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the hold-all-sends confirm tells the operator that reply windows keep closing while sends are held, and that six conversations will close within the hour. That is the sort of consequence nobody thinks of at 2 a.m. and everybody asks about at 9 — but it needs the window calculation to be live at confirm time. If your engineers would rather not compute it there, the honest fallback is “reply windows keep closing while sends are held” without the number, and I would keep the sentence either way.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

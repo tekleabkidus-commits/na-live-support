@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S08-cross-cutting-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Cross-cutting proof</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows I01–I08 · Doc 08 §13, §14 · Batch 4 prompt Step 1 and design rules. These rows are audited as their own set so nothing is proved on one viewport, one theme or one language. Most are satisfied by screens already delivered and are listed here pointing at them; two have no home elsewhere and are drawn.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">I08 · Phone numbers — stored one way, shown another</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §14 · E.164 stored, national shown</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — the same number in three places</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Identity row</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">091 234 4417</span></div>
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">While adding it</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px;"><span style="font-size: 12px; color: #6B675D;">🇪🇹 +251</span><span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">91 234 4417</span></span></div>
+          <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">In the SMS receipt</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">+251 91 ••• 4417</span></div>
+          <div style="padding: 11px 14px; display: flex; align-items: center; gap: 9px; background: #FBFAF8;"><span style="font-size: 12.5px; font-weight: 600; color: #4A4842;">Stored</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 12.5px; color: #6B675D;">+251912344417</span></div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">One value, three renderings, each right for its job: national format where an agent reads it aloud, the country picker where they type it, masked where it is quoted back to a customer, and E.164 underneath so matching and search never depend on how somebody typed it.</div>
+      </div>
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — a number from outside Ethiopia</div>
+        <div style="width: 380px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+          <div style="background: #171715; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; align-items: flex-start; gap: 9px;"><span style="flex: none; font-size: 12px; color: #C9C5BB; margin-top: 1px;">☎</span><div style="flex: 1 1 auto; min-width: 0;"><div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 11px; color: #A6A296;">🇰🇪</span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4;">0722 118 340</span></div><div style="font-size: 10.5px; color: #A6A296; margin-top: 3px;">added by Dawit Bekele · 28 Jul</div></div></div>
+            <div style="padding: 10px 12px; display: flex; align-items: flex-start; gap: 9px;"><span style="flex: none; font-size: 12px; color: #C9C5BB; margin-top: 1px;">☎</span><div style="flex: 1 1 auto; min-width: 0;"><div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 11px; color: #A6A296;">🇪🇹</span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4;">091 234 4417</span></div><div style="font-size: 10.5px; color: #A6A296; margin-top: 3px;">from the pre-chat form · 12 Jul</div></div></div>
+          </div>
+          <div style="font-size: 11.5px; color: #A6A296; line-height: 1.65; margin-top: 10px;">The country is shown, never assumed. A Kenyan number formatted as if it were Ethiopian is a number an agent will misdial, and the flag is what stops the guess.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">I07 · What a keyboard reaches, and what gets said</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §13</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — inline edit, focused and saving</div>
+        <div style="width: 400px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+          <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">Country</span><span style="display: flex; align-items: center; border: 2px solid #2F5AC8; border-radius: 8px; padding: 0 11px; min-height: 40px; font-size: 12.5px; color: #1D1C18;">Ethiopia<span style="margin-left: auto; color: #6F6A61;">▾</span></span></label>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Save</button>
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 6px; cursor: pointer;">Cancel</button>
+            <span role="status" style="margin-left: auto; font-size: 11px; color: #156F45;">Saved · staff · you · just now</span>
+          </div>
+          <div style="font-size: 11px; color: #6B675D; line-height: 1.65; margin-top: 11px;">Tab reaches the field, Enter opens it, Escape cancels without saving, and the result is announced rather than only appearing. The provenance line is the announcement — an agent hears that the value is now theirs.</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — what each region announces</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Merge diff radios</span><span style="font-size: 11.5px; color: #4A4842; line-height: 1.6;">“Name: keep አበበ ታደሰ from the surviving profile, or Abel Tesfaye from the merged profile”</span></div>
+          <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Consequences</span><span style="font-size: 11.5px; color: #4A4842; line-height: 1.6;">Read as a list with its counts — “6 items: 17 tickets move…”</span></div>
+          <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">RG banner</span><span style="font-size: 11.5px; color: #4A4842; line-height: 1.6;">A note region, with the script link named as a link — for permitted viewers only, and silent for everyone else</span></div>
+          <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Copy-on-click</span><span style="font-size: 11.5px; color: #4A4842; line-height: 1.6;">A button, and “Copied” spoken on success</span></div>
+          <div style="padding: 10px 14px; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Tombstone</span><span style="font-size: 11.5px; color: #4A4842; line-height: 1.6;">The redirect is announced on arrival, not left as a visual card</span></div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 520px; line-height: 1.5;">Marked in the markup across the delivered screens. Whether a screen reader actually speaks them is a build-acceptance question, and it belongs in <span style="font-family: ui-monospace, monospace; font-size: 12px;">B4-A01</span> rather than being claimed here.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">I05 · Nothing carried by colour alone</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Batch 4 prompt design rules</span>
+    </div>
+    <div style="max-width: 1100px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 15px 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #FBE5E5; color: #B32B2B; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">Blocked</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #ECEEF1; color: #414B57; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">◈ Responsible gaming</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #FCF0D9; color: #8F5F08; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">◷ stale</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #E7EFFE; color: #1D4FD7; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">also on 2 other profiles</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">retired field</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">inactive</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">unreachable</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px dashed #CFCBC1; color: #6F6A61; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">shell</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11.5px; font-weight: 600; border-radius: 4px; padding: 4px 9px;">Staff-collected</span>
+    </div>
+    <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 1100px; line-height: 1.5;">Every state Batch 4 introduces, as it actually renders. Each is a word; three add a glyph. Printed in grey or read aloud, none of them loses its meaning — which is the test, not whether the palette is distinguishable.</div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">I01–I04, I06 · Proved by the screens, listed here</h2>
+    </div>
+    <div style="max-width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 210px minmax(0, 1fr) 240px; gap: 14px; padding: 13px 16px; border-bottom: 1px solid #F0EEE9; align-items: start;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ r.t }}</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ r.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; line-height: 1.6;">{{ r.where }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROWS = [
+  ["I01 · Both viewports", "1440 and 375 for every screen in the batch — the panel as slot and as sheet, the profile page single-column, merge full-screen, the directory as cards.", "B4-S01 – B4-S07"],
+  ["I02 · Both themes", "Light and dark complete on every screen set, including the two RG views drawn in both so the absence rule can be checked in either.", "B4-S01 – B4-S07"],
+  ["I03 · Both languages", "Real Amharic including long strings: a three-part name in the panel header, a two-line pinned note, the merge confirm step, the tombstone, the language-detection chip, and directory search matching Amharic on its own terms. Flagged for native review.", "B4-S01 · S02 · S04 · S06 · S07"],
+  ["I04 · 44px touch targets", "Every interactive element at 375, including inside the merge steps and the unlink confirmation. Desktop panels use the approved 36px metric from B1-DS-v2's addendum.", "B4-S01 – B4-S07"],
+  ["I06 · Batch 1 consistency", "The panel fits the approved context-panel slot unchanged — 380px, tab order, tab treatment, badge dot. Reused components are taken from source files: the confirm-phrase input from B1-S04, the data table and toast from B1-DS, the sheet chrome from B2-S01-v3, the tombstone token set from B1-DS. Three drift re-introductions were caught in review and corrected against source.", "B4-S01 – B4-S07 · B12-R01"]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { rows: ROWS.map(r => ({ t: r[0], d: r[1], where: r[2] })) };
+  }
+}
+</script>
+</body>
+</html>

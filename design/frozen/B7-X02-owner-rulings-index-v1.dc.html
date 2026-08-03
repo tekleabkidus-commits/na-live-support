@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-X02-owner-rulings-index-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #E4F4EA; color: #156F45; padding: 4px 8px; border-radius: 3px;">handoff · law that is in no document</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Owner rulings index</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every decision the owner made that no specification document contains. Each began as a silence or a conflict, was ruled on explicitly, and now binds the build exactly as a document clause does — with the difference that a developer reading Docs 01–18 will never encounter it. That is what this file is for.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Scope caveat, stated because the index is only useful if its limits are known: this covers rulings <strong style="font-weight: 600;">recoverable from the Batch 7 design record</strong>. Rulings made in Batches 1–6 are cited where a Batch 7 decision depends on them, but their own full record lives in those batches' audits — I have not reconstructed from memory what I cannot quote.</p>
+  </header>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="5">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">{{ g.id }}</span>
+        <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">{{ g.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ g.count }}</span>
+      </div>
+      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <sc-for list="{{ g.items }}" as="r" hint-placeholder-count="4">
+          <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px 16px;">
+            <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+              <span style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 4px; padding: 3px 7px;">{{ r.n }}</span>
+              <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ r.t }}</span>
+              <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">{{ r.ref }}</span>
+            </div>
+            <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">{{ r.rule }}</p>
+            <p style="margin: 6px 0 0; font-size: 12px; line-height: 1.65; color: #6B675D;">{{ r.why }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px;">
+    <div style="background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">How to use this in the build</h2>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 920px;">Treat each entry as a clause with the same force as the document it sits beside. Where an entry conflicts with a reading of a document, the entry is the narrower and later statement and governs — that is what makes it a ruling rather than a preference. Where an entry is silent, the document governs, and a new silence is a question for the owner, never an opening for invention. Two entries carry conditions that outlive this batch and should be read before any theme or i18n work: <strong style="font-weight: 600; color: #F4F3F1;">R-09</strong> on the token colourways and <strong style="font-weight: 600; color: #F4F3F1;">R-14</strong> on the Amharic review's standing.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const G = [
+["A","Scope and containers","Silences the documents left, closed by decision", [
+["R-01","The user list is authorised, and is not spec","Doc 02 · 3 Aug","Doc 02 names five administrator actions on another person's account but no screen to host them, and no roster exists in any document. Ruling: the five actions extend the user profile whose RBAC portion Batch 6 froze (Doc 03 §8); and because nothing in the frozen work navigates to a profile, a minimal user list is authorised — name, email, role, state chips (invited / active / disabled / locked), list search, rows opening the profile, B1-DS data-table pattern. No bulk actions, no extra columns, no ⌘K people search.","Recorded as an owner decision filling a genuine silence, not as a document requirement. Every affected row in B7-S08 is marked owner-ruled so a later reader cannot mistake it for spec."],
+["R-02","API tokens are in scope","Doc 02 §4.5 · 3 Aug","The batch scope line ended “whatever the document names”. Doc 02 §4.5 names personal and machine tokens with visible human obligations — plaintext shown once, last-used displayed, individual revocation, a rotation overlap window — so they are designed as Section G. The narrower reading was considered and rejected as orphaning documented UI.","Machine tokens bind to a visible non-login service account with its own role, never to a person (Doc 02 BR-03)."],
+["R-03","Auth emails are designed bodies, not slots","Doc 02 §14 · Doc 16 FR-01 · 3 Aug","Invite, reset and new-device ship as full designed bodies in both languages. Slot-bodies were rejected: deferring copy to whoever writes the code is the failure the program exists to prevent. Conditions: bodies wear Doc 16 FR-01's chrome exactly; the reset body contains nothing that varies with account existence; Amharic bodies join the review queue.","The reset condition is the one place a well-meaning operator personalising a subject line would silently break Doc 02 SEC-01."]
+]],
+["B","Viewports and platform rules","Where a document floor beat the program rule, and where it did not", [
+["R-04","Editing is desktop; 375 is read-only — program rule","Doc 16 §9 · Doc 03 §9 · 3 Aug","The Batch 6 ruling carries forward and is now a program rule, not a per-batch one: document floors outrank the both-viewports sentence. The branding editor edits at desktop; its 375 is the read-only / preview rendering behind an explicit “editing requires a larger screen” notice.","Applies to every editing surface in Sections J–U. The notice is a first-class element, not an apology."],
+["R-05","Auth screens are exempt from every viewport floor","Doc 02 NFR-05 · 3 Aug","Every auth screen is fully functional in a mobile browser — no read-only variant, no notice, nothing withheld. A weak mobile login is a rejection with the document's own force.","The 44 px touch floor holds on those screens; where a B1-DS desktop metric conflicts, the floor wins and the deviation is flagged."],
+["R-06","Emails need a narrow-client rendering","3 Aug","An email has a client width rather than a viewport — but the dominant client for these recipients is a phone mail app at about 360 px, so a narrow rendering is required. S21's degraded states are exempt, because each is a state of a screen that ships at 375 in its own section.","Delivered as one template reflowing, not a mobile variant: a second template is a second thing to keep true in two languages."]
+]],
+["C","Design-system law","Tokens, marks, and what a tenant may never re-skin", [
+["R-07","Fixed tokens are never re-mixed","B1-DS §2 · standing","Status pill hues, priority dots, SLA chip, reply-window chip, connection state, channel health, internal-note tokens and the violet AI accent are outside the theme. A tenant whose brand colour is teal still gets the same teal for “resolved”, and the AI accent stays violet everywhere — Doc 09 BR-05's disclosure rule is not a style.","White-label extends to identity, never to meaning. Section L names each fixed family on the surface where an operator would try to re-skin it."],
+["R-08","Status hues are reserved to semantic components","3 Aug, adopted at Section S","Status hues may not appear on generic indicators. Pass/fail glyphs, validator results and completeness chips use neutral success and danger tokens. Adopted after three recurrences of the same leak in one batch; folds into the design system at its next legitimate version bump rather than reopening v4 for prose.","The leak was always the same shape: a green that means “open” borrowed for a green that means “passed”."],
+["R-09","Both colourways already exist — read them","B1-DS §2 · 3 Aug","B1-DS v2 §2 carries a complete dark column for every fixed-token family. Dark frames take those values verbatim; light values on a dark shell are wrong, and inventing dark variants is wrong twice. No v5 addendum is needed.","Standing condition for future theme work: before proposing a token, search the design system for it. This batch mixed dark tokens by eye, then “corrected” them to light values, while the answer sat in the file both times."],
+["R-10","Tenant marks are fixtures, never drawn","3 Aug","A tenant logo is a dashed placeholder slot everywhere except inside an editor preview pane, where the uploaded state renders a labelled generic fixture mark and the empty state renders the slot. Drawing a wordmark is drift.","Preserves the rule that a neutral card must invent no brand personality, while letting a preview show what a preview is for."]
+]],
+["D","Copy, language, and destructive confirmations","Where translation is a design decision", [
+["R-11","A typed confirmation takes the name as it is","3 Aug","Typed-name confirmations accept the person's name in its own script — ዮናስ ተስፋዬ, not a Latin transliteration. This does not conflict with the MERGE token ruling: MERGE is a fixed safety token and stays untranslated; a typed name is data and is typed as the name actually is.","Asking an Amharic reader to transliterate in order to confirm a destructive act would be a trap, not a check."],
+["R-12","Meaning-parity beats word-parity","3 Aug","A clause that exists in Amharic but not English is legitimate localization, not divergence. Where a direct rendering reads as an accusation, an added softener is the correct translation of the English meaning.","Applied at H15's load failure, which gained “ችግሩ ከእርስዎ በኩል አይደለም” where the English carries the same reassurance by tone."],
+["R-13","Missing-language blocks, scoped","Doc 16 FR-04 · 3 Aug","A missing label in a customer-enabled language blocks publish for the login footer's link labels. This does not modify the warn-and-enable rule for content coverage established in Batches 5 and 6: that rule governs content at scale behind a working fallback chain; this governs four legal links on the highest-visibility surface a tenant has, where the fix costs four strings.","Recorded with its scope because without the scope line an audit finds two rulings pointing opposite ways."],
+["R-14","The Amharic review is a named blocker, not a promise","3 Aug","Amharic destructive-tier review is scoped per file with evidence, and the closing audit's Amharic row cannot be marked ✅ by declaration. The designer may not clear it. Until the owner's scoped clearance or a signed exception is on the record, the row is ❌ and the build's i18n freeze waits on it.","Adopted because a one-line “all clear” across seven batches of machine-authored Amharic is a claim, not evidence — the same standard the program applies to the designer."]
+]],
+["E","Process discipline","How the record stays true", [
+["R-15","Gates clear only by an explicit per-gate sentence","3 Aug","A gated item opens only on a sentence naming that gate, with evidence. No general “continue” releases anything gated. Approved files are frozen reference law; a reopen must be explicit and scope-limited.","Adopted after gate slips; it is the rule that makes “approved” mean something later."],
+["R-16","Every touched file gets a version bump","standing","Including one-attribute fixes. Six announcement-role additions produced six bumps.","Exceptions to bookkeeping rules are where drift historically entered this program."],
+["R-17","Delivery notes are written after checking the file","3 Aug, adopted at Section N","A note's claims are verified claim-by-claim against the artifact before the note is written, not after. And a method change applies backwards to files already delivered.","The second half was learned the hard way: adopted at N, never applied to A–M, which is how a screen with no Amharic at all survived eleven sections."],
+["R-18","Improvements are proposed, never baked in","standing","Anything outside the documents is offered as “OPTION, not in spec:” and left unbuilt until ruled on.","Kept a scheduled-publish reminder, an approval step on soft-lock takeover, and several convenience affordances out of the delivered work."]
+]]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { groups: G.map(([id, name, sub, items]) => ({
+      id, name: name + " — " + sub.toLowerCase(),
+      count: items.length + (items.length === 1 ? " ruling" : " rulings"),
+      items: items.map(([n, t, ref, rule, why]) => ({ n, t, ref, rule, why }))
+    })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S00-checklist-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Step 0 · awaiting your approval · nothing designed yet</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 6 — the contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every screen, component and state Doc 05, Doc 03 and Doc 16 require of the backoffice, with its reference. This is the contract the closing audit is checked against, row by row. I have read all three documents in full and designed nothing.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three things shape this batch. First, it is the batch where <strong style="font-weight: 600;">the operator configures the product itself</strong> — so every screen has to show a current value, its scope, and what changing it does, and the wide or destructive ones carry exactly the friction the documents name (typed confirmations, four-eyes, blast summaries, diff previews). Second, two of these surfaces are <strong style="font-weight: 600;">used in anger</strong>: the connect checklist is worked standing next to a support phone, and the incident page is worked at 2 AM — the documents say so themselves, and they get designed for those conditions rather than for a demo. Third, <strong style="font-weight: 600;">this batch designs the white-label machinery</strong>, which means the theme editor must render in the platform's own system and never in the draft theme it is editing (Doc 16 §9) — the one place in the program where a screen deliberately refuses to be branded.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">One conflict needs your ruling before I start. It is the same viewport question you reversed in Batch 5, and it lands harder here — see the panel below the rows.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ counts }}</span>
+      <label style="display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 12px; color: #4A4842;">Filter</span><input value="{{ q }}" onInput="{{ onFilter }}" placeholder="connection, window, matrix, contrast, flag, amharic…" style="font-family: inherit; font-size: 12.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; min-width: 260px;" /></label>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="17">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ sec.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ sec.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 46px minmax(0, 1fr) 230px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">The one conflict — your batch rule against three documents, and I will not pick the winner</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">All three documents in this batch put the heavy editors above phone size, in the same words. Your Step 2 rule says the opposite. Both passages, verbatim:</p>
+    <p style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px; border-left: 2px solid #CFCBC1; padding-left: 12px;"><strong style="font-weight: 600;">Batch 6 prompt, Step 2:</strong> “deliver both viewports together — 1440px desktop AND 375px mobile. Mobile is not a bonus; a weak mobile version is a rejection.”</p>
+    <p style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px; border-left: 2px solid #CFCBC1; padding-left: 12px;"><strong style="font-weight: 600;">Doc 03 §9:</strong> matrix becomes an accordion by module ≤ 1024 px; editor fully usable on tablet; “read-only on phones with an explicit ‘editing requires a larger screen’ notice (deliberate: fat-finger risk on 130 checkboxes)”.<br /><strong style="font-weight: 600;">Doc 05 §9:</strong> connection tab fully usable on tablet, checklist usable on phone, “designer requires ≥ 1024 px (fat-finger policy consistent with Doc 03)”.<br /><strong style="font-weight: 600;">Doc 16 §9:</strong> “settings/translations phone-readable, edit tablet+; branding editor desktop (previews need room; fat-finger policy family); flags screen tablet+ with the confirm dialogs full-screen mobile-capable for incident use (deliberate exception — you flip kill switches from a phone at 2 AM)”.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Note what the documents already agree with you about: the <strong style="font-weight: 600;">connect checklist</strong> is phone-usable by design (admins stand next to the support phone), and the <strong style="font-weight: 600;">incident page and every flag confirm dialog</strong> are explicitly phone-operable. Those are not in dispute and they ship at 375 either way, half-asleep-proof.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">What is in dispute is <strong style="font-weight: 600;">editing at 375</strong> on four surfaces: the permission matrix (rows G23, H12), the menu designer (E13), the branding editor (M27), and settings/translation editing (J19, N13). In Batch 5 you reversed the same call — every feature available on a phone, each newly-enabled action carrying a confirmation that names its consequence first. I have written those rows both ways and left them marked, because carrying a Batch 5 ruling into Batch 6 unasked is exactly the kind of silent decision this program forbids.</p>
+    <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin: 0;">
+      <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">▲ Awaiting your ruling — nothing in Section E, G, H, J, M or N is drawn until you answer</div>
+      <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 900px;">Whichever way you rule, it is recorded here, in each affected row, and in every delivery note — so the audit reads it as a decision, never as an oversight.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I have deliberately left out — and two silences you should rule on</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+      <li><strong style="font-weight: 600;">Agent-facing Telegram surfaces.</strong> The composer's closing / expired / connection-paused / blocked cards, the countdown chip in inbox rows, the rescue view and the owner-phone message badge are Doc 05's <em>contract for Doc 07</em> and are Batch 1 law. Section D covers only the backoffice half — the window setting, the calibration rule, the staging simulator.</li>
+      <li><strong style="font-weight: 600;">Editors owned by other documents.</strong> Doc 16 FR-08 embeds or links Business Hours (Doc 12), SLA policies (Doc 12), Routing keys (Doc 11), AI config (Doc 09), SMS templates and gateways (Doc 14). Their <em>settings rows and cross-links</em> are in Section J; their editors are not rebuilt here. Doc 11's organization admin shipped in Batch 5.</li>
+      <li><strong style="font-weight: 600;">The audit trail itself.</strong> Doc 03 SEC-03 and Doc 16 SEC-01 feed a dedicated audit view — that view is Doc 17. This batch shows provenance lines and states that changes are audited; it does not design the audit screens.</li>
+      <li><strong style="font-weight: 600;">Everything that is a build obligation.</strong> Both catalogues of technical requirements, CI gates (the string-lint, the hostile-theme sweep, the route→permission table), performance budgets and acceptance criteria are engineering contracts, not screens — except where a document turns one into something visible, like the contrast validator having no override, or “a test module's new keys appear with no UI work”, which are rows.</li>
+      <li><strong style="font-weight: 600;">All three §19 future lists</strong> — custom fonts, sub-branding, theme marketplace, scoped overrides, ABAC rules, SSO group mapping, group chats, Mini Apps, Telegram Stars — are out of v1 and absent here.</li>
+      <li style="margin-top: 8px;"><strong style="font-weight: 600;">Silence 1 — user administration.</strong> Doc 03 §8 puts overrides “on the user profile” but no document in this batch specifies creating, inviting, or disabling a user, though <code style="font-family: ui-monospace, monospace; font-size: 12px;">admin.users.manage</code> and <code style="font-family: ui-monospace, monospace; font-size: 12px;">admin.users.disable</code> exist in the catalog. Section H designs only the RBAC portion of that profile. If you want the user list and lifecycle in Batch 6, say so and I will add rows; I will not invent them.</li>
+      <li><strong style="font-weight: 600;">Silence 2 — deep links.</strong> Doc 05 FR-26 defines the payload schema <code style="font-family: ui-monospace, monospace; font-size: 12px;">src-{source}_ctx-{context}</code> but names no admin screen to build or track one. I have left it out rather than invent a builder.</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 24px; background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">What happens next</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 900px;">Approve this checklist — or edit it — and answer the viewport question, and I start with <strong style="font-weight: 600; color: #F4F3F1;">Section A + B, the Telegram bot registry and connection method</strong>, because every later Telegram screen hangs off that shell. It arrives in both viewports and both themes with the universal state set, built from <strong style="font-weight: 600; color: #F4F3F1;">B1-DS</strong> components verbatim, as Step 1 requires. Nothing moves until you approve it.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "A", name: "Telegram — bot registry, webhook lifecycle", note: "Doc 05 §4.1. The shell every other Telegram screen hangs off: registering a bot, proving its webhook works, and getting rid of it safely.", rows: [
+  { t: "Bot registry list", r: "Backoffice → Channels → Telegram: every bot with its health rollup (healthy / degraded / down) and the way in to its Connection, Health, Menu and Templates tabs. One bot may serve many accounts.", d: "Doc 05 FR-29, BR-01, §8" },
+  { t: "Add-bot wizard, step 1", r: "Paste the BotFather token → getMe validation result → token stored as a vault reference → route key generated → setWebhook with its secret → getWebhookInfo result displayed. The allowed_updates list is shown in full, not hidden: message, edited_message, callback_query, my_chat_member, business_connection, business_message, edited_business_message, deleted_business_messages.", d: "Doc 05 FR-01" },
+  { t: "The token is never shown again", r: "A stored token is never rendered anywhere in the UI; changing it requires typing a new one.", d: "Doc 05 SEC-01" },
+  { t: "Webhook verification states", r: "Verified, and failed-with-detail from getWebhookInfo — an honest failure, not a spinner that gives up.", d: "Doc 05 FR-01, FR-02" },
+  { t: "Re-register webhook", r: "One button, safe to press at any time, idempotent, with copy saying nothing is dropped because Telegram redelivers.", d: "Doc 05 FR-03" },
+  { t: "Delete bot", r: "Blocked unless there are zero active business connections, or the admin explicitly acknowledges the cascade; states plainly that conversations stay readable afterwards.", d: "Doc 05 FR-04" },
+  { t: "Empty states", r: "No bots yet, and no connections yet: explainer plus the start-the-checklist action.", d: "Doc 05 §8" },
+  { t: "Loading states", r: "Per-step spinners while the platform waits on Telegram; health widgets skeleton then stream.", d: "Doc 05 §8" }
+]},
+{ id: "B", name: "Telegram — connection method setting", note: "Doc 05 §4.2. The product rule made visible: Business is primary, direct is the integration surface, hybrid is both. Changing it changes handling, never connections.", rows: [
+  { t: "Mode segmented control", r: "direct / business / hybrid, each with its own one-paragraph explanation, and the “recommended: Business” tag on the primary model.", d: "Doc 05 FR-05, §8, §9" },
+  { t: "Direct-mode semantics shown", r: "If business updates arrive anyway they are stored and flagged unconfigured_source, and admins are alerted — the screen says this is a misconfiguration signal.", d: "Doc 05 FR-05" },
+  { t: "Business-mode semantics shown", r: "Direct messages to the bot receive the redirect auto-reply, editable per language, and the conversation is still stored.", d: "Doc 05 FR-05" },
+  { t: "Redirect template can never dead-end", r: "The editor requires a tappable account link in the redirect; a dead end is prohibited.", d: "Doc 05 BR-06" },
+  { t: "Hybrid-mode semantics shown", r: "One customer, two conversations, a dual-channel badge, and the warning agents get when replying in the older-activity conversation.", d: "Doc 05 FR-05, EC-04" },
+  { t: "Mode-change confirmation", r: "Moving away from business with active connections takes a typed confirmation, and the copy states that handling changes but nothing is disconnected — disconnect is a separate, explicit act.", d: "Doc 05 FR-06" }
+]},
+{ id: "C", name: "Telegram — business connection lifecycle", note: "Doc 05 §4.3. The screen an admin works standing next to the support phone, and the registry it produces. Phone-usable by the document's own instruction.", rows: [
+  { t: "Connect checklist, three steps", r: "Enable Business Mode in BotFather (instructions + deep link) · on the support phone grant the bot reply permission · the platform waits, live, for the business_connection update. Live status per step, announced as it changes.", d: "Doc 05 FR-07, §8, §13" },
+  { t: "Account confirmation step", r: "Account name, id, can_reply and granted scope are shown, and the admin confirms “this is our account” before anything routes.", d: "Doc 05 FR-07, SEC-04" },
+  { t: "Pending connection state", r: "An unconfirmed connection never routes and raises an alert after ten minutes.", d: "Doc 05 SEC-04" },
+  { t: "Wrong account rejected", r: "Admin rejects → connection deleted → checklist restarts from step 1.", d: "Doc 05 EC-01" },
+  { t: "Two admins connecting at once", r: "The second admin sees the pending connection and joins the same confirm step; one registry row per connection.", d: "Doc 05 EC-02" },
+  { t: "Connections table", r: "Account name, state pill, can_reply, last inbound, sends-blocked count, and the pause-handling and disconnect actions.", d: "Doc 05 FR-08, §8" },
+  { t: "Connection state pills", r: "active / paused / revoked as icon-plus-text pills, never colour alone, with the transition's source.", d: "Doc 05 FR-09, §9" },
+  { t: "Paused and revoked notifications", r: "Every transition to paused or revoked notifies admins; the screen shows what was sent.", d: "Doc 05 FR-09" },
+  { t: "Read-only connection (can_reply=false)", r: "Saved as paused with the explainer “reply permission not granted — redo step 2”; inbound still flows.", d: "Doc 05 EC-03" },
+  { t: "Revoked consequences", r: "Open tickets on that connection flagged channel_unreachable, linked to the rescue view, outbound lane frozen — all stated on the connection row, not buried.", d: "Doc 05 FR-10" },
+  { t: "Disconnect confirmation", r: "Typed account name, with the affected open tickets listed first, above the button.", d: "Doc 05 §8" },
+  { t: "Support account renamed", r: "The row updates from the next update; historical attribution keeps the old display name with its history.", d: "Doc 05 EC-05" },
+  { t: "Compound failure", r: "Business removal and token revocation in the same minute render as one compound cause; the rescue list shows each ticket once.", d: "Doc 05 EC-06" },
+  { t: "Flap damping", r: "More than three transitions in an hour collapse into a single digest alert while every state stays truthfully recorded.", d: "Doc 05 FS-04" },
+  { t: "Connection as a routing line", r: "Each connection carries its own health, reports dimension and routing tag — visible on the row so an operator can see why VIPs land on account B.", d: "Doc 05 FR-08, SS-01" }
+]},
+{ id: "D", name: "Telegram — reply-window administration", note: "Doc 05 §4.6, backoffice half only. The composer's closing / expired / paused / blocked states are Doc 05's contract for Doc 07 and are Batch 1 law — not rebuilt here.", rows: [
+  { t: "Window setting", r: "telegram.business.window_hours: default 24, minimum 1, maximum 24, explained in plain language next to the control.", d: "Doc 05 FR-21" },
+  { t: "Calibration is visible and wins", r: "An observed early expiry tightens the stored value; the setting states that operators may tighten the window but never extend it beyond Telegram's observed behaviour.", d: "Doc 05 FR-21, BR-05, EC-14" },
+  { t: "Closing threshold and its notification", r: "The two-hour closing state and the optional agent notification, configured here, described by what an agent will actually see.", d: "Doc 05 FR-22" },
+  { t: "Simulate window expiry", r: "The staging-only test tool, labelled staging-only on its face and unavailable in production.", d: "Doc 05 FR-30" }
+]},
+{ id: "E", name: "Telegram — menu designer, templates, commands", note: "Doc 05 §4.7. Where a product owner redesigns the bot without engineering, and the one screen the document puts at ≥ 1024 px.", rows: [
+  { t: "Menu designer, two panes", r: "Drag-ordered builder beside the live preview; maximum 12 buttons in rows of no more than 3, with the limits shown as you approach them.", d: "Doc 05 FR-27, §8" },
+  { t: "Button target types", r: "KB flow, Form, AI free-chat, Human handoff, URL — each with the configuration that target needs.", d: "Doc 05 FR-27" },
+  { t: "Dual live preview", r: "The Telegram button render beside the business numbered-text render, in device-styled frames, each labelled for screen readers (“Preview: button menu” / “Preview: text menu”).", d: "Doc 05 FR-27, §8, §9, §13" },
+  { t: "Per-language tabs", r: "One tab per enabled language with a completeness badge on each.", d: "Doc 05 FR-27, §14" },
+  { t: "Versioned publish and rollback", r: "Publish confirmation naming the affected bots, version history with restore, instant rollback.", d: "Doc 05 FR-27, §8" },
+  { t: "Empty and loading states", r: "A menu with no buttons yet, and the preview's own loading state while a draft renders.", d: "Doc 05 §8" },
+  { t: "Bot message templates", r: "Per bot, per language: greeting, off-hours, handoff (“creating ticket…”), resolved + CSAT prompt, blocked-direct-mode redirect, window guidance strings.", d: "Doc 05 FR-28" },
+  { t: "Template variables", r: "{{first_name}} and {{queue_wait}} insertable and validated, with an unresolved-variable error state.", d: "Doc 05 FR-28" },
+  { t: "Command set", r: "/start, /menu, /status, /human, /language shown with their localized labels and descriptions — fixed in v1 and stated as fixed, not operator-extendable.", d: "Doc 05 FR-25" },
+  { t: "/language gating", r: "The picker offers only languages whose template set is complete; the designer shows which languages currently qualify.", d: "Doc 05 §14" },
+  { t: "Jargon-free window copy", r: "The window guidance strings read like a person in both languages — “You can reply here again after the customer writes back”.", d: "Doc 05 §14" },
+  { t: "Keyboard equivalents for drag", r: "Move-up / move-down controls for every drag operation, focus visible throughout.", d: "Doc 05 §13" },
+  { t: "▲ Viewport ruling needed", r: "Doc 05 §9 puts the designer at ≥ 1024 px. Ships as a 375 read-only preview with an explicit notice, or fully editable at 375 with consequence-naming confirmations, on your ruling.", d: "Doc 05 §9 · Batch 6 Step 2" }
+]},
+{ id: "F", name: "Telegram — channel health & observability", note: "Doc 05 §4.8. The page an admin opens when a player says “the bot is dead”. Every number here is a real diagnostic, not a dashboard ornament.", rows: [
+  { t: "Health panel", r: "Status banner, in/out sparkline, failure-class breakdown, retry-queue depth with drill-in.", d: "Doc 05 FR-29, §8" },
+  { t: "Per-bot metrics", r: "Webhook status, pending_update_count, last error, in and out per hour, failure rate by class.", d: "Doc 05 FR-29" },
+  { t: "Per-connection metrics", r: "State, can_reply, last inbound, sends-blocked count — per inbound line, independently.", d: "Doc 05 FR-29" },
+  { t: "Rollup thresholds", r: "The healthy / degraded / down thresholds are settings, shown with the values that are currently deciding the badge.", d: "Doc 05 FR-29" },
+  { t: "Test tools", r: "Send a test message to an admin-verified sandbox chat; re-register the webhook; simulate window expiry on staging.", d: "Doc 05 FR-30" },
+  { t: "Raw update viewer", r: "Last 50 updates as virtualized JSON rows, copy button, masked fields greyed, fully keyboard navigable.", d: "Doc 05 FR-30, §9, §13" },
+  { t: "Masking and permission gate", r: "Phone numbers, contact payloads and forwarded-author fields masked; the whole viewer gated on telegram.health.view.", d: "Doc 05 SEC-03 · Doc 03 §4.1" },
+  { t: "Rate-limit controls", r: "Per-bot and per-chat bucket settings inside platform maximums, with the adaptive slowdown after a 429 explained in plain words.", d: "Doc 05 FR-20" },
+  { t: "Telegram outage state", r: "The outage banner, and the honest note that window expiry transitions are paused while health is down so nothing is falsely marked expired.", d: "Doc 05 FS-01" },
+  { t: "Silently-broken webhook", r: "Detected by pending_update_count growth and no-inbound heartbeat; alert with the one-click re-register beside it.", d: "Doc 05 FS-02" },
+  { t: "Credentials unavailable", r: "Vault-down send failures shown as retryable with lanes holding, and the statement that no fallback token store exists by design.", d: "Doc 05 FS-03" },
+  { t: "Empty viewer", r: "“Waiting for first message”, with the test-message shortcut in the empty state itself.", d: "Doc 05 §8" }
+]},
+{ id: "G", name: "RBAC — roles administration", note: "Doc 03 §8–§9. Unlimited roles, one role per user, 118 catalog keys across 14 modules. The matrix has to stay usable at that size — that is the whole design problem.", rows: [
+  { t: "Roles list", r: "Name with its colour dot, description, users count, high-risk count badge, last updated; create, clone, compare and guarded delete.", d: "Doc 03 §8" },
+  { t: "Compare two roles", r: "Select two → side-by-side diff, added green, removed red, grouped by module.", d: "Doc 03 §8, §9" },
+  { t: "Role editor header", r: "Name (unique per tenant), description, colour.", d: "Doc 03 FR-02, §8" },
+  { t: "Scope bar per scoped module", r: "Own / Team / Department / All as a segmented control with the plain-language helper — “Agents with this role can see tickets belonging to: …”.", d: "Doc 03 FR-03, §8" },
+  { t: "Permission matrix", r: "Grouped by module, module header row with tri-state select-all, each row a label plus an info tooltip carrying description and risk.", d: "Doc 03 §8, §9" },
+  { t: "The catalog rendered verbatim", r: "All 14 modules and their v1 keys exactly as Doc 03 §4.1 names them — tickets.*, conversations.*, customers.*, telegram.*, webchat.*, sms.*, ai.*, kb.*, automation/macros/forms/fields/sla.*, org.*, admin.*, reports.*, supervision.*, settings/branding/features/languages/audit/apikeys.*. No key renamed, merged or invented.", d: "Doc 03 §4.1, BR-03" },
+  { t: "High-risk rows", r: "Shield badge with icon and label, never colour alone; the tooltip says what makes it high-risk.", d: "Doc 03 §8, §9" },
+  { t: "Live search", r: "Filters the matrix as you type; “/” focuses it.", d: "Doc 03 §8, §9" },
+  { t: "Right sidebar summary", r: "“42 permissions · 6 high-risk · 13 users affected”, live as you toggle.", d: "Doc 03 §8" },
+  { t: "Unsaved-changes guard", r: "Leaving with pending toggles is caught, with what would be lost named.", d: "Doc 03 §8" },
+  { t: "Impact modal on save", r: "Affected users and the added/removed key diff, shown before commit — never after.", d: "Doc 03 §8, US-07" },
+  { t: "Seeded role templates", r: "Super Admin, Admin, Manager, Team Leader, Senior Agent, Agent, Junior Agent, QA, Read Only — all editable, marked is_system.", d: "Doc 03 FR-10, FR-02" },
+  { t: "Empty state", r: "No custom roles yet → the template gallery with its explanation.", d: "Doc 03 §8" },
+  { t: "Delete guarded", r: "Blocked while assigned: shows the count and a reassign-users shortcut.", d: "Doc 03 FR-08c, §8" },
+  { t: "Optimistic toggle with rollback", r: "The toggle answers instantly; a save failure rolls it back with a toast that says so.", d: "Doc 03 §8" },
+  { t: "Loading skeleton", r: "Module groups shimmer while the matrix builds.", d: "Doc 03 §8" },
+  { t: "Concurrent edit", r: "Optimistic version check; the loser sees a diff of the winner's changes and can re-apply.", d: "Doc 03 EC-03" },
+  { t: "Team scope with no team", r: "Saving a Team scope for teamless users warns, and the empty set fails closed.", d: "Doc 03 EC-04" },
+  { t: "Template changelog suggestions", r: "A platform release never overwrites an edited template; changes arrive as suggestions in the roles UI.", d: "Doc 03 EC-07" },
+  { t: "Soft limit warning", r: "A warning at 100 roles, not a block.", d: "Doc 03 EC-10" },
+  { t: "Matrix keyboard operability", r: "Arrow keys move cells, space toggles, tri-state exposes aria-checked=\"mixed\", focus always visible.", d: "Doc 03 §9, §13" },
+  { t: "Accordion at ≤ 1024 px", r: "The matrix becomes a per-module accordion with proper aria-expanded.", d: "Doc 03 §9, §13" },
+  { t: "▲ Viewport ruling needed", r: "Doc 03 §9 makes the phone read-only with an explicit “editing requires a larger screen” notice. Ships that way, or fully editable at 375 with consequence-naming confirmations, on your ruling.", d: "Doc 03 §9 · Batch 6 Step 2" }
+]},
+{ id: "H", name: "RBAC — user overrides & effective permissions", note: "Doc 03 §8. Precedence is User Deny > User Allow > Role > implicit deny, and the UI has to make that legible to someone who has never heard the word precedence.", rows: [
+  { t: "Current role on the profile", r: "Shown with a link into the role editor.", d: "Doc 03 §8" },
+  { t: "Effective-permission explorer", r: "Search any key → verdict plus the reason: “Denied by user override, set by Hanna, expires Aug 4”.", d: "Doc 03 §8, US-07" },
+  { t: "Verdict chip", r: "Allowed / Denied with its source, readable by screen readers including the why.", d: "Doc 03 §9, §13" },
+  { t: "Add-override flow", r: "Pick permission → allow or deny → optional expiry → mandatory reason of at least 10 characters, enforced in the field.", d: "Doc 03 FR-04, SEC-04" },
+  { t: "Active overrides list", r: "Each with a countdown chip where it expires.", d: "Doc 03 §8, §9" },
+  { t: "Overrides cannot change scope", r: "The flow states it: an override grants or denies the verb, evaluated inside the role's scope for that module.", d: "Doc 03 FR-04" },
+  { t: "Precedence rendered exactly", r: "The four-level order appears as the explanation on the verdict, in the documented sequence, with no reordering for visual convenience.", d: "Doc 03 FR-04, FR-05" },
+  { t: "Empty state", r: "“No exceptions for this user.”", d: "Doc 03 §8" },
+  { t: "Override-sprawl warning", r: "When more than rbac.override.warn_threshold users carry the same override, the UI says so and suggests creating a role instead.", d: "Doc 03 BR-02" },
+  { t: "Temporary access", r: "Expiring overrides, including the system-generated queue pull-in grants that end at shift close — shown as system-granted, not hand-made.", d: "Doc 03 FR-09" },
+  { t: "Expired mid-action", r: "“Your temporary access expired”, naming the granter.", d: "Doc 03 EC-02" },
+  { t: "▲ Viewport ruling needed", r: "The explorer is readable on a phone either way; whether the add-override flow is operable at 375 follows the same ruling as the matrix.", d: "Doc 03 §9 · Batch 6 Step 2" }
+]},
+{ id: "I", name: "RBAC — safety rails & high-risk governance", note: "Doc 03 FR-08, T-06. The rails that stop an operator locking themselves out or over-granting quietly. Each is a real state, not a paragraph of help text.", rows: [
+  { t: "Last-admin block", r: "Demoting or disabling the last holder of admin.roles.manage + admin.users.manage is hard-blocked, and the error explains exactly why and who else holds the rights.", d: "Doc 03 FR-08a, §8" },
+  { t: "Four-eyes pending banner", r: "When rbac.four_eyes is on, a high-risk grant sits pending on the role and the user with approve / reject for a different admin.", d: "Doc 03 FR-08b, §8, T-06" },
+  { t: "Pending never counts as granted", r: "The resolver ignores pending grants; the UI says the grant is not in force yet, and auto-expires it at 24 hours.", d: "Doc 03 T-06, FS-04" },
+  { t: "Four-eyes cannot deadlock", r: "The setting refuses to enable unless at least two users hold approval rights, with that reason stated.", d: "Doc 03 EC-08" },
+  { t: "Strict-grant mode", r: "rbac.strict_grant surfaced as a setting with its default-off rationale in plain language.", d: "Doc 03 BR-04" },
+  { t: "Override threshold setting", r: "rbac.override.warn_threshold, default 10, with what crossing it does.", d: "Doc 03 BR-02" },
+  { t: "Risk never by colour", r: "The shield badge carries an icon and the word, in both themes.", d: "Doc 03 §9, §13" }
+]},
+{ id: "J", name: "Settings Backoffice — shell & the per-key contract", note: "Doc 16 FR-08, FR-10, §8. Fourteen groups, one row contract, and a registry that means new keys appear without anyone designing them. The IA is data.", rows: [
+  { t: "Settings shell and left nav", r: "All fourteen groups exactly as FR-08 names them: General · Business Hours & Holidays · Languages · Security · Files & Media · Tickets & SLA · Routing · AI · SMS · Notifications · Quotas & Usage · Feature Flags · Branding · Config Export/Import.", d: "Doc 16 FR-08, §8" },
+  { t: "Settings search", r: "⌘K within Backoffice finds any key by label, description or key name.", d: "Doc 16 FR-10, §8" },
+  { t: "The per-key row contract", r: "Label, description, typed control, validation — the same anatomy on every key in the product.", d: "Doc 16 FR-08 · Doc 01 T-04" },
+  { t: "Provenance line", r: "“Changed by X at Y” on every key that differs from its default.", d: "Doc 16 FR-08, §8" },
+  { t: "Reset to default", r: "Per key, always available, with the default value shown beside the current one.", d: "Doc 16 FR-08" },
+  { t: "Modified badge", r: "One visual language for “differs from shipped/default”, shared with the translation manager.", d: "Doc 16 §9" },
+  { t: "Locked floors", r: "Platform minimums render with a lock and the caption “platform minimum” — the same lock treatment as mandated notification rows, because it means the same thing.", d: "Doc 16 §8, §9, BR-05" },
+  { t: "Consequence warnings inline", r: "Shown before save, not after — the timezone change and its recompute warning is the worked example.", d: "Doc 16 FR-08, §8" },
+  { t: "High-risk confirm dialog", r: "Security policy, branding publish, flags and quotas get the confirm-with-consequences pattern.", d: "Doc 16 FR-10 · Doc 03 §4.1" },
+  { t: "Cross-link rows", r: "“Edit SLA policies →” styled distinctly from a settings row so it never reads as a value.", d: "Doc 16 §8" },
+  { t: "General group", r: "Company, timezone, default language.", d: "Doc 16 FR-08" },
+  { t: "Security group", r: "The auth.* keys — password policy, 2FA enforcement, session timeouts, IP allowlists, lockout tuning — with their locked floors visible.", d: "Doc 16 FR-08 · Doc 02" },
+  { t: "Files & Media group", r: "media.max_mb and the retention keys carrying their legal-hold notes.", d: "Doc 16 FR-08" },
+  { t: "Tickets & SLA, Routing, AI, SMS groups", r: "Each rendering its own registered keys — including the starvation cap with its always-on explanation — and cross-linking out to the editors other documents own.", d: "Doc 16 FR-08" },
+  { t: "Quotas & Usage", r: "Usage bars against quota with the 80% alert threshold marked.", d: "Doc 16 FR-08 · Doc 01 NFR-06" },
+  { t: "Registry-rendered proof", r: "A newly registered key appears in its group with no Backoffice design work — shown as a state in the delivery, because it is the claim the whole IA rests on.", d: "Doc 16 T-04, AC-05" },
+  { t: "Fresh-tenant state", r: "Seeded theme plus the “make it yours” checklist as the empty state.", d: "Doc 16 §8" },
+  { t: "Validation and error states", r: "Per-key validation failures announced, not just tinted; a save failure names the key.", d: "Doc 16 §8, §13" },
+  { t: "▲ Viewport ruling needed", r: "Doc 16 §9 makes settings phone-readable and editable at tablet+. Ships that way, or fully editable at 375 with consequence-naming confirmations, on your ruling.", d: "Doc 16 §9 · Batch 6 Step 2" }
+]},
+{ id: "K", name: "Notification preferences", note: "Doc 16 FR-09. Three layers, twelve categories, three channels, and one rule: mandated means cannot mute, never must-SMS. Silent force and silent suppression are both prohibited.", rows: [
+  { t: "Category × channel matrix", r: "Categories as the documents register them — assignment, mention, follower events, escalation-to-me, SLA warnings, window-closing, bulk-completed, broadcast notes, schedule deliveries, channel health, gateway alerts, AI anomalies — against in-app, email and staff-SMS.", d: "Doc 16 FR-09" },
+  { t: "Staff-SMS gating", r: "The SMS column is only offered where the staff user has a phone and has opted in; otherwise it says why it is unavailable.", d: "Doc 16 FR-09" },
+  { t: "Three-layer indicators", r: "Platform default, role default, your override, mandated — each with its glyph and its text equivalent, never a colour or a symbol alone.", d: "Doc 16 §8, §9, §13" },
+  { t: "Effective result with a why", r: "The per-user screen shows what will actually happen and explains it: “Role default: on; your setting: muted; effective: muted”.", d: "Doc 16 §8, §13" },
+  { t: "Role-defaults admin view", r: "Edits the middle layer, with affected-user counts before saving.", d: "Doc 16 FR-09, §8" },
+  { t: "Mandated rows", r: "Locked, naming who mandated it and why — a supervisor cannot mute SLA breaches, and the screen says so rather than silently ignoring the toggle.", d: "Doc 16 FR-09, BR-06" },
+  { t: "Override beats role default", r: "When a role default changes under an explicit user override, the override wins, and the admin's affected-count excludes those users with a note saying so.", d: "Doc 16 EC-04" },
+  { t: "Mandated but undeliverable", r: "SMS-mandated with no phone falls back in channel-priority order; the lock tooltip states that a mandate means “cannot mute”, not “must SMS”.", d: "Doc 16 EC-05" },
+  { t: "Quick-mute lands here", r: "The inbox bell's quick-mute writes to this model, and the window is computed in the user's own profile timezone.", d: "Doc 16 FR-09, EC-12 · Doc 07 FR-26" },
+  { t: "Grid accessibility", r: "Real row and column headers, the three-layer state exposed as text, lock reasons announced.", d: "Doc 16 §13" },
+  { t: "Loading, empty, error", r: "Matrix skeleton; a category set with nothing registered yet; a save failure that names the row.", d: "Doc 16 §8" }
+]},
+{ id: "L", name: "Feature flags", note: "Doc 16 FR-11, FR-12. Flags hide, never destroy — and the UI has to say so, because that is the promise an operator is trusting when they flip one during an incident.", rows: [
+  { t: "Module cards", r: "Telegram, Live Chat, SMS, AI Chatbot, AI Copilot, Knowledge Base, Reports, Surveys, File Uploads, Voice Messages, Translation, SLA, Automation, plus registered sub-flags — each with state, switch and last-toggled provenance.", d: "Doc 16 FR-11, §8" },
+  { t: "Blast radius per flag", r: "Live usage from the realtime tier: “Telegram: 3 bots, ~1,200 conversations/day”.", d: "Doc 16 FR-11" },
+  { t: "Dependency edges", r: "Drawn lines with direction arrows, colour-coded requires versus required-by, and the text-list equivalent underneath.", d: "Doc 16 §8, §9, §13" },
+  { t: "Confirm dialog", r: "Disabling prompts with the dependents list; enabling a dependent auto-prompts its dependency. Full-screen on mobile by the document's own exception.", d: "Doc 16 FR-12, §8, §9" },
+  { t: "Off-behaviour stated honestly", r: "Off removes navigation and UI, returns feature_disabled on APIs, and parks new work per the owning module's contract — written on the card in plain language, not left implied.", d: "Doc 16 FR-12" },
+  { t: "Nothing is destroyed", r: "The dialog states that data and configuration are preserved and re-enabling restores the module as it was.", d: "Doc 16 BR-04, FR-12" },
+  { t: "Parked work while off", r: "The card shows the parked count live, and the drain on re-enable.", d: "Doc 16 EC-06" },
+  { t: "Last customer channel off", r: "Turning off the last customer-facing channel is allowed, but the confirm states the consequence plainly: customers will have no way to contact support through the platform.", d: "Doc 16 EC-10" },
+  { t: "Flags are tenant-wide", r: "The screen says it where admins will look for per-role visibility, and points at roles instead.", d: "Doc 16 R-03" },
+  { t: "Fail-static during an outage", r: "If the flag store is unavailable, flags hold their last state, toggling is disabled, and the error is honest about why.", d: "Doc 16 FS-03" },
+  { t: "Link to the incident page", r: "The “all stop buttons” link, from the flags screen into Section P.", d: "Doc 16 §8, AC-10" },
+  { t: "Loading, empty, error", r: "Card skeletons; a registry with no sub-flags; a toggle that failed and says so rather than silently reverting.", d: "Doc 16 §8, NFR-03" }
+]},
+{ id: "M", name: "Branding — the white-label theme editor", note: "Doc 16 §4.1, §8–§9. The editor renders in the platform's own system and is never themed by the draft it edits. Contrast has no override — the one validator with no escape hatch.", rows: [
+  { t: "Editor shell", r: "Left nav by surface group — Identity · Colors & Fonts · Login · Emails · Links & Legal · Senders · Inventory — with the forms in the centre.", d: "Doc 16 §8" },
+  { t: "Live preview pane", r: "Right-hand preview switching per group: app-chrome mock, login mock, email mock.", d: "Doc 16 §8" },
+  { t: "Identity group", r: "Company name, product name, light and dark logos (SVG/PNG, ≤ 512 KB, aspect guidance shown), favicon set generated from one upload.", d: "Doc 16 FR-01" },
+  { t: "Colors & Fonts group", r: "Primary, accent and surface-adjustment tokens; the curated font set including Inter and Noto Sans Ethiopic, with custom uploads stated as out of v1.", d: "Doc 16 FR-01" },
+  { t: "Login group", r: "Background image or colour and the welcome copy, per language.", d: "Doc 16 FR-01" },
+  { t: "Emails group", r: "Header and footer logo, address block and legal footer, per language.", d: "Doc 16 FR-01" },
+  { t: "Links & Legal group", r: "Copyright line and footer links as label+URL pairs per language, with the domain visible in the editor and https enforced.", d: "Doc 16 FR-01, SEC-02" },
+  { t: "Senders group", r: "From-name and from-address per purpose — auth, notifications, reports — each showing its domain-verification status inline.", d: "Doc 16 FR-01, SEC-03" },
+  { t: "Unverified sender blocked", r: "An unverified sender cannot be published for customer-facing purposes, and the block says what to fix.", d: "Doc 16 SEC-03, AC-09" },
+  { t: "Sender verification lapse", r: "A lapsed domain flips its identity to a warning state and sends fall back to the platform default sender — stated as deliverability continuity over brand purity.", d: "Doc 16 EC-11" },
+  { t: "Inventory page", r: "The thumbnail wall: staff app chrome + login, emails, chat widget, Telegram persona surfaces, SMS sender IDs, exports and watermarks, error pages, PDF transcripts — each openable as its own preview. The preview is the checklist.", d: "Doc 16 FR-02" },
+  { t: "AI identity slot referenced", r: "The assistant name and avatar appear in the inventory with their edit link into the persona screen, and the AI-disclosure rule is restated where the identity is touched.", d: "Doc 16 FR-01, BR-05" },
+  { t: "Draft preview mode", r: "A full-app draft preview with the banner “PREVIEWING DRAFT — visible only to you”, high-contrast in both themes, announced on entry and exit; email previews send to self.", d: "Doc 16 FR-03, §8, §9, §13" },
+  { t: "Publish dialog", r: "Validator results, blast summary (“applies to staff app, 4 email templates, 2 widgets”), and a typed confirm.", d: "Doc 16 §8, FR-04" },
+  { t: "Contrast matrix", r: "Every token pair with its computed ratio as text, pass/fail glyph, and a suggestion chip that applies the nearest passing value on click.", d: "Doc 16 §9, FR-04, §13" },
+  { t: "No publish-anyway", r: "A failing pair blocks publish and there is no override path — the screen states this is deliberate.", d: "Doc 16 BR-02, AC-03" },
+  { t: "Other publish gates", r: "Asset constraints, footer-link URLs, email render tests, and missing-language completeness warnings — blocking where a language is customer-enabled, advisory where it is not.", d: "Doc 16 FR-04" },
+  { t: "Login image-aware contrast", r: "The login preview samples the uploaded background; failures block with the overlay-scrim suggestion.", d: "Doc 16 EC-09" },
+  { t: "Version history", r: "Before/after thumbnails as a visual diff, with one-click rollback — a rollback is a publish, same pipeline, same audit.", d: "Doc 16 FR-03, §8" },
+  { t: "Rollback with a missing asset", r: "Re-validated at the gate; a since-deleted asset blocks with a re-upload prompt.", d: "Doc 16 EC-02" },
+  { t: "Two admins, one draft", r: "Single draft with a soft lock and an audited takeover.", d: "Doc 16 EC-07" },
+  { t: "Publish while agents are working", r: "Tokens swap live with no reload; the dialog says so instead of warning about downtime that will not happen.", d: "Doc 16 EC-01" },
+  { t: "Asset upload failures", r: "Type, size and dimension rejections stated per rule; SVG logos are sanitized at ingest and the editor says what was stripped.", d: "Doc 16 FR-01, SEC-06" },
+  { t: "Degraded branding", r: "Theme cache loss falls back to the platform default with a banner shown to admins only.", d: "Doc 16 FS-01" },
+  { t: "Email template failure", r: "Per-template rollback within the theme's email group, with the plain-text fallback stated.", d: "Doc 16 FS-02" },
+  { t: "The editor is not themed", r: "The editor chrome renders in the platform design system; only previews render the draft. Called out in the delivery note because it looks like an inconsistency until you know why.", d: "Doc 16 §9, T-01" },
+  { t: "▲ Viewport ruling needed", r: "Doc 16 §9 makes the branding editor desktop-only because previews need room. Ships as a 375 review-and-approve surface with editing withheld, or fully editable at 375, on your ruling.", d: "Doc 16 §9 · Batch 6 Step 2" }
+]},
+{ id: "N", name: "Translation manager & language administration", note: "Doc 16 §4.2. Two classes of string in one manager, and a missing-first view that shows the fourteen Amharic gaps players actually hit — not an alphabetical wall of ten thousand keys.", rows: [
+  { t: "Manager table", r: "Key, namespace chip, shipped value, inline override editor, modified badge, last-hit column from telemetry.", d: "Doc 16 §8, FR-06" },
+  { t: "Two string classes", r: "Platform UI strings (code-registered keys, en + am) and operator content strings (bot greetings and templates, widget welcome, CSAT labels, the RG template gated on ai.guardrails.edit, SMS templates linking out) — visibly distinguished, not blended.", d: "Doc 16 FR-06" },
+  { t: "Override and reset", r: "An override renders instead of the shipped value, carries a modified badge, and resets to shipped in one action with the shipped value always visible beside it.", d: "Doc 16 FR-06, R-02" },
+  { t: "Search and filters", r: "Across keys and values, filtered by namespace, language, modified and missing.", d: "Doc 16 FR-06" },
+  { t: "Missing-first smart view", r: "Ordered by what customers actually hit, from missing-translation telemetry.", d: "Doc 16 FR-06, US-07" },
+  { t: "CSV round-trip", r: "Bulk export and import for external translators, round-trip safe and audited; unknown keys rejected with per-row annotations.", d: "Doc 16 §8, T-03, AC-04" },
+  { t: "Orphaned overrides", r: "Overrides whose key a release removed are listed in a maintenance view — never rendered, never silently deleted, cleaned in one click.", d: "Doc 16 EC-03" },
+  { t: "Content-type enforcement", r: "An override cannot introduce markup beyond the safe subset its key allows; the editor rejects and explains.", d: "Doc 16 SEC-05" },
+  { t: "Language administration", r: "Enable and disable languages from the reference list, gated by languages.manage.", d: "Doc 16 FR-07 · Doc 03 §4.1" },
+  { t: "Readiness panel", r: "On enabling: platform string coverage %, operator-content completeness per module with links to each gap.", d: "Doc 16 FR-07" },
+  { t: "Default language and fallback chain", r: "Edited here with a plain-language explanation of the resolution order.", d: "Doc 16 FR-07" },
+  { t: "The manager's own UI is separate", r: "The translation manager's interface never mixes with the strings it edits — a meta-level separation in the key namespace.", d: "Doc 16 §14" },
+  { t: "▲ Viewport ruling needed", r: "Doc 16 §9 makes translations phone-readable, editable at tablet+. Same ruling as settings.", d: "Doc 16 §9 · Batch 6 Step 2" }
+]},
+{ id: "O", name: "Config export & import", note: "Doc 16 FR-13, BR-07. Bulk convenience without bulk opacity: every applied key is an individual, previewed, audited change.", rows: [
+  { t: "Export", r: "One button with a content summary — settings values, theme version, flags, translation overrides, business calendars — and an explicit statement of what is excluded: secrets, credentials, per-user preferences.", d: "Doc 16 FR-13, §8, SEC-04" },
+  { t: "Import diff preview", r: "Upload → diff table grouped by area, per-row apply checkboxes, validation badges per row.", d: "Doc 16 FR-13, §8" },
+  { t: "Apply and results", r: "Progress, then per-row results with audit links — the results screen is the recovery worklist.", d: "Doc 16 §8, FS-04" },
+  { t: "Partial apply", r: "The valid subset can be applied explicitly while invalid rows stay annotated; nothing merges silently.", d: "Doc 16 §8, BR-07" },
+  { t: "Version incompatibility", r: "A bundle from a newer platform version is rejected with the version delta named; partial-schema imports are never attempted.", d: "Doc 16 EC-08" },
+  { t: "Mid-apply failure", r: "Applied, failed and not-attempted shown separately; applied rows are not rolled back, and the screen explains why that is correct.", d: "Doc 16 FS-04" },
+  { t: "Cross-tenant is not a tenant action", r: "Tenant admins import only into their own tenant; the screen states it rather than failing mysteriously.", d: "Doc 16 SEC-04" }
+]},
+{ id: "P", name: "The incident page", note: "Doc 16 AC-10, SS-04. One page, every stop control, ≤ 2 clicks from anywhere in Backoffice. This is the screen the batch rule about half-asleep phone operation is really about.", rows: [
+  { t: "One page, every stop control", r: "AI kill switches, rules-pause and module flags together — the document's one-page rule, not three screens linked by a breadcrumb.", d: "Doc 16 §8, AC-10 · Doc 12 R-04" },
+  { t: "Reachable in two clicks", r: "From anywhere in Backoffice, and from the flags screen's “all stop buttons” link.", d: "Doc 16 AC-10, §8" },
+  { t: "Phone-first at 375", r: "Full-screen confirms, 44 px minimum targets, consequence named before the action, legible one-handed in the dark — the document's own deliberate exception.", d: "Doc 16 §9, SS-04 · Batch 6 Step 2" },
+  { t: "State after the stop", r: "What is now off, what is parked, who flipped it and when — so the morning after is readable.", d: "Doc 16 FR-12, EC-06" }
+]},
+{ id: "Q", name: "Cross-cutting — states, access, language, discipline", note: "Applies to every row above; audited per screen, not once at the end.", rows: [
+  { t: "Universal state set", r: "Normal, loading/skeleton, empty and error on every screen, plus each document-named edge state in its own row.", d: "Batch 6 Step 2" },
+  { t: "Both themes", r: "Dark and light on every screen, AA contrast verified in both — including the preview banner and the contrast matrix itself.", d: "Batch 6 Step 2 · Doc 16 §9, §13 · Doc 03 §13 · Doc 05 §9" },
+  { t: "Both viewports", r: "1440 and 375 for every screen, with the four disputed editors resolved by your ruling and the deviation recorded in each delivery note.", d: "Batch 6 Step 2 · §9 of all three docs" },
+  { t: "44 px touch floor", r: "The program floor holds on mobile variants; where a component's desktop metric conflicts, the floor wins and the deviation is flagged.", d: "Batch 6 design rules" },
+  { t: "Never colour alone", r: "State pills, risk shields, three-layer indicators, pass/fail glyphs, dependency edges and validation all carry text or a glyph.", d: "Doc 03 §9 · Doc 05 §9 · Doc 16 §9" },
+  { t: "One lock, one meaning", r: "Locked settings floors and mandated notification rows share the lock treatment: the platform or your admin holds this.", d: "Doc 16 §9" },
+  { t: "One modified badge", r: "Settings and translations use the same badge for “differs from shipped/default”.", d: "Doc 16 §9" },
+  { t: "Errors announced", r: "Validation and failures are announced, not merely tinted; labels are tied to fields throughout.", d: "Batch 6 design rules · Doc 16 §13 · Doc 03 §13" },
+  { t: "Keyboard operability", r: "Matrix cell navigation, designer drag equivalents, focus-trapped impact and confirm modals, keyboard-navigable update viewer and import tables.", d: "Doc 03 §13 · Doc 05 §13 · Doc 16 §13" },
+  { t: "Reduced motion", r: "Countdown chips shift colour statically, no pulsing; live health widgets hold still.", d: "Doc 05 §9 · Doc 16 §9" },
+  { t: "English and Amharic first-class", r: "Every labelled element shown in both, with real Amharic including long strings on the densest surfaces — the permission matrix, the notification grid, the settings rows — to prove the layout survives expansion. Flagged for native review.", d: "Batch 6 design rules · Doc 03 §14 · Doc 05 §14 · Doc 16 §14" },
+  { t: "Realistic operator data", r: "Ethiopian staff names, real-looking bot and support-account names, and permission keys taken verbatim from the Doc 03 catalog. No lorem ipsum, no invented keys.", d: "Batch 6 Step 2 · Doc 03 BR-03" },
+  { t: "Permission gating shown", r: "Each backoffice surface names the key that guards it: telegram.bots.manage, telegram.connections.manage, telegram.health.view, settings.view / settings.edit, branding.edit, features.toggle, languages.manage, admin.roles.manage, admin.overrides.manage.", d: "Doc 03 §4.1 · Doc 05 FR-05, SEC-03 · Doc 16 FR-07" },
+  { t: "Audit honesty", r: "Where a document classes a change as high-visibility audit — branding publish, flag toggles, security settings, mandates, imports, high-risk grants — the UI says the change is recorded and by whom.", d: "Doc 16 SEC-01 · Doc 03 FR-12, SEC-03" },
+  { t: "White-label neutrality", r: "No invented brand personality; the fixed tokens — status, priority, SLA, reply-window, connection state, channel health, internal-note and the violet AI accent — are never re-mixed, including on the screens where operators re-skin everything else.", d: "Batch 6 design rules · Doc 16 R-01" },
+  { t: "No impersonation surfaces", r: "Nowhere in this batch, including the admin views of a user's effective permissions and notification preferences.", d: "Batch 6 design rules" },
+  { t: "B1-DS verbatim", r: "Every reused component comes from the approved design system unchanged; new components in this batch are proposed as additions, never as restyles of approved elements.", d: "Batch 6 Step 1" }
+]}
+];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      let k = 0;
+      sec.rows.forEach(r => {
+        total += 1; k += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: sec.id + ("0" + k).slice(-2), t: r.t, r: r.r, d: r.d });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

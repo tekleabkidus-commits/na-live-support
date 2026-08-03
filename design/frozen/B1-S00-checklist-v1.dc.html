@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #F4F3F1; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #1E3E92; }
+  input { font: inherit; }
+</style>
+</helmet>
+
+<div style="max-width: 1240px; margin: 0 auto; padding: 40px 28px 96px;">
+
+  <header style="display: flex; flex-direction: column; gap: 14px; padding-bottom: 22px; border-bottom: 2px solid #1B1B18;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B1-S00-checklist-v1</span>
+      <h1 style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">THE CHECKLIST — Batch 1</h1>
+    </div>
+    <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #4A4842; max-width: 860px; text-wrap: pretty;">Design system + Unified Inbox · desktop 1440 + mobile 375. Every row below traces to a passage in the attached specification documents. This is the contract for the batch; the Step 4 closing audit is checked against it row by row.</p>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: #DEDCD7; border: 1px solid #DEDCD7; margin-top: 26px;">
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Scope documents</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Doc 07 — Unified Inbox (primary)<br />Doc 04 — Conversations &amp; Messaging Core<br />Doc 06 — Ticketing System</div>
+    </div>
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Components the inbox renders, defined elsewhere</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Doc 05 — reply-window chip, composer channel states, health rollup<br />Doc 12 — SLA chip instances, macros (definitions out of scope)<br />Doc 16 — what a tenant may re-skin</div>
+    </div>
+    <div style="background: #FFFFFF; padding: 16px 18px;">
+      <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6862; margin-bottom: 8px;">Explicitly out of scope (Doc 07 §3)</div>
+      <div style="font-size: 13px; line-height: 1.65; color: #333029;">Customer panel contents (Doc 08) — named empty slot only<br />Copilot panel contents (Doc 09) — named empty slot only<br />Queue config (Doc 11) · SLA/macro definitions (Doc 12) · Supervisor dashboard (Doc 15)</div>
+    </div>
+  </section>
+
+  <div style="margin-top: 20px; padding: 14px 18px; background: #FFF8E6; border: 1px solid #E8D9A8; font-size: 13.5px; line-height: 1.6; color: #4A4239;">
+    <strong style="font-weight: 600;">Step 4 — closing audit.</strong> Every row below is marked against the version that satisfies it, or ❌ where nothing does. The ❌ rows are real gaps, not oversights in the marking: I would rather hand you an honest 28 short than a false ✅. Filter the list for <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px;">❌</span> to see them together. Rows flagged <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; background: #1B1B18; color: #F4F3F1; padding: 2px 6px; border-radius: 3px;">B2?</span> still await your ruling on whether they belong to Batch 2.
+  </div>
+
+  <div style="position: sticky; top: 0; z-index: 20; background: #F4F3F1; padding: 20px 0 12px; margin-top: 8px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; border-bottom: 1px solid #DEDCD7;">
+    <input type="search" placeholder="Filter rows — try “composer”, “empty”, “Doc 06”" aria-label="Filter checklist rows" value="{{ q }}" onInput="{{ onFilter }}" style="flex: 1 1 280px; min-width: 240px; padding: 9px 12px; border: 1px solid #C9C6BF; border-radius: 4px; background: #FFFFFF; font-size: 13.5px; color: #1B1B18;" />
+    <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #6B6862;">{{ counts }}</span>
+  </div>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+    <section style="margin-top: 34px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600; color: #1B1B18;">{{ sec.id }}</span>
+        <h2 style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 8px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ sec.note }}</p>
+
+      <div role="table" style="margin-top: 12px; border: 1px solid #DEDCD7; background: #DEDCD7; display: flex; flex-direction: column; gap: 1px;">
+        <div role="row" style="display: grid; grid-template-columns: 54px minmax(180px, 1.1fr) minmax(280px, 2.2fr) 168px 96px; gap: 0; background: #EEEDEA;">
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6862;">№</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6862;">Item</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6862;">What the spec requires</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6862;">Source</div>
+          <div role="columnheader" style="padding: 8px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6862;">Done</div>
+        </div>
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="10">
+          <div role="row" style="display: grid; grid-template-columns: 54px minmax(180px, 1.1fr) minmax(280px, 2.2fr) 168px 96px; gap: 0; background: #FFFFFF;">
+            <div role="cell" style="padding: 9px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: #6F6A61;">{{ row.n }}</div>
+            <div role="cell" style="padding: 9px 10px; font-size: 13px; font-weight: 500; line-height: 1.45; color: #1B1B18; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap;">
+              <span>{{ row.t }}</span>
+              <sc-if value="{{ row.b }}" hint-placeholder-val="{{ false }}"><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; background: #1B1B18; color: #F4F3F1; padding: 2px 5px; border-radius: 3px; font-weight: 500;">B2?</span></sc-if>
+            </div>
+            <div role="cell" style="padding: 9px 10px; font-size: 13px; line-height: 1.5; color: #4A4842; text-wrap: pretty;">{{ row.r }}</div>
+            <div role="cell" style="padding: 9px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.5; color: #6B6862;">{{ row.d }}</div>
+            <div role="cell" style="padding: 9px 10px; font-size: 12.5px; color: #4A4842; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.s }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <footer style="margin-top: 46px; padding-top: 18px; border-top: 1px solid #DEDCD7; font-size: 12.5px; line-height: 1.7; color: #6B6862; max-width: 900px;">
+    <p style="margin: 0 0 8px;">Documents read in full for this checklist: Doc 01, Doc 02, Doc 03, Doc 04, Doc 05, Doc 06, Doc 07, Doc 16, Doc 17, Doc 18, Doc 19.</p>
+    <p style="margin: 0;">Rows sourced to “Batch 1 prompt” rather than a document are the universal requirements you set in the prompt itself (both viewports, both themes, both languages, the universal state set) — they are marked as such so you can tell spec law from program law when you audit.</p>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240},&quot;auditMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Audit&quot;},&quot;showBoundaryFlags&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Audit&quot;}}">
+const SECTIONS = [
+{ id: "A", name: "Foundations — the design system's fixed layer", note: "Step 1 of the protocol. These are decided once and every later row inherits them.", rows: [
+  { t: "Colour system, dark + light", r: "2–3 neutral, tenant-brandable directions for you to choose from; both themes complete.", d: "Batch 1 prompt Step 1 · Doc 16 FR-01" },
+  { t: "Contrast floor", r: "WCAG AA in both themes; the contrast validator blocks anything below it with no override path.", d: "Doc 16 FR-04, BR-02 · Doc 07 §13" },
+  { t: "Fixed hues (not themeable)", r: "Status pill hues fixed platform-wide: new=blue, open=green, pending_customer=amber, pending_internal=violet, escalated=orange, resolved=teal, closed=gray, spam=red-gray.", d: "Doc 06 §9" },
+  { t: "Note-mode differentiation floor", r: "Reply-vs-note differentiation is not themeable below a minimum contrast delta — treated as a safety hazard.", d: "Doc 07 BR-02" },
+  { t: "AI accent", r: "All AI-origin content carries the AI accent; AI messages are always visibly AI-labelled.", d: "Doc 07 §9 · Doc 04 FR-06" },
+  { t: "Typography", r: "Inter + Noto Sans Ethiopic from the curated font set; Amharic is first-class, not a fallback.", d: "Doc 16 FR-01 · Batch 1 prompt Step 1" },
+  { t: "Type scale, both viewports", r: "One scale that holds at 1440 and 375; relative times switch to absolute beyond 24 h.", d: "Doc 07 §14 · Batch 1 prompt Step 2" },
+  { t: "4pt grid + spacing scale", r: "All spacing on a 4pt grid.", d: "Batch 1 prompt Step 1" },
+  { t: "Density modes", r: "Comfortable / compact toggle: list rows 64 px / 52 px, thread spacing follows; persisted per user.", d: "Doc 07 §9" },
+  { t: "Motion tokens", r: "Bubble-in 120 ms fade/slide; row enter with 300 ms highlight; row leave 150 ms fade+collapse; delivery-glyph crossfade.", d: "Doc 04 §9 · Doc 07 FR-11" },
+  { t: "Reduced-motion rules", r: "Slides/fades become instant, highlight becomes outline, urgent styling static (never pulsing), countdowns shift colour without animating.", d: "Doc 07 §9 · Doc 06 §9 · Doc 05 §9" },
+  { t: "Focus system", r: "Visible focus everywhere; roving tabindex in the list; focus is never stolen by live updates.", d: "Doc 07 §13" },
+  { t: "Landmarks + skip links", r: "The four regions are landmarks with skip-links.", d: "Doc 07 §13" },
+  { t: "Bidi / RTL-ready layout", r: "Logical properties throughout; snippets bidi-isolate mixed LTR/RTL content.", d: "Doc 04 §14 · Doc 07 §14" },
+  { t: "Icon set", r: "Channel glyphs, delivery-state glyphs, actor-type glyphs, media-kind placeholders.", d: "Doc 07 FR-09, EC-11 · Doc 04 §8" }
+]},
+{ id: "B", name: "Components", note: "Every component the batch documents name. Each ships in both themes with its full variant and state set.", rows: [
+  { t: "Buttons — all variants", r: "Primary / secondary / tertiary / destructive, plus the loading state (spinner-in-button, no full-page blockers).", d: "Doc 02 §9 · Batch 1 prompt Step 1" },
+  { t: "Split button — send", r: "Send / Send &amp; Resolve / Send &amp; Pending-customer; all three actions exposed in the menu for assistive tech.", d: "Doc 07 FR-21, §13" },
+  { t: "Status pill ×8", r: "The eight statuses at their fixed hues, icon + text (never colour alone).", d: "Doc 06 §9, §13" },
+  { t: "Priority dot ×4", r: "low=gray, normal=blue, high=orange, urgent=red — always with a label.", d: "Doc 06 §9" },
+  { t: "SLA countdown chip", r: "green → amber → red as time-to-breach shrinks; shown in list rows and the property panel.", d: "Doc 07 FR-09 · Doc 06 §8 · Batch 1 prompt Step 1" },
+  { t: "Reply-window chip", r: "mm:ss under 10 min, h:mm above; the identical component appears in inbox list rows and over the composer.", d: "Doc 05 §9, FR-22 · Doc 07 FR-09" },
+  { t: "Auto-close / reopen / spam countdowns", r: "One temporal language for every countdown in the product — reuses the Doc 05 chip.", d: "Doc 06 §8, §9" },
+  { t: "Connection-state pill", r: "active=green, paused=amber, revoked=red.", d: "Doc 05 §9" },
+  { t: "Channel-health dot + banner", r: "healthy / degraded / down rollup; degraded or down shows a coloured dot plus a banner.", d: "Doc 07 FR-03 · Doc 05 FR-29" },
+  { t: "Avatar with presence", r: "Avatar plus presence dot, used in list rows, assignee combo and viewer stack.", d: "Doc 04 FR-19 · Doc 06 §8" },
+  { t: "Unassigned ring", r: "Distinct treatment for an unassigned ticket in place of the assignee avatar.", d: "Doc 07 FR-09" },
+  { t: "Viewer-avatar stack", r: "“Who is viewing this conversation”, top-right of the thread.", d: "Doc 07 FR-16 · Doc 04 FR-19" },
+  { t: "Bubble — customer", r: "Max-width 72% desktop / 86% mobile; density-aware spacing.", d: "Doc 04 §9" },
+  { t: "Bubble — agent (human)", r: "Staff public reply.", d: "Doc 04 §9" },
+  { t: "Bubble — AI", r: "Visibly AI-accented and AI-labelled; AI messages are never edited post-send.", d: "Doc 04 §9, FR-23 · Doc 07 §9" },
+  { t: "Bubble — owner-phone agent", r: "Manual replies sent from the support phone render with a “phone” badge and the account name.", d: "Doc 05 FR-11, §8 · BR-03" },
+  { t: "Internal note", r: "Unmistakably different: distinct background, border and label. Never deliverable to a customer.", d: "Doc 04 FR-17 · Doc 07 FR-17 · BR-02" },
+  { t: "System event row", r: "Assignment, transfer, escalation, join/leave, window-expired — muted style, bulk-collapsible.", d: "Doc 04 FR-05 · Doc 07 FR-14" },
+  { t: "Tombstone", r: "“Message deleted by customer” — neutral, content not shown.", d: "Doc 04 FR-21, §8" },
+  { t: "Edit marker", r: "“edited” affordance opening revision history only for permitted users.", d: "Doc 04 FR-21, §8" },
+  { t: "Delivery-state glyphs", r: "Clock (queued/sending), single check (sent), red ! (failed) with reason + Retry; text equivalents; no double-check ever rendered for Telegram.", d: "Doc 04 §8, FR-13 · Doc 05 FR-17, AC-07" },
+  { t: "Failure-reason guidance", r: "Reason codes map to actionable strings: blocked_by_user → “consider SMS”; window_expired → composer state; too_large → shows the configured cap.", d: "Doc 04 §8, FR-14" },
+  { t: "Photo / video + lightbox", r: "Thumb → full on demand; lightbox with pinch-zoom on mobile, fully keyboard operable.", d: "Doc 04 §8, §9, §13" },
+  { t: "Voice player", r: "Scrubber, speed 1× / 1.5× / 2×, “show transcript” toggle when a transcript exists, “unavailable” when it failed.", d: "Doc 04 §8 · EC-07" },
+  { t: "Document row", r: "Type icon, file name, size.", d: "Doc 04 §8" },
+  { t: "Infected-media shield", r: "Shield block with no download path for any role.", d: "Doc 04 §8 · SEC-04" },
+  { t: "Upload progress + cancel", r: "Per-attachment progress with cancel; “attachment pending” when storage is degraded.", d: "Doc 04 §9 · FS-02" },
+  { t: "Sticker placeholder", r: "Generic placeholder when content cannot be thumbnailed; never blocks the message.", d: "Doc 05 EC-10 · Doc 04 FR-05" },
+  { t: "Media snippet placeholder", r: "Media-only messages show a localised kind placeholder (“📷 Photo”) in list rows — never a raw storage key.", d: "Doc 07 EC-11" },
+  { t: "Long-message clamp", r: "A 16 KB message clamps at 40 lines with “show more”; search anchors still resolve.", d: "Doc 07 EC-10" },
+  { t: "Tag chip + overflow + input", r: "Tag chips with +N overflow in rows; free-form tag input with autocomplete in the panel.", d: "Doc 06 FR-19 · Doc 07 FR-09" },
+  { t: "Language chip", r: "Detected message/ticket language on the list row.", d: "Doc 07 FR-09 · Doc 04 FR-06" },
+  { t: "Sentiment dot", r: "Latest sentiment on the list row (value supplied by Doc 09).", d: "Doc 07 FR-09" },
+  { t: "Draft pencil", r: "Pencil affordance on any row with an unfinished reply.", d: "Doc 04 §8, FR-20 · Doc 07 FR-09" },
+  { t: "Unread state + count", r: "Bold row state with an unread count.", d: "Doc 07 FR-09" },
+  { t: "Dual-channel badge", r: "One customer reachable on both business account and direct bot shows a dual-channel badge; rows group under the customer.", d: "Doc 05 EC-04 · Doc 07 FR-09" },
+  { t: "Data table", r: "Virtualised-row table pattern with state pills and skeleton rows.", d: "Doc 01 §9 · Doc 03 §9 · Batch 1 prompt Step 1" },
+  { t: "Toasts", r: "Info / success / error, plus the specified one-tap-retry and “stay signed in” variants.", d: "Doc 07 §8 · Doc 04 EC-06 · Doc 02 §8" },
+  { t: "Empty-state pattern", r: "One reusable pattern: illustration slot, one-line explanation, one action.", d: "Doc 07 §8 · Batch 1 prompt Step 1" },
+  { t: "Skeletons", r: "List 8 rows, thread 6 bubbles, independent panel-tab skeletons, view counts as em-dash until the first real value.", d: "Doc 07 §8 · Doc 04 §9" },
+  { t: "Live-resort pill", r: "“List changed · Resort”, appears at most once per 5 s.", d: "Doc 07 FR-11, §8" },
+  { t: "Connection pills", r: "Reconnecting pill (≤2 s), staleness pill (“Live updates delayed”, after 30 s), offline banner.", d: "Doc 07 FR-29 · FS-01" },
+  { t: "Collision strip", r: "“Sara is replying…” — non-blocking, dismissible, never covers composer text; their draft is never shown.", d: "Doc 07 FR-16, §8" },
+  { t: "Send-race confirm", r: "“Sara just replied — send anyway?” — non-blocking confirm for the later sender.", d: "Doc 07 FR-16" },
+  { t: "New-messages chip", r: "“New messages ↓” while scrolled up; jump-to-first-unread and jump-to-latest.", d: "Doc 04 §9 · Doc 07 FR-15" },
+  { t: "Date separator", r: "Day boundaries in the thread.", d: "Doc 07 FR-14" },
+  { t: "Ticket-boundary marker", r: "“Ticket #4811 closed · Ticket #4812 opened” — a conversation spans tickets.", d: "Doc 07 FR-14" },
+  { t: "Handoff-packet card", r: "Pinned at its ticket start, collapsible: summary, intent + confidence meter, sentiment/urgency chips, suggested routing with applied/overridden indicator, “customer already saw these” KB list.", d: "Doc 06 FR-11, §8 · Doc 07 FR-14" },
+  { t: "Confirm-phrase input", r: "Typed-phrase confirmation for wide operations (merge &gt;2 sources, bulk close &gt;50).", d: "Doc 06 §9 · Doc 01 §9" },
+  { t: "Bulk bar", r: "Selection count; allowed actions computed from per-item permission intersection; disabled actions state why.", d: "Doc 06 §8 · Doc 07 FR-13" },
+  { t: "Bulk progress drawer", r: "Per-item results, retry-failed, progress announced at 25% increments.", d: "Doc 06 §8, FR-25, §13" },
+  { t: "Command palette (⌘K)", r: "Three sections: Actions, Views, Search; keyboard-navigable; recent searches per user.", d: "Doc 07 FR-23" },
+  { t: "Quick-filter chips", r: "status / priority / assignee=me / has-draft composing within the current view's base filters, plus clear-all.", d: "Doc 07 FR-24" },
+  { t: "Notification bell", r: "Badge, rows that deep-link, mark-all-read, quick mute (1 h / today).", d: "Doc 07 FR-26" },
+  { t: "Agent-status control", r: "Online / Away / Offline, with supervisor-forced status shown as “set by Dawit”.", d: "Doc 07 FR-28" },
+  { t: "Density toggle", r: "Comfortable / compact, persisted.", d: "Doc 07 §9" },
+  { t: "Shortcut overlay", r: "Opened with ?, lists the live bindings, screen-reader friendly.", d: "Doc 07 FR-31, §13" },
+  { t: "Coach marks", r: "Four steps — views, list, composer modes, ⌘K; dismiss-forever, re-openable from ?.", d: "Doc 07 §8" },
+  { t: "Macro / saved-reply palette", r: "Opened with /, personal → shared, fuzzy search, preview pane, variables resolved live with missing-variable warnings.", d: "Doc 07 FR-19" },
+  { t: "AI-actions cluster", r: "Button cluster + inline results slot (draft / improve / translate / summarize); contents owned by Doc 09.", d: "Doc 07 FR-19" },
+  { t: "Context-tab bar", r: "Ticket / Customer / Copilot in fixed order with badge dots.", d: "Doc 07 §9, FR-01" },
+  { t: "Region resize + collapse", r: "Resize and collapse affordances for R1/R2/R4, each with a keyboard equivalent.", d: "Doc 07 FR-01, §13" },
+  { t: "Absence-not-lock pattern", r: "Out-of-scope rows, hits and counts are absent — never a lock icon.", d: "Doc 07 BR-03 · Doc 03 SEC-02" }
+]},
+{ id: "C", name: "Screens and regions", note: "Each delivered at 1440 desktop AND 375 mobile, in both themes, with realistic Ethiopian deposit/withdrawal data in English and Amharic.", rows: [
+  { t: "Inbox shell — 1440", r: "Four regions: R1 Views 240 px (collapses to 56 px icons), R2 List 360 px (resizable 300–480), R3 Thread flex, R4 Context 380 px collapsible. Sizes persist per user.", d: "Doc 07 FR-01" },
+  { t: "Breakpoint 1024–1279", r: "R4 becomes an overlay drawer.", d: "Doc 07 FR-02" },
+  { t: "Breakpoint 768–1023", r: "R1 collapses to icons permanently.", d: "Doc 07 FR-02" },
+  { t: "Mobile — 375", r: "Two-level navigation: List screen ↔ Thread screen; R4 is a swipe-up bottom sheet with the same three tabs; Views is a modal sheet from the header.", d: "Doc 07 FR-02" },
+  { t: "Top bar", r: "Global search (⌘K), New-ticket, notification bell with badge, agent-status control, channel-health indicator, profile menu.", d: "Doc 07 FR-03" },
+  { t: "Views rail", r: "Seven system views (My Open, Unassigned, Mentions, Following, SLA at risk, Expiring windows, Rescue), auto-generated queue views, shared and personal saved views; live count badges capped at “999+”; drag-ordering within sections.", d: "Doc 07 FR-05–FR-08" },
+  { t: "Saved-view editor", r: "Filter set (status, priority, department, queue, assignee, tags, language, channel, has-draft, date ranges) + sort + visible columns; share to team/department; shared views read-only with “duplicate to edit”.", d: "Doc 07 FR-06" },
+  { t: "List", r: "Two-line dense row per FR-09; per-view default ordering (My Open = last activity desc, SLA at risk = time-to-breach asc, Unassigned = created asc); user sort override persists per view; infinite scroll 50/page with total count in the header.", d: "Doc 07 FR-09, FR-10, FR-12" },
+  { t: "Thread", r: "Full Doc 04 bubble/state/media rendering plus date separators, ticket-boundary markers, pinned handoff card, inline collapsible system events; opens at first unread; deep links resolve to the right anchor.", d: "Doc 07 FR-14, FR-15 · Doc 04 §8/§9" },
+  { t: "Composer", r: "Reply / Note modes (sticky per ticket per user), rich-lite formatting with per-channel downgrade preview, attachments with live per-channel caps, emoji, / macro palette, AI-actions slot, send-and-set-status split button, draft chip.", d: "Doc 07 FR-17–FR-22" },
+  { t: "Context panel — Ticket tab", r: "The full Doc 06 property contract: status control, priority, assignee combo, department/queue cascade, tags, followers, SLA chips, reply-window chip, pending-reason selector, linked tickets.", d: "Doc 06 §8 · Doc 07 FR-01", b: true },
+  { t: "Context panel — Customer / Copilot slots", r: "Named tabs with badge dots, rendered as labelled empty slots — contents are Doc 08 / Doc 09 and out of scope here.", d: "Doc 07 FR-01, §3, §21" },
+  { t: "⌘K palette + search results", r: "Actions / Views / Search sections; ticket, customer and message result rows; message hits deep-link to the thread anchored and highlighted.", d: "Doc 07 FR-23, FR-25" },
+  { t: "Notification panel", r: "Assignment, mention, follower events, escalation-to-me, SLA warning on mine, window-closing on mine, bulk-completed; each row deep-links.", d: "Doc 07 FR-26" },
+  { t: "Merge dialog", r: "Side-by-side timelines, direction arrow, consequences checklist, confirm phrase for &gt;2 sources.", d: "Doc 06 §8, FR-20", b: true },
+  { t: "Split dialog", r: "Message multi-select mode with a count pill, then a destination step (department/form).", d: "Doc 06 §8, FR-21", b: true },
+  { t: "Escalate dialog", r: "Path picker (supervisor review / department / named user) + reason with a minimum-length meter.", d: "Doc 06 §8, FR-23", b: true },
+  { t: "Spam dialog", r: "Consequences note plus an optional block-customer checkbox carrying its own separate confirm.", d: "Doc 06 §8, FR-09", b: true },
+  { t: "Transfer", r: "Department/queue cascade; assignee reset unless retained; explanatory badge when the SLA keeps its original targets.", d: "Doc 06 FR-22, §8", b: true },
+  { t: "New ticket from conversation", r: "Pre-filled customer/channel; blocked when an open-family ticket exists, showing a jump link instead.", d: "Doc 06 FR-12 · Doc 07 FR-03", b: true },
+  { t: "Mobile interaction set", r: "Swipe-right = quick claim (haptic), swipe-left = quick actions sheet (resolve/pending/priority), pull-to-refresh, composer sticky above the keyboard, attachments in an overflow sheet, bulk capped at 25.", d: "Doc 07 §8 · Doc 06 §9" },
+  { t: "Thread print layout", r: "Ticket header + messages; notes excluded unless the viewer holds conversations.history.full and explicitly toggles them; watermarked with user + timestamp.", d: "Doc 07 §9, SEC-05" }
+]},
+{ id: "D", name: "States", note: "The universal set (normal, loading, empty, error) for every region, plus every edge state the documents name.", rows: [
+  { t: "List — loading", r: "Eight skeleton rows, then progressive fill.", d: "Doc 07 §8" },
+  { t: "List — empty (My Open)", r: "“Inbox zero 🎉 — check Unassigned (12)” with the action; the 🎉 is a replaceable token.", d: "Doc 07 §8, §14" },
+  { t: "List — empty (Unassigned)", r: "“All caught up”.", d: "Doc 07 §8" },
+  { t: "List — error", r: "Inline retry card; the views rail stays usable.", d: "Doc 07 §8" },
+  { t: "List — unread rows", r: "Bold state with unread count.", d: "Doc 07 FR-09" },
+  { t: "List — resort held", r: "Batched every 5 s; held while the pointer is inside the list; auto-resorts after 3 s unhovered.", d: "Doc 07 FR-11" },
+  { t: "List — row enter / leave", r: "New rows slide in at position with a 300 ms highlight; departing rows fade and collapse over 150 ms.", d: "Doc 07 FR-11" },
+  { t: "List — selection", r: "Click-checkbox, shift-range, ⌘/ctrl-toggle, “select all in view” with the true server count; selection survives live re-sorts.", d: "Doc 07 FR-13" },
+  { t: "List — drift tray", r: "Selected rows that left the view sit in a “no longer in view” tray on the bulk bar; execution reports “3 items left the view and were skipped”.", d: "Doc 07 EC-02, T-05" },
+  { t: "List — scroll restoration", r: "Scroll position restored on back-navigation.", d: "Doc 07 FR-12" },
+  { t: "Thread — no selection", r: "Keyboard-hint panel with the shortcut-overlay teaser.", d: "Doc 07 §8" },
+  { t: "Thread — loading", r: "Six-bubble skeleton; progressive media (thumb → full).", d: "Doc 04 §9 · Doc 07 §8" },
+  { t: "Thread — error", r: "Retry plus “open customer instead”.", d: "Doc 07 §8" },
+  { t: "Thread — first-unread anchor", r: "Opens at first unread (else bottom) with jump affordances both directions.", d: "Doc 07 FR-15" },
+  { t: "Thread — collapsed events", r: "“show 12 events” bulk collapse for system events.", d: "Doc 07 FR-14" },
+  { t: "Thread — brand-new conversation", r: "Customer identity card + “no messages yet”.", d: "Doc 04 §9" },
+  { t: "Thread — reply-to out of page", r: "Clicking a reply-to reference fetches the anchor context window on demand.", d: "Doc 07 FR-15 · Doc 04 EC-08" },
+  { t: "Composer — Reply (normal)", r: "Public reply mode; send button reads “Send reply”.", d: "Doc 07 FR-17" },
+  { t: "Composer — Note mode", r: "Note-yellow: border + background + label all change; send button reads “Add note”; mode change announced (“Internal note mode”).", d: "Doc 07 FR-17, §13 · Doc 04 FR-17" },
+  { t: "Composer — window closing", r: "Amber countdown strip inline over the composer: “Reply window closes in 1 h 12 m”.", d: "Doc 05 §8, FR-22 · Doc 07 FR-20" },
+  { t: "Composer — window expired", r: "Sending disabled with an options card: send SMS re-engagement template (only when a phone is on file), “reply from the phone” guidance, or wait — copy explains only customer activity reopens the window.", d: "Doc 05 FR-23, §8 · Doc 07 FR-20" },
+  { t: "Composer — connection paused / revoked", r: "Red card naming the account, linking to admin health.", d: "Doc 05 §8 · Doc 07 FR-20" },
+  { t: "Composer — blocked by user", r: "Guidance card: “Customer has blocked this channel — consider SMS”.", d: "Doc 04 §8 · Doc 05 §8 · Doc 07 FR-20" },
+  { t: "Composer — conversation blocked", r: "No outbound is possible to a blocked conversation, with no exception.", d: "Doc 07 FR-20 · Doc 04 BR-02" },
+  { t: "Composer — optimistic send", r: "Bubble appears with the queued glyph, then updates through the delivery state machine.", d: "Doc 07 FR-21 · Doc 04 FR-13" },
+  { t: "Composer — failed + retry", r: "Inline retry on the failed bubble with its reason code.", d: "Doc 04 §8 · Doc 07 FR-21" },
+  { t: "Composer — offline queued", r: "Sends queue locally with visible “will send when online” chips; flush in order on reconnect with no duplicates.", d: "Doc 04 §9 · Doc 07 FR-29" },
+  { t: "Composer — send-and-status partial failure", r: "Reply stays sent; the transition error is a toast with one-tap retry of just the transition.", d: "Doc 07 §8, FR-21 · Doc 06 EC-08" },
+  { t: "Composer — resolved-by-rule prompt", r: "Automation resolved the ticket while typing → “resolved by rule X — send and reopen, or discard?”.", d: "Doc 06 EC-08 · Doc 07 EC-06" },
+  { t: "Composer — unsent-draft guard", r: "Only above 20 characters: “discard / keep”.", d: "Doc 07 FR-22" },
+  { t: "Composer — draft chip", r: "Per-ticket draft chip in the thread header.", d: "Doc 07 FR-22" },
+  { t: "Composer — attachment caps", r: "Per-channel caps shown live; oversize rejected with the configured cap named.", d: "Doc 07 FR-18 · Doc 04 §8, EC-02" },
+  { t: "Composer — formatting downgrade hint", r: "Rich-lite content downgraded per channel capability at send, with a per-channel preview hint.", d: "Doc 07 FR-18" },
+  { t: "Composer — collision + send race", r: "Live warning strip while a colleague types; non-blocking confirm on the send race.", d: "Doc 07 FR-16" },
+  { t: "Thread — typing indicator", r: "Shown ≤6 s after the last signal then auto-clears; never stacks.", d: "Doc 04 §8, FR-18" },
+  { t: "Views — counts pending", r: "Em-dash until the first real value; never 0-then-jump.", d: "Doc 07 §8, FR-07" },
+  { t: "Views — empty", r: "Nothing shared yet → explainer.", d: "Doc 07 §8" },
+  { t: "Search — no hits", r: "Per-section empty states echoing the query.", d: "Doc 07 §8" },
+  { t: "Search — unavailable", r: "Search sections show “search unavailable” inline; Actions and Views keep working.", d: "Doc 07 FS-03" },
+  { t: "Notifications — permission denied", r: "Silent downgrade with a one-time hint in the bell menu; never a re-prompt loop.", d: "Doc 07 FS-04" },
+  { t: "Notifications — empty", r: "Empty bell state (universal set).", d: "Batch 1 prompt Step 2" },
+  { t: "Panel — loading", r: "Property-panel skeleton; inline spinners on transitions.", d: "Doc 06 §8", b: true },
+  { t: "Panel — legal next states only", r: "The status control renders only legal targets; illegal ones are absent, not disabled.", d: "Doc 06 §8, FR-04", b: true },
+  { t: "Panel — optimistic transition + revert", r: "Optimistic status change with revert and the rejection reason surfaced.", d: "Doc 06 §8", b: true },
+  { t: "Panel — resolved", r: "Auto-close countdown: “closes in 41 h unless the customer replies”.", d: "Doc 06 §8, FR-07", b: true },
+  { t: "Panel — closed", r: "Reopen-window countdown or the reason-required notice.", d: "Doc 06 §8, FR-08", b: true },
+  { t: "Panel — spam", r: "Banner with the 7-day unmark countdown.", d: "Doc 06 §8, FR-09", b: true },
+  { t: "Panel — channel unreachable", r: "Unreachable chip plus SLA-pause indication; never auto-resolves or auto-closes.", d: "Doc 06 EC-10, BR-07 · Doc 05 FR-10", b: true },
+  { t: "Panel — transferred", r: "Explanatory badge when the SLA instance keeps its original targets.", d: "Doc 06 FR-22", b: true },
+  { t: "Panel — linked tickets", r: "Merged / split / previous relationships with labels; merged source carries a permanent banner to the target.", d: "Doc 06 §8, FR-20", b: true },
+  { t: "Panel — pending reason", r: "Pending-reason selector appears contextually (awaiting customer / internal).", d: "Doc 06 §8, FR-01", b: true },
+  { t: "Claim race", r: "First commit wins; the loser sees an inline avatar swap — no error-modal storm.", d: "Doc 06 FR-16 · Doc 07 SS-02" },
+  { t: "Rescue view populated", r: "channel_unreachable tickets listed after a connection is revoked.", d: "Doc 07 FR-05 · Doc 05 FR-10" },
+  { t: "Reconnecting", r: "Amber “reconnecting” pill within 2 s; list and thread continue read-only from cache.", d: "Doc 07 FR-29" },
+  { t: "Live updates delayed", r: "Staleness pill after 30 s when the projector is down; no agent action is blocked.", d: "Doc 07 FS-01" },
+  { t: "Version skew", r: "Passive “refresh for updates” toast — never forced mid-composition.", d: "Doc 07 FR-30" },
+  { t: "Full offline", r: "Offline screen with the cached last view, read-only.", d: "Doc 07 FR-29" },
+  { t: "Away auto-set", r: "60-second countdown toast with cancel before Away is applied after 10 idle minutes.", d: "Doc 07 FR-28" },
+  { t: "Forced status", r: "Supervisor-forced status shown with attribution.", d: "Doc 07 FR-28" },
+  { t: "Out-of-scope deep link", r: "404-pattern page with “search instead”; existence is never confirmed.", d: "Doc 07 EC-01 · Doc 03 SEC-02" },
+  { t: "Queue deleted mid-shift", r: "Queue view vanishes with a toast; deep links fall back to My Open.", d: "Doc 07 EC-09" },
+  { t: "Channel health banner", r: "Degraded / down banner in the inbox header during a channel outage.", d: "Doc 07 FR-03 · Doc 05 FS-01" },
+  { t: "Store recovery", r: "After a schema mismatch the store resets and refetches, preserving composer text above all else.", d: "Doc 07 FS-05" },
+  { t: "Bulk — mixed permissions", r: "Disallowed actions disabled with the reason; per-item results honest; partial success is normal.", d: "Doc 06 §8, FR-25 · Doc 07 EC-05" },
+  { t: "Draft conflict across devices", r: "Last-writer-wins with a “draft updated on another device” toast to the loser.", d: "Doc 04 EC-06 · Doc 07 EC-03" },
+  { t: "Draft survives merge", r: "Draft moves to the surviving ticket with an info chip.", d: "Doc 07 EC-12" }
+]},
+{ id: "E", name: "Cross-cutting proof", note: "Applies to every row above; audited as its own set so nothing is proved on desktop-light-English only.", rows: [
+  { t: "Both themes", r: "Dark and light, complete, for every screen and state.", d: "Batch 1 prompt Step 2 · Doc 07 §9" },
+  { t: "Both viewports", r: "1440 desktop and 375 mobile delivered together.", d: "Batch 1 prompt Step 2 · Doc 07 FR-02" },
+  { t: "Both languages", r: "English and Amharic, real Amharic text (flagged for native review) including long strings that prove the layout survives expansion.", d: "Batch 1 prompt Step 2 · Doc 07 §14" },
+  { t: "44 px touch targets", r: "Minimum on every interactive element on mobile.", d: "Batch 1 prompt design rules · Doc 02 §9" },
+  { t: "Nothing by colour alone", r: "Every pill, dot, chip and state carries an icon or text equivalent.", d: "Batch 1 prompt design rules · Doc 06 §9 · Doc 07 §13" },
+  { t: "Live-region announcements", r: "Batched list changes (“List updated: 3 new”), incoming message in the open thread, collision strip, composer mode change.", d: "Doc 07 §13 · Doc 04 §13" },
+  { t: "Accessible counts", r: "Badge counts labelled (“My Open, 12 tickets”).", d: "Doc 07 §13" },
+  { t: "Keyboard map complete", r: "All FR-31 bindings designed and hinted on desktop: J/K, Enter/O, X, Shift+X, R, N, A, I, E, Shift+E, P, T, S, M, G then U/M/A, ⌘K, ⌘Enter, Esc, ?.", d: "Doc 07 FR-31 · Batch 1 prompt design rules" },
+  { t: "Any conversation in ≤2 clicks/taps", r: "Navigation budget honoured on both viewports.", d: "Batch 1 prompt design rules" },
+  { t: "Keyboard equivalents for drag", r: "View reorder and panel resize both operable without a pointer.", d: "Doc 07 §13" },
+  { t: "White-label neutrality", r: "No invented brand personality; only the Doc 16 token set varies per tenant; fixed status hues stay fixed.", d: "Doc 16 FR-01 · Doc 06 §9 · Batch 1 prompt design rules" },
+  { t: "Hard product rules visible", r: "Notes structurally distinct from replies; AI content AI-labelled; no impersonation surfaces; no customer “verified” language; SMS surfaces notification-only.", d: "Batch 1 prompt design rules · Doc 04 BR-01 · Doc 05 BR-02" },
+  { t: "Realistic data throughout", r: "Ethiopian names, deposit and withdrawal support conversations, mixed Amharic + English — never lorem ipsum.", d: "Batch 1 prompt Step 2" }
+]}
+];
+
+const DS = "✅ B1-DS", S1 = "✅ B1-S01", S2 = "✅ B1-S02", S3 = "✅ B1-S03", S4 = "✅ B1-S04";
+const STATUS = {
+  "Colour system, dark + light": DS, "Contrast floor": DS, "Fixed hues (not themeable)": DS,
+  "Note-mode differentiation floor": DS, "AI accent": DS, "Typography": DS, "Type scale, both viewports": DS,
+  "4pt grid + spacing scale": DS, "Density modes": DS, "Motion tokens": DS, "Reduced-motion rules": DS, "Icon set": DS,
+  "Buttons — all variants": DS, "Split button — send": DS, "Status pill ×8": DS, "Priority dot ×4": DS,
+  "SLA countdown chip": DS, "Reply-window chip": DS, "Connection-state pill": DS, "Channel-health dot + banner": DS,
+  "Avatar with presence": DS, "Unassigned ring": DS, "Bubble — customer": DS, "Bubble — agent (human)": DS,
+  "Bubble — AI": DS, "Bubble — owner-phone agent": DS, "Internal note": DS, "System event row": DS, "Tombstone": DS,
+  "Delivery-state glyphs": DS, "Failure-reason guidance": DS, "Voice player": DS, "Document row": DS,
+  "Infected-media shield": DS, "Upload progress + cancel": DS, "Sticker placeholder": DS,
+  "Tag chip + overflow + input": DS, "Language chip": DS, "Sentiment dot": DS, "Draft pencil": DS,
+  "Unread state + count": DS, "Data table": DS, "Toasts": DS, "Empty-state pattern": DS, "Skeletons": DS,
+  "Live-resort pill": DS, "Connection pills": DS, "Handoff-packet card": DS, "Confirm-phrase input": DS,
+  "Bulk bar": DS, "Density toggle": S1,
+  "Viewer-avatar stack": S1, "Dual-channel badge": S1, "Media snippet placeholder": S1, "Date separator": S1,
+  "Ticket-boundary marker": S1, "AI-actions cluster": S1, "Context-tab bar": S1, "Agent-status control": S1,
+  "Quick-filter chips": S1,
+  "Collision strip": S2, "Send-race confirm": S2, "New-messages chip": S2, "Long-message clamp": S2,
+  "Absence-not-lock pattern": S2,
+  "Command palette (⌘K)": S3, "Notification bell": S3, "Shortcut overlay": S3, "Coach marks": S3,
+  "Region resize + collapse": DS,
+  "Inbox shell — 1440": S1, "Mobile — 375": S1, "Top bar": S1, "Views rail": S1 + " · B1-S03",
+  "Saved-view editor": S3, "List": S1, "Thread": S1, "Composer": S1, "Context panel — Ticket tab": S1,
+  "Context panel — Customer / Copilot slots": S1, "⌘K palette + search results": S3, "Notification panel": S3,
+  "Merge dialog": S4, "Split dialog": S4, "Escalate dialog": S4, "Spam dialog": S4, "Transfer": S4,
+  "New ticket from conversation": S4, "Thread print layout": S4,
+  "List — loading": S2, "List — empty (My Open)": S2, "List — empty (Unassigned)": S2, "List — error": S2,
+  "List — unread rows": S1, "List — resort held": S2, "List — selection": S2, "List — drift tray": S2,
+  "Thread — no selection": S2, "Thread — loading": S2, "Thread — error": S2, "Thread — first-unread anchor": S2,
+  "Thread — collapsed events": S2, "Thread — brand-new conversation": S2,
+  "Composer — Reply (normal)": S1, "Composer — Note mode": S2, "Composer — window closing": S1,
+  "Composer — window expired": S2, "Composer — connection paused / revoked": S2, "Composer — blocked by user": S2,
+  "Composer — conversation blocked": S2, "Composer — failed + retry": S2, "Composer — offline queued": S2,
+  "Composer — send-and-status partial failure": S2, "Composer — resolved-by-rule prompt": S2,
+  "Composer — unsent-draft guard": S2, "Composer — draft chip": S1, "Composer — formatting downgrade hint": S1,
+  "Composer — collision + send race": S2, "Thread — typing indicator": S1,
+  "Views — counts pending": S2, "Views — empty": S3, "Search — no hits": S2, "Search — unavailable": S2,
+  "Notifications — permission denied": S2, "Notifications — empty": S3,
+  "Panel — legal next states only": S1, "Panel — transferred": S4, "Panel — linked tickets": S1,
+  "Reconnecting": S2, "Live updates delayed": S2, "Version skew": S2, "Full offline": S2, "Away auto-set": S2,
+  "Forced status": S2, "Out-of-scope deep link": S2, "Queue deleted mid-shift": S2, "Channel health banner": S2,
+  "Bulk — mixed permissions": S2, "Draft conflict across devices": S2,
+  "Both themes": "✅ all", "Both viewports": "✅ all", "Both languages": "✅ all", "44 px touch targets": "✅ all",
+  "Nothing by colour alone": "✅ all", "Accessible counts": S3, "Keyboard map complete": S3,
+  "Any conversation in ≤2 clicks/taps": S1, "Keyboard equivalents for drag": S3,
+  "White-label neutrality": DS, "Hard product rules visible": "✅ all", "Realistic data throughout": "✅ all"
+};
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    const audit = this.props.auditMode ?? false;
+    const flags = this.props.showBoundaryFlags ?? true;
+    let n = 0, total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      sec.rows.forEach(r => {
+        n += 1; total += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({
+          n: ("00" + n).slice(-3),
+          t: r.t, r: r.r, d: r.d,
+          b: flags && !!r.b,
+          s: audit ? (STATUS[r.t] || "❌") : "—"
+        });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

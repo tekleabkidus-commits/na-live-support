@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 26px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B12-S00-combined-checklist-audit-v2</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batches 1 + 2 — one checklist, one audit</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Batch 1's 179 rows and Batch 2's 74, reconciled into 221 — duplicates collapsed, nothing dropped. Changed since v1: the nine behaviour rows are now <strong style="font-weight: 600;">handed to build acceptance</strong> against <span style="font-family: ui-monospace, monospace; font-size: 13px;">B12-A01</span>, each citing its document; the lightbox is drawn and awaiting your pass; the bulk bar points at <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-S02-v2</span>, where its disabled reason became visible text.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">✅ {{ tally.done }} designed</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #EDF0F7; border: 1px solid #C3CEE6; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #2B4478;">⇢ {{ tally.handed }} handed to build acceptance</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #7E650F;">◷ {{ tally.pending }} awaiting your verdict</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FBE5E5; border: 1px solid #EFC2C2; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #8E2020;">❌ {{ tally.open }} still to draw</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">{{ tally.total }} rows · {{ tally.merged }} duplicates collapsed</span>
+    </div>
+  </header>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="10">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; color: #1D1C18;">{{ g.id }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ g.name }}</span>
+        <span style="margin-left: auto; font-size: 11.5px; color: #4A4842;">{{ g.tally }}</span>
+      </div>
+      <sc-for list="{{ g.rows }}" as="row" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 26px minmax(0, 1fr) 200px 160px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+          <span style="font-size: 13px; padding-top: 1px;">{{ row.mk }}</span>
+          <div style="min-width: 0;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; line-height: 1.5; padding-top: 2px;">{{ row.where }}</div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+
+  <section style="background: #EDF0F7; border: 1px solid #C3CEE6; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #2B4478;">⇢ Nine rows, handed to build acceptance</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.6; color: #2B4478;">Each is written out in <span style="font-family: ui-monospace, monospace;">B12-A01-behaviour-acceptance-v1</span> with what must be true, how a builder demonstrates it, and the passage it answers to. They close as a signed hand-off, not as designs.</p>
+    <sc-for list="{{ handedRows }}" as="row" hint-placeholder-count="9">
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 200px; gap: 12px; padding: 7px 0; border-top: 1px solid #C3CEE6; font-size: 12.5px; align-items: baseline;">
+        <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #2B4478;">{{ row.where }}</span>
+        <span style="color: #1D1C18; font-weight: 600;">{{ row.t }}</span>
+        <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #2B4478;">{{ row.d }}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="background: #FBE5E5; border: 1px solid #EFC2C2; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #8E2020;">❌ Two rows still to draw · ◷ one awaiting you</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #7A1D1D;">The <strong style="font-weight: 600;">edit marker</strong> (Doc 04 FR-21, FR-22, FR-23, §8) and the <strong style="font-weight: 600;">/ macro palette</strong> (Doc 07 FR-19) are fully specified by your rulings and queued — I am posting the three components one at a time as you asked, and the <strong style="font-weight: 600;">lightbox</strong> (<span style="font-family: ui-monospace, monospace;">B12-S01-v2</span>) is waiting on your visual pass. Neither remaining row is blocked by a question; say the word and both are drawn.</p>
+  </section>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 4px; color: #1D1C18;">The {{ tally.merged }} rows I collapsed, and into what</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.6; color: #4A4842;">Both checklists named these requirements. Each is one row now, carrying both document references. If you disagree with any collapse, say which and I will split it back out.</p>
+    <sc-for list="{{ merged }}" as="m" hint-placeholder-count="10">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); gap: 10px; padding: 6px 0; border-top: 1px solid #F0EEE9; font-size: 12.5px; align-items: baseline;">
+        <span style="color: #6B675D;">{{ m.from }}</span>
+        <span style="color: #A8A398;">→</span>
+        <span style="color: #1D1C18; font-weight: 600;">{{ m.into }}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #7E650F;">Before you close this</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #7E650F;">
+      <li>One row reverses an earlier ✅ of mine: <strong style="font-weight: 600;">live-region announcements</strong>. I marked it done in <span style="font-family: ui-monospace, monospace;">B2-S06</span> because the roles were marked in the markup. Marked is not spoken. It is a build-acceptance row now.</li>
+      <li>You have approved <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S01-v2</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S02-v2</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S03</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S04</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S05</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-S01-v2</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-S02-v2</span>, <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-S03-v2</span>. <span style="font-family: ui-monospace, monospace; font-size: 12px;">B12-S01-v2</span> and <span style="font-family: ui-monospace, monospace; font-size: 12px;">B12-A01</span> are not yet approved.</li>
+      <li>Amharic stays flagged for native review on your side.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const MARKS = { done: "✅", handed: "⇢", pending: "◷", open: "❌" };
+
+class Component extends DCLogic {
+  state = { groups: [], merged: [], tally: { total: 0, done: 0, open: 0, handed: 0, pending: 0, merged: 0 } };
+  componentDidMount() {
+    import('./combined-audit-data.js').then(m => {
+      const groups = m.GROUPS.map(g => ({ ...g, rows: g.rows.map(r => ({ ...r, mk: MARKS[r.state] || "❌" })) }));
+      this.setState({ groups, merged: m.MERGED, tally: m.TALLY });
+    });
+  }
+  renderVals() {
+    const handedRows = [];
+    this.state.groups.forEach(g => g.rows.forEach(r => { if (r.state === 'handed') handedRows.push(r); }));
+    return { groups: this.state.groups, merged: this.state.merged, tally: this.state.tally, handedRows };
+  }
+}
+</script>
+</body>
+</html>

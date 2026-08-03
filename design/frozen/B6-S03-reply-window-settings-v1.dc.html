@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S03-reply-window-settings-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows D01–D04</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Reply-window administration</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Four rows, one small surface, and one genuinely unusual rule to make legible: <strong style="font-weight: 600;">this setting can be tightened but never loosened</strong>, and the platform will tighten it behind the operator's back when Telegram proves the window was shorter than configured. A number field that silently disagrees with its own stored value would be a bug; here it is the specification, so the calibration has to be visible next to the control rather than buried in a changelog.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every part is <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim — including the reply-window chips, which are shown here as previews so an admin setting the threshold can see the exact chip an agent will get. The per-key anatomy (label, description, typed control, validation, provenance, reset) is Doc 16's contract, applied here as rows J03–J06 will apply it everywhere else.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">The composer's closing / expired / paused cards are Doc 05's contract for Doc 07 and are Batch 1 law. They are not rebuilt here.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The window settings — 1440</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows D01–D04 · Doc 05 FR-21, FR-22, FR-30, BR-05, EC-14</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Placement call: the documents give this setting no screen of its own, and Doc 16 FR-08's fourteen settings groups have no channels group to hold it, so it sits on the bot's Connection tab beside the mode it belongs to — the same decision the cross-walk recorded. Say the word and it moves.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">D01 · D02 · D03 · D04</span></div>
+    <div data-screen-label="D01 window settings light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_promo_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Tickets &amp; SLA</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #6B675D;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22A55B;"></span>Healthy</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.edit</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 18px;">
+            <span style="font-size: 15px; font-weight: 600; color: #1D1C18;">Reply window</span>
+            <span style="font-size: 12px; color: #6B675D;">Business mode only — it is Telegram's rule, not ours</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; margin-top: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+              <div style="display: flex; align-items: flex-start; gap: 14px;">
+                <div style="min-width: 0; flex: 1;">
+                  <label for="win-l" style="display: block; font-size: 13px; font-weight: 600; color: #1D1C18;">How long agents can reply after a customer writes</label>
+                  <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.6; color: #4A4842;">Telegram only lets the bot answer on your account's behalf for a while after each customer message. Shorten this if you want your team pushed to answer sooner — the countdown an agent sees is driven by this number.</p>
+                  <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 2px 6px; display: inline-block; margin-top: 8px;">telegram.business.window_hours</span>
+                </div>
+                <div style="flex: none; width: 210px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="win-l" style="flex: 1; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #1D1C18; background: #FFFFFF; min-height: 38px;">20</div>
+                    <span style="font-size: 12.5px; color: #4A4842;">hours</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 11px; color: #6B675D;">
+                    <span>Min 1</span><span>·</span><span style="display: inline-flex; align-items: center; gap: 4px;">🔒 Max 24</span>
+                  </div>
+                  <div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Platform maximum — Telegram's own limit</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 11px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; color: #6B675D;">Changed by Sara Bekele · 12 Jul 2026, 10:18</span>
+                <span style="display: inline-flex; align-items: center; background: #EEECE6; color: #4A4842; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">Modified from default</span>
+                <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; min-height: 36px; cursor: pointer;">Reset to 24 hours</button>
+              </div>
+
+              <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin-top: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">The platform shortened this for @NaBetVIP on 28 Jul</div>
+                <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #8F5F08;">A reply was refused by Telegram 3 h 52 m before this setting said the window would close, so the stored window for that line was tightened to what Telegram actually allows. You can lower this number, but you cannot raise it past what Telegram has been observed to permit — what Telegram does always wins over what is configured here.</p>
+                <a href="#calibration" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #8F5F08; margin-top: 4px;">See the calibration record →</a>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+                <label for="close-l" style="display: block; font-size: 13px; font-weight: 600; color: #1D1C18;">Warn agents when the window is nearly gone</label>
+                <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.6; color: #4A4842;">Below this point the ticket starts showing a countdown in the list and above the composer.</p>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                  <div id="close-l" style="width: 92px; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #1D1C18; min-height: 38px;">2</div>
+                  <span style="font-size: 12.5px; color: #4A4842;">hours left</span>
+                </div>
+                <label style="display: flex; gap: 9px; align-items: flex-start; margin-top: 11px; font-size: 12px; line-height: 1.5; color: #1D1C18;"><input type="checkbox" checked="checked" style="margin-top: 2px;" /><span>Also notify the assignee when a ticket enters this state</span></label>
+                <div style="border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 11px;">
+                  <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">What the agent will see</div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; color: #4A5460; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⏱ Window 3h 12m</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⏱ Closes in 08:41</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⊘ Window expired</span>
+                  </div>
+                  <p style="margin: 7px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">These are the approved chips from the design system — this setting changes when they appear, never how they look.</p>
+                </div>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Simulate an expiry</span>
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: #EEECE6; color: #4A4842; padding: 2px 7px; border-radius: 999px;">Staging only</span>
+                </div>
+                <p style="margin: 5px 0 0; font-size: 12px; line-height: 1.6; color: #4A4842;">Forces one conversation into the expired state so you can see what an agent gets. It is not available on production, and this is production.</p>
+                <button style="font-family: inherit; width: 100%; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 14px; min-height: 36px; margin-top: 11px;">Simulate window expiry</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · staging, with the simulator live</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">D04 enabled · Amharic labels</span></div>
+    <div data-screen-label="D01 window settings dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: #2F2F29; color: #C9C5BB; padding: 3px 8px; border-radius: 999px;">Staging</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">2</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 224px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Tickets &amp; SLA</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 20px 24px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">NA BET Support <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #A6A296;">@nabet_support_bot</span></h1>
+            </div>
+            <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">settings.edit</span>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Connection</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 18px;">
+            <span style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Reply window · የመልስ መስኮት</span>
+            <span style="font-size: 12px; color: #A6A296;">ለቢዝነስ ዘዴ ብቻ</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; margin-top: 12px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+              <div style="display: flex; align-items: flex-start; gap: 14px;">
+                <div style="min-width: 0; flex: 1;">
+                  <label for="win-d" style="display: block; font-size: 13px; font-weight: 600; color: #ECEAE4;">ደንበኛው ከጻፈ በኋላ ወኪሎች መመለስ የሚችሉበት ጊዜ</label>
+                  <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.75; color: #C9C5BB;">ቴሌግራም ቦቱ በመለያዎ ስም መልስ እንዲሰጥ የሚፈቅደው ደንበኛው ከጻፈ በኋላ ላለው የተወሰነ ጊዜ ብቻ ነው። ቡድንዎ ቶሎ እንዲመልስ ከፈለጉ ይህን ያሳጥሩት።</p>
+                  <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 2px 6px; display: inline-block; margin-top: 8px;">telegram.business.window_hours</span>
+                </div>
+                <div style="flex: none; width: 210px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="win-d" role="alert" style="flex: 1; border: 1.5px solid #F08A8A; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #ECEAE4; min-height: 38px;">30</div>
+                    <span style="font-size: 12.5px; color: #C9C5BB;">ሰዓት</span>
+                  </div>
+                  <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 8px 10px; margin-top: 7px;">
+                    <div style="font-size: 11.5px; font-weight: 600; color: #F5A7A7;">Must be between 1 and 24</div>
+                    <div style="font-size: 11px; line-height: 1.5; color: #E0A0A0; margin-top: 2px;">24 is Telegram's own limit — the platform cannot go past it.</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #262622; margin-top: 12px; padding-top: 11px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; color: #A6A296;">Unsaved change · was 20</span>
+                <button style="font-family: inherit; margin-left: auto; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px;">Save</button>
+                <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 12px; min-height: 36px; cursor: pointer;">Discard</button>
+              </div>
+
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 12px 13px; margin-top: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Calibration record</div>
+                <p style="margin: 4px 0 8px; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Every time Telegram refuses a reply earlier than we expected, the stored window for that line is tightened and the observation is kept here.</p>
+                <div style="display: flex; flex-direction: column; gap: 7px; font-size: 11.5px;">
+                  <div style="display: flex; gap: 10px; color: #C9C5BB;"><span style="font-family: ui-monospace, monospace; color: #A6A296; flex: none;">28 Jul 21:04</span><span>@NaBetVIP · configured 24 h → observed 20 h 08 m</span></div>
+                  <div style="display: flex; gap: 10px; color: #C9C5BB;"><span style="font-family: ui-monospace, monospace; color: #A6A296; flex: none;">14 Jul 08:51</span><span>@NaBetSupport · configured 24 h → observed 23 h 41 m</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+                <label for="close-d" style="display: block; font-size: 13px; font-weight: 600; color: #ECEAE4;">መስኮቱ ሊዘጋ ሲቃረብ ወኪሎችን አስጠንቅቅ</label>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                  <div id="close-d" style="width: 92px; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #ECEAE4; min-height: 38px;">2</div>
+                  <span style="font-size: 12.5px; color: #C9C5BB;">ሰዓት ሲቀር</span>
+                </div>
+                <div style="border-top: 1px solid #262622; margin-top: 12px; padding-top: 11px;">
+                  <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">What the agent will see</div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #262C33; color: #A7B2BE; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⏱ Window 3h 12m</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⏱ Closes in 08:41</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">⊘ Window expired</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Simulate an expiry</span>
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: #2F2F29; color: #C9C5BB; padding: 2px 7px; border-radius: 999px;">Staging only</span>
+                </div>
+                <p style="margin: 5px 0 0; font-size: 12px; line-height: 1.6; color: #C9C5BB;">Pick a conversation and force it into the expired state to see exactly what an agent gets.</p>
+                <div style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #918C80; margin-top: 10px; min-height: 38px;">Choose a conversation…</div>
+                <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 14px; min-height: 36px; margin-top: 9px; cursor: pointer;">Simulate window expiry</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">States</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">loading · empty · save error · not-applicable</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The fourth one is the interesting one: on a bot in Direct mode there is no reply window at all, and the honest answer is to say that rather than show a disabled control an admin will try to fix.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">Loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="height: 10px; width: 52%; background: #EEECE6; border-radius: 3px;"></div>
+          <div style="height: 8px; width: 78%; background: #F2F1ED; border-radius: 3px; margin-top: 9px;"></div>
+          <div style="height: 8px; width: 64%; background: #F2F1ED; border-radius: 3px; margin-top: 6px;"></div>
+          <div style="height: 38px; width: 132px; background: #EEECE6; border-radius: 6px; margin-top: 12px;"></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">No calibration yet</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Calibration record</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Nothing observed yet. Telegram has never refused a reply earlier than this setting expected, so the configured window is what is in force on every line.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">Save failed</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 92px; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #1D1C18; min-height: 38px;">18</div>
+            <span style="font-size: 12.5px; color: #4A4842;">hours</span>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">! Could not save the reply window</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #7A3232; margin-top: 3px;">Your change is still here and nothing was applied. The value in force is still 20 hours.</div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Try again</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Discard my change</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">Value out of range</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <label for="win-err-l" style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agents can reply for</label>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <div id="win-err-l" role="alert" style="width: 92px; border: 1.5px solid #B32B2B; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #1D1C18; min-height: 38px;">30</div>
+            <span style="font-size: 12.5px; color: #4A4842;">hours</span>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Must be between 1 and 24</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #7A3232; margin-top: 3px;">24 is Telegram's own limit — the platform cannot go past it.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">Direct mode — no window exists</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">This bot has no reply window</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #6B675D;">@nabet_promo_bot is in Direct mode. Players message the bot itself, so there is no account to answer on behalf of and nothing expires — agents can reply whenever they like.</p>
+          <a href="#connection" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #22211D; margin-top: 6px;">Change the connection method →</a>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">D04 — the simulator, on staging</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Simulate an expiry</span>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: #EEECE6; color: #4A4842; padding: 2px 7px; border-radius: 999px;">Staging only</span>
+          </div>
+          <div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #726D63; margin-top: 10px; min-height: 38px;">Choose a conversation…</div>
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 14px; min-height: 36px; margin-top: 9px; cursor: pointer;">Simulate window expiry</button>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">Loading</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="height: 10px; width: 52%; background: #2F2F29; border-radius: 3px;"></div>
+          <div style="height: 8px; width: 78%; background: #262622; border-radius: 3px; margin-top: 9px;"></div>
+          <div style="height: 8px; width: 64%; background: #262622; border-radius: 3px; margin-top: 6px;"></div>
+          <div style="height: 38px; width: 132px; background: #2F2F29; border-radius: 6px; margin-top: 12px;"></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">No calibration yet</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Calibration record</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Nothing observed yet. Telegram has never refused a reply earlier than this setting expected, so the configured window is what is in force on every line.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">Direct mode — no window exists</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">This bot has no reply window</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">@nabet_promo_bot is in Direct mode. Players message the bot itself, so there is no account to answer on behalf of and nothing expires — agents can reply whenever they like.</p>
+          <a href="#connection" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-top: 6px;">Change the connection method →</a>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">Save failed</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 92px; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #ECEAE4; min-height: 38px;">18</div>
+            <span style="font-size: 12.5px; color: #C9C5BB;">hours</span>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">! Could not save the reply window</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #E0A0A0; margin-top: 3px;">Your change is still here and nothing was applied. The value in force is still 20 hours.</div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Try again</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Discard my change</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">Value out of range</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <label for="win-err-d" style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Agents can reply for</label>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <div id="win-err-d" role="alert" style="width: 92px; border: 1.5px solid #F08A8A; border-radius: 6px; padding: 9px 11px; font-size: 13px; font-weight: 600; color: #ECEAE4; min-height: 38px;">30</div>
+            <span style="font-size: 12.5px; color: #C9C5BB;">hours</span>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Must be between 1 and 24</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #E0A0A0; margin-top: 3px;">24 is Telegram's own limit — the platform cannot go past it.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">D04 — the simulator, on production</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Simulate an expiry</span>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: #2F2F29; color: #C9C5BB; padding: 2px 7px; border-radius: 999px;">Staging only</span>
+          </div>
+          <p style="margin: 5px 0 0; font-size: 12px; line-height: 1.6; color: #C9C5BB;">Not available on production, and this is production.</p>
+          <button style="font-family: inherit; width: 100%; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 9px 14px; min-height: 36px; margin-top: 11px;">Simulate window expiry</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">D01–D03 · Doc 16 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Under your ruling this is one of the read-only surfaces: Doc 16 §9 makes settings phone-readable and editable at tablet and above. So the value, its floor, its provenance and the calibration record all read correctly here, and the controls are inert behind the notice rather than absent — an admin on a phone can still answer "what is our window and who set it".</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · read-only</div>
+        <div data-screen-label="D01 window 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Reply window</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">You can read everything here. Changing settings needs a tablet or a computer.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agents can reply for</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 6px;">
+                <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18;">20</span><span style="font-size: 13px; color: #4A4842;">hours after each customer message</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; font-size: 11px; color: #4A4842;">
+                <span style="background: #EEECE6; border-radius: 4px; padding: 3px 8px;">Min 1</span>
+                <span style="background: #EEECE6; border-radius: 4px; padding: 3px 8px;">🔒 Max 24</span>
+                <span style="background: #EEECE6; border-radius: 4px; padding: 3px 8px;">Modified from default</span>
+              </div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 9px;">Changed by Sara Bekele · 12 Jul 2026, 10:18</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Agents are warned at</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 6px;">
+                <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18;">2</span><span style="font-size: 13px; color: #4A4842;">hours left</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">⏱ Closes in 08:41</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">⊘ Window expired</span>
+              </div>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">Shortened for @NaBetVIP on 28 Jul</div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #8F5F08; margin-top: 3px;">Telegram refused a reply before we expected, so that line now uses 20 h 08 m. What Telegram does always wins.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ · read-only</div>
+        <div data-screen-label="D01 window 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">የመልስ መስኮት</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">እዚህ ሁሉንም ማንበብ ይችላሉ። ቅንብሮችን ለመቀየር ግን ታብሌት ወይም ኮምፒውተር ያስፈልጋል።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ወኪሎች መመለስ የሚችሉበት</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 6px;">
+                <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4;">20</span><span style="font-size: 13px; color: #C9C5BB;">ሰዓት</span>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 7px;">ደንበኛው ከጻፈ በኋላ ላሉት 20 ሰዓታት ውስጥ።</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; font-size: 11px; color: #C9C5BB;">
+                <span style="background: #2F2F29; border-radius: 4px; padding: 3px 8px;">ዝቅተኛ 1</span>
+                <span style="background: #2F2F29; border-radius: 4px; padding: 3px 8px;">🔒 ከፍተኛ 24</span>
+              </div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 9px;">በሳራ በቀለ ተቀይሯል · 12 ጁላይ 2026</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ወኪሎች የሚስጠነቀቁት</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 6px;">
+                <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4;">2</span><span style="font-size: 13px; color: #C9C5BB;">ሰዓት ሲቀር</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">⏱ Closes in 08:41</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">⊘ Window expired</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> D01 (§A both themes, §C both themes), D02 (calibration banner in §A light, calibration record in §A dark, empty state in §B, phone summary in §C light), D03 (§A both themes with the approved chips as previews, §C both themes), D04 (§A light disabled on production with the reason, §A dark live on staging). Plus the universal set in §B, each drawn in <em>both</em> theme columns: loading, empty calibration record, value-out-of-range, save failure, the not-applicable state for a Direct-mode bot, and both faces of D04 — enabled on staging and disabled on production. Both viewports, both themes.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 variant is read-only behind the explicit notice, per your ruling that Doc 16 §9 holds. Recorded in row J19 of the contract and here.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One placement call for you:</strong> the documents never say where this setting lives. I put it on the bot's Connection tab because it is per-bot and business-mode-only, and because Doc 16 FR-08's fourteen groups have no channels group to hold it. The alternative is a Tickets &amp; SLA row that cross-links here. Say which you prefer and it moves.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">And one thing I want your eye on:</strong> the calibration copy. “What Telegram does always wins over what is configured here” is me trying to say BR-05 in a sentence a non-technical admin will not argue with. If your operators would read that as the product being broken, tell me and I will rewrite it.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

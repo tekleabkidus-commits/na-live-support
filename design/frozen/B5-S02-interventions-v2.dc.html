@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 40px;">
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S02-interventions-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">v2 · phone-executable · Amharic confirmations</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Interventions and explainability</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Everything a supervisor <em>does</em> from the live board, and the record that explains what the router did on its own. Doc 15 FR-11 is explicit that these execute with their owning module's semantics — so none of these dialogs invents a confirmation pattern, and each one is attributed to the human who pressed it.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">One idea runs through all of it: <strong style="font-weight: 600;">a machine decision is never final and never mysterious.</strong> Every override says whose it was, and every automatic routing choice can be read back as numbered steps in plain language. Continues from <a href="B5-S01-live-dashboard-v1.dc.html">B5-S01</a>; chrome and tokens are B1-DS verbatim.</p>
+  </header>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section style="margin-top: 8px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Reassignment</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C01 · C02 · Doc 11 FR-15, BR-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 11 BR-03 lets a supervisor bypass the strategy entirely. The dialog's job is to make the bypass deliberate and attributable — it shows what the router <em>would</em> have done, so overriding is a choice rather than an accident.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="reassign" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C01 · Reassign dialog</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1D1C18;">Reassign #4812</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">Deposits · አበበ ታደሰ · waiting 31m</span></span>
+              <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">The router would pick</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+                  <span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">ሃግ</span>
+                  <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሃና ግርማ</span>
+                  <span style="font-size: 11.5px; color: #6B675D; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">next in round robin · at capacity 5/5</span>
+                </div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Assign instead to</label>
+                <div style="display: flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px;">
+                  <span aria-hidden="true" style="color: #6B675D;">⌕</span>
+                  <span style="font-size: 12.5px; color: #1D1C18;">Dawit Bekele</span>
+                  <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">4/5</span>
+                </div>
+                <div style="border: 1px solid #E5E2DB; border-top: none; border-radius: 0 0 7px 7px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; background: #F6F5F2; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Dawit Bekele</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">●</span>Online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">4/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሰላም ኃይሌ</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">●</span>Online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">1/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; opacity: 0.6;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Trainee · cap 2</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">2/2</span></div>
+                </div>
+              </div>
+              <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">This bypasses the Deposits round-robin. The ticket is attributed to you, not the router, and the rotation pointer does not move.</div>
+              <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; color: #4A4842;"><input type="checkbox" style="margin-top: 2px; flex: none;" /><span>Add an internal note explaining the move</span></label>
+            </div>
+            <div style="padding: 11px 16px; background: #F6F5F2; border-top: 1px solid #E5E2DB; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Reassign to Dawit</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C02 · Drag at 1440 — the desktop path</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <div style="display: flex; gap: 10px; align-items: stretch;">
+              <div style="flex: 1; min-width: 0; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 10px; background: #F6F5F2;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">Dragging</div>
+                <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 7px 9px; box-shadow: 0 4px 14px rgba(0,0,0,0.14);">
+                  <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">#4812 · Deposits</div>
+                  <div style="font-size: 11px; color: #6B675D;">አበበ ታደሰ · 31m</div>
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 0; border: 2px dashed #22211D; border-radius: 7px; padding: 9px 10px; background: #F6F5F2;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">Drop target</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">DB</span>
+                  <span style="min-width: 0;"><span style="display: block; font-size: 12px; font-weight: 600; color: #1D1C18;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #156F45;">Has room — 4 of 5</span></span>
+                </div>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Dropping opens the same C01 dialog pre-filled, so the drag is a shortcut into the confirmation rather than a way around it. An agent at capacity refuses the drop and says why.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C02 · Tablet and keyboard — the same outcome, no drag</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 7px; overflow: hidden;">
+              <div style="padding: 8px 11px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 11.5px; font-weight: 600; color: #1D1C18;">#4812 · Deposits</div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; font-size: 12.5px; color: #1D1C18; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">⇄</span>Reassign to an agent…</button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; font-size: 12.5px; color: #1D1C18; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">↩</span>Return to queue</button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #FFFFFF; border: none; font-size: 12.5px; color: #1D1C18; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">◉</span>Why is this ticket here?</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Per your ruling this menu is the <strong style="font-weight: 600;">tablet</strong> rendering, and the keyboard path at every size. Identical audit record either way — Doc 11 §13 requires the equivalence, not a lesser version.</p>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="reassign" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C01 · Reassign dialog</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.5);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #262622; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #ECEAE4;">Reassign #4812</span><span style="display: block; font-size: 11.5px; color: #A6A296; margin-top: 2px;">Deposits · አበበ ታደሰ · waiting 31m</span></span>
+              <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">The router would pick</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+                  <span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">ሃግ</span>
+                  <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሃና ግርማ</span>
+                  <span style="font-size: 11.5px; color: #A6A296; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">next in round robin · at capacity 5/5</span>
+                </div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Assign instead to</label>
+                <div style="display: flex; align-items: center; gap: 7px; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 8px 11px;">
+                  <span aria-hidden="true" style="color: #A6A296;">⌕</span>
+                  <span style="font-size: 12.5px; color: #ECEAE4;">Dawit Bekele</span>
+                  <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">4/5</span>
+                </div>
+                <div style="border: 1px solid #343430; border-top: none; border-radius: 0 0 7px 7px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; background: #232320; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Dawit Bekele</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">●</span>Online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">4/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሰላም ኃይሌ</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">●</span>Online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">1/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 8px 11px; opacity: 0.6;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Trainee · cap 2</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">2/2</span></div>
+                </div>
+              </div>
+              <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">This bypasses the Deposits round-robin. The ticket is attributed to you, not the router, and the rotation pointer does not move.</div>
+              <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; color: #C9C5BB;"><input type="checkbox" style="margin-top: 2px; flex: none;" /><span>Add an internal note explaining the move</span></label>
+            </div>
+            <div style="padding: 11px 16px; background: #232320; border-top: 1px solid #343430; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Reassign to Dawit</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C02 · Drag at 1440 — the desktop path</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <div style="display: flex; gap: 10px; align-items: stretch;">
+              <div style="flex: 1; min-width: 0; border: 1px solid #343430; border-radius: 7px; padding: 9px 10px; background: #232320;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588; margin-bottom: 6px;">Dragging</div>
+                <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; padding: 7px 9px; box-shadow: 0 4px 14px rgba(0,0,0,0.55);">
+                  <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">#4812 · Deposits</div>
+                  <div style="font-size: 11px; color: #A6A296;">አበበ ታደሰ · 31m</div>
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 0; border: 2px dashed #ECEAE4; border-radius: 7px; padding: 9px 10px; background: #232320;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588; margin-bottom: 6px;">Drop target</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">DB</span>
+                  <span style="min-width: 0;"><span style="display: block; font-size: 12px; font-weight: 600; color: #ECEAE4;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #5AD190;">Has room — 4 of 5</span></span>
+                </div>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Dropping opens the same C01 dialog pre-filled, so the drag is a shortcut into the confirmation rather than a way around it. An agent at capacity refuses the drop and says why.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C02 · Tablet and keyboard — the same outcome, no drag</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <div style="border: 1px solid #343430; border-radius: 7px; overflow: hidden;">
+              <div style="padding: 8px 11px; background: #232320; border-bottom: 1px solid #343430; font-size: 11.5px; font-weight: 600; color: #ECEAE4;">#4812 · Deposits</div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; font-size: 12.5px; color: #ECEAE4; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">⇄</span>Reassign to an agent…</button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; font-size: 12.5px; color: #ECEAE4; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">↩</span>Return to queue</button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 11px; background: #1C1C19; border: none; font-size: 12.5px; color: #ECEAE4; text-align: left; min-height: 44px; cursor: pointer;"><span aria-hidden="true">◉</span>Why is this ticket here?</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Per your ruling this menu is the <strong style="font-weight: 600;">tablet</strong> rendering, and the keyboard path at every size. Identical audit record either way — Doc 11 §13 requires the equivalence, not a lesser version.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Pulling an agent in</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C03 · C04 · C05 · Doc 11 FR-15, FR-03, BR-07</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A temporary grant is the one intervention that quietly becomes permanent if nobody watches it. So the expiry is defaulted from business hours rather than left blank, the grant is visible as a countdown everywhere that agent appears, and the third repeat in a week offers to make it real.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="pullin" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C03 · Pull-in dialog</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1D1C18;">Pull an agent into Deposits</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">18 waiting · oldest 31m · 5 of 6 eligible online</span></span>
+              <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Agent</label>
+                <div style="border: 1px solid #CFCBC1; border-radius: 7px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 9px 11px; background: #F6F5F2; border-bottom: 1px solid #F0EEE9;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Yonas Tesfaye</span><span style="font-size: 11px; color: #6B675D; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bonuses · away, on break</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842; flex: none;">0/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 9px 11px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሰላም ኃይሌ</span><span style="font-size: 11px; color: #6B675D; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">General · online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842; flex: none;">1/5</span></div>
+                </div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Until</label>
+                <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+                  <span style="display: inline-flex; align-items: center; background: #22211D; color: #FFFFFF; border-radius: 7px; padding: 8px 12px; font-size: 12px; font-weight: 600; white-space: nowrap;">End of shift · 22:00</span>
+                  <span style="display: inline-flex; align-items: center; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #1D1C18; white-space: nowrap;">2 hours</span>
+                  <span style="display: inline-flex; align-items: center; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #1D1C18; white-space: nowrap;">Custom…</span>
+                </div>
+                <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.5; color: #6B675D;">22:00 comes from the Payments business-hours calendar, not a fixed guess. Change it and the countdown follows.</p>
+              </div>
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Yonas keeps his Bonuses membership. For the next 2h 19m he is eligible for Deposits as well, and the queue's strategy will include him.</div>
+            </div>
+            <div style="padding: 11px 16px; background: #F6F5F2; border-top: 1px solid #E5E2DB; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Pull in until 22:00</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C04 · The temporary-member chip, wherever that agent appears</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px dashed #CFCBC1; border-radius: 7px;">
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Yonas Tesfaye</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #F6F5F2; border: 1px dashed #CFCBC1; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Temporary · 2h 19m left</span>
+              <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842; flex: none;">1/5</span>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The dashed border is the signal that this membership ends by itself. It appears in the agent grid, the queue's member list and the routing record — never only in the place the grant was made.</p>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #F6F5F2; border: 1px dashed #CFCBC1; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #4A4842; white-space: nowrap;">Temporary · 2h 19m left</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; border: 1px dashed #E8CF9B; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #8F5F08; white-space: nowrap;">Temporary · 8m left</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #6B675D; white-space: nowrap;">Grant ended 19:04</span>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Under ten minutes the chip warms to amber. Expiry is stated, never silent — the agent simply stops being offered work.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C05 · Third pull-in this week</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+            <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 7px 7px 0; padding: 11px 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">You have pulled Yonas into Deposits three times this week</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #4A4842; margin-top: 4px;">If Deposits needs him regularly, a permanent membership saves you the trip — and makes him count in the queue's capacity planning.</div>
+              <div style="display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Make permanent</button>
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Keep it temporary</button>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">A suggestion at the moment of the third grant — never an automatic change. Doc 11 BR-07 asks for the nudge; the platform does not restructure anyone's team on its own.</p>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="pullin" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C03 · Pull-in dialog</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.5);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #262622; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #ECEAE4;">Pull an agent into Deposits</span><span style="display: block; font-size: 11.5px; color: #A6A296; margin-top: 2px;">18 waiting · oldest 31m · 5 of 6 eligible online</span></span>
+              <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Agent</label>
+                <div style="border: 1px solid #45443E; border-radius: 7px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 9px 11px; background: #232320; border-bottom: 1px solid #262622;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Yonas Tesfaye</span><span style="font-size: 11px; color: #A6A296; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bonuses · away, on break</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; flex: none;">0/5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 9px 11px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሰላም ኃይሌ</span><span style="font-size: 11px; color: #A6A296; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">General · online</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; flex: none;">1/5</span></div>
+                </div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Until</label>
+                <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+                  <span style="display: inline-flex; align-items: center; background: #ECEAE4; color: #171714; border-radius: 7px; padding: 8px 12px; font-size: 12px; font-weight: 600; white-space: nowrap;">End of shift · 22:00</span>
+                  <span style="display: inline-flex; align-items: center; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #ECEAE4; white-space: nowrap;">2 hours</span>
+                  <span style="display: inline-flex; align-items: center; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #ECEAE4; white-space: nowrap;">Custom…</span>
+                </div>
+                <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.5; color: #A6A296;">22:00 comes from the Payments business-hours calendar, not a fixed guess. Change it and the countdown follows.</p>
+              </div>
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Yonas keeps his Bonuses membership. For the next 2h 19m he is eligible for Deposits as well, and the queue's strategy will include him.</div>
+            </div>
+            <div style="padding: 11px 16px; background: #232320; border-top: 1px solid #343430; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Pull in until 22:00</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C04 · The temporary-member chip, wherever that agent appears</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px dashed #45443E; border-radius: 7px;">
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">YT</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Yonas Tesfaye</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #232320; border: 1px dashed #45443E; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Temporary · 2h 19m left</span>
+              <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; flex: none;">1/5</span>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The dashed border is the signal that this membership ends by itself. It appears in the agent grid, the queue's member list and the routing record — never only in the place the grant was made.</p>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #232320; border: 1px dashed #45443E; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #C9C5BB; white-space: nowrap;">Temporary · 2h 19m left</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; border: 1px dashed #6B551A; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #F0B54A; white-space: nowrap;">Temporary · 8m left</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; font-weight: 600; color: #A6A296; white-space: nowrap;">Grant ended 19:04</span>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">Under ten minutes the chip warms to amber. Expiry is stated, never silent — the agent simply stops being offered work.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C05 · Third pull-in this week</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+            <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 7px 7px 0; padding: 11px 13px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">You have pulled Yonas into Deposits three times this week</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #C9C5BB; margin-top: 4px;">If Deposits needs him regularly, a permanent membership saves you the trip — and makes him count in the queue's capacity planning.</div>
+              <div style="display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap;">
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Make permanent</button>
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Keep it temporary</button>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">A suggestion at the moment of the third grant — never an automatic change. Doc 11 BR-07 asks for the nudge; the platform does not restructure anyone's team on its own.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Status, broadcast, supervision</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C06 · C07 · C08</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three interventions that touch a person rather than a ticket, so each one is visible to the person it touches. Forcing a status is never invisible to the agent; a whisper is an internal note by construction, not by convention.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="people" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C06 · Force agent status</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9;">
+              <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Set status for አቤል ጸጋዬ</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Currently system-away · heartbeat lost 11m · 4 tickets assigned</div>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #1D1C18; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #22211D; color: #FFFFFF; border-radius: 7px; padding: 8px 12px; font-size: 12px; font-weight: 600; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E0A33A;"></span>Away</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #1D1C18; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6B675D;"></span>Offline</span>
+              </div>
+              <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">አቤል will see that you set this, and he can change it back himself. His 4 open tickets are not moved by this — use Rescue for those.</div>
+            </div>
+            <div style="padding: 11px 16px; background: #F6F5F2; border-top: 1px solid #E5E2DB; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Set to Away</button>
+            </div>
+          </div>
+          <div style="width: 520px; margin-top: 9px; display: flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 8px 11px;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">◐</span>Away</span>
+            <span style="font-size: 11.5px; color: #6B675D;">set by Marta G. · 19:44</span>
+          </div>
+          <p style="margin: 7px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The grid shows the attribution from then on. Doc 15 FR-10 wants status <em>and</em> its origin — self-set, supervisor-forced, or system-away — because they mean different things to whoever reads the board next.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C07 · Broadcast to queue members</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9;">
+              <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Message Deposits members</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">6 agents · 5 online, 1 away · includes 2 temporary members</div>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 10px 11px; font-size: 12.5px; line-height: 1.6; color: #1D1C18; min-height: 70px;">Match traffic is heavy — please keep deposit replies short and use the saved reply for pending confirmations. I have pulled Yonas in until 22:00.</div>
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 11px;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">They will see</div>
+                <div style="background: #FFFFFF; border-left: 3px solid #C89B2C; border-radius: 0 6px 6px 0; padding: 8px 10px;">
+                  <div style="font-size: 10.5px; font-weight: 600; color: #8F5F08;">Note from Marta G. · supervisor</div>
+                  <div style="font-size: 12px; line-height: 1.55; color: #1D1C18; margin-top: 3px;">Match traffic is heavy — please keep deposit replies short…</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 11px 16px; background: #F6F5F2; border-top: 1px solid #E5E2DB; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Send to 6 agents</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C08 · Supervision chrome around the frozen Batch 1 thread</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="background: #F1EDFE; border-bottom: 1px solid #D9CFFB; padding: 9px 12px; display: flex; align-items: center; gap: 9px;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #FFFFFF; border-left: 3px solid #7C5CFC; border-radius: 4px; padding: 2px 8px; font-size: 10.5px; font-weight: 700; color: #5B3FD6; white-space: nowrap; flex: none;">◉ Monitoring</span>
+              <span style="font-size: 11.5px; line-height: 1.5; color: #4A4842; min-width: 0;">You are watching Sara Bekele work. አበበ ታደሰ cannot see you.</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1D1C18; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Stop</button>
+            </div>
+            <div style="padding: 14px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; text-align: center;">
+              <div style="border: 1px dashed #CFCBC1; border-radius: 7px; padding: 18px 12px; background: repeating-linear-gradient(135deg, #FFFFFF 0 8px, #F6F5F2 8px 16px);">
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D;">Batch 1 conversation thread — B1-S02, frozen</div>
+                <div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 5px;">Rendered here as approved. Not redrawn, not restyled, not re-specified by this batch.</div>
+              </div>
+            </div>
+            <div style="padding: 11px 12px;">
+              <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #6B675D; white-space: nowrap;">Reply to customer</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; font-weight: 600; color: #8F5F08; white-space: nowrap;">Whisper to Sara</span>
+              </div>
+              <div style="border: 1px solid #E8CF9B; border-left: 3px solid #C89B2C; border-radius: 0 7px 7px 0; background: #FCF0D9; padding: 10px 11px;">
+                <div style="font-size: 10.5px; font-weight: 600; color: #8F5F08;">Internal note · only Sara sees this</div>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #1D1C18; margin-top: 4px;">His deposit cleared at 19:12 — check the gateway tab before you promise a timeline.</div>
+              </div>
+              <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">A whisper composes as an internal note, so it is <strong style="font-weight: 600;">structurally undeliverable</strong> to the customer — the same guarantee Doc 04 BR-01 gives every internal note. There is no path where a mis-click sends it outward.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="people" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C06 · Force agent status</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.5);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #262622;">
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Set status for አቤል ጸጋዬ</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">Currently system-away · heartbeat lost 11m · 4 tickets assigned</div>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #ECEAE4; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #ECEAE4; color: #171714; border-radius: 7px; padding: 8px 12px; font-size: 12px; font-weight: 600; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #F0B54A;"></span>Away</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #ECEAE4; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #A6A296;"></span>Offline</span>
+              </div>
+              <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">አቤል will see that you set this, and he can change it back himself. His 4 open tickets are not moved by this — use Rescue for those.</div>
+            </div>
+            <div style="padding: 11px 16px; background: #232320; border-top: 1px solid #343430; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Set to Away</button>
+            </div>
+          </div>
+          <div style="width: 520px; margin-top: 9px; display: flex; align-items: center; gap: 8px; background: #1C1C19; border: 1px solid #343430; border-radius: 7px; padding: 8px 11px;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none;"><span style="font-size: 8px;">◐</span>Away</span>
+            <span style="font-size: 11.5px; color: #A6A296;">set by Marta G. · 19:44</span>
+          </div>
+          <p style="margin: 7px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The grid shows the attribution from then on. Doc 15 FR-10 wants status <em>and</em> its origin — self-set, supervisor-forced, or system-away — because they mean different things to whoever reads the board next.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C07 · Broadcast to queue members</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.5);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #262622;">
+              <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Message Deposits members</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">6 agents · 5 online, 1 away · includes 2 temporary members</div>
+            </div>
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="border: 1px solid #45443E; border-radius: 7px; padding: 10px 11px; font-size: 12.5px; line-height: 1.6; color: #ECEAE4; min-height: 70px;">Match traffic is heavy — please keep deposit replies short and use the saved reply for pending confirmations. I have pulled Yonas in until 22:00.</div>
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 10px 11px;">
+                <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588; margin-bottom: 6px;">They will see</div>
+                <div style="background: #1C1C19; border-left: 3px solid #A8862A; border-radius: 0 6px 6px 0; padding: 8px 10px;">
+                  <div style="font-size: 10.5px; font-weight: 600; color: #F0B54A;">Note from Marta G. · supervisor</div>
+                  <div style="font-size: 12px; line-height: 1.55; color: #ECEAE4; margin-top: 3px;">Match traffic is heavy — please keep deposit replies short…</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 11px 16px; background: #232320; border-top: 1px solid #343430; display: flex; gap: 8px; justify-content: flex-end;">
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 14px; white-space: nowrap; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; white-space: nowrap; cursor: pointer;">Send to 6 agents</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C08 · Supervision chrome around the frozen Batch 1 thread</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="background: #292144; border-bottom: 1px solid #3B3168; padding: 9px 12px; display: flex; align-items: center; gap: 9px;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #1C1C19; border-left: 3px solid #A18BFF; border-radius: 4px; padding: 2px 8px; font-size: 10.5px; font-weight: 700; color: #BCA9FF; white-space: nowrap; flex: none;">◉ Monitoring</span>
+              <span style="font-size: 11.5px; line-height: 1.5; color: #C9C5BB; min-width: 0;">You are watching Sara Bekele work. አበበ ታደሰ cannot see you.</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; color: #ECEAE4; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Stop</button>
+            </div>
+            <div style="padding: 14px 12px; background: #232320; border-bottom: 1px solid #343430; text-align: center;">
+              <div style="border: 1px dashed #45443E; border-radius: 7px; padding: 18px 12px; background: repeating-linear-gradient(135deg, #1C1C19 0 8px, #232320 8px 16px);">
+                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">Batch 1 conversation thread — B1-S02, frozen</div>
+                <div style="font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 5px;">Rendered here as approved. Not redrawn, not restyled, not re-specified by this batch.</div>
+              </div>
+            </div>
+            <div style="padding: 11px 12px;">
+              <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #A6A296; white-space: nowrap;">Reply to customer</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; font-weight: 600; color: #F0B54A; white-space: nowrap;">Whisper to Sara</span>
+              </div>
+              <div style="border: 1px solid #6B551A; border-left: 3px solid #A8862A; border-radius: 0 7px 7px 0; background: #3A2D10; padding: 10px 11px;">
+                <div style="font-size: 10.5px; font-weight: 600; color: #F0B54A;">Internal note · only Sara sees this</div>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #ECEAE4; margin-top: 4px;">His deposit cleared at 19:12 — check the gateway tab before you promise a timeline.</div>
+              </div>
+              <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">A whisper composes as an internal note, so it is <strong style="font-weight: 600;">structurally undeliverable</strong> to the customer — the same guarantee Doc 04 BR-01 gives every internal note. There is no path where a mis-click sends it outward.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The routing-decision record</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C09 · C10 · C11 · Doc 11 FR-17</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 11 FR-17 asks for numbered steps, monospace inputs and plain-language outcomes. The reason it matters is escalation: when a customer complains that they waited while someone else was served, this is the artefact that answers them. So it copies as text.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="record" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C09 · Expanded in the ticket timeline</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why this ticket went to Dawit</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">19:12:04</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1D1C18; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Copy as text</button>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">1</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">The ticket arrived in <strong style="font-weight: 600;">Deposits</strong>, matched by the customer's message intent.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">intent=payment.deposit · confidence=0.91 · channel=telegram</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">2</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Priority boosts were applied in order. None matched, so it took its place by arrival time.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">urgent=no · vip=no · window_closing=no · sla_at_risk=no · reopened=no</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Deposits uses <strong style="font-weight: 600;">round robin</strong>. The rotation pointer was on ሃና, who was at capacity, so it moved on.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">strategy=round_robin · pointer=hana.g · load=5/5 → skipped</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">4</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Dawit was next in rotation, online and had room, so the ticket went to him.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">assignee=dawit.b · load=3/5 → 4/5 · elapsed=142ms</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C10 · Skill match with nobody online — it holds rather than mis-routes</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why this ticket is still waiting</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷ 22m</span>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">1</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Verification routes by skill. This customer writes in Amharic, so an Amharic-speaking agent is required.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">strategy=skill_based · require=lang:am · source=conversation_language</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">2</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">No agent with that skill is online right now.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">eligible=2 · online=0</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">This queue is set to <strong style="font-weight: 600;">hold for a match</strong> rather than drop the language requirement, so the ticket waits — and an SLA alert was raised.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">fallback=hold_for_match · alert=sla.at_risk raised 19:24</span></span>
+              </div>
+              <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">A supervisor can override: pull in an Amharic speaker, or assign anyway and accept the language mismatch.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C10 · The starvation jump, and a reopened ticket's courtesy hold</div>
+          <div style="width: 520px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">◷</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">This ticket waited 30 minutes, so it jumped ahead of newer higher-priority tickets. <strong style="font-weight: 600;">This rule is always on and cannot be turned off.</strong></span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">boost=starvation · waited=30m01s · position 7 → 1</span></span>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">↩</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Reopened. It was held 5 minutes for Sara, who handled it before, then released to the queue when she did not pick it up.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">courtesy_hold=sara.b · window=5m · expired 19:33 → requeued</span></span>
+              </div>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Both are cases where the queue order looks wrong from outside. The record is what makes them defensible instead of arbitrary.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C11 · The same record, viewer without individual-metrics rights</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why this ticket went where it did</span>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #6B675D; white-space: nowrap; flex: none;">🔒 Names hidden</span>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Deposits uses <strong style="font-weight: 600;">round robin</strong>. The agent at the pointer was at capacity, so it moved on.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">strategy=round_robin · pointer=agent · load=at_capacity → skipped</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">4</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">The next agent in rotation was online with room, and took it.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">assignee=agent · elapsed=142ms</span></span>
+              </div>
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The record is not hidden — only the names are. The routing logic stays fully auditable, which is the point of Doc 11 SEC-02.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="record" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C09 · Expanded in the ticket timeline</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Why this ticket went to Dawit</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296;">19:12:04</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; color: #ECEAE4; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Copy as text</button>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">1</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">The ticket arrived in <strong style="font-weight: 600;">Deposits</strong>, matched by the customer's message intent.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">intent=payment.deposit · confidence=0.91 · channel=telegram</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">2</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Priority boosts were applied in order. None matched, so it took its place by arrival time.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">urgent=no · vip=no · window_closing=no · sla_at_risk=no · reopened=no</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Deposits uses <strong style="font-weight: 600;">round robin</strong>. The rotation pointer was on ሃና, who was at capacity, so it moved on.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">strategy=round_robin · pointer=hana.g · load=5/5 → skipped</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">4</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Dawit was next in rotation, online and had room, so the ticket went to him.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">assignee=dawit.b · load=3/5 → 4/5 · elapsed=142ms</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C10 · Skill match with nobody online — it holds rather than mis-routes</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Why this ticket is still waiting</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">◷ 22m</span>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">1</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Verification routes by skill. This customer writes in Amharic, so an Amharic-speaking agent is required.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">strategy=skill_based · require=lang:am · source=conversation_language</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">2</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">No agent with that skill is online right now.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">eligible=2 · online=0</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">This queue is set to <strong style="font-weight: 600;">hold for a match</strong> rather than drop the language requirement, so the ticket waits — and an SLA alert was raised.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">fallback=hold_for_match · alert=sla.at_risk raised 19:24</span></span>
+              </div>
+              <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">A supervisor can override: pull in an Amharic speaker, or assign anyway and accept the language mismatch.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C10 · The starvation jump, and a reopened ticket's courtesy hold</div>
+          <div style="width: 520px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">◷</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">This ticket waited 30 minutes, so it jumped ahead of newer higher-priority tickets. <strong style="font-weight: 600;">This rule is always on and cannot be turned off.</strong></span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">boost=starvation · waited=30m01s · position 7 → 1</span></span>
+              </div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">↩</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Reopened. It was held 5 minutes for Sara, who handled it before, then released to the queue when she did not pick it up.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">courtesy_hold=sara.b · window=5m · expired 19:33 → requeued</span></span>
+              </div>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Both are cases where the queue order looks wrong from outside. The record is what makes them defensible instead of arbitrary.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C11 · The same record, viewer without individual-metrics rights</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid #262622;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Why this ticket went where it did</span>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #A6A296; white-space: nowrap; flex: none;">🔒 Names hidden</span>
+            </div>
+            <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">3</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Deposits uses <strong style="font-weight: 600;">round robin</strong>. The agent at the pointer was at capacity, so it moved on.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">strategy=round_robin · pointer=agent · load=at_capacity → skipped</span></span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <span style="width: 18px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">4</span>
+                <span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">The next agent in rotation was online with room, and took it.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">assignee=agent · elapsed=142ms</span></span>
+              </div>
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The record is not hidden — only the names are. The routing logic stays fully auditable, which is the point of Doc 11 SEC-02.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§E</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Rescue alerts and confirmation weight</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">C12 · C13 · C14 · Doc 11 FR-16, FR-16a, FR-19</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The Rescue view itself is Batch 1's, approved and frozen. What belongs to this batch is the alert that raises it — and crucially, whether auto-return is on, because that single setting decides whether the tickets are already safe or still stranded.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="rescue" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C12 · C13 · Three rescue conditions, and what each says about auto-return</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none; padding-top: 1px;">19:33</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Heartbeat lost</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #1D1C18; margin-top: 3px;">አቤል ጸጋዬ has been unreachable 11 min with 4 live tickets. <strong style="font-weight: 600;">Auto-return is off</strong> — they are still assigned to him until you act.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #22211D; text-decoration: none;">Open Rescue →</a></span>
+            </div>
+            <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none; padding-top: 1px;">19:21</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Channel unreachable</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #1D1C18; margin-top: 3px;">The Telegram connection for Bonuses stopped responding. 3 conversations cannot receive replies. <strong style="font-weight: 600;">Auto-return is on</strong> — they went back to the queue at 19:23.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #22211D; text-decoration: none;">Connection health →</a></span>
+            </div>
+            <div style="padding: 10px 12px; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none; padding-top: 1px;">18:47</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Orphaned by deletion</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #1D1C18; margin-top: 3px;">The Promotions queue was deleted with 2 tickets still open. They have no queue and will not be routed until you place them.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #22211D; text-decoration: none;">Place these tickets →</a></span>
+            </div>
+          </div>
+          <p style="margin: 8px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Each alert states the setting in force. Without it a supervisor cannot tell a handled situation from an unhandled one, which is exactly the confusion Doc 11 FR-16a exists to prevent.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">C14 · Confirmation weight matches consequence</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #F0EEE9;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">Undoable</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #4A4842;">Force status, single reassign — execute immediately with a toast that offers undo. Interrupting a supervisor mid-crisis for a reversible act is its own failure.</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #F0EEE9;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">Visible to others</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #4A4842;">Broadcast, pull-in — one dialog stating who is affected, because other people will see the result.</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">Structural</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #4A4842;">Anything that moves many tickets at once — the restructure wizard's typed confirmation, specified in Doc 11 FR-18 and delivered with the Organization screens.</span>
+            </div>
+            <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 11px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 12px; color: #1D1C18; min-width: 0;">#4812 reassigned to Dawit Bekele</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1D1C18; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Undo</button>
+            </div>
+            <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Owner decision — undo is an inverse operation, never an erasure.</strong> Pressing Undo runs the opposite action through the same machinery that ran the first one: a second reassignment back, attributed to you, timestamped, in the audit trail. Nothing is rewritten and nothing disappears — the ticket carries both moves. Where the inverse is not legal the control is present but disabled with the reason, so the absence of undo is explained rather than silent.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 11px; display: flex; align-items: center; gap: 9px;"><span style="min-width: 0; font-size: 12px; color: #1D1C18;">#4790 returned to the Deposits queue</span><button disabled="{{ true }}" style="font-family: inherit; margin-left: auto; flex: none; background: #EEECE6; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; color: #ADA89D; padding: 5px 10px; white-space: nowrap; cursor: default;">Undo</button></div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842;">Disabled here because ሰላም has already replied — reassigning back would not unsend the message, so the inverse is not available. The reason shows on focus and on hover.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 11px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">In the timeline afterwards:</strong> two entries, not none — “Marta G. reassigned to Dawit B. · 19:44” and “Marta G. reassigned to ሃና ግ. (undo) · 19:44”. An auditor sees what happened, including the correction.</div>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="rescue" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C12 · C13 · Three rescue conditions, and what each says about auto-return</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none; padding-top: 1px;">19:33</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Heartbeat lost</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #ECEAE4; margin-top: 3px;">አቤል ጸጋዬ has been unreachable 11 min with 4 live tickets. <strong style="font-weight: 600;">Auto-return is off</strong> — they are still assigned to him until you act.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: none;">Open Rescue →</a></span>
+            </div>
+            <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none; padding-top: 1px;">19:21</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Channel unreachable</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #ECEAE4; margin-top: 3px;">The Telegram connection for Bonuses stopped responding. 3 conversations cannot receive replies. <strong style="font-weight: 600;">Auto-return is on</strong> — they went back to the queue at 19:23.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: none;">Connection health →</a></span>
+            </div>
+            <div style="padding: 10px 12px; display: flex; gap: 9px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none; padding-top: 1px;">18:47</span>
+              <span style="min-width: 0;"><span style="display: inline-flex; align-items: center; gap: 4px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap;">⚑ Orphaned by deletion</span><span style="display: block; font-size: 12px; line-height: 1.55; color: #ECEAE4; margin-top: 3px;">The Promotions queue was deleted with 2 tickets still open. They have no queue and will not be routed until you place them.</span><a href="#" style="font-size: 11px; font-weight: 600; color: #ECEAE4; text-decoration: none;">Place these tickets →</a></span>
+            </div>
+          </div>
+          <p style="margin: 8px 0 0; width: 520px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Each alert states the setting in force. Without it a supervisor cannot tell a handled situation from an unhandled one, which is exactly the confusion Doc 11 FR-16a exists to prevent.</p>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">C14 · Confirmation weight matches consequence</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #262622;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">Undoable</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #C9C5BB;">Force status, single reassign — execute immediately with a toast that offers undo. Interrupting a supervisor mid-crisis for a reversible act is its own failure.</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #262622;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">Visible to others</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #C9C5BB;">Broadcast, pull-in — one dialog stating who is affected, because other people will see the result.</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="width: 88px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">Structural</span>
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #C9C5BB;">Anything that moves many tickets at once — the restructure wizard's typed confirmation, specified in Doc 11 FR-18 and delivered with the Organization screens.</span>
+            </div>
+            <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 10px 11px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 12px; color: #ECEAE4; min-width: 0;">#4812 reassigned to Dawit Bekele</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; color: #ECEAE4; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Undo</button>
+            </div>
+            <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">Owner decision — undo is an inverse operation, never an erasure.</strong> Pressing Undo runs the opposite action through the same machinery that ran the first one: a second reassignment back, attributed to you, timestamped, in the audit trail. Nothing is rewritten and nothing disappears — the ticket carries both moves. Where the inverse is not legal the control is present but disabled with the reason, so the absence of undo is explained rather than silent.</div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 7px; padding: 10px 11px; display: flex; align-items: center; gap: 9px;"><span style="min-width: 0; font-size: 12px; color: #ECEAE4;">#4790 returned to the Deposits queue</span><button disabled="{{ true }}" style="font-family: inherit; margin-left: auto; flex: none; background: #282822; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; color: #6B6860; padding: 5px 10px; white-space: nowrap; cursor: default;">Undo</button></div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Disabled here because ሰላም has already replied — reassigning back would not unsend the message, so the inverse is not available. The reason shows on focus and on hover.</div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 7px; padding: 10px 11px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">In the timeline afterwards:</strong> two entries, not none — “Marta G. reassigned to Dawit B. · 19:44” and “Marta G. reassigned to ሃና ግ. (undo) · 19:44”. An auditor sees what happened, including the correction.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§F</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — fully executable, every action confirmed</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row C02 · owner ruling, v2</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Your revised ruling: every intervention runs on a phone, with a confirmation step to catch mis-taps. That makes the confirmation the safety mechanism the fat-finger policy used to provide by absence — so it is designed as a real component, not a browser-style “are you sure”.</p>
+    <p style="margin: 10px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Four rules make it work: the confirm <strong style="font-weight: 600;">restates the consequence in nouns</strong> — who, how many, until when — rather than repeating the button label; the primary button carries the specific verb, never “OK”; destructive and reversible actions are visually different weights; and the confirm button sits on the <strong style="font-weight: 600;">right at 44px minimum</strong>, away from the thumb's resting arc on the cancel side.</p>
+
+    <div style="display: flex; gap: 24px; margin-top: 16px; align-items: flex-start; flex-wrap: wrap;">
+      <div data-tone="light" data-blk="mob375" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · ticket actions</div>
+        <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 16px; color: #1D1C18; cursor: pointer; min-width: 44px; min-height: 44px;">‹</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1D1C18;">#4812</span><span style="display: block; font-size: 11px; color: #6B675D;">Deposits · አበበ ታደሰ · waiting 31m</span></span>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why this ticket is here</span><button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1D1C18; padding: 7px 11px; min-height: 44px; white-space: nowrap; cursor: pointer;">Copy</button></div>
+              <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 9px;"><span style="width: 16px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">3</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Round robin skipped ሃና — she was at capacity.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">pointer=hana.g · load=5/5 → skipped</span></span></div>
+                <div style="display: flex; gap: 9px;"><span style="width: 16px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #6B675D;">4</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Dawit was next, online and had room.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px; overflow-wrap: anywhere;">assignee=dawit.b · load=3/5 → 4/5</span></span></div>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Actions</div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; font-size: 13px; color: #1D1C18; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #6B675D;">⇄</span>Reassign this ticket<span style="margin-left: auto; color: #6B675D;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; font-size: 13px; color: #1D1C18; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #6B675D;">＋</span>Pull an agent into Deposits<span style="margin-left: auto; color: #6B675D;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; font-size: 13px; color: #1D1C18; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #6B675D;">◉</span>Set an agent's status<span style="margin-left: auto; color: #6B675D;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; font-size: 13px; color: #1D1C18; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #6B675D;">✉</span>Message queue members<span style="margin-left: auto; color: #6B675D;">›</span></button>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">52px rows — above the 44px floor, because these carry consequences and sit in a scrolling list.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="dark" data-blk="mob375" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · ticket actions</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 16px; color: #ECEAE4; cursor: pointer; min-width: 44px; min-height: 44px;">‹</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #ECEAE4;">#4812</span><span style="display: block; font-size: 11px; color: #A6A296;">Deposits · አበበ ታደሰ · waiting 31m</span></span>
+          </div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #262622;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Why this ticket is here</span><button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; color: #ECEAE4; padding: 7px 11px; min-height: 44px; white-space: nowrap; cursor: pointer;">Copy</button></div>
+              <div style="padding: 11px 12px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 9px;"><span style="width: 16px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">3</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Round robin skipped ሃና — she was at capacity.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">pointer=hana.g · load=5/5 → skipped</span></span></div>
+                <div style="display: flex; gap: 9px;"><span style="width: 16px; flex: none; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: #A6A296;">4</span><span style="min-width: 0;"><span style="display: block; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Dawit was next, online and had room.</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px; overflow-wrap: anywhere;">assignee=dawit.b · load=3/5 → 4/5</span></span></div>
+              </div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Actions</div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; font-size: 13px; color: #ECEAE4; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #A6A296;">⇄</span>Reassign this ticket<span style="margin-left: auto; color: #A6A296;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; font-size: 13px; color: #ECEAE4; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #A6A296;">＋</span>Pull an agent into Deposits<span style="margin-left: auto; color: #A6A296;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; font-size: 13px; color: #ECEAE4; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #A6A296;">◉</span>Set an agent's status<span style="margin-left: auto; color: #A6A296;">›</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; font-size: 13px; color: #ECEAE4; text-align: left; min-height: 52px; cursor: pointer;"><span aria-hidden="true" style="color: #A6A296;">✉</span>Message queue members<span style="margin-left: auto; color: #A6A296;">›</span></button>
+            </div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">52px rows — above the 44px floor, because these carry consequences and sit in a scrolling list.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="light" data-blk="mobsheet" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · reassign sheet, then confirm</div>
+        <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1D1C18;">Reassign #4812</span><span style="display: block; font-size: 11px; color: #6B675D;">Deposits · waiting 31m</span></span>
+            <button aria-label="Close" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; min-width: 44px; min-height: 44px;">✕</button>
+          </div>
+          <div style="background: #F6F5F2; padding: 10px 12px; border-bottom: 1px solid #E5E2DB;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">The router would pick</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሃና ግርማ</span><span style="font-size: 11px; color: #6B675D; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">at capacity 5/5</span></div>
+          </div>
+          <div style="background: #FFFFFF;">
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #F6F5F2; border: none; border-bottom: 1px solid #F0EEE9; text-align: left; min-height: 56px; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">DB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #1D1C18;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #156F45;">Online · has room</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none;">4/5</span></button>
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; text-align: left; min-height: 56px; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #1D1C18;">ሰላም ኃይሌ</span><span style="display: block; font-size: 11px; color: #156F45;">Online · has room</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none;">1/5</span></button>
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #FFFFFF; border: none; text-align: left; min-height: 56px; opacity: 0.55; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">ካአ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #1D1C18;">ካልኪዳን አሰፋ</span><span style="display: block; font-size: 11px; color: #6B675D;">Trainee · at capacity 2/2</span></span></button>
+          </div>
+          <div style="padding: 12px; background: #F6F5F2; border-top: 1px solid #E5E2DB;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 14px; min-height: 52px; cursor: pointer;">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="dark" data-blk="mobsheet" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · reassign sheet, then confirm</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #ECEAE4;">Reassign #4812</span><span style="display: block; font-size: 11px; color: #A6A296;">Deposits · waiting 31m</span></span>
+            <button aria-label="Close" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; min-width: 44px; min-height: 44px;">✕</button>
+          </div>
+          <div style="background: #232320; padding: 10px 12px; border-bottom: 1px solid #343430;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">The router would pick</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሃና ግርማ</span><span style="font-size: 11px; color: #A6A296; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">at capacity 5/5</span></div>
+          </div>
+          <div style="background: #1C1C19;">
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #232320; border: none; border-bottom: 1px solid #262622; text-align: left; min-height: 56px; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">DB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #ECEAE4;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #5AD190;">Online · has room</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none;">4/5</span></button>
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; text-align: left; min-height: 56px; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">ሰኃ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #ECEAE4;">ሰላም ኃይሌ</span><span style="display: block; font-size: 11px; color: #5AD190;">Online · has room</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none;">1/5</span></button>
+            <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 10px; padding: 11px 12px; background: #1C1C19; border: none; text-align: left; min-height: 56px; opacity: 0.55; cursor: pointer;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex: none;">ካአ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 13px; font-weight: 600; color: #ECEAE4;">ካልኪዳን አሰፋ</span><span style="display: block; font-size: 11px; color: #A6A296;">Trainee · at capacity 2/2</span></span></button>
+          </div>
+          <div style="padding: 12px; background: #232320; border-top: 1px solid #343430;">
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 14px; min-height: 52px; cursor: pointer;">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="light" data-blk="mobconfirm" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · the confirmation, three weights</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="width: 375px; background: rgba(27,27,24,0.42); border: 1px solid #CFCBC1; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.24);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">ወደ Dawit Bekele ይመድቡ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842; margin-top: 6px;">#4812 ከተቀማጭ ወረፋ ወደ Dawit ይዛወራል፤ ጫናው <strong style="font-weight: 600;">5 ከ5</strong> ይሆናል። ይህ ተራ በተራ ማዘዋወርን ያልፋል፤ እንደ እርስዎ ውሳኔ ይመዘገባል።</div>
+                <div style="background: #F6F5F2; border-radius: 7px; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.5; color: #6B675D;">ከዚያ በኋላ ለ10 ሰከንድ መመለስ ይችላሉ።</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #1D1C18; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">መድብ</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: rgba(27,27,24,0.42); border: 1px solid #CFCBC1; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.24);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Yonas እስከ 22:00 ወደ ተቀማጭ ይጠሩ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842; margin-top: 6px;">ለ<strong style="font-weight: 600;">2 ሰዓት ከ19 ደቂቃ</strong> Yonas Tesfaye ከጉርሻ በተጨማሪ ለተቀማጭ ብቁ ይሆናል፤ ወረፋውም ሥራ ወደ እሱ መላክ ይጀምራል። የጉርሻ አባልነቱ እንደተጠበቀ ይቆያል።</div>
+                <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.5; color: #8F5F08;">Yonas አሁን በእረፍት ላይ ነው። ሲመለስ ይህንን ያያል።</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #1D1C18; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ጥራ</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: rgba(27,27,24,0.42); border: 1px solid #CFCBC1; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.24);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;">▲ ሌሎችን ይነካል</div>
+                <div style="font-size: 15px; font-weight: 600; color: #1D1C18; margin-top: 7px;">ይህን ማስታወሻ ለ6 ወኪሎች ይላኩ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842; margin-top: 6px;">ሁሉም የተቀማጭ አባላት ይደርሳቸዋል፤ <strong style="font-weight: 600;">2 ጊዜያዊ አባላትን</strong> ጨምሮ። አንዴ ከተላከ መመለስ አይቻልም።</div>
+                <div style="background: #F6F5F2; border-left: 3px solid #C89B2C; border-radius: 0 7px 7px 0; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #1D1C18;">Match traffic is heavy — please keep deposit replies short…</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #1D1C18; padding: 13px; min-height: 48px; cursor: pointer;">ተመለስ አርትዕ</button>
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ላክ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="dark" data-blk="mobconfirm" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · the confirmation, three weights</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="width: 375px; background: rgba(0,0,0,0.62); border: 1px solid #343430; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #1C1C19; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.6);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ወደ Dawit Bekele ይመድቡ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #C9C5BB; margin-top: 6px;">#4812 ከተቀማጭ ወረፋ ወደ Dawit ይዛወራል፤ ጫናው <strong style="font-weight: 600;">5 ከ5</strong> ይሆናል። ይህ ተራ በተራ ማዘዋወርን ያልፋል፤ እንደ እርስዎ ውሳኔ ይመዘገባል።</div>
+                <div style="background: #232320; border-radius: 7px; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.5; color: #A6A296;">ከዚያ በኋላ ለ10 ሰከንድ መመለስ ይችላሉ።</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #ECEAE4; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">መድብ</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: rgba(0,0,0,0.62); border: 1px solid #343430; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #1C1C19; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.6);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Yonas እስከ 22:00 ወደ ተቀማጭ ይጠሩ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #C9C5BB; margin-top: 6px;">ለ<strong style="font-weight: 600;">2 ሰዓት ከ19 ደቂቃ</strong> Yonas Tesfaye ከጉርሻ በተጨማሪ ለተቀማጭ ብቁ ይሆናል፤ ወረፋውም ሥራ ወደ እሱ መላክ ይጀምራል። የጉርሻ አባልነቱ እንደተጠበቀ ይቆያል።</div>
+                <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.5; color: #F0B54A;">Yonas አሁን በእረፍት ላይ ነው። ሲመለስ ይህንን ያያል።</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #ECEAE4; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ጥራ</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: rgba(0,0,0,0.62); border: 1px solid #343430; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; background: #1C1C19; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.6);">
+              <div style="padding: 15px 16px 13px;">
+                <div style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;">▲ ሌሎችን ይነካል</div>
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">ይህን ማስታወሻ ለ6 ወኪሎች ይላኩ?</div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: #C9C5BB; margin-top: 6px;">ሁሉም የተቀማጭ አባላት ይደርሳቸዋል፤ <strong style="font-weight: 600;">2 ጊዜያዊ አባላትን</strong> ጨምሮ። አንዴ ከተላከ መመለስ አይቻልም።</div>
+                <div style="background: #232320; border-left: 3px solid #A8862A; border-radius: 0 7px 7px 0; padding: 8px 10px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #ECEAE4;">Match traffic is heavy — please keep deposit replies short…</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #ECEAE4; padding: 13px; min-height: 48px; cursor: pointer;">ተመለስ አርትዕ</button>
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ላክ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="light" data-blk="mobheavy" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · the heaviest tier keeps its typed confirmation</div>
+        <div style="width: 375px; background: rgba(27,27,24,0.42); border: 1px solid #CFCBC1; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 100%; background: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.24);">
+            <div style="padding: 15px 16px 13px;">
+              <div style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;">▲ መቀልበስ አይቻልም</div>
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18; margin-top: 7px;">1,284 ትኬቶችን ከማስተዋወቂያ ያውጡ?</div>
+              <div style="font-size: 12.5px; line-height: 1.6; color: #4A4842; margin-top: 6px;">ወደ <strong style="font-weight: 600;">አጠቃላይ</strong> ይዛወራሉ። 3 ራስ-ሰር ደንቦችና 1 የSLA ፖሊሲ ማስተዋወቂያን ያመለክታሉ፤ እነሱም ይቀየራሉ። ይህ ለበርካታ ደቂቃዎች ይሠራል፤ መቀልበስ አይቻልም።</div>
+              <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-top: 10px;">ለማረጋገጥ <span style="font-family: ui-monospace, monospace; color: #1D1C18;">Promotions</span> ብለው ይተይቡ</label>
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px 11px; margin-top: 5px; font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18; min-height: 46px;">Promotions</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #1D1C18; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #B32B2B; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ትኬቶችን አዛውር</button>
+            </div>
+          </div>
+        </div>
+        <p style="margin: 9px 0 0; width: 375px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Restructure execution and bulk moves stay on the typed-confirmation pattern that Doc 11 FR-18 already specifies. Enabling them on a phone does not lower that bar — it is the same gate, laid out for a thumb.</p>
+      </div>
+      <div data-tone="dark" data-blk="mobheavy" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · the heaviest tier keeps its typed confirmation</div>
+        <div style="width: 375px; background: rgba(0,0,0,0.62); border: 1px solid #343430; border-radius: 8px; padding: 26px 16px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 100%; background: #1C1C19; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.6);">
+            <div style="padding: 15px 16px 13px;">
+              <div style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;">▲ መቀልበስ አይቻልም</div>
+              <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; margin-top: 7px;">1,284 ትኬቶችን ከማስተዋወቂያ ያውጡ?</div>
+              <div style="font-size: 12.5px; line-height: 1.6; color: #C9C5BB; margin-top: 6px;">ወደ <strong style="font-weight: 600;">አጠቃላይ</strong> ይዛወራሉ። 3 ራስ-ሰር ደንቦችና 1 የSLA ፖሊሲ ማስተዋወቂያን ያመለክታሉ፤ እነሱም ይቀየራሉ። ይህ ለበርካታ ደቂቃዎች ይሠራል፤ መቀልበስ አይቻልም።</div>
+              <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-top: 10px;">ለማረጋገጥ <span style="font-family: ui-monospace, monospace; color: #ECEAE4;">Promotions</span> ብለው ይተይቡ</label>
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 12px 11px; margin-top: 5px; font-family: ui-monospace, monospace; font-size: 13px; color: #ECEAE4; min-height: 46px;">Promotions</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 15px;">
+              <button style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #ECEAE4; padding: 13px; min-height: 48px; cursor: pointer;">ተወው</button>
+              <button style="font-family: inherit; background: #F08A8A; color: #2A1212; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 13px; min-height: 48px; cursor: pointer;">ትኬቶችን አዛውር</button>
+            </div>
+          </div>
+        </div>
+        <p style="margin: 9px 0 0; width: 375px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Restructure execution and bulk moves stay on the typed-confirmation pattern that Doc 11 FR-18 already specifies. Enabling them on a phone does not lower that bar — it is the same gate, laid out for a thumb.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note — v2</h2>
+      <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+        <div style="font-size: 13px; font-weight: 600; color: #8F5F08;">▲ Deliberate deviation from the documents, on your instruction — needs your sign-off</div>
+        <p style="margin: 6px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 920px;">Doc 15 §9 places the live dashboard at <strong style="font-weight: 600;">tablet+</strong> and Doc 11 §9 restricts wizard execution to desktop or tablet, both under the fat-finger policy. You have ruled that every feature is available on a phone, guarded by a confirmation. That reverses your earlier ruling in this same batch and overrides two document sections, so it is recorded here rather than absorbed silently. Your reviewers should see it.</p>
+        <p style="margin: 6px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 920px;">What replaces the policy: a confirmation on every action enabled at 375, restating the consequence in nouns; 52px action rows and 48px dialog buttons; and the typed-confirmation tier from Doc 11 FR-18 kept intact for bulk moves. The guard is stricter than desktop, which is the trade the ruling implies.</p>
+      </div>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> C01–C14 complete, both themes, 1440 dialogs at 1:1, and a fully executable 375 rendering — actions list, reassign sheet, three confirmation weights and the typed-confirmation tier. C08 is chrome only — the banner, the whisper affordance and the internal-note composition around <a href="B1-S02-conversation-v2.dc.html">B1-S02</a>'s frozen thread, which is shown as a placeholder rather than redrawn, per your instruction.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Touch metrics:</strong> the tablet action menu (C02) uses 44px rows and the phone action rows 52px, both at or above the program floor. Doc 11 §13 asks for a keyboard-and-touch equivalent and sets no metric; the program rule outranks the component's desktop metrics, so only the desktop row menu keeps its tighter spacing.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Owner decision — undo accepted, as an inverse audited operation.</strong> Undo re-runs the opposite action through normal machinery and is recorded like any other intervention; it never erases the original. Where the inverse is not legal the control is disabled with its reason rather than hidden.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Amharic:</strong> every confirmation popup — reassign, pull-in, broadcast and the typed irreversible tier — is now in Amharic, per the standing both-languages rule and your destructive-first priority. Amharic runs longer than English here, so the confirmations are the widest strings in the batch and the two-line bodies are the real layout test. Written by me and <strong style="font-weight: 600;">not native-reviewed</strong> — flagged for your reviewers before i18n keys freeze.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

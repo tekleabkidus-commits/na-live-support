@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S09-degradation-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Degradation</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows K01–K06 · Doc 13 FR-21, FR-22, FS-01, FS-02, FS-04, FS-05, NFR-05, NFR-06, BR-01. Doc 13 spends more words on failure than on success, and the ranking is consistent: the host page must never break, then the visitor must never lose a message, then — a long way down — the visitor may be told something is wrong. Most of these states are designed to be invisible.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · what the visitor sees, in order of severity</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">K01–K04 · Doc 13 FS-01, FS-02, FS-04</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">K01 · Light — socket lost, polling: nothing changes</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #DCD8CF; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">SB</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Selam</div><div style="font-size: 12px; color: #6B675D; margin-top: 1px;">Na Support</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div role="log" aria-live="polite" aria-label="Conversation" style="flex: none; padding: 16px; background: #FBFAF8; display: flex; flex-direction: column; gap: 11px;">
+            <div style="align-self: flex-end; max-width: 84%;"><div style="background: #22211D; border-radius: 14px 14px 4px 14px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #FFFFFF;">Is it still being traced?</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 4px; text-align: right;">14:31 · ✓✓ Delivered</div></div>
+            <div style="align-self: flex-start; max-width: 84%;"><div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 14px 14px 14px 4px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #1D1C18;">Yes — the bank confirmed it a minute ago. Releasing it now.</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 4px;">Selam · 14:32</div></div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 14px; border-top: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1 1 auto; border: 1px solid #CFCBC1; border-radius: 22px; padding: 12px 15px; font-size: 15px; color: #6F6A61; min-height: 44px;">Write a message…</div>
+            <button aria-label="Send" style="font-family: inherit; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #22211D; border: none; color: #FFFFFF; font-size: 15px; cursor: pointer;">➤</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">This frame is the design. The socket died and the widget is polling every five seconds — no banner, no spinner, no “reconnecting” badge, because a visitor cannot act on transport and telling them only makes the product look fragile. Delivery ticks stay truthful; updates arrive a few seconds later. Doc 13 says transport state is never surfaced beyond honest glyphs, and that is a deliberate absence rather than an omission.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">K02 · Dark — the visitor's own connection is gone</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #45443E; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">SB</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Selam</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: none; padding: 10px 14px; background: #3A2D10; border-bottom: 1px solid #6B551A; display: flex; align-items: center; gap: 9px;" role="status"><span style="flex: none; font-size: 13px; color: #F0B54A;">◌</span><span style="font-size: 13px; color: #F0B54A; line-height: 1.45;">You're offline — messages will send when you reconnect</span></div>
+          <div role="log" aria-live="polite" aria-label="Conversation" style="flex: none; padding: 16px; background: #171715; display: flex; flex-direction: column; gap: 11px;">
+            <div style="align-self: flex-start; max-width: 84%;"><div style="background: #232320; border: 1px solid #343430; border-radius: 14px 14px 14px 4px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #ECEAE4;">Releasing it now — you'll have it within the hour.</div><div style="font-size: 11.5px; color: #9A9588; margin-top: 4px;">Selam · 14:32</div></div>
+            <div style="align-self: flex-end; max-width: 84%;"><div style="background: #2F2F29; border: 1px dashed #6B551A; border-radius: 14px 14px 4px 14px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #ECEAE4;">አመሰግናለሁ!</div><div style="font-size: 11.5px; color: #F0B54A; margin-top: 4px; text-align: right;">◌ Sending when you're back</div></div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 14px; border-top: 1px solid #343430; display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1 1 auto; border: 1px solid #45443E; border-radius: 22px; padding: 12px 15px; font-size: 15px; color: #8C877C; min-height: 44px;">Keep typing — it'll send</div>
+            <button aria-label="Queue message" style="font-family: inherit; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #45443E; border: none; color: #ECEAE4; font-size: 15px; cursor: pointer;">➤</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #343430; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #ECEAE4; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">This one the visitor can act on — move to wifi, wait for signal — so it is said plainly. The history they already have stays readable, and typing still works because the alternative is asking someone to hold a thought until the network returns.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">K03 · Light — the last-resort card</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; height: 470px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 11px;">
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Na Support</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 28px 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 9px;" role="alert">
+            <span style="font-size: 22px; color: #B32B2B;">⚠</span>
+            <div style="font-size: 16px; font-weight: 600; color: #1D1C18;">Chat isn't loading</div>
+            <div style="font-size: 14px; color: #4A4842; line-height: 1.6; text-wrap: pretty;">Something on our side is down. Nothing you typed has been lost.</div>
+            <button style="font-family: inherit; margin-top: 8px; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; padding: 0 22px; font-size: 15px; font-weight: 600; cursor: pointer;">Try again</button>
+            <div style="font-size: 12.5px; color: #6B675D; margin-top: 6px; line-height: 1.55;">Urgent? The support number is on the payments page.</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The whole API is down. No tab bar, because none of the tabs would work — a panel offering Home and Help that both fail is worse than one honest card. The launcher stays on the host page: a later attempt may succeed, and a vanished widget looks like a broken site.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">K04 · Dark — the bot is down, so it never appears</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #ECEAE4; color: #171714; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">N</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Na Support</div><div style="font-size: 12px; color: #A6A296; margin-top: 1px;">Connecting you to a specialist</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div role="log" aria-live="polite" aria-label="Conversation" style="flex: none; padding: 16px; background: #171715; display: flex; flex-direction: column; gap: 11px;">
+            <div style="align-self: flex-end; max-width: 84%;"><div style="background: #ECEAE4; border-radius: 14px 14px 4px 14px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #171714;">My deposit hasn't arrived.</div><div style="font-size: 11.5px; color: #9A9588; margin-top: 4px; text-align: right;">14:02 · ✓✓</div></div>
+            <div style="align-self: center; max-width: 92%; text-align: center; font-size: 12.5px; color: #A6A296; line-height: 1.5;">Putting you through to someone who can check this.</div>
+            <div style="align-self: stretch; background: #232320; border: 1px solid #45443E; border-radius: 12px; padding: 14px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 24px; font-weight: 700; color: #ECEAE4; letter-spacing: -0.02em;">#2</span><span style="font-size: 14px; color: #ECEAE4;">in line</span><span style="margin-left: auto; font-size: 13px; color: #A6A296;">about 4 min</span></div>
+              <div style="margin-top: 10px; height: 6px; background: #171715; border-radius: 999px; overflow: hidden;"><div style="width: 58%; height: 100%; background: #ECEAE4;"></div></div>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 14px; border-top: 1px solid #343430; display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1 1 auto; border: 1px solid #45443E; border-radius: 22px; padding: 12px 15px; font-size: 15px; color: #8C877C; min-height: 44px;">Write a message…</div>
+            <button aria-label="Send" style="font-family: inherit; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #ECEAE4; border: none; color: #171714; font-size: 15px; cursor: pointer;">➤</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #343430; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #ECEAE4; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">No AI bubble, no error, no apology for a component the visitor never knew existed — the message simply goes straight to the queue. The only tell is that a person answers instead of a bot, which is not a downgrade to anyone waiting on 2,500 birr.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">K05, K06 · Failing without taking the site with it</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 FS-05, NFR-05, NFR-06, BR-01</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">K05 · Help down, Messages up</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">Drawn in <span style="font-family: ui-monospace, monospace; font-size: 12px;">B3-S04</span> and not redrawn here: the Help tab shows one line saying articles are unavailable and points at chat, while Messages carries on. They are separate failure domains, and the widget is built so one taking the other down is not possible rather than merely unlikely.</p>
+      </div>
+
+      <div style="width: 660px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">K06 · Below the support matrix, or blocked outright</div>
+        <div style="display: grid; grid-template-columns: 300px minmax(0, 1fr);">
+          <div style="padding: 16px; border-right: 1px solid #E5E2DB;">
+            <div style="position: relative; height: 300px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 12px 14px; border-bottom: 1px solid #EFEDE8; display: flex; align-items: center; gap: 9px;"><span style="width: 62px; height: 11px; background: #E5E2DB; border-radius: 3px;"></span></div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 9px;"><div style="height: 96px; background: #F2F1ED; border-radius: 8px;"></div><div style="height: 11px; width: 74%; background: #EFEDE8; border-radius: 3px;"></div><div style="height: 11px; width: 56%; background: #F2F1ED; border-radius: 3px;"></div><div style="height: 40px; width: 128px; background: #E5E2DB; border-radius: 8px;"></div></div>
+              <div style="position: absolute; right: 14px; bottom: 16px; width: 56px; height: 56px; border: 1px dashed #DCD8CF; border-radius: 50%;"></div>
+            </div>
+            <div style="font-size: 11px; color: #4A4842; margin-top: 7px; line-height: 1.5;">The dashed circle is not drawn in the product — it marks where the launcher would have been.</div>
+          </div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+            <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">An old browser below the matrix, a host CSP that blocks the frame, a CDN that will not answer — in all three the widget does not mount, says nothing, and leaves no trace on the page. No error card, no console shouting, no half-rendered bubble. The host page is exactly as it would have been if the snippet had never been pasted.</p>
+            <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">The operator learns about it instead: the loader beacons the reason, and Health names it with the fix — the CSP header to paste, the browser that fell below the line. That asymmetry is the whole posture. A dead widget is invisible to the player and loud to the person who can repair it.</p>
+            <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 8px 8px 0; padding: 11px 13px; font-size: 12.5px; color: #4A4842; line-height: 1.6;">The rule underneath every frame on this page: the widget can never be the reason an operator's site broke. It outranks every feature, including the ones on this screen.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

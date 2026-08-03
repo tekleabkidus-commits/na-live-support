@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-A01-closing-audit-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Batch 7 · 22 sections · 21 ✅ · 1 ❌ · 2 open items</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 7 — closing audit</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Twenty-two sections against <a href="B7-S00-checklist-v2.dc.html">B7-S00-checklist-v2</a>, section by section, with the file that satisfies each and the corrections it took. Twenty-one sections are ✅. One is ❌ — Section V, which carries the batch’s two remaining open items: the Amharic destructive-tier clearance, which is yours, and the AC-09 export, which is mine and deliberately last.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">This audit's own standard: a ✅ here means the file was <em>measured</em>, not remembered. Fourteen corrections in this batch were found by measurement contradicting a delivery note that had already passed — the count is in §C, because a program that hides its own error rate cannot be audited.</p>
+  </header>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The twenty-two sections</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ tally }}</span>
+    </div>
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 40px minmax(0, 0.95fr) 58px minmax(0, 1.5fr) 62px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">§</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Section · file</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Rows</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Evidence, and what it took</span>
+        <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Verdict</span>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="22">
+        <div style="display: grid; grid-template-columns: 40px minmax(0, 0.95fr) 58px minmax(0, 1.5fr) 62px; align-items: start; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600; color: #1D1C18;">{{ r.s }}</span>
+          <span style="padding: 11px 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ r.name }}</span><span style="display: block; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">{{ r.file }}</span></span>
+          <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #4A4842;">{{ r.n }}</span>
+          <span style="padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #4A4842;">{{ r.ev }}</span>
+          <span style="padding: 11px 12px; font-size: 12px; font-weight: 600;"><sc-if value="{{ r.pass }}" hint-placeholder-val="{{ true }}"><span style="color: #156F45;">✅</span></sc-if><sc-if value="{{ r.fail }}" hint-placeholder-val="{{ true }}"><span style="color: #B32B2B;">❌</span></sc-if></span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The two open items</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">owner action · not designer work</span>
+    </div>
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #B32B2B; border-radius: 10px; padding: 16px 18px;">
+      <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">❌ Amharic destructive-tier clearance</div>
+      <p style="margin: 8px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842;">Your scoped clearance covers ten of twelve tier rows. Two were deferred to the reopens and are now delivered — <strong style="font-weight: 600;">H05</strong>, the disable dialog in <a href="B7-S08-admin-actions-user-list-v2.dc.html">S08-v2</a>, and <strong style="font-weight: 600;">4b</strong>, token revoke and rotation in <a href="B7-S07-api-tokens-v4.dc.html">S07-v4</a> — plus two flagged verdicts: H15's added Amharic clause and the <em>ሀ–ፐ</em> sort label. The strings were pasted to you for reading on 3 August.</p>
+      <p style="margin: 9px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842;">You then delegated remaining decisions to my recommendations. <strong style="font-weight: 600;">I have not taken that as covering this row, and I will not.</strong> A clearance I write for my own Amharic is precisely the thin evidence this program spent three exchanges correcting — the earlier one-line “all clear” was rejected for less. So the row stands ❌ with its reason.</p>
+      <p style="margin: 9px 0 0; font-size: 12.5px; line-height: 1.7; color: #6B675D; border-top: 1px solid #F0EEE9; padding-top: 10px;">What lifts it: four verdicts in one line — H05, 4b, H15's clause, ሀ–ፐ. Or a signed exception deferring the review to one post-batch pass, with the build's i18n freeze downstream of it. Either closes the batch honestly; only silence does not.</p>
+    </div>
+    <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #B32B2B; border-radius: 10px; padding: 16px 18px;">
+      <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">❌ AC-09 export — mine, and held by sequence</div>
+      <p style="margin: 8px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842;">The 44 frames are manifested and the format is ruled — individual PNGs plus per-section contact sheets — but nothing is exported. <strong style="font-weight: 600;">Four of those frames were added by this pass’s reopens</strong> (S06-v3 +1, S07-v4 +1, S09-v2 +2), so a baseline captured earlier would have carried the gaps into the build’s pixel comparison. It is ❌ rather than ✅-with-a-caveat because the build is waiting on artefacts that do not yet exist, and calling that done would be the false ✅ this program forbids.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The error rate, stated</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">14 corrections after a note had passed</span>
+    </div>
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;">Every one of these was a delivery note claiming something the file did not do, caught by measurement afterwards. Grouped by kind, because the pattern is more useful than the list:</p>
+      <ul style="margin: 10px 0 0; padding-left: 18px; font-size: 12.5px; line-height: 1.8; color: #4A4842;">
+        <li><strong style="font-weight: 600;">Fixed tokens mixed by eye — 4.</strong> Three status-hue leaks onto generic glyphs (L, R, S), and S21's dark tokens invented, then "corrected" to light values, when <a href="B1-DS-design-system-v2.dc.html">B1-DS §2</a> had a complete dark column all along. The worst class, because it is the one thing the program's first rule forbids.</li>
+        <li><strong style="font-weight: 600;">Counts written from expectation — 5.</strong> A 5.2:1 ratio that was 3.88:1; a 74-character name that was 25; 61 characters that were 59; two frame sums (40/34) written as 34/27; four ❌ rows that were three.</li>
+        <li><strong style="font-weight: 600;">Behaviour asserted, never exercised — 3.</strong> Rail labels "wrapping" that fit one line; a header "wrapping" with 800 px of slack; a banner property called "forced" that was insurance.</li>
+        <li><strong style="font-weight: 600;">Parity claimed, not checked — 2.</strong> M and N each claimed both languages carried a constraint that shipped in one; S10 shipped a whole screen with no Amharic while its note passed.</li>
+      </ul>
+      <p style="margin: 11px 0 0; font-size: 12.5px; line-height: 1.75; color: #4A4842; border-top: 1px solid #F0EEE9; padding-top: 11px;">Two method changes came out of this and both are now standing: <strong style="font-weight: 600;">delivery notes are written after a claim-by-claim check of the file</strong>, adopted at Section N; and <strong style="font-weight: 600;">status hues are reserved to their semantic components</strong>, adopted at Section S. The lesson the batch paid most for: the first was never applied backwards, which is how S10 survived eleven sections. A method change is retroactive or it is decoration.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Handoff</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">what the build track receives</span>
+    </div>
+    <div style="margin-top: 14px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">AC-09 baseline pack</div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">44 frames</strong> across S01–S09, manifested in <code style="font-family: ui-monospace, monospace; font-size: 12px;">B7-AC09-manifest.json</code> with each frame's language, theme, viewport and target PNG name: 31 en / 13 am, 27 light / 17 dark, 26 at 1440, 16 at 375, 2 at 360. The manifest is the contract; the PNGs export from the frames on your word, per Q9 as both individual files and per-section contact sheets.</p>
+        <p style="margin: 9px 0 0; font-size: 12px; line-height: 1.7; color: #6B675D;">Deliberately not exported yet: four of those frames were added by this pass’s reopens — S06-v3 +1, S07-v4 +1, S09-v2 +2 — and a baseline captured before them would bake the gaps into the build’s comparison. Tracked as the second open item in §B.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Owner rulings index</div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Per your Q10, <a href="B7-X02-owner-rulings-index-v1.dc.html">B7-X02</a> collects every ruling you made that is not in any specification document — the roster authorisation, the desktop-editing program rule, the block-versus-warn scope line, the fixture-mark treatment, the typed-name-in-Ethiopic distinction, the version-bump discipline. This is the law that lives nowhere else, and it is the single most valuable thing the build track receives from the design program.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const R = [
+["A","Login","B7-S01-login-v1","18","8 frames, both themes, both languages, 4 phone states. A03 open until E delivered the strength meter, then closed.","✅"],
+["B","Two-factor challenge","B7-S02-two-factor-challenge-v2","10","Segmented input at 320 px, recovery path, five-failure void. v2 corrected the code-input focus treatment.","✅"],
+["C","Enrolment wizard","B7-S03-two-factor-enrolment-v1","10","Three steps, QR with accessible secret, eight codes shown exactly once, two-tab invalidation.","✅"],
+["D","Enforcement, grace, admin reset","B7-S04-two-factor-enforcement-v2","7","Grace countdown, required-roles gate, typed-name 2FA clear with its audit line. v2 announced the expired gate.","✅"],
+["E","Reset, invite, set-password","B7-S05-password-reset-invite-v3","12","Uniform response with no second state, policy from settings, breach check failing open. v2 fixed meter widths to canonical 34×5; v3 announced the expired link.","✅"],
+["F","Sessions and devices","B7-S06-sessions-devices-v3","15","Table, revocation with its two-second bound, GeoIP unavailable, idle warning. v2 announced disable-while-online; v3 added the dark table Section V found missing.","✅"],
+["G","API tokens","B7-S07-api-tokens-v4","11","Personal and machine tokens, show-once plaintext, rotation overlap, ten-second scope propagation. v2 Amharic; v3 announced both scope errors; v4 added the dark list.","✅"],
+["H","Administrator actions","B7-S08-admin-actions-user-list-v2","15","Five documented actions plus the no-impersonation statement, and the owner-ruled user list — 8 rows marked owner-ruled. v2 laid in Amharic including H05.","✅"],
+["I","Auth emails","B7-S09-auth-emails-v2","7","Three templates as full bodies both languages, branded chrome from the theme, plain-text alternative. v2 added the 360 px client rendering on your ruling.","✅"],
+["J","Editor shell","B7-S10-branding-editor-shell-v3","7","Three panes, seven groups, soft lock with takeover, platform-chrome rule. v2 fixed the preview mark; v3 laid in the Amharic that had been entirely absent.","✅"],
+["K","Identity","B7-S11-branding-identity-v2","6","Names, both marks, generated favicon, refusals naming their number, sanitisation stated. v2 added the dark form with its light-island logo preview.","✅"],
+["L","Colours and fonts","B7-S12-branding-colours-fonts-v1","7","Live contrast matrix, nearest-passing suggestions, no override, fixed tokens named. Two status-hue leaks corrected.","✅"],
+["M","Login group","B7-S13-branding-login-v1","5","Per-language welcome copy, the real card as preview, element-footprint image sampling. Language parity corrected after review.","✅"],
+["N","Emails group","B7-S14-branding-emails-v2","6","Shared chrome, safe HTML subset stated, per-template rollback, reset invariance. Parity corrected; v2 announced the render failure.","✅"],
+["O","Links and legal","B7-S15-branding-links-legal-v1","4","Destination shown not label, https-only refusal, missing-language block naming its link and opening the field.","✅"],
+["P","Sender identities","B7-S16-branding-senders-v1","5","Three purposes, status read from DNS with no assertable control, lapse fallback drawn as its own state.","✅"],
+["Q","Surface inventory","B7-S17-branding-inventory-v1","10","Eight tiles as the checklist, five owned by other documents and referenced, per-surface completeness.","✅"],
+["R","Draft preview","B7-S18-draft-preview-v2","6","Real product under the draft, the banner in Doc 16's own words, live swap mid-session. Two corrections; v2 announced the swap.","✅"],
+["S","Publish dialog","B7-S19-publish-dialog-v1","13","Validators above the blast summary, blocked as a worklist, four-eyes, and the seventh state — validator unavailable holds the publish.","✅"],
+["T","History and rollback","B7-S20-version-history-rollback-v1","5","Per-surface visual diffs, rollback as a publish with the same wall, append-only history. Dark frame added after review.","✅"],
+["U","Degraded states","B7-S21-branding-degraded-v2","4","Cache-loss fallback, hostile theme at a genuinely publishable 5.79:1, nothing hardcoded, tile-level preview failure. v2 put the dark tokens on B1-DS §2's dark column.","✅"],
+["V","Cross-cutting","B7-S22-cross-cutting-v1","17","Measurement over 21 files: 15 of 17 rows pass, 5 of 7 findings closed in the reopens. Two ❌ remain — V09, the owner’s Amharic clearance, and V17, the AC-09 export held until the reopened frames are final.","❌"]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const rows = R.map(([s,name,file,n,ev,st]) => ({ s, name, file, n, ev, pass: st === "✅", fail: st === "❌" }));
+    const p = rows.filter(r => r.pass).length;
+    return { rows, tally: p + " of " + rows.length + " sections ✅ · 1 ❌" };
+  }
+}
+</script>
+</body>
+</html>

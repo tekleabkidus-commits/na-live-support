@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S00-checklist-v3</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">v3 · viewport ruling reversed · awaiting approval</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 5 — the contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every screen, component and state Doc 11 and Doc 15 require, with its reference. This is the contract the closing audit is checked against, row by row. I have designed nothing yet.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three things shape this batch. First, it is the batch that <strong style="font-weight: 600;">introduces charts</strong> to the system — Doc 15 §9 sets a chart grammar (one palette per dimension, units from the registry, never colour alone) and I propose that component set for approval before any report uses it. Second, Doc 15's whole design goal is one sentence — <strong style="font-weight: 600;">no two screens ever show two different numbers for the same question</strong> — which means the metric name, its formula hover, and its drill-down are part of every screen, not decoration. Third, Doc 11 gives me two very different surfaces: a <strong style="font-weight: 600;">live floor view</strong> where a supervisor acts in seconds, and a <strong style="font-weight: 600;">structure admin</strong> where the same person restructures departments carefully, with a wizard that lists everything they are about to break.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Section J is a scope call, not an invention: Doc 11 §8 specifies a full Backoffice → Organization admin, and Batch 6 is fixed to Docs 16, 05 and 03, so this batch is the only place it can land. Cut it here if you meant it elsewhere.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ counts }}</span>
+      <label style="display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 12px; color: #4A4842;">Filter</span><input value="{{ q }}" onInput="{{ onFilter }}" placeholder="queue, tv, export, amharic…" style="font-family: inherit; font-size: 12.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; min-width: 240px;" /></label>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="12">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ sec.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ sec.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 46px minmax(0, 1fr) 230px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">The viewport conflict — reversed in v3, and now a recorded deviation</h2>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Your batch instruction and Doc 15 disagreed about phones. Both passages are kept here because the final answer departs from one of them, and that has to stay visible.</p>
+    <p style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px; border-left: 2px solid #CFCBC1; padding-left: 12px;"><strong style="font-weight: 600;">Batch 5 prompt, Step 2:</strong> “deliver both viewports together — 1440px desktop AND 375px mobile. Mobile is not a bonus; a weak mobile version is a rejection.”</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px; border-left: 2px solid #CFCBC1; padding-left: 12px;"><strong style="font-weight: 600;">Doc 15 §9 Responsive:</strong> reports phone-readable, “builder ≥ 1024 px (fat-finger policy), live dashboard tablet+ with the Doc 11 touch fallbacks”. Doc 11 §9 says the same of restructuring: “wizards full-screen mobile-capable read-only (execution desktop/tablet per fat-finger policy)”.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v2 ruling, now superseded:</strong> the documents outrank the prompt; no execution at 375 in any form.</p>
+    <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v3 ruling, in force:</strong> every feature is available on a phone — interventions, the dashboard builder and the restructure wizards alike — and every action newly enabled at 375 carries a confirmation popup that names its consequence before it runs.</p>
+    <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; margin: 0 0 10px;">
+      <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">▲ This is a deliberate deviation from Doc 15 §9 and Doc 11 §9</div>
+      <p style="margin: 5px 0 0; font-size: 12.5px; line-height: 1.65; color: #8F5F08; max-width: 900px;">Both sections place these surfaces at tablet or above under the fat-finger policy. The owner has overridden them. It is recorded here, in every affected row, and in each screen delivery note, so no reviewer meets it as a surprise and no audit can read it as an oversight.</p>
+    </div>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Rows <strong style="font-weight: 600;">B18, C02, H15, J16 and J21</strong> carry the v3 ruling. The confirmation itself is a new component — row <strong style="font-weight: 600;">C15</strong> — because it now bears the safety load the policy used to carry.</p>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I have deliberately left out</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+      <li>Doc 11 §3 puts SLA policy maths (Doc 12) and supervisor-dashboard rendering (Doc 15) out of its own scope, and Doc 15 §3 puts event production, the SLA clock, AI anomaly generation (Doc 09) and notification transport (Doc 16) out of its. This batch renders their outputs; it does not design their machinery.</li>
+      <li>The <strong style="font-weight: 600;">Rescue view</strong> itself is Doc 07 FR-05 and was Batch 1's. Doc 11 FR-16 only requires that rescue conditions raise alerts here, so rows C12–C13 cover the alert and its deep link, not the view.</li>
+      <li>The <strong style="font-weight: 600;">monitor/whisper conversation</strong> is Doc 07's thread with a supervision banner. Row C08 covers the entry point, the banner and the internal-note typing of a whisper; the thread itself is approved law from Batch 1.</li>
+      <li>Report API (Doc 15 FR-18) has no interface. Technical rows (T-01…T-09 both docs), non-functional budgets and acceptance criteria are build obligations, not screens — except where a document turns one into something visible, like the “verified” badge (NFR-06) or the estimator's banded strings (Doc 11 FR-13), which are rows.</li>
+      <li>Both §19 future-expansion lists — volume forecasting, cohorts, BI connectors, QA scorecards, operator-defined metrics, richer skills, spillover policies, customer-choice routing — are out of v1 and absent here.</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 24px; background: #1B1B18; color: #F4F3F1; border-radius: 10px; padding: 18px 20px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px;">What happens next</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #D9D6CF; max-width: 900px;">Approve this checklist, or edit it, and I start with <strong style="font-weight: 600; color: #F4F3F1;">Section A — the chart component set</strong>, because Doc 15 §9's grammar has to be settled before any report can be drawn. It arrives attached to the first screen that needs it (B — the live dashboard), both viewports, both themes, as Step 1 requires. Nothing after it moves until you approve that foundation.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "A", name: "Chart & data-viz foundation — the Step 1 gate", note: "New to the system in this batch, so it is proposed once, approved once, and reused everywhere after. Doc 15 §9 fixes the grammar; the Batch 5 rules add that colour is never the only encoding.", rows: [
+  { t: "Palette per dimension, stable in a session", r: "A queue keeps its colour on every chart of the session; the mapping is shown once in a legend component rather than re-guessed per chart.", d: "Doc 15 §9" },
+  { t: "Second encoding on every series", r: "Pattern, marker shape or direct label alongside hue, so a chart read in greyscale still answers its question.", d: "Doc 15 §9 · Batch 5 design rules" },
+  { t: "Line, bar and pie", r: "Axes labelled with the unit taken from the registry entry; time axes in tenant timezone and labelled as such.", d: "Doc 15 FR-13, §9" },
+  { t: "Hour × day heatmap", r: "Localised weekdays, row and column headers exposed programmatically, legend with value bands.", d: "Doc 15 FR-13, §9, §13" },
+  { t: "KPI card", r: "Value, unit, comparison delta, optional target band with threshold colouring — and the band stated in text.", d: "Doc 15 FR-13, §9" },
+  { t: "Table widget and activity feed", r: "The two non-chart widget types, sharing the table conventions of the approved system.", d: "Doc 15 FR-13" },
+  { t: "Leaderboard", r: "Rank, agent, metric — with the deterministic tie rule (metric value, then alphabetical) visible in the header note.", d: "Doc 15 FR-13, EC-12" },
+  { t: "Sparkline", r: "Queue throughput in the live table and headline sparks on report-home family cards; static under reduced motion.", d: "Doc 11 §8, §9 · Doc 15 §8, §9" },
+  { t: "Delta chip", r: "Sign, arrow and colour together — never colour alone, and legible in both themes.", d: "Doc 15 §9, §13" },
+  { t: "Number formatting", r: "Tabular numerals, locale-aware, rates to one decimal, durations humanised with the exact value on hover.", d: "Doc 15 §9" },
+  { t: "Data-table alternative", r: "Every chart toggles to its own table; the toggle is a real control, not a hidden affordance.", d: "Doc 15 §13" },
+  { t: "Accessible trend summary", r: "A written sentence per chart — “FRT down 12% versus last week” — not only the picture.", d: "Doc 15 §13" },
+  { t: "Formula disclosure", r: "The focusable hover that every metric carries: label, formula sentence, exclusions, business-hours mode.", d: "Doc 15 FR-03, §8, §13" },
+  { t: "LIVE marking", r: "The micro-label and pulse dot that separate a realtime tile from a historical one, on sight.", d: "Doc 15 FR-05, BR-03, §9" },
+  { t: "Chart states", r: "Loading shimmer into draw, honest empty (“no data in range”, never a zero line pretending), and a single-metric error card that leaves its neighbours alive.", d: "Doc 15 §8, FS-05" },
+  { t: "Both themes, AA in both", r: "The whole set in dark and light, contrast checked at chart-ink sizes as well as text.", d: "Batch 5 design rules · Doc 15 §9" }
+]},
+{ id: "B", name: "Supervisor live dashboard", note: "Doc 15 FR-10 is a fixed four-part layout rendering contracts owned by Docs 11 and 07. Realtime tier only, labelled live, never blended with history.", rows: [
+  { t: "KPI strip", r: "Waiting, oldest wait, active chats, agents online, SLA at-risk, breaches today — six tiles, all live-labelled.", d: "Doc 15 FR-10" },
+  { t: "Queue table", r: "Per queue: depth, oldest wait, eligible/online agents, throughput sparkline.", d: "Doc 15 FR-10 · Doc 11 §8" },
+  { t: "Queue row drill-through", r: "Any queue number reaches its waiting tickets in one click — the ≤2-clicks-to-drill-down rule.", d: "Doc 15 FR-08 · Batch 5 design rules" },
+  { t: "Agent grid — status", r: "Status with its attribution: self-set, supervisor-forced, or system-away from heartbeat loss.", d: "Doc 15 FR-10 · Doc 07 FR-28" },
+  { t: "Agent grid — load and time", r: "Active load against capacity (including a trainee's overridden capacity) and time in current status.", d: "Doc 15 FR-10 · Doc 11 FR-06, US-07" },
+  { t: "Agent grid — today's numbers", r: "Handled, resolved, CSAT — visible only to holders of reports.agents.individual.", d: "Doc 15 FR-10, BR-04" },
+  { t: "Agent grid — unentitled viewer", r: "The same grid without any per-person metric, as a restricted state rather than blank columns.", d: "Doc 15 FR-14, BR-04, AC-04" },
+  { t: "Live alert feed", r: "SLA warnings and breaches, reply-window expiries, routing no-skill-match, channel health changes, AI anomalies, gateway circuits — each row actionable with its deep link.", d: "Doc 15 FR-10" },
+  { t: "Alert feed behaviour", r: "Rows age-fade; additions announce politely and in batches, not one interruption per event.", d: "Doc 15 §8, §13" },
+  { t: "Out-of-scope alert elision", r: "An alert about an object the viewer cannot see reads “a ticket in Payments” — never a name.", d: "Doc 15 SEC-05" },
+  { t: "Loading", r: "KPI skeletons, queue and agent table skeletons; the shell is present before the numbers are.", d: "Doc 15 §8" },
+  { t: "Empty — quiet floor", r: "3 AM: nothing waiting, one agent online. Honest emptiness, not a broken board.", d: "Doc 15 §8 · Doc 11 BR-05" },
+  { t: "Empty — no queues in a department", r: "The warning-toned state: “intake falls to… nothing — create a queue”, with the fix one click away.", d: "Doc 11 §8 Empty states" },
+  { t: "Empty — tiny operator", r: "One department, one queue, two agents: the board degrades to a shared-inbox view without looking unfinished.", d: "Doc 11 EC-11" },
+  { t: "Stale realtime", r: "Tiles older than 10 s dim and carry a staleness chip; the value is not silently trusted.", d: "Doc 15 §8" },
+  { t: "Degraded realtime", r: "Socket lost: banner plus poll fallback, the board keeps running, and the degradation is stated.", d: "Doc 15 §8, FS-03 · Doc 07 patterns" },
+  { t: "Error", r: "A failed tile renders its own error card; the rest of the board is unaffected.", d: "Doc 15 FS-05" },
+  { t: "Live dashboard — 375, fully operable", r: "The full board on a phone — KPI stack, queue list, agent list, alert feed, drill-through — and every intervention executable, each behind a confirmation. Deviates from Doc 15 §9 tablet+ on the owner instruction.", d: "Doc 15 §9 (deviation) · owner ruling, v3" }
+]},
+{ id: "C", name: "Interventions and explainability", note: "Doc 15 FR-11 says every action here executes with its owning module's semantics — Doc 11 FR-15 for the operations, Doc 06 for the transitions. Humans override machines, visibly.", rows: [
+  { t: "Reassign — dialog", r: "Pick a ticket, pick an agent, bypass the strategy; the result is attributed to the supervisor, not the router.", d: "Doc 11 FR-15, BR-03 · Doc 15 FR-11" },
+  { t: "Reassign — drag, and its equivalents", r: "Drag at 1440; the dialog equivalent at tablet, by keyboard, and at 375 with a confirmation. Same outcome, same audit, at every size.", d: "Doc 11 §9, §13 · Doc 15 §9 (deviation) · owner ruling, v3" },
+  { t: "Pull-in dialog", r: "Agent picker plus expiry defaulted to shift end from business hours, editable — the temporary grant made in one step.", d: "Doc 11 FR-15 · Doc 03 FR-09" },
+  { t: "Temporary-member chip", r: "Dashed border and a live countdown wherever that agent appears while the grant lasts.", d: "Doc 11 §9, FR-03" },
+  { t: "Recurring pull-in hint", r: "The third pull-in of the same agent in a week offers “make permanent?” — a nudge, never an automatic change.", d: "Doc 11 BR-07, AC-05" },
+  { t: "Force agent status", r: "Supervisor sets an agent's status; the grid shows it was forced and by whom.", d: "Doc 11 FR-15 · Doc 07 FR-28" },
+  { t: "Broadcast note to queue members", r: "Composer, recipient count, and what the agents will actually see.", d: "Doc 11 FR-15" },
+  { t: "Monitor / whisper entry", r: "Chrome only: the supervision banner and whisper entry are drawn around Batch 1's frozen thread, never a redrawn thread. A whisper composes as an internal note and is structurally undeliverable.", d: "Doc 15 FR-11 · Doc 04 BR-01 · Doc 03 supervision.* · owner ruling, v2" },
+  { t: "Routing-decision record", r: "The expandable record in the ticket timeline: numbered steps, monospace inputs, plain-language outcomes, copy-as-text for escalations.", d: "Doc 11 FR-17, §9, §13" },
+  { t: "Record — the hard cases", r: "Skill match with zero agents online falling back to wait; the starvation jump at minute 30; the courtesy hold for a reopened ticket's previous assignee.", d: "Doc 11 FR-12, EC-04, EC-08, SS-02" },
+  { t: "Record — elided viewer", r: "A viewer without individual-metrics rights sees the record with agent names removed, not the record hidden.", d: "Doc 11 SEC-02" },
+  { t: "Rescue alerts", r: "Heartbeat-lost with live tickets, channel-unreachable, and orphaned-by-deletion each raise a distinct alert row.", d: "Doc 11 FR-16, FR-19" },
+  { t: "Rescue alert — auto-return on or off", r: "The alert says which setting is in force, so a supervisor knows whether the tickets are already back in the queue.", d: "Doc 11 FR-16a" },
+  { t: "Confirmation semantics", r: "Each intervention confirms per its owning spec — no invented confirmation patterns, no silent execution of a heavy action.", d: "Doc 15 §8" },
+  { t: "Mobile confirmation component", r: "The popup that guards every action enabled at 375: consequence restated in nouns (who, how many, until when), a specific verb on the primary button, three weights for reversible / affects-others / irreversible, and 48px targets. It now carries the safety load the fat-finger policy used to.", d: "owner ruling, v3 · Doc 11 FR-18 for the typed tier" }
+]},
+{ id: "D", name: "TV mode", note: "Doc 15 FR-12 makes this a mode of any dashboard, not a screen of its own — and SEC-04 makes it a security surface: a lobby screen holds no privileged interaction.", rows: [
+  { t: "TV mode — live dashboard", r: "Full-screen, auto-refresh, large-type tokens, high-contrast variant, no cursor.", d: "Doc 15 FR-12, §9" },
+  { t: "Rotation", r: "Multiple pages rotating on the configured interval, with a page indicator that reads at distance.", d: "Doc 15 FR-12, FR-13 tv_config" },
+  { t: "Display-only", r: "No interactive affordance is rendered at all — the drag handles, menus and buttons are absent, not disabled.", d: "Doc 15 FR-12, SEC-04" },
+  { t: "Restricted widgets in TV", r: "A per-agent leaderboard on a wall screen stays a lock placeholder. Nobody is ranked to a corridor.", d: "Doc 15 FR-14, US-05, AC-04" },
+  { t: "TV config panel", r: "Rotation, refresh and page selection with a live preview of what the wall will show.", d: "Doc 15 §8, FR-13" },
+  { t: "TV under reduced motion", r: "No pulses, no animated transitions between pages.", d: "Doc 15 §9" }
+]},
+{ id: "E", name: "Reports home", note: "The entry point to eight families, and the place the platform states how much it currently trusts its own numbers.", rows: [
+  { t: "Family cards", r: "Eight cards — Agent, Team/Queue, Customer, AI, Telegram, Live Chat, SMS, SLA — each with a headline spark.", d: "Doc 15 §8, FR-02" },
+  { t: "Digest and anomaly feed", r: "The AI daily digest and anomaly alerts, each linking into the right report at the right range.", d: "Doc 15 FR-09 · Doc 09 FR-17" },
+  { t: "Recent and pinned", r: "The reports this user actually returns to.", d: "Doc 15 §8" },
+  { t: "Verified badge", r: "The integrity indicator with its last-reconciled time, stated plainly enough for a non-technical manager.", d: "Doc 15 §8, NFR-06" },
+  { t: "Verified badge withheld", r: "After drift or a recovery, the badge is absent with the reason — the honest version of the same indicator.", d: "Doc 15 NFR-06, FS-01" },
+  { t: "Home — loading, empty, error", r: "A tenant with no history yet, and the failure of the feed panel alone.", d: "Batch 5 Step 2 · Doc 15 §8" }
+]},
+{ id: "F", name: "Report page anatomy, filters and drill-down", note: "Doc 15 FR-07 fixes one anatomy for all eight families. Designed once here, then applied; every number on it must be explainable and reachable.", rows: [
+  { t: "Page anatomy", r: "Header KPI row, primary chart, breakdown table — in that order, at both viewports.", d: "Doc 15 FR-07, §8" },
+  { t: "Global filter bar", r: "Date range with comparison period, department, queue, team, agent (gated), channel, language, tag, priority.", d: "Doc 15 FR-07" },
+  { t: "Family-specific filters", r: "Policy, template, gateway, bot/connection, widget — shown only on the families that own them.", d: "Doc 15 FR-07" },
+  { t: "Date semantics", r: "Tenant timezone, inclusive ranges, automatic grain (hour ≤ 3 days, day ≤ 90, week or month beyond) with the grain stated.", d: "Doc 15 FR-07" },
+  { t: "Comparison deltas", r: "The comparison period rendered as delta chips against each KPI.", d: "Doc 15 FR-07, §9" },
+  { t: "Formula hover in place", r: "Every KPI and column header discloses its formula, exclusions and calendar — including that spam and test traffic never count.", d: "Doc 15 FR-03, BR-02, US-04" },
+  { t: "Business-hours variant", r: "Where a metric has both, calendar and business-hours values are distinct and named, never quietly swapped.", d: "Doc 15 FR-01" },
+  { t: "Two calendars in one comparison", r: "When compared periods fall under different effective calendars, the hover names both.", d: "Doc 15 EC-09" },
+  { t: "Filter persistence", r: "The bar remembers per user per report; returning tomorrow lands where you left.", d: "Doc 15 §8" },
+  { t: "Empty range", r: "An honest empty chart — “no data in range” — never a zero line implying zero activity.", d: "Doc 15 §8" },
+  { t: "Drill-down slide-over", r: "Any number opens its constituent list through the approved list components, with the applied context as removable chips.", d: "Doc 15 FR-08, §8" },
+  { t: "Drill-down — rate metrics", r: "A rate drills into numerator and denominator separately; no aggregate ships without a way in.", d: "Doc 15 BR-06" },
+  { t: "Drill-down — 10k cap", r: "The cap is stated with an export-the-full-set path, never silent truncation.", d: "Doc 15 EC-07, FR-08" },
+  { t: "Scope duality", r: "The same shared number recomputed to a department-scope viewer's scope, shown side by side so the rule is legible.", d: "Doc 15 FR-08, FR-15, US-03, AC-03" },
+  { t: "Per-agent columns elided", r: "An unentitled viewer drilling into a team aggregate gets the list without agent columns.", d: "Doc 15 SEC-02, BR-04" },
+  { t: "Export this list", r: "The gated shortcut from a drill-down into the export pipeline.", d: "Doc 15 §8, FR-16" },
+  { t: "Report page — 375", r: "KPIs stack, charts simplify to sparkline plus table, filters collapse to a sheet.", d: "Doc 15 §9" },
+  { t: "Print styles", r: "A report page printed from the browser stays legible and keeps its filter stamp.", d: "Doc 15 §9" },
+  { t: "Loading and lag", r: "Skeletons throughout; a “data may lag” banner when the aggregate store is degraded — never silent staleness.", d: "Doc 15 §8, FS-02" }
+]},
+{ id: "G", name: "The eight report families", note: "Doc 15 FR-02 names the metrics; the semantic dictionary is law and no metric may be invented or renamed. Each family is one designed page on the F anatomy.", rows: [
+  { t: "Agent report", r: "Handled, resolved, reopened rate, escalated, FRT, avg response, resolution time, CSAT avg and count, AI-assist usage, active time, tickets per active hour.", d: "Doc 15 FR-02 Agent · Doc 06 FR-24" },
+  { t: "Active time, derived honestly", r: "Active time comes from activity events, never a status clock — and the hover says so.", d: "Doc 15 BR-07 · Doc 07 BR-06" },
+  { t: "Team / Queue report", r: "Volume in and out, backlog with age profile, SLA attainment per stage, utilisation, workload balance, throughput, wait p50/p90.", d: "Doc 15 FR-02 Team/Queue" },
+  { t: "Customer report", r: "Created and closed, repeat-contact rate, top intents, satisfaction distribution, deflection.", d: "Doc 15 FR-02 Customer" },
+  { t: "AI report", r: "Resolution rate, handoff rate with reason distribution, reopen-after-AI, CSAT(AI) against CSAT(human), calibration buckets, top unanswerable intents, token cost per resolution.", d: "Doc 15 FR-02 AI" },
+  { t: "The honest triad, enforced", r: "AI resolution rate never renders without CSAT(AI) and reopen-after-AI beside it — in the report, and unbuildable otherwise in the builder.", d: "Doc 15 BR-05, AC-08 · Doc 09 R-06" },
+  { t: "Telegram report", r: "Messages in and out, delivery success and failure by class, media volume, active conversations, per-connection health history, window expiries and re-engagement conversion, calibration telemetry.", d: "Doc 15 FR-02 Telegram" },
+  { t: "Live Chat report", r: "Loads, opens, chats started, AI-resolved, handoffs, actual wait against the banded estimate, widget error rate, proactive conversion.", d: "Doc 15 FR-02 Live Chat" },
+  { t: "SMS report", r: "Sent, delivered, undelivered and expired by gateway and country, cost by template and gateway, opt-out rate, guard-skip distribution, DLR latency, missing-DLR rate.", d: "Doc 15 FR-02 SMS" },
+  { t: "SLA report", r: "Attainment per policy, stage and priority; breach count and time-to-breach distribution; pause-time composition; warning-to-save rate.", d: "Doc 15 FR-02 SLA" },
+  { t: "Cost metrics gating", r: "AI and SMS spend are permission-gated; rate-card detail stays in its owning admin screen and is linked, not duplicated.", d: "Doc 15 SEC-06 · Doc 14 SEC-06" },
+  { t: "Merged-ticket footnote", r: "Where the merge contract changes a count, the hover states it rather than leaving a manager to find the gap.", d: "Doc 15 EC-02 · Doc 06 FR-20" },
+  { t: "Event-time attribution", r: "An agent who changed teams mid-month counts where they were at the time; the team report's hover states this.", d: "Doc 15 EC-04" }
+]},
+{ id: "H", name: "Dashboard builder", note: "Doc 15 FR-13's constraint is the design idea: invalid combinations are unbuildable, not error-prone. The registry drives what the inspector will even offer.", rows: [
+  { t: "Builder shell", r: "Widget palette, 12-column grid canvas with drag and resize, inspector panel.", d: "Doc 15 FR-13, §8" },
+  { t: "Metric picker", r: "Searchable dictionary with labels and descriptions; the search is the moment the semantic dictionary becomes real to a user.", d: "Doc 15 FR-13, §8 · perf §12" },
+  { t: "Constrained inspector", r: "Allowed aggregations and dimensions come from the registry entry; disallowed ones are absent, not error states.", d: "Doc 15 FR-13" },
+  { t: "Tier flag, automatic", r: "Activity feeds and now-state KPIs are realtime; charts are historical. A mixed-tier widget cannot be produced.", d: "Doc 15 FR-13, BR-03, AC-05" },
+  { t: "Target bands editor", r: "Thresholds with their colour bands and the text that accompanies them.", d: "Doc 15 FR-13, §9" },
+  { t: "Comparison period control", r: "Per widget, matching the report pages' semantics.", d: "Doc 15 FR-13, FR-07" },
+  { t: "Sharing", r: "Private, team or tenant; sharing requires the permission and says what the recipients will see.", d: "Doc 15 FR-13" },
+  { t: "As-viewer preview", r: "“As: me / as: role X” so the owner can sanity-check a share before making it.", d: "Doc 15 FR-15, §8" },
+  { t: "Restricted-widget placeholder", r: "Lock glyph and “requires individual-metrics permission” — never partial data, never a broken chart.", d: "Doc 15 FR-14, §9" },
+  { t: "Honest-triad rule in the builder", r: "Attempting an AI-resolution widget without its companions is refused at build time, with the reason.", d: "Doc 15 BR-05, AC-08" },
+  { t: "Needs-update widget", r: "A metric deprecated after the dashboard was built renders as needs-update with the replacement suggested — never a silent formula swap.", d: "Doc 15 T-07, FR-03" },
+  { t: "Deleted-filter reference", r: "A widget filtered on a removed queue shows a “filter references removed queue” chip and returns empty — not a silently broadened result.", d: "Doc 15 EC-11 · Doc 11 FR-18" },
+  { t: "Unsaved-changes guard", r: "Leaving a half-built dashboard asks first.", d: "Doc 15 §8" },
+  { t: "Keyboard grid control", r: "Drag and resize have keyboard equivalents through grid position controls — the builder is operable without a mouse.", d: "Doc 15 §13" },
+  { t: "Builder — 375, fully operable", r: "Doc 15 §9 sets a 1024 px floor for building; the owner has overridden it. Widgets are created, moved, resized and edited from a phone, with grid position controls rather than free drag and a confirmation on destructive edits.", d: "Doc 15 §9 (deviation) · owner ruling, v3" },
+  { t: "Builder — loading, empty, error", r: "An empty grid that invites the first widget; a metric whose registry entry fails to load.", d: "Batch 5 Step 2 · Doc 15 FS-05" }
+]},
+{ id: "I", name: "Exports and schedules", note: "Doc 15 FR-16 and FR-17. Every export is watermarked, parameterised and audited; a schedule carries its owner's scope frozen at save.", rows: [
+  { t: "Export dialog", r: "PDF, Excel or CSV from any report or dashboard, with the filters that will be baked in shown before committing.", d: "Doc 15 FR-16" },
+  { t: "PDF snapshot content", r: "Filters, generation stamp and the requesting user's watermark on the rendered output.", d: "Doc 15 FR-16, SEC-03" },
+  { t: "Tabular export content", r: "Dictionary keys as headers alongside localised labels, so a spreadsheet stays reconcilable.", d: "Doc 15 FR-16, R-05" },
+  { t: "No live values in exports", r: "A historical export never carries a live-tier number; the rule is visible where a live widget is skipped.", d: "Doc 15 BR-03, AC-05" },
+  { t: "Progress drawer", r: "Async generation with progress and a completion notification — not a frozen screen.", d: "Doc 15 §8, NFR-05" },
+  { t: "Export failure", r: "Retry with a support reference after the automatic attempts; the failure is never silent.", d: "Doc 15 §8, FS-04" },
+  { t: "Schedule editor", r: "Report or dashboard, filters, cadence with tenant-timezone time, format, recipients.", d: "Doc 15 FR-17" },
+  { t: "Schedule manager list", r: "Next run, owner, format and recipients at a glance.", d: "Doc 15 §8" },
+  { t: "Owner-scope freeze, stated", r: "The editor says the output will render under the owner's scope as frozen at save.", d: "Doc 15 FR-17, SEC-03" },
+  { t: "Paused schedule warnings", r: "Owner deactivated, or a metric deprecated: paused with the reason and the fix — never an orphaned-privilege export, never a silent skip.", d: "Doc 15 FR-17, EC-06" },
+  { t: "Delivery history", r: "Per schedule, including the gaps where a delivery failed.", d: "Doc 15 §8, FS-04" },
+  { t: "Permission race", r: "An export requested seconds before the requester loses the permission is re-verified at run and refused with a plain explanation.", d: "Doc 15 EC-10" },
+  { t: "Exports — 375", r: "Requesting, monitoring and retrieving an export from a phone.", d: "Batch 5 Step 2" }
+]},
+{ id: "J", name: "Structure admin — Backoffice → Organization", note: "Doc 11 §8. Batch 6 is fixed to Docs 16, 05 and 03, so this is the only batch that can carry it. Careful, inventory-first, and never destructive by surprise.", rows: [
+  { t: "Three tabs", r: "Departments, Teams, Queues — one shell, three lists.", d: "Doc 11 §8" },
+  { t: "Departments list", r: "Reorderable, with queue counts and default-queue badges.", d: "Doc 11 §8, FR-01" },
+  { t: "Department detail", r: "Name, slug, description, position, default queue, business-hours override, active flag — plus the danger zone.", d: "Doc 11 FR-01, §8" },
+  { t: "Teams tab", r: "Member management with role-context chips and multi-team visibility; teams may span departments.", d: "Doc 11 FR-02, §8" },
+  { t: "Queues list", r: "Grouped by department, with strategy badges, member avatar stacks, capacity, temporary-member chips with countdowns.", d: "Doc 11 §8, §9" },
+  { t: "Warning badges", r: "Amber triangle with text for a member outside the department's access or a rule targeting an orphaned queue; hover gives the specific misconfiguration.", d: "Doc 11 FR-04, §8, §9" },
+  { t: "Strategy panel — round robin", r: "The rotation preview, showing where the pointer sits and who is skipped.", d: "Doc 11 FR-09, §8" },
+  { t: "Strategy panel — load based", r: "Least-loaded with the tiebreak note stated in words.", d: "Doc 11 FR-10, §8" },
+  { t: "Strategy panel — skill based", r: "Matcher builder over ticket attributes plus the fallback choice: drop the language requirement, or hold for a match with an SLA-aware alert.", d: "Doc 11 FR-11, §8" },
+  { t: "Priority boost ordering", r: "Drag list of boosts — urgent, VIP, window closing, SLA at-risk, reopened — with the locked starvation row pinned and captioned: “After 30 min waiting, any ticket jumps the line. Always on.”", d: "Doc 11 FR-12, §8, §9, §13" },
+  { t: "VIP source warning", r: "When the VIP boost points at an agent-editable tag, the config screen warns and recommends a customer field.", d: "Doc 11 EC-05" },
+  { t: "Membership editor and routing tags", r: "Direct members, members via team, temporary members with expiry; the queue's routing tag list.", d: "Doc 11 FR-03, FR-04, §8" },
+  { t: "RG queue special case", r: "The single is_rg queue marked as final-routing, with deletion requiring a replacement RG target.", d: "Doc 11 FR-01, FR-03, BR-02" },
+  { t: "No eligible agents banner", r: "On queue detail: the online and at-capacity breakdown behind the number.", d: "Doc 11 §8 Empty states" },
+  { t: "Queue-wait estimator preview", r: "The banded contract shown as it will read to a customer — “~5 min”, “~20 min”, “over an hour”, “when we open at 08:00” — bands only, no counts or names.", d: "Doc 11 FR-13, FR-14, SEC-05" },
+  { t: "Restructure wizard", r: "Reference inventory (rules, bots, SLA policies, views, ticket counts) → a choice per reference → typed confirmation → per-chunk progress. Executable at 375 as well, with the typed confirmation kept intact — the gate is not lowered for the phone, only laid out for a thumb.", d: "Doc 11 FR-18, §8, §9 (deviation) · owner ruling, v3" },
+  { t: "Deactivate versus delete", r: "Deactivating stops intake and lists the rules that will fall to the department default; deleting demands empty-or-reassign.", d: "Doc 11 FR-18" },
+  { t: "Delete department wizard", r: "Guided reassignment of every queue, ticket and rule reference, with the RG case called out.", d: "Doc 11 FR-18, FR-01" },
+  { t: "Wizard inventory failure", r: "Per-system checks with retries when one reference source cannot be reached — the inventory is never presented as complete when it is not.", d: "Doc 11 §8 Loading/error" },
+  { t: "Structure admin — loading, empty, error", r: "Skeleton lists, a department with no queues, a failed save.", d: "Doc 11 §8" },
+  { t: "Structure admin — tablet and 375", r: "Tablet and phone both carry the full admin including wizard execution. The fat-finger policy is replaced by confirmation, not by restriction.", d: "Doc 11 §9 (deviation) · owner ruling, v3" }
+]},
+{ id: "K", name: "Data honesty and degradation", note: "Doc 15's integrity discipline made visible. These are states, not screens, and each one is a place the platform refuses to overclaim.", rows: [
+  { t: "Live is approximate, by contract", r: "Realtime values carry the live label everywhere they appear; the label is the honesty, not a decoration.", d: "Doc 15 FR-05, BR-03" },
+  { t: "Tiers never blend", r: "No widget and no page mixes a live number with a historical one; where both appear, they are visibly separated.", d: "Doc 15 BR-03, FR-05" },
+  { t: "Aggregate store degraded", r: "Reports serve last-good behind a lag banner; the live board keeps running as the independent tier.", d: "Doc 15 FS-02" },
+  { t: "Projector lagging", r: "The banner that says numbers are behind, with how far, rather than serving them as current.", d: "Doc 15 FS-01, NFR-03" },
+  { t: "Realtime store lost", r: "Tiles rebuild from truth-syncs; the degraded banner stays up throughout.", d: "Doc 15 FS-03 · Doc 11 FS-01" },
+  { t: "Counter drift", r: "A corrected tile after a truth-sync, framed by the approximate-by-contract label rather than apologised for.", d: "Doc 15 EC-08" },
+  { t: "Per-metric error isolation", r: "One broken registry entry renders one error card naming the metric; the page survives.", d: "Doc 15 FS-05" },
+  { t: "DST honesty", r: "A 25-hour day renders honestly on the transition date instead of being smoothed away.", d: "Doc 15 EC-01" },
+  { t: "Spam and test never count", r: "Stated in the formula hovers as a platform rule, not offered as a toggle anywhere.", d: "Doc 15 BR-02, FR-01 · Doc 06 FR-09" },
+  { t: "Estimator honesty check", r: "The Live Chat family's actual-versus-banded comparison, which is the platform grading its own promise.", d: "Doc 15 FR-02 Live Chat · Doc 11 FR-13" }
+]},
+{ id: "L", name: "Cross-cutting proof", note: "Audited as its own set so nothing is proved on one viewport, one theme or one language.", rows: [
+  { t: "Both viewports", r: "1440 and 375 delivered together for every screen, with full feature parity between them. No surface is desktop-only.", d: "Batch 5 Step 2 · owner ruling, v3" },
+  { t: "Both themes", r: "Dark and light, complete, including chart ink and heatmap bands.", d: "Batch 5 Step 2 · Doc 15 §9" },
+  { t: "Both languages", r: "Real Amharic including long strings — department and queue names, alert sentences, routing-record outcomes, metric labels — flagged for native review.", d: "Batch 5 Step 2 · Doc 15 §14 · Doc 11 §14" },
+  { t: "Amharic in charts", r: "Localised weekdays on the heatmap, Amharic axis and legend labels that do not truncate or overlap.", d: "Doc 15 §9, §14" },
+  { t: "Internally consistent data", r: "Ethiopian names, deposit and withdrawal support metrics, and totals that actually add up across KPI, chart and table on the same screen.", d: "Batch 5 Step 2 · Doc 15 US-01" },
+  { t: "44px touch targets", r: "Every interactive element at 375, including alert-feed rows and wizard steps.", d: "Batch 5 design rules" },
+  { t: "Nothing by colour alone", r: "Charts, delta chips, status, SLA risk, warning badges and strategy badges all carry text or a glyph.", d: "Batch 5 design rules · Doc 15 §9 · Doc 11 §9" },
+  { t: "Keyboard operability", r: "Structure reordering via move buttons, wizards as stepped forms with progress announced, sortable table headers announced, drag equivalents everywhere.", d: "Doc 11 §13 · Doc 15 §13" },
+  { t: "Announcements", r: "Alert-feed additions announced politely and batched; countdowns follow the platform's screen-reader cadence.", d: "Doc 15 §13 · Doc 11 §13" },
+  { t: "Reduced motion", r: "No sparkline animation, no live pulses, static deltas.", d: "Doc 11 §9 · Doc 15 §9" },
+  { t: "Timezone and locale labelling", r: "Dates, durations and schedule times in tenant timezone with explicit labels and the recipient's local-time hint.", d: "Doc 15 §14 · Doc 01" },
+  { t: "Batch 1 consistency", r: "Every reused component comes from B1-DS verbatim; the chart set extends the system rather than restyling it.", d: "Batch 5 Step 1" },
+  { t: "White-label neutrality", r: "Chart palette and dashboard chrome stay tenant-brandable; the fixed status, priority, SLA and AI tokens are never re-mixed.", d: "Batch 5 design rules · Doc 16" }
+]}
+];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      let k = 0;
+      sec.rows.forEach(r => {
+        total += 1; k += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: sec.id + ("0" + k).slice(-2), t: r.t, r: r.r, d: r.d });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

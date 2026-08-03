@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S07-proactive-notifications-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Proactive, notifications, multi-tab</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows H01–H04, I01–I06 · Doc 13 FR-14, FR-17, FR-18, BR-03, BR-06, EC-03, EC-05, EC-09, T-06. The two features most likely to make a player hate a widget: interrupting them, and making noise. Doc 13 constrains both structurally rather than trusting an operator's restraint — one proactive per cooldown, dismissal permanent on that page, permission requested only after the visitor has spoken first, and everything silent while they are already looking at the thread.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · the proactive message and its guards</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">H01–H04 · Doc 13 FR-14, BR-06, EC-05</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H01 · Light — fired on the deposit page</div>
+        <div style="position: relative; width: 375px; height: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #EFEDE8; display: flex; align-items: center; gap: 10px;"><span style="width: 74px; height: 12px; background: #E5E2DB; border-radius: 3px;"></span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6F6A61;">/deposit</span></div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 11px;">
+            <div style="height: 12px; width: 52%; background: #EFEDE8; border-radius: 3px;"></div>
+            <div style="height: 46px; background: #F2F1ED; border-radius: 8px;"></div>
+            <div style="height: 46px; background: #F2F1ED; border-radius: 8px;"></div>
+            <div style="height: 46px; width: 60%; background: #E5E2DB; border-radius: 8px;"></div>
+          </div>
+          <div style="position: absolute; right: 16px; bottom: 92px; width: 268px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 14px 14px 4px 14px; box-shadow: 0 10px 28px rgba(29,28,24,0.18); padding: 13px 15px;">
+            <div style="font-size: 14.5px; color: #1D1C18; line-height: 1.55;">Stuck? I can check how long your deposit should take.</div>
+            <div style="font-size: 12px; color: #6B675D; margin-top: 7px;">Hana · support assistant</div>
+            <button aria-label="Dismiss this message" style="font-family: inherit; position: absolute; top: -12px; right: -12px; width: 32px; height: 32px; border-radius: 50%; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; font-size: 13px; cursor: pointer;">✕</button>
+          </div>
+          <div style="position: absolute; right: 16px; bottom: 20px;">
+            <button aria-label="Chat with us" style="font-family: inherit; width: 56px; height: 56px; border-radius: 50%; background: #22211D; border: none; color: #FFFFFF; font-size: 21px; box-shadow: 0 6px 20px rgba(29,28,24,0.28); cursor: pointer;">✻</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">It offers something specific to the page the visitor is on. A generic “Hi! Any questions?” is the version everyone closes without reading, and the trigger builder makes the specific one just as easy to configure.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H02, H03, H04 · The three guards</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Dismissed once, gone for good on this page</div>
+            <div style="font-size: 13px; color: #4A4842; line-height: 1.6; margin-top: 6px;">Closing the card ends it. Reloading the deposit page, coming back tomorrow, or bouncing between it and the withdrawals page does not bring it back.</div>
+          </div>
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">One per visitor per cooldown</div>
+            <div style="font-size: 13px; color: #4A4842; line-height: 1.6; margin-top: 6px;">Default 24 hours, across every trigger the operator has configured — not 24 hours each. Five clever rules cannot add up to five interruptions in an afternoon.</div>
+          </div>
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Never over a keyboard</div>
+            <div style="font-size: 13px; color: #4A4842; line-height: 1.6; margin-top: 6px;">If the visitor is typing into the site's own form — a deposit amount, a phone number — the card waits until the field loses focus. The widget can tell something has focus; it cannot and does not read what is being typed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H04 · Dark — deferred while a field has focus</div>
+        <div style="position: relative; width: 375px; height: 560px; background: #121211; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 10px;"><span style="width: 74px; height: 12px; background: #2F2F29; border-radius: 3px;"></span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">/deposit</span></div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 11px;">
+            <div style="height: 12px; width: 44%; background: #262622; border-radius: 3px;"></div>
+            <div style="border: 2px solid #5C95FF; border-radius: 8px; padding: 13px 14px; font-size: 15px; color: #ECEAE4; background: #1C1C19;">2,500<span style="display: inline-block; width: 1.5px; height: 16px; background: #ECEAE4; vertical-align: -3px; margin-left: 1px;"></span></div>
+            <div style="font-size: 12px; color: #A6A296;">Amount in ETB</div>
+            <div style="height: 46px; background: #1F1F1C; border-radius: 8px;"></div>
+          </div>
+          <div style="position: absolute; left: 16px; right: 16px; bottom: 90px; border: 1px dashed #45443E; border-radius: 12px; padding: 12px 14px; font-size: 12.5px; color: #A6A296; line-height: 1.55;">A proactive message is due here — held back until this field loses focus. Interrupting someone entering a payment amount is how a widget gets blamed for a mistyped deposit.</div>
+          <div style="position: absolute; right: 16px; bottom: 20px;">
+            <button aria-label="Chat with us" style="font-family: inherit; width: 56px; height: 56px; border-radius: 50%; background: #ECEAE4; border: none; color: #171714; font-size: 21px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); cursor: pointer;">✻</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · noise, and permission to make it</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">I01–I06 · Doc 13 FR-17, FR-18, BR-03, EC-03, EC-09</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">I01 · Light — asked after the first message, never on load</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #22211D; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">H</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Hana</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div role="log" aria-live="polite" aria-label="Conversation" style="flex: none; padding: 16px; background: #FBFAF8; display: flex; flex-direction: column; gap: 11px;">
+            <div style="align-self: flex-end; max-width: 84%;"><div style="background: #22211D; border-radius: 14px 14px 4px 14px; padding: 11px 14px; font-size: 15px; line-height: 1.55; color: #FFFFFF;">My withdrawal hasn't arrived.</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 4px; text-align: right;">14:02 · ✓✓</div></div>
+            <div style="align-self: stretch; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 12px; padding: 13px 14px;">
+              <div style="font-size: 14px; color: #1D1C18; line-height: 1.55;">Want a notification when we reply? You can carry on browsing.</div>
+              <div style="display: flex; gap: 8px; margin-top: 11px;">
+                <button style="font-family: inherit; flex: 1 1 auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 44px; font-size: 14px; font-weight: 600; cursor: pointer;">Yes, notify me</button>
+                <button style="font-family: inherit; flex: none; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 10px; min-height: 44px; padding: 0 16px; font-size: 14px; font-weight: 600; cursor: pointer;">No thanks</button>
+              </div>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 14px; border-top: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1 1 auto; border: 1px solid #CFCBC1; border-radius: 22px; padding: 12px 15px; font-size: 15px; color: #6F6A61; min-height: 44px;">Write a message…</div>
+            <button aria-label="Send" style="font-family: inherit; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #22211D; border: none; color: #FFFFFF; font-size: 15px; cursor: pointer;">➤</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The widget asks in its own words first, and only calls the browser's permission dialog if the answer is yes — so a “no” costs nothing and can be changed later, instead of permanently poisoning the site's permission state.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">I02, I03 · Three channels, and when they go quiet</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 10px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Tab unfocused — all three fire</div>
+            <div style="padding: 13px 14px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 10px; padding: 10px 12px;"><span style="flex: none; font-size: 14px;">🔔</span><span style="flex: 1 1 auto; font-size: 13px; color: #1D1C18; line-height: 1.5;">Browser notification — “Selam replied”</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 10px; padding: 10px 12px;"><span style="flex: none; font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 4px; padding: 3px 7px;">(1)</span><span style="flex: 1 1 auto; font-size: 13px; color: #1D1C18; line-height: 1.5;">Title-bar counter on the host page</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 10px; padding: 10px 12px;"><span style="flex: none; font-size: 14px;">🔊</span><span style="flex: 1 1 auto; font-size: 13px; color: #1D1C18; line-height: 1.5;">One short sound, on by default</span></div>
+            </div>
+          </div>
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 10px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Thread visible and focused — silence</div>
+            <div style="padding: 13px 14px; font-size: 13px; color: #4A4842; line-height: 1.6;">No sound, no counter, no notification. Someone watching the conversation does not need to be told it moved — they can see it. This is the rule that decides whether the widget feels attentive or frantic.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">I05, I06 · Dark — six tabs, one voice · and the WebView</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Six tabs open, one of them in charge</div>
+            <div style="display: flex; gap: 7px; margin-top: 11px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #ECEAE4; color: #171714; border-radius: 8px; padding: 7px 11px; font-size: 12px; font-weight: 600;">Tab 1 · leader</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; color: #A6A296; border-radius: 8px; padding: 7px 11px; font-size: 12px;">Tab 2</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; color: #A6A296; border-radius: 8px; padding: 7px 11px; font-size: 12px;">Tab 3</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; color: #A6A296; border-radius: 8px; padding: 7px 11px; font-size: 12px;">+3</span>
+            </div>
+            <div style="font-size: 13px; color: #A6A296; line-height: 1.6; margin-top: 11px;">One socket, one sound, one unread count shared across all of them. Close the leader and another takes over within two seconds. Whether the panel is open stays private to each tab — that is a deliberate exception, because a visitor who opened the chat on one tab has not asked for it to pop open on five.</div>
+          </div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Inside the Android app</div>
+            <div style="font-size: 13px; color: #A6A296; line-height: 1.6; margin-top: 6px;">The WebView has no Notification API, so that path does nothing at all — no error, no permission prompt, no broken button. Sound defers to the app's own audio focus, so the widget never talks over a video.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 · I04 · the sound switch, where a visitor can find it</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §8 overflow menu · §4.4 Behavior</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start;">
+      <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="position: relative; width: 380px; height: 460px; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 14px; box-shadow: 0 18px 48px rgba(29,28,24,0.2); overflow: hidden; display: flex; flex-direction: column;">
+        <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;">
+          <span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #DCD8CF; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">SB</span>
+          <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 14.5px; font-weight: 600; color: #1D1C18;">Selam</div></div>
+          <button aria-label="More options" style="font-family: inherit; background: #EEECE6; border: none; border-radius: 8px; color: #1D1C18; font-size: 16px; min-width: 36px; min-height: 36px; cursor: pointer;">⋯</button>
+          <button aria-label="Minimize" style="font-family: inherit; background: transparent; border: none; color: #4A4842; font-size: 16px; min-width: 36px; min-height: 36px; cursor: pointer;">－</button>
+          <button aria-label="Close chat" style="font-family: inherit; background: transparent; border: none; color: #4A4842; font-size: 16px; min-width: 36px; min-height: 36px; cursor: pointer;">✕</button>
+        </div>
+        <div role="log" aria-live="polite" aria-label="Conversation" style="flex: 1; min-height: 0; padding: 14px; background: #FBFAF8; display: flex; flex-direction: column; gap: 10px;">
+          <div style="align-self: flex-start; max-width: 82%;"><div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 14px 14px 14px 4px; padding: 10px 13px; font-size: 14.5px; line-height: 1.55; color: #1D1C18;">Tracing it now.</div></div>
+        </div>
+        <div style="position: absolute; top: 56px; right: 12px; width: 244px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; box-shadow: 0 10px 30px rgba(29,28,24,0.2); overflow: hidden;">
+          <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 14px; min-height: 48px; font-size: 14px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;">🔊 Sound <span style="margin-left: auto; font-size: 12px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 999px; padding: 3px 9px;">On</span></button>
+          <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 14px; min-height: 48px; font-size: 14px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;">🌐 Language <span style="margin-left: auto; font-size: 12px; color: #6B675D;">English</span></button>
+          <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 14px; min-height: 48px; font-size: 14px; color: #1D1C18; cursor: pointer;">Download transcript</button>
+          <div style="height: 1px; background: #F0EEE9;"></div>
+          <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 14px; min-height: 48px; font-size: 14px; color: #4A4842; cursor: pointer;">Privacy</button>
+        </div>
+        <div style="flex: none; padding: 11px 14px; border-top: 1px solid #E5E2DB; display: flex; align-items: center; gap: 9px;">
+          <div style="flex: 1 1 auto; border: 1px solid #CFCBC1; border-radius: 20px; padding: 10px 14px; font-size: 14.5px; color: #6F6A61; min-height: 40px;">Write a message…</div>
+          <button aria-label="Send" style="font-family: inherit; flex: none; width: 40px; height: 40px; border-radius: 50%; background: #22211D; border: none; color: #FFFFFF; font-size: 14px; cursor: pointer;">➤</button>
+        </div>
+        <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+          <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 52px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+          <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 52px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Messages</button>
+          <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 52px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Help</button>
+        </div>
+      </div>
+      <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">Why the switch lives in the menu and not on the thread</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">A sound toggle on the main surface is a control almost nobody touches taking space from the one everybody does. In the overflow it is two taps away, next to language and the transcript — the three things a visitor changes once, if ever. The operator sets the default; the visitor's choice, once made, outranks it and persists.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

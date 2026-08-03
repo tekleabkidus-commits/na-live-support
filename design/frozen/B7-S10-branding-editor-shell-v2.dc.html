@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S10-branding-editor-shell-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">v2 · preview mark ruled 3 Aug · fixture mark shipped</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The branding editor — shell</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The Doc 16 half of the batch starts here. Three panes: what you are editing on the left, the fields in the middle, and what it will look like on the right — the preview changes with the group, so a colour change and an email header are never judged from the same picture.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">One rule governs the whole surface and it is counter-intuitive enough to be stated on screen: <strong style="font-weight: 600;">the editor is never themed by the draft.</strong> It stays in the platform's own colours while only the preview renders the tenant's. That is what makes a broken draft recoverable — you can always read the tool that fixes it.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Editing is desktop, per Doc 16 §9 and your 3 August ruling; 375 ships as the read-only rendering behind the documented notice. Tenant is Selam Bet throughout.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Three panes, seven groups — 1440</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J01 · J02 · J03 · J04 · J05 · Doc 16 §8, §9, FR-03, T-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Groups are the seven §8 names in the seven §8 words. The header carries the two facts that matter before any edit: which version is live, and that this draft is not. Publish is present but never the loud thing on the screen — it belongs to §S's dialog, where the validators run.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · Identity group, unpublished draft</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J01 · J02 · J03 · J04 · J05</span></div>
+    <div data-screen-label="J01 branding shell light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px; display: flex; flex-direction: column;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+          </div>
+          <div style="margin-top: auto; border-top: 1px solid #F0EEE9; padding: 10px;">
+            <div style="font-size: 10.5px; line-height: 1.6; color: #6B675D;">Live: <strong style="font-weight: 600; color: #4A4842;">version 7</strong><br />published 14 Jul by Hanna Girma</div>
+            <a href="#t01" style="font-size: 11px; font-weight: 500; display: inline-block; margin-top: 6px;">Version history</a>
+          </div>
+        </nav>
+
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Branding</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Identity</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #7E650F;">◈ Draft · 3 unpublished changes</span>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">branding.edit</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Preview the draft</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish…</button>
+            </div>
+          </div>
+
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; overflow: hidden; display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                  <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Company name</label>
+                  <input type="text" value="Selam Bet Trading PLC" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  <div style="font-size: 11px; color: #6B675D; margin-top: 5px;">Legal name — appears in email footers and the copyright line.</div>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Product name</label>
+                  <input type="text" value="Selam Bet Support" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  <div style="font-size: 11px; color: #6B675D; margin-top: 5px;">What staff and customers see: sign-in card, email subjects, the widget header.</div>
+                </div>
+                <div style="display: flex; gap: 14px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Logo — light backgrounds</label>
+                    <div style="border: 1px dashed #CFCBC1; border-radius: 8px; background: #F6F5F2; height: 84px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; color: #6B675D;">selam-bet-mark.svg · 14 KB</div>
+                  </div>
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Logo — dark backgrounds</label>
+                    <div style="border: 1px dashed #CFCBC1; border-radius: 8px; background: #22211D; height: 84px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; color: #C9C5BB;">selam-bet-mark-dark.svg</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; line-height: 1.6; color: #6B675D;">SVG or PNG, up to 512 KB, roughly 4:1. Uploads are scanned and SVGs stripped of scripts before they are stored.</div>
+              </div>
+            </div>
+
+            <div style="width: 512px; flex: none; border-left: 1px solid #E5E2DB; background: #FFFFFF; display: flex; flex-direction: column; min-height: 0;">
+              <div style="flex: none; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Preview</span>
+                <span style="font-size: 11px; color: #6B675D;">App chrome</span>
+                <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="font-size: 11px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 5px; padding: 5px 9px;">Light</span><span style="font-size: 11px; font-weight: 500; color: #4A4842; border-radius: 5px; padding: 5px 9px;">Dark</span></span>
+              </div>
+              <div style="flex: 1; padding: 16px; background: #F6F5F2; overflow: hidden;">
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+                  <div style="height: 40px; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+                    <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #22211D;"></span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span>
+                    <span style="font-size: 10.5px; color: #6B675D;">Support</span>
+                    <span style="margin-left: auto; width: 22px; height: 22px; border-radius: 50%; background: #EEECE6;"></span>
+                  </div>
+                  <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="height: 9px; width: 44%; background: #EEECE6; border-radius: 3px;"></div>
+                    <div style="height: 8px; width: 72%; background: #F2F1ED; border-radius: 3px;"></div>
+                    <div style="height: 8px; width: 60%; background: #F2F1ED; border-radius: 3px;"></div>
+                  </div>
+                </div>
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px; margin-top: 12px; display: flex; align-items: center; gap: 10px;">
+                  <span style="flex: none; font-size: 10.5px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 8px;">Selam Bet logo</span>
+                  <span style="font-size: 11px; line-height: 1.55; color: #6B675D;">Empty state — no logo uploaded yet, so the preview shows the slot.</span>
+                </div>
+                <div style="font-size: 11px; line-height: 1.6; color: #6B675D; margin-top: 10px;">Above is the <strong style="font-weight: 600; color: #4A4842;">uploaded</strong> state: a labelled generic fixture mark standing in for the tenant’s asset, never an invented brand. Outside this pane the dashed slot remains law. Only this pane renders your draft — the editor around it stays in the platform’s own colours, so a draft that breaks contrast can never make this screen unreadable.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Dark, the soft lock, and the states</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J03 · J06 · J07 · Doc 16 EC-07, §8, §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">There is one draft per tenant, so two admins editing at once is a question of who holds it — not a merge. The lock is soft: it says who has it and since when, and lets you take over with the takeover recorded. Silent locking would be worse than the collision it prevents.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · Colours group, draft held by someone else</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">J03 · J06</span></div>
+    <div data-screen-label="J06 branding shell dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296;">Settings · Branding</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">Colours &amp; Fonts</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button disabled="disabled" style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Publish…</button>
+            </div>
+          </div>
+          <div style="flex: none; background: #2C2612; border-bottom: 1px solid #6B551A; padding: 12px 20px; display: flex; align-items: center; gap: 12px;">
+            <span style="flex: none; font-weight: 700; color: #E8C25A; font-size: 13px;">◈</span>
+            <span style="font-size: 12.5px; line-height: 1.6; color: #E8C25A;"><strong style="font-weight: 600;">Hanna Girma is editing this draft</strong> — since 09:12, about twenty minutes. You can look around; saving is off while she holds it.</span>
+            <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; color: #E8C25A; border: 1px solid #6B551A; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px; cursor: pointer;">Take over editing</button>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; opacity: 0.62;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                  <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">Primary</div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="width: 34px; height: 34px; border-radius: 6px; background: #2F5AC8; border: 1px solid #45443E;"></span>
+                    <code style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #ECEAE4; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px;">#2F5AC8</code>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px;">Font</div>
+                  <div style="display: flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #ECEAE4; min-height: 38px;">Inter + Noto Sans Ethiopic<span style="margin-left: auto; color: #A6A296; font-size: 10px;">▾</span></div>
+                </div>
+              </div>
+            </div>
+            <div style="width: 512px; flex: none; border-left: 1px solid #343430; background: #1C1C19; padding: 16px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-bottom: 10px;">Preview · app chrome</div>
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="height: 9px; width: 40%; background: #2F2F29; border-radius: 3px;"></div>
+                <div style="height: 8px; width: 68%; background: #262622; border-radius: 3px;"></div>
+              </div>
+              <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 12px;">The editor stays in platform colours in dark mode too — the tenant's palette only ever renders inside this pane.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="height: 11px; width: 30%; background: #EEECE6; border-radius: 3px;"></div>
+          <div style="height: 38px; background: #F2F1ED; border-radius: 6px;"></div>
+          <div style="height: 11px; width: 24%; background: #EEECE6; border-radius: 3px;"></div>
+          <div style="height: 84px; background: #F2F1ED; border-radius: 8px;"></div>
+        </div>
+        <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.6; color: #8E2222; display: flex; align-items: center; gap: 9px;"><span style="flex: none; font-weight: 700;">⚠</span><span><strong style="font-weight: 600;">Couldn't save “Product name”.</strong> Your change is still here — try again, or copy it somewhere safe first.</span><button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; color: #8E2222; font-size: 11.5px; font-weight: 600; cursor: pointer;">Retry</button></div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">J07 · light · en · skeleton per group, and a save failure that names the field</div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · read-only, per Doc 16 §9</div>
+        <div data-screen-label="J02 branding 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">09:31<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Settings</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Branding</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Editing requires a larger screen.</strong> Previews need the room, and a mis-tap here changes what every customer sees. You can read everything below; changing it needs a desktop.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="font-size: 11px; font-weight: 600; color: #6B675D;">Company name</div>
+                <div style="font-size: 13.5px; color: #1D1C18; margin-top: 3px;">Selam Bet Trading PLC</div>
+              </div>
+              <div>
+                <div style="font-size: 11px; font-weight: 600; color: #6B675D;">Product name</div>
+                <div style="font-size: 13.5px; color: #1D1C18; margin-top: 3px;">Selam Bet Support</div>
+              </div>
+              <div>
+                <div style="font-size: 11px; font-weight: 600; color: #6B675D;">Primary colour</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;"><span style="width: 20px; height: 20px; border-radius: 5px; background: #2F5AC8; border: 1px solid #E5E2DB;"></span><code style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">#2F5AC8</code></div>
+              </div>
+              <div>
+                <div style="font-size: 11px; font-weight: 600; color: #6B675D;">Live version</div>
+                <div style="font-size: 13px; color: #1D1C18; margin-top: 3px;">Version 7 · published 14 Jul by Hanna Girma</div>
+              </div>
+            </div>
+            <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #7E650F;">◈ Draft with 3 unpublished changes — Hanna Girma is editing on desktop.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all seven rows. J01–J05 in §A at 1440 light; J03, J06 and J07 in §B, with dark at 1440 and the read-only 375 beside them.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">The 375 is a designed screen, not a blank.</strong> Per your standing ruling it renders real values, the live version, the draft state and the notice in Doc 03 §9's own words — “editing requires a larger screen” — as a first-class element rather than an apology. Deviation from Step 2's both-viewports rule is recorded here, as required.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">v2 — the preview mark, ruled 3 August.</strong> The preview pane renders a labelled generic fixture mark in the uploaded state and the dashed slot in the empty state; the slot stays law everywhere outside the pane. v1 drew a wordmark, which was drift and is gone — this is the ruled treatment, not a second attempt at one.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the takeover in J06 is a <em>button</em>, not a request sent to Hanna. Doc 16 EC-07 says soft lock with takeover, audited — it does not describe an approval step, and inventing one would slow down the 00:15 rollback the whole system is designed for. The audit line is what keeps it honest.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section K — Identity, and the asset rules that stop a 4 MB logo reaching the login card.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

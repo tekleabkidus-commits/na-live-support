@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S04-merge-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Merge</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows D01–D13 · Doc 08 FR-11, FR-12, FR-13, EC-04, EC-12, §8 Merge flow, §13, NFR-02, FS-02 · Doc 06 FR-10, FR-21. Three steps — pick, choose, confirm — then a drawer, a tombstone and thirty days to change your mind. The confirm-phrase input comes from <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-S04</span>; the merge dialog's shape follows the one approved there.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">This is the operation that consolidates two people into one, and it is irreversible in practice after a month. So the design's job is not to make it fast — it is to make sure the agent has actually understood the size of it before the button is live. Every step states a number.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">D01–D03 · Steps one and two</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-11, §8, §13</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D01 · Light — which one survives</div>
+        <div style="width: 620px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: baseline; gap: 10px;">
+            <div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Merge two customers</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">Step 1 of 3 — pick the one that survives</div></div>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="width: 22px; height: 4px; border-radius: 999px; background: #22211D;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #DCD8CF;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #DCD8CF;"></span></span>
+          </div>
+          <div style="padding: 15px 16px; display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); align-items: center; gap: 10px;">
+            <div style="border: 2px solid #22211D; border-radius: 9px; padding: 12px;">
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #1D1C18; margin-bottom: 8px;">Survives</div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">አታ</span><div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">አበበ ታደሰ</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">14 tickets · since 4 Mar</div></div></div>
+              <div style="font-size: 11px; color: #4A4842; line-height: 1.6; margin-top: 9px;">Telegram, phone · VIP tag · 3 notes</div>
+            </div>
+            <div style="text-align: center; font-size: 17px; color: #6F6A61;">←</div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px;">
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Merged away</div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">አት</span><div style="min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Abel Tesfaye</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">3 tickets · since 2 Jun</div></div></div>
+              <div style="font-size: 11px; color: #4A4842; line-height: 1.6; margin-top: 9px;">Telegram only · no notes</div>
+            </div>
+          </div>
+          <div style="padding: 0 16px 14px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; display: flex; align-items: center; gap: 10px;">
+              <span style="flex: 1 1 auto; font-size: 11.5px; color: #4A4842; line-height: 1.6;">The older, richer profile usually survives — but it is a choice, not a rule.</span>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Swap</button>
+            </div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Next — choose fields</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D02, D03 · Light — field by field</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: baseline; gap: 10px;">
+            <div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Choose what to keep</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">Step 2 of 3</div></div>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="width: 22px; height: 4px; border-radius: 999px; background: #22211D;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #22211D;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #DCD8CF;"></span></span>
+          </div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 13px;">
+            <div role="radiogroup" aria-label="Name: keep አበበ ታደሰ from the surviving profile, or Abel Tesfaye from the merged profile">
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Name</div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
+                <button role="radio" aria-checked="true" style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 11px; cursor: pointer;"><span style="display: flex; align-items: center; gap: 8px;"><span style="flex: none; width: 14px; height: 14px; border-radius: 50%; border: 4px solid #22211D;"></span><span style="font-size: 12.5px; color: #1D1C18;">አበበ ታደሰ</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px; padding-left: 22px;">from the survivor</span></button>
+                <button role="radio" aria-checked="false" style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 11px; cursor: pointer;"><span style="display: flex; align-items: center; gap: 8px;"><span style="flex: none; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #A8A398;"></span><span style="font-size: 12.5px; color: #1D1C18;">Abel Tesfaye</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px; padding-left: 22px;">from the merged profile</span></button>
+              </div>
+            </div>
+            <div role="radiogroup" aria-label="Language: keep አማርኛ from the surviving profile, or English from the merged profile">
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Language</div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
+                <button role="radio" aria-checked="true" style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 11px; cursor: pointer;"><span style="display: flex; align-items: center; gap: 8px;"><span style="flex: none; width: 14px; height: 14px; border-radius: 50%; border: 4px solid #22211D;"></span><span style="font-size: 12.5px; color: #1D1C18;">አማርኛ</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px; padding-left: 22px;">staff-set · from the survivor</span></button>
+                <button role="radio" aria-checked="false" style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 11px; cursor: pointer;"><span style="display: flex; align-items: center; gap: 8px;"><span style="flex: none; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #A8A398;"></span><span style="font-size: 12.5px; color: #1D1C18;">English</span></span><span style="display: block; font-size: 10.5px; color: #6B675D; margin-top: 5px; padding-left: 22px;">detected · from the merged</span></button>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Tags · both kept</div>
+              <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 11px;">
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                  <span style="display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">vip</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">withdrawal-history</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">new-account</span>
+                </div>
+                <div style="font-size: 10.5px; color: #6B675D; margin-top: 8px; line-height: 1.55;">Tags, notes, files and identities always merge together — there is nothing to choose, and nothing is lost.</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Back</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Next — see the consequences</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 520px; line-height: 1.5;">Each pair is a radio group whose label reads both values in context, so a screen-reader user hears “Name: keep አበበ ታደሰ from the surviving profile, or Abel Tesfaye from the merged profile” rather than two unlabelled options.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">D04–D06, D13 · Step three, and the two ways it refuses</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-11, FR-12, EC-12 · Doc 06 FR-10, FR-21</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D04–D06 · Dark — consequences, collision, confirm</div>
+        <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.3);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #262622; display: flex; align-items: baseline; gap: 10px;">
+            <div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">What will happen</div><div style="font-size: 12px; color: #C9C5BB; margin-top: 3px;">Step 3 of 3</div></div>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="width: 22px; height: 4px; border-radius: 999px; background: #ECEAE4;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #ECEAE4;"></span><span style="width: 22px; height: 4px; border-radius: 999px; background: #ECEAE4;"></span></span>
+          </div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <ul aria-label="Consequences of this merge" style="margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.85; color: #C9C5BB;">
+              <li><strong style="color: #ECEAE4;">17 tickets</strong> move to አበበ ታደሰ</li>
+              <li><strong style="color: #ECEAE4;">3 conversations</strong> move with them</li>
+              <li><strong style="color: #ECEAE4;">4 files</strong> and <strong style="color: #ECEAE4;">1 note</strong> join the survivor</li>
+              <li>Both Telegram identities and the phone end up on one profile</li>
+              <li>Satisfaction history combines — the average becomes <strong style="color: #ECEAE4;">4.4</strong> across 12 ratings</li>
+              <li>Abel Tesfaye becomes a tombstone that redirects here forever</li>
+            </ul>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">Both profiles have an open ticket</div>
+              <div style="font-size: 12px; color: #F0B54A; margin-top: 4px; line-height: 1.6;">#4812 and #4903 will both be open on one customer. The newer one is flagged as linked work with a system note, which is allowed — it is not a mistake, but you should know before it happens.</div>
+            </div>
+            <div>
+              <div style="font-size: 12px; color: #C9C5BB; margin-bottom: 6px;">Type <strong style="font-family: ui-monospace, monospace; color: #ECEAE4;">MERGE</strong> to confirm</div>
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 0 12px; min-height: 48px; display: flex; align-items: center; font-family: ui-monospace, monospace; font-size: 13px; color: #9A9588;">MERGE</div>
+            </div>
+            <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">You can undo this for 30 days. After that it is permanent.</div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #262622; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #C9C5BB; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Back</button>
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Merge 17 tickets into አበበ ታደሰ</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D13 · Light — refused: too much open linked work</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">This merge can't go ahead</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">Step 3 of 3</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Together these two would have 4 open linked tickets — the limit is 3</div>
+              <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.6;">Resolve or transfer one of these first, then come back:</div>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #6B675D; flex: none;">#4812</span><span style="font-size: 12px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal not received</span><a href="#4812" style="flex: none; font-size: 11.5px; font-weight: 600;">Open</a></div>
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #6B675D; flex: none;">#4903</span><span style="font-size: 12px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposit reference mismatch</span><a href="#4903" style="flex: none; font-size: 11.5px; font-weight: 600;">Open</a></div>
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #6B675D; flex: none;">#4918</span><span style="font-size: 12px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">KYC documents</span><a href="#4918" style="flex: none; font-size: 11.5px; font-weight: 600;">Open</a></div>
+              <div style="padding: 9px 12px; display: flex; align-items: center; gap: 9px; min-height: 44px;"><span style="font-size: 12px; color: #6B675D; flex: none;">#4931</span><span style="font-size: 12px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bonus not applied</span><a href="#4931" style="flex: none; font-size: 11.5px; font-weight: 600;">Open</a></div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; line-height: 1.6;">Nothing was changed. The cap exists so a customer cannot end up with a pile of parallel open work nobody owns.</div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Close</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 520px; line-height: 1.5;">The refusal names the four tickets and links each one, because “resolve one first” is useless without knowing which four are competing.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">D07, D08, D11 · While it runs, and when it doesn't</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 NFR-02, §8 Loading, FS-02</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D07 · Light — a drawer, not a frozen dialog</div>
+        <div style="width: 400px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 13px 15px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Merging</span><button aria-label="Hide" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #4A4842; font-size: 13px; min-width: 34px; min-height: 34px; cursor: pointer;">✕</button></div>
+          <div style="padding: 14px 15px; display: flex; flex-direction: column; gap: 11px;">
+            <div style="height: 6px; background: #EEECE6; border-radius: 999px; overflow: hidden;" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Merge progress"><div style="width: 62%; height: 100%; background: #22211D;"></div></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; color: #4A4842;"><span style="flex: none; color: #156F45;">✓</span>3 conversations moved</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; color: #4A4842;"><span style="flex: none; color: #156F45;">✓</span>17 tickets moved</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; color: #1D1C18; font-weight: 600;"><span style="flex: none; color: #6F6A61;">◌</span>Moving 4 files and 1 note</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; color: #6B675D;"><span style="flex: none; color: #A8A398;">○</span>Identities and rollups</div>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; line-height: 1.6;">Carry on working — we'll tell you when it's finished. A big profile can take a few seconds.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D08 · Light — done</div>
+        <div style="width: 400px; background: #22211D; border-radius: 7px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+          <span style="flex: 1 1 auto; font-size: 12.5px; color: #F6F5F2; line-height: 1.5;">Merged into አበበ ታደሰ · 17 tickets moved</span>
+          <button style="font-family: inherit; flex: none; background: transparent; border: none; color: #C9C5BB; font-size: 11.5px; font-weight: 600; cursor: pointer;">View</button>
+          <button style="font-family: inherit; flex: none; background: transparent; border: none; color: #C9C5BB; font-size: 11.5px; font-weight: 600; cursor: pointer;">Undo</button>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 400px; line-height: 1.5;">The toast component from <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-DS</span>, unchanged. Undo here is the same thirty-day undo that lives on the tombstone — not a separate short-lived one, which would be a crueller kind of lie.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D11 · Dark — it crashed halfway</div>
+        <div style="width: 400px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 14px 15px; display: flex; flex-direction: column; gap: 11px;">
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F08A8A;">The merge stopped and was rolled back</div>
+              <div style="font-size: 12px; color: #F08A8A; margin-top: 4px; line-height: 1.6;">Both profiles are exactly as they were. Nothing is half-merged — the tickets that had already moved were put back.</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; background: #232320; border-radius: 6px; padding: 8px 10px;">incident MRG-4471-0812</div>
+            <div style="display: flex; gap: 8px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; cursor: pointer;">Try again</button>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 14px; cursor: pointer;">Copy reference</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 400px; line-height: 1.5;">The reference is there so an agent can report it without describing what they were doing. “Nothing is half-merged” is the sentence that matters — it is the fear this state exists to answer.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">D09, D10 · Undoing it</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-13, EC-04</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D09 · Light — what comes back, and what doesn't</div>
+        <div style="width: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Undo this merge</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">Merged 28 July by Hana Girma · 25 days left to undo</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 7px;">Goes back to Abel Tesfaye</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 11.5px; line-height: 1.75; color: #4A4842;"><li>The 17 tickets and 3 conversations that were his</li><li>His Telegram identity</li><li>4 files and 1 note</li></ul>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #8F5F08; margin-bottom: 7px;">Stays with አበበ ታደሰ — created after the merge</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 11.5px; line-height: 1.75; color: #8F5F08;"><li><span style="font-family: ui-monospace, monospace;">#4955</span> — raised 30 July</li><li>2 notes written on 29 and 31 July</li><li>1 file received yesterday</li></ul>
+              <div style="font-size: 11px; color: #8F5F08; margin-top: 8px; line-height: 1.6;">Anything made since the merge belongs to the profile it was made on. Undo restores the split, it does not rewind time.</div>
+            </div>
+            <div>
+              <div style="font-size: 12px; color: #4A4842; margin-bottom: 6px;">Type <strong style="font-family: ui-monospace, monospace; color: #1D1C18;">UNDO</strong> to confirm</div>
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 0 12px; min-height: 48px; display: flex; align-items: center; font-family: ui-monospace, monospace; font-size: 13px; color: #6F6A61;">UNDO</div>
+            </div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Undo the merge</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">D10 · Dark — a chain, in the wrong order</div>
+        <div style="width: 480px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #262622;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Undo this merge</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">Undo the later merge first</div>
+              <div style="font-size: 12px; color: #F0B54A; margin-top: 4px; line-height: 1.6;">አበበ ታደሰ was itself merged into ሰላም በቀለ on 2 August. Unpicking this one first would leave tickets pointing at a profile that no longer stands on its own.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #A6A296; flex-wrap: wrap;">
+              <span>Abel Tesfaye</span><span>→</span><span style="color: #ECEAE4;">አበበ ታደሰ</span><span>→</span><span style="color: #ECEAE4;">ሰላም በቀለ</span>
+            </div>
+            <div style="font-size: 11.5px; color: #C9C5BB; line-height: 1.6;">Undo runs outermost first: separate ሰላም በቀለ and አበበ ታደሰ, then come back here.</div>
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer; align-self: flex-start;">Go to that merge</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 480px; line-height: 1.5;">The chain is drawn rather than described, because “outermost first” means nothing to someone who cannot see the order they happened in.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">D12 · 375 · full-screen steps</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 Responsive · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — step 2 of 3</div>
+        <div style="width: 375px; height: 660px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; flex: none; background: transparent; border: none; color: #1D1C18; font-size: 17px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Choose what to keep</div><div style="font-size: 11.5px; color: #6B675D;">Step 2 of 3</div></div>
+            <button aria-label="Cancel" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 14px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+            <div role="radiogroup" aria-label="Name: keep አበበ ታደሰ from the surviving profile, or Abel Tesfaye from the merged profile">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Name</div>
+              <button role="radio" aria-checked="true" style="font-family: inherit; width: 100%; text-align: left; background: #FFFFFF; border: 1.5px solid #22211D; border-radius: 10px; padding: 0 14px; min-height: 60px; cursor: pointer; display: flex; align-items: center; gap: 11px;"><span style="flex: none; width: 16px; height: 16px; border-radius: 50%; border: 5px solid #22211D;"></span><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14px; color: #1D1C18;">አበበ ታደሰ</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">from the survivor</span></span></button>
+              <button role="radio" aria-checked="false" style="font-family: inherit; width: 100%; text-align: left; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 14px; min-height: 60px; cursor: pointer; display: flex; align-items: center; gap: 11px; margin-top: 8px;"><span style="flex: none; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #A8A398;"></span><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14px; color: #1D1C18;">Abel Tesfaye</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">from the merged profile</span></span></button>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Tags · both kept</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;"><span style="background: #EEECE6; color: #4A4842; font-size: 12px; border-radius: 5px; padding: 5px 10px;">vip</span><span style="background: #EEECE6; color: #4A4842; font-size: 12px; border-radius: 5px; padding: 5px 10px;">withdrawal-history</span><span style="background: #EEECE6; color: #4A4842; font-size: 12px; border-radius: 5px; padding: 5px 10px;">new-account</span></div>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 16px; border-top: 1px solid #E5E2DB;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Next — see the consequences</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — step 3 of 3, Amharic</div>
+        <div style="width: 375px; height: 660px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ምን እንደሚሆን</div><div style="font-size: 11.5px; color: #A6A296;">ደረጃ 3 ከ3</div></div>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 14px; display: flex; flex-direction: column; gap: 13px; overflow: hidden;">
+            <ul aria-label="የዚህ ውህደት ውጤቶች" style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.9; color: #C9C5BB;">
+              <li><strong style="color: #ECEAE4;">17 ጥያቄዎች</strong> ወደ አበበ ታደሰ ይዛወራሉ</li>
+              <li><strong style="color: #ECEAE4;">3 ውይይቶች</strong> አብረው ይሄዳሉ</li>
+              <li><strong style="color: #ECEAE4;">4 ፋይሎች</strong> እና <strong style="color: #ECEAE4;">1 ማስታወሻ</strong> ይቀላቀላሉ</li>
+              <li>አቤል ተስፋዬ ወደ መቃብር ምልክት ይቀየራል</li>
+            </ul>
+            <div>
+              <div style="font-size: 12.5px; color: #C9C5BB; margin-bottom: 7px;"><strong style="font-family: ui-monospace, monospace; color: #ECEAE4;">MERGE</strong> ብለው ይተይቡ</div>
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 0 12px; min-height: 48px; display: flex; align-items: center; font-family: ui-monospace, monospace; font-size: 13px; color: #9A9588;">MERGE</div>
+            </div>
+            <div style="font-size: 12px; color: #A6A296; line-height: 1.6;">ለ30 ቀናት መቀልበስ ይችላሉ። ከዚያ በኋላ ቋሚ ይሆናል።</div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 16px; border-top: 1px solid #343430;">
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">17 ጥያቄዎችን አዋህድ</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The confirm phrase stays <span style="font-family: ui-monospace, monospace; font-size: 12px;">MERGE</span> in Amharic too — a typed safety word that changes with the interface language is a word an agent has to think about, which is the opposite of what it is for. Flagged for native review with the rest.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

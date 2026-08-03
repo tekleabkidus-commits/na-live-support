@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B1-S03-views-search-notify-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Views, search, notifications, shortcuts</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows C6, C7, C12, C13, C22 · Doc 07 FR-05–FR-08, FR-23–FR-26, FR-31, §8. Light and dark, desktop and 375.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Views rail — R1</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-05–FR-08, FR-01</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Collapsed — 56px icon rail</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 56px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 6px; display: flex; flex-direction: column; gap: 3px; align-items: center;">
+            <span title="My Open — 12" style="width: 44px; height: 44px; border-radius: 8px; flex: none; background: #22211D; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">◧<span style="position: absolute; top: 2px; right: 2px; font-size: 10px; font-weight: 700;">12</span></span>
+            <span title="Unassigned — 8" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">◇<span style="position: absolute; top: 1px; right: 0; background: #22211D; color: #FFFFFF; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">8</span></span>
+            <span title="Mentions — 2" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">@</span>
+            <span title="Following — 5" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">☆</span>
+            <span title="SLA at risk — 3" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">▲<span style="position: absolute; top: 1px; right: 0; background: #FBE5E5; color: #B32B2B; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+            <span title="Expiring windows — 4" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">⏱<span style="position: absolute; top: 1px; right: 0; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">4</span></span>
+            <span title="Rescue — 1" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">⚑</span>
+            <span style="width: 24px; height: 1px; background: #E5E2DB; margin: 6px 0; flex: none;"></span>
+            <span title="Payments — 14" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">▤</span>
+            <span title="KYC &amp; verification — 6" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">▤</span>
+            <button aria-label="Expand views rail" style="font-family: inherit; margin-top: auto; width: 44px; height: 44px; border-radius: 8px; flex: none; background: transparent; border: none; color: #6B675D; font-size: 13px; cursor: pointer;">⇥</button>
+          </div>
+          <div style="width: 56px; background: #141412; border: 1px solid #343430; border-radius: 8px; padding: 10px 6px; display: flex; flex-direction: column; gap: 3px; align-items: center;">
+            <span title="My Open — 12" style="width: 44px; height: 44px; border-radius: 8px; flex: none; background: #ECEAE4; color: #171714; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">◧<span style="position: absolute; top: 2px; right: 2px; font-size: 10px; font-weight: 700;">12</span></span>
+            <span title="Unassigned — 8" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">◇<span style="position: absolute; top: 1px; right: 0; background: #ECEAE4; color: #171714; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">8</span></span>
+            <span title="Mentions — 2" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">@</span>
+            <span title="Following — 5" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">☆</span>
+            <span title="SLA at risk — 3" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">▲<span style="position: absolute; top: 1px; right: 0; background: #3D1B1B; color: #F08A8A; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+            <span title="Expiring windows — 4" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; position: relative;">⏱<span style="position: absolute; top: 1px; right: 0; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 0 4px;">4</span></span>
+            <span title="Rescue — 1" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">⚑</span>
+            <span style="width: 24px; height: 1px; background: #343430; margin: 6px 0; flex: none;"></span>
+            <span title="Payments — 14" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">▤</span>
+            <span title="KYC &amp; verification — 6" style="width: 44px; height: 44px; border-radius: 8px; flex: none; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">▤</span>
+            <button aria-label="Expand views rail" style="font-family: inherit; margin-top: auto; width: 44px; height: 44px; border-radius: 8px; flex: none; background: transparent; border: none; color: #A6A296; font-size: 13px; cursor: pointer;">⇥</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 130px; line-height: 1.5;">Every icon keeps its count and a tooltip naming the view.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Reordering, and nothing shared yet</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 240px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; padding: 12px 8px;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 0 8px 8px;">System</div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; font-size: 12.5px; color: #1D1C18;"><span style="color: #6B675D; cursor: grab;">⠿</span>SLA at risk<span style="margin-left: auto; font-size: 11px; font-weight: 600; background: #FBE5E5; color: #B32B2B; border-radius: 999px; padding: 1px 6px;">3</span></div>
+            <div style="height: 2px; background: #22211D; margin: 3px 9px; border-radius: 2px;"></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; font-size: 12.5px; color: #1D1C18;"><span style="color: #6F6A61;">⠿</span>My Open<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #6B675D;">12</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; font-size: 12.5px; color: #1D1C18;"><span style="color: #6F6A61;">⠿</span>Unassigned<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #6B675D;">8</span></div>
+            <div style="font-size: 10.5px; color: #6B675D; padding: 8px 9px 0; line-height: 1.5;">Drag to reorder, or move with <span style="font-family: ui-monospace, monospace; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 3px; padding: 0 4px;">Alt ↑</span> <span style="font-family: ui-monospace, monospace; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 3px; padding: 0 4px;">Alt ↓</span></div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 16px 8px 8px;">Shared</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 11px; text-align: center;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">No shared views yet</div>
+              <div style="font-size: 11px; color: #6B675D; margin: 4px 0 9px; line-height: 1.45;">Save a filter set and share it so your team works the same list.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; padding: 7px 11px; cursor: pointer;">New saved view</button>
+            </div>
+          </div>
+          <div style="width: 240px; background: #141412; border: 1px solid #343430; border-radius: 8px; padding: 12px 8px;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 0 8px 8px;">System</div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 6px; background: #1C1C19; border: 1px dashed #45443E; font-size: 12.5px; color: #ECEAE4;"><span style="color: #A6A296; cursor: grab;">⠿</span>SLA at risk<span style="margin-left: auto; font-size: 11px; font-weight: 600; background: #3D1B1B; color: #F08A8A; border-radius: 999px; padding: 1px 6px;">3</span></div>
+            <div style="height: 2px; background: #ECEAE4; margin: 3px 9px; border-radius: 2px;"></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; font-size: 12.5px; color: #ECEAE4;"><span style="color: #9A9588;">⠿</span>My Open<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #A6A296;">12</span></div>
+            <div style="display: flex; align-items: center; gap: 9px; padding: 7px 9px; font-size: 12.5px; color: #ECEAE4;"><span style="color: #9A9588;">⠿</span>Unassigned<span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #A6A296;">8</span></div>
+            <div style="font-size: 10.5px; color: #A6A296; padding: 8px 9px 0; line-height: 1.5;">Drag to reorder, or move with <span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 3px; padding: 0 4px;">Alt ↑</span> <span style="font-family: ui-monospace, monospace; background: #232320; border: 1px solid #343430; border-radius: 3px; padding: 0 4px;">Alt ↓</span></div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 16px 8px 8px;">Shared</div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 7px; padding: 11px; text-align: center;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">No shared views yet</div>
+              <div style="font-size: 11px; color: #A6A296; margin: 4px 0 9px; line-height: 1.45;">Save a filter set and share it so your team works the same list.</div>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; padding: 7px 11px; cursor: pointer;">New saved view</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 500px; line-height: 1.5;">Drag has a keyboard equivalent — the rail is fully operable without a pointer (Doc 07 §13).</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Saved-view editor — Doc 07 FR-06</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">New saved view</div>
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 4px;">Name</span><span style="display: block; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18;">VIP pending &gt; 2 h</span></label>
+              <div>
+                <span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Filters</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                  <span style="font-size: 11px; background: #EEECE6; color: #1D1C18; border-radius: 5px; padding: 4px 9px;">Status: Pending customer ×</span>
+                  <span style="font-size: 11px; background: #EEECE6; color: #1D1C18; border-radius: 5px; padding: 4px 9px;">Tag: vip ×</span>
+                  <span style="font-size: 11px; background: #EEECE6; color: #1D1C18; border-radius: 5px; padding: 4px 9px;">Updated: &gt; 2 h ago ×</span>
+                  <span style="font-size: 11px; color: #4A4842; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 9px; cursor: pointer;">+ Priority, department, queue, assignee, language, channel, has-draft…</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px;">
+                <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 4px;">Sort</span><span style="display: block; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18;">Oldest update first ▾</span></label>
+                <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 4px;">Share with</span><span style="display: block; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18;">Payments team ▾</span></label>
+              </div>
+              <div style="background: #F6F5F2; border-radius: 6px; padding: 9px 11px; font-size: 11px; line-height: 1.5; color: #4A4842;">Teammates see only the tickets their own permissions allow, so their count may differ from yours.</div>
+              <div style="display: flex; gap: 7px; justify-content: flex-end;"><button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Cancel</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer;">Save view</button></div>
+            </div>
+          </div>
+          <div style="width: 420px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">New saved view</div>
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 4px;">Name</span><span style="display: block; border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #ECEAE4;">VIP pending &gt; 2 h</span></label>
+              <div>
+                <span style="display: block; font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 5px;">Filters</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                  <span style="font-size: 11px; background: #2F2F29; color: #ECEAE4; border-radius: 5px; padding: 4px 9px;">Status: Pending customer ×</span>
+                  <span style="font-size: 11px; background: #2F2F29; color: #ECEAE4; border-radius: 5px; padding: 4px 9px;">Tag: vip ×</span>
+                  <span style="font-size: 11px; background: #2F2F29; color: #ECEAE4; border-radius: 5px; padding: 4px 9px;">Updated: &gt; 2 h ago ×</span>
+                  <span style="font-size: 11px; color: #C9C5BB; border: 1px dashed #45443E; border-radius: 5px; padding: 4px 9px; cursor: pointer;">+ Priority, department, queue, assignee, language, channel, has-draft…</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px;">
+                <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 4px;">Sort</span><span style="display: block; border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #ECEAE4;">Oldest update first ▾</span></label>
+                <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #C9C5BB; margin-bottom: 4px;">Share with</span><span style="display: block; border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #ECEAE4;">Payments team ▾</span></label>
+              </div>
+              <div style="background: #232320; border-radius: 6px; padding: 9px 11px; font-size: 11px; line-height: 1.5; color: #C9C5BB;">Teammates see only the tickets their own permissions allow, so their count may differ from yours.</div>
+              <div style="display: flex; gap: 7px; justify-content: flex-end;"><button style="font-family: inherit; background: transparent; color: #C9C5BB; border: none; font-size: 12px; font-weight: 500; padding: 8px 12px; cursor: pointer;">Cancel</button><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer;">Save view</button></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 500px; line-height: 1.5;">Counts are per-viewer, so the note explains a difference an agent would otherwise report as a bug (Doc 07 EC-04).</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">⌘K palette and search</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-23, FR-24, FR-25</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Desktop — all three sections</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="font-size: 14px; color: #4A4842;">⌕</span><span style="font-size: 14px; color: #1D1C18; flex: 1 1 auto;">withdraw</span><span style="font-family: ui-monospace, monospace; font-size: 10px; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px;">Esc</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Actions</div>
+            <div style="padding: 8px 16px; background: #F6F5F2; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #1D1C18;"><span>Resolve ticket #4812</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #4A4842;">E</span></div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #1D1C18;"><span>Set priority on #4812</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #4A4842;">P</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Views</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #1D1C18;"><span>Withdrawals queue</span><span style="margin-left: auto; font-size: 11px; color: #4A4842;">9</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Tickets</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #1D1C18; min-width: 0;"><span style="color: #4A4842; flex: none;">#4812</span><span style="flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal not received — አበበ ታደሰ</span><span style="flex: none; display: inline-flex; align-items: center; gap: 4px; background: #FBE5E5; color: #B32B2B; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 999px;">▲ SLA</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Customers</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #1D1C18;"><span>Meron Assefa</span><span style="color: #4A4842; font-size: 11.5px;">@meronas · +251 91 ••• ••17</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Messages</div>
+            <div style="padding: 8px 16px 12px; font-size: 12.5px; color: #1D1C18; line-height: 1.5;">“…my <mark style="background: #FBEFA8; color: #1D1C18; padding: 0 2px;">withdraw</mark>al is still pending after two hours…” <span style="color: #4A4842; font-size: 11.5px;">#4790 · Jul 28</span></div>
+            <div style="padding: 9px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 10.5px; color: #4A4842; display: flex; gap: 14px;"><span><span style="font-family: ui-monospace, monospace;">↑↓</span> move</span><span><span style="font-family: ui-monospace, monospace;">↵</span> open</span><span style="margin-left: auto;">Recent: “deposit stuck”, “#4790”</span></div>
+          </div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.3);">
+            <div style="padding: 13px 16px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;"><span style="font-size: 14px; color: #C9C5BB;">⌕</span><span style="font-size: 14px; color: #ECEAE4; flex: 1 1 auto;">withdraw</span><span style="font-family: ui-monospace, monospace; font-size: 10px; color: #C9C5BB; border: 1px solid #343430; border-radius: 4px; padding: 2px 6px;">Esc</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Actions</div>
+            <div style="padding: 8px 16px; background: #232320; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #ECEAE4;"><span>Resolve ticket #4812</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #C9C5BB;">E</span></div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #ECEAE4;"><span>Set priority on #4812</span><span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; color: #C9C5BB;">P</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Views</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #ECEAE4;"><span>Withdrawals queue</span><span style="margin-left: auto; font-size: 11px; color: #C9C5BB;">9</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Tickets</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #ECEAE4; min-width: 0;"><span style="color: #C9C5BB; flex: none;">#4812</span><span style="flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal not received — አበበ ታደሰ</span><span style="flex: none; display: inline-flex; align-items: center; gap: 4px; background: #3D1B1B; color: #F08A8A; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 999px;">▲ SLA</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Customers</div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #ECEAE4;"><span>Meron Assefa</span><span style="color: #C9C5BB; font-size: 11.5px;">@meronas · +251 91 ••• ••17</span></div>
+            <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Messages</div>
+            <div style="padding: 8px 16px 12px; font-size: 12.5px; color: #ECEAE4; line-height: 1.5;">“…my <mark style="background: #6B551A; color: #FFF6DC; padding: 0 2px;">withdraw</mark>al is still pending after two hours…” <span style="color: #C9C5BB; font-size: 11.5px;">#4790 · Jul 28</span></div>
+            <div style="padding: 9px 16px; border-top: 1px solid #262622; background: #171715; font-size: 10.5px; color: #C9C5BB; display: flex; gap: 14px;"><span><span style="font-family: ui-monospace, monospace;">↑↓</span> move</span><span><span style="font-family: ui-monospace, monospace;">↵</span> open</span><span style="margin-left: auto;">Recent: “deposit stuck”, “#4790”</span></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 700px; line-height: 1.5;">A message hit opens the thread anchored at that message with the match highlighted (Doc 07 FR-25). Results only ever include tickets the agent's own scope allows.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Notifications, shortcuts, first run</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-26, FR-31, §8</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Notification bell — and its empty state</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 380px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+            <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Notifications</span><button style="font-family: inherit; margin-left: auto; background: transparent; border: none; font-size: 11px; color: #4A4842; cursor: pointer;">Mark all read</button><button style="font-family: inherit; background: transparent; border: 1px solid #E5E2DB; border-radius: 5px; font-size: 11px; color: #4A4842; padding: 3px 8px; cursor: pointer;">Mute 1 h ▾</button></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; border-left: 3px solid #22211D; background: #FBFAF8;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.45;"><strong style="font-weight: 600;">Sara Bekele</strong> mentioned you in a note on <strong style="font-weight: 600;">#4812</strong></div><div style="font-size: 10.5px; color: #4A4842; margin-top: 3px;">2 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.45;"><strong style="font-weight: 600;">#4810</strong> was assigned to you</div><div style="font-size: 10.5px; color: #4A4842; margin-top: 3px;">9 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.45;">SLA warning on <strong style="font-weight: 600;">#4798</strong> — 15 min to breach</div><div style="font-size: 10.5px; color: #4A4842; margin-top: 3px;">22 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.45;">Reply window closing on <strong style="font-weight: 600;">#4807</strong></div><div style="font-size: 10.5px; color: #4A4842; margin-top: 3px;">1 h ago</div></div>
+            <div style="padding: 10px 14px;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.45;">Bulk update finished — 18 done, 2 skipped</div><div style="font-size: 10.5px; color: #4A4842; margin-top: 3px;">3 h ago</div></div>
+            <div style="padding: 20px 14px; border-top: 1px solid #F0EEE9; background: #FBFAF8; text-align: center;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Nothing new</div><div style="font-size: 11px; color: #4A4842; margin-top: 3px;">Mentions and assignments will land here.</div></div>
+          </div>
+          <div style="width: 380px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Notifications</span><button style="font-family: inherit; margin-left: auto; background: transparent; border: none; font-size: 11px; color: #C9C5BB; cursor: pointer;">Mark all read</button><button style="font-family: inherit; background: transparent; border: 1px solid #343430; border-radius: 5px; font-size: 11px; color: #C9C5BB; padding: 3px 8px; cursor: pointer;">Mute 1 h ▾</button></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #262622; border-left: 3px solid #ECEAE4; background: #232320;"><div style="font-size: 12px; color: #ECEAE4; line-height: 1.45;"><strong style="font-weight: 600;">Sara Bekele</strong> mentioned you in a note on <strong style="font-weight: 600;">#4812</strong></div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 3px;">2 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 12px; color: #ECEAE4; line-height: 1.45;"><strong style="font-weight: 600;">#4810</strong> was assigned to you</div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 3px;">9 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 12px; color: #ECEAE4; line-height: 1.45;">SLA warning on <strong style="font-weight: 600;">#4798</strong> — 15 min to breach</div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 3px;">22 min ago</div></div>
+            <div style="padding: 10px 14px; border-bottom: 1px solid #262622;"><div style="font-size: 12px; color: #ECEAE4; line-height: 1.45;">Reply window closing on <strong style="font-weight: 600;">#4807</strong></div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 3px;">1 h ago</div></div>
+            <div style="padding: 10px 14px;"><div style="font-size: 12px; color: #ECEAE4; line-height: 1.45;">Bulk update finished — 18 done, 2 skipped</div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 3px;">3 h ago</div></div>
+            <div style="padding: 20px 14px; border-top: 1px solid #262622; background: #171715; text-align: center;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">Nothing new</div><div style="font-size: 11px; color: #C9C5BB; margin-top: 3px;">Mentions and assignments will land here.</div></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 500px; line-height: 1.5;">Desktop pop-ups carry the customer name and ticket number only, never message content (Doc 07 SEC-04).</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Shortcut overlay — the complete v1 map</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 18px; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px;"><span style="font-size: 15px; font-weight: 600; color: #1D1C18;">Keyboard shortcuts</span><span style="font-size: 11.5px; color: #4A4842;">Press <span style="font-family: ui-monospace, monospace; border: 1px solid #E5E2DB; border-radius: 3px; padding: 0 4px;">?</span> any time</span></div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px;">
+              <div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">List</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #1D1C18;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">J</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">K</span><span>Next / previous</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">Enter</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">O</span><span>Open</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">X</span><span>Select</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">Shift X</span><span>Select range</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">Esc</span><span>Close panel / deselect</span></div>
+                </div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin: 14px 0 7px;">Go to</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #1D1C18;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">G U</span><span>Unassigned</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">G M</span><span>My Open</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">G A</span><span>SLA at risk</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">M</span><span>Mentions</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">⌘K</span><span>Command palette</span></div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Ticket</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #1D1C18;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">I</span><span>Assign to me</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">A</span><span>Assign to…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">E</span><span>Resolve</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">P</span><span>Priority…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">T</span><span>Tags…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">S</span><span>Snooze to pending…</span></div>
+                </div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin: 14px 0 7px;">Composer</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #1D1C18;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">R</span><span>Focus the reply box</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">N</span><span>Internal note mode</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">⌘↵</span><span>Send</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">Shift E</span><span>Send &amp; resolve</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 6px; flex: none;">?</span><span>This overlay</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; padding: 18px; box-shadow: 0 8px 28px rgba(0,0,0,0.3);">
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px;"><span style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Keyboard shortcuts</span><span style="font-size: 11.5px; color: #C9C5BB;">Press <span style="font-family: ui-monospace, monospace; border: 1px solid #343430; border-radius: 3px; padding: 0 4px;">?</span> any time</span></div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px;">
+              <div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 7px;">List</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #ECEAE4;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">J</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">K</span><span>Next / previous</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">Enter</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">O</span><span>Open</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">X</span><span>Select</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">Shift X</span><span>Select range</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">Esc</span><span>Close panel / deselect</span></div>
+                </div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin: 14px 0 7px;">Go to</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #ECEAE4;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">G U</span><span>Unassigned</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">G M</span><span>My Open</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">G A</span><span>SLA at risk</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">M</span><span>Mentions</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">⌘K</span><span>Command palette</span></div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 7px;">Ticket</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #ECEAE4;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">I</span><span>Assign to me</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">A</span><span>Assign to…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">E</span><span>Resolve</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">P</span><span>Priority…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">T</span><span>Tags…</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">S</span><span>Snooze to pending…</span></div>
+                </div>
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin: 14px 0 7px;">Composer</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #ECEAE4;">
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">R</span><span>Focus the reply box</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">N</span><span>Internal note mode</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">⌘↵</span><span>Send</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">Shift E</span><span>Send &amp; resolve</span></div>
+                  <div style="display: flex; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #232320; border: 1px solid #343430; border-radius: 4px; padding: 1px 6px; flex: none;">?</span><span>This overlay</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 700px; line-height: 1.5;">All nineteen bindings from Doc 07 FR-31, grouped by where an agent's hands already are.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">First-run coach marks — 4 steps</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div style="width: 300px; background: #22211D; color: #F6F5F2; border-radius: 10px; padding: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+            <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; color: #C9C5BB;">STEP 3 OF 4</span><button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #C9C5BB; font-size: 11px; cursor: pointer;">Skip</button></div>
+            <div style="font-size: 13.5px; font-weight: 600; margin-top: 7px;">Reply, or write a note</div>
+            <div style="font-size: 12px; line-height: 1.5; color: #DDD9D0; margin-top: 5px;">The yellow composer is an internal note — your team sees it, the customer never does. Press <span style="font-family: ui-monospace, monospace; background: #35342E; border-radius: 3px; padding: 0 4px;">N</span> to switch.</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+              <span style="display: inline-flex; gap: 4px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #6B6860;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #6B6860;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #F6F5F2;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #6B6860;"></span></span>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: 1px solid #4A4842; border-radius: 5px; color: #F6F5F2; font-size: 11.5px; padding: 6px 11px; cursor: pointer;">Back</button>
+              <button style="font-family: inherit; background: #F6F5F2; color: #22211D; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 6px 12px; cursor: pointer;">Next</button>
+            </div>
+          </div>
+          <div style="width: 300px; background: #ECEAE4; color: #171714; border-radius: 10px; padding: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
+            <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; color: #4A4842;">STEP 3 OF 4</span><button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #4A4842; font-size: 11px; cursor: pointer;">Skip</button></div>
+            <div style="font-size: 13.5px; font-weight: 600; margin-top: 7px;">Reply, or write a note</div>
+            <div style="font-size: 12px; line-height: 1.5; color: #3A3A34; margin-top: 5px;">The yellow composer is an internal note — your team sees it, the customer never does. Press <span style="font-family: ui-monospace, monospace; background: #D8D5CD; border-radius: 3px; padding: 0 4px;">N</span> to switch.</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+              <span style="display: inline-flex; gap: 4px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #A19D95;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #A19D95;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #171714;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #A19D95;"></span></span>
+              <button style="font-family: inherit; margin-left: auto; background: transparent; border: 1px solid #A19D95; border-radius: 5px; color: #171714; font-size: 11.5px; padding: 6px 11px; cursor: pointer;">Back</button>
+              <button style="font-family: inherit; background: #171714; color: #ECEAE4; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 6px 12px; cursor: pointer;">Next</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 620px; line-height: 1.5;">Four steps only: views, list, composer modes, ⌘K. Dismissable forever, re-openable from the <span style="font-family: ui-monospace, monospace;">?</span> overlay.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Mobile 375</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-02 — views as a modal sheet, search full-screen</span>
+    </div>
+    <div style="display: flex; gap: 18px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Views sheet · Light</div>
+        <div style="width: 375px; height: 600px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 10px; font-size: 15px; font-weight: 600; color: #1D1C18;">Views</div>
+            <div style="padding: 0 8px;">
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; border-radius: 8px; background: #22211D; color: #FFFFFF; font-size: 14px; font-weight: 600;"><span>◧</span>My Open<span style="margin-left: auto; font-size: 12.5px;">12</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>◇</span>Unassigned<span style="margin-left: auto; font-size: 12.5px; font-weight: 600; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 2px 8px;">8</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>@</span>Mentions<span style="margin-left: auto; font-size: 12.5px; color: #4A4842;">2</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>☆</span>Following<span style="margin-left: auto; font-size: 12.5px; color: #4A4842;">5</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>▲</span>SLA at risk<span style="margin-left: auto; font-size: 12.5px; font-weight: 600; background: #FBE5E5; color: #B32B2B; border-radius: 999px; padding: 2px 8px;">3</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>⏱</span>Expiring windows<span style="margin-left: auto; font-size: 12.5px; font-weight: 600; background: #FCF0D9; color: #8F5F08; border-radius: 999px; padding: 2px 8px;">4</span></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>⚑</span>Rescue<span style="margin-left: auto; font-size: 12.5px; color: #4A4842;">1</span></div>
+              <div style="height: 1px; background: #F0EEE9; margin: 6px 12px;"></div>
+              <div style="display: flex; align-items: center; gap: 11px; padding: 0 12px; min-height: 48px; color: #1D1C18; font-size: 14px;"><span>▤</span>Payments<span style="margin-left: auto; font-size: 12.5px; color: #4A4842;">14</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Search · Dark</div>
+        <div style="width: 375px; height: 600px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="padding: 10px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #ECEAE4; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">‹</button>
+            <span style="flex: 1 1 auto; min-width: 0; background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px; font-size: 13.5px; color: #ECEAE4; min-height: 44px;">withdraw</span>
+          </div>
+          <div style="flex: 1; min-height: 0; overflow-y: auto; background: #1C1C19;">
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Tickets</div>
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 48px;"><div style="display: flex; align-items: center; gap: 7px; min-width: 0;"><span style="font-size: 12px; color: #C9C5BB; flex: none;">#4812</span><span style="font-size: 13.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal not received</span></div><div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">አበበ ታደሰ · SLA breached</div></div>
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Customers</div>
+            <div style="padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 48px;"><div style="font-size: 13.5px; color: #ECEAE4;">Meron Assefa</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">@meronas · +251 91 ••• ••17</div></div>
+            <div style="padding: 10px 14px 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Messages</div>
+            <div style="padding: 11px 14px; min-height: 48px;"><div style="font-size: 13px; color: #ECEAE4; line-height: 1.5;">“…my <mark style="background: #6B551A; color: #FFF6DC; padding: 0 2px;">withdraw</mark>al is still pending after two hours…”</div><div style="font-size: 11.5px; color: #A6A296; margin-top: 3px;">#4790 · Jul 28</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer style="max-width: 900px; font-size: 12.5px; line-height: 1.7; color: #4A4842; border-top: 1px solid #CFCBC1; padding-top: 16px;">
+    <p style="margin: 0;">That closes the inbox surfaces. What remains on the checklist for this batch is the ticket-operation set — merge, split, escalate, spam, transfer, new-ticket — the rows I flagged <span style="font-family: ui-monospace, monospace; font-size: 11px; background: #1B1B18; color: #F4F3F1; padding: 1px 5px; border-radius: 3px;">B2?</span>, plus the thread print layout.</p>
+  </footer>
+</div>
+
+</x-dc>
+</body>
+</html>

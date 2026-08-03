@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S20-version-history-rollback-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section T · 5 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Version history &amp; rollback</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 16's success scenario for this screen is fifteen minutes and two audit rows: something looks wrong after a publish, somebody puts it back, and the record shows both events. So the design goal is that an operator under pressure can tell which version they want by <em>looking</em> — before-and-after thumbnails per surface, not a diff of token names.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The rule that makes this section and <a href="B7-S19-publish-dialog-v1.dc.html">Section S</a> one system: <strong style="font-weight: 600;">a rollback is a publish</strong>. Same validators, same no-override wall, same four-eyes where the tenant has it on. A past version whose contrast now fails is blocked by the same dialog — because history cannot be a tunnel under BR-02's wall.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4, and on the standing rule adopted at Section S: status hues stay with their semantic components; generic pass/fail uses neutral tokens.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The history, and what actually changed</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">T01 · T02 · Doc 16 FR-03, T-01, AC-02, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Newest first, the live one marked, every row carrying who published it and when. Selecting a version puts its surfaces beside the live ones — the sign-in card, the app chrome, an email — so the question “is this the version with the gold buttons?” is answered by the thumbnails rather than by a changelog. History is append-only in presentation: a version is never edited, only superseded, and a rollback adds a row rather than removing one.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · version 6 selected against live</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">T01 · T02</span></div>
+    <div data-screen-label="T01 version history light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">History</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 14px 20px;">
+            <div style="font-size: 11.5px; color: #6B675D;">Settings · Branding</div>
+            <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">History</h1>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="width: 358px; flex: none; border-right: 1px solid #E5E2DB; background: #FFFFFF; overflow: hidden;">
+              <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">7 published versions</div>
+              <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: flex-start; gap: 10px;">
+                <div style="flex: 1; min-width: 0;">
+                  <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Version 7</span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 999px; padding: 2px 8px;">Live</span></div>
+                  <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Today 09:47 · Hanna Girma</div>
+                  <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Primary → gold, new logo, footer links</div>
+                </div>
+              </div>
+              <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; background: #F6F5F2; border-left: 3px solid #22211D;">
+                <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Version 6</span><span style="font-size: 10.5px; color: #6B675D;">selected</span></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">7 July 2026, 14:12 · Hanna Girma</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Amharic welcome copy, email footer address</div>
+              </div>
+              <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Version 5</div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">2 June 2026, 09:03 · Dawit Haile</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Dark-mode surface adjustments</div>
+              </div>
+              <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Version 4</div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">18 May 2026, 16:40 · Selamawit Girma</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Sender identities, notify subdomain</div>
+              </div>
+              <div style="padding: 13px 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Version 1</div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">12 May 2026, 08:15 · seeded at sign-up</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Platform defaults, name only</div>
+              </div>
+            </div>
+            <div style="flex: 1; min-width: 0; padding: 16px 20px; background: #F6F5F2; overflow: hidden; display: flex; flex-direction: column; gap: 13px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div>
+                  <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Version 6 · beside what is live now</div>
+                  <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">3 surfaces differ · 5 are identical</div>
+                </div>
+                <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer;">Put version 6 back…</button>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+                  <div style="padding: 9px 11px; border-bottom: 1px solid #F0EEE9; font-size: 11px; font-weight: 600; color: #1D1C18;">Sign-in card</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div style="padding: 10px; border-right: 1px solid #F0EEE9;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">V6</div>
+                      <div style="background: #EEECE6; border-radius: 5px; padding: 8px;"><div style="background: #FFFFFF; border-radius: 4px; padding: 7px; display: flex; flex-direction: column; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2F5AC8;"></span><span style="height: 6px; border: 1px solid #CFCBC1; border-radius: 2px;"></span><span style="height: 7px; border-radius: 2px; background: #2F5AC8;"></span></div></div>
+                    </div>
+                    <div style="padding: 10px;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">LIVE</div>
+                      <div style="background: #EEECE6; border-radius: 5px; padding: 8px;"><div style="background: #FFFFFF; border-radius: 4px; padding: 7px; display: flex; flex-direction: column; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #91722A;"></span><span style="height: 6px; border: 1px solid #CFCBC1; border-radius: 2px;"></span><span style="height: 7px; border-radius: 2px; background: #91722A;"></span></div></div>
+                    </div>
+                  </div>
+                  <div style="padding: 8px 11px; border-top: 1px solid #F0EEE9; font-size: 10.5px; color: #6B675D;">Primary, logo</div>
+                </div>
+
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+                  <div style="padding: 9px 11px; border-bottom: 1px solid #F0EEE9; font-size: 11px; font-weight: 600; color: #1D1C18;">App chrome</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div style="padding: 10px; border-right: 1px solid #F0EEE9;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">V6</div>
+                      <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 5px; overflow: hidden;"><div style="height: 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; padding: 0 5px;"><span style="width: 7px; height: 7px; border-radius: 2px; background: #2F5AC8;"></span></div><div style="padding: 6px; display: flex; flex-direction: column; gap: 3px;"><span style="height: 4px; width: 70%; background: #EEECE6; border-radius: 2px;"></span><span style="height: 4px; width: 52%; background: #F2F1ED; border-radius: 2px;"></span></div></div>
+                    </div>
+                    <div style="padding: 10px;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">LIVE</div>
+                      <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 5px; overflow: hidden;"><div style="height: 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; padding: 0 5px;"><span style="width: 7px; height: 7px; border-radius: 2px; background: #91722A;"></span></div><div style="padding: 6px; display: flex; flex-direction: column; gap: 3px;"><span style="height: 4px; width: 70%; background: #EEECE6; border-radius: 2px;"></span><span style="height: 4px; width: 52%; background: #F2F1ED; border-radius: 2px;"></span></div></div>
+                    </div>
+                  </div>
+                  <div style="padding: 8px 11px; border-top: 1px solid #F0EEE9; font-size: 10.5px; color: #6B675D;">Primary only</div>
+                </div>
+
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+                  <div style="padding: 9px 11px; border-bottom: 1px solid #F0EEE9; font-size: 11px; font-weight: 600; color: #1D1C18;">Email footer</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div style="padding: 10px; border-right: 1px solid #F0EEE9;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">V6</div>
+                      <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; padding: 8px; font-size: 7.5px; line-height: 1.7; color: #6B675D;">ሰላም ቤት ትሬዲንግ · ቦሌ መንገድ<br />ግላዊነት · ውሎች</div>
+                    </div>
+                    <div style="padding: 10px;">
+                      <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #6F6A61; margin-bottom: 6px;">LIVE</div>
+                      <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 5px; padding: 8px; font-size: 7.5px; line-height: 1.7; color: #6B675D;">ሰላም ቤት ትሬዲንግ · ቦሌ መንገድ<br />ግላዊነት · ውሎች · እገዛ</div>
+                    </div>
+                  </div>
+                  <div style="padding: 8px 11px; border-top: 1px solid #F0EEE9; font-size: 10.5px; color: #6B675D;">One link added</div>
+                </div>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px 14px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Identical in both — not shown</div>
+                <div style="font-size: 11.5px; line-height: 1.7; color: #6B675D; margin-top: 4px;">Error pages · chat widget · Telegram persona · AI assistant identity · PDF transcripts. Five surfaces with nothing to compare, listed so their absence is not a question.</div>
+              </div>
+
+              <div style="margin-top: auto; font-size: 11.5px; line-height: 1.7; color: #6B675D;">History is append-only: putting version 6 back publishes it as <strong style="font-weight: 600; color: #4A4842;">version 8</strong> and leaves version 7 in the list. Nothing here is ever edited or deleted.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">A rollback is a publish</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">T03 · T04 · Doc 16 FR-03, BR-02, EC-02, AC-02</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The confirmation is Section S's dialog with a different heading, and it names both ends of the move — what you are leaving and what you are returning to — because someone rolling back at speed needs to be sure they are not undoing the wrong publish. Two ways it can be refused, and both are the point: a version whose asset has since been deleted, and a version whose contrast no longer passes.</p>
+    <p style="margin: 8px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">That second one deserves saying plainly: a theme that was publishable in May can fail today, because the tokens it was validated against have moved. Letting it through because it is “only a rollback” would be the one tunnel under BR-02's wall — so history is not an override channel, and the dialog that stops it is the same dialog.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.14); overflow: hidden;">
+          <div style="padding: 17px 20px 13px; border-bottom: 1px solid #F0EEE9;">
+            <h2 style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Put version 6 back?</h2>
+            <div style="font-size: 12.5px; line-height: 1.6; color: #6B675D; margin-top: 4px;">Leaving <strong style="font-weight: 600; color: #4A4842;">version 7</strong> — today 09:47, Hanna Girma<br />Returning to <strong style="font-weight: 600; color: #4A4842;">version 6</strong> — 7 July 14:12, Hanna Girma</div>
+          </div>
+          <div style="padding: 15px 20px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12px; color: #1D1C18;">Contrast — re-checked against today's tokens</span><span style="flex: none; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">lowest 4.9:1</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12px; color: #1D1C18;">Assets — 3 still present</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px;"><span style="flex: none; font-size: 12px; font-weight: 700; color: #1D1C18;">✓</span><span style="flex: 1; font-size: 12px; color: #1D1C18;">Email templates — 16 renders</span></div>
+            </div>
+            <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7; color: #1D1C18;">Changes the staff app for <strong style="font-weight: 600;">53 people</strong>, the sign-in card and <strong style="font-weight: 600;">8 email templates</strong>. Publishes as <strong style="font-weight: 600;">version 8</strong>; version 7 stays in the history.</div>
+            <div>
+              <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Type <strong style="font-weight: 700;">Selam Bet Support</strong> to confirm</label>
+              <input type="text" value="Selam Bet Support" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 10px 11px; font-size: 13px; color: #1D1C18; min-height: 40px;" />
+              <div style="font-size: 11px; line-height: 1.6; color: #6B675D; margin-top: 6px;">Audited as a branding publish by <strong style="font-weight: 600; color: #4A4842;">Hanna Girma</strong>, with old and new values kept — the second of the two rows this incident leaves.</div>
+            </div>
+          </div>
+          <div style="padding: 13px 20px; border-top: 1px solid #F0EEE9; display: flex; align-items: center; gap: 12px; background: #F6F5F2;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 15px; min-height: 36px; cursor: pointer;">Publish version 6 again</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">T03 · light · en · both ends named, same validators, same typed confirm</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 17px 20px 13px; border-bottom: 1px solid #262622;">
+            <h2 style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4; line-height: 1.45;">ስሪት 3ን መመለስ አይቻልም</h2>
+            <div style="font-size: 12.5px; line-height: 1.85; color: #A6A296; margin-top: 5px;">ስሪት 3 — ግንቦት 18፣ ዳዊት ኃይሌ</div>
+          </div>
+          <div style="padding: 15px 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 11px;">
+              <span style="flex: none; font-size: 12px; font-weight: 700; color: #F5A7A7;">✕</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">ይህ ስሪት የሚጠቀመው አርማ ተሰርዟል</div><div style="font-size: 12px; color: #F5A7A7; margin-top: 3px; line-height: 1.8;"><span style="font-family: ui-monospace, monospace;">selam-bet-2025.svg</span> ከማከማቻው ጠፍቷል። እንደገና ይጫኑት ወይም ሌላ ስሪት ይምረጡ።</div></div>
+            </div>
+            <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 11px;">
+              <span style="flex: none; font-size: 12px; font-weight: 700; color: #F5A7A7;">✕</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">የዚህ ስሪት ንጽጽር አሁን አያልፍም — 3.9:1</div><div style="font-size: 12px; color: #F5A7A7; margin-top: 3px; line-height: 1.8;">በግንቦት ወር ሲታተም አልፎ ነበር፤ ከዚያ በኋላ የገጹ ቀለም ተቀይሯል። ያለፈ ስሪት መሆኑ ማረጋገጫውን አያሳልፍም።</div></div>
+            </div>
+            <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 11px 13px; font-size: 11.5px; line-height: 1.85; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">ወደ ኋላ መመለስም እንደ ማተም ይቆጠራል።</strong> ተመሳሳይ ማረጋገጫዎች ይሠራሉ፤ “ለማንኛውም አትም” የሚል አማራጭም እዚህ የለም። ታሪክ የማረጋገጫ መተላለፊያ አይሆንም። ያለፈ ስሪት ሲመለስ እንደ <strong style="font-weight: 600; color: #ECEAE4;">አዲስ ስሪት</strong> ታትሞ ይጨመራል፤ ታሪኩ ውስጥ ያለ ምንም ነገር አይሰረዝም ወይም አይቀየርም።</div>
+          </div>
+          <div style="padding: 13px 20px; border-top: 1px solid #262622; display: flex; align-items: center; gap: 12px; background: #232320; flex-wrap: wrap;">
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer; line-height: 1.6;">ዘጋ</button>
+            <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ስሪት 6ን ይሞክሩ</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588;">T04 · dark · am · two refusals, and the way out is a version that passes</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">One version, and the phone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">T05 · Doc 16 §8, §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A tenant on its first afternoon has exactly one version and nothing to compare — so the empty state explains what a version is and what will put a second one here, rather than showing an empty diff pane and a disabled button.</p>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+      <div style="width: 560px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 22px 18px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">One version so far</div>
+          <div style="font-size: 12.5px; line-height: 1.7; color: #4A4842; margin-top: 6px; max-width: 400px;">Version 1 was seeded when Habesha Games signed up — platform defaults with your name on them. It is live now.</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 12px; line-height: 1.7; color: #4A4842;">The next time someone publishes, this list gets a second row and every surface here gains a before-and-after. Until then there is nothing to compare, and nothing to put back.</div>
+          <button style="font-family: inherit; margin-top: 12px; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer;">Start with Identity</button>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">T05 · light · en · an explanation, not an empty diff and a dead button</div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · read-only</div>
+        <div data-screen-label="T01 history 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">09:52<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Branding</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">History</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Rolling back requires a larger screen.</strong> The diffs need the room to be worth trusting — you can read the history here.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 12px 13px; border-bottom: 1px solid #F0EEE9;"><div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Version 7</span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 999px; padding: 2px 8px;">Live</span></div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Today 09:47 · Hanna Girma<br />Primary → gold, new logo, footer links</div></div>
+              <div style="padding: 12px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Version 6</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">7 July 14:12 · Hanna Girma<br />Amharic welcome copy, email footer</div></div>
+              <div style="padding: 12px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Version 5</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">2 June 09:03 · Dawit Haile<br />Dark-mode surfaces</div></div>
+              <div style="padding: 12px 13px;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Version 4</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">18 May 16:40 · Selamawit Girma<br />Sender identities</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; font-size: 11.5px; line-height: 1.7; color: #4A4842;">Putting a version back publishes it as a new version. Nothing in this list is ever edited or removed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 100%;">
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · the history screen and its diff tiles</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">T01 · T02 · the stacked surfaces proven on the dark shell</span></div>
+        <div data-screen-label="T01 version history dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18);">
+          <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+            <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+            <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <nav style="width: 196px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Branding</div>
+              <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+                <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+                <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+                <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">History</span>
+              </div>
+            </nav>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+              <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 14px 20px;">
+                <div style="font-size: 11.5px; color: #A6A296;">Settings · Branding</div>
+                <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">History</h1>
+              </div>
+              <div style="flex: 1; display: flex; min-height: 0;">
+                <div style="width: 358px; flex: none; border-right: 1px solid #343430; background: #1C1C19; overflow: hidden;">
+                  <div style="padding: 11px 14px; border-bottom: 1px solid #262622; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">7 published versions</div>
+                  <div style="padding: 13px 14px; border-bottom: 1px solid #262622;">
+                    <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Version 7</span><span style="font-size: 10.5px; font-weight: 600; color: #ECEAE4; border: 1px solid #45443E; border-radius: 999px; padding: 2px 8px;">Live</span></div>
+                    <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.6;">Today 09:47 · Hanna Girma</div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px; line-height: 1.6;">Primary → gold, new logo, footer links</div>
+                  </div>
+                  <div style="padding: 13px 14px; border-bottom: 1px solid #262622; background: #232320; border-left: 3px solid #ECEAE4;">
+                    <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Version 6</span><span style="font-size: 10.5px; color: #A6A296;">selected</span></div>
+                    <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.6;">7 July 2026, 14:12 · Hanna Girma</div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px; line-height: 1.6;">Amharic welcome copy, email footer address</div>
+                  </div>
+                  <div style="padding: 13px 14px; border-bottom: 1px solid #262622;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Version 5</div>
+                    <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.6;">2 June 2026, 09:03 · Dawit Haile</div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px; line-height: 1.6;">Dark-mode surface adjustments</div>
+                  </div>
+                  <div style="padding: 13px 14px;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Version 4</div>
+                    <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.6;">18 May 2026, 16:40 · Selamawit Girma</div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px; line-height: 1.6;">Sender identities, notify subdomain</div>
+                  </div>
+                </div>
+                <div style="flex: 1; min-width: 0; padding: 16px 20px; background: #141412; overflow: hidden; display: flex; flex-direction: column; gap: 13px;">
+                  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <div>
+                      <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Version 6 · beside what is live now</div>
+                      <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">3 surfaces differ · 5 are identical</div>
+                    </div>
+                    <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer;">Put version 6 back…</button>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+                    <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 10px; overflow: hidden;">
+                      <div style="padding: 9px 11px; border-bottom: 1px solid #262622; font-size: 11px; font-weight: 600; color: #ECEAE4;">Sign-in card</div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                        <div style="padding: 10px; border-right: 1px solid #262622;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">V6</div>
+                          <div style="background: #232320; border-radius: 5px; padding: 8px;"><div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 4px; padding: 7px; display: flex; flex-direction: column; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2F5AC8;"></span><span style="height: 6px; border: 1px solid #45443E; border-radius: 2px;"></span><span style="height: 7px; border-radius: 2px; background: #2F5AC8;"></span></div></div>
+                        </div>
+                        <div style="padding: 10px;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">LIVE</div>
+                          <div style="background: #232320; border-radius: 5px; padding: 8px;"><div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 4px; padding: 7px; display: flex; flex-direction: column; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #91722A;"></span><span style="height: 6px; border: 1px solid #45443E; border-radius: 2px;"></span><span style="height: 7px; border-radius: 2px; background: #91722A;"></span></div></div>
+                        </div>
+                      </div>
+                      <div style="padding: 8px 11px; border-top: 1px solid #262622; font-size: 10.5px; color: #A6A296;">Primary, logo</div>
+                    </div>
+                    <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 10px; overflow: hidden;">
+                      <div style="padding: 9px 11px; border-bottom: 1px solid #262622; font-size: 11px; font-weight: 600; color: #ECEAE4;">App chrome</div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                        <div style="padding: 10px; border-right: 1px solid #262622;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">V6</div>
+                          <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; overflow: hidden;"><div style="height: 14px; border-bottom: 1px solid #262622; display: flex; align-items: center; padding: 0 5px;"><span style="width: 7px; height: 7px; border-radius: 2px; background: #2F5AC8;"></span></div><div style="padding: 6px; display: flex; flex-direction: column; gap: 3px;"><span style="height: 4px; width: 70%; background: #2F2F29; border-radius: 2px;"></span><span style="height: 4px; width: 52%; background: #262622; border-radius: 2px;"></span></div></div>
+                        </div>
+                        <div style="padding: 10px;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">LIVE</div>
+                          <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; overflow: hidden;"><div style="height: 14px; border-bottom: 1px solid #262622; display: flex; align-items: center; padding: 0 5px;"><span style="width: 7px; height: 7px; border-radius: 2px; background: #91722A;"></span></div><div style="padding: 6px; display: flex; flex-direction: column; gap: 3px;"><span style="height: 4px; width: 70%; background: #2F2F29; border-radius: 2px;"></span><span style="height: 4px; width: 52%; background: #262622; border-radius: 2px;"></span></div></div>
+                        </div>
+                      </div>
+                      <div style="padding: 8px 11px; border-top: 1px solid #262622; font-size: 10.5px; color: #A6A296;">Primary only</div>
+                    </div>
+                    <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 10px; overflow: hidden;">
+                      <div style="padding: 9px 11px; border-bottom: 1px solid #262622; font-size: 11px; font-weight: 600; color: #ECEAE4;">Email footer</div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                        <div style="padding: 10px; border-right: 1px solid #262622;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">V6</div>
+                          <div style="background: #F6F5F2; border-radius: 5px; padding: 8px; font-size: 7.5px; line-height: 1.7; color: #6B675D;">ሰላም ቤት ትሬዲንግ · ቦሌ መንገድ<br />ግላዊነት · ውሎች</div>
+                        </div>
+                        <div style="padding: 10px;">
+                          <div style="font-family: ui-monospace, monospace; font-size: 9px; color: #9A9588; margin-bottom: 6px;">LIVE</div>
+                          <div style="background: #F6F5F2; border-radius: 5px; padding: 8px; font-size: 7.5px; line-height: 1.7; color: #6B675D;">ሰላም ቤት ትሬዲንግ · ቦሌ መንገድ<br />ግላዊነት · ውሎች · እገዛ</div>
+                        </div>
+                      </div>
+                      <div style="padding: 8px 11px; border-top: 1px solid #262622; font-size: 10.5px; color: #A6A296;">One link added · the email itself stays light</div>
+                    </div>
+                  </div>
+                  <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 10px; padding: 12px 14px;">
+                    <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Identical in both — not shown</div>
+                    <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 4px;">Error pages · chat widget · Telegram persona · AI assistant identity · PDF transcripts.</div>
+                  </div>
+                  <div style="margin-top: auto; font-size: 11.5px; line-height: 1.7; color: #A6A296;">History is append-only: putting version 6 back publishes it as <strong style="font-weight: 600; color: #C9C5BB;">version 8</strong> and leaves version 7 in the list. Nothing here is ever edited or deleted.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">T01 · T02 · dark · en · the diff tiles get their own borders here — on the dark shell the light-mode background separation disappears, so each tile and each half is bordered rather than merely tinted. The email-footer thumbnails stay light in both halves, because that is what the email actually is.</div>
+      </div>
+
+      <div style="width: 700px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+        <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Delivered:</strong> all five rows, both themes. T01 and T02 in §A at 1440 light and in §C at 1440 dark, with three differing surfaces as before-and-after and the five identical ones listed so their absence is not a question; T03 and T04 in §B — the English rollback confirmation and the Amharic double refusal; T05 in §C with the read-only 375.</p>
+        <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">The dark 1440 was added after review, and it changed the design.</strong> A first pass shipped this section light-only at both viewports and the note read as complete — a false ✅ against the both-themes rule. Drawing it dark showed why it mattered: the diff tiles rely on stacked light surfaces (<code style="font-family: ui-monospace, monospace; font-size: 12px;">#FFFFFF</code> on <code style="font-family: ui-monospace, monospace; font-size: 12px;">#EEECE6</code> on <code style="font-family: ui-monospace, monospace; font-size: 12px;">#F6F5F2</code>) that collapse into one another on the <code style="font-family: ui-monospace, monospace; font-size: 12px;">#141412</code> shell, so each tile and each V6/LIVE half is now bordered rather than tinted. One deviation flagged: <strong style="font-weight: 600;">the 375 ships light only</strong> — it is the read-only rendering behind the desktop-editing ruling, and the dark shell adds nothing a reviewer can act on. Say the word and it ships.</p>
+        <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Parity, claim by claim against the file.</strong> Four claims, each now true in both languages. <em>A rollback is a publish and runs the same validators</em> — English in §A’s prose and §B’s check rows, Amharic in §B’s constraint strip. <em>No override, including on history</em> — English in the header, Amharic in the same strip. <em>History is append-only; a rollback adds a version</em> — English in §A’s footer line, the dark frame and the 375 card; Amharic added to §B’s strip after review, where it had been English-only. <em>Both ends of the move are named</em> — English in T03’s header, Amharic in T04’s heading and subtitle.</p>
+        <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Neutral pass glyphs throughout,</strong> per the standing rule adopted at Section S — the rollback validator rows use ink <code style="font-family: ui-monospace, monospace; font-size: 12px;">#1D1C18</code>, and no status hue appears in this file.</p>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Next on your word:</strong> Section U — the degraded states: theme cache loss, hostile-theme survival, and the proof that no combination of an operator's choices can break a screen.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

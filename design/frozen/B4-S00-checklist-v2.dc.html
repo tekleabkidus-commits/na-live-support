@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S00-checklist-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">v2 · EC-10 to EC-12 folded in</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 4 — the contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every screen, component and state Doc 08 requires of the customer profile and directory, with its reference. This is the contract the closing audit is checked against, row by row.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three things make this batch different from the ones before it. The panel is not a new surface — it fills the <strong style="font-weight: 600;">Customer slot</strong> in the approved inbox context panel, so it inherits that frame rather than defining its own. Two operations here are <strong style="font-weight: 600;">high-risk and human-only</strong>: merge and unlink move a real player's money conversations, and Doc 08 forbids the system from ever doing that consolidation by itself. And one field, the <strong style="font-weight: 600;">RG flag</strong>, has to be invisible to staff who lack the permission — not redacted, not greyed, <em>absent</em>, so its existence cannot be inferred.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ counts }}</span>
+      <label style="display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 12px; color: #4A4842;">Filter</span><input value="{{ q }}" onInput="{{ onFilter }}" placeholder="merge, rg, identity…" style="font-family: inherit; font-size: 12.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; min-width: 240px;" /></label>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="9">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ sec.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 900px;">{{ sec.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 46px minmax(0, 1fr) 220px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">§15 answered — what the three edge cases changed</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">Two rows are new and one is sharper. <strong style="font-weight: 600;">EC-10</strong> confirmed staff-set is sticky and added something I would not have invented — a detected language offers itself <em>once per change</em> as a chip rather than nagging or overwriting, which is now written into H03. <strong style="font-weight: 600;">EC-11</strong> is new: concurrent edits to one field are last-writer-wins with a conflict toast, so the agent who lost sees it happen instead of discovering it later — row A16. <strong style="font-weight: 600;">EC-12</strong> is new and the most consequential: a merge whose combined open linked work would break Doc 06's cap of three is refused at the confirm step with the offending tickets named — row D13. That one is a merge I would otherwise have drawn as always-possible.</p>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I have deliberately left out</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 900px;">
+      <li>Doc 08 §3 puts conversation mechanics (Doc 04), RG <em>detection</em> and its queue routing (Docs 09, 11), CSAT capture (Doc 12), the erasure approval workflow (Doc 17) and marketing consent out of scope. Where this batch <em>renders</em> one of them — the RG banner, a satisfaction rollup, an export initiation — the row is here; the machinery behind it is not mine.</li>
+      <li>The resolver (FR-07, FR-08) is a backend contract with no interface of its own. It appears only where an agent can see its consequences: shell profiles, the duplicate-phone block, and the deliberate absence of any auto-linking affordance.</li>
+      <li>Acceptance criteria AC-01 to AC-09 and the technical rows T-01 to T-08 are build obligations, not screens, and are not checklist rows.</li>
+      <li>Doc 08 §19's future expansion — self-service portal, household graph, enrichment connectors, ML duplicate suggestions — is explicitly out of v1 and absent here. So is any identity confirmation flow: BR-01 forbids a verified affordance existing anywhere, and AC-09 makes that a repo-wide test.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "A", name: "The Customer panel — Doc 07's slot, filled", note: "Doc 08 FR-21 owns the contents of a frame Batch 1 already approved. Header first and instant, everything else streaming behind it.", rows: [
+  { t: "Panel header", r: "Display name, language and country chips, tags, pinned note, RG badge where permitted, blocked banner where applicable.", d: "Doc 08 FR-21, §8" },
+  { t: "Identity list with provenance", r: "Every identity with its type glyph, value, and where it came from — “from Telegram”, “added by Sara, 12 Jul”.", d: "Doc 08 FR-05, FR-21, §9" },
+  { t: "Username history popover", r: "Telegram display changes kept as history, reachable from the identity row and by keyboard.", d: "Doc 08 FR-06, §9, §13" },
+  { t: "Copy-on-click values", r: "Phone, email and ids copy on click with a button's semantics and a spoken confirmation.", d: "Doc 08 §9, §13" },
+  { t: "Betting fields card", r: "betting_username, player_id, brand — each labelled staff-collected, free to edit, with no verification affordance anywhere.", d: "Doc 08 FR-16, BR-01, §9" },
+  { t: "Duplicate player_id hint", r: "“Also on 2 other profiles” as an informational chip with scope-checked links — never an enforcement, never a name leak.", d: "Doc 08 FR-16, SEC-05, §9" },
+  { t: "Rollups", r: "Tickets count, satisfaction average with its spark, last contact — denormalised and honestly stale when they lag.", d: "Doc 08 FR-03, FR-21 · FS-03" },
+  { t: "Recent tickets", r: "Five, each linking through to the ticket.", d: "Doc 08 FR-21" },
+  { t: "Notes tab", r: "Per-customer notes with author and timestamp; one pinned note surfacing in the header.", d: "Doc 08 FR-17, FR-21" },
+  { t: "Files tab", r: "Every media the customer sent, filterable by kind, date and ticket, opening the approved lightbox.", d: "Doc 08 FR-19, FR-21" },
+  { t: "Inline edit with provenance", r: "Every field editable per permission, autosaving, and updating its provenance line — “staff · you · just now”.", d: "Doc 08 FR-21, §8, §13" },
+  { t: "Panel — loading", r: "Header instant from the list-hydration cache; sections skeleton-stream behind it.", d: "Doc 08 §8, NFR-03" },
+  { t: "Panel — shell profile", r: "“We only know their Telegram so far — add details as you learn them.”", d: "Doc 08 §8, FR-02" },
+  { t: "Panel — empty notes and files", r: "“Pin the first note to brief teammates”, and the empty gallery.", d: "Doc 08 §8" },
+  { t: "Panel — error", r: "A section that fails to load, with retry, while the rest of the panel survives.", d: "Batch 4 prompt Step 2" },
+  { t: "Concurrent edit conflict", r: "Two agents editing the same field: the last write wins, both are audited, and the one who lost gets a toast saying so rather than silently seeing their value vanish.", d: "Doc 08 EC-11 · Doc 01 EC-06" }
+]},
+{ id: "B", name: "The full profile page", note: "The same sections in a wider layout, plus what only exists at full size. Doc 08 §8 makes this a page a directory row opens into.", rows: [
+  { t: "Profile page — 1440", r: "Every panel section in the wider layout, header sticky.", d: "Doc 08 §8 Directory" },
+  { t: "Profile page — 375", r: "Single column with a sticky header.", d: "Doc 08 §9 Responsive" },
+  { t: "Audit tab", r: "Present only for audit.view holders, scoped to this customer.", d: "Doc 08 §8" },
+  { t: "Satisfaction and interaction history", r: "The rollups expanded — response history rather than a single average.", d: "Doc 08 FR-03, §3" },
+  { t: "Files gallery — full", r: "Filters by kind, date and ticket; infected media stays blocked; export is a permissioned action.", d: "Doc 08 FR-19, SEC-04" },
+  { t: "Tombstone page", r: "“This profile was merged into {name} on {date} by {actor}” — a redirect card, never a 404, with undo when in window and permitted.", d: "Doc 08 BR-05, §9, FR-13" }
+]},
+{ id: "C", name: "Identity work — the honest, human-only part", note: "The resolver matches; humans consolidate. Every screen here exists because Doc 08 refuses to let the system link identities by itself.", rows: [
+  { t: "Add an identity", r: "Phone or email added by staff, normalised on save, provenance recorded.", d: "Doc 08 FR-09, FR-04" },
+  { t: "Duplicate-phone block", r: "The number already belongs to another profile: blocked, with a link to that profile and a “merge instead?” shortcut.", d: "Doc 08 FR-09, §8 Error states · US-03" },
+  { t: "Unlink flow", r: "Modal listing the identity and exactly which conversations and tickets move to a new shell, with typed confirmation.", d: "Doc 08 FR-10, §8 Unlink" },
+  { t: "Unlink result", r: "A result screen linking both profiles — the one that kept the data and the shell that took the conversations.", d: "Doc 08 §8 Unlink" },
+  { t: "Unlink the only identity", r: "Allowed: the profile stays with its staff data, zero identities, and an “unreachable” chip.", d: "Doc 08 EC-05" },
+  { t: "Inactive identity hint", r: "A Telegram account that keeps hard-failing shows an informational inactive chip beside its last-known display.", d: "Doc 08 EC-03" },
+  { t: "No auto-link, made visible", r: "A phone number mentioned in chat text is never attached by itself — the design offers the staff action instead of doing it.", d: "Doc 08 FR-07, BR-02 · AC-01" }
+]},
+{ id: "D", name: "Merge — three steps and a 30-day undo", note: "The highest-risk operation in the batch. Doc 08 §8 fixes the shape: pick, diff and choose, consequences and confirm.", rows: [
+  { t: "Step 1 — pick survivor and merged", r: "Which profile survives and which becomes the tombstone.", d: "Doc 08 FR-11, §8 Merge flow" },
+  { t: "Step 2 — field diff", r: "Per-field radios: name, language, country, custom fields. Both values read in context for a screen reader.", d: "Doc 08 FR-11, §13" },
+  { t: "Step 2 — union fields", r: "Tags, notes and files always union; tags offer keep-both explicitly.", d: "Doc 08 FR-11, §8" },
+  { t: "Step 3 — consequences checklist", r: "Concrete numbers: “17 tickets and 3 conversations will move.” Read as a list with counts.", d: "Doc 08 FR-11, §8, §13" },
+  { t: "Step 3 — confirm phrase", r: "Typed confirmation before anything moves.", d: "Doc 08 FR-11" },
+  { t: "Open-family collision", r: "Both profiles had open tickets: the newer is auto-flagged linked work with a system note, surfaced in the checklist before confirming.", d: "Doc 08 FR-12 · Doc 06 FR-10, FR-21" },
+  { t: "Merge progress drawer", r: "A whale profile takes seconds, so progress is a drawer with a step list rather than a frozen dialog.", d: "Doc 08 §8 Loading, NFR-02" },
+  { t: "Post-merge toast", r: "“View survivor”, and the 30-day undo entry point on the tombstone.", d: "Doc 08 §8, FR-13" },
+  { t: "Un-merge preview", r: "What comes back, and the explicit statement that objects created after the merge stay with the survivor.", d: "Doc 08 FR-13" },
+  { t: "Chained merge, undo order", r: "A survivor later merged again: undo only from the outermost link, with the UI explaining the required order.", d: "Doc 08 EC-04" },
+  { t: "Merge failure rollback", r: "A crash mid-chunk rolls back to pre-merge with an incident reference — never a half-merged pair.", d: "Doc 08 §8 Error states, FS-02" },
+  { t: "Merge — 375", r: "Full-screen steps on mobile.", d: "Doc 08 §9 Responsive" },
+  { t: "Blocked by the linked-work cap", r: "The two profiles' open linked work would exceed three: the confirm step refuses and lists the exact tickets — “resolve or transfer one first”.", d: "Doc 08 EC-12 · Doc 06 FR-21" }
+]},
+{ id: "E", name: "The Responsible Gaming flag", note: "Doc 08 BR-03 is the rule the whole section serves: staff without the permission must not be able to infer that a flag exists. Absence, not redaction.", rows: [
+  { t: "RG banner — permitted viewer", r: "Slate and calm, never red, never blinking, with the approved handling script one button away.", d: "Doc 08 FR-14, §8, §9" },
+  { t: "RG badge in the panel", r: "A dot on the Customer tab for permitted holders only.", d: "Doc 08 FR-14, FR-21" },
+  { t: "Unpermitted viewer", r: "The same profile with no banner, no badge, no gap where something was removed, no placeholder.", d: "Doc 08 FR-14, BR-03, SEC-01" },
+  { t: "Set the flag", r: "Manual set with a mandatory reason and its author.", d: "Doc 08 FR-14, FR-15" },
+  { t: "Flag set by detection", r: "An AI-set flag always carries its triggering excerpt reference and is labelled as AI-origin.", d: "Doc 08 FR-14 · Doc 09" },
+  { t: "Clear the flag", r: "Requires the permission and a reason; history is kept, never deleted.", d: "Doc 08 FR-15, EC-06" },
+  { t: "Flag history", r: "Every set and clear with author, reason and time — insert-only.", d: "Doc 08 FR-15, T-05, US-05" }
+]},
+{ id: "F", name: "Blocking", note: "One customer, every channel. Doc 08 FR-18 makes this heavier than Doc 04's per-conversation block and the design has to show the difference.", rows: [
+  { t: "Block a customer", r: "Mandatory reason; all their conversations go quiet across every channel.", d: "Doc 08 FR-18, §8" },
+  { t: "Blocked profile banner", r: "Profile-wide, with reason, author and date.", d: "Doc 08 §8 Blocked state" },
+  { t: "Composer while blocked", r: "Every composer for this customer shows the approved blocked card.", d: "Doc 08 FR-18 · Doc 04 FR-03 · Doc 07" },
+  { t: "Unblock", r: "A distinct permissioned action with its own reason; conversation states restore.", d: "Doc 08 FR-18, §8" },
+  { t: "Evasion by new identity", r: "A blocked customer's brand-new channel identity is a fresh unblocked shell. The design surfaces the duplicate hint rather than pretending the block caught it.", d: "Doc 08 EC-07, BR-02" }
+]},
+{ id: "G", name: "Directory", note: "The list an agent searches when the conversation is not already open. Doc 08 FR-20 fixes the columns and the filters.", rows: [
+  { t: "Directory table — 1440", r: "Name, identity glyph row, last contact, open tickets, satisfaction, tags.", d: "Doc 08 FR-20, §8" },
+  { t: "Directory — 375", r: "The table becomes cards.", d: "Doc 08 §9 Responsive" },
+  { t: "Filters", r: "Has-open, language, country, tag, blocked — and RG only for those permitted to know it exists.", d: "Doc 08 FR-20, BR-03" },
+  { t: "Search", r: "Over names, usernames including history, phone, email and player_id.", d: "Doc 08 FR-20, T-04" },
+  { t: "Amharic search", r: "Amharic names return the expected results, and the design shows them rendering correctly.", d: "Doc 08 §14 · AC-07" },
+  { t: "Search degraded", r: "The index is down: prefix search on names and phone, slower and labelled as reduced.", d: "Doc 08 FS-01" },
+  { t: "Bulk actions", r: "Tags and export only — no bulk merge, no bulk block, deliberately.", d: "Doc 08 §8 Directory" },
+  { t: "Name collision", r: "Two customers with the same display name are told apart by identity values and a short-id on hover.", d: "Doc 08 EC-08" },
+  { t: "Directory — loading, empty, error", r: "The universal set for the table and for a search that finds nothing.", d: "Batch 4 prompt Step 2" }
+]},
+{ id: "H", name: "Data honesty, export and erasure", note: "Small in screens, heavy in consequence. Every row here is about the platform not claiming more than it knows.", rows: [
+  { t: "No verified language, anywhere", r: "No verified badge, no confirmed state, no checkmark on any identity — the component does not exist to be used.", d: "Doc 08 BR-01, AC-09 · Batch 4 prompt rules" },
+  { t: "Staff-collected label", r: "A subtle uppercase micro-label on the betting-fields card: informative, never warning-coloured.", d: "Doc 08 FR-16, §9, §14" },
+  { t: "Country and language provenance", r: "Whether a value was staff-set or detected is visible on the field. Staff-set is sticky, and a newly detected language offers itself once as a subtle “detected: Amharic — apply?” chip rather than overwriting.", d: "Doc 08 FR-01, EC-10" },
+  { t: "Retired custom field", r: "A definition deleted while values exist: values stay, read-only, tagged as a retired field.", d: "Doc 08 EC-09 · Doc 12" },
+  { t: "Export a customer", r: "Watermarked archive as an async job with a signed URL, permissioned and audited.", d: "Doc 08 SEC-04, FR-19" },
+  { t: "Erasure request", r: "Initiated here only — approval and execution belong to the audit workflow, and the design says so.", d: "Doc 08 SEC-04, §3" },
+  { t: "Stale rollups", r: "When the rollup handlers lag, counts show as stale rather than as fact.", d: "Doc 08 FS-03, NFR-05" }
+]},
+{ id: "I", name: "Cross-cutting proof", note: "Audited as its own set so nothing is proved on one viewport, one theme or one language.", rows: [
+  { t: "Both viewports", r: "1440 and 375 delivered together for every screen.", d: "Batch 4 prompt Step 2" },
+  { t: "Both themes", r: "Dark and light, complete.", d: "Batch 4 prompt Step 2" },
+  { t: "Both languages", r: "Real Amharic including long strings — names, notes, and the staff-collected label reviewed for tone.", d: "Batch 4 prompt Step 2 · Doc 08 §14" },
+  { t: "44px touch targets", r: "Every interactive element at 375, including inside the merge steps.", d: "Batch 4 prompt design rules" },
+  { t: "Nothing by colour alone", r: "Blocked, RG, stale and duplicate states all carry text or a glyph.", d: "Batch 4 prompt design rules" },
+  { t: "Batch 1 consistency", r: "The panel fits the approved context-panel slot; every reused component comes from B1-DS verbatim.", d: "Batch 4 prompt Step 1" },
+  { t: "Keyboard and announcement", r: "Inline edits, identity popovers, merge radios, consequence lists and the RG banner all reachable and announced.", d: "Doc 08 §13" },
+  { t: "Phone formatting", r: "Stored E.164, shown in national format with its country.", d: "Doc 08 §14" }
+]}
+];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      let k = 0;
+      sec.rows.forEach(r => {
+        total += 1; k += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: sec.id + ("0" + k).slice(-2), t: r.t, r: r.r, d: r.d });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

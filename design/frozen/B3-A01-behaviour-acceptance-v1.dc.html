@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-A01-behaviour-acceptance-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 3 — build acceptance rows</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Requirements a static screen cannot hold, written so the build can be checked against them. This list opens with one row and grows as the batch runs; it closes with the batch. Same shape as <span style="font-family: ui-monospace, monospace; font-size: 13px;">B12-A01</span>: what must be true, how it is demonstrated, and the passage it answers to.</p>
+  </header>
+
+  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="1">
+    <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span style="font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700; color: #6B675D;">{{ r.n }}</span>
+        <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">{{ r.t }}</span>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">{{ r.d }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
+        <div style="padding: 12px 16px; border-right: 1px solid #F0EEE9;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">What must be true</div>
+          <div style="font-size: 12.5px; color: #1D1C18; line-height: 1.6;">{{ r.must }}</div>
+        </div>
+        <div style="padding: 12px 16px; background: #FBFAF8;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; margin-bottom: 6px;">How it is demonstrated</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ r.proof }}</div>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 880px;">A required absence is the hardest thing to defend six months out, because every individual addition sounds reasonable on its own — a first-time tip, a “new feature” dot, a one-off tour for a redesign. That is exactly why it is a row with a test rather than a sentence in a design file.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROWS = [
+  ["AC-B3-01", "No onboarding layer on first open", "Doc 13 §8 First-open · B3-S00 row C07",
+   "Two assertions, deliberately scoped differently. Contains-only, default config: on a default-configured widget a first-time visitor's Home holds the greeting, the wait band, the shortcut buttons, the resume card where history exists, and the tab bar — nothing further. Prohibited class, every config: no onboarding, tour, coach-mark, tip or “what's new” UI appears anywhere in the widget, under any configuration. Messages-only mode, a configured pre-chat form and a proactive open are all legal surfaces and must pass both assertions rather than being excused from them.",
+   "Assertion one runs on a fresh profile at 375 and 1440, light and dark, against default config only. Assertion two runs unconditionally across the configuration matrix — default, Messages-only, pre-chat off / optional / required, proactive fired, out-of-hours — and fails on the presence of the named class, not on overlays generally: a lightbox, an emoji picker, a form step and a proactive message are legitimate UI and never trip it. Naming the class rather than the shape is what stops a later exception being whitelisted through. Regression test on every release, not a launch check — the pressure to add a tour arrives long after launch."]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return { rows: ROWS.map(r => ({ n: r[0], t: r[1], d: r[2], must: r[3], proof: r[4] })) };
+  }
+}
+</script>
+</body>
+</html>

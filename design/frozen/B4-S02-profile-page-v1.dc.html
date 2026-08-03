@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S02-profile-page-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The full profile page</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows B01–B06 · Doc 08 §8 Directory, §9 Responsive, FR-03, FR-19, FR-13, BR-05, SEC-04. The same sections as the panel in a room twice the size — plus the two things that only exist here: the Audit tab, and the tombstone a merged profile becomes. Components come from <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-DS</span> and <span style="font-family: ui-monospace, monospace; font-size: 13px;">B4-S01</span>; nothing is re-mixed.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">The page is not a bigger panel. In the panel an agent is mid-conversation and wants the answer to one question. Here they arrived deliberately, usually to <em>decide</em> something — whether to merge, whether to block, whether this is even the right person — so history, files and the audit trail get room the slot could never give them.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">B01 · 1440 · light</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §8 · sticky header, wider layout</span>
+    </div>
+    <div style="width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+
+      <div style="padding: 14px 20px; border-bottom: 1px solid #E5E2DB; background: #F6F5F2; display: flex; align-items: flex-start; gap: 14px;">
+        <span style="flex: none; width: 46px; height: 46px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600;">አታ</span>
+        <div style="flex: 1 1 auto; min-width: 0;">
+          <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+            <span style="font-size: 19px; font-weight: 600; color: #1D1C18; letter-spacing: -0.01em;">አበበ ታደሰ</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D;">#8f21c4</span>
+          </div>
+          <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px;">
+            <span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">አማርኛ <span style="color: #6F6A61;">staff</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">🇪🇹 Ethiopia <span style="color: #6F6A61;">detected</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">vip<span style="cursor: pointer;">×</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">withdrawal-history<span style="cursor: pointer;">×</span></span>
+            <span style="font-size: 11px; color: #6F6A61; border: 1px dashed #CFCBC1; border-radius: 4px; padding: 3px 8px; cursor: pointer;">+ Add tag</span>
+          </div>
+        </div>
+        <div style="flex: none; display: flex; gap: 7px; align-items: center;">
+          <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 13px; cursor: pointer;">Merge…</button>
+          <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 13px; cursor: pointer;">Export</button>
+          <button style="font-family: inherit; background: transparent; border: 1px solid #E5E2DB; border-radius: 6px; color: #6B675D; font-size: 13px; min-height: 34px; min-width: 34px; cursor: pointer;">⋯</button>
+        </div>
+      </div>
+
+      <div style="padding: 0 20px; border-bottom: 1px solid #E5E2DB; display: flex; gap: 4px;" role="tablist" aria-label="Profile sections">
+        <button role="tab" aria-selected="true" style="font-family: inherit; background: transparent; border: none; border-bottom: 2px solid #22211D; padding: 11px 13px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Overview</button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Notes <span style="color: #6F6A61;">3</span></button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Files <span style="color: #6F6A61;">12</span></button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Audit</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 340px minmax(0, 1fr);">
+        <div style="padding: 16px 18px; border-right: 1px solid #E5E2DB; display: flex; flex-direction: column; gap: 15px; background: #FBFAF8;">
+          <div style="background: #FBF3D6; border: 1.5px solid #E3C455; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #7E650F;">📌 Pinned note</div>
+            <div style="font-size: 12px; color: #7E650F; line-height: 1.55; margin-top: 5px;">VIP — always confirm withdrawals by voice before releasing.</div>
+            <div style="font-size: 10.5px; color: #7E650F; margin-top: 5px;">Hana Girma · 12 Jul</div>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Identities</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; overflow: hidden;">
+              <div style="padding: 9px 11px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 12px; color: #4A4842; margin-top: 1px;">✈</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18;">@abebe_t</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">from Telegram · 4 Mar</div></div>
+                <button aria-label="Unlink @abebe_t" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #E5E2DB; border-radius: 5px; color: #4A4842; font-size: 10.5px; padding: 4px 7px; cursor: pointer;">Unlink</button>
+              </div>
+              <div style="padding: 9px 11px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 12px; color: #4A4842; margin-top: 1px;">☎</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18;">091 234 4417</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">added by Sara Bekele · 12 Jul</div></div>
+                <button aria-label="Unlink 091 234 4417" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #E5E2DB; border-radius: 5px; color: #4A4842; font-size: 10.5px; padding: 4px 7px; cursor: pointer;">Unlink</button>
+              </div>
+              <div style="padding: 9px 11px; display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 12px; color: #6F6A61; margin-top: 1px;">✈</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #6B675D;">@abebe_old</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; border-radius: 4px; padding: 2px 6px;">inactive</span></div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">sends have failed since 2 Jun</div></div>
+              </div>
+            </div>
+            <button style="font-family: inherit; margin-top: 7px; background: transparent; border: none; padding: 0; font-size: 11.5px; font-weight: 600; color: #2F5AC8; cursor: pointer;">+ Add phone or email</button>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 7px; margin-bottom: 7px;">
+              <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Betting details</span>
+              <span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; background: #EEECE6; border-radius: 3px; padding: 2px 6px;">Staff-collected</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 11px; display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 7px 10px; font-size: 12px;">
+              <span style="color: #6B675D;">Username</span><span style="font-family: ui-monospace, monospace; color: #1D1C18;">abebe_bet</span>
+              <span style="color: #6B675D;">Player ID</span><span style="min-width: 0;"><span style="font-family: ui-monospace, monospace; color: #1D1C18;">NB-40219</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #E7EFFE; color: #1D4FD7; font-size: 10.5px; border-radius: 4px; padding: 2px 7px; margin-left: 6px;">also on 2 other profiles</span></span>
+              <span style="color: #6B675D;">Brand</span><span style="color: #1D1C18;">Na Bet</span>
+              <span style="color: #6B675D;">Loyalty tier</span><span style="min-width: 0;"><span style="color: #1D1C18;">Gold</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; border-radius: 4px; padding: 2px 6px; margin-left: 6px;">retired field</span></span>
+            </div>
+            <div style="font-size: 10.5px; color: #6B675D; margin-top: 6px; line-height: 1.5;">A retired field keeps its value and stops being editable — the definition went, the fact stayed.</div>
+          </div>
+        </div>
+
+        <div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;"><div style="font-size: 21px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">14</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">tickets · 2 open</div></div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;"><div style="font-size: 21px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">4.6</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">of 5 · 9 ratings</div></div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;"><div style="font-size: 21px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">2h</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">since last contact</div></div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;"><div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 21px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">31%</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 3px; display: flex; align-items: center; gap: 5px;">repeat contact <span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; border-radius: 4px; padding: 1px 6px;">◷ stale</span></div></div>
+          </div>
+          <div style="font-size: 11px; color: #6B675D; line-height: 1.55; margin-top: -8px;">Counts are recomputed from events, so when the handlers lag they say stale rather than quietly lying. Last recomputed 41 minutes ago.</div>
+
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;">
+              <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Satisfaction</span>
+              <span style="font-size: 11px; color: #6B675D;">last 9 ratings, newest first</span>
+            </div>
+            <div role="list" aria-label="Last nine ratings, newest first" style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px; display: flex; align-items: flex-end; gap: 6px;"><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 80px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">5</span><span style="font-size: 9.5px; color: #6F6A61;">today</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 80px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">5</span><span style="font-size: 9.5px; color: #6F6A61;">yest</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #FCF0D9; border-top: 3px solid #8F5F08; height: 48px;"></span><span style="font-size: 11px; font-weight: 600; color: #8F5F08;">3</span><span style="font-size: 9.5px; color: #6F6A61;">30 Jul</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 64px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">4</span><span style="font-size: 9.5px; color: #6F6A61;">28 Jul</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 80px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">5</span><span style="font-size: 9.5px; color: #6F6A61;">22 Jul</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #FBE5E5; border-top: 3px solid #B32B2B; height: 16px;"></span><span style="font-size: 11px; font-weight: 600; color: #B32B2B;">1</span><span style="font-size: 9.5px; color: #6F6A61;">14 Jun</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 64px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">4</span><span style="font-size: 9.5px; color: #6F6A61;">2 Jun</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 80px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">5</span><span style="font-size: 9.5px; color: #6F6A61;">19 May</span></div><div role="listitem" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><span style="width: 100%; background: #E4F4EA; border-top: 3px solid #156F45; height: 80px;"></span><span style="font-size: 11px; font-weight: 600; color: #156F45;">5</span><span style="font-size: 9.5px; color: #6F6A61;">4 May</span></div></div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 6px; line-height: 1.55;">The single one-star is a withdrawal that took four days in June — worth reading before promising anything today. Every bar prints its rating and its date underneath, so the shape is a convenience rather than the only way to read it.</div>
+          </div>
+
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Tickets · 14</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; font-size: 12px;">
+              <div style="display: grid; grid-template-columns: 0.5fr 1.8fr 0.7fr 0.7fr; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;"><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Ticket</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Subject</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Status</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Updated</span></div>
+              <div style="display: grid; grid-template-columns: 0.5fr 1.8fr 0.7fr 0.7fr; border-bottom: 1px solid #F0EEE9;"><span style="padding: 7px 10px; color: #6B675D;">#4812</span><span style="padding: 7px 10px; color: #1D1C18;">Withdrawal not received</span><span style="padding: 7px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px;"><span style="font-size: 7px;">●</span>Open</span></span><span style="padding: 7px 10px; color: #4A4842;">2h ago</span></div>
+              <div style="display: grid; grid-template-columns: 0.5fr 1.8fr 0.7fr 0.7fr; border-bottom: 1px solid #F0EEE9;"><span style="padding: 7px 10px; color: #6B675D;">#4790</span><span style="padding: 7px 10px; color: #1D1C18;">Deposit not credited</span><span style="padding: 7px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px;"><span style="font-size: 7px;">●</span>Pending customer</span></span><span style="padding: 7px 10px; color: #4A4842;">yesterday</span></div>
+              <div style="display: grid; grid-template-columns: 0.5fr 1.8fr 0.7fr 0.7fr; border-bottom: 1px solid #F0EEE9;"><span style="padding: 7px 10px; color: #6B675D;">#4655</span><span style="padding: 7px 10px; color: #1D1C18;">የክፍያ ማረጋገጫ ጠይቋል</span><span style="padding: 7px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #DEF4F1; color: #0A7266; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px;"><span style="font-size: 7px;">●</span>Resolved</span></span><span style="padding: 7px 10px; color: #4A4842;">12 Jul</span></div>
+              <div style="display: grid; grid-template-columns: 0.5fr 1.8fr 0.7fr 0.7fr;"><span style="padding: 7px 10px; color: #6B675D;">#4590</span><span style="padding: 7px 10px; color: #1D1C18;">Account verification help</span><span style="padding: 7px 10px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #ECEEF1; color: #59636F; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px;"><span style="font-size: 7px;">●</span>Closed</span></span><span style="padding: 7px 10px; color: #4A4842;">28 Jun</span></div>
+            </div>
+            <button style="font-family: inherit; margin-top: 8px; background: transparent; border: none; padding: 0; font-size: 11.5px; font-weight: 600; color: #2F5AC8; cursor: pointer;">Show all 14</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 1180px; line-height: 1.5;">The left column is the panel's content, unchanged and still narrow — an agent who knows the panel finds everything where they left it. The right column is what the slot could never hold: the rollups spread out, the rating history readable, and the full ticket list as a table rather than a top-five.</div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">B03, B05 · Audit and the files gallery</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §8, FR-19, SEC-04 · audit.view scoped to this customer</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">B03 · Dark — Audit, for the few who hold it</div>
+        <div style="width: 620px; background: #141412; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 0 18px; border-bottom: 1px solid #343430; display: flex; gap: 4px;" role="tablist" aria-label="Profile sections">
+            <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Overview</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Notes</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Files</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; background: transparent; border: none; border-bottom: 2px solid #ECEAE4; padding: 11px 13px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Audit</button>
+          </div>
+          <div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 11px;">
+            <div style="font-size: 11.5px; color: #A6A296; line-height: 1.55;">Everything recorded about this customer, and nothing about anyone else — the tab is scoped to this profile even for someone who can audit the whole tenant.</div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #A6A296; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.5;"><span style="font-weight: 600;">Phone added</span> · 091 234 4417</div><div style="font-size: 11px; color: #9A9588; margin-top: 3px;">Sara Bekele · 12 Jul 14:22</div></div></div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #A6A296; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.5;"><span style="font-weight: 600;">Language set</span> · detected English → staff set አማርኛ</div><div style="font-size: 11px; color: #9A9588; margin-top: 3px;">Hana Girma · 12 Jul 09:04</div></div></div>
+              <div style="padding: 10px 12px; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #A6A296; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.5;"><span style="font-weight: 600;">Customer created</span> · from Telegram</div><div style="font-size: 11px; color: #9A9588; margin-top: 3px;">System · 4 Mar 21:07</div></div></div>
+            </div>
+            <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; color: #C9C5BB; line-height: 1.6;">Someone without <span style="font-family: ui-monospace, monospace;">audit.view</span> does not see a locked tab — they see three tabs and no fourth. The same absence rule the RG flag uses.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">B05 · Light — files, filtered</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Files</span>
+            <span style="font-size: 11.5px; color: #6B675D;">12</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 5px;">
+              <span style="font-size: 11px; font-weight: 600; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 4px 10px;">All</span>
+              <span style="font-size: 11px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 4px 10px;">Images 9</span>
+              <span style="font-size: 11px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 4px 10px;">Documents 3</span>
+            </span>
+          </div>
+          <div style="padding: 14px 16px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;">
+            <button style="font-family: inherit; padding: 0; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; background: #FFFFFF; cursor: pointer; text-align: left;"><span style="display: block; height: 74px; background: #0A7A5A;"></span><span style="display: block; padding: 7px 8px;"><span style="display: block; font-size: 10.5px; color: #1D1C18;">telebirr receipt</span><span style="display: block; font-size: 10px; color: #6B675D; margin-top: 2px;">#4812 · today</span></span></button>
+            <button style="font-family: inherit; padding: 0; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; background: #FFFFFF; cursor: pointer; text-align: left;"><span style="display: block; height: 74px; background: #EEECE6;"></span><span style="display: block; padding: 7px 8px;"><span style="display: block; font-size: 10.5px; color: #1D1C18;">screenshot</span><span style="display: block; font-size: 10px; color: #6B675D; margin-top: 2px;">#4790 · 30 Jul</span></span></button>
+            <button style="font-family: inherit; padding: 0; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; background: #FFFFFF; cursor: pointer; text-align: left;"><span style="display: block; height: 74px; background: #F2F1ED; display: flex; align-items: center; justify-content: center; color: #6F6A61; font-size: 17px;">▤</span><span style="display: block; padding: 7px 8px;"><span style="display: block; font-size: 10.5px; color: #1D1C18;">bank-statement.pdf</span><span style="display: block; font-size: 10px; color: #6B675D; margin-top: 2px;">#4655 · 12 Jul</span></span></button>
+            <div style="border: 1px solid #EFC7C7; border-radius: 8px; overflow: hidden; background: #FFFFFF;"><div style="height: 74px; background: #FBE5E5; display: flex; align-items: center; justify-content: center; color: #B32B2B; font-size: 17px;">⛨</div><div style="padding: 7px 8px;"><div style="font-size: 10.5px; color: #8E2222;">blocked file</div><div style="font-size: 10px; color: #8E2222; margin-top: 2px;">failed the scan</div></div></div>
+          </div>
+          <div style="padding: 11px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11px; color: #4A4842; flex: 1 1 auto; line-height: 1.5;">Infected media stays blocked here too — it is listed so the agent knows it existed, and cannot be opened or exported.</span>
+            <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 32px; padding: 0 12px; cursor: pointer;">Export gallery</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 520px; line-height: 1.5;">Every image the customer ever sent, with the ticket it arrived on — which is usually how an agent finds the receipt from three weeks ago. Export is permissioned and audited; it produces a watermarked archive rather than a folder of files.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">B06 · The tombstone — a merged profile, still answering</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 BR-05, FR-13, §9 · never a 404</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — inside the 30 days, permitted viewer</div>
+        <div style="width: 620px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 26px 24px;">
+          <div style="max-width: 460px;">
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Merged profile</div>
+            <div style="font-size: 19px; font-weight: 600; color: #1D1C18; margin-top: 8px; line-height: 1.4; letter-spacing: -0.01em;">This profile was merged into <span style="text-decoration: underline;">አበበ ታደሰ</span> on 28 July by Hana Girma.</div>
+            <div style="font-size: 13px; color: #4A4842; margin-top: 10px; line-height: 1.6;">Everything that was here — 6 tickets, 2 conversations, 4 files — now lives on that profile. Old links to this page keep working and will always land here.</div>
+            <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
+              <button style="font-family: inherit; background: #22211D; border: none; border-radius: 6px; color: #FFFFFF; font-size: 12.5px; font-weight: 600; min-height: 36px; padding: 0 15px; cursor: pointer;">Go to አበበ ታደሰ</button>
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 12.5px; font-weight: 600; min-height: 36px; padding: 0 15px; cursor: pointer;">Undo this merge</button>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px; line-height: 1.55;">Undo is available for 25 more days. Anything created since the merge stays with the surviving profile — the undo preview lists exactly what that is.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — window passed, or no permission</div>
+        <div style="width: 460px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 24px 22px;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Merged profile</div>
+          <div style="font-size: 18px; font-weight: 600; color: #ECEAE4; margin-top: 8px; line-height: 1.45;">This profile was merged into <span style="text-decoration: underline;">ሰላም በቀለ</span> on 3 May by Dawit Bekele.</div>
+          <div style="font-size: 13px; color: #C9C5BB; margin-top: 10px; line-height: 1.6;">The 30 days to undo have passed, so this one is permanent. The redirect stays forever.</div>
+          <button style="font-family: inherit; margin-top: 16px; background: #ECEAE4; border: none; border-radius: 6px; color: #171714; font-size: 12.5px; font-weight: 600; min-height: 36px; padding: 0 15px; cursor: pointer;">Go to ሰላም በቀለ</button>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">No undo button rather than a disabled one — the same rule as everywhere else in this program. A viewer without merge rights sees this version too, inside the window or not.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">B02 · 375 · single column, sticky header</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 Responsive</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — header stays, sections stack</div>
+        <div style="width: 375px; height: 700px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+            <div style="display: flex; align-items: flex-start; gap: 11px;">
+              <button aria-label="Back to directory" style="font-family: inherit; flex: none; background: transparent; border: none; color: #1D1C18; font-size: 17px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 16px; font-weight: 600; color: #1D1C18;">አበበ ታደሰ</div><div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;"><span style="background: #EEECE6; color: #4A4842; font-size: 11.5px; border-radius: 5px; padding: 3px 8px;">አማርኛ</span><span style="background: #EEECE6; color: #4A4842; font-size: 11.5px; border-radius: 5px; padding: 3px 8px;">🇪🇹 Ethiopia</span></div></div>
+              <button aria-label="More actions" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">⋯</button>
+            </div>
+          </div>
+          <div style="flex: none; display: flex; border-bottom: 1px solid #E5E2DB; overflow: hidden;" role="tablist" aria-label="Profile sections">
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-bottom: 2px solid #22211D; min-height: 48px; font-size: 13px; font-weight: 600; color: #1D1C18; cursor: pointer;">Overview</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 48px; font-size: 13px; color: #6B675D; cursor: pointer;">Notes</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 48px; font-size: 13px; color: #6B675D; cursor: pointer;">Files</button>
+          </div>
+          <div style="flex: 1; min-height: 0; overflow: hidden; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="background: #FBF3D6; border: 1.5px solid #E3C455; border-radius: 8px; padding: 11px 13px;">
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #7E650F;">📌 Pinned note</div>
+              <div style="font-size: 13.5px; color: #7E650F; line-height: 1.55; margin-top: 5px;">VIP — always confirm withdrawals by voice.</div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="font-size: 18px; font-weight: 700; color: #1D1C18;">14</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">tickets</div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="font-size: 18px; font-weight: 700; color: #1D1C18;">4.6</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">of 5</div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="font-size: 18px; font-weight: 700; color: #1D1C18;">2h</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">last seen</div></div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Identities</div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+                <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 0 13px; min-height: 56px; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: none; font-size: 13px; color: #4A4842;">✈</span><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18;">@abebe_t</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">from Telegram</span></span></button>
+                <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 13px; min-height: 56px; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: none; font-size: 13px; color: #4A4842;">☎</span><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-family: ui-monospace, monospace; font-size: 13px; color: #1D1C18;">091 234 4417</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">added by Sara · 12 Jul</span></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The Audit tab is absent at this width for the same reason it is absent for anyone without the permission — but here it is a space decision, so it lives behind the ⋯ menu rather than being dropped.</div>
+      </div>
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — the tombstone at 375</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; padding: 20px 16px;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Merged profile</div>
+          <div style="font-size: 17px; font-weight: 600; color: #ECEAE4; margin-top: 8px; line-height: 1.45;">This profile was merged into ሰላም በቀለ on 28 July by ሃና ግርማ።</div>
+          <div style="font-size: 13.5px; color: #C9C5BB; margin-top: 10px; line-height: 1.6;">6 ጥያቄዎች እና 4 ፋይሎች ወደዚያ መገለጫ ተዛውረዋል። የድሮ አገናኞች አሁንም ይሰራሉ።</div>
+          <button style="font-family: inherit; margin-top: 16px; width: 100%; background: #ECEAE4; border: none; border-radius: 10px; color: #171714; font-size: 14px; font-weight: 600; min-height: 48px; cursor: pointer;">ወደ ሰላም በቀለ ይሂዱ</button>
+          <button style="font-family: inherit; margin-top: 9px; width: 100%; background: transparent; border: 1px solid #45443E; border-radius: 10px; color: #ECEAE4; font-size: 14px; font-weight: 600; min-height: 48px; cursor: pointer;">ውህደቱን ቀልብስ</button>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Amharic throughout, flagged for native review. A tombstone reached from an old link on a phone is the most likely way anyone meets this screen.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

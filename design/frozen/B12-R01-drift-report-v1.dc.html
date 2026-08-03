@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 24px; max-width: 1140px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B12-R01-drift-report-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Drift report — component reconciliation against B1-DS</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Seven files reopened for component reconciliation only. 91 corrections, every one a colour or type value pulled back to <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-DS-design-system-v1</span>. No layout changed, no copy changed, nothing redesigned. Each touched file is version-bumped; the old versions are untouched on disk.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">7 files reopened</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">91 corrections</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: #4A4842;">9 component families</span>
+    </div>
+  </header>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+    <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">What was wrong, and what it is now</div>
+    <sc-for list="{{ defects }}" as="d" hint-placeholder-count="8">
+      <div style="padding: 13px 16px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 190px minmax(0, 1fr) 250px; gap: 14px; align-items: start;">
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ d.name }}</div>
+          <div style="font-size: 11px; color: #6B675D; margin-top: 3px; line-height: 1.45;">{{ d.where }}</div>
+        </div>
+        <div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.55;">{{ d.what }}</div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-family: ui-monospace, monospace; font-size: 10.5px; color: #8E2222;"><span style="width: 13px; height: 13px; border-radius: 3px; border: 1px solid #CFCBC1; background: {{ d.wrongSwatch }};"></span>{{ d.wrong }}</span>
+            <span style="color: #A8A398;">→</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-family: ui-monospace, monospace; font-size: 10.5px; color: #156F45;"><span style="width: 13px; height: 13px; border-radius: 3px; border: 1px solid #CFCBC1; background: {{ d.rightSwatch }};"></span>{{ d.right }}</span>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; line-height: 1.6;">{{ d.files }}</div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+    <div style="padding: 13px 16px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">Corrections per file · counted as style declarations replaced</div>
+    <sc-for list="{{ files }}" as="f" hint-placeholder-count="7">
+      <div style="padding: 11px 16px; border-bottom: 1px solid #F0EEE9; display: grid; grid-template-columns: 260px 60px minmax(0, 1fr); gap: 14px; align-items: baseline;">
+        <span style="font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600; color: #1D1C18;">{{ f.name }}</span>
+        <span style="font-size: 12px; font-weight: 600; color: {{ f.colour }};">{{ f.count }}</span>
+        <span style="font-size: 12px; color: #6B675D; line-height: 1.5;">{{ f.detail }}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #7E650F;">Four things you should know before re-verdicting</h2>
+    <ol style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #7E650F;">
+      <li><strong style="font-weight: 600;">The AI accent was the worst of it.</strong> The Copilot source labels in <span style="font-family: ui-monospace, monospace;">B2-S03</span> were a blue I invented. Doc 07 §9 fixes the AI accent as violet and makes it non-themeable, and the checklist marks it settled in <span style="font-family: ui-monospace, monospace;">B1-DS</span>. Three chips now use the approved token. This is the one correction a reader will actually see.</li>
+      <li><strong style="font-weight: 600;">Two files came back clean.</strong> <span style="font-family: ui-monospace, monospace;">B12-S01</span> is built from lightbox chrome that has no design-system equivalent, and it inherited nothing wrong. <span style="font-family: ui-monospace, monospace;">B2-S03</span> was clean except the AI chips.</li>
+      <li><strong style="font-weight: 600;">The 44px floor stands, and is now a rule.</strong> Where a design-system component is sized for desktop and appears again at 375, the touch floor outranks the component's desktop metrics. Recorded as: <em>mobile variants inherit the 44px floor; reconcile colour and type only, never below the floor.</em> It affects the success pill in <span style="font-family: ui-monospace, monospace;">B2-S02</span> and the undo control in <span style="font-family: ui-monospace, monospace;">B2-S01</span>. Folding that sentence into <span style="font-family: ui-monospace, monospace;">B1-DS</span> itself needs an explicit reopen of that file — it can ride along with the addendum below.</li>
+      <li><strong style="font-weight: 600;">The lightbox chrome becomes a component.</strong> On approval of <span style="font-family: ui-monospace, monospace;">B12-S01</span>, its chrome — scrim, header, filmstrip, zoom bar, description slot — is promoted to a <span style="font-family: ui-monospace, monospace;">B1-DS</span> addendum so later batches reuse it instead of matching it by eye. That is this report's own failure, caught before it can repeat.</li>
+    </ol>
+  </section>
+
+  <section style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Standing instruction, recorded</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;">From here through Batch 7: <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-DS-design-system-v1</span> is opened at the start of every session and stays the source of truth. Any reused component is taken from it verbatim. No component is rebuilt from a screen, a screenshot, or memory. Mobile variants inherit the 44px touch floor: reconcile colour and type only, never below it. This report exists because those rules did not exist yet — they do now, and they are written into <span style="font-family: ui-monospace, monospace; font-size: 12px;">CLAUDE.md</span> so they survive the end of this chat.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DEFECTS = [
+  { name: "AI accent", where: "Copilot source label on the subject field", what: "The chip announcing AI-written content used an invented blue with a pill radius and a 1px border. Authority chain: Doc 07 §9 mandates that all AI-origin content carries the AI accent; the violet token itself is law by way of approved B1-DS — violet ground, 3px left rule, 4px radius, weight 700.", wrong: "#EDF0F7 / #2B4478", wrongSwatch: "#EDF0F7", right: "#F1EDFE / #5B3FD6", rightSwatch: "#F1EDFE", files: "B2-S03 · 3 chips, both themes" },
+  { name: "Dark error surface", where: "refusals, offline banners, spam-final, split cap", what: "Built on #3A1F1F with a #7A3B3B border and #FFB4B4 / #E8A0A0 text — a red family I mixed myself. B1-DS fixes the dark error surface at #3D1B1B / #6B3838 / #F08A8A.", wrong: "#3A1F1F / #FFB4B4", wrongSwatch: "#3A1F1F", right: "#3D1B1B / #F08A8A", rightSwatch: "#3D1B1B", files: "B2-S02 · B2-S04 · B2-S05" },
+  { name: "Light error text", where: "optimistic revert, spam banner, split cap, panel error", what: "Body copy on error surfaces sat at #8E2020 with a #EFC2C2 border. The approved error toast is #8E2222 on #FBE5E5 with a #EFC7C7 border.", wrong: "#8E2020 / #EFC2C2", wrongSwatch: "#FBE5E5", right: "#8E2222 / #EFC7C7", rightSwatch: "#FBE5E5", files: "B2-S04 · B2-S05" },
+  { name: "Dark warning surface", where: "unreachable chip, 25-cap notice, offline strip, edit window", what: "Used #2C2612 with #E8C25A text — that pair is the internal-note token, not the warning state. The warning state is #3A2D10 with #F0B54A, bordered #6B551A.", wrong: "#2C2612 / #E8C25A", wrongSwatch: "#2C2612", right: "#3A2D10 / #F0B54A", rightSwatch: "#3A2D10", files: "B2-S01 · B2-S02 · B2-S04 · B2-S05 · B12-S02" },
+  { name: "Light warning surface", where: "escalation banner, reply-window notices", what: "Mixed the #FFF8E6 typing-strip ground into state warnings and darkened the text to #7E5107. State warnings are #FCF0D9 with #E8CF9B and #8F5F08.", wrong: "#FFF8E6 / #7E5107", wrongSwatch: "#FFF8E6", right: "#FCF0D9 / #8F5F08", rightSwatch: "#FCF0D9", files: "B2-S01 · B2-S04 · B2-S05" },
+  { name: "Success surface", where: "resolved banner, agent-status pill", what: "Drawn on #F1F6F2 with a #B8D8C4 border and #14532F / #2C6547 text. The approved open-and-resolved ground is #E4F4EA with #156F45, and design-system pills carry no border at all.", wrong: "#F1F6F2 / #14532F", wrongSwatch: "#F1F6F2", right: "#E4F4EA / #156F45", rightSwatch: "#E4F4EA", files: "B2-S02 · B2-S04" },
+  { name: "Dark success", where: "resolved banner, simultaneous-resolve state", what: "Ground was right at #123322; the border and text were not — #1E5638, #B8ECCE and #9FD9B8 against the approved #5AD190 on the neutral divider.", wrong: "#B8ECCE / #1E5638", wrongSwatch: "#123322", right: "#5AD190 / #343430", rightSwatch: "#123322", files: "B2-S04 · B2-S05" },
+  { name: "Skeleton bars", where: "search loading, panel loading, list loading", what: "Secondary bars were #F4F2ED, one step off the approved #F2F1ED. Eleven bars across two files.", wrong: "#F4F2ED", wrongSwatch: "#F4F2ED", right: "#F2F1ED", rightSwatch: "#F2F1ED", files: "B2-S02 · B2-S05" },
+  { name: "Tombstone", where: "deleted customer message", what: "Redrawn rather than reused: wrong ground, wrong grey, 12.5px instead of 12px, 9px/12px padding instead of 7px/11px, and a bubble tail radius the component does not have. Fixed earlier in the session; recorded here for completeness.", wrong: "#F4F3F1 / 12.5px", wrongSwatch: "#F4F3F1", right: "#F2F1ED / 12px", rightSwatch: "#F2F1ED", files: "B12-S02 · both themes" }
+];
+const FILES = [
+  { name: "B2-S01-mobile-interactions-v3", count: 3, detail: "warning surfaces on the selection cap and pull-to-refresh strips" },
+  { name: "B2-S02-mobile-search-status-v3", count: 11, detail: "skeletons, offline error surface, agent-status success pill" },
+  { name: "B2-S03-ticket-properties-v2", count: 3, detail: "AI accent on the Copilot source labels — nothing else" },
+  { name: "B2-S04-state-affordances-v2", count: 36, detail: "the affordance banners: resolved, closed, spam, escalated, unreachable, reopened" },
+  { name: "B2-S05-states-v2", count: 35, detail: "panel states, race states, mobile universal states, skeletons" },
+  { name: "B12-S01-media-lightbox-v3", count: 0, detail: "clean — no reused design-system component drifted" },
+  { name: "B12-S02-edit-marker-v2", count: 3, detail: "tombstone taken verbatim from B1-DS, both themes, plus one warning colour" }
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      defects: DEFECTS,
+      files: FILES.map(f => ({ ...f, colour: f.count === 0 ? "#156F45" : "#1D1C18" }))
+    };
+  }
+}
+</script>
+</body>
+</html>

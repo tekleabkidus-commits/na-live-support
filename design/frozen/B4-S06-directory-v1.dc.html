@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S06-directory-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The directory</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows G01–G09 · Doc 08 FR-20, EC-08, FS-01, BR-03, §8, §9, §14 · AC-07. The list an agent reaches for when the conversation is not already open — usually because someone has phoned, or because they are checking whether two profiles are the same person. The table is <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-DS</span>'s data table with the columns Doc 08 names.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Two constraints shape it. Search has to find people by things they no longer are — an old username, a phone they gave once — because that is what a returning player has. And the RG filter must not exist for staff who cannot see the flag: a filter that returns fewer rows is itself a disclosure.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">G01, G03, G07, G08 · 1440 · light</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-20, EC-08 · table from B1-DS</span>
+    </div>
+    <div style="width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 14px 18px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <div style="font-size: 16px; font-weight: 600; color: #1D1C18;">Customers</div>
+        <span style="font-size: 12px; color: #6B675D;">4,182 in your scope</span>
+        <label style="flex: 1 1 320px; min-width: 240px;"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Search customers</span><span style="display: flex; align-items: center; gap: 8px; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; background: #FFFFFF;"><span style="font-size: 12px; color: #6B675D;">⌕</span><span style="font-size: 12.5px; color: #6F6A61;">Name, username, phone, email or player ID</span></span></label>
+        <button style="font-family: inherit; background: #22211D; border: none; border-radius: 6px; color: #FFFFFF; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">New customer</button>
+      </div>
+      <div style="padding: 11px 18px; border-bottom: 1px solid #E5E2DB; background: #FBFAF8; display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-right: 3px;">Filter</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; background: #22211D; color: #FFFFFF; font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 5px 11px;">Has an open ticket <span style="cursor: pointer;">×</span></span>
+        <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Language ▾</span>
+        <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Country ▾</span>
+        <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Tag ▾</span>
+        <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Blocked ▾</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #59636F;"></span>Responsible gaming ▾</span>
+        <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #2F5AC8; font-size: 11.5px; font-weight: 600; cursor: pointer;">Clear all</button>
+      </div>
+      <div style="padding: 9px 18px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; background: #F6F5F2;">
+        <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">3 selected</span>
+        <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 30px; padding: 0 11px; cursor: pointer;">Add a tag</button>
+        <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 30px; padding: 0 11px; cursor: pointer;">Export</button>
+        <span style="font-size: 11px; color: #6B675D;">Tagging and export only — merging and blocking are one at a time, on purpose.</span>
+        <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #4A4842; font-size: 11.5px; font-weight: 600; cursor: pointer;">Clear</button>
+      </div>
+      <div style="font-size: 12px;">
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+          <span style="padding: 7px 10px;"></span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Name</span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Identities</span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last contact</span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Open</span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Rating</span>
+          <span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Tags</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; border-bottom: 1px solid #F0EEE9; background: #FBFAF8;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #22211D;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18;">አበበ ታደሰ</span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Telegram">✈</span><span title="Phone">☎</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">@abebe_t</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">2h ago</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">2</span>
+          <span style="padding: 7px 10px; color: #4A4842;">4.6</span>
+          <span style="padding: 7px 10px;"><span style="background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 2px 7px;">vip</span></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #CFCBC1;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">አቤል ተስፋዬ <span title="Customer #8f21c4" style="font-family: ui-monospace, monospace; font-size: 10px; color: #6F6A61;">#8f21</span></span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Telegram">✈</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">@abel_t</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">yesterday</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">1</span>
+          <span style="padding: 7px 10px; color: #4A4842;">—</span>
+          <span style="padding: 7px 10px;"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #CFCBC1;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">አቤል ተስፋዬ <span title="Customer #c410b9" style="font-family: ui-monospace, monospace; font-size: 10px; color: #6F6A61;">#c410</span></span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Phone">☎</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">091 550 3382</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">3 May</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">1</span>
+          <span style="padding: 7px 10px; color: #4A4842;">3.0</span>
+          <span style="padding: 7px 10px;"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #22211D;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">ተስፋዬ ገብሬ <span title="Responsible gaming flag" style="width: 6px; height: 6px; border-radius: 50%; background: #59636F;"></span></span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Telegram">✈</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">@tesfaye_g</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">1d ago</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">1</span>
+          <span style="padding: 7px 10px; color: #4A4842;">3.9</span>
+          <span style="padding: 7px 10px;"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr; border-bottom: 1px solid #F0EEE9;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; background: #22211D;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">ዮሴፍ ካሳ <span style="background: #FBE5E5; color: #B32B2B; font-size: 10px; font-weight: 600; border-radius: 4px; padding: 1px 6px;">Blocked</span></span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Telegram">✈</span><span title="Phone">☎</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">@yosef_k</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">1 Aug</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">0</span>
+          <span style="padding: 7px 10px; color: #4A4842;">2.1</span>
+          <span style="padding: 7px 10px;"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 36px 1.5fr 1.1fr 0.7fr 0.6fr 0.7fr 1fr;">
+          <span style="padding: 7px 10px; display: flex; align-items: center;"><span style="width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid #CFCBC1;"></span></span>
+          <span style="padding: 7px 10px; color: #1D1C18; display: flex; align-items: center; gap: 7px;">Customer #b7e0 <span style="border: 1px dashed #CFCBC1; color: #6F6A61; font-size: 10px; border-radius: 4px; padding: 1px 6px;">shell</span></span>
+          <span style="padding: 7px 10px; color: #4A4842; display: flex; align-items: center; gap: 7px;"><span title="Telegram">✈</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">@kidist_h</span></span>
+          <span style="padding: 7px 10px; color: #4A4842;">12m ago</span>
+          <span style="padding: 7px 10px; color: #1D1C18;">1</span>
+          <span style="padding: 7px 10px; color: #4A4842;">—</span>
+          <span style="padding: 7px 10px;"></span>
+        </div>
+      </div>
+      <div style="padding: 11px 18px; border-top: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 11.5px; color: #6B675D;">Showing 6 of 4,182</span>
+        <span style="margin-left: auto; display: inline-flex; gap: 6px;"><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #6F6A61; font-size: 11.5px; min-height: 30px; padding: 0 11px;">Previous</button><button style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 30px; padding: 0 11px; cursor: pointer;">Next</button></span>
+      </div>
+    </div>
+    <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 1180px; line-height: 1.5;">Two customers called አቤል ተስፋዬ sit next to each other — told apart by their identity values and a short id, because a betting product has real name collisions and a directory that hides them causes the wrong merge. Bulk actions are tags and export only; merging and blocking stay one at a time.</div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">G03, G04, G05 · Searching, and who can filter by what</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-20, BR-03, §14 · AC-07</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">G04 · Dark — found by a username they no longer use</div>
+        <div style="width: 620px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #343430;">
+            <span style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #ECEAE4; border-radius: 7px; padding: 0 11px; min-height: 38px; background: #171715;"><span style="font-size: 12px; color: #ECEAE4;">⌕</span><span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #ECEAE4;">abebe1994</span><span style="display: inline-block; width: 1.5px; height: 14px; background: #ECEAE4;"></span></span>
+          </div>
+          <div style="padding: 9px 16px; border-bottom: 1px solid #262622; font-size: 11.5px; color: #A6A296;">1 result</div>
+          <div style="padding: 12px 16px; display: flex; align-items: flex-start; gap: 11px;">
+            <span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">አታ</span>
+            <div style="flex: 1 1 auto; min-width: 0;">
+              <div style="font-size: 13.5px; color: #ECEAE4;">አበበ ታደሰ</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px; line-height: 1.55;">Matched an earlier Telegram name — <span style="font-family: ui-monospace, monospace; color: #ECEAE4;">@abebe1994</span>, used until 4 March. Now <span style="font-family: ui-monospace, monospace; color: #ECEAE4;">@abebe_t</span>.</div>
+            </div>
+            <span style="flex: none; font-size: 11.5px; color: #A6A296;">2h ago</span>
+          </div>
+          <div style="padding: 11px 16px; border-top: 1px solid #262622; background: #171715; font-size: 11px; color: #A6A296; line-height: 1.6;">A player who lost their phone and made a new account still knows their old handle. Matching history is how they get found — and the result says which name matched, so the agent is not confused by a profile that shows something else.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">G03 · Light — the same filter bar, without the permission</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 11px 16px; background: #FBFAF8; display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-right: 3px;">Filter</span>
+            <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Has an open ticket ▾</span>
+            <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Language ▾</span>
+            <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Country ▾</span>
+            <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Tag ▾</span>
+            <span style="font-size: 11.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px;">Blocked ▾</span>
+          </div>
+          <div style="padding: 14px 16px; font-size: 12.5px; color: #4A4842; line-height: 1.7;">Five filters, not six. There is no greyed responsible-gaming chip and no gap where one was — and the row for ተስፋዬ ገብሬ appears in this table with no dot beside the name.</div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 11.5px; color: #4A4842; line-height: 1.65;">A filter that exists but returns nothing is a disclosure: run it, see who disappears, and you have the list. So the control is absent, the column is never queried, and the count at the top of the page is the same for both viewers.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">G05 · Light — Amharic search</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB;">
+            <span style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #22211D; border-radius: 7px; padding: 0 11px; min-height: 38px;"><span style="font-size: 12px; color: #1D1C18;">⌕</span><span style="font-size: 13px; color: #1D1C18;">መቅደስ</span><span style="display: inline-block; width: 1.5px; height: 14px; background: #22211D;"></span></span>
+          </div>
+          <div style="padding: 9px 16px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;">2 results</div>
+          <div style="padding: 11px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">መዓ</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; color: #1D1C18;"><mark style="background: #FBEFA8; color: #1D1C18; padding: 0 2px;">መቅደስ</mark> ዓለሙ ወልደሚካኤል</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">@mekdes_a · 6 tickets</div></div>
+          </div>
+          <div style="padding: 11px 16px; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">መበ</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; color: #1D1C18;"><mark style="background: #FBEFA8; color: #1D1C18; padding: 0 2px;">መቅደስ</mark> በላይ</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">091 663 2014 · 2 tickets</div></div>
+          </div>
+          <div style="padding: 11px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 11px; color: #4A4842; line-height: 1.6;">Amharic is indexed and matched on its own terms, not transliterated. A three-part name still finds on the first part, which is how staff actually search.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">G06, G09 · When it is slow, empty or broken</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FS-01 · Batch 4 prompt Step 2</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">G06 · Light — the index is down</div>
+        <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 11px 16px; background: #FCF0D9; border-bottom: 1px solid #E8CF9B; display: flex; align-items: center; gap: 9px;" role="status">
+            <span style="flex: none; font-size: 12px; color: #8F5F08;">◌</span>
+            <span style="font-size: 12px; color: #8F5F08; line-height: 1.55;">Search is running in a reduced mode — names and phone numbers only, and slower than usual.</span>
+          </div>
+          <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="display: flex; align-items: center; gap: 8px; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 38px;"><span style="font-size: 12px; color: #6B675D;">⌕</span><span style="font-size: 12.5px; color: #1D1C18;">abebe</span></span>
+          </div>
+          <div style="padding: 11px 16px; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">አታ</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13px; color: #1D1C18;">አበበ ታደሰ</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">matched on name</div></div>
+          </div>
+          <div style="padding: 11px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 11px; color: #4A4842; line-height: 1.6;">Old usernames, emails and player IDs are not searchable while this lasts — so the banner says what is missing rather than just apologising. An agent who cannot find someone needs to know whether to try a different term or a different route.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">G09 · Light — loading, and nothing found</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.6fr; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;"><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Name</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Identities</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last</span><span style="padding: 7px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Open</span></div>
+            <div role="status" aria-label="Loading customers">
+              <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.6fr; border-bottom: 1px solid #F0EEE9;"><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 62%; background: #EEECE6; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 74%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 52%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 30%; background: #F2F1ED; border-radius: 3px;"></span></span></div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.6fr; border-bottom: 1px solid #F0EEE9;"><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 48%; background: #EEECE6; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 62%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 44%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 30%; background: #F2F1ED; border-radius: 3px;"></span></span></div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.6fr;"><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 56%; background: #EEECE6; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 68%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 48%; background: #F2F1ED; border-radius: 3px;"></span></span><span style="padding: 11px 10px;"><span style="display: block; height: 9px; width: 30%; background: #F2F1ED; border-radius: 3px;"></span></span></div>
+            </div>
+          </div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 26px 20px; text-align: center;">
+            <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Nobody matches “chapa refund”</div>
+            <div style="font-size: 12.5px; color: #4A4842; margin-top: 6px; line-height: 1.6; max-width: 380px; margin-left: auto; margin-right: auto;">This searched names, usernames including old ones, phone, email and player ID across the 4,182 customers you can see.</div>
+            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 13px; flex-wrap: wrap;">
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">Clear the search</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">New customer</button>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 11px; line-height: 1.6;">Saying what was searched matters more than saying nothing was found — otherwise the agent tries the same term twice.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">G02 · 375 · the table becomes cards</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 Responsive · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — one card per customer</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 9px;">
+            <span style="font-size: 16px; font-weight: 600; color: #1D1C18;">Customers</span>
+            <span style="margin-left: auto; font-size: 12px; color: #6B675D;">4,182</span>
+          </div>
+          <div style="flex: none; padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+            <span style="display: flex; align-items: center; gap: 9px; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 13px; min-height: 44px;"><span style="font-size: 14px; color: #6B675D;">⌕</span><span style="font-size: 15px; color: #6F6A61;">Search customers</span></span>
+            <div style="display: flex; gap: 7px; margin-top: 10px; overflow: hidden;">
+              <span style="flex: none; font-size: 12.5px; font-weight: 600; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 8px 13px;">Open tickets</span>
+              <span style="flex: none; font-size: 12.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 8px 13px;">Language</span>
+              <span style="flex: none; font-size: 12.5px; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 999px; padding: 8px 13px;">Tag</span>
+            </div>
+          </div>
+          <div style="flex: 1; min-height: 0;">
+            <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 13px 14px; min-height: 76px; cursor: pointer; display: flex; align-items: flex-start; gap: 11px;">
+              <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">አታ</span>
+              <span style="flex: 1 1 auto; min-width: 0;">
+                <span style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 15px; color: #1D1C18;">አበበ ታደሰ</span><span style="background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 2px 7px;">vip</span></span>
+                <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B675D; margin-top: 5px;"><span title="Telegram">✈</span><span title="Phone">☎</span><span>2 open</span><span>·</span><span>4.6</span></span>
+              </span>
+              <span style="flex: none; font-size: 12px; color: #6B675D;">2h</span>
+            </button>
+            <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 13px 14px; min-height: 76px; cursor: pointer; display: flex; align-items: flex-start; gap: 11px;">
+              <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">አተ</span>
+              <span style="flex: 1 1 auto; min-width: 0;">
+                <span style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 15px; color: #1D1C18;">አቤል ተስፋዬ</span><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6F6A61;">#8f21</span></span>
+                <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B675D; margin-top: 5px;"><span title="Telegram">✈</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px;">@abel_t</span><span>·</span><span>1 open</span></span>
+              </span>
+              <span style="flex: none; font-size: 12px; color: #6B675D;">1d</span>
+            </button>
+            <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 13px 14px; min-height: 76px; cursor: pointer; display: flex; align-items: flex-start; gap: 11px;">
+              <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">ዮካ</span>
+              <span style="flex: 1 1 auto; min-width: 0;">
+                <span style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 15px; color: #1D1C18;">ዮሴፍ ካሳ</span><span style="background: #FBE5E5; color: #B32B2B; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 7px;">Blocked</span></span>
+                <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B675D; margin-top: 5px;"><span title="Telegram">✈</span><span title="Phone">☎</span><span>0 open</span></span>
+              </span>
+              <span style="flex: none; font-size: 12px; color: #6B675D;">1 Aug</span>
+            </button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Seven columns will not survive 375, so the card keeps what an agent scans for — who, how to reach them, how many open, how long ago — and drops the rest to the profile. Each card is one 76px target.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — searching by phone</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; border-bottom: 1px solid #343430;">
+            <span style="display: flex; align-items: center; gap: 9px; border: 1.5px solid #ECEAE4; border-radius: 10px; padding: 0 13px; min-height: 44px;"><span style="font-size: 14px; color: #ECEAE4;">⌕</span><span style="font-family: ui-monospace, monospace; font-size: 14px; color: #ECEAE4;">0912344417</span><span style="display: inline-block; width: 1.5px; height: 16px; background: #ECEAE4;"></span></span>
+          </div>
+          <div style="flex: none; padding: 9px 14px; border-bottom: 1px solid #262622; font-size: 12px; color: #A6A296;">1 result · matched on phone</div>
+          <button style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 13px 14px; min-height: 76px; cursor: pointer; display: flex; align-items: flex-start; gap: 11px;">
+            <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">አታ</span>
+            <span style="flex: 1 1 auto; min-width: 0;">
+              <span style="display: block; font-size: 15px; color: #ECEAE4;">አበበ ታደሰ</span>
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #A6A296; margin-top: 5px;"><span style="font-family: ui-monospace, monospace; font-size: 12px;">091 234 4417</span><span>·</span><span>2 open</span></span>
+            </span>
+            <span style="flex: none; font-size: 12px; color: #A6A296;">2h</span>
+          </button>
+          <div style="padding: 11px 14px; border-top: 1px solid #262622; background: #171715; font-size: 11.5px; color: #A6A296; line-height: 1.6;">Typed as it was dialled, matched against the stored international form. An agent with a caller on the line types what the caller says.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

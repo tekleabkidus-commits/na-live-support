@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S08-widget-designer-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Widget Designer</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows J01–J10 · Doc 13 §4.4, FR-19, FR-20, NFR-04, EC-11, BR-07 · Doc 16 validator. The operator's side of the widget: five tabs, versioned publishes, one-click rollback. This is a Backoffice surface, so it follows the agent workspace rather than the widget — the <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-DS</span> desktop density and 12.5px type, not the visitor's 15px. Desktop leads here; the 375 view is the one an admin uses to check something from their phone, not to redesign a widget.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 · J01–J03 · Appearance, with the preview and the refusal</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §4.4 Appearance · §9 · Doc 16 contrast validation</span>
+    </div>
+    <div style="width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 12px;">
+        <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Support subdomain widget</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">wk_9f21 · live on help.nabet.et</div></div>
+        <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">● Unpublished changes</span>
+        <button style="font-family: inherit; margin-left: auto; background: transparent; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 13px; cursor: pointer;">Discard</button>
+        <button style="font-family: inherit; background: #22211D; border: none; border-radius: 6px; color: #FFFFFF; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 14px; cursor: pointer;">Publish</button>
+      </div>
+      <div role="tablist" aria-label="Widget settings" style="display: flex; border-bottom: 1px solid #E5E2DB; padding: 0 16px; gap: 4px;">
+        <button role="tab" aria-selected="true" style="font-family: inherit; background: transparent; border: none; border-bottom: 2px solid #22211D; padding: 11px 13px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Appearance</button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Content</button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Behavior</button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Install</button>
+        <button role="tab" aria-selected="false" style="font-family: inherit; background: transparent; border: none; padding: 11px 13px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Health</button>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 470px;">
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; border-right: 1px solid #E5E2DB;">
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Brand colour</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid #22211D; border-radius: 8px; padding: 7px 11px; font-size: 12.5px; color: #1D1C18;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #22211D;"></span>#22211D</span>
+              <span style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 7px 11px; font-size: 12.5px; color: #1D1C18;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #0A7A5A;"></span>#0A7A5A</span>
+              <span style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 7px 11px; font-size: 12.5px; color: #1D1C18;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #1D4FD7;"></span>#1D4FD7</span>
+            </div>
+            <div style="margin-top: 10px; background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 12px;" role="alert">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">#F2C94C on white is 1.9:1 — this cannot be published</div>
+              <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.55;">Text on the launcher would be unreadable for a lot of people. The nearest passing shade of the same hue is <span style="font-family: ui-monospace, monospace;">#8A6A05</span> at 4.6:1.</div>
+              <button style="font-family: inherit; margin-top: 9px; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; color: #8E2222; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Use #8A6A05</button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;">
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Position</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">Bottom right<span style="margin-left: auto; color: #6F6A61;">▾</span></span></label>
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Theme</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">Auto — follows the visitor<span style="margin-left: auto; color: #6F6A61;">▾</span></span></label>
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Side offset</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">16 px</span></label>
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Bottom offset</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">20 px</span></label>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Launcher icon</div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span style="width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid #22211D; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; color: #1D1C18;">✻</span>
+              <span style="width: 40px; height: 40px; border-radius: 8px; border: 1px solid #E5E2DB; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; color: #4A4842;">💬</span>
+              <span style="width: 40px; height: 40px; border-radius: 8px; border: 1px solid #E5E2DB; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; color: #4A4842;">?</span>
+              <button style="font-family: inherit; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 8px; color: #4A4842; font-size: 12px; min-height: 40px; padding: 0 13px; cursor: pointer;">Upload</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Font</div>
+            <div style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18; max-width: 320px;">Inter + Noto Sans Ethiopic<span style="margin-left: auto; color: #6F6A61;">▾</span></div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 6px; line-height: 1.5;">Curated list only — a font without Ethiopic coverage cannot be chosen for a tenant serving Amharic.</div>
+          </div>
+        </div>
+        <div style="padding: 16px; background: #F6F5F2; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Live preview</span>
+            <span style="margin-left: auto; display: inline-flex; gap: 3px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 3px;"><span style="padding: 5px 11px; border-radius: 5px; background: #22211D; color: #FFFFFF; font-size: 11.5px; font-weight: 600;">Mobile</span><span style="padding: 5px 11px; font-size: 11.5px; color: #4A4842;">Desktop</span></span>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div style="width: 208px; height: 380px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 9px 10px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 7px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #22211D; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">H</span><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Hana</span></div>
+              <div style="flex: 1; padding: 11px; display: flex; flex-direction: column; gap: 8px;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Hello 👋</div><div style="font-size: 11.5px; color: #4A4842; line-height: 1.5;">Ask us anything about your account.</div><div style="border: 1px solid #CFCBC1; border-radius: 7px; min-height: 34px; padding: 8px 10px; font-size: 11.5px; color: #1D1C18;">Where is my withdrawal?</div></div>
+              <div style="flex: none; border-top: 1px solid #E5E2DB; display: flex;"><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; font-weight: 600; color: #1D1C18; border-top: 2px solid #22211D; margin-top: -1px;">Home</span><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; color: #6B675D;">Messages</span><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; color: #6B675D;">Help</span></div>
+            </div>
+            <div style="width: 208px; height: 380px; background: #171715; border: 1px solid #343430; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 9px 10px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 7px;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #ECEAE4; color: #171714; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">H</span><span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Hana</span></div>
+              <div style="flex: 1; padding: 11px; display: flex; flex-direction: column; gap: 8px; background: #1C1C19;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ሰላም 👋</div><div style="font-size: 11.5px; color: #C9C5BB; line-height: 1.5;">ስለ አካውንትዎ ማንኛውንም ይጠይቁን።</div><div style="border: 1px solid #45443E; border-radius: 7px; min-height: 34px; padding: 8px 10px; font-size: 11.5px; color: #ECEAE4;">ገንዘቤ የት ደረሰ?</div></div>
+              <div style="flex: none; border-top: 1px solid #343430; display: flex;"><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; font-weight: 600; color: #ECEAE4; border-top: 2px solid #ECEAE4; margin-top: -1px;">መነሻ</span><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; color: #A6A296;">መልእክቶች</span><span style="flex: 1; text-align: center; padding: 9px 0; font-size: 10px; color: #A6A296;">እገዛ</span></div>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #4A4842; line-height: 1.55;">Both themes side by side, both device frames a toggle away. An operator picking a colour sees the dark rendering without asking for it — which is where most brand palettes quietly fail.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 · J04, J05 · Content and Behavior</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §4.4 Content, Behavior · FR-12, FR-14</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div style="width: 580px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 11px 16px; border-bottom: 1px solid #E5E2DB; font-size: 13px; font-weight: 600; color: #1D1C18;">Content</div>
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 15px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Welcome message</span><span style="margin-left: auto; display: inline-flex; gap: 3px; background: #F6F5F2; border-radius: 6px; padding: 2px;"><span style="padding: 4px 10px; border-radius: 4px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 11px; font-weight: 600; color: #1D1C18;">English</span><span style="padding: 4px 10px; font-size: 11px; color: #4A4842;">አማርኛ</span></span></div>
+            <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 11px; font-size: 12.5px; color: #1D1C18; line-height: 1.55;">Ask us anything about deposits, withdrawals or your account.</div>
+            <div style="display: flex; align-items: center; gap: 7px; margin-top: 7px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">አማርኛ incomplete</span><span style="font-size: 11px; color: #6B675D;">Amharic can't be offered to visitors until every string is filled.</span></div>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Shortcut buttons</div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="color: #6F6A61;">⠿</span><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0;">How long do withdrawals take?</span><span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ARTICLE</span></div>
+              <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;"><span style="color: #6F6A61;">⠿</span><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0;">Report a missing deposit</span><span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">FORM</span></div>
+              <div style="padding: 9px 12px; display: flex; align-items: center; gap: 9px;"><span style="color: #6F6A61;">⠿</span><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0;">Talk to us about my account</span><span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">CHAT</span></div>
+            </div>
+            <button style="font-family: inherit; margin-top: 8px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; color: #1D1C18; font-size: 12px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">+ Add a shortcut</button>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;">
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Agents appear as</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">First name<span style="margin-left: auto; color: #6F6A61;">▾</span></span></label>
+            <label style="display: block;"><span style="display: block; font-size: 11px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Pre-chat form</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 11px; min-height: 36px; font-size: 12.5px; color: #1D1C18;">Off<span style="margin-left: auto; color: #6F6A61;">▾</span></span></label>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Tabs</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 7px; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 600;">✓ Home</span>
+              <span style="display: inline-flex; align-items: center; gap: 7px; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 600;">✓ Messages</span>
+              <span style="display: inline-flex; align-items: center; gap: 7px; border: 1px solid #CFCBC1; color: #4A4842; border-radius: 999px; padding: 6px 12px; font-size: 12px;">Help</span>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 7px; line-height: 1.5;">Turning Home and Help off gives the Messages-only widget — the tab bar disappears rather than showing one lonely tab.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 580px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 11px 16px; border-bottom: 1px solid #E5E2DB; font-size: 13px; font-weight: 600; color: #1D1C18;">Behavior</div>
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 15px;">
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; display: flex; align-items: center; gap: 10px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Chatbot · on</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.5;">Managed in Copilot settings, not here. The kill-switch lives with the people who watch what it says.</div></div>
+            <a href="#copilot" style="margin-left: auto; flex: none; font-size: 12px; font-weight: 600;">Open Copilot ↗</a>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Proactive triggers</div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 12.5px; color: #1D1C18;">When the page is <strong style="font-weight: 600;">/deposit</strong> and 25 s have passed</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">→ open with “Stuck? I can check how long your deposit should take.”</div></div>
+              <div style="padding: 10px 12px; display: flex; align-items: center; gap: 9px;"><span style="font-size: 12.5px; color: #6B675D; flex: 1 1 auto;">Exit intent on /withdraw</span><span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">DESKTOP ONLY</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 9px;">
+              <label style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11.5px; color: #4A4842;">Cooldown</span><span style="display: flex; align-items: center; border: 1px solid #CFCBC1; border-radius: 7px; padding: 0 10px; min-height: 34px; font-size: 12.5px; color: #1D1C18;">24 h</span></label>
+              <span style="font-size: 11px; color: #6B675D; line-height: 1.5;">Shared across every trigger — this is a ceiling, not a per-rule setting.</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto;">File upload</span><button role="switch" aria-checked="true" aria-label="File upload" style="font-family: inherit; flex: none; display: inline-flex; align-items: center; gap: 9px; background: transparent; border: none; padding: 0; cursor: pointer;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">On</span><span style="width: 40px; height: 22px; border-radius: 999px; background: #22211D; position: relative; display: inline-block;"><span style="position: absolute; top: 3px; right: 3px; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span></button></div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto;">Notification sound by default</span><button role="switch" aria-checked="true" aria-label="Notification sound by default" style="font-family: inherit; flex: none; display: inline-flex; align-items: center; gap: 9px; background: transparent; border: none; padding: 0; cursor: pointer;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">On</span><span style="width: 40px; height: 22px; border-radius: 999px; background: #22211D; position: relative; display: inline-block;"><span style="position: absolute; top: 3px; right: 3px; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span></button></div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto;">Ask for a rating after resolution</span><button role="switch" aria-checked="true" aria-label="Ask for a rating after resolution" style="font-family: inherit; flex: none; display: inline-flex; align-items: center; gap: 9px; background: transparent; border: none; padding: 0; cursor: pointer;"><span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">On</span><span style="width: 40px; height: 22px; border-radius: 999px; background: #22211D; position: relative; display: inline-block;"><span style="position: absolute; top: 3px; right: 3px; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span></button></div>
+            <div style="font-size: 11px; color: #6B675D; line-height: 1.5;">Rating suppression rules live in the survey policy — this switch decides whether the widget asks at all, not who gets asked.</div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px dashed #CFCBC1; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #6B675D; flex: 1 1 auto;">Voice notes</span><span style="font-size: 11px; color: #6B675D;">Platform flag off — not available to any tenant</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 · J06–J10 · Install, Health, publishing</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §4.4 Install, Health · FR-19, FR-20, EC-11, BR-07 · SEC-03</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div style="width: 580px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 11px 16px; border-bottom: 1px solid #E5E2DB; font-size: 13px; font-weight: 600; color: #1D1C18;">Install</div>
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 15px;">
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">The snippet</div>
+            <div style="background: #22211D; border-radius: 8px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 10px;">
+              <code style="flex: 1 1 auto; min-width: 0; font-family: ui-monospace, monospace; font-size: 11.5px; color: #F6F5F2; line-height: 1.6; word-break: break-all;">&lt;script async src="https://cdn.naplatform.et/w/wk_9f21.js"&gt;&lt;/script&gt;</code>
+              <button style="font-family: inherit; flex: none; background: transparent; border: 1px solid #4A4842; border-radius: 6px; color: #F6F5F2; font-size: 11.5px; font-weight: 600; min-height: 32px; padding: 0 11px; cursor: pointer;">Copy</button>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 7px; line-height: 1.5;">Paste before <span style="font-family: ui-monospace, monospace;">&lt;/body&gt;</span>. Single-page apps need nothing extra — route changes are handled.</div>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Allowed domains</div>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap; align-items: center;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; border-radius: 6px; padding: 5px 10px; font-family: ui-monospace, monospace; font-size: 11.5px;">help.nabet.et <span style="cursor: pointer;">×</span></span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; border-radius: 6px; padding: 5px 10px; font-family: ui-monospace, monospace; font-size: 11.5px;">*.nabet.et <span style="cursor: pointer;">×</span></span>
+              <span style="border: 1px dashed #CFCBC1; border-radius: 6px; padding: 5px 10px; font-size: 11.5px; color: #6B675D; cursor: pointer;">+ Add domain</span>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 7px; line-height: 1.5;">Anywhere else, the widget refuses to load and the attempt is listed in Health. Removing a domain takes effect within a minute.</div>
+          </div>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Signed identity secret</div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;">
+              <span style="flex: 1 1 auto; font-family: ui-monospace, monospace; font-size: 12px; color: #6B675D;">••••••••••••••••••••••••</span>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 32px; padding: 0 11px; cursor: pointer;">Rotate</button>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 7px; line-height: 1.5;">Shown once when created. Rotating issues a new one and keeps the old valid for 24 hours, so nobody has to deploy in a panic.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 580px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 11px 16px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;"><span style="font-size: 13px; font-weight: 600; color: #1D1C18;">Health</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #4A4842;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22A55B;"></span>v2.14.0 · 100% rollout</span></div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;">
+              <div><div style="font-size: 19px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">14,208</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Loads · 7 d</div></div>
+              <div><div style="font-size: 19px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">1,946</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Opens</div></div>
+              <div><div style="font-size: 19px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">812</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Conversations</div></div>
+              <div><div style="font-size: 19px; font-weight: 700; color: #1D1C18; letter-spacing: -0.02em;">0.4%</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Error rate</div></div>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">3 blocked origins this week</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #8F5F08; margin-top: 6px; line-height: 1.7;">promo-partner.example · 2 attempts<br />bet-mirror.example · 1 attempt</div>
+              <div style="font-size: 11.5px; color: #8F5F08; margin-top: 6px; line-height: 1.5;">Someone embedded your widget on a site you do not control. Nothing loaded.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto;">Invalid signatures</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">0</span></div>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto;">Test mode <span style="color: #6B675D;">— sandbox chats stay out of every report</span></span><button role="switch" aria-checked="false" aria-label="Test mode" style="font-family: inherit; flex: none; display: inline-flex; align-items: center; gap: 9px; background: transparent; border: none; padding: 0; cursor: pointer;"><span style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Off</span><span style="width: 40px; height: 22px; border-radius: 999px; background: #DCD8CF; position: relative; display: inline-block;"><span style="position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span></button></div>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 11px 16px; border-bottom: 1px solid #E5E2DB; font-size: 13px; font-weight: 600; color: #1D1C18;">Publish history</div>
+          <div style="padding: 4px 0;">
+            <div style="padding: 10px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 12.5px; color: #1D1C18;">Promo colours + new shortcut</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">Meron Assefa · today 09:41 · live</span></span></div>
+            <div style="padding: 10px 16px; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 12.5px; color: #1D1C18;">Amharic welcome text</span><span style="display: block; font-size: 11.5px; color: #6B675D; margin-top: 2px;">Meron Assefa · 28 July</span></span><button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 32px; padding: 0 11px; cursor: pointer;">Roll back to this</button></div>
+          </div>
+          <div style="padding: 11px 16px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 11.5px; color: #4A4842; line-height: 1.55;">Live within a minute. A visitor mid-conversation keeps the config they started with until they reload — nothing changes under someone while they are typing.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · J09 · the admin on their phone</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 FR-19 · multiple widgets per tenant</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+      <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+        <div style="padding: 12px 14px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;"><span style="font-size: 15px; font-weight: 600; color: #1D1C18;">Widgets</span><span style="font-size: 12.5px; color: #6B675D;">3</span></div>
+        <div style="padding: 0;">
+          <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 11px; min-height: 64px;"><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14.5px; color: #1D1C18;">Support subdomain</span><span style="display: block; font-size: 12px; color: #6B675D; margin-top: 3px;">help.nabet.et · v2.14.0</span></span><span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">● Unpublished</span></div>
+          <div style="padding: 13px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 11px; min-height: 64px;"><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14.5px; color: #1D1C18;">Android app WebView</span><span style="display: block; font-size: 12px; color: #6B675D; margin-top: 3px;">app://nabet · v2.14.0</span></span><span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">● Live</span></div>
+          <div style="padding: 13px 14px; display: flex; align-items: center; gap: 11px; min-height: 64px;"><span style="flex: 1 1 auto; min-width: 0;"><span style="display: block; font-size: 14.5px; color: #1D1C18;">Staging</span><span style="display: block; font-size: 12px; color: #6B675D; margin-top: 3px;">staging.nabet.et · test mode</span></span><span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;">Test</span></div>
+        </div>
+      </div>
+      <div style="width: 500px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px; align-self: flex-start;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">What the phone view is for</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">Checking, not configuring. An admin on a phone wants to know which widget is live, whether anything is unpublished, and whether a rollout is healthy — so the list, the version and the status badge come first and the editors stay behind them. Designing a full colour picker for a 375 screen would be effort spent on a session that almost never happens, and the live preview needs both device frames side by side to be worth anything.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S08-admin-actions-user-list-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section H · 15 rows · 8 owner-ruled · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Administrator actions, and the user list</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two halves with different authority, and the file keeps them visibly apart. <strong style="font-weight: 600;">H01–H07</strong> are Doc 02's five administrator actions, added as a Security and account section to the user profile Batch 6 froze — the existing screen gains a section, nothing on it is restyled. <strong style="font-weight: 600;">H08–H15</strong> are the minimal user list you authorised on 3 August: your decision filling a silence, and every row of it is labelled as such so the closing audit never reads it as a document requirement.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The list fills the destination the frozen nav already points at — People → Users — and does exactly four things: name, email, role, state, plus a search and a row that opens the profile. No bulk actions, no extra columns, nothing that would make it a feature rather than a way through.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Chrome, nav and data table are B1-DS and the frozen <a href="B6-S09-user-overrides-v1.dc.html">B6-S09</a> shell, unchanged.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The user list — owner-ruled addition</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">H08–H14 · owner ruling 3 Aug 2026, not a document requirement</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Fifty-three people, four columns, one search box. Sorted by state so the ones needing attention — locked, invited, disabled — surface without a filter, then alphabetically inside each group. The row is the target; there are no per-row menus, because every action lives on the profile where its consequences can be explained properly.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · People → Users</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">H08 · H09 · H10 · H11 · H12 · H13 · H14</span></div>
+    <div data-screen-label="H08 user list light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">People</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Users</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Roles &amp; permissions</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Channels</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">✈ Telegram</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">💬 Web chat</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">People</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Users</h1>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 4px;">53 people · 1 locked · 1 invited · 1 disabled</div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">admin.users.manage</span>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Invite someone</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: 1; max-width: 320px; display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; color: #726D63;">⌕ Search this list by name or email</span>
+            <span style="font-size: 11.5px; color: #6B675D;">Needs attention first, then A–Z</span>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Name</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Email</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Role</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">State</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center; background: #F6F5F2;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">YT</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Yonas Tesfaye</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">yonas.tesfaye@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Supervisor</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #7E650F;">⏱ Locked</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">KH</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Kidist Haile</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">kidist.haile@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Agent</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A5460;">◷ Invited</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">SA</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Selam Alemu</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">selam.alemu@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Agent</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;">◼ Disabled</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">AT</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Abel Tsegaye</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">abel.tsegaye@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">QA</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">DB</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Dawit Bekele</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">dawit.bekele@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Team Leader</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">HG</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Hanna Girma</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">hanna.girma@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Admin</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">MA</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Meron Assefa</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">meron.assefa@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Agent</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 190px 150px; align-items: center;">
+              <span style="padding: 11px 12px; display: flex; align-items: center; gap: 9px;"><span style="flex: none; width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600;">SB</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Sara Bekele</span></span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">sara.bekele@selambet.et</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #4A4842;">Senior Agent</span>
+              <span style="padding: 11px 12px;"><span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #4A4842;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Active</span></span>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">H14 — no checkboxes, no bulk bar. Every action happens on one named person, from their profile.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The profile, extended — five actions in one section</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">H01–H07 · Doc 02 FR-03, FR-05, FR-08, FR-16, FR-17, BR-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The frozen profile keeps its header, its role line and its RBAC sections exactly as Batch 6 shipped them — the dark frame below shows them dimmed only to make the new section legible in a review, not because anything changed. Underneath sits <strong style="font-weight: 600;">Security and account</strong>: current state, then the five actions in escalating consequence, with disable last and visually separated.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · Yonas Tesfaye, locked out</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">H01 · H02 · H03 · H05 · H06 · H07</span></div>
+    <div data-screen-label="H07 profile security dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">People</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">Users</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Roles &amp; permissions</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 12px; opacity: 0.55;">
+            <span style="width: 38px; height: 38px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">YT</span>
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296;">People · Users</div>
+              <div style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; color: #ECEAE4;">Yonas Tesfaye</div>
+            </div>
+            <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">admin.users.manage</span>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px 16px; opacity: 0.55;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Role and permissions</div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px;">Supervisor · 3 active overrides · effective-permission explorer — frozen from Batch 6, unchanged</div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4;">Security and account</h2>
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #2C2612; border: 1px solid #6B551A; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #E8C25A;">⏱ Locked · 6 minutes ago</span>
+              <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">Two-factor on · 5 recovery codes left · last sign-in 07:04 today</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;">
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Unlock this account</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Five wrong passwords locked it at 08:51. It unlocks itself in about nine minutes — or you can unlock it now. A completed password reset also unlocks it.</div>
+                <button style="font-family: inherit; align-self: flex-start; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px; cursor: pointer;">Unlock now</button>
+              </div>
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Send a password-reset link</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Goes to yonas.tesfaye@selambet.et, valid one hour. He chooses the password — you never see it and cannot set it.</div>
+                <button style="font-family: inherit; align-self: flex-start; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Send the link</button>
+              </div>
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Clear two-factor</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">For a lost phone with no recovery codes left. He re-enrols at next sign-in; until then his password is the only protection.</div>
+                <button style="font-family: inherit; align-self: flex-start; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Clear two-factor…</button>
+              </div>
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Invitation</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Accepted on 14 June 2026. Nothing to resend.</div>
+                <button disabled="disabled" style="font-family: inherit; align-self: flex-start; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px;">Resend invitation</button>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #262622; padding-top: 14px; display: flex; align-items: flex-start; gap: 14px;">
+              <div style="flex: 1;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Disable this account</div>
+                <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296; margin-top: 4px;">Signs out every session and revokes every token at the same moment. His six open conversations stay assigned to him until someone reassigns them. Reversible — disabling deletes nothing.</div>
+              </div>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Disable account…</button>
+            </div>
+
+            <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #A7B2BE;"><strong style="font-weight: 600;">There is no “sign in as Yonas”.</strong> This platform has no impersonation, deliberately — to see what he sees, ask for read-only permissions on his queue. You also cannot see or set his password, his two-factor secret or his recovery codes. Every action on this page is recorded in the audit trail under your name.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 900px; margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 15px 17px;">
+      <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">H03 and H06 are shown here but were designed in Section D</div>
+      <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">The typed-name confirmation for clearing two-factor (H03) and the can/cannot panel (H06) are the same components delivered in <a href="B7-S04-two-factor-enforcement-v1.dc.html">B7-S04 §B</a>, on this same surface. They appear here in place so the profile reads whole; they are not second versions, and a change to one is a change to both.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Disable, invite, list states, and the phone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">H04 · H05 · H15 · Doc 02 FR-17, BR-04 · owner ruling</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Disable is the only action here that ends someone's working day, so it counts what it will end — six conversations, two sessions, one token — before it asks. Invite is the opposite: one field, one role, and a sentence making clear the platform sends a link rather than a password.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Disable Selam Alemu's account?</h2>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #8E2222;"><strong style="font-weight: 600;">Right now, in one action:</strong> 2 sessions signed out · 1 API token revoked · Telegram and web-chat access removed. Her 6 open conversations stay assigned to her until someone reassigns them.</div>
+          <div style="font-size: 12px; line-height: 1.6; color: #4A4842;">Nothing is deleted. Her replies, notes and history stay exactly where they are, attributed to her, and re-enabling restores access.</div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Type <strong style="font-weight: 600;">Selam Alemu</strong> to confirm</label>
+            <input type="text" value="" readonly="readonly" placeholder="Selam Alemu" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+          </div>
+          <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #4A5460;">Recorded in the audit trail as a high-visibility change, under your name.</div>
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #F0EEE9; padding-top: 14px;">
+            <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button>
+            <button disabled="disabled" style="font-family: inherit; margin-left: auto; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Disable account</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">H05 · light · en · counts the consequence before it asks</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Invite someone</h2>
+            <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Work email</label>
+                <input type="email" value="tigist.alemayehu@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <div style="flex: none; width: 150px;">
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Role</label>
+                <div style="display: flex; align-items: center; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;">Agent<span style="margin-left: auto; color: #6B675D; font-size: 10px;">▾</span></div>
+              </div>
+            </div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D;">She gets a link valid for seven days and chooses her own password — you never set one. Until she accepts, she shows as <strong style="font-weight: 600; color: #4A4842;">Invited</strong> in the list.</div>
+            <button style="font-family: inherit; align-self: flex-start; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Send invitation</button>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">H04 · light · en · resend lives on the invited person's profile</div>
+        </div>
+
+        <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 22px 14px; text-align: center;">
+            <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">No one matches “tigst”</div>
+            <div style="font-size: 12px; line-height: 1.6; color: #A6A296; margin-top: 5px;">Check the spelling, or invite them.</div>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 12px; border-bottom: 1px solid #262622;"><div style="height: 9px; width: 44%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 12px;"><div style="height: 9px; width: 52%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 58%; background: #262622; border-radius: 3px; margin-top: 7px;"></div></div>
+          </div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #F5A7A7; display: flex; align-items: center; gap: 9px;">Couldn't load the list.<button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #F5A7A7; font-size: 11.5px; font-weight: 600; cursor: pointer;">Try again</button></div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588;">H15 · dark · en · empty search, skeleton, load failure</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 18px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · the list on a phone</div>
+        <div data-screen-label="H08 user list light en mobile" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">09:12<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">People</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Users</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 9px; min-height: 0;">
+            <div style="display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 12px 11px; font-size: 13px; color: #726D63; min-height: 44px;">⌕ Search by name or email</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px; min-height: 44px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">YT</span>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Yonas Tesfaye</div><div style="font-size: 11.5px; color: #6B675D;">Supervisor</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #7E650F;">⏱ Locked</span>
+              </div>
+              <div style="padding: 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px; min-height: 44px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">KH</span>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Kidist Haile</div><div style="font-size: 11.5px; color: #6B675D;">Agent</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #4A5460;">◷ Invited</span>
+              </div>
+              <div style="padding: 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px; min-height: 44px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">SA</span>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Selam Alemu</div><div style="font-size: 11.5px; color: #6B675D;">Agent</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #4A4842;">◼ Disabled</span>
+              </div>
+              <div style="padding: 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px; min-height: 44px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">HG</span>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Hanna Girma</div><div style="font-size: 11.5px; color: #6B675D;">Admin</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #4A4842;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #22A55B;"></span>Active</span>
+              </div>
+              <div style="padding: 12px; display: flex; align-items: center; gap: 10px; min-height: 44px;">
+                <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">SB</span>
+                <div style="flex: 1; min-width: 0;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Sara Bekele</div><div style="font-size: 11.5px; color: #6B675D;">Senior Agent</div></div>
+                <span style="flex: none; display: inline-flex; align-items: center; gap: 5px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: #4A4842;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #22A55B;"></span>Active</span>
+              </div>
+            </div>
+            <div style="font-size: 11px; color: #6B675D;">53 people · tap a row to open their profile</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 560px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">07 · Account state chip — proposed as a B1-DS addition</div>
+          <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">Four states, each icon plus word, never colour alone: <strong style="font-weight: 600;">Active</strong> reuses the presence pill from the B1-DS top bar verbatim (green dot on a hairline pill); <strong style="font-weight: 600;">Invited</strong> takes the info surface <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#EDEEF2</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#D5D8DE</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#4A5460</code>; <strong style="font-weight: 600;">Locked</strong> the warning surface; <strong style="font-weight: 600;">Disabled</strong> the neutral <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#EEECE6</code> on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#DCD8CF</code>.</div>
+          <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 8px; border-top: 1px solid #F0EEE9; padding-top: 8px;">No new hue enters the system, and deliberately none of the fixed ticket-status, priority or SLA hues are reused — an account state is a different vocabulary and must not read as a ticket state.</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">What I did not add, though it was tempting</div>
+          <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">No last-sign-in column, no department, no filter chips, no per-row menu, no CSV export, no bulk disable. Each would have been defensible and none was authorised — your ruling said four columns, a search, and rows that open the profile. The list is deliberately the least interesting screen in the batch.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all fifteen rows. H08–H14 in §A at 1440 and §C at 375, every one of them an <strong style="font-weight: 600;">owner-ruled addition</strong> rather than a document requirement. H01, H02, H05 and H07 in §B; H03 and H06 shown in place but designed in <a href="B7-S04-two-factor-enforcement-v1.dc.html">B7-S04 §B</a> and not duplicated as second versions; H04 and H15 in §C.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">The frozen profile was not touched.</strong> Its header, role line and RBAC sections render exactly as Batch 6 shipped them; they appear dimmed in the frame purely so a reviewer can see what is new. Nothing above the new section changed by a pixel.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One new component, proposed not assumed:</strong> the account state chip (§C). It introduces no new colour and deliberately avoids every fixed status hue, so an account state can never be mistaken for a ticket state.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section I — the three auth emails, full templates in both languages, with the reset body carrying nothing that varies with account existence.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

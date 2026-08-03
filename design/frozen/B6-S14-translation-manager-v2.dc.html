@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S14-translation-manager-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows N01–N13</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Translation manager &amp; language administration</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Ten thousand keys, and the only ones that matter today are the fourteen an Amharic-speaking player hit this week. So the manager opens on <strong style="font-weight: 600;">missing-first, ordered by what customers actually ran into</strong> — telemetry, not the alphabet. An alphabetical wall is a filing cabinet; this is a worklist.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two classes of string share one table and must never blend: <strong style="font-weight: 600;">platform strings</strong> that ship with the code and get overridden, and <strong style="font-weight: 600;">operator content</strong> that the tenant wrote in the first place. Overriding “Send” is a cosmetic decision; editing the responsible-gaming template is a regulated one. They carry different chips, different provenance and, for the RG template, a different permission.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">The manager's own interface is never edited by the manager — a meta-level separation drawn explicitly in §C. Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell is <a href="B6-S11-settings-shell-v1.dc.html">B6-S11</a>'s.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v2 — 3 Aug 2026.</strong> Doc 16 FR-07 governs the readiness question: customer-facing enablement is <em>gated per the owning modules' completeness rules</em>, not merely warned. §B now renders that gate — platform coverage informs, module completeness decides.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The manager — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows N01–N05 · Doc 16 FR-06, §8, US-07</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light is the missing-first view: fourteen gaps, ordered by how many players hit each one this week. Dark is the same table filtered to operator content, where an override is not a translation but the tenant's own words — including the one row that needs a permission to touch.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · missing first</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N01 · N03 · N04 · N05</span></div>
+    <div data-screen-label="N05 missing first light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+          <div style="padding: 6px 0 0 16px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">Strings</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">Languages</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Languages</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Strings · አማርኛ</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Export CSV</button>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Import CSV</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; flex: none; flex-wrap: wrap;">
+            <span style="flex: 1; max-width: 280px; display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12px; color: #726D63; min-height: 36px;">⌕ Search keys and values</span>
+            <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden;">
+              <span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 8px 13px; min-height: 36px; display: inline-flex; align-items: center;">Missing 14</span>
+              <span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 8px 13px; min-height: 36px; display: inline-flex; align-items: center; border-left: 1px solid #E5E2DB;">Modified 26</span>
+              <span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 8px 13px; min-height: 36px; display: inline-flex; align-items: center; border-left: 1px solid #E5E2DB;">All 9,841</span>
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 11.5px; color: #1D1C18; min-height: 36px;">Namespace · all<span style="font-size: 10px; color: #6B675D;">▾</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 11.5px; color: #1D1C18; min-height: 36px;">Class · all<span style="font-size: 10px; color: #6B675D;">▾</span></span>
+            <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Ordered by how often players hit the gap, last 7 days</span>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Key</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Namespace</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Shipped · English</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">አማርኛ</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Hit</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center; background: #FDFCFA;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">ticket.status.awaiting_payment</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ticket</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">Awaiting payment</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #8E2222;">Missing<span style="font-size: 11px; font-weight: 400; color: #6B675D;">falls back to English</span></span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">412</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">widget.reply_window.closing</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">widget</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">We can reply for another {hours} hours</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #8E2222;">Missing</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">308</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: start; background: #FDFCFA;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">ticket.priority.urgent</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ticket</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">Urgent</span>
+              <span style="padding: 8px 14px;">
+                <div style="border: 1.5px solid #22211D; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18; min-height: 36px;">አስቸኳይ</div>
+                <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;">
+                  <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; padding: 5px 10px; min-height: 30px; cursor: pointer;">Save</button>
+                  <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; font-size: 11px; font-weight: 500; padding: 5px 8px; min-height: 30px; cursor: pointer;">Cancel</button>
+                  <span style="margin-left: auto; font-size: 10.5px; color: #6B675D;">Flagged for native review</span>
+                </div>
+              </span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">277</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">inbox.assign.self</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">inbox</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">Take this ticket</span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">ይህን ትኬት ውሰድ <span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">Modified</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">190</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">sms.optout.confirm</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">sms</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">You will not receive further messages</span>
+              <span style="padding: 10px 14px;"><span style="font-size: 11.5px; font-weight: 600; color: #8E2222;">Missing</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">146</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">ticket.field.account_id</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ticket</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">Account number</span>
+              <span style="padding: 10px 14px;"><span style="font-size: 11.5px; font-weight: 600; color: #8E2222;">Missing</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">118</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) 104px minmax(0, 1.5fr) minmax(0, 1.6fr) 96px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18; overflow-wrap: break-word;">csat.question.primary</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">csat</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #1D1C18;">How did we do?</span>
+              <span style="padding: 10px 14px;"><span style="font-size: 11.5px; font-weight: 600; color: #8E2222;">Missing</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: #1D1C18;">94</span>
+            </div>
+            <div style="padding: 10px 14px; font-size: 11.5px; color: #6B675D;">7 more gaps below · together they were hit 213 times this week</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Why this order</div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">These fourteen keys are the ones Amharic-speaking customers actually reached this week — 1,545 times between them. The other 9,827 keys are either translated or nobody has hit them. Fixing the top three covers two thirds of the exposure.</p>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">A missing string is never blank</div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">It falls back down the chain — አማርኛ, then English — so a player sees English rather than an empty label. That is why these are gaps, not outages.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · operator content, not platform strings</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">N02 · N03 · N04</span></div>
+    <div data-screen-label="N02 operator content dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ቅንብሮች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">አጠቃላይ</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ቋንቋዎች</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ማሳወቂያዎች</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ቅንብሮች · ቋንቋዎች</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">የእርስዎ ጽሑፎች · Operator content</h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden; flex: none;">
+              <span style="font-size: 11.5px; color: #ECEAE4; background: #1C1C19; padding: 8px 13px; min-height: 36px; display: inline-flex; align-items: center;">Platform strings</span>
+              <span style="font-size: 11.5px; font-weight: 600; background: #ECEAE4; color: #171714; padding: 8px 13px; min-height: 36px; display: inline-flex; align-items: center;">Operator content</span>
+            </span>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px 14px; margin-top: 12px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">These are your words, not ours</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">Platform strings ship with the product and you override them. Operator content — bot greetings, the widget welcome, CSAT labels, SMS and RG templates — you wrote in the first place, so there is nothing to fall back to. An empty one is empty to the customer.</p>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; background: #232320; border-bottom: 1px solid #343430;">
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">What it is</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Where</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">አማርኛ</span>
+              <span style="padding: 9px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Last hit</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">Bot greeting</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">@nabet_support_bot</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; line-height: 1.7; color: #ECEAE4;">ሰላም! ወደ ና ቤት ድጋፍ እንኳን በደህና መጡ። እንዴት ልንረዳዎት እንችላለን? <span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">የተቀየረ</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">2 ደቂቃ</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">Widget welcome</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">web chat</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; line-height: 1.7; color: #ECEAE4;">ጥያቄዎን ይጻፉ — በአማካይ በ2 ደቂቃ ውስጥ እንመልሳለን።</span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">14 ደቂቃ</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">CSAT label · good</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">csat</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">ጥሩ</span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">1 ሰዓት</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; border-bottom: 1px solid #262622; align-items: start; background: #222220;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">Responsible-gaming message <span style="display: block; font-size: 10.5px; color: #A6A296; margin-top: 3px;">🔒 needs ai.guardrails.edit</span></span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">RG template</span></span>
+              <span style="padding: 10px 14px;">
+                <div style="border: 1px solid #45443E; border-radius: 6px; padding: 9px 11px; font-size: 12px; line-height: 1.8; color: #918C80; background: #1C1C19;">ስለ አጨዋወትዎ የሚያሳስብዎት ነገር ካለ፣ የተቀማጭ ገደብ ማስቀመጥ ወይም መለያዎን ለጊዜው ማገድ ይችላሉ። ነጻ የድጋፍ መስመር፦ 8335።</div>
+                <div style="font-size: 10.5px; color: #A6A296; margin-top: 6px;">Read-only for you — this template is regulated and its editor is gated.</div>
+              </span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">3 ሰዓት</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">SMS templates</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">sms</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #C9C5BB;">6 templates — edited in the SMS module, where segment counts and opt-out rules live <span style="color: #ECEAE4; font-weight: 600;">↗</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">—</span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 168px minmax(0, 2.2fr) 108px; align-items: center;">
+              <span style="padding: 10px 14px; font-size: 12px; color: #ECEAE4;">Redirect message</span>
+              <span style="padding: 10px 14px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">@nabet_vip_bot</span></span>
+              <span style="padding: 10px 14px; font-size: 12px; line-height: 1.7; color: #ECEAE4;">ሰላም <span>{</span>{first_name}}! የድጋፍ ቡድናችን መልስ የሚሰጠው ከ @NaBetSupport መለያ ነው።</span>
+              <span style="padding: 10px 14px; font-size: 12px; color: #A6A296;">28 ደቂቃ</span>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 13px 14px; margin-top: 12px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">An override always shows what it replaced</div>
+            <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">Wherever a value has been overridden, the shipped original stays visible beside it and one click puts it back. Nothing you change is ever the only copy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Language administration — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows N09, N10, N11 · Doc 16 FR-07 · Doc 03 §4.1</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Turning a language on is a promise to customers, so the readiness panel is shown before the switch, not after: platform coverage as a percentage, operator content as a per-module list with a link into each gap. Both themes carry all three rows.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N09 — languages, enable and disable</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">English</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Default · fallback for everything</div></div>
+            <span style="margin-left: auto; font-size: 11px; color: #6B675D; flex: none;">Cannot be disabled</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">አማርኛ · Amharic</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">On · 99.9% of platform strings</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Afaan Oromoo</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Off · from the reference list</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+          </div>
+          <div style="padding: 9px 14px; border-top: 1px solid #F0EEE9; font-size: 11px; color: #6B675D;">Enabling and disabling needs <span style="font-family: ui-monospace, monospace;">languages.manage</span>.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N10 — readiness, before you turn it on</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Turn on Afaan Oromoo for customers?</div>
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
+            <span style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #1D1C18;">38%</span>
+            <span style="font-size: 11.5px; color: #4A4842;">of platform strings translated · 6,102 of 9,841</span>
+          </div>
+          <div style="height: 8px; background: #F0EEE9; border-radius: 999px; margin-top: 6px; overflow: hidden;"><span style="display: block; width: 38%; height: 100%; background: #22211D;"></span></div>
+          <div style="border-top: 1px solid #F0EEE9; margin-top: 11px; padding-top: 10px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Your own content</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 7px; font-size: 11.5px;">
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #4A4842;">Bot greetings</span><span style="margin-left: auto; color: #8E2222; font-weight: 600;">0 of 3</span><span style="font-weight: 600; color: #22211D;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #4A4842;">Widget welcome</span><span style="margin-left: auto; color: #8E2222; font-weight: 600;">Missing</span><span style="font-weight: 600; color: #22211D;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #4A4842;">CSAT labels</span><span style="margin-left: auto; color: #8E2222; font-weight: 600;">0 of 5</span><span style="font-weight: 600; color: #22211D;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #4A4842;">RG message</span><span style="margin-left: auto; color: #8E2222; font-weight: 600;">Missing</span><span style="font-size: 10.5px; color: #6B675D;">🔒 gated</span></div>
+            </div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #8F5F08;">Not yet available to customers — three modules are incomplete</div>
+            <div style="font-size: 11px; line-height: 1.6; color: #8F5F08; margin-top: 3px;">Coverage of platform strings is informational: untranslated ones fall back to English. What decides is your own content, which has nothing to fall back to — bot greetings, the widget welcome and CSAT labels each report incomplete, and their modules gate the language until they are filled.</div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Enable for customers</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Fill the gaps</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N11 — default language and the fallback chain</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">What a customer sees, in order</div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #1D1C18;">Their own choice</span>
+            <span style="font-size: 13px; color: #6B675D;">→</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #1D1C18;">አማርኛ · your default</span>
+            <span style="font-size: 13px; color: #6B675D;">→</span>
+            <span style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #1D1C18;">English</span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">If a string is missing in the customer's language we try your default, then English. English is always last and always complete, which is why it cannot be turned off.</p>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N09 — languages, enable and disable</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">English</div><div style="font-size: 11px; color: #A6A296; margin-top: 2px;">Default · fallback for everything</div></div>
+            <span style="margin-left: auto; font-size: 11px; color: #A6A296; flex: none;">Cannot be disabled</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">አማርኛ · Amharic</div><div style="font-size: 11px; color: #A6A296; margin-top: 2px;">On · 99.9% of platform strings</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #ECEAE4; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #171714;"></span></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Afaan Oromoo</div><div style="font-size: 11px; color: #A6A296; margin-top: 2px;">Off · from the reference list</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #1C1C19; border: 1px solid #45443E;"></span></span>
+          </div>
+          <div style="padding: 9px 14px; border-top: 1px solid #262622; font-size: 11px; color: #A6A296;">Enabling and disabling needs <span style="font-family: ui-monospace, monospace;">languages.manage</span>.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N10 — readiness, before you turn it on</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">Turn on Afaan Oromoo for customers?</div>
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
+            <span style="font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4;">38%</span>
+            <span style="font-size: 11.5px; color: #C9C5BB;">of platform strings translated · 6,102 of 9,841</span>
+          </div>
+          <div style="height: 8px; background: #262622; border-radius: 999px; margin-top: 6px; overflow: hidden;"><span style="display: block; width: 38%; height: 100%; background: #ECEAE4;"></span></div>
+          <div style="border-top: 1px solid #262622; margin-top: 11px; padding-top: 10px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Your own content</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 7px; font-size: 11.5px;">
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #C9C5BB;">Bot greetings</span><span style="margin-left: auto; color: #F5A7A7; font-weight: 600;">0 of 3</span><span style="font-weight: 600; color: #ECEAE4;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #C9C5BB;">Widget welcome</span><span style="margin-left: auto; color: #F5A7A7; font-weight: 600;">Missing</span><span style="font-weight: 600; color: #ECEAE4;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #C9C5BB;">CSAT labels</span><span style="margin-left: auto; color: #F5A7A7; font-weight: 600;">0 of 5</span><span style="font-weight: 600; color: #ECEAE4;">Fill →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center;"><span style="color: #C9C5BB;">RG message</span><span style="margin-left: auto; color: #F5A7A7; font-weight: 600;">Missing</span><span style="font-size: 10.5px; color: #A6A296;">🔒 gated</span></div>
+            </div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #F0B54A;">Not yet available to customers — three modules are incomplete</div>
+            <div style="font-size: 11px; line-height: 1.6; color: #E8C25A; margin-top: 3px;">Coverage of platform strings is informational: untranslated ones fall back to English. What decides is your own content, which has nothing to fall back to — bot greetings, the widget welcome and CSAT labels each report incomplete, and their modules gate the language until they are filled.</div>
+          </div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Enable for customers</button><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Fill the gaps</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N11 — default language and the fallback chain</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ደንበኛው የሚያየው በዚህ ቅደም ተከተል</div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #ECEAE4;">የራሱ ምርጫ</span>
+            <span style="font-size: 13px; color: #A6A296;">→</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #ECEAE4;">አማርኛ · ነባሪዎ</span>
+            <span style="font-size: 13px; color: #A6A296;">→</span>
+            <span style="border: 1px solid #45443E; border-radius: 6px; padding: 6px 11px; font-size: 11.5px; color: #ECEAE4;">English</span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">አንድ ጽሑፍ በደንበኛው ቋንቋ ከጠፋ ወደ ነባሪዎ፣ ከዚያም ወደ እንግሊዝኛ ይወርዳል። እንግሊዝኛ ሁልጊዜ የመጨረሻና ሙሉ ስለሆነ ማጥፋት አይቻልም።</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">CSV, orphans, safety — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows N06, N07, N08, N12 · Doc 16 T-03, AC-04, EC-03, SEC-05, §14</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">All four states are drawn in both theme columns. The CSV import annotates per row rather than rejecting the file, orphaned overrides are parked in a maintenance view instead of being deleted for you, and an override that tries to smuggle markup is refused with the reason.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N06 — CSV import, annotated per row</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">amharic-batch-2026-08.csv · 412 rows</div>
+          <div style="display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">✓ 397 ready</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">9 unchanged</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; color: #8E2222; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">6 rejected</span>
+          </div>
+          <div style="border: 1px solid #E5E2DB; border-radius: 7px; overflow: hidden; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 7px 10px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;"><span>Row</span><span>Key</span><span>Result</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #F0EEE9; font-size: 11px; align-items: center;"><span style="color: #6B675D;">14</span><span style="font-family: ui-monospace, monospace; color: #1D1C18; overflow-wrap: break-word;">ticket.status.new</span><span style="color: #156F45;">✓ Will be applied</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #F0EEE9; font-size: 11px; align-items: center;"><span style="color: #6B675D;">88</span><span style="font-family: ui-monospace, monospace; color: #1D1C18; overflow-wrap: break-word;">ticket.stauts.closed</span><span style="color: #8E2222;">✕ No such key — check the spelling</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #F0EEE9; font-size: 11px; align-items: center;"><span style="color: #6B675D;">201</span><span style="font-family: ui-monospace, monospace; color: #1D1C18; overflow-wrap: break-word;">widget.greeting</span><span style="color: #8E2222;">✕ Placeholder {name} was dropped</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; font-size: 11px; align-items: center;"><span style="color: #6B675D;">340</span><span style="font-family: ui-monospace, monospace; color: #1D1C18; overflow-wrap: break-word;">csat.label.good</span><span style="color: #8F5F08;">— Identical to what is stored</span></div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">The 397 good rows can be applied now; the six rejected ones stay in the file with their reason so a translator can fix and resend. Exporting again gives you exactly what is stored — the round trip is safe.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply 397 rows</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Download the 6 rejects</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N07 — orphaned overrides</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">3 overrides have nowhere to go</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">These keys were removed by a platform release. Your text is kept and listed here — never rendered anywhere, never deleted behind your back.</p>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 9px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 6px; padding: 7px 10px;"><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">inbox.filter.legacy_all</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">Removed in 4.2 · your text: “ሁሉም”</div></div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 6px; padding: 7px 10px;"><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #1D1C18;">ticket.bulk.v1_label</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">Removed in 4.0 · your text: “በጅምላ”</div></div>
+          </div>
+          <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 10px; cursor: pointer;">Clean up all 3</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N08 — markup the key does not allow</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12px; font-weight: 500; color: #1D1C18;">csat.question.primary · አማርኛ</div>
+          <div role="alert" style="border: 1.5px solid #B32B2B; border-radius: 6px; padding: 9px 11px; font-size: 12px; line-height: 1.7; color: #1D1C18; margin-top: 6px;">እንዴት ሠራን? &lt;script&gt;track()&lt;/script&gt;</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #8E2222;">! This key allows plain text only</div>
+            <div style="font-size: 11px; line-height: 1.55; color: #7A3232; margin-top: 2px;">It is shown inside a customer-facing survey, so no tags are permitted. Bold and links are allowed on template keys, not on this one.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">N12 — the manager cannot edit itself</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Its own labels are out of scope, on purpose</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Keys in the <span style="font-family: ui-monospace, monospace; font-size: 11px;">admin.translations.*</span> namespace are excluded from this table. If a bad override could rename “Reset to shipped”, the way back would be the thing you broke.</p>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N06 — CSV import, annotated per row</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">amharic-batch-2026-08.csv · 412 rows</div>
+          <div style="display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">✓ 397 ready</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">9 unchanged</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F5A7A7; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">6 rejected</span>
+          </div>
+          <div style="border: 1px solid #343430; border-radius: 7px; overflow: hidden; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 7px 10px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;"><span>Row</span><span>Key</span><span>Result</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #262622; font-size: 11px; align-items: center;"><span style="color: #A6A296;">14</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4; overflow-wrap: break-word;">ticket.status.new</span><span style="color: #5AD190;">✓ Will be applied</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #262622; font-size: 11px; align-items: center;"><span style="color: #A6A296;">88</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4; overflow-wrap: break-word;">ticket.stauts.closed</span><span style="color: #F5A7A7;">✕ No such key — check the spelling</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; border-bottom: 1px solid #262622; font-size: 11px; align-items: center;"><span style="color: #A6A296;">201</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4; overflow-wrap: break-word;">widget.greeting</span><span style="color: #F5A7A7;">✕ Placeholder {name} was dropped</span></div>
+            <div style="display: grid; grid-template-columns: 44px minmax(0, 1.4fr) minmax(0, 1.6fr); padding: 8px 10px; font-size: 11px; align-items: center;"><span style="color: #A6A296;">340</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4; overflow-wrap: break-word;">csat.label.good</span><span style="color: #F0B54A;">— Identical to what is stored</span></div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">The 397 good rows can be applied now; the six rejected ones stay in the file with their reason so a translator can fix and resend. Exporting again gives you exactly what is stored — the round trip is safe.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Apply 397 rows</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Download the 6 rejects</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N07 — orphaned overrides</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">3 overrides have nowhere to go</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">These keys were removed by a platform release. Your text is kept and listed here — never rendered anywhere, never deleted behind your back.</p>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 9px;">
+            <div style="border: 1px solid #343430; border-radius: 6px; padding: 7px 10px;"><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">inbox.filter.legacy_all</div><div style="font-size: 10.5px; color: #A6A296; margin-top: 2px;">Removed in 4.2 · your text: “ሁሉም”</div></div>
+            <div style="border: 1px solid #343430; border-radius: 6px; padding: 7px 10px;"><div style="font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4;">ticket.bulk.v1_label</div><div style="font-size: 10.5px; color: #A6A296; margin-top: 2px;">Removed in 4.0 · your text: “በጅምላ”</div></div>
+          </div>
+          <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 10px; cursor: pointer;">Clean up all 3</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N08 — markup the key does not allow</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12px; font-weight: 500; color: #ECEAE4;">csat.question.primary · አማርኛ</div>
+          <div role="alert" style="border: 1.5px solid #F08A8A; border-radius: 6px; padding: 9px 11px; font-size: 12px; line-height: 1.7; color: #ECEAE4; margin-top: 6px;">እንዴት ሠራን? &lt;script&gt;track()&lt;/script&gt;</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #F5A7A7;">! This key allows plain text only</div>
+            <div style="font-size: 11px; line-height: 1.55; color: #E0A0A0; margin-top: 2px;">It is shown inside a customer-facing survey, so no tags are permitted. Bold and links are allowed on template keys, not on this one.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">N12 — the manager cannot edit itself</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Its own labels are out of scope, on purpose</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Keys in the <span style="font-family: ui-monospace, monospace; font-size: 11px;">admin.translations.*</span> namespace are excluded from this table. If a bad override could rename “Reset to shipped”, the way back would be the thing you broke.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 read-only — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row N13 · Doc 16 §9 · owner ruling</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Keys, shipped values, overrides, modified badges and the missing-first order all read at 375. The inline editor is inert behind the notice — which is the right call here for a reason beyond the ruling: nobody should be typing Amharic customer-facing copy on a phone between other tasks.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="N13 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Languages</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Strings · አማርኛ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing needs a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Every key, its shipped value and your overrides read here.</div></div>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 11px;">
+              <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">14 gaps</span>
+              <span style="font-size: 11.5px; color: #6B675D;">most-hit first, last 7 days</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 8px;">
+              <div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; overflow-wrap: break-word;">ticket.status.awaiting_payment</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ticket</span><span style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #1D1C18;">412 hits</span></div>
+              <div style="font-size: 12px; color: #4A4842; margin-top: 7px;">Shipped: Awaiting payment</div>
+              <div style="font-size: 12px; font-weight: 600; color: #8E2222; margin-top: 3px;">Missing — falls back to English</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18; overflow-wrap: break-word;">inbox.assign.self</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">inbox</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">Modified</span><span style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #1D1C18;">190 hits</span></div>
+              <div style="font-size: 12px; color: #4A4842; margin-top: 7px;">Shipped: Take this ticket</div>
+              <div style="font-size: 12px; color: #1D1C18; margin-top: 3px;">Yours: ይህን ትኬት ውሰድ</div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px;">12 more · 9,841 keys in total</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="N13 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ቋንቋዎች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ጽሑፎች · አማርኛ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማረም ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">እያንዳንዱ ቁልፍ፣ የመጣው እሴትና የእርስዎ ለውጦች እዚህ ይነበባሉ።</div></div>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 11px;">
+              <span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">14 ክፍተቶች</span>
+              <span style="font-size: 11.5px; color: #A6A296;">በብዛት የተነኩት መጀመሪያ</span>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 8px;">
+              <div style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4; overflow-wrap: break-word;">ticket.status.awaiting_payment</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">ticket</span><span style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #ECEAE4;">412 ጊዜ</span></div>
+              <div style="font-size: 12px; color: #C9C5BB; margin-top: 7px;">የመጣው፦ Awaiting payment</div>
+              <div style="font-size: 12px; font-weight: 600; color: #F5A7A7; margin-top: 3px;">የለም — ወደ እንግሊዝኛ ይወርዳል</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የቦት ሰላምታ</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">የእርስዎ ጽሑፍ</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">የተቀየረ</span></div>
+              <div style="font-size: 12px; line-height: 1.8; color: #ECEAE4; margin-top: 7px;">ሰላም! ወደ ና ቤት ድጋፍ እንኳን በደህና መጡ።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የኃላፊነት ጨዋታ መልእክት</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 6px;"><span style="display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 10.5px; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">🔒 የተጠበቀ</span></div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 7px;">ለማረም ai.guardrails.edit ያስፈልጋል።</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> N01 (key, namespace chip, shipped value, inline override editor open on one row, modified badge and the last-hit column — §A light; the same columns as operator content in §A dark), N02 (the two classes as an explicit switch with different columns and chips, the RG row gated on <span style="font-family: ui-monospace, monospace; font-size: 12px;">ai.guardrails.edit</span> and SMS templates linking out — §A dark, §D dark), N03 (override renders instead of shipped, carries the badge, resets in one action with the shipped value beside it — §A both themes, §D both themes), N04 (search plus namespace, class and state filters — §A light, class switch in §A dark), N05 (missing-first, ordered by hits with the reasoning stated — §A light, §D both themes), N06 (CSV round-trip with per-row annotations — §C both themes), N07 (orphaned overrides in a maintenance view — §C both themes), N08 (content-type rejection with the reason — §C both themes), N09 (language administration gated on <span style="font-family: ui-monospace, monospace; font-size: 12px;">languages.manage</span> — §B both themes), N10 (readiness panel with coverage, per-module gaps linked, and FR-07's completeness gate holding the customer-facing enable inert — §B both themes), N11 (fallback chain in plain language — §B both themes), N12 (the manager's own namespace excluded — §C both themes), N13 (§D both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> none. All Amharic on this screen is real and is flagged for your native reviewers before i18n keys freeze — including the row that says so in the editor itself.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Closed, and the document decided it:</strong> your ruling was warn-and-enable <em>unless Doc 16 states a threshold, which then governs</em>. FR-07 does state one — customer-facing enablement is “gated per the owning modules' completeness rules”. So coverage informs and module completeness decides: <span style="font-family: ui-monospace, monospace; font-size: 12px;">Enable for customers</span> is inert until bot greetings, the widget welcome and CSAT labels report complete, each linked from the panel.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

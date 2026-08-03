@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S21-branding-degraded-v2</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section U · 4 rows · v2 · dark tokens from B1-DS §2</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Branding — degraded states</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">What the operator sees when the theme layer itself is having a bad day, and the proof that no combination of their choices can break a screen. Four rows, and the through-line is that <strong style="font-weight: 600;">branded-but-generic is a designed state</strong>, not a failure — a platform that renders unbranded is working; a platform that renders half-branded is not.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The hostile-theme row is the interesting one. Doc 16 FR-05 and T-08 ask the build to survive a garish palette, a very long legal name and long Amharic — usually verified in CI against a snapshot. Verified there it stays invisible, so it is drawn here: the ugliest publishable theme in the product, rendering correctly.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4, under the Section S standing rule: status hues stay with their semantic components. Parity checked claim by claim against the file.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The theme cache is gone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">U01 · Doc 16 FS-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Redis loses the theme and every surface falls back to the platform's own defaults. Agents see a working product that looks slightly unfamiliar and are told nothing — a banner about a cache would only alarm them. Administrators see the banner, because they are the ones who will be asked why the logo has gone.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · admin view, fallback active</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">U01 · admin-only banner</span></div>
+    <div data-screen-label="U01 cache loss light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="flex: none; background: #FFF8E6; border-bottom: 1px solid #E8D9A8; padding: 9px 16px; display: flex; align-items: center; gap: 10px;">
+        <span style="flex: none; font-size: 12px; font-weight: 700; color: #7E650F;">◈</span>
+        <span style="font-size: 12px; line-height: 1.55; color: #7E650F;"><strong style="font-weight: 600;">Your branding is temporarily unavailable — the platform's default look is showing instead.</strong> Nothing is lost and nothing needs republishing. Only administrators see this message; your team sees a working product.</span>
+        <span style="margin-left: auto; flex: none; font-size: 11px; color: #7E650F;">Rebuilding · started 11:02</span>
+      </div>
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Na Live Support</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search conversations…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 210px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Inbox</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Mine · 6</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Unassigned · 14</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">All open · 41</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex;">
+          <div style="width: 330px; flex: none; border-right: 1px solid #E5E2DB; background: #FFFFFF;">
+            <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Withdrawal not received</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Tigist Alemu · 4 minutes ago</div>
+              <div style="display: flex; gap: 6px; margin-top: 7px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #156F45;"><span style="font-size: 8px;">●</span>Open</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #EDEEF2; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #4A5460;">⏱ 2h 41m</span></div>
+            </div>
+            <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9;">
+              <div style="font-size: 12.5px; color: #1D1C18;">Account verification stuck</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.6;">Dawit Mekonnen · 22 minutes ago</div>
+            </div>
+            <div style="padding: 12px 14px;">
+              <div style="font-size: 12.5px; color: #1D1C18;">የቦነስ ጥያቄ</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px; line-height: 1.7;">ሰብለ ተፈሪ · ከ1 ሰዓት በፊት</div>
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #F6F5F2;">
+            <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 12px 16px;">
+              <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Withdrawal not received</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">Tigist Alemu · +251 91 234 5678 · Telegram</div>
+            </div>
+            <div style="flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="align-self: flex-start; max-width: 62%; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; font-size: 12.5px; line-height: 1.8; color: #1D1C18;">ብር 2,500 ለማውጣት ሞክሬ ነበር ግን እስካሁን አልደረሰኝም።</div>
+              <div style="align-self: flex-end; max-width: 62%; background: #22211D; border-radius: 10px; padding: 11px 13px; font-size: 12.5px; line-height: 1.6; color: #FFFFFF;">Thank you — let me check that withdrawal for you now.</div>
+              <div style="align-self: flex-start; max-width: 62%; background: #F1EDFE; border: 1px solid #DACFFB; border-radius: 10px; padding: 11px 13px; font-size: 12px; line-height: 1.6; color: #5B3FD6;"><strong style="font-weight: 600;">✦ AI suggestion</strong><br />Withdrawal #88214 is pending bank confirmation, submitted 14:02 yesterday.</div>
+            </div>
+            <div style="flex: none; background: #FFFFFF; border-top: 1px solid #E5E2DB; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="flex: 1; font-size: 12px; color: #726D63;">Write a reply…</span>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 15px; min-height: 36px; cursor: pointer;">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1180px; margin-top: 10px; font-size: 12.5px; line-height: 1.7; color: #4A4842;">U01 — the product is fully usable: platform wordmark instead of the logo, near-black buttons instead of the tenant's primary. What does <em>not</em> change is meaning: the Open pill, the reply-window chip and the violet AI accent are fixed tokens and survive the fallback, because a cache miss must never make an AI reply look human.</div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The ugliest publishable theme, rendering correctly</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">U02 · U03 · Doc 16 FR-05, T-08, NFR-05, BR-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Every hostile condition at once, on a theme that <em>passes</em> every validator: a magenta primary at 5.79:1 on white, a 59-character legal name, Amharic welcome copy at its longest, and a footer of five links carrying both languages in each label. Nothing clips, nothing truncates, nothing loses its meaning tokens. This is the state CI snapshots and nobody ever looks at.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · hostile theme, አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">U02 · U03 · every fixed token intact</span></div>
+    <div data-screen-label="U02 hostile theme dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 7px; min-width: 0;"><span style="flex: none; width: 20px; height: 20px; border-radius: 4px; background: #C4007A;"></span><span title="ሐበሻ ጌምስ የመዝናኛ የስፖርት ውርርድና የመዝናኛ አገልግሎት ኃላፊነቱ የተወሰነ የግል ማኅበር" aria-label="ሐበሻ ጌምስ የመዝናኛ የስፖርት ውርርድና የመዝናኛ አገልግሎት ኃላፊነቱ የተወሰነ የግል ማኅበር" tabindex="0" style="font-size: 12px; font-weight: 600; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; line-height: 1.5;">ሐበሻ ጌምስ የመዝናኛ የስፖርት ውርርድና የመዝናኛ አገልግሎት ኃላፊነቱ የተወሰነ የግል ማኅበር</span></span>
+        <span style="flex: 1; max-width: 340px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #A6A296; line-height: 1.6;">⌕ ንግግሮችን ይፈልጉ</span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; line-height: 1.6;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>ተያይዟል</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #C4007A; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">መ</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 216px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; color: #9A9588; padding: 0 10px 8px; line-height: 1.7;">የመልእክት ሳጥን</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB; line-height: 1.7;">
+            <span style="padding: 8px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">የእኔ · 6</span>
+            <span style="padding: 8px 10px; border-radius: 6px;">ያልተመደቡ · 14</span>
+            <span style="padding: 8px 10px; border-radius: 6px;">ክፍት ሁሉም · 41</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex;">
+          <div style="width: 336px; flex: none; border-right: 1px solid #343430; background: #1C1C19;">
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; line-height: 1.7;">ገንዘብ ማውጣት አልተሳካም</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.7;">ትዕግስት ዓለሙ · ከ4 ደቂቃ በፊት</div>
+              <div style="display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #5AD190; line-height: 1.7;"><span style="font-size: 8px;">●</span>ክፍት</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #262C33; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #A7B2BE; line-height: 1.7;">⏱ 2ሰ 41ደ</span></div>
+            </div>
+            <div style="padding: 12px 14px; border-bottom: 1px solid #262622;">
+              <div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.7;">የመለያ ማረጋገጫ ተቋርጧል</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.7;">ዳዊት መኮንን · ከ22 ደቂቃ በፊት</div>
+            </div>
+            <div style="padding: 12px 14px;">
+              <div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.7;">የቦነስ ጥያቄ</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 3px; line-height: 1.7;">ሰብለ ተፈሪ · ከ1 ሰዓት በፊት</div>
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #141412;">
+            <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 12px 16px;">
+              <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">ገንዘብ ማውጣት አልተሳካም</div>
+              <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px; line-height: 1.7;">ትዕግስት ዓለሙ · +251 91 234 5678 · ቴሌግራም</div>
+            </div>
+            <div style="flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="align-self: flex-start; max-width: 64%; background: #1C1C19; border: 1px solid #45443E; border-radius: 10px; padding: 11px 13px; font-size: 12.5px; line-height: 1.85; color: #ECEAE4;">ብር 2,500 ለማውጣት ሞክሬ ነበር ግን እስካሁን አልደረሰኝም። እባክዎ በአስቸኳይ ይመልከቱልኝ።</div>
+              <div style="align-self: flex-end; max-width: 64%; background: #C4007A; border-radius: 10px; padding: 11px 13px; font-size: 12.5px; line-height: 1.85; color: #FFFFFF;">አመሰግናለሁ — አሁኑኑ ላረጋግጥልዎ።</div>
+              <div style="align-self: flex-start; max-width: 64%; background: #292144; border-left: 3px solid #A18BFF; border-radius: 10px; padding: 11px 13px; font-size: 12px; line-height: 1.85; color: #BCA9FF;"><strong style="font-weight: 600;">✦ የAI ጥቆማ</strong><br />ክፍያ #88214 የባንክ ማረጋገጫ እየተጠበቀ ነው፤ ትናንት 14:02 ገብቷል።</div>
+              <div style="align-self: flex-start; max-width: 64%; background: #332B12; border: 1.5px solid #8A6D1A; border-radius: 10px; padding: 11px 13px; font-size: 12px; line-height: 1.85; color: #E8C25A;">🔒 የውስጥ ማስታወሻ — ከፋይናንስ ጋር ተረጋግጧል፤ ነገ ጠዋት ይለቀቃል።</div>
+            </div>
+            <div style="flex: none; background: #1C1C19; border-top: 1px solid #343430; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="flex: 1; font-size: 12px; color: #A6A296; line-height: 1.7;">መልስ ይጻፉ…</span>
+              <button style="font-family: inherit; background: #C4007A; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 15px; min-height: 36px; cursor: pointer; line-height: 1.6;">ላክ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="flex: none; background: #1C1C19; border-top: 1px solid #343430; padding: 9px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <span style="font-size: 10.5px; color: #A6A296; line-height: 1.8;">© 2026 ሐበሻ ጌምስ የመዝናኛ የስፖርት ውርርድና የመዝናኛ አገልግሎት ኃላፊነቱ የተወሰነ የግል ማኅበር</span>
+        <span style="margin-left: auto; display: inline-flex; gap: 10px; font-size: 10.5px; line-height: 1.8; flex-wrap: wrap;"><a href="#u" style="color: #8FB0F5;">ግላዊነት · Privacy</a><a href="#u" style="color: #8FB0F5;">ውሎች · Terms</a><a href="#u" style="color: #8FB0F5;">ኃላፊነት የተሞላበት ጨዋታ · Responsible gambling</a><a href="#u" style="color: #8FB0F5;">እገዛ · Help</a><a href="#u" style="color: #8FB0F5;">አድራሻ · Address</a></span>
+      </div>
+    </div>
+    <div style="max-width: 1180px; margin-top: 10px; font-size: 12.5px; line-height: 1.7; color: #4A4842;">U02 · U03 — the magenta lands on the logo, the avatar, the outbound bubble and the send button, and nowhere else. <strong style="font-weight: 600;">Every meaning token holds, at its B1-DS value exactly:</strong> ክፍት in <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#E4F4EA</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#156F45</code>, the reply window in <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#EDEEF2</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#4A5460</code>, the internal note in <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#FBF3D6</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#7E650F</code>, the AI accent in <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#F1EDFE</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#5B3FD6</code> — and on the dark shell each takes its own <strong style="font-weight: 600;">dark-column</strong> value from the same table — ክፍት <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#123322</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#5AD190</code>, window <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#262C33</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#A7B2BE</code>, note <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#332B12</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#E8C25A</code>, AI <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#292144</code>/<code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#BCA9FF</code>. The 59-character company name genuinely overflows the top bar and truncates with an ellipsis at 210 px, with the full string on the element as its title and accessible name and the element focusable so a keyboard reaches it; the footer renders it in full, where it has the room. That is a deliberate split, not an accident of overflow.</div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Nothing hardcoded, and a thumbnail that cannot render</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">U03 · U04 · Doc 16 FR-05, BR-01, §8, NFR-01</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two smaller rows with one shared discipline: say what is happening on the tile that is failing, not in a toast that outlives it. A preview that cannot render says so in place; a stale thumbnail would be worse than an empty one, because an operator would publish against it.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Inventory · 8 surfaces</div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="height: 62px; background: #EEECE6; display: flex; align-items: center; justify-content: center;"><div style="width: 46px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 3px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #C4007A;"></span><span style="height: 4px; border: 1px solid #CFCBC1; border-radius: 1px;"></span></div></div>
+              <div style="padding: 7px 9px; border-top: 1px solid #F0EEE9; font-size: 10.5px; font-weight: 600; color: #1D1C18;">Sign-in card</div>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="height: 62px; background: #EEECE6; display: flex; align-items: center; justify-content: center;"><div style="width: 52px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 4px; overflow: hidden;"><div style="height: 11px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; padding: 0 4px;"><span style="width: 6px; height: 6px; border-radius: 2px; background: #C4007A;"></span></div><div style="padding: 4px; display: flex; flex-direction: column; gap: 2px;"><span style="height: 3px; width: 72%; background: #EEECE6;"></span><span style="height: 3px; width: 54%; background: #F2F1ED;"></span></div></div></div>
+              <div style="padding: 7px 9px; border-top: 1px solid #F0EEE9; font-size: 10.5px; font-weight: 600; color: #1D1C18;">App chrome</div>
+            </div>
+            <div style="border: 1px solid #EFC7C7; border-radius: 8px; overflow: hidden;">
+              <div style="height: 62px; background: #FBE5E5; display: flex; align-items: center; justify-content: center; padding: 8px;"><div style="font-size: 10px; line-height: 1.5; font-weight: 600; color: #8E2222; text-align: center;">Couldn't render<br />this preview</div></div>
+              <div style="padding: 7px 9px; border-top: 1px solid #EFC7C7; font-size: 10.5px; font-weight: 600; color: #8E2222;">CSAT email</div>
+            </div>
+          </div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 12px; margin-top: 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">The CSAT email preview didn't render</div>
+            <div style="font-size: 11.5px; color: #8E2222; margin-top: 3px; line-height: 1.55;">The tile stays empty rather than showing you an old picture — publishing against a stale preview is the failure this avoids. The template itself is unaffected and still sends.</div>
+            <button style="font-family: inherit; margin-top: 9px; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; color: #8E2222; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 11px; cursor: pointer;">Try that preview again</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">U04 · light · en · the failure is on the tile, not in a toast that outlives it</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">U03 · nothing hardcoded — how it was actually checked</div>
+          <div style="font-size: 12.5px; line-height: 1.8; color: #4A4842; margin-top: 8px;">Not a claim, a sweep. Every colour literal in this batch's twenty-one files was matched against the B1-DS token table; the eight files where a literal appeared outside a token were corrected and disclosed in their own notes. What remains are the deliberately fixed tokens — the eight status families, priority dots, SLA and reply-window chips, connection state, channel health, internal note, and the violet AI accent — and Section L names each one on the surface where an operator would try to re-skin it.</div>
+          <div style="font-size: 12px; line-height: 1.75; color: #6B675D; margin-top: 10px; border-top: 1px solid #F0EEE9; padding-top: 10px;">The rule that makes this testable: a theme changes <em>values</em>, never layout. No token in Doc 16's set can move an element, change a size or hide a control — which is why the hostile frame above needed no special-case CSS to survive.</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Delivered:</strong> all four rows, both themes. U01 in §A at 1440 light; U02 and U03 in §B at 1440 dark in Amharic — the hostile theme with a 59-character name and long Amharic on every surface; U03 and U04 in §C.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Two corrections after review, and one open question for you.</strong> The hostile magenta shipped as <code style="font-family: ui-monospace, monospace; font-size: 12px;">#E040A0</code> under a claim of 5.2:1; computed, it is <strong style="font-weight: 600;">3.88:1</strong> — the exact pair Section L refuses and Section S blocks, which made the frame unpublishable and the row pointless. It is now <code style="font-family: ui-monospace, monospace; font-size: 12px;">#C4007A</code> at a computed <strong style="font-weight: 600;">5.79:1</strong>, still garish, genuinely publishable. Separately, the dark frame’s fixed tokens had been mixed by eye into dark variants (<code style="font-family: ui-monospace, monospace; font-size: 12px;">#17301F</code>, <code style="font-family: ui-monospace, monospace; font-size: 12px;">#241C3D</code> and others) that exist in no B1-DS version — asserting token fidelity with invented hexes, on the one row whose subject is token fidelity. They now carry the B1-DS values verbatim.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">A third correction: the hostile length was asserted, not built.</strong> The frame claimed a 74-character name that truncated behind a tooltip; measured, the name was 25 characters, nothing overflowed, no ellipsis rendered and no tooltip existed — so the row’s central condition was never exercised while its judgement paragraph reasoned about it. The name is now <strong style="font-weight: 600;">59 characters</strong> and genuinely overflows the 210 px top bar, the full string is on the element as <code style="font-family: ui-monospace, monospace; font-size: 12px;">title</code> and <code style="font-family: ui-monospace, monospace; font-size: 12px;">aria-label</code> with <code style="font-family: ui-monospace, monospace; font-size: 12px;">tabindex="0"</code> so a keyboard can reach it, and the footer carries it in full. The footer links now carry both languages, as the caption said they did.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">v2 — the dark tokens were in B1-DS all along, and I twice failed to look.</strong> This section first invented dark variants by eye, then “corrected” them to the light values while raising a question about whether dark variants should exist. <a href="B1-DS-design-system-v2.dc.html">B1-DS v2 §2</a> carries a <strong style="font-weight: 600;">complete dark column</strong> — every status pill, priority dot, SLA and reply-window chip, connection state, channel health rollup, note token and the AI accent, each with its own dark value. The frame now uses them verbatim. The open question I raised at Section U is withdrawn: there was nothing to specify, only something to read. That is the second time in this batch a token was mixed by eye when the answer was in the file, and it is the failure the program’s own first rule exists to prevent.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">One deviation, flagged:</strong> no 375 frame in this section. Each row is a state of a screen delivered elsewhere — the inbox, the inventory — and both already ship at 375 in their own sections; drawing the phone again would restate them rather than prove anything about degradation. Say the word and it ships.</p>
+          <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">One judgement.</strong> The long company name <em>does</em> truncate — in the top bar, at 210 px, with the full string in a tooltip and in the footer. FR-05 requires that nothing break, not that everything render in full; a 59-character name shown complete in a 52 px top bar would push the search field off the screen. The distinction worth auditing: truncation with the full value reachable is a layout decision, silent loss is a defect.</p>
+          <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">Parity, claim by claim.</strong> Three claims. <em>Branded-but-generic is a designed state</em> — English in §A's banner, Amharic not applicable: the banner is admin-facing and this tenant's admins read English, so U01 ships English-only and I am stating it rather than implying coverage. <em>Every meaning token survives a re-skin</em> — English in §B's caption and §C's panel, Amharic in the hostile frame itself, where all four tokens render in Amharic. <em>A failed preview says so in place</em> — English in §C; no Amharic surface, same reason as U01.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

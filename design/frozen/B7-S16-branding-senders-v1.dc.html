@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S16-branding-senders-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section P · 5 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Branding — Sender identities</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Three purposes, three from-addresses, and one status the operator cannot set. Verification is read from the DNS records infrastructure actually observes — so this screen <strong style="font-weight: 600;">reports</strong> a fact and never asserts one. There is no “mark as verified” control anywhere in it, because a sender an operator can declare good is a spoofing surface with extra steps.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The group's real subject is the lapse. DNS changes without warning, and when it does, customer email has to keep arriving — so the platform falls back to its own sender, keeps sending, and tells the operator plainly why their brand disappeared from the From line.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4. Parity checked against the file before this was written; DNS status is Doc 18's, surfaced here and edited nowhere.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Three purposes, and a status nobody here can set</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P01 · P02 · P03 · P05 · Doc 16 FR-01, SEC-03, AC-09 · Doc 18</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Auth mail, notifications and reports are separated because they fail differently: a reset that lands in spam is a locked-out agent, a report that lands in spam is an annoyance. Each row shows the from-name a customer reads, the address underneath it, and the observed state of that domain — pending, failed, verified — with the records to fix it one click away in Doc 18's surface rather than restated here.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · one verified, one pending, one blocked</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P01 · P02 · P03 · P05</span></div>
+    <div data-screen-label="P01 senders light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Branding</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Senders</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #7E650F;">◈ 1 sender cannot be published yet</span>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Re-check DNS now</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish…</button>
+            </div>
+          </div>
+          <div style="flex: 1; padding: 18px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column; gap: 14px;">
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; gap: 16px; align-items: flex-start;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Sign-in and security</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Password resets, invitations, new-device notices</div>
+                <div style="display: flex; gap: 10px; margin-top: 11px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From name</label>
+                    <input type="text" value="Selam Bet Support" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                  <div style="flex: 1.3;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From address</label>
+                    <input type="text" value="no-reply@mail.selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                </div>
+              </div>
+              <div style="flex: none; width: 300px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px;">
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #1D1C18;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Domain verified</div>
+                <div style="font-size: 11px; line-height: 1.65; color: #4A4842; margin-top: 8px;">SPF, DKIM and DMARC all observed on <strong style="font-weight: 600;">mail.selambet.et</strong>. Last checked 12 minutes ago.</div>
+                <div style="font-size: 10.5px; line-height: 1.6; color: #6B675D; margin-top: 7px;">Read from DNS — this platform cannot set it, and neither can you.</div>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; gap: 16px; align-items: flex-start;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Notifications</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Ticket updates, CSAT requests, window reminders</div>
+                <div style="display: flex; gap: 10px; margin-top: 11px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From name</label>
+                    <input type="text" value="Selam Bet" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                  <div style="flex: 1.3;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From address</label>
+                    <input type="text" value="hello@notify.selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #22211D; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                </div>
+              </div>
+              <div style="flex: none; width: 300px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 13px;">
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #E8D9A8; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #7E650F;">◷ Waiting for DNS</div>
+                <div style="font-size: 11px; line-height: 1.65; color: #7E650F; margin-top: 8px;">DKIM is not visible on <strong style="font-weight: 600;">notify.selambet.et</strong> yet. Records can take up to 48 hours to propagate; this one was added 3 hours ago.</div>
+                <div style="font-size: 11px; font-weight: 600; color: #7E650F; margin-top: 8px;">Customer email cannot be published from this address until DNS confirms it.</div>
+                <a href="#dns" style="display: inline-block; font-size: 11px; font-weight: 500; margin-top: 7px;">See the records to add →</a>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; gap: 16px; align-items: flex-start;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Reports</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">Scheduled exports to managers — internal only</div>
+                <div style="display: flex; gap: 10px; margin-top: 11px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From name</label>
+                    <input type="text" value="Selam Bet Reports" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                  <div style="flex: 1.3;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">From address</label>
+                    <input type="text" value="reports@mail.selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                  </div>
+                </div>
+              </div>
+              <div style="flex: none; width: 300px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px;">
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: #1D1C18;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Domain verified</div>
+                <div style="font-size: 11px; line-height: 1.65; color: #4A4842; margin-top: 8px;">Shares <strong style="font-weight: 600;">mail.selambet.et</strong> with sign-in mail. Last checked 12 minutes ago.</div>
+              </div>
+            </div>
+
+            <div style="background: #F6F5F2; border-left: 3px solid #CFCBC1; border-radius: 0 6px 6px 0; padding: 11px 13px; font-size: 11.5px; line-height: 1.65; color: #4A4842;"><strong style="font-weight: 600;">There is no “mark as verified”.</strong> Every state on this page is observed from DNS by infrastructure and reported here; nothing on this screen can change it. An unverified address may be saved as a draft, but it cannot be published for customer-facing mail.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The lapse — what sends while the brand is gone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P04 · Doc 16 EC-11, AC-09</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Somebody edits a DNS zone at midnight and the DKIM record goes with it. The platform notices before the operator does, and the choice it makes is deliverability over brand purity: mail keeps sending, from the platform's own address, and the screen says so in the same sentence as the reason. Three facts have to land at once — what broke, what is sending in the meantime, and what a customer now sees in their inbox.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · verification lapsed · አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">P04</span></div>
+    <div data-screen-label="P04 sender lapse dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ብራንዲንግ</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB; line-height: 1.7;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ማንነት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ቀለሞችና ፊደላት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">መግቢያ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ኢሜይሎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">አገናኞችና ሕጋዊ</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ላኪዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ዝርዝር</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ቅንብሮች · ብራንዲንግ</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4; line-height: 1.4;">ላኪዎች</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #3D1B1B; border: 1px solid #6B3838; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">⚠ ማረጋገጫው ተቋርጧል</span>
+            <div style="margin-left: auto;">
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 13px; min-height: 36px; cursor: pointer; line-height: 1.6;">DNSን እንደገና ፈትሽ</button>
+            </div>
+          </div>
+          <div style="flex: 1; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+            <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 13px 14px;">
+              <div style="font-size: 13px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">የ mail.selambet.et ማረጋገጫ ተቋርጧል — ዛሬ 02:14</div>
+              <div style="font-size: 12px; color: #F5A7A7; margin-top: 5px; line-height: 1.8;">የDKIM መዝገቡ ከDNS ጠፍቷል። ኢሜይሎች እየተላኩ ናቸው፤ ነገር ግን <strong style="font-weight: 600;">ከመድረኩ የራሱ አድራሻ</strong> ነው — ደንበኞች አሁን <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">no-reply@nalivesupport.com</span> ብለው ያያሉ እንጂ የእርስዎን ስም አይደለም። መዝገቡን መልሰው ሲያስገቡ ወዲያውኑ ወደ ቀድሞው ይመለሳል።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 16px; display: flex; gap: 16px;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 9px; line-height: 1.6;">አሁን ደንበኛው የሚያየው</div>
+                <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 13px;">
+                  <div style="font-size: 12px; line-height: 1.9; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">ከ</strong> Na Live Support &lt;no-reply@nalivesupport.com&gt;<br /><strong style="font-weight: 600; color: #ECEAE4;">ርዕስ</strong> የይለፍ ቃልዎን ይቀይሩ</div>
+                  <div style="font-size: 11px; line-height: 1.75; color: #A6A296; margin-top: 8px; border-top: 1px solid #45443E; padding-top: 8px;">የኢሜይሉ ይዘትና አርማዎ አልተለወጡም — የተቀየረው የላኪው አድራሻ ብቻ ነው።</div>
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 9px; line-height: 1.6;">ለምን እንዲህ ተደረገ</div>
+                <div style="font-size: 12px; line-height: 1.9; color: #C9C5BB;">ያልተረጋገጠ አድራሻ ኢሜይሎቹ spam ውስጥ እንዲገቡ ወይም ጨርሶ እንዳይደርሱ ያደርጋል። የይለፍ ቃል መቀየሪያ ካልደረሰ ወኪል መግባት አይችልም። ስለዚህ መድረኩ የምርት ስምን ሳይሆን መድረስን መርጧል።</div>
+                <div style="font-size: 11px; line-height: 1.8; color: #A6A296; margin-top: 9px;">አስተዳዳሪዎች በኢሜይልና በደወል ማሳወቂያ ተነግሯቸዋል።</div>
+              </div>
+            </div>
+            <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 11px 13px; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">“እንደተረጋገጠ ምልክት አድርግ” የሚል የለም።</strong> በዚህ ገጽ ላይ ያለው እያንዳንዱ ሁኔታ ከDNS የተነበበ ነው፤ እዚህ ላይ ሊቀየር አይችልም።</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px 13px;">
+            <div style="font-size: 13px; font-weight: 600; color: #8E2222;">Verification for mail.selambet.et lapsed — today at 02:14</div>
+            <div style="font-size: 12px; color: #8E2222; margin-top: 5px; line-height: 1.6;">The DKIM record disappeared from DNS. Email is still sending, but <strong style="font-weight: 600;">from the platform's own address</strong> — customers now see <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">no-reply@nalivesupport.com</span> instead of your name. Put the record back and it returns automatically.</div>
+          </div>
+          <div style="font-size: 12px; line-height: 1.7; color: #4A4842;">An unverified sender lands in spam or nowhere. A reset that never arrives is an agent who cannot start their shift, so the platform chose arrival over branding — and says which it chose.</div>
+          <div style="font-size: 11.5px; line-height: 1.65; color: #6B675D; border-top: 1px solid #F0EEE9; padding-top: 10px;"><strong style="font-weight: 600; color: #4A4842;">There is no “mark as verified”.</strong> Every state here is read from DNS and cannot be changed on this screen.</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">P04 · light · en · the same three facts, in the other language</div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · read-only</div>
+        <div data-screen-label="P01 senders 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">02:31<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Branding</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Senders</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Verification lapsed at 02:14</div>
+              <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.55;">Mail is still sending, from the platform address. Customers see no-reply@nalivesupport.com.</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 12px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Sign-in and security</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">no-reply@mail.selambet.et</div><div style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #8E2222; margin-top: 6px;">⚠ Lapsed</div></div>
+              <div style="padding: 12px 13px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Notifications</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">hello@notify.selambet.et</div><div style="display: inline-flex; align-items: center; gap: 5px; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #7E650F; margin-top: 6px;">◷ Waiting for DNS</div></div>
+              <div style="padding: 12px 13px;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Reports</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">reports@mail.selambet.et</div><div style="display: inline-flex; align-items: center; gap: 5px; background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #8E2222; margin-top: 6px;">⚠ Lapsed</div></div>
+            </div>
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Editing requires a larger screen.</strong> Status is read from DNS and cannot be set anywhere, including here.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all five rows. P01, P02, P03 and P05 in §A at 1440 light with three states side by side — verified, waiting, and a domain that cannot be published from; P04 in §B at 1440 dark in Amharic with the English equivalent beneath it and the read-only 375 beside it.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">No assertable status, checked as an absence.</strong> There is no “mark as verified”, no override, and no manual state control on any surface in this section — the statement appears in English in §A and §B and in Amharic in §B's constraint strip. Status arrives from Doc 18's DNS observation; the only control here re-runs the check, which asks infrastructure rather than telling it.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">On the word “verified”, deliberately used here and nowhere else.</strong> This is a technical statement about a DNS record for a domain the operator controls; it says nothing about a person, and it must never rhyme with a customer-identity treatment — Doc 08 BR-01 and AC-09 prohibit any verified-person badge on customer surfaces, and nothing here is reused there.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Pill vocabulary corrected after review.</strong> A first pass dressed “Domain verified” in the ticket-status <em>Resolved</em> pair and “Lapsed” in the <em>SLA-breached</em> pair — pixel-identical to two fixed tokens, and the note defended the first while omitting the second. Sender state is a third vocabulary, like Section H’s account states, so it now borrows none of them: verified is the hairline presence pill with the <code style="font-family: ui-monospace, monospace; font-size: 12px;">#22A55B</code> dot, lapsed is the generic error pair <code style="font-family: ui-monospace, monospace; font-size: 12px;">#FBE5E5</code>/<code style="font-family: ui-monospace, monospace; font-size: 12px;">#8E2222</code>, and waiting stays on the generic warning strip. No fixed ticket, SLA or connection-state hue appears in this section.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section Q — the surface inventory, where the preview wall is the checklist and five of the eight surfaces belong to other documents.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

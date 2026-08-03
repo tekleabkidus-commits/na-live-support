@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S05-bot-templates-commands-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows E07–E11</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Bot messages &amp; commands</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Six named templates and five fixed commands — the words a player actually reads. Two rules shape the screen. First, <strong style="font-weight: 600;">the shipped wording is always visible beside the operator's version</strong>, so an edit is a comparison rather than a leap of faith, and reset is one press away. Second, <strong style="font-weight: 600;">the preview is a real message bubble</strong>, not a text box — because these strings are judged as messages, and a variable that reads fine in a form can read strangely in a chat.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Bubbles, modified badges, tables and buttons are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell is <a href="B6-S01-telegram-bots-connection-v1.dc.html">B6-S01</a>'s; the language tabs and completeness badges are the ones approved on <a href="B6-S04-menu-designer-v1.dc.html">B6-S04</a>.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Amharic is real text, flagged for native review before i18n keys freeze.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Templates — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows E07, E08, E11 · Doc 05 FR-28, §14 · Doc 16 FR-06</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">All six templates are listed by the job they do, not by their key — an operator looks for “the message when we are closed”, not for <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">telegram.templates.off_hours</span>. The key is still shown, because whoever files the support ticket will need it.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · English, greeting selected</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E07 · E08</span></div>
+    <div data-screen-label="E07 templates light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">MA</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 190px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram · @nabet_support_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Bot messages</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.edit</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Send a test message</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish changes</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden;">
+              <span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">English<span style="font-size: 10px; opacity: 0.85;">6/6</span></span>
+              <span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">አማርኛ<span style="display: inline-flex; align-items: center; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">5/6</span></span>
+            </span>
+            <span style="font-size: 11.5px; color: #6B675D;">Two edited from the shipped wording · one Amharic message still missing</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr) 292px; gap: 14px; margin-top: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 9px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">The six messages</div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; border-left: 3px solid #22211D; background: #FDFCFA;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">First hello</span><span style="margin-left: auto; display: inline-flex; align-items: center; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; flex: none;">Edited</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">greeting</div>
+              </div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; color: #1D1C18;">When we are closed</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">off_hours</div>
+              </div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; color: #1D1C18;">Handing over to a person</span><span style="margin-left: auto; display: inline-flex; align-items: center; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; flex: none;">Edited</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">handoff</div>
+              </div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; color: #1D1C18;">Solved, and how did we do</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">resolved_csat</div>
+              </div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; color: #1D1C18;">Wrong door — go to the account</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">direct_redirect</div>
+              </div>
+              <div style="padding: 10px 12px;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; color: #1D1C18;">Why we cannot reply yet</span><span style="margin-left: auto; display: inline-flex; align-items: center; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; flex: none;">አማርኛ missing</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 3px;">window_guidance</div>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 15px; min-width: 0;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 14px; font-weight: 600; color: #1D1C18;">First hello</span>
+                <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D;">telegram.templates.greeting · en</span>
+              </div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">Sent the first time someone opens the bot, and after a long gap. It is the only message every player sees.</p>
+
+              <label for="tpl-l" style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-top: 12px;">Your wording</label>
+              <div id="tpl-l" style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 11px 12px; font-size: 12.5px; line-height: 1.65; color: #1D1C18; margin-top: 5px; min-height: 84px;">Hello <span>{</span>{first_name}}! You have reached NA BET support. Tell me what happened and I will help, or tap a button below. Typical wait right now: <span>{</span>{queue_wait}}.</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px; flex-wrap: wrap;">
+                <span style="font-size: 11px; color: #6B675D;">Insert:</span>
+                <button style="font-family: ui-monospace, monospace; background: #EEECE6; color: #4A4842; border: none; border-radius: 4px; font-size: 10.5px; font-weight: 600; padding: 5px 8px; min-height: 32px; cursor: pointer;"><span>{</span>{first_name}}</button>
+                <button style="font-family: ui-monospace, monospace; background: #EEECE6; color: #4A4842; border: none; border-radius: 4px; font-size: 10.5px; font-weight: 600; padding: 5px 8px; min-height: 32px; cursor: pointer;"><span>{</span>{queue_wait}}</button>
+                <span style="margin-left: auto; font-size: 11px; color: #6B675D;">168 characters</span>
+              </div>
+
+              <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; margin-top: 11px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Shipped wording</span>
+                  <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 5px 10px; min-height: 32px; cursor: pointer;">Reset to this</button>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: #4A4842; margin-top: 7px;">Hello <span>{</span>{first_name}}. How can we help you today?</div>
+              </div>
+
+              <div style="border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 12px;">
+                <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">How it will arrive</div>
+                <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; padding: 11px; margin-top: 8px;">
+                  <div style="max-width: 82%;">
+                    <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Hello Abebe! You have reached NA BET support. Tell me what happened and I will help, or tap a button below. Typical wait right now: 4 minutes.</div>
+                    <div style="font-size: 10.5px; color: #6F6A61; margin-top: 3px;">@NaBetSupport · now</div>
+                  </div>
+                </div>
+                <p style="margin: 7px 0 0; font-size: 11px; line-height: 1.55; color: #6B675D;">Variables are filled with real sample values, so a sentence that only works when the name is short shows up here.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Variables you can use</div>
+                <div style="display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 7px 10px; margin-top: 9px; font-size: 11.5px;">
+                  <span style="font-family: ui-monospace, monospace; color: #4A4842;"><span>{</span>{first_name}}</span><span style="color: #6B675D;">The player's Telegram first name</span>
+                  <span style="font-family: ui-monospace, monospace; color: #4A4842;"><span>{</span>{queue_wait}}</span><span style="color: #6B675D;">Current typical wait, in words</span>
+                </div>
+                <p style="margin: 9px 0 0; font-size: 11px; line-height: 1.55; color: #6B675D;">These two are the whole set. Anything else in braces is left as written, which is why the preview is the check.</p>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Where this one appears</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 11.5px; color: #4A4842;">
+                  <span>· Direct mode — first message to the bot</span>
+                  <span>· Business mode — first message to @NaBetSupport</span>
+                  <span>· After a deep link, with the context added</span>
+                </div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Changes reach players in about 10 seconds</div>
+                <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Published wording applies from each player's next message. Nobody mid-conversation gets a message rewritten under them.</p>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 8px;">Last published by Meron Assefa · 29 Jul, 15:07</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · አማርኛ, window guidance selected</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E07 · E11 · missing-translation state</span></div>
+    <div data-screen-label="E11 templates dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">MA</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 190px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram · @nabet_support_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">የቦት መልእክቶች</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">የፍተሻ መልእክት ላክ</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">ለውጦችን አሳትም</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Menu</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <span style="display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden;">
+              <span style="font-size: 11.5px; color: #ECEAE4; background: #1C1C19; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">English<span style="font-size: 10px; color: #A6A296;">6/6</span></span>
+              <span style="font-size: 11.5px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">አማርኛ<span style="display: inline-flex; align-items: center; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">5/6</span></span>
+            </span>
+            <span style="font-size: 11.5px; color: #A6A296;">አንድ መልእክት ገና አልተተረጎመም</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr) 292px; gap: 14px; margin-top: 12px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 9px 12px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ስድስቱ መልእክቶች</div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="font-size: 12.5px; color: #ECEAE4;">የመጀመሪያ ሰላምታ</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">greeting</div></div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="font-size: 12.5px; color: #ECEAE4;">ስንዘጋ የሚላክ</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">off_hours</div></div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="font-size: 12.5px; color: #ECEAE4;">ወደ ሰው ማስተላለፍ</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">handoff</div></div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="font-size: 12.5px; color: #ECEAE4;">ተፈታ — እንዴት ነበርን?</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">resolved_csat</div></div>
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622;"><div style="font-size: 12.5px; color: #ECEAE4;">ወደ መለያው ይሂዱ</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">direct_redirect</div></div>
+              <div style="padding: 10px 12px; border-left: 3px solid #ECEAE4; background: #222220;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለምን ገና መመለስ አልቻልንም</span><span style="margin-left: auto; display: inline-flex; align-items: center; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; flex: none;">ጎደለ</span></div>
+                <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 3px;">window_guidance</div>
+              </div>
+            </div>
+
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px; min-width: 0;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 14px; font-weight: 600; color: #ECEAE4;">ለምን ገና መመለስ አልቻልንም</span>
+                <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296;">window_guidance · am</span>
+              </div>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.7; color: #A6A296;">የመልስ መስኮቱ ካለፈ በኋላ ደንበኛው እንደገና ሲጽፍ የሚላክ። ቴክኒካዊ ቃላት አይግቡ — ተጫዋቹ ስለ “መስኮት” ማወቅ አይጠበቅበትም።</p>
+
+              <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; margin-top: 11px;">
+                <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">ይህ መልእክት በአማርኛ ገና አልተጻፈም</div>
+                <div style="font-size: 11.5px; line-height: 1.7; color: #E8C25A; margin-top: 3px;">እስከዚያው የአማርኛ ተጫዋቾች የእንግሊዝኛውን ያገኛሉ። ይህ የደንበኛ-ገጽ መልእክት ስለሆነ ሲሞላ /language ምናሌው አማርኛን ማካተት ይችላል።</div>
+              </div>
+
+              <label for="tpl-d" style="display: block; font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-top: 12px;">የእርስዎ አጻጻፍ</label>
+              <div id="tpl-d" style="border: 1px dashed #45443E; border-radius: 7px; padding: 11px 12px; font-size: 12.5px; line-height: 1.75; color: #918C80; margin-top: 5px; min-height: 84px;">እዚህ በአማርኛ ይጻፉ…</div>
+
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px; margin-top: 11px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">የተላከው የእንግሊዝኛ አጻጻፍ</span>
+                  <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 5px 10px; min-height: 32px; cursor: pointer;">Copy as a start</button>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: #C9C5BB; margin-top: 7px;">You can reply here again after the customer writes back.</div>
+              </div>
+
+              <div style="border-top: 1px solid #262622; margin-top: 12px; padding-top: 12px;">
+                <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">እንደ መልእክት ሲደርስ</div>
+                <div style="background: #232320; border: 1px solid #45443E; border-radius: 12px; padding: 11px; margin-top: 8px;">
+                  <div style="max-width: 86%;">
+                    <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12.5px; line-height: 1.75; color: #ECEAE4;">እንደገና ሲጽፉልን በዚሁ በኩል መልስ እንሰጥዎታለን።</div>
+                    <div style="font-size: 10.5px; color: #9A9588; margin-top: 3px;">@NaBetSupport · አሁን</div>
+                  </div>
+                </div>
+                <p style="margin: 7px 0 0; font-size: 11px; line-height: 1.7; color: #A6A296;">ይህ የቀረበ ትርጉም ነው — በአገር ውስጥ ገምጋሚዎች መረጋገጥ አለበት።</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቃላቱ ቀላል ይሁኑ</div>
+                <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.7; color: #C9C5BB;">“መስኮት”፣ “ክፍለ-ጊዜ” ወይም “ኤፒአይ” የሚሉ ቃላት ወደ ተጫዋቹ መልእክት አይግቡ። የሚያስፈልገው አንድ ነገር ብቻ ነው፦ መቼ እንደሚመልሱ።</p>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የሚታየው መቼ ነው</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 11.5px; color: #C9C5BB;">
+                  <span>· መስኮቱ ካለፈ በኋላ ደንበኛው ሲጽፍ</span>
+                  <span>· በቢዝነስ ዘዴ ብቻ</span>
+                </div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Variables</div>
+                <div style="display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 7px 10px; margin-top: 9px; font-size: 11.5px;">
+                  <span style="font-family: ui-monospace, monospace; color: #C9C5BB;"><span>{</span>{first_name}}</span><span style="color: #A6A296;">የተጫዋቹ ስም</span>
+                  <span style="font-family: ui-monospace, monospace; color: #C9C5BB;"><span>{</span>{queue_wait}}</span><span style="color: #A6A296;">የአሁኑ የመጠባበቅ ጊዜ</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 11px; color: #A6A296;">አስገባ:</span>
+                  <button style="font-family: ui-monospace, monospace; background: #2F2F29; color: #C9C5BB; border: none; border-radius: 4px; font-size: 10.5px; font-weight: 600; padding: 5px 8px; min-height: 32px; cursor: pointer;"><span>{</span>{first_name}}</button>
+                  <button style="font-family: ui-monospace, monospace; background: #2F2F29; color: #C9C5BB; border: none; border-radius: 4px; font-size: 10.5px; font-weight: 600; padding: 5px 8px; min-height: 32px; cursor: pointer;"><span>{</span>{queue_wait}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Template states — every one in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows E07, E08 · Doc 05 FR-28 · Doc 16 §8</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">Never customised — shipped wording in force</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">When we are closed</div>
+          <div style="border: 1px dashed #CFCBC1; border-radius: 7px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #726D63; margin-top: 8px;">Using the shipped wording — nothing to reset.</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 12px; margin-top: 8px; font-size: 12px; line-height: 1.6; color: #4A4842;">We are closed right now. Leave your message and we will reply when we open at 8:00.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E08 — unknown variable</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div role="alert" style="border: 1.5px solid #B32B2B; border-radius: 7px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #1D1C18;">Hello <span>{</span>{player_name}} — your ticket is <span>{</span>{ticket_id}}.</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Two of these are not real variables</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #7A3232; margin-top: 3px;">Players would receive the braces exactly as typed. Only <span style="font-family: ui-monospace, monospace;"><span>{</span>{first_name}}</span> and <span style="font-family: ui-monospace, monospace;"><span>{</span>{queue_wait}}</span> get filled in.</div>
+          </div>
+          <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 9px; cursor: pointer;">Use <span>{</span>{first_name}} instead</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">Publish</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Publish 3 changed messages?</div>
+          <div style="font-size: 11.5px; line-height: 1.7; color: #4A4842; margin-top: 8px;">· First hello · English<br />· Handing over to a person · English<br />· Why we cannot reply yet · አማርኛ</div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Both bots that share these messages are affected. Players see the new wording from their next message.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Keep editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">Loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px;">
+          <div style="height: 10px; width: 44%; background: #EEECE6; border-radius: 3px;"></div>
+          <div style="height: 74px; background: #F2F1ED; border-radius: 7px; margin-top: 10px;"></div>
+          <div style="height: 8px; width: 62%; background: #F2F1ED; border-radius: 3px; margin-top: 10px;"></div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">Never customised — shipped wording in force</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">When we are closed</div>
+          <div style="border: 1px dashed #45443E; border-radius: 7px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #918C80; margin-top: 8px;">Using the shipped wording — nothing to reset.</div>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 10px 12px; margin-top: 8px; font-size: 12px; line-height: 1.6; color: #C9C5BB;">We are closed right now. Leave your message and we will reply when we open at 8:00.</div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E08 — unknown variable</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div role="alert" style="border: 1.5px solid #F08A8A; border-radius: 7px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">Hello <span>{</span>{player_name}} — your ticket is <span>{</span>{ticket_id}}.</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Two of these are not real variables</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #E0A0A0; margin-top: 3px;">Players would receive the braces exactly as typed. Only <span style="font-family: ui-monospace, monospace;"><span>{</span>{first_name}}</span> and <span style="font-family: ui-monospace, monospace;"><span>{</span>{queue_wait}}</span> get filled in.</div>
+          </div>
+          <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 9px; cursor: pointer;">Use <span>{</span>{first_name}} instead</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">Publish</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Publish 3 changed messages?</div>
+          <div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 8px;">· First hello · English<br />· Handing over to a person · English<br />· Why we cannot reply yet · አማርኛ</div>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 9px 11px; margin-top: 9px; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Both bots that share these messages are affected. Players see the new wording from their next message.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Keep editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">Loading</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px;">
+          <div style="height: 10px; width: 44%; background: #2F2F29; border-radius: 3px;"></div>
+          <div style="height: 74px; background: #262622; border-radius: 7px; margin-top: 10px;"></div>
+          <div style="height: 8px; width: 62%; background: #262622; border-radius: 3px; margin-top: 10px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Commands, and the /language gate</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows E09, E10 · Doc 05 FR-25, §14</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The five commands are fixed in v1, and the screen says so plainly instead of offering an Add button that would only ever refuse. What <em>is</em> editable is what each one is called in each language — and the /language picker only offers a language once its customer-facing messages are complete, so the gate is shown as a checklist rather than as a mysterious absence.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E09 — the five commands</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Command</span>
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">English description</span>
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">አማርኛ</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #F0EEE9; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #1D1C18;">/start</span><span style="padding: 9px 12px; color: #4A4842;">Start here</span><span style="padding: 9px 12px; color: #4A4842;">ጀምር</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #F0EEE9; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #1D1C18;">/menu</span><span style="padding: 9px 12px; color: #4A4842;">Show the main menu</span><span style="padding: 9px 12px; color: #4A4842;">ዋና ምናሌ አሳይ</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #F0EEE9; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #1D1C18;">/status</span><span style="padding: 9px 12px; color: #4A4842;">My open requests</span><span style="padding: 9px 12px; color: #4A4842;">የእኔ ጥያቄዎች ሁኔታ</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #F0EEE9; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #1D1C18;">/human</span><span style="padding: 9px 12px; color: #4A4842;">Talk to a person</span><span style="padding: 9px 12px; color: #4A4842;">ሰው ማነጋገር</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #1D1C18;">/language</span><span style="padding: 9px 12px; color: #4A4842;">Change language</span><span style="padding: 9px 12px; color: #4A4842;">ቋንቋ ቀይር</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">This set is fixed in this version</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">You can rename and translate them. Adding a sixth command is not possible yet — the menu is where new entry points belong.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E10 — what /language offers</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px; padding-bottom: 10px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">English</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">6 of 6 messages · menu complete</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">✓ Offered</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 10px 0;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">አማርኛ</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">5 of 6 messages · 2 menu labels missing</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">Not offered yet</span>
+          </div>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">A player choosing Amharic would meet English messages, so the picker leaves it out until it is complete. Three things remain: <strong style="font-weight: 600;">window guidance</strong>, and the menu labels <strong style="font-weight: 600;">Verify account</strong> and <strong style="font-weight: 600;">Betting rules</strong>.</div>
+          <a href="#gaps" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #22211D; margin-top: 6px;">Fill the three gaps →</a>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E09 — the five commands</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); background: #232320; border-bottom: 1px solid #343430;">
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Command</span>
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">English</span>
+            <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">አማርኛ</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #262622; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #ECEAE4;">/start</span><span style="padding: 9px 12px; color: #C9C5BB;">Start here</span><span style="padding: 9px 12px; color: #C9C5BB;">ጀምር</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #262622; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #ECEAE4;">/menu</span><span style="padding: 9px 12px; color: #C9C5BB;">Show the main menu</span><span style="padding: 9px 12px; color: #C9C5BB;">ዋና ምናሌ አሳይ</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #262622; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #ECEAE4;">/status</span><span style="padding: 9px 12px; color: #C9C5BB;">My open requests</span><span style="padding: 9px 12px; color: #C9C5BB;">የእኔ ጥያቄዎች ሁኔታ</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); border-bottom: 1px solid #262622; font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #ECEAE4;">/human</span><span style="padding: 9px 12px; color: #C9C5BB;">Talk to a person</span><span style="padding: 9px 12px; color: #C9C5BB;">ሰው ማነጋገር</span></div>
+          <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); font-size: 12px;"><span style="padding: 9px 12px; font-family: ui-monospace, monospace; color: #ECEAE4;">/language</span><span style="padding: 9px 12px; color: #C9C5BB;">Change language</span><span style="padding: 9px 12px; color: #C9C5BB;">ቋንቋ ቀይር</span></div>
+        </div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 13px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">This set is fixed in this version</div>
+          <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">You can rename and translate them. Adding a sixth command is not possible yet — the menu is where new entry points belong.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E10 — what /language offers</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 9px; padding-bottom: 10px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">English</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">6 of 6 messages · menu complete</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">✓ Offered</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 10px 0;">
+            <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">አማርኛ</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">5 of 6 messages · 2 menu labels missing</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">Not offered yet</span>
+          </div>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.7; color: #C9C5BB;">አማርኛን የመረጠ ተጫዋች የእንግሊዝኛ መልእክቶችን ያገኛል፤ ስለዚህ እስኪሟላ ድረስ በምናሌው አይታይም። ሦስት ነገሮች ቀርተዋል፦ <strong style="font-weight: 600; color: #ECEAE4;">window guidance</strong>፣ እና የምናሌ መለያዎቹ <strong style="font-weight: 600; color: #ECEAE4;">Verify account</strong> እና <strong style="font-weight: 600; color: #ECEAE4;">Betting rules</strong>።</div>
+          <a href="#gaps" style="display: inline-flex; align-items: center; min-height: 32px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; margin-top: 6px;">ሦስቱን ጉድለቶች ሙላ →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — read-only, per your ruling</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 16 §9 · Doc 03 §9</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · read-only</div>
+        <div data-screen-label="E07 templates 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Bot messages</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">You can read every message and see how it arrives. Changing the wording needs a tablet or a computer.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">First hello</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px;">Edited</span>
+              </div>
+              <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 10px; margin-top: 9px;">
+                <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12.5px; line-height: 1.6; color: #1D1C18;">Hello Abebe! You have reached NA BET support. Tell me what happened and I will help, or tap a button below. Typical wait right now: 4 minutes.</div>
+              </div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 8px;">Shipped: “Hello <span>{</span>{first_name}}. How can we help you today?”</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">The other five</div>
+              <div style="font-size: 12px; line-height: 1.9; color: #4A4842; margin-top: 6px;">When we are closed<br />Handing over to a person <span style="font-size: 10px; font-weight: 600; background: #EEECE6; padding: 1px 6px; border-radius: 4px;">Edited</span><br />Solved, and how did we do<br />Wrong door — go to the account<br />Why we cannot reply yet <span style="font-size: 10px; font-weight: 600; background: #FCF0D9; color: #8F5F08; padding: 1px 6px; border-radius: 4px;">አማርኛ missing</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">E09 · E10 at 375 — commands and the language gate</div>
+        <div data-screen-label="E09 commands 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">ትዕዛዞች እና ቋንቋ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #4A4842; margin-top: 2px;">ሁሉንም ማንበብ ይችላሉ። ስሞችን ለመቀየር ግን ታብሌት ወይም ኮምፒውተር ያስፈልጋል።</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">አምስቱ ትዕዛዞች</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 9px;">
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none; width: 78px;">/start</span><span style="font-size: 12px; color: #4A4842;">ጀምር</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none; width: 78px;">/menu</span><span style="font-size: 12px; color: #4A4842;">ዋና ምናሌ አሳይ</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none; width: 78px;">/status</span><span style="font-size: 12px; color: #4A4842;">የእኔ ጥያቄዎች ሁኔታ</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none; width: 78px;">/human</span><span style="font-size: 12px; color: #4A4842;">ሰው ማነጋገር</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; flex: none; width: 78px;">/language</span><span style="font-size: 12px; color: #4A4842;">ቋንቋ ቀይር</span></div>
+              </div>
+              <div style="font-size: 11px; line-height: 1.7; color: #6B675D; margin-top: 10px;">በዚህ ስሪት ላይ የተወሰኑ ናቸው — መጨመር አይቻልም።</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">/language የሚያቀርበው</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #1D1C18;">English</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">✓ ይቀርባል</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #1D1C18;">አማርኛ</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">ገና አይቀርብም</span>
+              </div>
+              <div style="font-size: 11px; line-height: 1.7; color: #8F5F08; margin-top: 9px;">ሦስት ጉድለቶች ሲሟሉ በራስ-ሰር ይታከላል።</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ · read-only</div>
+        <div data-screen-label="E09 commands 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ትዕዛዞች እና ቋንቋ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">ሁሉንም ማንበብ ይችላሉ። ስሞችን ለመቀየር ግን ታብሌት ወይም ኮምፒውተር ያስፈልጋል።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">አምስቱ ትዕዛዞች</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 9px;">
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none; width: 78px;">/start</span><span style="font-size: 12px; color: #C9C5BB;">ጀምር</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none; width: 78px;">/menu</span><span style="font-size: 12px; color: #C9C5BB;">ዋና ምናሌ አሳይ</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none; width: 78px;">/status</span><span style="font-size: 12px; color: #C9C5BB;">የእኔ ጥያቄዎች ሁኔታ</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none; width: 78px;">/human</span><span style="font-size: 12px; color: #C9C5BB;">ሰው ማነጋገር</span></div>
+                <div style="display: flex; gap: 9px; align-items: baseline;"><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; flex: none; width: 78px;">/language</span><span style="font-size: 12px; color: #C9C5BB;">ቋንቋ ቀይር</span></div>
+              </div>
+              <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 10px;">በዚህ ስሪት ላይ የተወሰኑ ናቸው — መጨመር አይቻልም።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">/language የሚያቀርበው</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #ECEAE4;">English</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">✓ ይቀርባል</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <span style="font-size: 12px; color: #ECEAE4;">አማርኛ</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">ገና አይቀርብም</span>
+              </div>
+              <div style="font-size: 11px; line-height: 1.7; color: #E8C25A; margin-top: 9px;">ሦስት ጉድለቶች ሲሟሉ በራስ-ሰር ይታከላል።</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">E07 at 375 — the six messages</div>
+        <div data-screen-label="E07 templates 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Bot messages</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #C9C5BB; margin-top: 2px;">You can read every message and see how it arrives. Changing the wording needs a tablet or a computer.</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">First hello</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px;">Edited</span>
+              </div>
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 10px; padding: 10px; margin-top: 9px;">
+                <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">Hello Abebe! You have reached NA BET support. Tell me what happened and I will help, or tap a button below. Typical wait right now: 4 minutes.</div>
+              </div>
+              <div style="font-size: 11px; color: #A6A296; margin-top: 8px;">Shipped: “Hello <span>{</span>{first_name}}. How can we help you today?”</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">The other five</div>
+              <div style="font-size: 12px; line-height: 1.9; color: #C9C5BB; margin-top: 6px;">When we are closed<br />Handing over to a person <span style="font-size: 10px; font-weight: 600; background: #2F2F29; padding: 1px 6px; border-radius: 4px;">Edited</span><br />Solved, and how did we do<br />Wrong door — go to the account<br />Why we cannot reply yet <span style="font-size: 10px; font-weight: 600; background: #3A2D10; color: #F0B54A; padding: 1px 6px; border-radius: 4px;">አማርኛ missing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> E07 — all six named templates, listed and editable, in §A both themes and summarised at 375 in both themes. E08 — variable insertion, the two-variable set, and the unknown-variable error, in §A both themes and §B both themes. E09 — the five fixed commands with per-language descriptions and the “fixed in v1” statement, §C both themes and §D dark. E10 — the /language gate as a per-language readiness list naming exactly what is missing, §C both themes and §D dark. E11 — the jargon-free window-guidance copy in both languages, §A dark (Amharic, as the missing-translation case) and its shipped English beside it.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">States, each in both theme columns of §B:</strong> never-customised (shipped wording in force), unknown variable, publish confirmation, loading. The missing-translation state is in §A dark and its light counterpart is the “አማርኛ missing” row in the §A light list and the §D light summary.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 variants are read-only behind the explicit notice, per your ruling. Nothing else departs from the documents.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> I named the templates by their job — “First hello”, “When we are closed”, “Why we cannot reply yet” — instead of by their keys. It reads better and it is a small invention of wording on my part; the keys are shown beside each. If your team already calls these something specific, give me their names and I will use those instead.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

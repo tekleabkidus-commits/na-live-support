@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S04-help-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Help tab</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows E01–E06, plus one state with no approved row · Doc 13 FR-11 rendering Doc 10 FR-18 · §8, §12, §14, FS-05. The knowledge base inside the panel. The content belongs to Doc 10 and is not mine to design; what is mine is how it reads on a phone, how fast it gets out of the way, and the one promise Doc 13 makes on every screen of this tab — <strong style="font-weight: 600;">the way back to a human is always visible</strong>. A help tab that traps someone in articles is worse than no help tab.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #7E650F; background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 11px 13px; text-wrap: pretty;">One frame below has no checklist row. The <strong style="font-weight: 600;">language fallback</strong> state — an article that exists only in English shown to an Amharic visitor — is required by Doc 13 §14 and Doc 10's article-language behaviour, but B3-S00 was approved with six E rows and none of them covers it. I have drawn it rather than let it go missing, and I am not folding it into a neighbouring row: at the closing audit that would be a false ✅. <strong style="font-weight: 600;">It needs a scope-limited reopen of B3-S00 to add row E07.</strong> Your call.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · browse, search, read</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">E01–E04, E06 · plus the unrowed language-fallback state · Doc 10 FR-18</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E01 · Light — browse</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; height: 680px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 11px;">
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Help</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: none; padding: 12px 14px;">
+            <label style="display: block;"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Search help</span><span style="display: flex; align-items: center; gap: 9px; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 13px; min-height: 44px; background: #FFFFFF;"><span style="font-size: 14px; color: #6B675D;">⌕</span><span style="font-size: 15px; color: #6F6A61;">Search for an answer</span></span></label>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 0 14px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+            <div>
+              <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Popular right now</div>
+              <div style="display: flex; flex-direction: column; gap: 1px;">
+                <button style="font-family: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 0; min-height: 56px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto; min-width: 0;">How long do withdrawals take?</span><span style="flex: none; color: #A8A398;">›</span></button>
+                <button style="font-family: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 0; min-height: 56px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto; min-width: 0;">Why was my deposit not credited?</span><span style="flex: none; color: #A8A398;">›</span></button>
+                <button style="font-family: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #F0EEE9; padding: 0; min-height: 56px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto; min-width: 0;">Verifying your account</span><span style="flex: none; color: #A8A398;">›</span></button>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Categories</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 14px; min-height: 52px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto;">Deposits &amp; withdrawals</span><span style="flex: none; font-size: 12.5px; color: #6B675D;">14</span></button>
+                <button style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 14px; min-height: 52px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto;">Account &amp; verification</span><span style="flex: none; font-size: 12.5px; color: #6B675D;">9</span></button>
+                <button style="font-family: inherit; text-align: left; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 0 14px; min-height: 52px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 10px;"><span style="flex: 1 1 auto;">Bonuses &amp; promotions</span><span style="flex: none; font-size: 12.5px; color: #6B675D;">6</span></button>
+              </div>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px; border-top: 1px solid #E5E2DB; background: #F6F5F2;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; font-size: 15px; font-weight: 600; cursor: pointer;">Still need help? Start a chat</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The start-a-chat footer is pinned above the tab bar on every Help screen — browse, search, article. It is the only element in this tab that never scrolls away.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E02 · Dark — search as you type, Amharic</div>
+        <div role="dialog" aria-modal="true" aria-label="ከና ድጋፍ ጋር ይወያዩ" style="width: 375px; height: 680px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 11px;">
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">እገዛ</div></div>
+            <button aria-label="ዝጋ" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: none; padding: 12px 14px;">
+            <span style="display: flex; align-items: center; gap: 9px; border: 1.5px solid #ECEAE4; border-radius: 10px; padding: 0 13px; min-height: 44px; background: #1C1C19;"><span style="font-size: 14px; color: #ECEAE4;">⌕</span><span style="font-size: 15px; color: #ECEAE4;">ማውጣት</span><span style="display: inline-block; width: 1.5px; height: 16px; background: #ECEAE4;"></span><button aria-label="አጽዳ" style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #A6A296; font-size: 14px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button></span>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 0 14px; overflow: hidden;">
+            <div style="font-size: 12px; color: #9A9588; padding: 2px 0 10px;">4 ውጤቶች</div>
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #262622; padding: 12px 0; min-height: 56px; cursor: pointer;"><span style="display: block; font-size: 15px; color: #ECEAE4; line-height: 1.5;">ገንዘብ <mark style="background: #6B551A; color: #FFF6DC; padding: 0 3px; border-radius: 2px;">ማውጣት</mark> ምን ያህል ጊዜ ይወስዳል?</span><span style="display: block; font-size: 12.5px; color: #A6A296; margin-top: 4px; line-height: 1.5;">ወደ telebirr እና CBE Birr አብዛኛውን ጊዜ በ15 ደቂቃ ውስጥ ይደርሳል።</span></button>
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #262622; padding: 12px 0; min-height: 56px; cursor: pointer;"><span style="display: block; font-size: 15px; color: #ECEAE4; line-height: 1.5;">የ<mark style="background: #6B551A; color: #FFF6DC; padding: 0 3px; border-radius: 2px;">ማውጣት</mark> ገደቦች</span><span style="display: block; font-size: 12.5px; color: #A6A296; margin-top: 4px; line-height: 1.5;">በቀን ከፍተኛው መጠን እና እንዴት እንደሚጨምር።</span></button>
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; padding: 12px 0; min-height: 56px; cursor: pointer;"><span style="display: block; font-size: 15px; color: #ECEAE4; line-height: 1.5;">ያልተሳካ <mark style="background: #6B551A; color: #FFF6DC; padding: 0 3px; border-radius: 2px;">ማውጣት</mark></span><span style="display: block; font-size: 12.5px; color: #A6A296; margin-top: 4px; line-height: 1.5;">ገንዘቡ ከተመለሰ ምን ማድረግ እንዳለብዎት።</span></button>
+            </div>
+          </div>
+          <div style="flex: none; padding: 12px 14px; border-top: 1px solid #343430; background: #232320;">
+            <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; min-height: 48px; font-size: 15px; font-weight: 600; cursor: pointer;">አሁንም እገዛ ይፈልጋሉ? ውይይት ይጀምሩ</button>
+          </div>
+          <div role="tablist" aria-label="ክፍሎች" style="flex: none; border-top: 1px solid #343430; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">መነሻ</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">መልእክቶች</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #ECEAE4; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">እገዛ</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Results arrive as the visitor types, debounced. The match is highlighted on the word, and each result carries the first line of the article so the choice can be made without opening three of them.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E03, E04 · Light — article and its feedback row</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; height: 680px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back to help" style="font-family: inherit; flex: none; background: transparent; border: none; color: #1D1C18; font-size: 17px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="flex: 1 1 auto; min-width: 0; font-size: 13.5px; color: #6B675D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposits &amp; withdrawals</div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 18px 18px 0; overflow: hidden;">
+            <h3 style="margin: 0; font-size: 21px; font-weight: 600; color: #1D1C18; line-height: 1.3; letter-spacing: -0.01em;">How long do withdrawals take?</h3>
+            <div style="font-size: 12.5px; color: #6B675D; margin-top: 8px;">Updated 12 July</div>
+            <p style="margin: 14px 0 0; font-size: 16px; line-height: 1.65; color: #1D1C18;">Withdrawals to telebirr and CBE Birr normally arrive within 15 minutes of approval.</p>
+            <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.65; color: #1D1C18;">Bank transfers take up to one business day. Requests made after 17:00 are processed the next morning.</p>
+            <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.65; color: #1D1C18;">First withdrawals need a verified account, which adds a few minutes the first time only.</p>
+          </div>
+          <div style="flex: none; padding: 14px 18px; border-top: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 13.5px; color: #4A4842; flex: 1 1 auto;">Was this helpful?</span>
+            <button aria-label="Yes, helpful" style="font-family: inherit; flex: none; min-width: 48px; min-height: 44px; border-radius: 10px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 16px; cursor: pointer;">👍</button>
+            <button aria-label="No, not helpful" style="font-family: inherit; flex: none; min-width: 48px; min-height: 44px; border-radius: 10px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 16px; cursor: pointer;">👎</button>
+          </div>
+          <div style="flex: none; padding: 12px 14px; border-top: 1px solid #E5E2DB; background: #F6F5F2;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; font-size: 15px; font-weight: 600; cursor: pointer;">This didn't answer it — start a chat</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Reader typography: 16px body, generous line height, no widget chrome competing with it. The footer's wording shifts on an article — a visitor still reading has already told you the article is not enough. The tab bar stays: an article is a view inside the panel, not a mode that takes the panel over, so Messages is always one tap away.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E06 · Dark — the index is down, chat still works</div>
+        <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; height: 680px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 11px;">
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Help</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 28px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 9px;" role="status">
+            <span style="font-size: 22px; color: #6E6A61;">◫</span>
+            <div style="font-size: 16px; font-weight: 600; color: #ECEAE4;">Articles are unavailable right now</div>
+            <div style="font-size: 14px; color: #A6A296; line-height: 1.6; text-wrap: pretty;">Chat is working normally — ask us and we'll answer directly.</div>
+            <button style="font-family: inherit; margin-top: 8px; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; min-height: 48px; padding: 0 22px; font-size: 15px; font-weight: 600; cursor: pointer;">Start a chat</button>
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; min-height: 44px; font-size: 13.5px; cursor: pointer;">Try again</button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #343430; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Home</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">Messages</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #ECEAE4; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Help</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Help and Messages fail independently. The tab says what is broken in one line and points at the thing that still works, rather than apologising at length.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">No row yet · Language fallback — Amharic widget, English-only article</div>
+        <div role="dialog" aria-modal="true" aria-label="ከና ድጋፍ ጋር ይወያዩ" style="width: 375px; height: 680px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 8px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="ወደ እገዛ ተመለስ" style="font-family: inherit; flex: none; background: transparent; border: none; color: #1D1C18; font-size: 17px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="flex: 1 1 auto; min-width: 0; font-size: 13.5px; color: #6B675D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ተቀማጭ እና ማውጣት</div>
+            <button aria-label="ዝጋ" style="font-family: inherit; flex: none; background: transparent; border: none; color: #4A4842; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div style="flex: none; margin: 12px 14px 0; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; display: flex; gap: 9px;" role="status">
+            <span style="flex: none; font-size: 13px; color: #6B675D;">🌐</span>
+            <div style="font-size: 13px; color: #4A4842; line-height: 1.55;">ይህ ጽሑፍ በአማርኛ ገና የለም — በእንግሊዝኛ እያሳየነው ነው። <span style="color: #1D1C18;">Shown in English.</span></div>
+          </div>
+          <div style="flex: 1; min-height: 0; padding: 16px 18px 0; overflow: hidden;">
+            <h3 style="margin: 0; font-size: 21px; font-weight: 600; color: #1D1C18; line-height: 1.3; letter-spacing: -0.01em;">Withdrawal limits</h3>
+            <div style="font-size: 12.5px; color: #6B675D; margin-top: 8px;">Updated 3 July · English</div>
+            <p style="margin: 14px 0 0; font-size: 16px; line-height: 1.65; color: #1D1C18;">The daily withdrawal limit is 50,000 ETB for verified accounts and 10,000 ETB before verification.</p>
+            <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.65; color: #1D1C18;">Limits reset at midnight East Africa Time. Raising a limit takes one working day and needs a document check.</p>
+          </div>
+          <div style="flex: none; padding: 14px 18px; border-top: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 13.5px; color: #4A4842; flex: 1 1 auto;">ጠቃሚ ነበር?</span>
+            <button aria-label="አዎ ጠቃሚ ነበር" style="font-family: inherit; flex: none; min-width: 48px; min-height: 44px; border-radius: 10px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 16px; cursor: pointer;">👍</button>
+            <button aria-label="አይ ጠቃሚ አልነበረም" style="font-family: inherit; flex: none; min-width: 48px; min-height: 44px; border-radius: 10px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 16px; cursor: pointer;">👎</button>
+          </div>
+          <div style="flex: none; padding: 12px 14px; border-top: 1px solid #E5E2DB; background: #F6F5F2;">
+            <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 48px; font-size: 15px; font-weight: 600; cursor: pointer;">አሁንም እገዛ ይፈልጋሉ? ውይይት ይጀምሩ</button>
+          </div>
+          <div role="tablist" aria-label="ክፍሎች" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">መነሻ</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #6B675D; cursor: pointer;">መልእክቶች</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">እገዛ</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Doc 10's fallback chain, made visible. The visitor is told in their own language that this one is not translated yet, rather than being handed English silently or — worse — an empty category. Only public, published articles reach this tab at all. <strong style="font-weight: 600;">No approved checklist row covers this state</strong> — it awaits E07.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 · article in the floating panel</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">E03–E05 · 380×640</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+      <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 380px; height: 640px; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 14px; box-shadow: 0 18px 48px rgba(29,28,24,0.2); overflow: hidden; display: flex; flex-direction: column;">
+        <div style="flex: none; padding: 8px 12px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+          <button aria-label="Back to help" style="font-family: inherit; flex: none; background: transparent; border: none; color: #1D1C18; font-size: 16px; min-width: 36px; min-height: 36px; padding: 0; cursor: pointer;">←</button>
+          <div style="flex: 1 1 auto; min-width: 0; font-size: 13px; color: #6B675D;">Deposits &amp; withdrawals</div>
+          <button aria-label="Minimize" style="font-family: inherit; background: transparent; border: none; color: #4A4842; font-size: 16px; min-width: 36px; min-height: 36px; cursor: pointer;">－</button>
+          <button aria-label="Close chat" style="font-family: inherit; background: transparent; border: none; color: #4A4842; font-size: 16px; min-width: 36px; min-height: 36px; cursor: pointer;">✕</button>
+        </div>
+        <div style="flex: 1; min-height: 0; padding: 18px; overflow: hidden;">
+          <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #1D1C18; line-height: 1.3;">Why was my deposit not credited?</h3>
+          <div style="font-size: 12px; color: #6B675D; margin-top: 8px;">Updated 28 June</div>
+          <p style="margin: 14px 0 0; font-size: 15.5px; line-height: 1.65; color: #1D1C18;">Most deposits appear within a minute. If yours has not, the usual cause is a reference number that did not travel with the transfer.</p>
+          <p style="margin: 12px 0 0; font-size: 15.5px; line-height: 1.65; color: #1D1C18;">Send us the transaction number from your telebirr or bank receipt and we can match it manually.</p>
+          <div style="margin-top: 16px; background: #F6F5F2; border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.6; color: #4A4842;">Keep the receipt — a screenshot of it is the fastest way for an agent to trace the payment.</div>
+        </div>
+        <div style="flex: none; padding: 12px 18px; border-top: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 13px; color: #4A4842; flex: 1 1 auto;">Was this helpful?</span>
+          <button aria-label="Yes, helpful" style="font-family: inherit; flex: none; min-width: 44px; min-height: 40px; border-radius: 9px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 15px; cursor: pointer;">👍</button>
+          <button aria-label="No, not helpful" style="font-family: inherit; flex: none; min-width: 44px; min-height: 40px; border-radius: 9px; background: #FFFFFF; border: 1px solid #CFCBC1; font-size: 15px; cursor: pointer;">👎</button>
+        </div>
+        <div style="flex: none; padding: 11px 14px; border-top: 1px solid #E5E2DB; background: #F6F5F2;">
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 10px; min-height: 44px; font-size: 14.5px; font-weight: 600; cursor: pointer;">This didn't answer it — start a chat</button>
+        </div>
+        <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #E5E2DB; display: flex;">
+          <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 52px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Home</button>
+          <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 52px; font-size: 12.5px; color: #6B675D; cursor: pointer;">Messages</button>
+          <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #22211D; margin-top: -1px; min-height: 52px; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Help</button>
+        </div>
+      </div>
+      <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px; align-self: flex-start;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">Two things this tab must not become</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">A deflection funnel, and a search box with nothing behind it. The footer that says “start a chat” is deliberately the most prominent control on every screen of the tab — a player chasing a missing 2,500 birr is not in the mood to read three articles, and burying the human is how a widget earns a reputation for wasting time. Deflection is a side effect of a good article, never a goal the interface pursues.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

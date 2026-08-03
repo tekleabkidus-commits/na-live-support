@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S05-rg-blocking-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The RG flag, and blocking</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows E01–E07 and F01–F05 · Doc 08 FR-14, FR-15, FR-18, BR-03, EC-06, EC-07, SEC-01, §8, §9 · Doc 04 FR-03. Two sensitive states in one screen set because they share a discipline: both are about what the interface refuses to say.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">The responsible-gaming flag is the hardest requirement in Batch 4. Not because the banner is difficult — because <strong style="font-weight: 600;">an agent without the permission must not be able to work out that a flag exists</strong>. No lock, no greyed row, no gap where something was removed, no “restricted” label. The unpermitted profile is not a redacted version of the permitted one; it is a different, complete page.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">E01–E03 · The same customer, two staff</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-14, BR-03, SEC-01, §9 · slate, never red</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E01, E02 · Light — with <span style="font-family: ui-monospace, monospace; font-size: 11px;">customers.rg_flag.view</span></div>
+        <aside aria-label="Context" style="width: 380px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; display: flex; border-bottom: 1px solid #E5E2DB; background: #FFFFFF;">
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 500; color: #6B675D;">Ticket</span>
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 600; color: #1D1C18; border-bottom: 2px solid #22211D; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">Customer<span title="Responsible gaming flag" style="width: 6px; height: 6px; border-radius: 50%; background: #59636F;"></span></span>
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 500; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">Copilot<span title="New suggestion" style="width: 6px; height: 6px; border-radius: 50%; background: #7C5CFC;"></span></span>
+          </div>
+          <div style="flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="background: #ECEEF1; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px;" role="note">
+              <div style="display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 13px; color: #59636F; margin-top: 1px;">◈</span>
+                <div style="flex: 1 1 auto; min-width: 0;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #414B57;">Responsible gaming</div>
+                  <div style="font-size: 12px; color: #4A5460; line-height: 1.6; margin-top: 4px;">Flagged by Meron Assefa on 14 July — “customer described chasing losses over three sessions”.</div>
+                  <a href="#rg-handling-script" aria-label="Open the approved responsible-gaming handling script" style="display: inline-flex; align-items: center; margin-top: 9px; background: #FFFFFF; border: 1px solid #D5D8DE; border-radius: 6px; color: #414B57; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; text-decoration: none;">Open the handling script ↗</a>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">ተገ</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">ተስፋዬ ገብሬ</div><div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px;"><span style="background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">አማርኛ</span><span style="background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">🇪🇹 Ethiopia</span></div></div>
+            </div>
+            <div>
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Identities</div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 12px; color: #4A4842; margin-top: 1px;">✈</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18;">@tesfaye_g</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">from Telegram · 8 Jan</div></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">History</div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 11px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px;">
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">22</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">tickets</div></div>
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">3.9</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">of 5</div></div>
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">1d</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">last contact</div></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 380px; line-height: 1.5;">Slate, not red. This is not an alarm and the customer has done nothing wrong — the banner's job is to put the approved script one tap from the agent before they reply. The tab dot uses the same neutral, so a glance at the tab strip does not shout it across an open-plan floor either.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E03 · Light — without it. Not redacted. Absent.</div>
+        <aside aria-label="Context" style="width: 380px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; display: flex; border-bottom: 1px solid #E5E2DB; background: #FFFFFF;">
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 500; color: #6B675D;">Ticket</span>
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 600; color: #1D1C18; border-bottom: 2px solid #22211D;">Customer</span>
+            <span style="flex: 1; text-align: center; padding: 11px 6px; font-size: 12.5px; font-weight: 500; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">Copilot<span title="New suggestion" style="width: 6px; height: 6px; border-radius: 50%; background: #7C5CFC;"></span></span>
+          </div>
+          <div style="flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">ተገ</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">ተስፋዬ ገብሬ</div><div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px;"><span style="background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">አማርኛ</span><span style="background: #EEECE6; color: #4A4842; font-size: 10.5px; border-radius: 4px; padding: 3px 7px;">🇪🇹 Ethiopia</span></div></div>
+            </div>
+            <div>
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">Identities</div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 9px 11px; display: flex; align-items: flex-start; gap: 9px;">
+                <span style="flex: none; font-size: 12px; color: #4A4842; margin-top: 1px;">✈</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18;">@tesfaye_g</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">from Telegram · 8 Jan</div></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 7px;">History</div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 11px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px;">
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">22</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">tickets</div></div>
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">3.9</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">of 5</div></div>
+                <div><div style="font-size: 17px; font-weight: 700; color: #1D1C18;">1d</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">last contact</div></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 380px; line-height: 1.5;">Put these two side by side and the second has no seam. No banner slot, no empty space where one was, no dot on the tab, and the page begins where it always begins. The API never sends the field, so there is nothing for a curious agent to find in the markup either.</div>
+      </div>
+
+      <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px; align-self: flex-start;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">Why absence and not a lock</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">A locked row tells you a secret exists and who it is about. On a support floor that is enough: the agent knows this customer has <em>something</em>, and the guessing does the damage the permission was meant to prevent.</p>
+        <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">So the rule is stricter than hiding a value. Two agents comparing screens over a desk should not be able to tell which of them can see more — and that only holds if the unpermitted view is a complete page in its own right, which is what these two frames are drawn to prove.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">E04–E07 · Setting it, clearing it, and the record</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-14, FR-15, EC-06, T-05 · US-05</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E04 · Light — set by hand, reason required</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Flag for responsible gaming</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">ተስፋዬ ገብሬ</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 12.5px; color: #4A4842; line-height: 1.65;">This routes their new tickets to the RG queue, stops promotional messages and non-essential SMS, and shows the handling script to staff who can see the flag.</div>
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 6px;">Why are you flagging this? <span style="color: #6B675D; font-weight: 400;">Required — kept permanently</span></span><span style="display: block; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 12px; min-height: 76px; font-size: 12.5px; color: #1D1C18; line-height: 1.6;">Customer described chasing losses over three sessions and asked about deposit limits.<span style="display: inline-block; width: 1.5px; height: 15px; background: #22211D; vertical-align: -3px; margin-left: 1px;"></span></span></label>
+            <div style="background: #F6F5F2; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; color: #4A4842; line-height: 1.6;">Written by you, kept for good, and visible to compliance. Clearing it later keeps this reason on the record.</div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Flag this customer</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E05 · Dark — set by detection, with its evidence</div>
+        <div style="width: 460px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+          <div style="background: #272D34; border: 1px solid #3A424B; border-radius: 8px; padding: 12px;" role="note">
+            <div style="display: flex; align-items: flex-start; gap: 9px;">
+              <span style="flex: none; font-size: 13px; color: #9AA6B2; margin-top: 1px;">◈</span>
+              <div style="flex: 1 1 auto; min-width: 0;">
+                <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="font-size: 12.5px; font-weight: 600; color: #C5CDD6;">Responsible gaming</span><span style="display: inline-flex; align-items: center; gap: 4px; background: #292144; border-left: 3px solid #A18BFF; color: #BCA9FF; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px;">✦ Detected</span></div>
+                <div style="font-size: 12px; color: #A7B2BE; line-height: 1.6; margin-top: 5px;">Flagged automatically on 2 August. A person has not reviewed this yet.</div>
+                <div style="background: #1C1C19; border: 1px solid #3A424B; border-radius: 6px; padding: 9px 11px; margin-top: 9px;">
+                  <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9AA6B2;">What triggered it</div>
+                  <div style="font-size: 12px; color: #C5CDD6; line-height: 1.6; margin-top: 5px;">“ዛሬ ሶስት ጊዜ አጥቻለሁ፣ ገንዘቤን ለመመለስ ደግሜ አስገባሁ።”</div>
+                  <div style="font-size: 10.5px; color: #9AA6B2; margin-top: 5px;">#5012 · 2 Aug 23:41 · <span style="text-decoration: underline;">open the message</span></div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                  <a href="#rg-handling-script" aria-label="Open the approved responsible-gaming handling script" style="display: inline-flex; align-items: center; background: #ECEAE4; border-radius: 6px; color: #171714; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; text-decoration: none;">Open the handling script ↗</a>
+                  <button style="font-family: inherit; background: transparent; border: 1px solid #3A424B; border-radius: 6px; color: #C5CDD6; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Clear this flag</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">An AI-set flag always shows the sentence that caused it and links the message in context. It carries the violet AI accent like every other AI-origin thing in the product, and says plainly that no person has looked at it yet — because a false positive here costs a customer their promotions and a difficult conversation.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E06 · Light — clearing it, also on the record</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Clear the flag</div>
+            <div style="font-size: 12px; color: #4A4842; line-height: 1.6; margin-top: 5px;">Routing and suppression go back to normal. The flag and this reason stay in the history for good.</div>
+            <label style="display: block; margin-top: 11px;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 6px;">Why is it being cleared? <span style="color: #6B675D; font-weight: 400;">Required</span></span><span style="display: block; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 12px; min-height: 58px; font-size: 12.5px; color: #1D1C18; line-height: 1.6;">Reviewed the conversation — the customer was describing a friend's situation, not their own.</span></label>
+            <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 11px;">
+              <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 15px; cursor: pointer;">Clear the flag</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E07 · Light — the history, never deleted</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 11px 14px; border-bottom: 1px solid #F0EEE9; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Flag history</div>
+            <div style="padding: 4px 0;">
+              <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #8C877C; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.5;"><strong style="font-weight: 600;">Cleared</strong> — “describing a friend's situation, not their own”</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Meron Assefa · 3 Aug 09:20</div></div></div>
+              <div style="padding: 10px 14px; border-bottom: 1px solid #F0EEE9; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #8C877C; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.5;"><strong style="font-weight: 600;">Set by detection</strong> — from #5012</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Copilot · 2 Aug 23:41</div></div></div>
+              <div style="padding: 10px 14px; display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #8C877C; margin-top: 5px;"></span><div style="min-width: 0;"><div style="font-size: 12px; color: #1D1C18; line-height: 1.5;"><strong style="font-weight: 600;">Set</strong> — “chasing losses over three sessions”</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Meron Assefa · 14 Jul 16:05</div></div></div>
+            </div>
+            <div style="padding: 10px 14px; border-top: 1px solid #F0EEE9; background: #FBFAF8; font-size: 11px; color: #4A4842; line-height: 1.55;">Insert-only. A cleared flag is not an erased one — compliance can export every set and clear with its author and reason.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">F01–F05 · Blocking, and its honest limit</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-18, EC-07, §8 · Doc 04 FR-03</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">F01 · Light — every channel at once</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Block ዮሴፍ ካሳ</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">This is wider than blocking one conversation</div>
+              <ul style="margin: 6px 0 0; padding-left: 17px; font-size: 12px; line-height: 1.75; color: #8E2222;"><li>All <strong style="font-weight: 600;">4 conversations</strong> go quiet, on every channel</li><li>New messages from them are quarantined, not delivered</li><li>Nothing can be sent to them until this is lifted</li></ul>
+            </div>
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 6px;">Reason <span style="color: #6B675D; font-weight: 400;">Required</span></span><span style="display: block; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 12px; min-height: 58px; font-size: 12.5px; color: #1D1C18; line-height: 1.6;">Repeated abuse toward three agents after a declined payout. Escalated to the operator on 1 Aug.</span></label>
+            <div style="font-size: 11.5px; color: #6B675D; line-height: 1.6;">If you only want one channel quiet, block the conversation instead — that leaves the rest of their contact working.</div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Block on every channel</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">F02, F03 · Dark — the banner, and the composer</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 460px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px;" role="note">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F08A8A;">Blocked on every channel</div>
+              <div style="font-size: 12px; color: #F08A8A; line-height: 1.6; margin-top: 4px;">“Repeated abuse toward three agents after a declined payout.”</div>
+              <div style="font-size: 11px; color: #E8A0A0; margin-top: 6px;">Dawit Bekele · 1 Aug 11:40</div>
+              <button style="font-family: inherit; margin-top: 10px; background: transparent; border: 1px solid #6B3838; border-radius: 6px; color: #F08A8A; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Unblock…</button>
+            </div>
+          </div>
+          <div style="width: 460px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 14px; background: #171715; display: flex; flex-direction: column; gap: 9px;">
+              <div style="align-self: flex-start; max-width: 78%; background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; color: #A6A296; line-height: 1.55;">ለምን መልስ አትሰጡኝም?</div>
+              <div style="align-self: center; font-size: 11px; color: #9A9588;">quarantined · not delivered to agents' queues</div>
+            </div>
+            <div style="padding: 14px; border-top: 1px solid #343430;">
+              <div style="border: 1px dashed #45443E; border-radius: 10px; padding: 13px; text-align: center;">
+                <div style="font-size: 12.5px; color: #ECEAE4;">This customer is blocked</div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 5px; line-height: 1.6;">Nothing can be sent. Unblocking is a separate action with its own reason.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">Their messages still arrive and are held, so the record is complete if this ever becomes a dispute — but nobody is asked to answer them. The composer is replaced rather than disabled, and it says the state plainly instead of failing on send.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">F04 · Light — unblocking, separately</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+            <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Unblock ዮሴፍ ካሳ</div>
+            <div style="font-size: 12px; color: #4A4842; line-height: 1.6; margin-top: 5px;">Their 4 conversations return to the state they were in. Quarantined messages stay quarantined — they are not replayed into anyone's queue.</div>
+            <label style="display: block; margin-top: 11px;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 6px;">Reason <span style="color: #6B675D; font-weight: 400;">Required</span></span><span style="display: block; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 12px; min-height: 52px; font-size: 12.5px; color: #6F6A61; line-height: 1.6;">Why is this being lifted?</span></label>
+            <button style="font-family: inherit; margin-top: 11px; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 42px; cursor: pointer;">Unblock</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">F05 · Light — they came back on a new account</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1.5px dashed #CFCBC1; color: #6F6A61; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">?</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Customer #c410</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">@yosef_k2 · first seen 12 minutes ago</div></div>
+            </div>
+            <div style="margin-top: 11px; background: #E7EFFE; border-radius: 7px; padding: 10px 11px;">
+              <div style="font-size: 12px; color: #1D4FD7; line-height: 1.6;">Player ID <span style="font-family: ui-monospace, monospace;">NB-51108</span> is also on 1 other profile.</div>
+            </div>
+            <div style="font-size: 11.5px; color: #4A4842; line-height: 1.65; margin-top: 10px;">A new Telegram account is a new customer — the block did not follow them, and nothing links the two automatically. The duplicate hint is usually how an agent notices. From here they can merge the two profiles and inherit the block, or block this shell on its own.</div>
+            <div style="display: flex; gap: 8px; margin-top: 11px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 7px; font-size: 11.5px; font-weight: 600; min-height: 36px; cursor: pointer;">Merge with the blocked profile</button>
+              <button style="font-family: inherit; flex: none; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 11.5px; font-weight: 600; min-height: 36px; padding: 0 12px; cursor: pointer;">Block this one</button>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 420px; line-height: 1.5;">Doc 08 calls this a documented limitation rather than a bug. Auto-linking the two would mean guessing that a phone or an ID makes two accounts the same person — the exact guess this product refuses to make anywhere else.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · both states on a phone</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">E01 · Dark — the banner in the sheet</div>
+        <div style="width: 375px; height: 600px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; height: 88%; display: flex; flex-direction: column;">
+            <div style="padding: 10px 0 0;"><div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 10px;"></div></div>
+            <div style="display: flex; border-bottom: 1px solid #262622;">
+              <span style="flex: 1; text-align: center; padding: 12px 6px; font-size: 13.5px; color: #A6A296;">Ticket</span>
+              <span style="flex: 1; text-align: center; padding: 12px 6px; font-size: 13.5px; font-weight: 600; color: #ECEAE4; border-bottom: 2px solid #ECEAE4; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">Customer<span title="Responsible gaming flag" style="width: 6px; height: 6px; border-radius: 50%; background: #9AA6B2;"></span></span>
+              <span style="flex: 1; text-align: center; padding: 12px 6px; font-size: 13.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">Copilot<span title="New suggestion" style="width: 6px; height: 6px; border-radius: 50%; background: #A18BFF;"></span></span>
+            </div>
+            <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #272D34; border: 1px solid #3A424B; border-radius: 10px; padding: 13px;" role="note">
+                <div style="font-size: 13.5px; font-weight: 600; color: #C5CDD6;">Responsible gaming</div>
+                <div style="font-size: 13px; color: #A7B2BE; line-height: 1.6; margin-top: 5px;">በሜሮን አሰፋ ሐምሌ 14 ተለይቷል — “ደንበኛው ኪሳራውን ለመመለስ ደጋግሞ እንደሚጫወት ገልጿል”።</div>
+                <a href="#rg-handling-script" aria-label="የአያያዝ መመሪያውን ክፈት" style="display: flex; align-items: center; justify-content: center; margin-top: 11px; width: 100%; background: #ECEAE4; border-radius: 9px; color: #171714; font-size: 13.5px; font-weight: 600; min-height: 48px; text-decoration: none;">የአያያዝ መመሪያውን ክፈት ↗</a>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">ተገ</span>
+                <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 17px; font-weight: 600; color: #ECEAE4;">ተስፋዬ ገብሬ</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 4px;">22 ጥያቄዎች · ትናንት</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">F02 · Light — blocked, on the profile</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 12px 14px; background: #FBE5E5; border-bottom: 1px solid #EFC7C7;" role="note">
+            <div style="font-size: 14px; font-weight: 600; color: #8E2222;">Blocked on every channel</div>
+            <div style="font-size: 13px; color: #8E2222; line-height: 1.6; margin-top: 5px;">“Repeated abuse toward three agents after a declined payout.”</div>
+            <div style="font-size: 11.5px; color: #8E2222; margin-top: 6px;">Dawit Bekele · 1 Aug</div>
+          </div>
+          <div style="padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">ዮካ</span>
+              <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 17px; font-weight: 600; color: #1D1C18;">ዮሴፍ ካሳ</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 4px;">4 conversations · all quiet</div></div>
+            </div>
+            <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Unblock…</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Red here, slate for RG — the two states look different on purpose. One is a decision about behaviour, the other is care.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

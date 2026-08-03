@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S13-branding-login-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section M · 5 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Branding — Login</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The group that reaches back into <a href="B7-S01-login-v1.dc.html">Section A</a>: everything edited here lands on the card five hundred agents open at shift start. So the preview is not a mock of that card — it is that card, rendered under the draft, which is the only way an operator sees what they are actually changing.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">It is also the one surface in the platform that needs <strong style="font-weight: 600;">image-aware</strong> contrast. Everywhere else a colour sits on a known colour; here it sits on whatever photograph the operator uploaded, so the validator samples the regions the card and its text actually cover — and a palette that passes on white can still fail over a bright sky.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Built on B1-DS v4. Uploaded images render as labelled fixtures per your 3 August ruling; the slot shows in the empty state.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Background, welcome copy, and the real card</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">M01 · M02 · M03 · Doc 16 FR-01, §8, §14</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Welcome copy is per language with its own completeness state, because a tenant that has written Amharic for the widget and forgotten it here ships a front door in one language. The two language fields sit side by side rather than behind tabs for exactly that reason: an empty one should be visible without being looked for.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · colour background, both languages written</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">M01 · M02 · M03</span></div>
+    <div data-screen-label="M01 login group light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Branding</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Identity</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Colours &amp; Fonts</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Login</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Emails</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Links &amp; Legal</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Senders</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Inventory</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">Settings · Branding</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Login</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #1D1C18;">✓ Both languages written</span>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Preview the draft</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish…</button>
+            </div>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; overflow: hidden; display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Background</div>
+                <div style="display: flex; gap: 8px;">
+                  <span style="font-size: 12px; font-weight: 600; color: #FFFFFF; background: #22211D; border-radius: 6px; padding: 8px 13px;">Solid colour</span>
+                  <span style="font-size: 12px; font-weight: 500; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 13px;">Image</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 34px; height: 34px; border-radius: 6px; background: #EEECE6; border: 1px solid #CFCBC1;"></span>
+                  <code style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 9px 11px;">#EEECE6</code>
+                  <span style="font-size: 11px; color: #6B675D;">Ink on this background 14.4:1 · passes</span>
+                </div>
+                <div style="font-size: 11px; line-height: 1.6; color: #6B675D; border-top: 1px solid #F0EEE9; padding-top: 11px;">A colour is validated once. An image is validated against the regions the card covers — see §B.</div>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <span style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Welcome copy</span>
+                  <span style="margin-left: auto; font-size: 11px; color: #6B675D;">Appears under “Sign in” on the card</span>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">English</label>
+                    <input type="text" value="Selam Bet Support workspace" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                    <div style="font-size: 10.5px; color: #6B675D; margin-top: 4px;">27 of 60 characters</div>
+                  </div>
+                  <div style="flex: 1;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 5px;">አማርኛ</label>
+                    <input type="text" value="የሰላም ቤት የድጋፍ መስሪያ ቦታ" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+                    <div style="font-size: 10.5px; color: #6B675D; margin-top: 4px;">21 of 60 characters</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; line-height: 1.6; color: #6B675D;">Amharic is customer-enabled, so an empty field here blocks publish rather than warning — the front door cannot ship in one language.</div>
+              </div>
+            </div>
+
+            <div style="width: 512px; flex: none; border-left: 1px solid #E5E2DB; background: #FFFFFF; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 12px 16px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Preview</span><span style="font-size: 11px; color: #6B675D;">The sign-in card itself</span>
+                <span style="margin-left: auto; display: inline-flex; gap: 4px;"><span style="font-size: 11px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 5px; padding: 5px 9px;">EN</span><span style="font-size: 11px; font-weight: 500; color: #4A4842; border-radius: 5px; padding: 5px 9px;">አማ</span></span>
+              </div>
+              <div style="flex: 1; padding: 20px 16px; background: #EEECE6; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 300px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+                  <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #2F5AC8;"></span><span style="font-size: 10.5px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span>
+                  <div>
+                    <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em; color: #1D1C18;">Sign in</div>
+                    <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Selam Bet Support workspace</div>
+                  </div>
+                  <div><div style="font-size: 10.5px; font-weight: 600; color: #4A4842; margin-bottom: 4px;">Email</div><div style="height: 34px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></div></div>
+                  <div><div style="font-size: 10.5px; font-weight: 600; color: #4A4842; margin-bottom: 4px;">Password</div><div style="height: 34px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></div></div>
+                  <div style="border-radius: 6px; background: #2F5AC8; padding: 9px; text-align: center; font-size: 12px; font-weight: 600; color: #FFFFFF;">Sign in</div>
+                  <div style="font-size: 10px; color: #6B675D; text-align: center;">© 2026 Selam Bet Trading PLC</div>
+                </div>
+              </div>
+              <div style="flex: none; padding: 11px 16px; border-top: 1px solid #F0EEE9; font-size: 11px; line-height: 1.6; color: #6B675D;">M03 — this is Section A's card component, not a drawing of it. What renders here is what ships.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Image-aware contrast — the one surface that samples</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">M04 · Doc 16 EC-09, FR-04, BR-02</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">An operator uploads a stadium photograph, the card lands over the bright half, and a palette that passed every pair in Section L now fails where it actually sits. The validator samples the regions the card and the footer cover, reports the worst of them, and offers the fix the document names — an overlay scrim — rather than asking the operator to guess. Same refusal card as everywhere else; same absence of a way past it.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · sampled regions fail, scrim offered · አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">M04</span></div>
+    <div data-screen-label="M04 login image contrast dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">HG</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 196px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ብራንዲንግ</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB; line-height: 1.7;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ማንነት</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ቀለሞችና ፊደላት</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">መግቢያ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ኢሜይሎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">አገናኞችና ሕጋዊ</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ላኪዎች</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">ዝርዝር</span>
+          </div>
+        </nav>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+          <div style="flex: none; background: #1C1C19; border-bottom: 1px solid #343430; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ቅንብሮች · ብራንዲንግ</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4; line-height: 1.4;">መግቢያ</h1>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #3D1B1B; border: 1px solid #6B3838; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">⚠ 2 የናሙና አካባቢዎች አላለፉም</span>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <button disabled="disabled" style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; line-height: 1.6;">አትም…</button>
+            </div>
+          </div>
+          <div style="flex: 1; display: flex; min-height: 0;">
+            <div style="flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; line-height: 1.6;">የጀርባ ምስል</div>
+                <div style="display: flex; align-items: center; gap: 11px; background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px;">
+                  <span style="flex: none; width: 74px; height: 46px; border-radius: 5px; background: #C9C5BB; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #4A4842; text-align: center; line-height: 1.3;">Background<br />fixture</span>
+                  <div style="min-width: 0;">
+                    <div style="font-size: 12px; color: #ECEAE4;">stadium-night.jpg</div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 2px;">2560 × 1440 · 380 KB</div>
+                  </div>
+                  <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer; line-height: 1.6;">ቀይር</button>
+                </div>
+                <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 11px 12px;">
+                  <div style="font-size: 12.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">የግርጌ ጽሑፉ በምስሉ ብሩህ ክፍል ላይ 2.4:1 ነው — ይህ ሊታተም አይችልም</div>
+                  <div style="font-size: 12px; color: #F5A7A7; margin-top: 4px; line-height: 1.75;">ካርዱ የሚያርፍባቸው ሁለት አካባቢዎች ተመዝነዋል። የሚመከረው መፍትሔ ከካርዱ ጀርባ <strong style="font-weight: 600;">40% ጥቁር ሽፋን</strong> መጨመር ነው፤ ይህም ሁለቱንም ወደ 5.1:1 ያደርሳቸዋል።</div>
+                  <button style="font-family: inherit; margin-top: 9px; background: #1C1C19; border: 1px solid #6B3838; border-radius: 6px; color: #F5A7A7; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 12px; cursor: pointer; line-height: 1.6;">40% ሽፋን ጨምር</button>
+                </div>
+                <div style="font-size: 11px; line-height: 1.75; color: #A6A296;">ማተም እስኪስተካከል ድረስ አይቻልም። “ለማንኛውም አትም” የሚል አማራጭ የለም።</div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 10px; line-height: 1.6;">የተመዘኑ አካባቢዎች <span style="font-weight: 400; color: #9A9588;">— ከመጀመሪያው ምስል የተወሰዱ</span></div>
+                <div style="border: 1px solid #45443E; border-radius: 8px; overflow: hidden;">
+                  <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 92px 78px; background: #232320; border-bottom: 1px solid #45443E;">
+                    <span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">አካባቢ</span><span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ንጽጽር</span><span style="padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ውጤት</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 92px 78px; align-items: center; border-bottom: 1px solid #262622;">
+                    <span style="padding: 9px 12px; font-size: 12px; color: #ECEAE4; line-height: 1.6;">ከካርዱ ጀርባ</span><span style="padding: 9px 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #C9C5BB;">9.4:1</span><span style="padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #C9C5BB; line-height: 1.6;">✓ አልፏል</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 92px 78px; align-items: center; border-bottom: 1px solid #262622;">
+                    <span style="padding: 9px 12px; font-size: 12px; color: #ECEAE4; line-height: 1.6;">የግርጌ ጽሑፍ — ብሩህ ክፍል</span><span style="padding: 9px 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #F5A7A7;">2.4:1</span><span style="padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">✕ አላለፈም</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) 92px 78px; align-items: center;">
+                    <span style="padding: 9px 12px; font-size: 12px; color: #ECEAE4; line-height: 1.6;">የቋንቋ መቀየሪያ</span><span style="padding: 9px 12px; font-family: ui-monospace, monospace; font-size: 11.5px; color: #F5A7A7;">3.1:1</span><span style="padding: 9px 12px; font-size: 11.5px; font-weight: 600; color: #F5A7A7; line-height: 1.6;">✕ አላለፈም</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="width: 512px; flex: none; border-left: 1px solid #343430; background: #1C1C19; display: flex; flex-direction: column;">
+              <div style="flex: none; padding: 12px 16px; border-bottom: 1px solid #262622; font-size: 11.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">ቅድመ-እይታ — የመግቢያ ገጽ</div>
+              <div style="flex: 1; padding: 16px; background: #C9C5BB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+                <div style="width: 260px; background: #FFFFFF; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+                  <span style="width: 16px; height: 16px; border-radius: 4px; background: #2F5AC8;"></span>
+                  <div style="font-size: 15px; font-weight: 600; color: #1D1C18; line-height: 1.45;">ይግቡ</div>
+                  <div style="height: 30px; border: 1px solid #CFCBC1; border-radius: 6px;"></div>
+                  <div style="border-radius: 6px; background: #2F5AC8; padding: 8px; text-align: center; font-size: 11.5px; font-weight: 600; color: #FFFFFF; line-height: 1.6;">ግባ</div>
+                </div>
+                <div style="font-size: 10.5px; color: #FFFFFF; line-height: 1.7;">© 2026 ሰላም ቤት ትሬዲንግ · ግላዊነት · ውሎች</div>
+                <div style="font-size: 10px; color: #FFFFFF; line-height: 1.6;">English · አማርኛ</div>
+              </div>
+              <div style="flex: none; padding: 11px 16px; border-top: 1px solid #262622; font-size: 11px; line-height: 1.75; color: #A6A296;">ችግሩ እዚህ ይታያል፦ ካርዱ ጥሩ ነው፣ ግን ከሱ ውጭ ያለው ነጭ ጽሑፍ በብሩህ ዳራ ላይ አይነበብም።</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842;">Background image</div>
+          <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 8px; padding: 11px 12px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #8E2222;">Footer text over the bright part of the image is 2.4:1 — this cannot be published</div>
+            <div style="font-size: 12px; color: #8E2222; margin-top: 4px; line-height: 1.55;">Two of the regions the card sits on were sampled. The suggested fix is a <strong style="font-weight: 600;">40% dark scrim</strong> behind the card, which brings both to 5.1:1.</div>
+            <button style="font-family: inherit; margin-top: 9px; background: #FFFFFF; border: 1px solid #EFC7C7; border-radius: 6px; color: #8E2222; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 12px; cursor: pointer;">Add a 40% scrim</button>
+          </div>
+          <div style="font-size: 12px; line-height: 1.6; color: #4A4842; font-weight: 600;">Publishing is blocked until this is fixed. There is no “publish anyway” option.</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">M04 · light · en · the same refusal, in the other language</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Sampled from the image, not from the preview</div>
+        <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">The ratios in the table are measured against <strong style="font-weight: 600;">stadium-night.jpg</strong> at full resolution — the regions the card, the footer and the language switcher actually cover. The preview pane renders a flat fixture standing in for that photograph, so measuring the drawn preview will not reproduce them; the validator never reads the preview.</p>
+        <p style="margin: 9px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">That distinction matters beyond this file: the fixture exists so no invented brand imagery enters the design, and the numbers exist because the real image is what ships.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The hostile case, and the phone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">M05 · Doc 16 FR-05, T-08 · §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The sweep's condition, drawn as a state rather than left to CI: a long legal name, a long Amharic welcome line, and a two-line footer, all on the 420 px card. Nothing clips, nothing truncates with an ellipsis, and the card grows downward — which is the only direction it may grow.</p>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+      <div style="width: 560px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 22px; display: flex; justify-content: center;">
+        <div style="width: 420px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 15px;">
+          <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px;"><span style="width: 20px; height: 20px; border-radius: 4px; background: #2F5AC8;"></span><span style="font-size: 11px; font-weight: 600; color: #1D1C18;">Fixture mark</span></span>
+          <div>
+            <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: #1D1C18; line-height: 1.4;">ይግቡ</div>
+            <div style="font-size: 12.5px; color: #6B675D; margin-top: 4px; line-height: 1.8;">የሰላም ቤት ትሬዲንግ ኃላፊነቱ የተወሰነ የግል ማኅበር የደንበኞች ድጋፍ መስሪያ ቦታ — እባክዎ በሥራ መለያዎ ይግቡ</div>
+          </div>
+          <div><div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px; line-height: 1.6;">ኢሜይል</div><div style="height: 38px; border: 1px solid #CFCBC1; border-radius: 6px;"></div></div>
+          <div style="border-radius: 6px; background: #2F5AC8; padding: 10px; text-align: center; font-size: 12.5px; font-weight: 600; color: #FFFFFF; line-height: 1.6;">ግባ</div>
+          <div style="border-top: 1px solid #F0EEE9; padding-top: 12px; font-size: 10.5px; line-height: 1.85; color: #6B675D;">© 2026 ሰላም ቤት ትሬዲንግ ኃላፊነቱ የተወሰነ የግል ማኅበር · ቦሌ መንገድ፣ አዲስ አበባ · ግላዊነት · ውሎች · እገዛ</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · read-only</div>
+        <div data-screen-label="M01 login group 375 read only" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">08:20<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+            <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">Branding</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Login</div></div>
+          </div>
+          <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+            <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.6; color: #4A5460;"><strong style="font-weight: 600;">Editing requires a larger screen.</strong> The preview needs the room to show what a customer sees.</div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+              <div><div style="font-size: 11px; font-weight: 600; color: #6B675D;">Background</div><div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #EEECE6; border: 1px solid #CFCBC1;"></span><code style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">#EEECE6</code></div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #6B675D;">Welcome · English</div><div style="font-size: 13px; color: #1D1C18; margin-top: 3px;">Selam Bet Support workspace</div></div>
+              <div><div style="font-size: 11px; font-weight: 600; color: #6B675D;">Welcome · አማርኛ</div><div style="font-size: 13px; color: #1D1C18; margin-top: 3px; line-height: 1.7;">የሰላም ቤት የድጋፍ መስሪያ ቦታ</div></div>
+              <div style="border-top: 1px solid #F0EEE9; padding-top: 11px; font-size: 11.5px; line-height: 1.6; color: #6B675D;">Ink on this background 14.4:1 · passes</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px;">
+              <div style="font-size: 11px; font-weight: 600; color: #6B675D; margin-bottom: 8px;">Preview</div>
+              <div style="background: #EEECE6; border-radius: 8px; padding: 14px; display: flex; justify-content: center;">
+                <div style="width: 190px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                  <span style="width: 14px; height: 14px; border-radius: 3px; background: #2F5AC8;"></span>
+                  <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Sign in</div>
+                  <div style="height: 24px; border: 1px solid #CFCBC1; border-radius: 5px;"></div>
+                  <div style="border-radius: 5px; background: #2F5AC8; padding: 6px; text-align: center; font-size: 10.5px; font-weight: 600; color: #FFFFFF;">Sign in</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all five rows. M01, M02 and M03 in §A at 1440 light; M04 in §B at 1440 dark in Amharic, where the sampled-region table and the scrim suggestion run longest; M05 in §C as the hostile card at full 420 px; the read-only 375 beside it.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">The failure is outside the card, and that is the point.</strong> The card's own background passes at 9.4:1 — it is the footer and the language switcher, which sit directly on the photograph, that fail. A validator that only checked the card would have passed this theme, so the sampled regions are the elements' own footprints, not one average of the image.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Both languages carry the no-override sentence — corrected after review.</strong> A first pass shipped it in Amharic only and the note claimed otherwise, which is the worse of the two errors. The English refusal now sits beside §B with the same sentence, and the claim above describes what actually ships.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section N — the email group, its per-language chrome, the safe HTML subset, and per-template rollback.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

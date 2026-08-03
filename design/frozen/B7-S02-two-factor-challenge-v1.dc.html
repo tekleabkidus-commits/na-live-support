@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S02-two-factor-challenge-v1</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section B · 10 rows · awaiting your verdict</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">The two-factor challenge</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Six digits, typed with one thumb while holding a phone in the other hand, at 07:03, by someone who is already late. That is the whole design brief. The card is <a href="B7-S01-login-v1.dc.html">Section A's</a> card in its second step — same width, same chrome, same footer — because a challenge that looks like a different screen makes people think something went wrong.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two things drive every decision here. The input is <strong style="font-weight: 600;">six boxes to look at and one field to operate</strong> — paste works, arrow keys work, and a screen reader meets a single labelled input rather than six unlabelled ones. And the failure path never becomes a countdown to disaster: attempts remaining are stated plainly, the recovery code is offered before it is needed, and the fifth failure explains itself instead of dumping someone back at the start.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Amharic is real text and is flagged for native review. Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim plus the four additions proposed in Section A §F; the segmented input is proposed here as a fifth.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Waiting for the code — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">B01 · B02 · B06 · B10 · Doc 02 FR-07, §8, §9, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Focus lands in the first box on arrival, so a typed code needs no click. Paste fills all six from anywhere in the field. The sixth digit submits — there is no button to reach for, but the escape routes stay visible the whole time: back to the password step, the recovery-code path, and the one line of help that names clock drift, the actual cause when a correct-looking code keeps failing.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · idle, English</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">B01 · B02 · B06 · B10</span></div>
+    <div data-screen-label="B01 2fa idle light en" style="width: 1440px; height: 900px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back to email and password" style="font-family: inherit; width: 30px; height: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 13px; cursor: pointer;">←</button>
+            <span style="font-size: 11.5px; color: #6B675D;">Step 2 of 2</span>
+            <span style="margin-left: auto; font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 9px;">Selam Bet logo</span>
+          </div>
+
+          <div>
+            <h1 tabindex="-1" style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Enter your 6-digit code</h1>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #6B675D; margin-top: 4px;">From your authenticator app, for <strong style="font-weight: 600; color: #4A4842;">sara.bekele@selambet.et</strong></div>
+          </div>
+
+          <div>
+            <label for="b01-code" style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Authentication code</label>
+            <div style="display: flex; gap: 7px;">
+              <span style="flex: 1; height: 46px; border: 1px solid #22211D; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #1D1C18;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+            </div>
+            <input id="b01-code" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Authentication code, 6 digits" value="" readonly="readonly" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;" />
+            <div style="font-size: 11px; color: #6B675D; margin-top: 7px;">Paste works. The code submits itself on the sixth digit.</div>
+          </div>
+
+          <div style="background: #F6F5F2; border-left: 3px solid #CFCBC1; border-radius: 0 6px 6px 0; padding: 10px 12px;">
+            <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600;">Codes keep failing?</strong> They are time-based. Check that your phone's clock is set automatically — more than about 30 seconds out and no code will match.</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #F0EEE9; padding-top: 14px;">
+            <a href="#b07" style="font-size: 11.5px; font-weight: 500;">Use a recovery code instead</a>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 600; color: #1D1C18; background: #EEECE6; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 500; color: #4A4842; border-radius: 6px; padding: 6px 11px;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #6B675D;">© 2026 Selam Bet Trading PLC</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01">Privacy</a><a href="#o01">Terms</a><a href="#o01">Help</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · idle, አማርኛ</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same rows · long Amharic help line</span></div>
+    <div data-screen-label="B01 2fa idle dark am" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="width: 420px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ወደ ኢሜይልና የይለፍ ቃል ተመለስ" style="font-family: inherit; width: 30px; height: 30px; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; color: #ECEAE4; font-size: 13px; cursor: pointer;">←</button>
+            <span style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ደረጃ 2 ከ2</span>
+            <span style="margin-left: auto; font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 4px 9px;">Selam Bet logo</span>
+          </div>
+
+          <div>
+            <h1 tabindex="-1" style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4; line-height: 1.4;">ባለ 6 አኃዝ ኮድዎን ያስገቡ</h1>
+            <div style="font-size: 12.5px; line-height: 1.7; color: #A6A296; margin-top: 4px;">ከማረጋገጫ መተግበሪያዎ፣ ለ <strong style="font-weight: 600; color: #C9C5BB;">sara.bekele@selambet.et</strong></div>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #C9C5BB; margin-bottom: 6px; line-height: 1.6;">የማረጋገጫ ኮድ</label>
+            <div style="display: flex; gap: 7px;">
+              <span style="flex: 1; height: 46px; border: 1px solid #ECEAE4; border-radius: 6px; background: #232320;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+              <span style="flex: 1; height: 46px; border: 1px solid #45443E; border-radius: 6px; background: #232320;"></span>
+            </div>
+            <div style="font-size: 11px; color: #A6A296; margin-top: 7px; line-height: 1.7;">መለጠፍ ይሠራል። ኮዱ በስድስተኛው አኃዝ ራሱን ይልካል።</div>
+          </div>
+
+          <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 10px 12px;">
+            <div style="font-size: 11.5px; line-height: 1.75; color: #C9C5BB;"><strong style="font-weight: 600;">ኮዶቹ ሁልጊዜ አይሠሩም?</strong> ኮዶቹ በሰዓት ላይ የተመሠረቱ ናቸው። የስልክዎ ሰዓት በራስ-ሰር እንዲስተካከል ያድርጉ — ከ30 ሰከንድ በላይ ልዩነት ካለ ማንኛውም ኮድ አይዛመድም።</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #262622; padding-top: 14px;">
+            <a href="#b07" style="font-size: 11.5px; font-weight: 500; color: #A9C0F5; line-height: 1.6;">በምትኩ የመልሶ ማግኛ ኮድ ይጠቀሙ</a>
+            <span style="margin-left: auto; display: inline-flex; gap: 4px;">
+              <span style="font-size: 11.5px; font-weight: 500; color: #C9C5BB; border-radius: 6px; padding: 6px 11px;">English</span>
+              <span style="font-size: 11.5px; font-weight: 600; color: #ECEAE4; background: #2F2F29; border-radius: 6px; padding: 6px 11px; line-height: 1.6;">አማርኛ</span>
+            </span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px;">
+          <span style="font-size: 11px; color: #A6A296;">© 2026 ሰላም ቤት ትሬዲንግ ኃ.የተ.የግ.ማ.</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 12px; font-size: 11px;"><a href="#o01" style="color: #A9C0F5;">ግላዊነት</a><a href="#o01" style="color: #A9C0F5;">ውሎች</a><a href="#o01" style="color: #A9C0F5;">እገዛ</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Verifying, success, and the four wrong codes before the fifth</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">B03 · B04 · B05 · Doc 02 FR-07, AC-03, §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Attempts remaining are stated from the first failure, because the alternative is someone discovering the limit by hitting it. The count is text, not a shrinking bar — and it never appears on the login card, where it would tell an attacker how close they are. Success is a 400 ms check in place of the boxes; under reduced motion it simply is a check, with no transition.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: flex; flex-direction: column; gap: 20px;">
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">B03 · verifying, then verified</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">≤ 400 ms · static under prefers-reduced-motion</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Enter your 6-digit code</div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">4</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">9</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">1</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">2</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">0</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #F6F5F2; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #6B675D;">7</span>
+              </div>
+              <div role="status" style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #4A4842;"><span style="font-size: 13px;">◌</span>Checking your code…</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · verifying · boxes lock, nothing else moves</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: #232320; border: 1px solid #45443E; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #3ECB80;">✓</div>
+              <div style="text-align: center;">
+                <div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Verified</div>
+                <div style="font-size: 12.5px; color: #A6A296; margin-top: 4px;">Taking you to your inbox…</div>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · success · the check is the state, not an animation</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">B04 · wrong code, with what is left</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">announced · never colour alone</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Enter your 6-digit code</div>
+              <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #8E2222; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span>That code didn't match. <strong style="font-weight: 600;">4 attempts left</strong> before this sign-in is stopped.</span></div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #C93B3B; border-radius: 6px; background: #FFFFFF;"></span>
+              </div>
+              <a href="#b07" style="font-size: 11.5px; font-weight: 500;">Use a recovery code instead</a>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · the field clears itself and keeps focus</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #ECEAE4; line-height: 1.45;">ባለ 6 አኃዝ ኮድዎን ያስገቡ</div>
+              <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.7; color: #F5A7A7; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span>ኮዱ አልተዛመደም። ይህ መግቢያ ከመቆሙ በፊት <strong style="font-weight: 600;">4 ሙከራዎች</strong> ቀርተዋል።</span></div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+              </div>
+              <a href="#b07" style="font-size: 11.5px; font-weight: 500; color: #A9C0F5; line-height: 1.6;">በምትኩ የመልሶ ማግኛ ኮድ ይጠቀሙ</a>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">dark · am</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">B05 · the fifth failure voids the attempt</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">back to the card, and it says why</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Sign in</div>
+              <div role="alert" style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #8E2222; display: flex; gap: 8px;"><span style="flex: none; font-weight: 700;">⚠</span><span><strong style="font-weight: 600;">We stopped that sign-in after five wrong codes.</strong> Start again with your email and password. If your authenticator is out of sync, use a recovery code this time. This attempt counts towards the lock-out limit.</span></div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Email</label>
+                <input type="email" value="sara.bekele@selambet.et" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · the lock-out consequence is stated here, not discovered later</div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Why this message is longer than the others</div>
+            <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Three facts have to land at once: the attempt is over, the person is not locked out <em>yet</em>, and there is a way through that does not need the authenticator. Splitting that across two screens is how people end up locked out while holding a working recovery card in their wallet. It is the one place in this section where I chose length over brevity, and I would rather you reject it than have me trim it silently.</p>
+            <p style="margin: 9px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Note what it does <strong style="font-weight: 600;">not</strong> say: nothing about how many lock-out attempts remain. That number is the attacker's information, and Doc 02 FR-03 keeps it off the card.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The recovery path — for the phone that is gone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">B07 · B08 · B09 · Doc 02 FR-07, US-02, AC-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A recovery code is read off paper, usually under pressure, usually one-handed. So the field is monospace, spaced in two groups of four, and case-insensitive — and the screen says out loud that each code works once, before it is used rather than after. The remaining count is the honest part: eight becomes seven becomes six, and at two the platform starts asking for new ones instead of waiting for the person to run out.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: flex; flex-direction: column; gap: 20px;">
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">B07 · recovery-code entry · B08 · used, and how many are left</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">single-use, stated up front</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button aria-label="Back to the authenticator code" style="font-family: inherit; width: 30px; height: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 13px; cursor: pointer;">←</button>
+                <span style="font-size: 11.5px; color: #6B675D;">Recovery code</span>
+              </div>
+              <div>
+                <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Enter one of your recovery codes</h2>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #6B675D; margin-top: 4px;">One of the eight you saved when you set up two-factor. <strong style="font-weight: 600; color: #4A4842;">Each code works once.</strong></div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Recovery code</label>
+                <input type="text" value="7K4M-9QT2" readonly="readonly" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 11px; font-size: 15px; letter-spacing: 0.08em; color: #1D1C18; min-height: 44px;" />
+                <div style="font-size: 11px; color: #6B675D; margin-top: 6px;">Letters and numbers, in two groups of four. Upper or lower case both work.</div>
+              </div>
+              <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Sign in</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">B07 · light · en · 44 px field even on desktop — it is read off paper</div>
+          </div>
+          <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 11.5px; color: #A6A296; line-height: 1.6;">ገብተዋል · የመጀመሪያው ማያ ገጽ</div>
+              <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 7px; padding: 11px 12px; font-size: 12px; line-height: 1.7; color: #E8C25A; display: flex; gap: 9px;">
+                <span style="flex: none; font-weight: 700;">◈</span>
+                <span><strong style="font-weight: 600;">የመልሶ ማግኛ ኮድ ተጠቅመዋል።</strong> ከ8 ኮዶችዎ <strong style="font-weight: 600;">5 ቀርተዋል</strong>። ይህ ኮድ እንደገና አይሠራም።</span>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.75; color: #A6A296; border-top: 1px solid #262622; padding-top: 12px;">B08 · ስልክዎን ከቀየሩ፣ ባለ ሁለት ደረጃ ማረጋገጫውን በአዲሱ መሣሪያ ላይ እንደገና ያዋቅሩ።</div>
+              <button style="font-family: inherit; align-self: flex-start; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ባለ ሁለት ደረጃ ማረጋገጫ ያዋቅሩ</button>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">B08 · dark · am · the count is a fact, not a warning yet</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">B09 · two codes left — the last honest moment</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 FR-07 · regeneration is Section C</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+          <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-size: 11.5px; color: #6B675D;">Signed in · first screen</div>
+              <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 7px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #7E650F; display: flex; gap: 9px; align-items: flex-start;">
+                <span style="flex: none; font-weight: 700;">◈</span>
+                <span style="min-width: 0;"><strong style="font-weight: 600;">2 recovery codes left.</strong> Generate a new set now — if you run out while your phone is lost, an administrator has to reset your two-factor before you can sign in.</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Generate new codes</button>
+                <button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Not now</button>
+              </div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">light · en · dismissible, and it returns at one code left</div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #1B1B18; border-radius: 10px; padding: 16px 18px;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Where this banner lives</div>
+            <p style="margin: 7px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">Doc 02 FR-07 says a banner prompts regeneration at two codes remaining, and does not say where. It appears on the <strong style="font-weight: 600;">first screen after signing in</strong> and on the profile security page — not on the challenge itself, where someone is mid-task and cannot act on it, and never on the login card, where it would announce to anyone typing an email that this account is two codes from being stuck.</p>
+            <p style="margin: 9px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;">That placement is my reading of a silence, not something the document states. If you want it somewhere else, this is the row to say so on.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 and 320 — six segments hold at both</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">B01 · B02 · B10 · Doc 02 §9, NFR-05</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 02 §9 sets a hard floor most designs quietly break: the code input stays six segments at 320 px. At that width the card's inner measure is 260 px once both borders are counted, so each segment lands at 38.3 px wide and 46 px tall — narrower than comfortable, still six, still tappable, and never wrapped to two rows or collapsed into one box. The 320 frame is included because it is the width where the rule either holds or does not.</p>
+
+    <div style="margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · idle</div>
+        <div data-screen-label="B01 2fa idle light en mobile" style="width: 375px; height: 812px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D;">07:03<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+                <span style="font-size: 12px; color: #6B675D;">Step 2 of 2</span>
+              </div>
+              <div>
+                <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Enter your 6-digit code</h1>
+                <div style="font-size: 12.5px; line-height: 1.55; color: #6B675D; margin-top: 4px;">From your authenticator app</div>
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">Authentication code</label>
+                <div style="display: flex; gap: 7px;">
+                  <span style="flex: 1; height: 52px; border: 1px solid #22211D; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; color: #1D1C18;">4</span>
+                  <span style="flex: 1; height: 52px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                  <span style="flex: 1; height: 52px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                  <span style="flex: 1; height: 52px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                  <span style="flex: 1; height: 52px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                  <span style="flex: 1; height: 52px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                </div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 7px;">Submits on the sixth digit</div>
+              </div>
+              <a href="#b07" style="font-size: 13px; font-weight: 500; min-height: 44px; display: inline-flex; align-items: center;">Use a recovery code instead</a>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px 14px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600;">Codes keep failing?</strong> Check your phone's clock is set automatically — 30 seconds out and none of them match.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · dark · am · wrong code</div>
+        <div data-screen-label="B04 2fa wrong code dark am mobile" style="width: 375px; height: 812px; background: #141412; border: 1px solid #343430; border-radius: 12px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18);">
+          <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #A6A296;">07:04<span style="margin-left: auto;">▮▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button aria-label="ተመለስ" style="font-family: inherit; width: 44px; height: 44px; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; color: #ECEAE4; font-size: 15px; cursor: pointer;">←</button>
+                <span style="font-size: 12px; color: #A6A296; line-height: 1.6;">ደረጃ 2 ከ2</span>
+              </div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4; line-height: 1.4;">ባለ 6 አኃዝ ኮድዎን ያስገቡ</h1>
+              <div role="alert" style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 11px 12px; font-size: 12.5px; line-height: 1.7; color: #F5A7A7; display: flex; gap: 9px;"><span style="flex: none; font-weight: 700;">⚠</span><span>ኮዱ አልተዛመደም። <strong style="font-weight: 600;">4 ሙከራዎች</strong> ቀርተዋል።</span></div>
+              <div style="display: flex; gap: 7px;">
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+                <span style="flex: 1; height: 52px; border: 1px solid #E06B6B; border-radius: 6px; background: #232320;"></span>
+              </div>
+              <a href="#b07" style="font-size: 13px; font-weight: 500; color: #A9C0F5; min-height: 44px; display: inline-flex; align-items: center; line-height: 1.6;">በምትኩ የመልሶ ማግኛ ኮድ ይጠቀሙ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">320 × 640 · light · en · the floor</div>
+        <div data-screen-label="B01 2fa idle light en 320" style="width: 320px; height: 640px; background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="height: 24px; flex: none; display: flex; align-items: center; font-size: 10.5px; font-weight: 600; color: #6B675D;">07:03<span style="margin-left: auto;">▮▮</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+              <h1 style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Enter your 6-digit code</h1>
+              <div style="display: flex; gap: 6px;">
+                <span style="flex: 1; height: 46px; border: 1px solid #22211D; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #1D1C18;">4</span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+                <span style="flex: 1; height: 46px; border: 1px solid #CFCBC1; border-radius: 6px; background: #FFFFFF;"></span>
+              </div>
+              <div style="font-size: 11px; color: #6B675D;">38.3 px per segment. Still six.</div>
+              <a href="#b07" style="font-size: 12.5px; font-weight: 500; min-height: 44px; display: inline-flex; align-items: center;">Use a recovery code</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: 36px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§E</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The segmented input — proposed as B1-DS addition 05</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">Doc 02 §9, §13</span>
+    </div>
+    <div style="margin-top: 14px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">05 · Six-segment code input</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">Six boxes, gap 7 (6 at ≤ 320), each radius 6 on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#CFCBC1</code>, height 46 desktop / 52 mobile / 46 at 320. Filled digit 17/600. Active box takes the <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#22211D</code> border — the same focus ink as the Section A field. Error: every box takes <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#C93B3B</code> and the message goes in the B1-DS error banner above. Dark: <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#232320</code> on <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#45443E</code>, active <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#ECEAE4</code>, error <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">#E06B6B</code>.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">B02 · one field, six boxes</div>
+        <div style="font-size: 12px; line-height: 1.7; color: #4A4842; margin-top: 7px;">The boxes are presentation. Underneath sits a single visually-hidden input with <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">aria-label="Authentication code, 6 digits"</code>, <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">inputmode="numeric"</code> and <code style="font-family: ui-monospace, monospace; font-size: 11.5px;">autocomplete="one-time-code"</code>, so a screen reader announces one field, a password manager fills it, and iOS offers the SMS-style autofill chip. Six separate inputs would break all three.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all ten rows. B01, B02, B06 and B10 in §A at 1440 in both themes and both languages; B03, B04 and B05 in §B; B07, B08 and B09 in §C; the mobile and 320 proofs in §D. Every message is announced, every count is text, and no state anywhere reveals lock-out distance.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations, flagged:</strong> two, both upward. The recovery-code field is 44 px on <em>desktop</em> as well as mobile — it is transcribed from paper and the extra height is worth more than consistency with a 38 px form field. Mobile segments are 52 px rather than 46. Both exceed the floor rather than breaching it; neither changes a colour or a shape.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One silence I have read, and want confirmed:</strong> Doc 02 FR-07 requires the two-codes-left banner but never says where it appears. I have put it on the first screen after signing in and on the profile security page, and kept it off both the challenge and the login card, for the reasons in §C. Tell me if you read that differently.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section C, the enrolment wizard — three steps, and the only place in the product where something is shown exactly once.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

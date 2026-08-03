@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B4-S07-data-honesty-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Data honesty, export, erasure</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows H01–H07 · Doc 08 BR-01, FR-01, FR-16, EC-09, EC-10, SEC-04, FS-03, NFR-05, §3, §9, §14 · AC-09. Small in screens, heavy in consequence. Every row here is the product declining to claim more than it knows.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">The through-line: this platform verifies nobody. Anyone may contact support on behalf of another player, and the profile records who made contact and what they said — not who they are. The control point for money is the operator's own betting backoffice, and the interface has to keep saying so quietly, on every field, forever.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">H01, H02 · The affordance that does not exist</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 BR-01, FR-16, §9, §14 · AC-09</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H02 · Light — the label, and what it is not</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 15px;">
+          <div style="display: flex; align-items: baseline; gap: 7px; margin-bottom: 8px;">
+            <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Betting details</span>
+            <span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; background: #EEECE6; border-radius: 3px; padding: 2px 6px;">Staff-collected</span>
+          </div>
+          <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 7px; padding: 11px 12px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px 10px; font-size: 12.5px;">
+            <span style="color: #6B675D;">Username</span><span style="font-family: ui-monospace, monospace; color: #1D1C18;">abebe_bet</span>
+            <span style="color: #6B675D;">Player ID</span><span style="font-family: ui-monospace, monospace; color: #1D1C18;">NB-40219</span>
+            <span style="color: #6B675D;">Brand</span><span style="color: #1D1C18;">Na Bet</span>
+          </div>
+          <div style="font-size: 11.5px; color: #4A4842; line-height: 1.65; margin-top: 10px;">Grey, lowercase-weight, sitting beside the heading — informative, not a warning. It reads as “this is where the value came from”, which is true, and never as “do not trust this”, which would make agents ignore their own records.</div>
+          <div style="margin-top: 12px; border-top: 1px solid #F0EEE9; padding-top: 11px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Not in the component library</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F4F3F1; border: 1px dashed #CFCBC1; color: #8C877C; font-size: 11.5px; border-radius: 999px; padding: 4px 10px; text-decoration: line-through;">✓ Verified</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F4F3F1; border: 1px dashed #CFCBC1; color: #8C877C; font-size: 11.5px; border-radius: 999px; padding: 4px 10px; text-decoration: line-through;">Confirmed identity</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #F4F3F1; border: 1px dashed #CFCBC1; color: #8C877C; font-size: 11.5px; border-radius: 999px; padding: 4px 10px; text-decoration: line-through;">✓</span>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; line-height: 1.6; margin-top: 9px;">Drawn once, struck through, so the intent is on the record: no verified badge exists in any variant for customer identity. It is not disabled or permission-gated — there is nothing to enable. A repo-wide test keeps it that way, because the first well-meaning pull request adding a checkmark arrives within a quarter.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H01 · Dark — someone else's account, which is normal</div>
+        <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; overflow: hidden;">
+          <div style="padding: 14px 16px; background: #171715; display: flex; flex-direction: column; gap: 10px;">
+            <div style="align-self: flex-start; max-width: 86%;"><div style="background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">ለወንድሜ ነው የምጠይቀው። የእሱ ID NB-51108 ነው፣ ገንዘቡ አልደረሰውም።</div><div style="font-size: 11px; color: #9A9588; margin-top: 4px;">አበበ ታደሰ · 14:22</div></div>
+          </div>
+          <div style="padding: 14px 16px; border-top: 1px solid #343430; display: flex; flex-direction: column; gap: 11px;">
+            <div style="font-size: 12.5px; color: #C9C5BB; line-height: 1.7;">The ticket stays on አበበ's profile, because አበበ is who contacted us. His brother's player ID goes in a note. Nothing about this is treated as suspicious, and nothing in the interface asks the agent to establish who is entitled to ask.</div>
+            <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">Note added</div>
+              <div style="font-size: 12px; color: #ECEAE4; line-height: 1.6; margin-top: 5px;">Asking on behalf of his brother — player ID NB-51108. Payout query, not his own account.</div>
+              <div style="font-size: 10.5px; color: #A6A296; margin-top: 5px;">Selam Bekele · just now</div>
+            </div>
+            <div style="font-size: 11.5px; color: #A6A296; line-height: 1.65;">The honest version of this product says out loud that it cannot tell these two people apart, and puts the real control where it belongs — the betting backoffice, before any money moves.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 420px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px; align-self: flex-start;">
+        <h3 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #1D1C18;">Why a checkmark would be worse than nothing</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">A verified badge here could only ever mean “an agent typed this in”. But it would be read as “the platform checked”, and an agent releasing 2,500 birr against that reading is the exact failure the no-verification stance exists to prevent.</p>
+        <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: #4A4842; text-wrap: pretty;">So the design's contribution is a small grey label that never grows into a claim, and the discipline to leave the badge unbuilt when someone reasonable asks for it.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">H03, H04, H07 · Where a value came from, and how fresh it is</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 FR-01, EC-10, EC-09, FS-03, NFR-05 · Doc 12</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H03 · Light — staff-set wins, and the offer comes once</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 15px;">
+          <div style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 11px 10px; align-items: center; font-size: 12.5px;">
+            <span style="color: #6B675D;">Language</span>
+            <span style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">አማርኛ</span><span style="font-size: 11px; color: #6B675D;">set by Hana Girma · 12 Jul</span></span>
+            <span style="color: #6B675D;">Country</span>
+            <span style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="background: #EEECE6; color: #4A4842; font-size: 11px; border-radius: 4px; padding: 3px 8px;">🇪🇹 Ethiopia</span><span style="font-size: 11px; color: #6B675D;">detected</span></span>
+          </div>
+          <div style="margin-top: 12px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="flex: 1 1 auto; min-width: 0; font-size: 12px; color: #4A4842; line-height: 1.6;">Their last four messages were in English. Change the language?</span>
+            <button style="font-family: inherit; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; color: #1D1C18; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Apply</button>
+            <button aria-label="Dismiss" style="font-family: inherit; flex: none; background: transparent; border: none; color: #6F6A61; font-size: 13px; min-height: 34px; min-width: 30px; cursor: pointer;">✕</button>
+          </div>
+          <div style="font-size: 11px; color: #6B675D; line-height: 1.65; margin-top: 10px;">A staff-set value is sticky — detection never overwrites it. The chip appears once per change and does not come back for that same detection, because an agent who said Amharic on purpose should not be asked again every morning.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H04 · Dark — the field was retired, the value stayed</div>
+        <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+          <div style="background: #171715; border: 1px solid #343430; border-radius: 8px; padding: 12px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 9px 10px; font-size: 12.5px;">
+            <span style="color: #A6A296;">Player ID</span><span style="font-family: ui-monospace, monospace; color: #ECEAE4;">NB-40219</span>
+            <span style="color: #A6A296;">Loyalty tier</span><span style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;"><span style="color: #A6A296;">Gold</span><span style="background: #2F2F29; color: #C9C5BB; font-size: 10px; border-radius: 4px; padding: 2px 7px;">retired field</span></span>
+          </div>
+          <div style="font-size: 11.5px; color: #A6A296; line-height: 1.65; margin-top: 11px;">Someone deleted the loyalty-tier definition last month. The value an agent recorded in March is still true about March, so it stays — read-only, labelled, and not editable back into existence.</div>
+          <div style="font-size: 11.5px; color: #A6A296; line-height: 1.65; margin-top: 9px;">Deleting the field would rewrite the record. Hiding it would make the profile quietly wrong. Keeping it and saying why is the only version that stays honest.</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H07 · Light — counts that admit they are behind</div>
+        <div style="width: 440px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 15px;">
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="font-size: 18px; font-weight: 700; color: #1D1C18;">14</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">tickets</div></div>
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="font-size: 18px; font-weight: 700; color: #1D1C18;">4.6</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px;">of 5</div></div>
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px;"><div style="display: flex; align-items: baseline; gap: 5px;"><span style="font-size: 18px; font-weight: 700; color: #1D1C18;">31%</span></div><div style="font-size: 10.5px; color: #6B675D; margin-top: 3px; display: flex; align-items: center; gap: 5px;">repeat <span style="display: inline-flex; align-items: center; gap: 3px; background: #FCF0D9; color: #8F5F08; font-size: 9.5px; font-weight: 600; border-radius: 4px; padding: 1px 5px;">◷ stale</span></div></div>
+          </div>
+          <div style="font-size: 11.5px; color: #4A4842; line-height: 1.65; margin-top: 11px;">The rollups are rebuilt from events, and when the handlers back up they lag. A number that might be wrong says so — <span style="font-family: ui-monospace, monospace; font-size: 11px;">◷ stale</span> plus the word, never a colour on its own — and the tooltip carries when it was last rebuilt.</div>
+          <div style="font-size: 11px; color: #6B675D; line-height: 1.65; margin-top: 9px;">Last recomputed 41 minutes ago. A weekly checker repairs anything that drifts permanently, and any drift it finds raises an alert rather than being silently corrected.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">H05, H06 · Export, and the thing this screen cannot do</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 SEC-04, FR-19, §3 · erasure belongs to Doc 17</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H05 · Light — asking for the archive</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Export አበበ ታደሰ</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 7px;">What the archive contains</div>
+              <ul style="margin: 0; padding-left: 17px; font-size: 11.5px; line-height: 1.75; color: #4A4842;"><li>The profile as it stands, with provenance on every field</li><li>An index of all 14 tickets</li><li>A manifest of the 12 files — blocked media is listed, not included</li></ul>
+            </div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; color: #8F5F08; line-height: 1.65;">Every page is watermarked with your name and the time you asked. The export itself is recorded against your account.</div>
+            <div style="font-size: 11.5px; color: #4A4842; line-height: 1.65;">It is built in the background. You'll get a link when it is ready, and the link expires.</div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Start the export</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H05 · Dark — building, then ready</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="flex: 1 1 auto; min-width: 0; font-size: 12.5px; color: #ECEAE4;">Building the archive…</span>
+              <span style="flex: none; font-size: 11.5px; color: #A6A296;">about a minute</span>
+            </div>
+            <div style="height: 6px; background: #343430; border-radius: 999px; overflow: hidden; margin-top: 10px;" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" aria-label="Export progress"><div style="width: 45%; height: 100%; background: #ECEAE4;"></div></div>
+            <div style="font-size: 11.5px; color: #A6A296; margin-top: 9px; line-height: 1.6;">Carry on working — this runs on its own and will tell you when it is done.</div>
+          </div>
+          <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #123322; color: #5AD190; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">✓</span>
+              <div style="flex: 1 1 auto; min-width: 0;">
+                <div style="font-size: 13px; color: #ECEAE4;">Ready — <span style="font-family: ui-monospace, monospace; font-size: 12px;">abebe-tadesse-2026-08-03.zip</span></div>
+                <div style="font-size: 11.5px; color: #A6A296; margin-top: 4px; line-height: 1.6;">The link works for 24 hours and only for you. After that, ask again.</div>
+              </div>
+              <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 7px; font-size: 11.5px; font-weight: 600; min-height: 34px; padding: 0 12px; cursor: pointer;">Download</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 440px; line-height: 1.5;">A signed link rather than a file sitting on a server, and one that dies on its own — an export of somebody's whole support history should not outlive the reason it was made.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H06 · Light — erasure starts here and finishes elsewhere</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Request erasure</div><div style="font-size: 12px; color: #4A4842; margin-top: 3px;">አበበ ታደሰ</div></div>
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">This does not delete anything</div>
+              <div style="font-size: 12px; color: #4A4842; line-height: 1.65; margin-top: 5px;">It opens a request. Someone with the authority to approve it decides, and the deletion — if it happens — is carried out by the compliance workflow, not from this page.</div>
+            </div>
+            <label style="display: block;"><span style="display: block; font-size: 11.5px; font-weight: 600; color: #1D1C18; margin-bottom: 6px;">Why is erasure being requested? <span style="color: #6B675D; font-weight: 400;">Required</span></span><span style="display: block; border: 1.5px solid #22211D; border-radius: 8px; padding: 10px 12px; min-height: 66px; font-size: 12.5px; color: #1D1C18; line-height: 1.6;">Customer asked for their data to be removed on 2 August, by phone, during ticket #4812.</span></label>
+            <div style="display: flex; align-items: center; gap: 9px; background: #F6F5F2; border-radius: 7px; padding: 10px 12px;">
+              <span style="flex: none; font-size: 12px; color: #6F6A61;">→</span>
+              <span style="flex: 1 1 auto; font-size: 11.5px; color: #4A4842; line-height: 1.6;">Goes to the compliance queue. You will see its status here, and nothing on this profile changes in the meantime.</span>
+            </div>
+          </div>
+          <div style="padding: 12px 16px; border-top: 1px solid #F0EEE9; display: flex; gap: 8px; justify-content: flex-end;">
+            <button style="font-family: inherit; background: transparent; color: #4A4842; border: none; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 12px; cursor: pointer;">Cancel</button>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; min-height: 40px; padding: 0 16px; cursor: pointer;">Send the request</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">No delete button, no red, no confirm phrase — because none of those belong to this screen. The heading says request, the body says it deletes nothing, and the button says send. An agent should not be able to leave here believing they erased a customer.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H06 · Dark — the request, waiting</div>
+        <div style="width: 440px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px;" role="note">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Erasure requested</span><span style="background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; border-radius: 4px; padding: 2px 7px;">awaiting approval</span></div>
+            <div style="font-size: 12px; color: #C9C5BB; line-height: 1.65; margin-top: 6px;">Raised by Selam Bekele on 3 August. Sitting with compliance — nothing on this profile has changed, and the customer can still be helped normally while it waits.</div>
+            <div style="font-size: 11px; color: #A6A296; margin-top: 7px;">Reference <span style="font-family: ui-monospace, monospace;">ERA-2026-0803-11</span></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 440px; line-height: 1.5;">The status is visible here because the agent who raised it will be asked about it — but every action on it lives in the compliance workflow. This surface reports; it does not decide.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 · the same honesty, smaller</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 08 §9 · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H02, H03 · Light — label and provenance</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 16px;">
+          <div style="display: flex; align-items: baseline; gap: 7px; margin-bottom: 9px;">
+            <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Betting details</span>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; background: #EEECE6; border-radius: 3px; padding: 2px 6px;">Staff-collected</span>
+          </div>
+          <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 8px; padding: 13px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; font-size: 14px;">
+            <span style="color: #6B675D;">Player ID</span><span style="font-family: ui-monospace, monospace; color: #1D1C18;">NB-40219</span>
+            <span style="color: #6B675D;">Brand</span><span style="color: #1D1C18;">Na Bet</span>
+          </div>
+          <div style="margin-top: 13px; background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px 13px;">
+            <div style="font-size: 13.5px; color: #4A4842; line-height: 1.6;">የመጨረሻዎቹ አራት መልእክቶች በእንግሊዝኛ ነበሩ። ቋንቋውን ይቀይሩ?</div>
+            <div style="display: flex; gap: 8px; margin-top: 11px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 9px; color: #1D1C18; font-size: 13.5px; font-weight: 600; min-height: 44px; cursor: pointer;">ተግብር</button>
+              <button style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 9px; color: #4A4842; font-size: 13.5px; min-height: 44px; min-width: 44px; cursor: pointer;">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">H06 · Dark — request erasure on a phone</div>
+        <div style="width: 375px; height: 560px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 10px;"></div>
+            <div style="padding: 0 16px 12px;"><div style="font-size: 16px; font-weight: 600; color: #ECEAE4;">Request erasure</div><div style="font-size: 12.5px; color: #A6A296; margin-top: 3px;">አበበ ታደሰ</div></div>
+            <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #232320; border: 1px solid #45443E; border-radius: 10px; padding: 13px;">
+                <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">This does not delete anything</div>
+                <div style="font-size: 13px; color: #C9C5BB; line-height: 1.65; margin-top: 5px;">It opens a request for compliance to decide on. Nothing here is removed.</div>
+              </div>
+              <label style="display: block;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4; margin-bottom: 6px;">Reason</span><span style="display: block; border: 1px solid #45443E; border-radius: 10px; padding: 12px 13px; min-height: 72px; font-size: 14px; color: #6E6A61; line-height: 1.6;">Why is this being requested?</span></label>
+              <button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; cursor: pointer;">Send the request</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Same wording at every size. The sentence that matters — “this does not delete anything” — is the first thing in the sheet, not a footnote under the button.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

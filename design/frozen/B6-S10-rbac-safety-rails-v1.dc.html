@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S10-rbac-safety-rails-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows I01–I07</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">RBAC safety rails &amp; high-risk governance</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Seven rails, and every one is a real state rather than a paragraph of help text. Two ideas run through all of them. First, <strong style="font-weight: 600;">a block must say who can unblock it</strong> — refusing an action and leaving the operator to guess the way out is how people end up in a support ticket about their own product. Second, <strong style="font-weight: 600;">pending is not granted</strong>, and the interface has to keep saying so, because a request that looks like a grant is worse than no request at all.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim, including the shield: an icon plus the word <em>high-risk</em>, never a colour on its own. The two settings rows follow the per-key row contract Doc 16 FR-08 defines — label, description, typed control, provenance, reset — so a rail that lives in Settings looks like a setting rather than a special case. Section J builds that shell next; the contract is the document's, not that screen's.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Four-eyes in force — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows I02, I03, I07 · Doc 03 FR-08b, T-06, FS-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Light is the requester's view: she has asked, and the interface is unambiguous that nothing has changed yet. Dark is the approver's — a different admin, with the request in front of him and the reason he was given. The two views share the same pending card so neither party sees a different version of the truth.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · the requester</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">I02 · I03 · I07</span></div>
+    <div data-screen-label="I02 four-eyes requester light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">People</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Users</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Roles &amp; permissions</span>
+          </div>
+          <div style="padding: 6px 0 0 16px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px;">Agent</span>
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">Payments Specialist</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">RG Officer</span>
+          </div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">People · Roles</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #22211D;"></span>
+                <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Payments Specialist</h1>
+              </div>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">admin.roles.manage</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Discard</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Review &amp; save</button>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; margin-top: 12px; flex: none;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">⏳ Waiting for approval</span>
+              <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">1 high-risk grant is not in force yet</span>
+              <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">Expires in 21 h 40 m if nobody acts</span>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 high-risk</span>
+                <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18;">customers.export</span>
+                <span style="font-size: 11.5px; color: #6B675D;">→ Payments Specialist · affects 5 people</span>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #4A4842; margin-top: 6px;">Requested by you, 2 Aug at 09:14. Reason given: “Finance needs the monthly reconciliation export from inside the product instead of a database dump.”</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; color: #6B675D;">Can approve:</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 10px; font-size: 11px; color: #4A4842;">Dawit Bekele</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E2DB; border-radius: 999px; padding: 3px 10px; font-size: 11px; color: #4A4842;">Meron Assefa</span>
+                <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Remind them</button>
+                <button style="font-family: inherit; background: #FFFFFF; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer;">Withdraw</button>
+              </div>
+            </div>
+            <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Nobody has this permission yet. Until another admin approves, the five people in this role are exactly where they were — a pending grant is never counted when access is decided.</div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="font-size: 12px; font-weight: 600; color: #1D1C18;">Customers</span>
+              <span style="font-size: 11px; color: #6B675D;">9 of 13 in force · 1 waiting</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));">
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>View customers <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">customers.view</span></span>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>Merge 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">customers.merge</span></span>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px dashed #ADA89D; border-radius: 3px; background: #F6F5F2; flex: none;"></span>Export 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">customers.export</span> <span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">waiting</span></span>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>Add notes <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">customers.notes.add</span></span>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #6B675D;"><span style="width: 15px; height: 15px; border: 1.5px solid #CFCBC1; border-radius: 3px; background: #FFFFFF; flex: none;"></span>See RG flags 🛡 <span style="font-family: ui-monospace, monospace; font-size: 10px;">customers.rg_flag.view</span></span>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #F0EEE9; font-size: 11.5px; color: #1D1C18;"><span style="width: 15px; height: 15px; border: 1.5px solid #22211D; border-radius: 3px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none;">✓</span>Edit profile <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">customers.edit</span></span>
+            </div>
+            <div style="padding: 10px 14px; font-size: 11.5px; line-height: 1.6; color: #6B675D;">A waiting grant shows as a dashed box with the word beside it — never as a ticked box in a different colour. It is not on, and it must not look like it is.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · the approver</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">I02 · I03 · I07 · Amharic chrome</span></div>
+    <div data-screen-label="I02 four-eyes approver dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">1</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">ሰዎች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">ተጠቃሚዎች</span>
+            <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">ሚናዎች<span style="margin-left: auto; background: #E06B6B; color: #171714; font-size: 9.5px; font-weight: 700; border-radius: 999px; padding: 0 5px;">1</span></span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ሰዎች · ሚናዎች</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">የሚጠብቁ ጥያቄዎች</h1>
+            </div>
+            <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; border: 1px solid #45443E; border-radius: 4px; padding: 4px 7px;">admin.roles.approve</span>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px; margin-top: 12px; flex: none;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #2F2F29; color: #C9C5BB; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">⏳ ይሁንታ ይጠብቃል</span>
+              <span style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">ሳራ በቀለ ከፍተኛ አደጋ ያለው ፈቃድ ጠይቃለች</span>
+              <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">በ21 ሰ 40 ደ ራሱን ይሰርዛል</span>
+            </div>
+            <div style="border: 1px solid #343430; border-radius: 8px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 11px; font-weight: 600; color: #ECEAE4;">🛡 high-risk</span>
+                <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #ECEAE4;">customers.export</span>
+                <span style="font-size: 11.5px; color: #A6A296;">→ የክፍያ ባለሙያ · 5 ሰዎችን ይነካል</span>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB; margin-top: 7px;">የጠየቀችው ሳራ በቀለ ናት፤ ነሐሴ 2፣ 09:14። ምክንያት፦ “ፋይናንስ ወርሃዊውን ማስታረቅ ከምርቱ ውስጥ ማውረድ ይፈልጋል፤ ከዳታቤዝ መገልበጥ ይቀራል።”</div>
+              <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 9px 11px; margin-top: 10px; font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ይህ ፈቃድ እስካሁን በሥራ ላይ አይደለም። ካልፈቀዱት አምስቱ ሰዎች ምንም አዲስ መዳረሻ አያገኙም።</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 11px;">
+                <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">ፍቀድ</button>
+                <button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">አትቀበል</button>
+                <span style="margin-left: auto; font-size: 11px; color: #A6A296;">ውሳኔዎ በስምዎ ይመዘገባል።</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin-top: 12px; flex: none;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለምን ሁለተኛ ሰው ያስፈልጋል</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #A6A296;">ከፍተኛ አደጋ ያላቸው ፈቃዶች በአንድ ሰው ብቻ አይሰጡም። ጠያቂው ራሱን ማጽደቅ አይችልም፤ ስለዚህ ቢያንስ ሁለት አጽዳቂዎች ሁልጊዜ መኖር አለባቸው።</p>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ማንም ካልመለሰ</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.8; color: #A6A296;">ጥያቄው በ24 ሰዓት ውስጥ ራሱን ይሰርዛል። ያለ ውሳኔ ተንጠልጥሎ አይቀርም፤ ሳራ እንደገና መጠየቅ ትችላለች።</p>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px; margin-top: 12px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ይህ ፈቃድ ምን ያደርጋል</div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 10px;">
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የሚነኩ ሰዎች</div><div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">5</div></div>
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የሚደርሱባቸው ደንበኞች</div><div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">ክፍል</div></div>
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ተመሳሳይ ጥያቄዎች</div><div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">0</div></div>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; margin-top: 12px; flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #343430; flex: none;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የቅርብ ጊዜ የከፍተኛ አደጋ ውሳኔዎች</span>
+              <span style="font-size: 11px; color: #A6A296;">ባለፉት 30 ቀናት · 6</span>
+              <span style="margin-left: auto; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #A6A296; border: 1px solid #45443E; border-radius: 999px; padding: 2px 8px;">OPTION · not in spec</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 108px 1.4fr 1.5fr 96px; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #262622;">
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ውሳኔ</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ፈቃድ</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ሚና · ጠያቂ</span>
+              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">መቼ</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 108px 1.4fr 1.5fr 96px; gap: 8px; padding: 9px 14px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; width: fit-content;">✓ ፈቅጃለሁ</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">tickets.export</span>
+              <span style="font-size: 11.5px; color: #C9C5BB; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">የክፍያ ባለሙያ · ሳራ በቀለ</span>
+              <span style="font-size: 11px; color: #A6A296;">ሐምሌ 28</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 108px 1.4fr 1.5fr 96px; gap: 8px; padding: 9px 14px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; color: #F5A7A7; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; width: fit-content;">✕ አልተቀበልኩም</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">customers.rg_flag.view</span>
+              <span style="font-size: 11.5px; color: #C9C5BB; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ከፍተኛ ወኪል · ዮናስ ተስፋዬ</span>
+              <span style="font-size: 11px; color: #A6A296;">ሐምሌ 21</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 108px 1.4fr 1.5fr 96px; gap: 8px; padding: 9px 14px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; background: #2F2F29; color: #C9C5BB; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; width: fit-content;">⏱ ጊዜው አለፈ</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #ECEAE4; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">tickets.delete</span>
+              <span style="font-size: 11.5px; color: #C9C5BB; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ወኪል · መሮን አሰፋ</span>
+              <span style="font-size: 11px; color: #A6A296;">ሐምሌ 16</span>
+            </div>
+            <div style="padding: 10px 14px; font-size: 11px; line-height: 1.7; color: #A6A296;">ጊዜው ያለፈበት ጥያቄ እንደ አልተቀበልኩም አይቆጠርም — ማንም ስላልመለሰ ብቻ ራሱን ሰርዟል። መሮን እንደገና መጠየቅ ትችላለች።</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The blocks and the settings — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows I01, I04, I05, I06, I07 · Doc 03 FR-08a, EC-08, BR-02, BR-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The last-admin block and the four-eyes deadlock guard are the same idea twice: the product refuses, and then tells you precisely what would make it possible. Both name people, not counts. The three settings use Section J's row anatomy — label, description, control, provenance — so nothing here looks bespoke.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">I01 — last admin, hard block</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Sara Bekele cannot be moved off Administrator</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">She is the only person who can manage roles and users</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">If this change went through, nobody in NA BET could add a user, change a role, or undo it — including you. This is blocked rather than warned about.</div>
+          </div>
+          <div style="border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Who else holds these rights</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 6px; font-size: 11.5px;">
+              <div style="display: flex; gap: 8px;"><span style="color: #4A4842;">admin.roles.manage</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">Sara Bekele only</span></div>
+              <div style="display: flex; gap: 8px;"><span style="color: #4A4842;">admin.users.manage</span><span style="margin-left: auto; color: #1D1C18; font-weight: 600;">Sara Bekele only</span></div>
+            </div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Give both permissions to a second person first — then this change goes through on its own.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Choose a second administrator</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">I04 — four-eyes refuses to enable</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Two people must approve high-risk grants</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">rbac.four_eyes</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">When this is on, a high-risk permission only takes effect once a second administrator approves it.</p>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #CFCBC1;"></span></span>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Cannot be turned on yet — only Sara Bekele can approve</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #8F5F08; margin-top: 3px;">With one approver, every high-risk request would wait for a person who is not allowed to approve her own. Give a second person <span style="font-family: ui-monospace, monospace; font-size: 11px;">admin.roles.approve</span> and this switch becomes available.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">I05 · I06 — the two settings, per-key contract</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Require an explicit grant for every action</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">rbac.strict_grant</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Off by default, and we suggest leaving it off: with it on, anything a role forgot to tick is refused outright, which surfaces as agents unable to do ordinary work with no obvious cause. Turn it on only if your compliance regime asks for it.</p>
+            </div>
+            <div style="margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none;">
+              <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+              <span style="font-size: 10.5px; color: #6B675D;">Default · off</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Warn when this many people share one exception <span style="display: inline-flex; align-items: center; gap: 4px; background: #EEECE6; color: #4A4842; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">Modified</span></div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">rbac.override.warn_threshold</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Once more than this many people carry the same exception, the product suggests making a role instead. It only advises; nothing is blocked.</p>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 6px;">Changed by Sara Bekele · 14 Jun 2026 · default 10 <button style="font-family: inherit; background: transparent; border: none; color: #22211D; font-size: 10.5px; font-weight: 600; padding: 0 0 0 6px; cursor: pointer;">Reset</button></div>
+            </div>
+            <div style="margin-left: auto; flex: none;"><div style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #1D1C18; min-height: 36px; min-width: 68px; text-align: right;">8</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">I01 — last admin, hard block</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Sara Bekele cannot be moved off Administrator</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">She is the only person who can manage roles and users</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">If this change went through, nobody in NA BET could add a user, change a role, or undo it — including you. This is blocked rather than warned about.</div>
+          </div>
+          <div style="border: 1px solid #343430; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Who else holds these rights</div>
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 6px; font-size: 11.5px;">
+              <div style="display: flex; gap: 8px;"><span style="color: #C9C5BB;">admin.roles.manage</span><span style="margin-left: auto; color: #ECEAE4; font-weight: 600;">Sara Bekele only</span></div>
+              <div style="display: flex; gap: 8px;"><span style="color: #C9C5BB;">admin.users.manage</span><span style="margin-left: auto; color: #ECEAE4; font-weight: 600;">Sara Bekele only</span></div>
+            </div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Give both permissions to a second person first — then this change goes through on its own.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Choose a second administrator</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">I04 — four-eyes refuses to enable</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Two people must approve high-risk grants</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">rbac.four_eyes</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">When this is on, a high-risk permission only takes effect once a second administrator approves it.</p>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #45443E;"></span></span>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; margin-top: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Cannot be turned on yet — only Sara Bekele can approve</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E8C25A; margin-top: 3px;">With one approver, every high-risk request would wait for a person who is not allowed to approve her own. Give a second person <span style="font-family: ui-monospace, monospace; font-size: 11px;">admin.roles.approve</span> and this switch becomes available.</div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">I05 · I06 — the two settings, per-key contract</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Require an explicit grant for every action</div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">rbac.strict_grant</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Off by default, and we suggest leaving it off: with it on, anything a role forgot to tick is refused outright, which surfaces as agents unable to do ordinary work with no obvious cause.</p>
+            </div>
+            <div style="margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none;">
+              <span style="display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #1C1C19; border: 1px solid #45443E;"></span></span>
+              <span style="font-size: 10.5px; color: #A6A296;">Default · off</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Warn when this many people share one exception <span style="display: inline-flex; align-items: center; gap: 4px; background: #2F2F29; color: #C9C5BB; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">Modified</span></div>
+              <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-top: 2px;">rbac.override.warn_threshold</div>
+              <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Once more than this many people carry the same exception, the product suggests making a role instead. It only advises; nothing is blocked.</p>
+              <div style="font-size: 10.5px; color: #A6A296; margin-top: 6px;">Changed by Sara Bekele · 14 Jun 2026 · default 10 <button style="font-family: inherit; background: transparent; border: none; color: #ECEAE4; font-size: 10.5px; font-weight: 600; padding: 0 0 0 6px; cursor: pointer;">Reset</button></div>
+            </div>
+            <div style="margin-left: auto; flex: none;"><div style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; min-height: 36px; min-width: 68px; text-align: right;">8</div></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">I07 — risk is never carried by colour</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #ECEAE4;">🛡 high-risk</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #C9C5BB;">standard</span>
+            <span style="display: inline-flex; align-items: center; gap: 5px; background: #2F2F29; color: #C9C5BB; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600;">⏳ waiting for approval</span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #A6A296;">Shield plus the word, identical in both themes and in Amharic. Nothing about risk or pending state is conveyed by hue alone — a greyscale print of this screen loses no information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">I01, I02, I03 at phone width</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Approving is a two-tap decision on a request that expires in a day, so it is <strong style="font-weight: 600;">operable at 375</strong> — the approver is often the person not at a desk. The last-admin block is informational here: it explains and points at the fix, which needs a larger screen.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide</div>
+        <div data-screen-label="I02 approve 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Roles</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">1 request waiting</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">⏳ Waiting for approval</span>
+              <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18; margin-top: 8px;">Sara Bekele asked for a high-risk permission</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;"><span style="font-size: 11px; font-weight: 600; color: #1D1C18;">🛡 high-risk</span><span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18;">customers.export</span></div>
+              <div style="font-size: 12px; line-height: 1.6; color: #4A4842; margin-top: 6px;">To Payments Specialist · affects 5 people. “Finance needs the monthly reconciliation export from inside the product.”</div>
+              <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 9px 11px; margin-top: 9px; font-size: 12px; line-height: 1.6; color: #4A4842;">Not in force yet. Nobody has gained anything while this waits.</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 11px;">
+                <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer;">Approve</button>
+                <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 8px; font-size: 13px; font-weight: 500; min-height: 44px; cursor: pointer;">Reject</button>
+              </div>
+              <div style="font-size: 11px; color: #6B675D; margin-top: 8px;">Expires in 21 h 40 m · your decision is recorded with your name.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ</div>
+        <div data-screen-label="I01 block 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">ተጠቃሚዎች</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ሳራ በቀለ</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 13px; font-weight: 600; color: #F5A7A7;">ይህ ለውጥ ተከልክሏል</div>
+              <div style="font-size: 12px; line-height: 1.8; color: #E0A0A0; margin-top: 4px;">ሚናዎችንና ተጠቃሚዎችን ማስተዳደር የምትችለው እርሷ ብቻ ናት። ብትወርድ ማንም ተጠቃሚ መጨመር ወይም ሚና መቀየር አይችልም።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">እነዚህን ፈቃዶች ማን ይዟል</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="font-family: ui-monospace, monospace; color: #C9C5BB;">admin.roles.manage</span><span style="margin-left: auto; color: #ECEAE4; font-weight: 600;">ሳራ ብቻ</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px;"><span style="font-family: ui-monospace, monospace; color: #C9C5BB;">admin.users.manage</span><span style="margin-left: auto; color: #ECEAE4; font-weight: 600;">ሳራ ብቻ</span></div>
+            </div>
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 10px; padding: 11px 12px; margin-top: 10px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ሁለተኛ አስተዳዳሪ መምረጥ ሰፊ ማያ ገጽ ይፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">ምክንያቱን እዚህ ማንበብ ይችላሉ። ማስተካከያው ግን በኮምፒውተር ይሠራል።</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> I01 (last-admin hard block naming who else holds each right — §B both themes, §C dark), I02 (four-eyes pending on the role, requester view in §A light and approver view with approve/reject in §A dark, plus §C light), I03 (pending never counts as granted — stated in both §A frames, drawn as the dashed “waiting” cell in the §A light matrix, restated at 375, with the 24-hour auto-expiry visible in all three), I04 (the enable-refusal with its reason — §B both themes), I05 (<span style="font-family: ui-monospace, monospace; font-size: 12px;">rbac.strict_grant</span> with its default-off rationale — §B both themes), I06 (<span style="font-family: ui-monospace, monospace; font-size: 12px;">rbac.override.warn_threshold</span> at 8, default 10, showing the Modified badge, provenance line and Reset — §B both themes), I07 (shield with icon and word — throughout, and as an explicit swatch row in §B dark).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 approve/reject is operable rather than read-only. The request expires in 24 hours and the approver is by definition not the person already at the desk; a read-only phone view would mean requests dying of inattention. Every control clears 44 px. If you would rather it match the settings ruling exactly, it is a small change.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">OPTION, not in spec:</strong> the recent-decisions table on the approver screen (§A dark, lower half) is <em>not</em> one of rows I01–I07 and no document asks for it. I added it because an approver deciding a high-risk grant has no other way to see whether this has been asked before, and because an expired request currently leaves no visible trace — the third row shows exactly that case. It implies two things you have not approved: a queryable 30-day decision history, and a full-record destination behind it. It is marked on the screen itself and carries no live link. Say the word and it comes out; the frame is honestly short without it.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> the waiting permission renders as a dashed, unticked box with the word “waiting” beside it — deliberately not a ticked box in a different colour, which is how most products draw this and how admins come to believe a pending grant is live. It costs a little visual elegance in the matrix and buys an unambiguous answer to “does she have it or not”.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

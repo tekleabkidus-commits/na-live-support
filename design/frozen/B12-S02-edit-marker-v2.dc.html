@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B12-S02-edit-marker-v2</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Edit marker, revision history, tombstone</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Doc 04 FR-21, FR-22, FR-23, §8, §13 · your rulings. The tombstone is the approved <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">B1-DS</span> component used verbatim, not redrawn. Four things: the edited marker on any bubble that has revisions; the revision history behind <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">conversations.history.full</span>, marker-only for everyone else; the neutral tombstone when a customer deletes; and edit/delete on staff's own messages only where the channel adapter supports it. AI messages never carry an edit affordance — corrections are new messages.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 thread — the marker in place</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 04 FR-21, FR-22, FR-23, §8</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — permitted viewer, adapter supports edit</div>
+        <div style="width: 700px; background: #FBFAF8; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+
+          <div style="align-self: flex-start; max-width: 74%;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">ገንዘቡ 2,500 ብር ነው፣ 3,500 ብር አይደለም። ይቅርታ።</div>
+            <div style="font-size: 10.5px; color: #6F6A61; margin-top: 3px; display: flex; align-items: center; gap: 7px;">
+              <span>አበበ ታደሰ · 14:06</span>
+              <button style="font-family: inherit; background: transparent; border: none; padding: 0; font-size: 10.5px; color: #4A4842; font-weight: 600; text-decoration: underline dotted; cursor: pointer;">edited · 2 versions</button>
+            </div>
+          </div>
+
+          <div style="align-self: flex-start; max-width: 74%;">
+            <div style="align-self: flex-start; max-width: 78%; background: #F2F1ED; border: 1px dashed #CFCBC1; border-radius: 10px; padding: 7px 11px; font-size: 12px; color: #6F6A61; font-style: italic;">Message deleted by customer</div>
+            <div style="font-size: 10.5px; color: #6F6A61; margin-top: 3px;">አበበ ታደሰ · 14:09 · deleted 14:11</div>
+          </div>
+
+          <div style="align-self: flex-end; max-width: 74%;">
+            <div style="display: flex; align-items: flex-start; gap: 8px;">
+              <button aria-label="Message actions" style="font-family: inherit; flex: none; order: 0; width: 28px; height: 28px; margin-top: 4px; border-radius: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; font-size: 13px; cursor: pointer;">⋯</button>
+              <div style="flex: 1 1 auto; min-width: 0; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">Thanks for confirming 2,500 ETB — I've asked finance to trace it now.</div>
+            </div>
+            <div style="font-size: 10.5px; color: #6F6A61; margin-top: 3px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 7px;">
+              <button style="font-family: inherit; background: transparent; border: none; padding: 0; font-size: 10.5px; color: #4A4842; font-weight: 600; text-decoration: underline dotted; cursor: pointer;">edited</button>
+              <span>Selam Bekele · 14:12 · ✓ Sent</span>
+            </div>
+          </div>
+
+          <div style="align-self: flex-end; max-width: 74%;">
+            <div style="background: #F1EDFE; border: 1px solid #DACFFB; border-left: 3px solid #7C5CFC; border-radius: 10px 10px 3px 10px; padding: 9px 12px;">
+              <div style="font-size: 9.5px; font-weight: 700; color: #5B3FD6; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 3px;">✦ AI assistant</div>
+              <div style="font-size: 12.5px; line-height: 1.55; color: #1D1C18;">ሰላም! የመውጫ ጥያቄዎ ደርሶናል። አንድ ወኪል በቅርቡ ያግዝዎታል።</div>
+            </div>
+            <div style="font-size: 10.5px; color: #6F6A61; margin-top: 3px; text-align: right;">AI · 09:15 · ✓ Sent</div>
+          </div>
+
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 700px; line-height: 1.5;">The marker is a word, not a pencil — “edited”, with a count where there is more than one revision, sitting in the meta line where the timestamp already lives. Underlined dotted because it opens something. The AI bubble has no <span style="font-family: ui-monospace, monospace;">⋯</span> at all: FR-23 forbids editing it, so the affordance is absent rather than refusing on click.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — message actions, adapter capability decides</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 300px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; box-shadow: 0 8px 24px rgba(29,28,24,0.14); overflow: hidden;">
+            <div style="padding: 8px 12px; border-bottom: 1px solid #F0EEE9; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">Telegram · edit and delete</div>
+            <div style="display: flex; flex-direction: column; padding: 4px 0;">
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; padding: 0 12px; min-height: 40px; font-size: 12.5px; color: #1D1C18; cursor: pointer;">Edit this message</button>
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; padding: 0 12px; min-height: 40px; font-size: 12.5px; color: #1D1C18; cursor: pointer;">Copy text</button>
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; padding: 0 12px; min-height: 40px; font-size: 12.5px; color: #B32B2B; cursor: pointer;">Delete for everyone</button>
+            </div>
+            <div style="padding: 8px 12px 10px; border-top: 1px solid #F0EEE9; font-size: 11px; color: #6B675D; line-height: 1.5;">Both are audited with your name and the time. Telegram allows edits for 48 hours after sending.</div>
+          </div>
+          <div style="width: 300px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; box-shadow: 0 8px 24px rgba(29,28,24,0.14); overflow: hidden;">
+            <div style="padding: 8px 12px; border-bottom: 1px solid #F0EEE9; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">SMS · neither</div>
+            <div style="display: flex; flex-direction: column; padding: 4px 0;">
+              <button style="font-family: inherit; text-align: left; background: transparent; border: none; padding: 0 12px; min-height: 40px; font-size: 12.5px; color: #1D1C18; cursor: pointer;">Copy text</button>
+            </div>
+            <div style="padding: 8px 12px 10px; border-top: 1px solid #F0EEE9; font-size: 11px; color: #6B675D; line-height: 1.5;">SMS cannot recall or change a sent message, so Edit and Delete are not in this menu. Nothing is greyed out — the channel simply does not offer it.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Revision history — and what it looks like without the permission</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 04 §8, FR-21, BR-03 · conversations.history.full</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — permitted viewer opens the history</div>
+        <div style="width: 460px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; box-shadow: 0 8px 24px rgba(29,28,24,0.14); overflow: hidden;">
+          <div style="padding: 12px 14px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px;">
+            <div style="min-width: 0; flex: 1 1 auto;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Revision history</div><div style="font-size: 11px; color: #6B675D; margin-top: 2px;">አበበ ታደሰ · message at 14:06 · 2 versions</div></div>
+            <button aria-label="Close" style="font-family: inherit; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 7px; color: #1D1C18; font-size: 12px; min-height: 36px; min-width: 36px; cursor: pointer;">✕</button>
+          </div>
+          <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="border: 1.5px solid #22211D; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 7px 11px; background: #F6F5F2; display: flex; align-items: center; gap: 8px; font-size: 11px;"><span style="font-weight: 600; color: #1D1C18;">Current</span><span style="color: #6B675D;">edited 14:08</span></div>
+              <div style="padding: 10px 11px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">ገንዘቡ 2,500 ብር ነው፣ 3,500 ብር አይደለም። ይቅርታ።</div>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 7px 11px; background: #FBFAF8; display: flex; align-items: center; gap: 8px; font-size: 11px;"><span style="font-weight: 600; color: #4A4842;">Original</span><span style="color: #6B675D;">sent 14:06</span></div>
+              <div style="padding: 10px 11px; font-size: 12.5px; line-height: 1.55; color: #6B675D;">ገንዘቡ 3,500 ብር ነው።</div>
+            </div>
+            <div style="background: #F6F5F2; border-radius: 8px; padding: 10px 11px; font-size: 11.5px; color: #4A4842; line-height: 1.55;">Versions are the customer's own edits, kept for the audit trail. Nothing here can be changed, and opening it is itself recorded.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — same message, viewer without the permission</div>
+        <div style="width: 460px; background: #171715; border: 1px solid #343430; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="align-self: flex-start; max-width: 84%;">
+            <div style="background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">ገንዘቡ 2,500 ብር ነው፣ 3,500 ብር አይደለም። ይቅርታ።</div>
+            <div style="font-size: 10.5px; color: #9A9588; margin-top: 3px;">አበበ ታደሰ · 14:06 · edited</div>
+          </div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; color: #C9C5BB; line-height: 1.55;">Marker only. The word is still there — the fact that it was edited is never hidden — but it is plain text with nothing to open, and no lock icon announcing what this agent cannot have.</div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 460px; line-height: 1.5;">Absence, not a lock — the same pattern as out-of-scope rows in <span style="font-family: ui-monospace, monospace; font-size: 12px;">B1-S02</span>.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 — marker, history sheet, tombstone, and editing your own</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 04 §8, §13 · 44px targets</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · thread with all three markers</div>
+        <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="padding: 8px 12px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #ECEAE4; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div><div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">አበበ ታደሰ</div><div style="font-size: 11px; color: #A6A296;">#4812 · Telegram</div></div>
+          </div>
+          <div style="padding: 14px; background: #171715; display: flex; flex-direction: column; gap: 12px;">
+            <div style="align-self: flex-start; max-width: 82%;">
+              <div style="background: #232320; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">ገንዘቡ 2,500 ብር ነው፣ 3,500 ብር አይደለም።</div>
+              <div style="font-size: 10.5px; color: #9A9588; margin-top: 4px; display: flex; align-items: center; gap: 8px;"><span>14:06</span><button style="font-family: inherit; background: transparent; border: none; padding: 0 2px; min-height: 44px; font-size: 11px; color: #C9C5BB; font-weight: 600; text-decoration: underline dotted; cursor: pointer;">edited · 2 versions</button></div>
+            </div>
+            <div style="align-self: flex-start; max-width: 82%;">
+              <div style="align-self: flex-start; max-width: 78%; background: #1F1F1C; border: 1px dashed #45443E; border-radius: 10px; padding: 7px 11px; font-size: 12px; color: #9A9588; font-style: italic;">Message deleted by customer</div>
+              <div style="font-size: 10.5px; color: #9A9588; margin-top: 4px;">14:09 · deleted 14:11</div>
+            </div>
+            <div style="align-self: flex-end; max-width: 82%;">
+              <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 10px 10px 3px 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #ECEAE4;">Thanks for confirming 2,500 ETB — finance is tracing it now.</div>
+              <div style="font-size: 10.5px; color: #9A9588; margin-top: 4px; text-align: right;">Selam · 14:12 · edited · ✓ Sent</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Long-press a bubble for its actions — the same sheet as swipe actions in <span style="font-family: ui-monospace, monospace; font-size: 12px;">B2-S01</span>. The marker itself is a 44px target because it opens the history.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · revision history as a sheet</div>
+        <div style="width: 375px; height: 520px; background: rgba(29,28,24,0.35); border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #FFFFFF; border-radius: 16px 16px 0 0; padding: 10px 0 18px;">
+            <div style="width: 36px; height: 4px; background: #DCD8CF; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 10px;"><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Revision history</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">አበበ ታደሰ · 14:06 · 2 versions</div></div>
+            <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="border: 1.5px solid #22211D; border-radius: 8px; overflow: hidden;">
+                <div style="padding: 8px 11px; background: #F6F5F2; font-size: 11px;"><span style="font-weight: 600; color: #1D1C18;">Current</span> <span style="color: #6B675D;">· edited 14:08</span></div>
+                <div style="padding: 11px; font-size: 13px; line-height: 1.55; color: #1D1C18;">ገንዘቡ 2,500 ብር ነው፣ 3,500 ብር አይደለም። ይቅርታ።</div>
+              </div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+                <div style="padding: 8px 11px; background: #FBFAF8; font-size: 11px;"><span style="font-weight: 600; color: #4A4842;">Original</span> <span style="color: #6B675D;">· sent 14:06</span></div>
+                <div style="padding: 11px; font-size: 13px; line-height: 1.55; color: #6B675D;">ገንዘቡ 3,500 ብር ነው።</div>
+              </div>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 10px; font-size: 13.5px; font-weight: 600; min-height: 48px; cursor: pointer;">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · editing your own message, and the audit line after</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 10px 14px; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; flex: 1 1 auto;">Edit your message</span><span style="font-size: 11px; color: #F0B54A;">47 h left to edit</span></div>
+            <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="border: 1.5px solid #ECEAE4; border-radius: 10px; padding: 11px 12px; font-size: 13px; line-height: 1.55; color: #ECEAE4;">Thanks for confirming 2,500 ETB — finance is tracing it now.<span style="display: inline-block; width: 1.5px; height: 14px; background: #ECEAE4; vertical-align: -2px; margin-left: 1px;"></span></div>
+              <div style="font-size: 11.5px; color: #A6A296; line-height: 1.5;">The customer sees the corrected message with Telegram's own “edited” mark. Your name and both versions go into the audit trail.</div>
+              <div style="display: flex; gap: 8px;">
+                <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Save edit</button>
+                <button style="font-family: inherit; flex: none; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; padding: 0 18px; cursor: pointer;">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; padding: 12px 14px;">
+            <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; margin-bottom: 6px;">In the ticket timeline</div>
+            <div style="display: flex; gap: 10px;"><span style="flex: none; width: 8px; height: 8px; border-radius: 50%; background: #A6A296; margin-top: 5px;"></span><div><div style="font-size: 12.5px; color: #ECEAE4; line-height: 1.5;"><span style="font-weight: 600;">Message edited</span> · outbound, Telegram</div><div style="font-size: 11px; color: #9A9588; margin-top: 2px;">ሰላም በቀለ · today 14:12</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

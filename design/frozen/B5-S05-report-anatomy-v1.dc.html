@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 40px;">
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B5-S05-report-anatomy-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">checklist F01–F19</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Report page anatomy</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 15 FR-07 fixes one anatomy for all eight families: header KPI row, primary chart, breakdown table. Designed once here, then applied eight times — so every decision on this page is a decision made eight times over.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Two obligations shape it. Doc 15 FR-03: <strong style="font-weight: 600;">every number discloses its formula</strong>, exclusions and calendar. Doc 15 FR-08 and BR-06: <strong style="font-weight: 600;">every number is reachable</strong> — no aggregate ships without a way into the records behind it, and a rate drills into its numerator and denominator separately. The worked example is the Agent report, because it also exercises the permission gate.</p>
+  </header>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">1440 — the full anatomy</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F01 · F02 · F04 · F05</span>
+    </div>
+
+    <div data-tone="light" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 980px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #726D63;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #4A4842; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E0A33A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #1D1C18; border: 1px solid #E5E2DB; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online<span style="color: #6F6A61;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Reports" style="width: 210px; flex: none; background: #F6F5F2; border-right: 1px solid #E5E2DB; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 0 8px 8px;">Report families</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; background: #22211D; color: #FFFFFF; font-size: 12.5px; font-weight: 600; cursor: pointer;">Agent</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Team / Queue</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Customer</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">AI</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Telegram</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Live Chat</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">SMS</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">SLA</span>
+          </div>
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 16px 8px 8px;">Saved</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Payments weekly</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #1D1C18; font-size: 12.5px; cursor: pointer;">Night shift</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 14px 18px 0;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="min-width: 0;">
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #1D1C18;">Agent report</h1>
+                <p style="margin: 3px 0 0; font-size: 12px; color: #6B675D;">1–31 July 2025 · compared with 1–30 June · tenant timezone (EAT) · daily</p>
+              </div>
+              <div style="margin-left: auto; flex: none; display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #E4F4EA; border: 1px solid #B9E0C9; border-radius: 999px; padding: 5px 11px;"><span style="color: #156F45; font-size: 11px; font-weight: 700;">✓</span><span style="font-size: 11.5px; font-weight: 600; color: #156F45; white-space: nowrap;">Verified</span></span>
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; font-size: 12px; font-weight: 600; color: #1D1C18; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Export</button>
+                <button style="font-family: inherit; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; font-size: 12px; font-weight: 600; color: #1D1C18; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Schedule</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex: none; padding: 11px 18px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; border-bottom: 1px solid #E5E2DB; margin-top: 12px; background: #FFFFFF;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #22211D; color: #FFFFFF; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer;">July 2025<span style="opacity: 0.7;">▾</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #1D1C18; white-space: nowrap; cursor: pointer;">vs previous period<span style="color: #6F6A61;">▾</span></span>
+            <span style="width: 1px; height: 22px; background: #E5E2DB;"></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; color: #1D1C18; white-space: nowrap; cursor: pointer;">Payments<span style="color: #6B675D; font-weight: 400;">·dept</span><span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; color: #1D1C18; white-space: nowrap; cursor: pointer;">Deposits, Withdrawals<span style="color: #6B675D; font-weight: 400;">·queue</span><span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Team</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Agent</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Channel</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Language</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Tag</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px dashed #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #6B675D; white-space: nowrap; cursor: pointer;">+ Priority</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 11.5px; color: #6B675D; white-space: nowrap;">Saved for you</span><button style="font-family: inherit; background: transparent; border: none; font-size: 11.5px; font-weight: 600; color: #1D1C18; cursor: pointer; white-space: nowrap;">Reset</button></span>
+          </div>
+
+          <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="flex: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 11px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">Handled</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4,812</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 9%</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">Resolved</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4,201</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 7%</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">Reopened</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">6.2%</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #FBE5E5; color: #B32B2B; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 1.4pt</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #22211D; border-radius: 9px; padding: 11px 12px; position: relative;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #22211D; border-radius: 50%; font-size: 8.5px; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">2m 41s</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">CSAT</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4.6</span><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">n=1,204</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D; white-space: nowrap;">Per active hour</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">3.4</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #ECEEF1; color: #59636F; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">— 0%</span></div>
+              </div>
+            </div>
+
+            <div style="flex: none; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px 14px;">
+              <div style="display: flex; align-items: baseline; gap: 9px; margin-bottom: 4px;">
+                <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">First response time</span>
+                <span style="font-size: 11.5px; color: #6B675D;">median, business hours · daily</span>
+                <span style="margin-left: auto; display: flex; gap: 6px;">
+                  <button style="font-family: inherit; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; font-size: 10.5px; font-weight: 600; color: #4A4842; padding: 4px 9px; white-space: nowrap; cursor: pointer;">Table view</button>
+                  <button style="font-family: inherit; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; font-size: 10.5px; font-weight: 600; color: #4A4842; padding: 4px 9px; white-space: nowrap; cursor: pointer;">Download</button>
+                </span>
+              </div>
+              <svg viewBox="0 0 1120 200" width="100%" height="200" role="img" aria-label="Line chart of median first response time through July, from 3 minutes 6 seconds down to 2 minutes 41 seconds, with June shown as a dashed comparison line.">
+                <line x1="46" y1="16" x2="1114" y2="16" stroke="#F0EEE9" stroke-width="1" /><line x1="46" y1="60" x2="1114" y2="60" stroke="#F0EEE9" stroke-width="1" /><line x1="46" y1="104" x2="1114" y2="104" stroke="#F0EEE9" stroke-width="1" /><line x1="46" y1="148" x2="1114" y2="148" stroke="#F0EEE9" stroke-width="1" />
+                <text x="38" y="20" text-anchor="end" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">4m</text>
+                <text x="38" y="64" text-anchor="end" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">3m</text>
+                <text x="38" y="108" text-anchor="end" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">2m</text>
+                <text x="38" y="152" text-anchor="end" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">1m</text>
+                <polyline points="56,58 92,62 128,55 164,68 200,64 236,72 272,66 308,78 344,71 380,84 416,76 452,88 488,80 524,92 560,85 596,96 632,88 668,99 704,91 740,102 776,94 812,104 848,97 884,107 920,99 956,109 992,101 1028,110 1064,103 1104,112" fill="none" stroke="#A29D91" stroke-width="1.8" stroke-dasharray="6 4" />
+                <polyline points="56,52 92,56 128,49 164,58 200,54 236,61 272,56 308,64 344,58 380,68 416,61 452,70 488,63 524,72 560,66 596,74 632,68 668,76 704,70 740,78 776,72 812,80 848,74 884,82 920,76 956,84 992,78 1028,85 1064,80 1104,86" fill="none" stroke="#22211D" stroke-width="2.2" />
+                <circle cx="56" cy="52" r="3.5" fill="#22211D" /><circle cx="560" cy="66" r="3.5" fill="#22211D" /><circle cx="1104" cy="86" r="3.5" fill="#22211D" />
+                <text x="1104" y="42" text-anchor="end" font-size="10.5" fill="#22211D" font-weight="600" font-family="Inter, sans-serif">● July 2m 41s</text>
+                <text x="1104" y="128" text-anchor="end" font-size="10.5" fill="#6B675D" font-weight="600" font-family="Inter, sans-serif">▲ June 3m 03s</text>
+                <text x="56" y="180" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">1 Jul</text>
+                <text x="560" y="180" text-anchor="middle" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">15 Jul</text>
+                <text x="1114" y="180" text-anchor="end" font-size="10" fill="#6F6A61" font-family="ui-monospace, monospace">31 Jul</text>
+              </svg>
+              <p style="margin: 2px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">First response time improved 12% against June, from a median of 3m 03s to 2m 41s. The gap narrowed steadily rather than in a single step.</p>
+            </div>
+
+            <div style="flex: none; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-bottom: 1px solid #F0EEE9;">
+                <h2 style="font-size: 13px; font-weight: 600; margin: 0; color: #1D1C18;">By agent</h2>
+                <span style="font-size: 11.5px; color: #6B675D;">12 agents · every number opens the tickets behind it</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #6B675D; white-space: nowrap;"><span aria-hidden="true">👁</span>Individual metrics visible to you</span>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61;">
+                <span style="padding: 7px 13px; white-space: nowrap;">Agent</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Handled</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Resolved</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Reopened</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">First resp ▲</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Resolution</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">CSAT</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Active time</span>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #F0EEE9;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ሃና ግርማ</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">612</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">548</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.1%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">1m 52s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">18m 04s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.9</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">142h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #F0EEE9;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">SB</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Sara Bekele</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">588</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">531</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">5.3%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 08s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">19m 41s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.8</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">138h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #F0EEE9;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">DB</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Dawit Bekele</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">544</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">476</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">7.8%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 34s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">22m 12s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.6</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">151h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #F0EEE9;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">አጸ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">አቤል ጸጋዬ</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">497</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">433</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">6.9%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 51s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">24m 33s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.5</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">129h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #F0EEE9;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ካአ</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #4A4842; white-space: nowrap; flex: none;">Trainee</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">203</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">171</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">9.4%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">3m 47s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">31m 06s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">4.9</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums;">96h</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; background: #F6F5F2; border-top: 1px solid #E5E2DB; font-size: 11.5px; color: #6B675D;"><span>Showing 5 of 12</span><button style="font-family: inherit; background: transparent; border: none; font-size: 11.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Show all</button><span style="margin-left: auto;">Totals reconcile with the KPI row above</span></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 26px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">1440 — dark</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">same geometry, B1-DS dark tokens</span></div>
+    <div data-tone="dark" data-blk="desk" style="margin-top: 14px;">
+    <div style="width: 1440px; height: 980px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 4px 10px; flex: none;">Tenant logo</span>
+        <label style="flex: 1 1 auto; min-width: 0; max-width: 420px; display: flex; align-items: center; gap: 7px; background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 7px 11px; font-size: 12.5px; color: #918C80;"><span aria-hidden="true">⌕</span>Search tickets, customers, messages<span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></label>
+        <span style="flex: 1 1 auto;"></span>
+        <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 13px; white-space: nowrap; cursor: pointer;">+ New ticket</button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; background: #3A2D10; border: 1px solid #6B551A; border-radius: 999px; padding: 5px 10px; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #F0B54A;"></span>Telegram degraded</span>
+        <button aria-label="Notifications, 3 unread" style="font-family: inherit; flex: none; position: relative; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; padding: 4px;">🔔<span style="position: absolute; top: -1px; right: -3px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></button>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #ECEAE4; border: 1px solid #343430; border-radius: 999px; padding: 5px 10px; cursor: pointer;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online<span style="color: #9A9588;">▾</span></span>
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MG</span>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: flex;">
+        <nav aria-label="Reports" style="width: 210px; flex: none; background: #141412; border-right: 1px solid #343430; padding: 12px 8px; overflow-y: auto;">
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 0 8px 8px;">Report families</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; background: #ECEAE4; color: #171714; font-size: 12.5px; font-weight: 600; cursor: pointer;">Agent</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Team / Queue</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Customer</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">AI</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Telegram</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Live Chat</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">SMS</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">SLA</span>
+          </div>
+          <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 16px 8px 8px;">Saved</div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Payments weekly</span>
+            <span style="display: flex; align-items: center; padding: 7px 9px; border-radius: 6px; color: #ECEAE4; font-size: 12.5px; cursor: pointer;">Night shift</span>
+          </div>
+        </nav>
+
+        <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div style="flex: none; padding: 14px 18px 0;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="min-width: 0;">
+                <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: #ECEAE4;">Agent report</h1>
+                <p style="margin: 3px 0 0; font-size: 12px; color: #A6A296;">1–31 July 2025 · compared with 1–30 June · tenant timezone (EAT) · daily</p>
+              </div>
+              <div style="margin-left: auto; flex: none; display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #123322; border: 1px solid #245C3C; border-radius: 999px; padding: 5px 11px;"><span style="color: #5AD190; font-size: 11px; font-weight: 700;">✓</span><span style="font-size: 11.5px; font-weight: 600; color: #5AD190; white-space: nowrap;">Verified</span></span>
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #343430; border-radius: 7px; font-size: 12px; font-weight: 600; color: #ECEAE4; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Export</button>
+                <button style="font-family: inherit; background: #1C1C19; border: 1px solid #343430; border-radius: 7px; font-size: 12px; font-weight: 600; color: #ECEAE4; padding: 7px 12px; white-space: nowrap; cursor: pointer;">Schedule</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex: none; padding: 11px 18px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; border-bottom: 1px solid #343430; margin-top: 12px; background: #1C1C19;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ECEAE4; color: #171714; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer;">July 2025<span style="opacity: 0.7;">▾</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #ECEAE4; white-space: nowrap; cursor: pointer;">vs previous period<span style="color: #9A9588;">▾</span></span>
+            <span style="width: 1px; height: 22px; background: #343430;"></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; color: #ECEAE4; white-space: nowrap; cursor: pointer;">Payments<span style="color: #A6A296; font-weight: 400;">·dept</span><span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; color: #ECEAE4; white-space: nowrap; cursor: pointer;">Deposits, Withdrawals<span style="color: #A6A296; font-weight: 400;">·queue</span><span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Team</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Agent</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Channel</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Language</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Tag</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; background: #1C1C19; border: 1px dashed #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #A6A296; white-space: nowrap; cursor: pointer;">+ Priority</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 11.5px; color: #A6A296; white-space: nowrap;">Saved for you</span><button style="font-family: inherit; background: transparent; border: none; font-size: 11.5px; font-weight: 600; color: #ECEAE4; cursor: pointer; white-space: nowrap;">Reset</button></span>
+          </div>
+
+          <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="flex: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 11px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">Handled</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4,812</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 9%</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">Resolved</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4,201</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 7%</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">Reopened</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">6.2%</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #3D1B1B; color: #F08A8A; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▲ 1.4pt</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #ECEAE4; border-radius: 9px; padding: 11px 12px; position: relative;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #ECEAE4; border-radius: 50%; font-size: 8.5px; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">2m 41s</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">CSAT</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">4.6</span><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">n=1,204</span></div>
+              </div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 11px 12px;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296; white-space: nowrap;">Per active hour</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">3.4</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #272D34; color: #9AA6B2; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">— 0%</span></div>
+              </div>
+            </div>
+
+            <div style="flex: none; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px 14px;">
+              <div style="display: flex; align-items: baseline; gap: 9px; margin-bottom: 4px;">
+                <span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">First response time</span>
+                <span style="font-size: 11.5px; color: #A6A296;">median, business hours · daily</span>
+                <span style="margin-left: auto; display: flex; gap: 6px;">
+                  <button style="font-family: inherit; background: #232320; border: 1px solid #343430; border-radius: 6px; font-size: 10.5px; font-weight: 600; color: #C9C5BB; padding: 4px 9px; white-space: nowrap; cursor: pointer;">Table view</button>
+                  <button style="font-family: inherit; background: #232320; border: 1px solid #343430; border-radius: 6px; font-size: 10.5px; font-weight: 600; color: #C9C5BB; padding: 4px 9px; white-space: nowrap; cursor: pointer;">Download</button>
+                </span>
+              </div>
+              <svg viewBox="0 0 1120 200" width="100%" height="200" role="img" aria-label="Line chart of median first response time through July, from 3 minutes 6 seconds down to 2 minutes 41 seconds, with June shown as a dashed comparison line.">
+                <line x1="46" y1="16" x2="1114" y2="16" stroke="#262622" stroke-width="1" /><line x1="46" y1="60" x2="1114" y2="60" stroke="#262622" stroke-width="1" /><line x1="46" y1="104" x2="1114" y2="104" stroke="#262622" stroke-width="1" /><line x1="46" y1="148" x2="1114" y2="148" stroke="#262622" stroke-width="1" />
+                <text x="38" y="20" text-anchor="end" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">4m</text>
+                <text x="38" y="64" text-anchor="end" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">3m</text>
+                <text x="38" y="108" text-anchor="end" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">2m</text>
+                <text x="38" y="152" text-anchor="end" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">1m</text>
+                <polyline points="56,58 92,62 128,55 164,68 200,64 236,72 272,66 308,78 344,71 380,84 416,76 452,88 488,80 524,92 560,85 596,96 632,88 668,99 704,91 740,102 776,94 812,104 848,97 884,107 920,99 956,109 992,101 1028,110 1064,103 1104,112" fill="none" stroke="#78746A" stroke-width="1.8" stroke-dasharray="6 4" />
+                <polyline points="56,52 92,56 128,49 164,58 200,54 236,61 272,56 308,64 344,58 380,68 416,61 452,70 488,63 524,72 560,66 596,74 632,68 668,76 704,70 740,78 776,72 812,80 848,74 884,82 920,76 956,84 992,78 1028,85 1064,80 1104,86" fill="none" stroke="#ECEAE4" stroke-width="2.2" />
+                <circle cx="56" cy="52" r="3.5" fill="#ECEAE4" /><circle cx="560" cy="66" r="3.5" fill="#ECEAE4" /><circle cx="1104" cy="86" r="3.5" fill="#ECEAE4" />
+                <text x="1104" y="42" text-anchor="end" font-size="10.5" fill="#ECEAE4" font-weight="600" font-family="Inter, sans-serif">● July 2m 41s</text>
+                <text x="1104" y="128" text-anchor="end" font-size="10.5" fill="#A6A296" font-weight="600" font-family="Inter, sans-serif">▲ June 3m 03s</text>
+                <text x="56" y="180" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">1 Jul</text>
+                <text x="560" y="180" text-anchor="middle" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">15 Jul</text>
+                <text x="1114" y="180" text-anchor="end" font-size="10" fill="#9A9588" font-family="ui-monospace, monospace">31 Jul</text>
+              </svg>
+              <p style="margin: 2px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">First response time improved 12% against June, from a median of 3m 03s to 2m 41s. The gap narrowed steadily rather than in a single step.</p>
+            </div>
+
+            <div style="flex: none; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-bottom: 1px solid #262622;">
+                <h2 style="font-size: 13px; font-weight: 600; margin: 0; color: #ECEAE4;">By agent</h2>
+                <span style="font-size: 11.5px; color: #A6A296;">12 agents · every number opens the tickets behind it</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #A6A296; white-space: nowrap;"><span aria-hidden="true">👁</span>Individual metrics visible to you</span>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; background: #232320; border-bottom: 1px solid #343430; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9588;">
+                <span style="padding: 7px 13px; white-space: nowrap;">Agent</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Handled</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Resolved</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Reopened</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">First resp ▲</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Resolution</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">CSAT</span><span style="padding: 7px 8px; text-align: right; white-space: nowrap;">Active time</span>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #262622;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ሃግ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ሃና ግርማ</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">612</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">548</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.1%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">1m 52s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">18m 04s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.9</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">142h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #262622;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">SB</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Sara Bekele</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">588</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">531</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">5.3%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 08s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">19m 41s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.8</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">138h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #262622;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">DB</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Dawit Bekele</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">544</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">476</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">7.8%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 34s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">22m 12s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.6</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">151h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #262622;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">አጸ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">አቤል ጸጋዬ</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">497</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">433</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">6.9%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 51s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">24m 33s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.5</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">129h</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 84px 84px 92px 104px 104px 74px 100px; align-items: center; border-bottom: 1px solid #262622;"><span style="padding: 8px 13px; display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; flex: none;">ካአ</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">ካልኪዳን አሰፋ</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #343430; border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 600; color: #C9C5BB; white-space: nowrap; flex: none;">Trainee</span></span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">203</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">171</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">9.4%</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">3m 47s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">31m 06s</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.9</span><span style="padding: 8px; text-align: right; font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums;">96h</span></div>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; background: #232320; border-top: 1px solid #343430; font-size: 11.5px; color: #A6A296;"><span>Showing 5 of 12</span><button style="font-family: inherit; background: transparent; border: none; font-size: 11.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Show all</button><span style="margin-left: auto;">Totals reconcile with the KPI row above</span></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <span data-end="desk"></span>
+    </div>
+  </section>
+</div>
+
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Disclosure, dates and calendars</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F03 · F04 · F06 · F07 · F08 · F09</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 15's stated goal is that no two screens ever show two different numbers for the same question. The formula disclosure is how that goal becomes visible: when two people disagree about a figure, they open the same panel and find out they were asking different questions. It is a focusable button, not a hover-only tooltip.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="disc" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F06 · F07 · Formula disclosure, open</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px solid #22211D; border-radius: 9px; padding: 11px 12px; width: 210px;">
+              <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #6B675D;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #22211D; border-radius: 50%; font-size: 8.5px; color: #1D1C18; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+            </div>
+            <div style="margin-top: 9px; background: #22211D; color: #F4F3F1; border-radius: 9px; padding: 13px 14px;">
+              <div style="font-size: 13px; font-weight: 600; margin-bottom: 7px;">First response time</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #D9D6CF;">The median time from a ticket being opened to the first reply written by an agent.</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #3C3A35;">
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #A6A296;">Counts as</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #F4F3F1;">A public reply. Internal notes and AI replies do not stop this clock.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #A6A296;">Calendar</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #F4F3F1;">Business hours, Payments — 08:00–22:00 EAT, seven days.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #A6A296;">Excluded</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #F4F3F1;">Spam and test traffic, always, on every report. Not a setting.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #A6A296;">Tier</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #F4F3F1;">Historical. This figure is not live and will not move as you watch.</span></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #3C3A35;">
+                <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #A6A296;">tickets.frt.median · registry v4</span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: 1px solid #56534A; border-radius: 6px; font-size: 11px; font-weight: 600; color: #F4F3F1; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Calendar hours instead</button>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;"><strong style="font-weight: 600;">F07:</strong> where a metric has both a business-hours and a calendar-hours form, both exist and are named. Switching relabels the KPI — it never swaps the value under the same label.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F04 · Date range and automatic grain</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #1D1C18; white-space: nowrap;">Today</span>
+              <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #1D1C18; white-space: nowrap;">Last 7 days</span>
+              <span style="display: inline-flex; align-items: center; background: #22211D; color: #FFFFFF; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; white-space: nowrap;">July 2025</span>
+              <span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #1D1C18; white-space: nowrap;">Custom…</span>
+            </div>
+            <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #F6F5F2; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; width: 96px; flex: none;">≤ 3 days</span><span style="font-size: 12px; color: #1D1C18;">hourly</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #22211D; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; width: 96px; flex: none;">≤ 90 days</span><span style="font-size: 12px; color: #F4F3F1; font-weight: 600;">daily — in use</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #F6F5F2; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; width: 96px; flex: none;">beyond</span><span style="font-size: 12px; color: #1D1C18;">weekly or monthly</span></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The grain is chosen for you and then <strong style="font-weight: 600;">stated in the subtitle</strong>, because a chart whose bucket size changed silently is a chart that lies about its own shape. Ranges are inclusive of both endpoints, in tenant timezone.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F08 · Two calendars inside one comparison</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 10px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">◷ These two periods used different business hours</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #8F5F08; margin-top: 5px;">July ran on 08:00–22:00 seven days. June ran on 08:00–20:00 weekdays only. The comparison is still valid, but part of the improvement is the longer day, not faster work.</div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Doc 15 EC-09 requires both calendars be named. The interpretive sentence is an accepted addition that renders only against a recorded change — so the banner has two states, and both are drawn here.</p>
+            <div style="margin-top: 9px; background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Owner decision — the interpretive sentence renders conditionally.</strong> It appears only when the compared window spans a <em>recorded</em> business-hours change, and is phrased from that record rather than inferred — the platform knows the old hours, the new hours and the date they changed, so it says exactly that. Where no such record exists the banner names both calendars and stops, as Doc 15 EC-09 requires.</div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin: 12px 0 6px;">F08 · the untriggered state — no recorded change</div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 10px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #8F5F08;">◷ These two periods used different business hours</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #8F5F08; margin-top: 5px;">July ran on the Payments calendar. June ran on the tenant default. The comparison is still valid.</div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">The two calendars differ, but no change record explains <em>why</em> — the queue was simply moved onto a different calendar at some point outside this window. With nothing to phrase the sentence from, the banner names both and stops rather than guessing at the cause.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F03 · Family-specific filters, and F09 · persistence</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">SLA</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">+ Policy</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">SMS</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">+ Template</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">+ Gateway</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">Telegram</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">+ Bot / connection</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #6F6A61;">Live Chat</span><span style="display: inline-flex; align-items: center; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #1D1C18; white-space: nowrap;">+ Widget</span></div>
+            </div>
+            <p style="margin: 10px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Each appears only on the family that owns it — an SMS gateway filter never clutters the Agent report. The whole bar persists per user per report, so tomorrow you land where you left off, and <strong style="font-weight: 600;">Reset</strong> is always visible so nobody is confused by a filter they set last week.</p>
+          </div>
+        </div>
+        <span data-end="disc"></span>
+      </div>
+      <div data-tone="dark" data-blk="disc" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F06 · F07 · Formula disclosure, open</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px solid #ECEAE4; border-radius: 9px; padding: 11px 12px; width: 210px;">
+              <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 11px; color: #A6A296;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #ECEAE4; border-radius: 50%; font-size: 8.5px; color: #ECEAE4; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 3px;"><span style="font-size: 23px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; align-items: center; gap: 2px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+            </div>
+            <div style="margin-top: 9px; background: #ECEAE4; color: #171714; border-radius: 9px; padding: 13px 14px;">
+              <div style="font-size: 13px; font-weight: 600; margin-bottom: 7px;">First response time</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #4A4842;">The median time from a ticket being opened to the first reply written by an agent.</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #CFCBC1;">
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #6B675D;">Counts as</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #4A4842;">A public reply. Internal notes and AI replies do not stop this clock.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #6B675D;">Calendar</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #4A4842;">Business hours, Payments — 08:00–22:00 EAT, seven days.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #6B675D;">Excluded</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #4A4842;">Spam and test traffic, always, on every report. Not a setting.</span></div>
+                <div style="display: flex; gap: 10px;"><span style="width: 88px; flex: none; font-size: 11px; color: #6B675D;">Tier</span><span style="min-width: 0; font-size: 11.5px; line-height: 1.5; color: #4A4842;">Historical. This figure is not live and will not move as you watch.</span></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 9px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #CFCBC1;">
+                <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D;">tickets.frt.median · registry v4</span>
+                <button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11px; font-weight: 600; color: #171714; padding: 5px 10px; white-space: nowrap; cursor: pointer;">Calendar hours instead</button>
+              </div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;"><strong style="font-weight: 600;">F07:</strong> where a metric has both a business-hours and a calendar-hours form, both exist and are named. Switching relabels the KPI — it never swaps the value under the same label.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F04 · Date range and automatic grain</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #ECEAE4; white-space: nowrap;">Today</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #ECEAE4; white-space: nowrap;">Last 7 days</span>
+              <span style="display: inline-flex; align-items: center; background: #ECEAE4; color: #171714; border-radius: 7px; padding: 7px 11px; font-size: 12px; font-weight: 600; white-space: nowrap;">July 2025</span>
+              <span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 7px 11px; font-size: 12px; color: #ECEAE4; white-space: nowrap;">Custom…</span>
+            </div>
+            <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #232320; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; width: 96px; flex: none;">≤ 3 days</span><span style="font-size: 12px; color: #ECEAE4;">hourly</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #ECEAE4; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; width: 96px; flex: none;">≤ 90 days</span><span style="font-size: 12px; color: #171714; font-weight: 600;">daily — in use</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #232320; border-radius: 7px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; width: 96px; flex: none;">beyond</span><span style="font-size: 12px; color: #ECEAE4;">weekly or monthly</span></div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The grain is chosen for you and then <strong style="font-weight: 600;">stated in the subtitle</strong>, because a chart whose bucket size changed silently is a chart that lies about its own shape. Ranges are inclusive of both endpoints, in tenant timezone.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F08 · Two calendars inside one comparison</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">◷ These two periods used different business hours</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #F0B54A; margin-top: 5px;">July ran on 08:00–22:00 seven days. June ran on 08:00–20:00 weekdays only. The comparison is still valid, but part of the improvement is the longer day, not faster work.</div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Doc 15 EC-09 requires both calendars be named. The interpretive sentence is an accepted addition that renders only against a recorded change — so the banner has two states, and both are drawn here.</p>
+            <div style="margin-top: 9px; background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">Owner decision — the interpretive sentence renders conditionally.</strong> It appears only when the compared window spans a <em>recorded</em> business-hours change, and is phrased from that record rather than inferred — the platform knows the old hours, the new hours and the date they changed, so it says exactly that. Where no such record exists the banner names both calendars and stops, as Doc 15 EC-09 requires.</div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin: 12px 0 6px;">F08 · the untriggered state — no recorded change</div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #F0B54A;">◷ These two periods used different business hours</div>
+              <div style="font-size: 12px; line-height: 1.6; color: #F0B54A; margin-top: 5px;">July ran on the Payments calendar. June ran on the tenant default. The comparison is still valid.</div>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">The two calendars differ, but no change record explains <em>why</em> — the queue was simply moved onto a different calendar at some point outside this window. With nothing to phrase the sentence from, the banner names both and stops rather than guessing at the cause.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F03 · Family-specific filters, and F09 · persistence</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">SLA</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">+ Policy</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">SMS</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">+ Template</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">+ Gateway</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">Telegram</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">+ Bot / connection</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;"><span style="width: 78px; flex: none; font-size: 11px; font-weight: 600; color: #9A9588;">Live Chat</span><span style="display: inline-flex; align-items: center; background: #232320; border: 1px solid #45443E; border-radius: 7px; padding: 5px 10px; font-size: 11.5px; color: #ECEAE4; white-space: nowrap;">+ Widget</span></div>
+            </div>
+            <p style="margin: 10px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Each appears only on the family that owns it — an SMS gateway filter never clutters the Agent report. The whole bar persists per user per report, so tomorrow you land where you left off, and <strong style="font-weight: 600;">Reset</strong> is always visible so nobody is confused by a filter they set last week.</p>
+          </div>
+        </div>
+        <span data-end="disc"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Drill-down</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F11 · F12 · F13 · F14 · F15 · F16</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 15 BR-06 is the strongest sentence in the document: no aggregate ships without a way into the records behind it. The slide-over is that way in — it reuses the approved ticket-list components rather than inventing a second list, and it carries the applied context as removable chips so you can see exactly which slice you are looking at.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="drill" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F11 · F16 · Slide-over from a table cell</div>
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.12);">
+            <div style="padding: 13px 15px; border-bottom: 1px solid #F0EEE9;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;">
+                  <div style="font-size: 14px; font-weight: 600; color: #1D1C18;">548 resolved</div>
+                  <div style="font-size: 11.5px; color: #6B675D; margin-top: 2px;">The tickets behind this number</div>
+                </div>
+                <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+              </div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #1D1C18; white-space: nowrap;">ሃና ግርማ<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #1D1C18; white-space: nowrap;">July 2025<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #1D1C18; white-space: nowrap;">Payments<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #1D1C18; white-space: nowrap;">Resolved<span aria-hidden="true" style="color: #6B675D;">✕</span></span>
+              </div>
+            </div>
+            <div style="max-height: 210px; overflow-y: auto;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #F0EEE9;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4812</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none;">28 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #F0EEE9;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4788</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none;">28 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #F0EEE9;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4771</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ትዕግስት አለሙ — ተቀማጭ አልገባም</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none;">27 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4750</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Kidist Alemu — telebirr deposit missing</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; flex: none;">27 Jul</span></div>
+            </div>
+            <div style="padding: 10px 15px; background: #F6F5F2; border-top: 1px solid #E5E2DB; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 11.5px; color: #6B675D;">548 tickets</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Export this list</button>
+              <button style="font-family: inherit; flex: none; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Open in Inbox</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F12 · A rate drills into both of its halves</div>
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; color: #1D1C18;">Reopened rate <strong style="font-weight: 600; font-family: ui-monospace, monospace;">4.1%</strong></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 9px;">
+              <button style="font-family: inherit; text-align: left; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 12px; cursor: pointer;">
+                <div style="font-size: 11px; color: #6B675D;">Numerator</div>
+                <div style="font-size: 17px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 2px;">22 reopened</div>
+                <div style="font-size: 11px; color: #1D1C18; margin-top: 3px;">See these 22 tickets →</div>
+              </button>
+              <button style="font-family: inherit; text-align: left; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 12px; cursor: pointer;">
+                <div style="font-size: 11px; color: #6B675D;">Denominator</div>
+                <div style="font-size: 17px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 2px;">548 resolved</div>
+                <div style="font-size: 11px; color: #1D1C18; margin-top: 3px;">See these 548 tickets →</div>
+              </button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Doc 15 BR-06. A single "show me the 4.1%" link would be meaningless — the argument is almost always about which denominator was used.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F13 · The 10,000-row cap, stated</div>
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #8F5F08;"><strong style="font-weight: 600;">Showing the first 10,000 of 34,812.</strong> Narrow the range or filters to see a complete list here, or export the full set.</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #FFFFFF; border: 1px solid #E8CF9B; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #8F5F08; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Export all</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Never a silent truncation. A list that quietly stops at 10,000 is how someone concludes a problem is smaller than it is.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F14 · The same number, two scopes</div>
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 12px;">
+                <div style="font-size: 11px; color: #6B675D;">Marta, all departments</div>
+                <div style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 2px;">4,812</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">handled in July</div>
+              </div>
+              <div style="border: 1px solid #CFCBC1; border-radius: 8px; padding: 11px 12px;">
+                <div style="font-size: 11px; color: #6B675D;">Solomon, Payments only</div>
+                <div style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums; margin-top: 2px;">3,104</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">handled in July</div>
+              </div>
+            </div>
+            <div style="margin-top: 9px; background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Both are correct. The figure is recomputed to each viewer's scope rather than filtered after the fact, and the scope is always printed under the title — so two people comparing notes discover the difference instead of arguing about it.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F15 · Drill-down without individual-metrics rights</div>
+          <div style="width: 560px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; overflow: hidden;">
+            <div style="padding: 11px 15px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 13px; font-weight: 600; color: #1D1C18;">1,284 handled — Deposits</span>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #6B675D; white-space: nowrap; flex: none;">🔒 Agent column hidden</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #F0EEE9;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4812</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4788</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</span><span style="display: inline-flex; align-items: center; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div>
+            <div style="padding: 9px 15px; background: #F6F5F2; border-top: 1px solid #E5E2DB; font-size: 11.5px; line-height: 1.55; color: #6B675D;">The list is not withheld — only the agent column is. Doc 15 SEC-02 protects the person, not the work.</div>
+          </div>
+        </div>
+        <span data-end="drill"></span>
+      </div>
+      <div data-tone="dark" data-blk="drill" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F11 · F16 · Slide-over from a table cell</div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.5);">
+            <div style="padding: 13px 15px; border-bottom: 1px solid #262622;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;">
+                  <div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">548 resolved</div>
+                  <div style="font-size: 11.5px; color: #A6A296; margin-top: 2px;">The tickets behind this number</div>
+                </div>
+                <button aria-label="Close" style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; min-width: 32px; min-height: 32px;">✕</button>
+              </div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">ሃና ግርማ<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">July 2025<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">Payments<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #232320; border: 1px solid #45443E; border-radius: 999px; padding: 3px 9px; font-size: 11px; color: #ECEAE4; white-space: nowrap;">Resolved<span aria-hidden="true" style="color: #A6A296;">✕</span></span>
+              </div>
+            </div>
+            <div style="max-height: 210px; overflow-y: auto;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #262622;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4812</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none;">28 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #262622;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4788</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none;">28 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #262622;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4771</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ትዕግስት አለሙ — ተቀማጭ አልገባም</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none;">27 Jul</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4750</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Kidist Alemu — telebirr deposit missing</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; flex: none;">27 Jul</span></div>
+            </div>
+            <div style="padding: 10px 15px; background: #232320; border-top: 1px solid #343430; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 11.5px; color: #A6A296;">548 tickets</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Export this list</button>
+              <button style="font-family: inherit; flex: none; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Open in Inbox</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F12 · A rate drills into both of its halves</div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="font-size: 12.5px; color: #ECEAE4;">Reopened rate <strong style="font-weight: 600; font-family: ui-monospace, monospace;">4.1%</strong></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 9px;">
+              <button style="font-family: inherit; text-align: left; background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; cursor: pointer;">
+                <div style="font-size: 11px; color: #A6A296;">Numerator</div>
+                <div style="font-size: 17px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 2px;">22 reopened</div>
+                <div style="font-size: 11px; color: #ECEAE4; margin-top: 3px;">See these 22 tickets →</div>
+              </button>
+              <button style="font-family: inherit; text-align: left; background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px; cursor: pointer;">
+                <div style="font-size: 11px; color: #A6A296;">Denominator</div>
+                <div style="font-size: 17px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 2px;">548 resolved</div>
+                <div style="font-size: 11px; color: #ECEAE4; margin-top: 3px;">See these 548 tickets →</div>
+              </button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Doc 15 BR-06. A single "show me the 4.1%" link would be meaningless — the argument is almost always about which denominator was used.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F13 · The 10,000-row cap, stated</div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+              <span style="min-width: 0; font-size: 12px; line-height: 1.55; color: #F0B54A;"><strong style="font-weight: 600;">Showing the first 10,000 of 34,812.</strong> Narrow the range or filters to see a complete list here, or export the full set.</span>
+              <button style="font-family: inherit; margin-left: auto; flex: none; background: #1C1C19; border: 1px solid #6B551A; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #F0B54A; padding: 6px 11px; white-space: nowrap; cursor: pointer;">Export all</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Never a silent truncation. A list that quietly stops at 10,000 is how someone concludes a problem is smaller than it is.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F14 · The same number, two scopes</div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px;">
+                <div style="font-size: 11px; color: #A6A296;">Marta, all departments</div>
+                <div style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 2px;">4,812</div>
+                <div style="font-size: 11px; color: #A6A296; margin-top: 2px;">handled in July</div>
+              </div>
+              <div style="border: 1px solid #45443E; border-radius: 8px; padding: 11px 12px;">
+                <div style="font-size: 11px; color: #A6A296;">Solomon, Payments only</div>
+                <div style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums; margin-top: 2px;">3,104</div>
+                <div style="font-size: 11px; color: #A6A296; margin-top: 2px;">handled in July</div>
+              </div>
+            </div>
+            <div style="margin-top: 9px; background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 7px 7px 0; padding: 9px 11px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Both are correct. The figure is recomputed to each viewer's scope rather than filtered after the fact, and the scope is always printed under the title — so two people comparing notes discover the difference instead of arguing about it.</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F15 · Drill-down without individual-metrics rights</div>
+          <div style="width: 560px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; overflow: hidden;">
+            <div style="padding: 11px 15px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 13px; font-weight: 600; color: #ECEAE4;">1,284 handled — Deposits</span>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #A6A296; white-space: nowrap; flex: none;">🔒 Agent column hidden</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px; border-bottom: 1px solid #262622;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4812</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 9px 15px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4788</span><span style="min-width: 0; flex: 1; font-size: 12.5px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</span><span style="display: inline-flex; align-items: center; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div>
+            <div style="padding: 9px 15px; background: #232320; border-top: 1px solid #343430; font-size: 11.5px; line-height: 1.55; color: #A6A296;">The list is not withheld — only the agent column is. Doc 15 SEC-02 protects the person, not the work.</div>
+          </div>
+        </div>
+        <span data-end="drill"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 60px;">
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">States, 375 and print</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">F10 · F17 · F18 · F19</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">At 375 the anatomy survives but the chart cannot: a 31-point line at 343px wide is a smudge. So the primary chart becomes a headline plus a sparkline plus the table it was drawn from — the same information, honestly re-shaped, rather than the same picture shrunk past legibility.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px; align-items: start;">
+      <div data-tone="light" data-blk="states" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61;">Light</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F10 · An empty range is not a zero</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px dashed #CFCBC1; border-radius: 8px; padding: 26px 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No data in this range</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #6B675D; margin-top: 4px; max-width: 380px; margin-left: auto; margin-right: auto;">There were no tickets in Verification between 02:00 and 05:00. That is an absence of events, not a score of zero.</div>
+              <button style="font-family: inherit; margin-top: 11px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; font-size: 12px; font-weight: 600; color: #1D1C18; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Widen to the whole day</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">A flat line at zero would be read as terrible performance. The difference matters enough that Doc 15 §8 names it explicitly.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F19 · Loading, and the lag banner</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 52%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 64%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 60%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 48%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 44%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 58%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 56%; background: #F0EEE9; border-radius: 999px;"></div><div style="height: 18px; width: 52%; background: #F0EEE9; border-radius: 4px; margin-top: 8px;"></div></div>
+            </div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; height: 86px; background: #F6F5F2;"></div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #8F5F08;"><strong style="font-weight: 600;">Figures may be up to 20 minutes behind.</strong> We are catching up on yesterday's records. Today's numbers will keep changing until this clears.</div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Doc 15 FS-02 · NFR-03. Serving a stale number without saying so is the failure the whole verified-badge apparatus exists to prevent, so the banner is loud and sits above the numbers, not below them.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-bottom: 6px;">F18 · Printed from the browser</div>
+          <div style="width: 520px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px solid #CFCBC1; border-radius: 4px; padding: 16px; background: #FFFFFF;">
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 9px; border-bottom: 1.5px solid #22211D;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Agent report — Payments</div><div style="font-size: 10.5px; color: #4A4842; margin-top: 2px;">1–31 July 2025 · vs 1–30 June · EAT · business hours · spam and test excluded</div></div>
+                <div style="margin-left: auto; flex: none; text-align: right;"><div style="font-size: 10px; color: #4A4842;">Generated 2 Aug 2025 09:14 EAT</div><div style="font-size: 10px; color: #4A4842;">Marta Gebre</div></div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px;">
+                <div><div style="font-size: 9.5px; color: #4A4842;">Handled</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4,812</div></div>
+                <div><div style="font-size: 9.5px; color: #4A4842;">Resolved</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4,201</div></div>
+                <div><div style="font-size: 9.5px; color: #4A4842;">First response</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 41s</div></div>
+                <div><div style="font-size: 9.5px; color: #4A4842;">CSAT</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4.6</div></div>
+              </div>
+              <svg viewBox="0 0 460 70" width="100%" height="60" style="margin-top: 10px;" aria-label="First response time through July"><polyline points="0,22 60,26 120,20 180,30 240,26 300,34 360,29 420,38 460,36" fill="none" stroke="#22211D" stroke-width="1.4" /><line x1="0" y1="62" x2="460" y2="62" stroke="#CFCBC1" stroke-width="1" /></svg>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Chrome, nav and filter controls drop out; the <strong style="font-weight: 600;">filter stamp and the generation stamp stay</strong>, because a printout that does not say what it was filtered to is worse than no printout. Ink-light, no dark fills.</p>
+          </div>
+        </div>
+        <span data-end="states"></span>
+      </div>
+      <div data-tone="dark" data-blk="states" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 13px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588;">Dark</div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F10 · An empty range is not a zero</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px dashed #45443E; border-radius: 8px; padding: 26px 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">No data in this range</div>
+              <div style="font-size: 12px; line-height: 1.55; color: #A6A296; margin-top: 4px; max-width: 380px; margin-left: auto; margin-right: auto;">There were no tickets in Verification between 02:00 and 05:00. That is an absence of events, not a score of zero.</div>
+              <button style="font-family: inherit; margin-top: 11px; background: #1C1C19; border: 1px solid #45443E; border-radius: 7px; font-size: 12px; font-weight: 600; color: #ECEAE4; padding: 8px 13px; white-space: nowrap; cursor: pointer;">Widen to the whole day</button>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">A flat line at zero would be read as terrible performance. The difference matters enough that Doc 15 §8 names it explicitly.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F19 · Loading, and the lag banner</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 52%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 64%; background: #262622; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 60%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 48%; background: #262622; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 44%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 58%; background: #262622; border-radius: 4px; margin-top: 8px;"></div></div>
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 10px;"><div style="height: 8px; width: 56%; background: #262622; border-radius: 999px;"></div><div style="height: 18px; width: 52%; background: #262622; border-radius: 4px; margin-top: 8px;"></div></div>
+            </div>
+            <div style="border: 1px solid #343430; border-radius: 8px; height: 86px; background: #232320;"></div>
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.55; color: #F0B54A;"><strong style="font-weight: 600;">Figures may be up to 20 minutes behind.</strong> We are catching up on yesterday's records. Today's numbers will keep changing until this clears.</div>
+            <p style="margin: 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Doc 15 FS-02 · NFR-03. Serving a stale number without saying so is the failure the whole verified-badge apparatus exists to prevent, so the banner is loud and sits above the numbers, not below them.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #A6A296; margin-bottom: 6px;">F18 · Printed from the browser</div>
+          <div style="width: 520px; background: #1C1C19; border: 1px solid #343430; border-radius: 9px; padding: 13px;">
+            <div style="border: 1px solid #45443E; border-radius: 4px; padding: 16px; background: #1C1C19;">
+              <div style="display: flex; align-items: flex-start; gap: 10px; padding-bottom: 9px; border-bottom: 1.5px solid #ECEAE4;">
+                <div style="min-width: 0;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Agent report — Payments</div><div style="font-size: 10.5px; color: #C9C5BB; margin-top: 2px;">1–31 July 2025 · vs 1–30 June · EAT · business hours · spam and test excluded</div></div>
+                <div style="margin-left: auto; flex: none; text-align: right;"><div style="font-size: 10px; color: #C9C5BB;">Generated 2 Aug 2025 09:14 EAT</div><div style="font-size: 10px; color: #C9C5BB;">Marta Gebre</div></div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px;">
+                <div><div style="font-size: 9.5px; color: #C9C5BB;">Handled</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4,812</div></div>
+                <div><div style="font-size: 9.5px; color: #C9C5BB;">Resolved</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4,201</div></div>
+                <div><div style="font-size: 9.5px; color: #C9C5BB;">First response</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 41s</div></div>
+                <div><div style="font-size: 9.5px; color: #C9C5BB;">CSAT</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.6</div></div>
+              </div>
+              <svg viewBox="0 0 460 70" width="100%" height="60" style="margin-top: 10px;" aria-label="First response time through July"><polyline points="0,22 60,26 120,20 180,30 240,26 300,34 360,29 420,38 460,36" fill="none" stroke="#ECEAE4" stroke-width="1.4" /><line x1="0" y1="62" x2="460" y2="62" stroke="#45443E" stroke-width="1" /></svg>
+            </div>
+            <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Chrome, nav and filter controls drop out; the <strong style="font-weight: 600;">filter stamp and the generation stamp stay</strong>, because a printout that does not say what it was filtered to is worse than no printout. Ink-light, no dark fills.</p>
+          </div>
+        </div>
+        <span data-end="states"></span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 24px; margin-top: 22px; align-items: flex-start; flex-wrap: wrap;">
+      <div data-tone="light" data-blk="m1" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375</div>
+        <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 16px; color: #1D1C18; cursor: pointer; min-width: 44px; min-height: 44px;">‹</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #1D1C18;">Agent report</span><span style="display: block; font-size: 11px; color: #6B675D;">July 2025 · vs June · EAT</span></span>
+            <button aria-label="Export" style="font-family: inherit; background: transparent; border: none; font-size: 15px; color: #4A4842; cursor: pointer; min-width: 44px; min-height: 44px;">⇩</button>
+          </div>
+          <button style="font-family: inherit; width: 100%; display: flex; align-items: center; gap: 8px; background: #FFFFFF; border: none; border-bottom: 1px solid #E5E2DB; padding: 11px 12px; min-height: 48px; text-align: left; cursor: pointer;">
+            <span style="display: inline-flex; align-items: center; background: #22211D; color: #FFFFFF; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; white-space: nowrap; flex: none;">3 filters</span>
+            <span style="min-width: 0; font-size: 12px; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Payments · Deposits, Withdrawals</span>
+            <span style="margin-left: auto; flex: none; color: #6B675D;">▾</span>
+          </button>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #6B675D;">Handled</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4,812</span><span style="display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲9%</span></div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #6B675D;">Resolved</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4,201</span><span style="display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲7%</span></div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #6B675D;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼12%</span></div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #6B675D;">CSAT</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #CFCBC1; border-radius: 50%; font-size: 8.5px; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">4.6</span><span style="font-size: 10.5px; color: #6B675D;">n=1,204</span></div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">First response time</div>
+              <div style="font-size: 11px; color: #6B675D;">median, business hours · daily</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 7px;"><span style="font-size: 22px; font-weight: 600; color: #1D1C18; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              <svg viewBox="0 0 330 54" width="100%" height="50" style="margin-top: 7px;" aria-label="First response time falling through July from 3m 03s to 2m 41s"><polyline points="0,14 41,17 82,12 123,20 164,16 205,24 246,19 287,27 330,25" fill="none" stroke="#22211D" stroke-width="1.8" /><polyline points="0,24 41,27 82,23 123,31 164,27 205,35 246,30 287,38 330,36" fill="none" stroke="#A29D91" stroke-width="1.5" stroke-dasharray="5 4" /><text x="330" y="50" text-anchor="end" font-size="9" fill="#6F6A61" font-family="ui-monospace, monospace">31 Jul</text><text x="0" y="50" font-size="9" fill="#6F6A61" font-family="ui-monospace, monospace">1 Jul</text></svg>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.55; color: #4A4842;">Down 12% against June, narrowing steadily.</p>
+              <button style="font-family: inherit; width: 100%; margin-top: 9px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; font-size: 12px; font-weight: 600; color: #1D1C18; padding: 12px; min-height: 48px; cursor: pointer;">See the daily figures</button>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">By agent</span><span style="margin-left: auto; font-size: 11px; color: #6B675D;">by first response ▲</span></div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">ሃግ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሃና ግርማ</span><span style="display: block; font-size: 11px; color: #6B675D;">612 handled · CSAT 4.9</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums; flex: none;">1m 52s</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #FFFFFF; border: none; border-bottom: 1px solid #F0EEE9; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">SB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sara Bekele</span><span style="display: block; font-size: 11px; color: #6B675D;">588 handled · CSAT 4.8</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums; flex: none;">2m 08s</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #FFFFFF; border: none; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #EEECE6; color: #4A4842; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">DB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #1D1C18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #6B675D;">544 handled · CSAT 4.6</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #1D1C18; font-variant-numeric: tabular-nums; flex: none;">2m 34s</span></button>
+              <button style="font-family: inherit; width: 100%; min-height: 48px; background: #F6F5F2; border: none; border-top: 1px solid #E5E2DB; font-size: 12px; font-weight: 600; color: #1D1C18; cursor: pointer;">Show all 12 agents</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="dark" data-blk="m1" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375</div>
+        <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 16px; color: #ECEAE4; cursor: pointer; min-width: 44px; min-height: 44px;">‹</button>
+            <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 15px; font-weight: 600; color: #ECEAE4;">Agent report</span><span style="display: block; font-size: 11px; color: #A6A296;">July 2025 · vs June · EAT</span></span>
+            <button aria-label="Export" style="font-family: inherit; background: transparent; border: none; font-size: 15px; color: #C9C5BB; cursor: pointer; min-width: 44px; min-height: 44px;">⇩</button>
+          </div>
+          <button style="font-family: inherit; width: 100%; display: flex; align-items: center; gap: 8px; background: #1C1C19; border: none; border-bottom: 1px solid #343430; padding: 11px 12px; min-height: 48px; text-align: left; cursor: pointer;">
+            <span style="display: inline-flex; align-items: center; background: #ECEAE4; color: #171714; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 600; white-space: nowrap; flex: none;">3 filters</span>
+            <span style="min-width: 0; font-size: 12px; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Payments · Deposits, Withdrawals</span>
+            <span style="margin-left: auto; flex: none; color: #A6A296;">▾</span>
+          </button>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #A6A296;">Handled</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4,812</span><span style="display: inline-flex; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲9%</span></div></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #A6A296;">Resolved</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4,201</span><span style="display: inline-flex; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▲7%</span></div></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #A6A296;">First response</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; background: #123322; color: #5AD190; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; white-space: nowrap;">▼12%</span></div></div>
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 11px; min-height: 74px;"><div style="display: flex; align-items: center; gap: 4px;"><span style="font-size: 11px; color: #A6A296;">CSAT</span><span aria-hidden="true" style="width: 13px; height: 13px; border: 1px solid #45443E; border-radius: 50%; font-size: 8.5px; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; flex: none;">?</span></div><div style="display: flex; align-items: baseline; gap: 5px; margin-top: 3px;"><span style="font-size: 20px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">4.6</span><span style="font-size: 10.5px; color: #A6A296;">n=1,204</span></div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 12px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">First response time</div>
+              <div style="font-size: 11px; color: #A6A296;">median, business hours · daily</div>
+              <div style="display: flex; align-items: baseline; gap: 7px; margin-top: 7px;"><span style="font-size: 22px; font-weight: 600; color: #ECEAE4; font-variant-numeric: tabular-nums;">2m 41s</span><span style="display: inline-flex; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; white-space: nowrap;">▼ 12%</span></div>
+              <svg viewBox="0 0 330 54" width="100%" height="50" style="margin-top: 7px;" aria-label="First response time falling through July from 3m 03s to 2m 41s"><polyline points="0,14 41,17 82,12 123,20 164,16 205,24 246,19 287,27 330,25" fill="none" stroke="#ECEAE4" stroke-width="1.8" /><polyline points="0,24 41,27 82,23 123,31 164,27 205,35 246,30 287,38 330,36" fill="none" stroke="#78746A" stroke-width="1.5" stroke-dasharray="5 4" /><text x="330" y="50" text-anchor="end" font-size="9" fill="#9A9588" font-family="ui-monospace, monospace">31 Jul</text><text x="0" y="50" font-size="9" fill="#9A9588" font-family="ui-monospace, monospace">1 Jul</text></svg>
+              <p style="margin: 4px 0 0; font-size: 11.5px; line-height: 1.55; color: #C9C5BB;">Down 12% against June, narrowing steadily.</p>
+              <button style="font-family: inherit; width: 100%; margin-top: 9px; background: #232320; border: 1px solid #343430; border-radius: 7px; font-size: 12px; font-weight: 600; color: #ECEAE4; padding: 12px; min-height: 48px; cursor: pointer;">See the daily figures</button>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">By agent</span><span style="margin-left: auto; font-size: 11px; color: #A6A296;">by first response ▲</span></div>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">ሃግ</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ሃና ግርማ</span><span style="display: block; font-size: 11px; color: #A6A296;">612 handled · CSAT 4.9</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums; flex: none;">1m 52s</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #1C1C19; border: none; border-bottom: 1px solid #262622; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">SB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sara Bekele</span><span style="display: block; font-size: 11px; color: #A6A296;">588 handled · CSAT 4.8</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums; flex: none;">2m 08s</span></button>
+              <button style="font-family: inherit; display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 12px; background: #1C1C19; border: none; text-align: left; min-height: 52px; cursor: pointer;"><span style="width: 26px; height: 26px; border-radius: 50%; background: #2F2F29; color: #C9C5BB; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex: none;">DB</span><span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dawit Bekele</span><span style="display: block; font-size: 11px; color: #A6A296;">544 handled · CSAT 4.6</span></span><span style="font-family: ui-monospace, monospace; font-size: 12px; color: #ECEAE4; font-variant-numeric: tabular-nums; flex: none;">2m 34s</span></button>
+              <button style="font-family: inherit; width: 100%; min-height: 48px; background: #232320; border: none; border-top: 1px solid #343430; font-size: 12px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Show all 12 agents</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tone="light" data-blk="m2" style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 · filter sheet, and drill-down</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="width: 375px; background: rgba(27,27,24,0.42); border: 1px solid #CFCBC1; border-radius: 8px; padding: 22px 0 0; display: flex; align-items: flex-end;">
+            <div style="width: 100%; background: #FFFFFF; border-radius: 12px 12px 8px 8px; overflow: hidden;">
+              <div style="padding: 12px 14px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-size: 14px; font-weight: 600; color: #1D1C18;">Filters</span><button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 12px; font-weight: 600; color: #1D1C18; cursor: pointer; min-height: 44px;">Reset</button></div>
+              <div style="padding: 4px 0;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Date range</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">July 2025 ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Compare with</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Previous period ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Department</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">Payments ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Queue</span><span style="font-size: 13px; font-weight: 600; color: #1D1C18; white-space: nowrap;">2 selected ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Agent</span><span style="font-size: 13px; color: #6B675D; white-space: nowrap;">Any ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; min-height: 52px;"><span style="font-size: 13px; color: #1D1C18; min-width: 0; flex: 1;">Language</span><span style="font-size: 13px; color: #6B675D; white-space: nowrap;">Any ›</span></div>
+              </div>
+              <div style="padding: 12px 14px; background: #F6F5F2; border-top: 1px solid #E5E2DB;"><button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 14px; min-height: 52px; cursor: pointer;">Show 4,812 tickets</button></div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+            <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1D1C18;">548 resolved</span><span style="display: block; font-size: 11px; color: #6B675D;">ሃና ግርማ · July 2025 · Payments</span></span>
+              <button aria-label="Close" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #6B675D; cursor: pointer; min-width: 44px; min-height: 44px;">✕</button>
+            </div>
+            <div style="background: #FFFFFF;">
+              <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4812</span><span style="margin-left: auto; display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #1D1C18; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</div></div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #F0EEE9; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4788</span><span style="margin-left: auto; display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #1D1C18; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</div></div>
+              <div style="padding: 11px 12px; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; flex: none;">#4771</span><span style="margin-left: auto; display: inline-flex; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #1D1C18; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ትዕግስት አለሙ — ተቀማጭ አልገባም</div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #E5E2DB;">
+              <button style="font-family: inherit; min-height: 52px; background: #F6F5F2; border: none; border-right: 1px solid #E5E2DB; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Export list</button>
+              <button style="font-family: inherit; min-height: 52px; background: #F6F5F2; border: none; font-size: 12.5px; font-weight: 600; color: #1D1C18; cursor: pointer;">Open in Inbox</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-tone="dark" data-blk="m2" style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 · filter sheet, and drill-down</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="width: 375px; background: rgba(0,0,0,0.62); border: 1px solid #343430; border-radius: 8px; padding: 22px 0 0; display: flex; align-items: flex-end;">
+            <div style="width: 100%; background: #1C1C19; border-radius: 12px 12px 8px 8px; overflow: hidden;">
+              <div style="padding: 12px 14px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;"><span style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Filters</span><button style="font-family: inherit; margin-left: auto; flex: none; background: transparent; border: none; font-size: 12px; font-weight: 600; color: #ECEAE4; cursor: pointer; min-height: 44px;">Reset</button></div>
+              <div style="padding: 4px 0;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Date range</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">July 2025 ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Compare with</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Previous period ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Department</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">Payments ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Queue</span><span style="font-size: 13px; font-weight: 600; color: #ECEAE4; white-space: nowrap;">2 selected ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #262622; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Agent</span><span style="font-size: 13px; color: #A6A296; white-space: nowrap;">Any ›</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; min-height: 52px;"><span style="font-size: 13px; color: #ECEAE4; min-width: 0; flex: 1;">Language</span><span style="font-size: 13px; color: #A6A296; white-space: nowrap;">Any ›</span></div>
+              </div>
+              <div style="padding: 12px 14px; background: #232320; border-top: 1px solid #343430;"><button style="font-family: inherit; width: 100%; background: #ECEAE4; color: #171714; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; padding: 14px; min-height: 52px; cursor: pointer;">Show 4,812 tickets</button></div>
+            </div>
+          </div>
+
+          <div style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+            <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="min-width: 0; flex: 1;"><span style="display: block; font-size: 14px; font-weight: 600; color: #ECEAE4;">548 resolved</span><span style="display: block; font-size: 11px; color: #A6A296;">ሃና ግርማ · July 2025 · Payments</span></span>
+              <button aria-label="Close" style="font-family: inherit; flex: none; background: transparent; border: none; font-size: 15px; color: #A6A296; cursor: pointer; min-width: 44px; min-height: 44px;">✕</button>
+            </div>
+            <div style="background: #1C1C19;">
+              <div style="padding: 11px 12px; border-bottom: 1px solid #262622; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4812</span><span style="margin-left: auto; display: inline-flex; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #ECEAE4; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">አበበ ታደሰ — deposit not credited</div></div>
+              <div style="padding: 11px 12px; border-bottom: 1px solid #262622; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4788</span><span style="margin-left: auto; display: inline-flex; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #ECEAE4; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mulugeta Assefa — CBE transfer pending</div></div>
+              <div style="padding: 11px 12px; min-height: 52px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296; flex: none;">#4771</span><span style="margin-left: auto; display: inline-flex; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; white-space: nowrap; flex: none;">Resolved</span></div><div style="font-size: 12.5px; color: #ECEAE4; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ትዕግስት አለሙ — ተቀማጭ አልገባም</div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #343430;">
+              <button style="font-family: inherit; min-height: 52px; background: #232320; border: none; border-right: 1px solid #343430; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Export list</button>
+              <button style="font-family: inherit; min-height: 52px; background: #232320; border: none; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">Open in Inbox</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div style="padding: 0 32px 100px;">
+  <section style="max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> F01–F19, both themes, 1440 and 375. The anatomy, the global and family-specific filter bars, date semantics with automatic grain, comparison deltas, the formula disclosure with its business-hours switch, the two-calendar warning, filter persistence, the empty range, the drill-down slide-over with rate-halves and the 10k cap, scope duality, the elided-agent variant, export-this-list, the mobile filter sheet, and print.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Owner decision — the interpretive sentence, accepted and gated.</strong> Doc 15 EC-09 requires both calendars be named; the interpretive reading is an accepted addition that renders <em>only</em> when the compared window spans a recorded business-hours change, phrased from that record rather than inferred. Both states are drawn in §B — triggered, and the no-recorded-change case where the banner names both calendars and stops.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Judgement call:</strong> at 375 the primary chart becomes headline + sparkline + a link into the daily figures, rather than a shrunken 31-point line. Doc 15 §9 asks for exactly this ("charts simplify to sparkline plus table"), so it is compliant — but it is the one place the phone shows a genuinely different artefact from the desktop, and I would rather you saw that stated than discovered it.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;">Next: Section G — the eight families, each built on this frame.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

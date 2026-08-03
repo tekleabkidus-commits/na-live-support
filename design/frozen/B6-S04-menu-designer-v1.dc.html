@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S04-menu-designer-v1</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows E01–E06, E12, E13</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Menu designer</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The screen where a product owner redesigns the bot for a promo without engineering. Its whole difficulty is one requirement: <strong style="font-weight: 600;">the same menu renders two completely different ways</strong> — tappable buttons in direct mode, a numbered text list in business mode — so the designer shows both at once, side by side, and neither is treated as the “real” one. A menu that reads well as buttons and badly as text is a menu half your players will meet badly.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Everything reused is <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim. The shell is <a href="B6-S01-telegram-bots-connection-v1.dc.html">B6-S01</a>'s. Templates, variables and the command set are the rest of Section E and arrive next; this delivery is the menu itself.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Amharic is real text, flagged for native review. Menu labels are NA BET PLC's.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The designer — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows E01–E04, E12 · Doc 05 FR-27, §8, §9, §13</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Builder on the left, both previews on the right, and the selected button's configuration underneath it rather than in a modal — because choosing a target is part of writing the label, not a separate errand. Every drag has move-up and move-down buttons beside it; the row handles are a convenience, never the only way.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · English tab, one button selected</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E01 · E02 · E03 · E04 · E12</span></div>
+    <div data-screen-label="E01 designer light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #6B675D;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #C93B3B; color: #FFFFFF; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">MA</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 200px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #EEECE6; color: #1D1C18;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #4A4842;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #1D1C18;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #4A4842;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Channels · Telegram · @nabet_support_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Main menu</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-flex; align-items: center; background: #EEECE6; color: #4A4842; font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">Draft · unsaved</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Version history</button>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #E5E2DB;">
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18; padding: 8px 12px; border-bottom: 2px solid #22211D; margin-bottom: -1px;">Menu</span>
+            <span style="font-size: 12.5px; color: #6B675D; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <span style="display: inline-flex; border: 1px solid #E5E2DB; border-radius: 6px; overflow: hidden;">
+              <span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">English<span style="font-size: 10px; opacity: 0.85;">6/6</span></span>
+              <span style="font-size: 11.5px; color: #1D1C18; background: #FFFFFF; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">አማርኛ<span style="display: inline-flex; align-items: center; gap: 4px; background: #FCF0D9; color: #8F5F08; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">4/6</span></span>
+            </span>
+            <span style="font-size: 11.5px; color: #6B675D;">Amharic is missing 2 labels — it publishes, but those two buttons fall back to English.</span>
+            <span style="margin-left: auto; font-size: 11.5px; color: #6B675D;">6 of 12 buttons used</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; margin-top: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Buttons</span>
+                <span style="font-size: 11.5px; color: #6B675D;">Rows of up to 3 · 12 maximum</span>
+                <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">+ Add row</button>
+              </div>
+
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 9px; margin-top: 10px; background: #FDFCFA;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Row 1</span>
+                  <button aria-label="Move row 1 up" style="font-family: inherit; margin-left: auto; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #ADA89D; font-size: 11px; min-width: 32px; min-height: 32px;">↑</button>
+                  <button aria-label="Move row 1 down" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #1D1C18; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↓</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+                  <div style="border: 2px solid #22211D; border-radius: 7px; padding: 9px 10px; background: #FFFFFF;">
+                    <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D; cursor: grab;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Deposit help</span></div>
+                    <div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Knowledge base flow</div>
+                  </div>
+                  <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 10px; background: #FFFFFF;">
+                    <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D; cursor: grab;">⠿</span><span style="font-size: 12.5px; font-weight: 500; color: #1D1C18;">Withdrawal status</span></div>
+                    <div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Form · withdrawal_check</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 9px; margin-top: 9px;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Row 2</span>
+                  <button aria-label="Move row 2 up" style="font-family: inherit; margin-left: auto; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #1D1C18; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↑</button>
+                  <button aria-label="Move row 2 down" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #1D1C18; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↓</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+                  <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 10px;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D;">⠿</span><span style="font-size: 12.5px; color: #1D1C18;">Bonus &amp; promos</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Knowledge base flow</div></div>
+                  <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 10px;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D;">⠿</span><span style="font-size: 12.5px; color: #1D1C18;">Verify account</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Form · kyc_upload</div></div>
+                  <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 10px;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D;">⠿</span><span style="font-size: 12.5px; color: #1D1C18;">Betting rules</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Link · nabet.et/rules</div></div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #E5E2DB; border-radius: 8px; padding: 9px; margin-top: 9px;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Row 3</span>
+                  <button aria-label="Move row 3 up" style="font-family: inherit; margin-left: auto; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #1D1C18; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↑</button>
+                  <button aria-label="Move row 3 down" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 5px; color: #ADA89D; font-size: 11px; min-width: 32px; min-height: 32px;">↓</button>
+                </div>
+                <div style="border: 1px solid #CFCBC1; border-radius: 7px; padding: 9px 10px;"><div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #6B675D;">⠿</span><span style="font-size: 12.5px; color: #1D1C18;">Talk to a person</span></div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Human handoff</div></div>
+              </div>
+
+              <div style="border-top: 1px solid #F0EEE9; margin-top: 12px; padding-top: 12px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Selected button · Deposit help</div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 9px;">
+                  <div>
+                    <label for="lab-l" style="display: block; font-size: 11.5px; font-weight: 500; color: #1D1C18;">Label · English</label>
+                    <div id="lab-l" style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18; margin-top: 4px; min-height: 36px;">Deposit help</div>
+                  </div>
+                  <div>
+                    <label for="labam-l" style="display: block; font-size: 11.5px; font-weight: 500; color: #1D1C18;">Label · አማርኛ</label>
+                    <div id="labam-l" style="border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18; margin-top: 4px; min-height: 36px;">ገንዘብ ስለማስገባት</div>
+                  </div>
+                </div>
+                <div style="font-size: 11.5px; font-weight: 500; color: #1D1C18; margin-top: 10px;">What it does</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                  <span style="font-size: 11.5px; font-weight: 600; background: #1D1C18; color: #F6F5F2; padding: 6px 11px; border-radius: 6px;">Knowledge base flow</span>
+                  <span style="font-size: 11.5px; color: #1D1C18; border: 1px solid #CFCBC1; padding: 6px 11px; border-radius: 6px;">Form</span>
+                  <span style="font-size: 11.5px; color: #1D1C18; border: 1px solid #CFCBC1; padding: 6px 11px; border-radius: 6px;">AI free chat</span>
+                  <span style="font-size: 11.5px; color: #1D1C18; border: 1px solid #CFCBC1; padding: 6px 11px; border-radius: 6px;">Talk to a person</span>
+                  <span style="font-size: 11.5px; color: #1D1C18; border: 1px solid #CFCBC1; padding: 6px 11px; border-radius: 6px;">Open a link</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                  <span style="font-size: 11.5px; color: #6B675D; flex: none;">Article</span>
+                  <div style="flex: 1; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #1D1C18; min-height: 36px;">How to deposit with telebirr · KB-118</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Preview: button menu</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">What a player sees in direct mode</div>
+                <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; padding: 11px; margin-top: 9px;">
+                  <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 8px 11px; font-size: 12px; line-height: 1.5; color: #1D1C18; max-width: 88%;">Hello Abebe — what do you need help with?</div>
+                  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px;">
+                    <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; font-weight: 500; color: #1D1C18;">Deposit help</span>
+                    <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; font-weight: 500; color: #1D1C18;">Withdrawal status</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;">
+                    <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 11px; color: #1D1C18;">Bonus &amp; promos</span>
+                    <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 11px; color: #1D1C18;">Verify account</span>
+                    <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 11px; color: #1D1C18;">Betting rules</span>
+                  </div>
+                  <div style="margin-top: 6px;"><span style="display: block; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; color: #1D1C18;">Talk to a person</span></div>
+                </div>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Preview: text menu</div>
+                <div style="font-size: 11px; color: #6B675D; margin-top: 2px;">What the same menu becomes in business mode — buttons do not exist there</div>
+                <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; padding: 11px; margin-top: 9px;">
+                  <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12px; line-height: 1.7; color: #1D1C18;">Hello Abebe — what do you need help with?<br />1. Deposit help<br />2. Withdrawal status<br />3. Bonus &amp; promos<br />4. Verify account<br />5. Betting rules<br />6. Talk to a person<br /><span style="color: #6B675D;">Reply with a number.</span></div>
+                </div>
+                <p style="margin: 8px 0 0; font-size: 11px; line-height: 1.55; color: #6B675D;">Long labels are the thing to watch here — a row of three that fits as buttons can read as a wall as text.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · Amharic tab, incomplete</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">E04 completeness · both previews in Amharic</span></div>
+    <div data-screen-label="E01 designer dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 420px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ Search settings and channels…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; position: relative; font-size: 14px; color: #A6A296;">🔔<span style="position: absolute; top: -5px; right: -8px; background: #E06B6B; color: #171714; font-size: 9px; font-weight: 700; border-radius: 999px; padding: 0 4px;">3</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #343430; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">MA</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 200px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">Backoffice</div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 8px 10px 4px;">Channels</div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">✈ Telegram</span>
+          <div style="padding: 4px 0 0 18px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; color: #C9C5BB;">
+            <span style="padding: 5px 10px; border-radius: 6px; font-weight: 600; color: #ECEAE4;">@nabet_support_bot</span>
+            <span style="padding: 5px 10px; border-radius: 6px;">@nabet_vip_bot</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB; margin-top: 4px;">💬 Web chat</span>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: #C9C5BB;">✉ SMS</span>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; padding: 14px 10px 4px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Languages</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Feature Flags</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; overflow: hidden;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">Channels · Telegram · @nabet_support_bot</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">ዋና ምናሌ</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-flex; align-items: center; background: #2F2F29; color: #C9C5BB; font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;">Draft · unsaved</span>
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">Version history</button>
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #343430;">
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Connection</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Health</span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; padding: 8px 12px; border-bottom: 2px solid #ECEAE4; margin-bottom: -1px;">Menu</span>
+            <span style="font-size: 12.5px; color: #A6A296; padding: 8px 12px;">Templates</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <span style="display: inline-flex; border: 1px solid #343430; border-radius: 6px; overflow: hidden;">
+              <span style="font-size: 11.5px; color: #ECEAE4; background: #1C1C19; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">English<span style="font-size: 10px; color: #A6A296;">6/6</span></span>
+              <span style="font-size: 11.5px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 7px 13px; display: inline-flex; align-items: center; gap: 6px;">አማርኛ<span style="display: inline-flex; align-items: center; background: #3A2D10; color: #F0B54A; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px;">4/6</span></span>
+            </span>
+            <span style="font-size: 11.5px; color: #A6A296;">2 ያልተተረጎሙ መለያዎች — ሲታተም ወደ እንግሊዝኛ ይመለሳሉ።</span>
+            <span style="margin-left: auto; font-size: 11.5px; color: #A6A296;">6 of 12 buttons used</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; margin-top: 12px;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">አዝራሮች</span>
+                <span style="font-size: 11.5px; color: #A6A296;">በአንድ ረድፍ እስከ 3 · ቢበዛ 12</span>
+                <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 6px 11px; min-height: 32px; cursor: pointer;">+ ረድፍ ጨምር</button>
+              </div>
+
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 9px; margin-top: 10px; background: #222220;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ረድፍ 1</span>
+                  <button aria-label="ረድፍ 1 ወደ ላይ" style="font-family: inherit; margin-left: auto; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #6B6860; font-size: 11px; min-width: 32px; min-height: 32px;">↑</button>
+                  <button aria-label="ረድፍ 1 ወደ ታች" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #ECEAE4; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↓</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+                  <div style="border: 2px solid #ECEAE4; border-radius: 7px; padding: 9px 10px;">
+                    <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #A6A296;">⠿</span><span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ገንዘብ ስለማስገባት</span></div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px;">የእውቀት ማከማቻ</div>
+                  </div>
+                  <div style="border: 1px solid #45443E; border-radius: 7px; padding: 9px 10px;">
+                    <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 11px; color: #A6A296;">⠿</span><span style="font-size: 12.5px; color: #ECEAE4;">የወጪ ሁኔታ</span></div>
+                    <div style="font-size: 11px; color: #A6A296; margin-top: 3px;">ቅጽ · withdrawal_check</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 9px; margin-top: 9px;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ረድፍ 2</span>
+                  <button aria-label="ረድፍ 2 ወደ ላይ" style="font-family: inherit; margin-left: auto; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #ECEAE4; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↑</button>
+                  <button aria-label="ረድፍ 2 ወደ ታች" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #ECEAE4; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↓</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+                  <div style="border: 1px solid #45443E; border-radius: 7px; padding: 9px 10px;"><div style="font-size: 12.5px; color: #ECEAE4;">ጉርሻ እና ማስተዋወቂያ</div><div style="font-size: 11px; color: #A6A296; margin-top: 3px;">የእውቀት ማከማቻ</div></div>
+                  <div style="border: 1px dashed #6B551A; border-radius: 7px; padding: 9px 10px; background: #2C2612;"><div style="font-size: 12.5px; color: #F0B54A;">Verify account</div><div style="font-size: 11px; color: #E8C25A; margin-top: 3px;">አልተተረጎመም — በእንግሊዝኛ ይታያል</div></div>
+                  <div style="border: 1px dashed #6B551A; border-radius: 7px; padding: 9px 10px; background: #2C2612;"><div style="font-size: 12.5px; color: #F0B54A;">Betting rules</div><div style="font-size: 11px; color: #E8C25A; margin-top: 3px;">አልተተረጎመም — በእንግሊዝኛ ይታያል</div></div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #343430; border-radius: 8px; padding: 9px; margin-top: 9px;">
+                <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">
+                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ረድፍ 3</span>
+                  <button aria-label="ረድፍ 3 ወደ ላይ" style="font-family: inherit; margin-left: auto; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #ECEAE4; font-size: 11px; min-width: 32px; min-height: 32px; cursor: pointer;">↑</button>
+                  <button aria-label="ረድፍ 3 ወደ ታች" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 5px; color: #6B6860; font-size: 11px; min-width: 32px; min-height: 32px;">↓</button>
+                </div>
+                <div style="border: 1px solid #45443E; border-radius: 7px; padding: 9px 10px;"><div style="font-size: 12.5px; color: #ECEAE4;">ሰው ማነጋገር</div><div style="font-size: 11px; color: #A6A296; margin-top: 3px;">ወደ ወኪል ማስተላለፍ</div></div>
+              </div>
+
+              <div style="border-top: 1px solid #262622; margin-top: 12px; padding-top: 12px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የተመረጠ አዝራር · ገንዘብ ስለማስገባት</div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 9px;">
+                  <div>
+                    <label for="lab-d" style="display: block; font-size: 11.5px; font-weight: 500; color: #ECEAE4;">መለያ · አማርኛ</label>
+                    <div id="lab-d" style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #ECEAE4; margin-top: 4px; min-height: 36px;">ገንዘብ ስለማስገባት</div>
+                  </div>
+                  <div>
+                    <label for="laben-d" style="display: block; font-size: 11.5px; font-weight: 500; color: #ECEAE4;">Label · English</label>
+                    <div id="laben-d" style="border: 1px solid #45443E; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #ECEAE4; margin-top: 4px; min-height: 36px;">Deposit help</div>
+                  </div>
+                </div>
+                <div style="font-size: 11.5px; font-weight: 500; color: #ECEAE4; margin-top: 10px;">ምን ያደርጋል</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                  <span style="font-size: 11.5px; font-weight: 600; background: #ECEAE4; color: #141412; padding: 6px 11px; border-radius: 6px;">የእውቀት ማከማቻ</span>
+                  <span style="font-size: 11.5px; color: #ECEAE4; border: 1px solid #45443E; padding: 6px 11px; border-radius: 6px;">ቅጽ</span>
+                  <span style="font-size: 11.5px; color: #ECEAE4; border: 1px solid #45443E; padding: 6px 11px; border-radius: 6px;">ከAI ጋር ውይይት</span>
+                  <span style="font-size: 11.5px; color: #ECEAE4; border: 1px solid #45443E; padding: 6px 11px; border-radius: 6px;">ሰው ማነጋገር</span>
+                  <span style="font-size: 11.5px; color: #ECEAE4; border: 1px solid #45443E; padding: 6px 11px; border-radius: 6px;">አገናኝ መክፈት</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Preview: button menu</div>
+                <div style="font-size: 11px; color: #A6A296; margin-top: 2px;">በቀጥታ ዘዴ ተጫዋቹ የሚያየው</div>
+                <div style="background: #232320; border: 1px solid #45443E; border-radius: 12px; padding: 11px; margin-top: 9px;">
+                  <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 8px 11px; font-size: 12px; line-height: 1.7; color: #ECEAE4; max-width: 92%;">ሰላም አበበ — በምን ልርዳዎት?</div>
+                  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px;">
+                    <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">ገንዘብ ስለማስገባት</span>
+                    <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">የወጪ ሁኔታ</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;">
+                    <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 10.5px; color: #ECEAE4;">ጉርሻ እና ማስተዋወቂያ</span>
+                    <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 10.5px; color: #ECEAE4;">Verify account</span>
+                    <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px 4px; text-align: center; font-size: 10.5px; color: #ECEAE4;">Betting rules</span>
+                  </div>
+                  <div style="margin-top: 6px;"><span style="display: block; background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">ሰው ማነጋገር</span></div>
+                </div>
+              </div>
+
+              <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+                <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Preview: text menu</div>
+                <div style="font-size: 11px; color: #A6A296; margin-top: 2px;">በቢዝነስ ዘዴ አዝራሮች የሉም — ተመሳሳዩ ምናሌ ጽሑፍ ይሆናል</div>
+                <div style="background: #232320; border: 1px solid #45443E; border-radius: 12px; padding: 11px; margin-top: 9px;">
+                  <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px 10px 10px 3px; padding: 9px 11px; font-size: 12px; line-height: 1.9; color: #ECEAE4;">ሰላም አበበ — በምን ልርዳዎት?<br />1. ገንዘብ ስለማስገባት<br />2. የወጪ ሁኔታ<br />3. ጉርሻ እና ማስተዋወቂያ<br />4. Verify account<br />5. Betting rules<br />6. ሰው ማነጋገር<br /><span style="color: #A6A296;">ቁጥሩን ይላኩ።</span></div>
+                </div>
+                <p style="margin: 8px 0 0; font-size: 11px; line-height: 1.7; color: #A6A296;">ያልተተረጎሙት ሁለቱ እዚህም በእንግሊዝኛ ይታያሉ — በአንድ ዝርዝር ውስጥ ሁለት ቋንቋ መቀላቀል ከመታተሙ በፊት የሚታይ ነው።</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">States — every one in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows E05, E06 · Doc 05 FR-27, §8</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Five states, drawn twice each. The publish dialog names every bot the menu is about to change, because one menu can be in use by more than one bot and the blast radius is the thing you would want to know before a promo goes live.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E06 — empty menu</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 22px 16px; text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No buttons yet</div>
+          <div style="font-size: 12px; line-height: 1.55; color: #6B675D; margin: 5px auto 10px; max-width: 340px;">A player who opens the bot will get your greeting and nothing to tap. Add a first button, or start from the six most-asked topics.</div>
+          <div style="display: flex; gap: 7px; justify-content: center;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ Add a button</button><button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from suggestions</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E06 — preview loading</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Preview: button menu</div>
+          <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; padding: 11px; margin-top: 9px;">
+            <div style="height: 30px; background: #EEECE6; border-radius: 8px;"></div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px;"><div style="height: 30px; background: #EEECE6; border-radius: 7px;"></div><div style="height: 30px; background: #EEECE6; border-radius: 7px;"></div></div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;"><div style="height: 30px; background: #F2F1ED; border-radius: 7px;"></div><div style="height: 30px; background: #F2F1ED; border-radius: 7px;"></div><div style="height: 30px; background: #F2F1ED; border-radius: 7px;"></div></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E01 — limits reached</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">That is all 12 buttons</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #8F5F08; margin-top: 3px;">Telegram will not show more than twelve. Remove one to add another.</div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Row 2 is full</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #8F5F08; margin-top: 3px;">Three buttons to a row. Drop this one into row 3, or add a new row.</div>
+          </div>
+          <button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 10px;">+ Add button</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E05 — publish</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Publish this menu?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.55; color: #6B675D;">It reaches players at their next message — within about ten seconds.</p>
+          <div style="background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">Two bots use this menu</div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842; margin-top: 4px; line-height: 1.6;">@nabet_support_bot · business mode → text menu<br />@nabet_vip_bot · hybrid → both renderings</div>
+          </div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 9px 11px; margin-top: 8px; font-size: 11.5px; line-height: 1.55; color: #8F5F08;">Amharic is 4 of 6. Those two buttons will appear in English to Amharic players until you translate them.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish to both bots</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Keep editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">E05 — version history</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px; border-bottom: 1px solid #F0EEE9; background: #FDFCFA;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">v7 · live now</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Meron Assefa · 31 Jul, 09:14 · 6 buttons</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">● Published</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px; border-bottom: 1px solid #F0EEE9;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">v6 · Ramadan promo</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Meron Assefa · 12 Jul, 18:02 · 8 buttons</div></div>
+            <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer; flex: none;">Restore</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">v5</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Dawit Bekele · 28 Jun, 11:40 · 6 buttons</div></div>
+            <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer; flex: none;">Restore</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E06 — empty menu</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 22px 16px; text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">No buttons yet</div>
+          <div style="font-size: 12px; line-height: 1.55; color: #A6A296; margin: 5px auto 10px; max-width: 340px;">A player who opens the bot will get your greeting and nothing to tap. Add a first button, or start from the six most-asked topics.</div>
+          <div style="display: flex; gap: 7px; justify-content: center;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">+ Add a button</button><button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Start from suggestions</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E06 — preview loading</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Preview: button menu</div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 12px; padding: 11px; margin-top: 9px;">
+            <div style="height: 30px; background: #2F2F29; border-radius: 8px;"></div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px;"><div style="height: 30px; background: #2F2F29; border-radius: 7px;"></div><div style="height: 30px; background: #2F2F29; border-radius: 7px;"></div></div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;"><div style="height: 30px; background: #262622; border-radius: 7px;"></div><div style="height: 30px; background: #262622; border-radius: 7px;"></div><div style="height: 30px; background: #262622; border-radius: 7px;"></div></div>
+          </div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E01 — limits reached</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">That is all 12 buttons</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #E8C25A; margin-top: 3px;">Telegram will not show more than twelve. Remove one to add another.</div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Row 2 is full</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: #E8C25A; margin-top: 3px;">Three buttons to a row. Drop this one into row 3, or add a new row.</div>
+          </div>
+          <button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 12px; min-height: 36px; margin-top: 10px;">+ Add button</button>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E05 — publish</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Publish this menu?</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.55; color: #A6A296;">It reaches players at their next message — within about ten seconds.</p>
+          <div style="background: #232320; border: 1px solid #343430; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Two bots use this menu</div>
+            <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; margin-top: 4px; line-height: 1.6;">@nabet_support_bot · business mode → text menu<br />@nabet_vip_bot · hybrid → both renderings</div>
+          </div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 9px 11px; margin-top: 8px; font-size: 11.5px; line-height: 1.55; color: #F0B54A;">Amharic is 4 of 6. Those two buttons will appear in English to Amharic players until you translate them.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Publish to both bots</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Keep editing</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">E05 — version history</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px; border-bottom: 1px solid #262622; background: #222220;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">v7 · live now</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Meron Assefa · 31 Jul, 09:14 · 6 buttons</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; flex: none;">● Published</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px; border-bottom: 1px solid #262622;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">v6 · Ramadan promo</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Meron Assefa · 12 Jul, 18:02 · 8 buttons</div></div>
+            <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer; flex: none;">Restore</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 11px 13px;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">v5</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Dawit Bekele · 28 Jun, 11:40 · 6 buttons</div></div>
+            <button style="font-family: inherit; margin-left: auto; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 6px 11px; min-height: 32px; cursor: pointer; flex: none;">Restore</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — read-only, per your ruling</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row E13 · Doc 05 §9 · Doc 03 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 05 §9 puts the designer at 1024 px and above, and you ruled the documents hold. So the phone gets the whole menu, both previews and the version history to read — and the explicit notice in Doc 03 §9's own words. It is a real screen, not a locked door: someone can check what the live menu says while standing in a shop.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · read-only</div>
+        <div data-screen-label="E13 designer 375 light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Main menu</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;">● v7 live</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Editing requires a larger screen</div><div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">You can read the whole menu and both previews here. Building it needs a tablet or a computer.</div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">6 buttons · 3 rows</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #FCF0D9; color: #8F5F08; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">አማርኛ 4/6</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 10px;">
+                <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 12px; color: #1D1C18;">Deposit help</span>
+                <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 12px; color: #1D1C18;">Withdrawal status</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;">
+                <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10.5px; color: #1D1C18;">Bonus</span>
+                <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10.5px; color: #1D1C18;">Verify</span>
+                <span style="background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10.5px; color: #1D1C18;">Rules</span>
+              </div>
+              <div style="margin-top: 6px;"><span style="display: block; background: #EEECE6; border: 1px solid #DCD8CF; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 12px; color: #1D1C18;">Talk to a person</span></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">As text, in business mode</div>
+              <div style="font-size: 12px; line-height: 1.8; color: #4A4842; margin-top: 6px;">1. Deposit help<br />2. Withdrawal status<br />3. Bonus &amp; promos<br />4. Verify account<br />5. Betting rules<br />6. Talk to a person</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Versions</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">v7</div><div style="font-size: 11px; color: #6B675D; margin-top: 1px;">Meron Assefa · 31 Jul, 09:14</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #E4F4EA; color: #156F45; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px; flex: none;">● Live</span>
+              </div>
+              <div style="border-top: 1px solid #F0EEE9; margin-top: 9px; padding-top: 9px; font-size: 11.5px; line-height: 1.7; color: #6B675D;">v6 · Ramadan promo · 12 Jul<br />v5 · Dawit Bekele · 28 Jun</div>
+              <div style="font-size: 11px; line-height: 1.55; color: #6B675D; margin-top: 7px;">Restoring an older version needs a larger screen.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · አማርኛ · read-only</div>
+        <div data-screen-label="E13 designer 375 dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ተመለስ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #A6A296;">@nabet_support_bot</div><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">ዋና ምናሌ</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; flex: none;">● v7</span>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #2F2F29; border: 1px solid #45443E; border-radius: 8px; padding: 10px 11px; display: flex; gap: 9px; align-items: flex-start;">
+              <span style="font-size: 13px; flex: none;">🔒</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ለማስተካከል ሰፊ ማያ ገጽ ያስፈልጋል</div><div style="font-size: 11.5px; line-height: 1.7; color: #C9C5BB; margin-top: 2px;">ምናሌውን እና ሁለቱንም ቅድመ-እይታዎች እዚህ ማንበብ ይችላሉ። ለመገንባት ግን ታብሌት ወይም ኮምፒውተር ያስፈልጋል።</div></div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">6 አዝራሮች · 3 ረድፎች</span>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; color: #F0B54A; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;">አማርኛ 4/6</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 10px;">
+                <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">ገንዘብ ስለማስገባት</span>
+                <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">የወጪ ሁኔታ</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 6px;">
+                <span style="background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10px; color: #ECEAE4;">ጉርሻ</span>
+                <span style="background: #2C2612; border: 1px dashed #6B551A; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10px; color: #F0B54A;">Verify</span>
+                <span style="background: #2C2612; border: 1px dashed #6B551A; border-radius: 7px; padding: 10px 4px; text-align: center; font-size: 10px; color: #F0B54A;">Rules</span>
+              </div>
+              <div style="margin-top: 6px;"><span style="display: block; background: #2F2F29; border: 1px solid #45443E; border-radius: 7px; padding: 10px 8px; text-align: center; font-size: 11.5px; color: #ECEAE4;">ሰው ማነጋገር</span></div>
+              <div style="font-size: 11px; line-height: 1.7; color: #E8C25A; margin-top: 9px;">ሁለቱ በእንግሊዝኛ የሚታዩት ገና ስላልተተረጎሙ ነው።</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">በቢዝነስ ዘዴ እንደ ጽሑፍ</div>
+              <div style="font-size: 12px; line-height: 2; color: #C9C5BB; margin-top: 6px;">1. ገንዘብ ስለማስገባት<br />2. የወጪ ሁኔታ<br />3. ጉርሻ እና ማስተዋወቂያ<br />4. Verify account<br />5. Betting rules<br />6. ሰው ማነጋገር</div>
+            </div>
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ስሪቶች</div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 9px;">
+                <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">v7</div><div style="font-size: 11px; color: #A6A296; margin-top: 1px;">Meron Assefa · 31 ጁላይ, 09:14</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; background: #123322; color: #5AD190; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px; flex: none;">● Live</span>
+              </div>
+              <div style="border-top: 1px solid #262622; margin-top: 9px; padding-top: 9px; font-size: 11.5px; line-height: 1.8; color: #A6A296;">v6 · Ramadan promo · 12 ጁላይ<br />v5 · Dawit Bekele · 28 ጁን</div>
+              <div style="font-size: 11px; line-height: 1.7; color: #A6A296; margin-top: 7px;">የቀድሞ ስሪት ለመመለስ ሰፊ ማያ ገጽ ያስፈልጋል።</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> E01 (§A both themes; the 12-button and 3-per-row limits as states in §B, both themes), E02 (target types on the selected button, §A both themes), E03 (dual preview, §A both themes, each frame labelled for screen readers), E04 (language tabs with completeness badges, §A both themes, plus the untranslated-label treatment in the dark frame), E05 (publish confirmation naming affected bots, and version history with restore — §B, both themes), E06 (empty menu and preview loading — §B, both themes), E12 (move-up / move-down beside every row, §A both themes), E13 (§C, both themes).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Not here:</strong> bot message templates, template variables, the command set, /language gating and the window-guidance copy are rows E07–E11 and arrive as the next screen. Instant rollback shares the version-history control shown here; the confirmation for it is the same publish dialog, since a rollback <em>is</em> a publish.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 variant is read-only behind the explicit notice, per your ruling. Recorded in row E13 of the contract and here. Nothing else departs from the documents.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> in the Amharic tab I render untranslated buttons in English inside a dashed amber outline rather than hiding them or showing an empty slot — so the designer shows the mixed-language menu a player would actually receive. It is uglier than a clean list on purpose. If you would rather see the gap than the fallback, say so and I will invert it.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

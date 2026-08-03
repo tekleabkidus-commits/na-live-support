@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; max-width: 1180px;">
+
+  <header>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S00-checklist-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Batch 3 — the contract</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Every screen, component and state Doc 13 requires of the web chat widget, with its reference. This is the contract the closing audit is checked against, row by row. Nothing here is my invention; where the document was silent I asked rather than filled the gap — that exchange, and what your answer changed, is recorded at the foot.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 880px; text-wrap: pretty;">Two things shape this batch differently from Batch 2. It is <strong style="font-weight: 600;">customer-facing and mobile-first</strong>, so 375 leads and 1440 follows. And most of the widget is <strong style="font-weight: 600;">tenant-configurable</strong>, so every screen is drawn in the neutral default — the operator's re-skin is configuration, not a design invitation.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
+      <span style="display: inline-flex; align-items: center; gap: 7px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">{{ counts }}</span>
+      <label style="display: inline-flex; align-items: center; gap: 8px;"><span style="font-size: 12px; color: #4A4842;">Filter</span><input value="{{ q }}" onInput="{{ onFilter }}" placeholder="queue, offline, designer…" style="font-family: inherit; font-size: 12.5px; color: #1D1C18; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 7px; padding: 8px 11px; min-width: 240px;" /></label>
+    </div>
+  </header>
+
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="12">
+    <section style="margin-top: 30px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18;">
+        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600;">{{ sec.id }}</span>
+        <h2 style="font-size: 16px; font-weight: 600; margin: 0;">{{ sec.name }}</h2>
+        <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">{{ sec.count }}</span>
+      </div>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: #6B6862; max-width: 880px;">{{ sec.note }}</p>
+      <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 46px minmax(0, 1fr) 210px; gap: 12px; align-items: start; padding: 11px 16px; border-bottom: 1px solid #F0EEE9;">
+            <span style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #6B675D; padding-top: 2px;">{{ row.n }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ row.t }}</div>
+              <div style="font-size: 12px; color: #6B675D; margin-top: 3px; line-height: 1.5;">{{ row.r }}</div>
+            </div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; line-height: 1.5; padding-top: 2px;">{{ row.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="margin-top: 30px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">FR-15 to FR-18, answered and folded in</h2>
+    <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 880px;">You sent the four requirements my copy had truncated, and nothing in them was guesswork-compatible — three of the four changed rows I had written from cross-references.</p>
+    <ul style="margin: 10px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 880px;">
+      <li><strong style="font-weight: 600;">FR-15</strong> split one guessed row into four: in-hours, out-of-hours with the bot on, out-of-hours with it off, and the SMS that follows a phone number. The Doc 14 SMS row is new — I had no way to know it existed.</li>
+      <li><strong style="font-weight: 600;">FR-16</strong> was uploads, as I suspected, but it named drag, paste and picker as three paths and makes <em>pasting a screenshot</em> first-class. That is now its own row: it is how a deposit receipt actually arrives.</li>
+      <li><strong style="font-weight: 600;">FR-17</strong> was tighter than “after engagement” — the permission comes after the visitor's <em>first sent message</em>, and all three channels go silent when the thread is visible and focused. Two new rows.</li>
+      <li><strong style="font-weight: 600;">FR-18</strong> added the detail that matters to a designer: panel open-or-closed is per tab <em>by design</em>, while unread and sound are shared.</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 24px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+    <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">What I have deliberately left out</h2>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 880px;">
+      <li>Doc 13 §3 puts the message pipeline (Doc 04), chatbot logic (Doc 09), KB content (Doc 10), form definitions (Doc 12) and inbox rendering (Doc 07) out of scope. Where the widget <em>renders</em> one of those — the Help tab, a pre-chat form, the CSAT star row — the row is here; the thing being rendered is not mine to design.</li>
+      <li>Acceptance criteria AC-01 to AC-10 and the technical rows T-01 to T-09 are build obligations, not screens. They are not checklist rows, and I will not claim them as designed.</li>
+      <li>Doc 13 §19's future expansion — customer portal, co-browsing, web push, native SDK — is explicitly deferred and absent here.</li>
+    </ul>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [
+{ id: "A", name: "Install, isolation and the operator's first hour", note: "The widget's surface on someone else's site. Almost none of this is visitor-facing, but it is what an operator judges the product by on day one.", rows: [
+  { t: "Install snippet card", r: "One async script tag with the widget key, copy button, and what the operator does with it.", d: "Doc 13 FR-01 · §4.4 Install" },
+  { t: "Domain allowlist editor", r: "Exact hosts and wildcard subdomains, add and remove, with the blocked-origin consequence stated.", d: "Doc 13 §4.4 Install · SEC-02" },
+  { t: "Signed-identity secret", r: "Shown once, rotate flow with the overlap window, never re-displayed.", d: "Doc 13 FR-07 · SEC-03 · §4.4 Install" },
+  { t: "CSP and SPA notes", r: "Copy-paste CSP header and the route-change note, as install-tab content.", d: "Doc 13 §4.4 Install · T-07 · Doc 02 T-07" },
+  { t: "Version channel + rollout state", r: "Stable or early channel, the active version, and where a staged rollout has reached.", d: "Doc 13 FR-04 · §4.4 Health" },
+  { t: "Double-install warning", r: "Two snippets on one page: second mount no-ops, and how the operator learns it happened.", d: "Doc 13 EC-01" },
+  { t: "CSP-blocked diagnosis", r: "Host CSP blocks the iframe: widget fails silently, Health surfaces it with the fix.", d: "Doc 13 EC-02 · NFR-06" }
+]},
+{ id: "B", name: "Launcher and panel shell", note: "The frame every other screen lives inside. 375 first: below 480px the panel is a full-screen sheet, not a floating card.", rows: [
+  { t: "Launcher — default", r: "Brand-coloured bubble with icon, configurable corner and offsets, safe-area respect.", d: "Doc 13 §8 Launcher" },
+  { t: "Launcher — unread badge", r: "Unread count on the bubble, announced as state and not colour alone.", d: "Doc 13 §8 · §13" },
+  { t: "Launcher — open/close morph", r: "150 ms morph between bubble and close affordance.", d: "Doc 13 §8" },
+  { t: "Launcher — attention nudge", r: "Single subtle bounce, once per session, absent under reduced-motion.", d: "Doc 13 §8 · §9 reduced-motion" },
+  { t: "Panel — 380×640 desktop", r: "Floating panel with shadow at 1440.", d: "Doc 13 §8 Panel" },
+  { t: "Panel — full-screen sheet", r: "Below 480px viewport the panel is a sheet, not a shrunken card.", d: "Doc 13 §8 Panel" },
+  { t: "Panel header", r: "Persona or agent identity per state, title, minimize, close.", d: "Doc 13 §8 Panel · FR-12" },
+  { t: "Header overflow menu", r: "Sound toggle, language switcher, download transcript, privacy link.", d: "Doc 13 §8 Panel · SEC-06" },
+  { t: "Tab bar", r: "Home / Messages / Help at the bottom, and the Messages-only mode when tabs are off.", d: "Doc 13 §8 · FR-09" },
+  { t: "Zero layout shift", r: "Fixed-position iframes; the host page never moves. Shown as the install-time promise.", d: "Doc 13 NFR-01 · BR-01" }
+]},
+{ id: "C", name: "Home tab", note: "The first thing a visitor sees. Doc 13 forbids onboarding here — the greeting is the whole tutorial.", rows: [
+  { t: "Greeting block", r: "Persona avatar and name, welcome text per language.", d: "Doc 13 FR-09 · Doc 09 config" },
+  { t: "Expected reply time", r: "Doc 11 bands, honest, never a decorative online dot.", d: "Doc 13 FR-09 · BR-02 · Doc 11 FR-13" },
+  { t: "Off-hours reply band", r: "Outside business hours the band shows when the team opens.", d: "Doc 13 FR-09 · FR-15" },
+  { t: "Shortcut buttons", r: "KB article, start-form, start-chat-with-topic, URL — the four configured kinds.", d: "Doc 13 FR-09" },
+  { t: "Resume card", r: "A recent conversation offered for resumption when history exists.", d: "Doc 13 FR-09 · FR-08" },
+  { t: "Home — loading", r: "Greeting instant from cached config; the wait band streams in after.", d: "Doc 13 §8 Empty/loading/error" },
+  { t: "First open is greeting, band, shortcuts — nothing else", r: "A required absence, not an omission: no tour, no coach marks, no tips layer, no dismissible hints, no “what's new”. Doc 13 calls it a deliberate anti-pattern rejection, so adding one later is a spec violation rather than an enhancement. Carried into build acceptance as AC-B3-01.", d: "Doc 13 §8 First-open" }
+]},
+{ id: "D", name: "Messages tab — the conversation", note: "The heart of the batch. One continuous thread from bot to human to resolution, with no visible ticket mechanics.", rows: [
+  { t: "Conversation list", r: "Usually one; linked-work splits still read as a single continuous conversation.", d: "Doc 13 FR-10 · BR-04" },
+  { t: "Thread — bubbles", r: "Visitor, staff and AI variants per the Doc 04 set, AI accent subtle on the visitor side.", d: "Doc 13 FR-10 · §9 · Doc 04 §8" },
+  { t: "AI disclosure", r: "AI messages textually marked “AI assistant” — non-removable, never impersonating a person.", d: "Doc 13 §9 · Doc 09 disclosure" },
+  { t: "AI streaming", r: "Token-batched rendering with caret; chunked and caret-free under reduced-motion.", d: "Doc 13 §8 Thread states · §9" },
+  { t: "Delivery glyphs", r: "Double-check on socket ack because webchat can honestly show it; nothing faked.", d: "Doc 13 §9 · T-02 · Doc 04" },
+  { t: "Typing indicators", r: "Both directions — visitor to staff, staff and AI to visitor.", d: "Doc 13 FR-10" },
+  { t: "Day separators", r: "Date separators in the thread.", d: "Doc 13 FR-10" },
+  { t: "Media in-thread + lightbox", r: "Photo and video render, opening the themed lightbox.", d: "Doc 13 FR-10 · Doc 04 §8" },
+  { t: "Tombstone", r: "Deleted message renders as the neutral tombstone.", d: "Doc 13 FR-10 · Doc 04 §8" },
+  { t: "AI → human transition", r: "System line marking the handoff, with the reassurance that nothing must be repeated.", d: "Doc 13 FR-12, FR-13" },
+  { t: "Queue card — position", r: "“You're #3 in line · ~5 min”, position live-updating with a gentle count-down.", d: "Doc 13 FR-12 · Doc 11 · T-05" },
+  { t: "Queue card — band only", r: "Position unknown: the band alone, no invented number.", d: "Doc 13 FR-12" },
+  { t: "Queue position never rises", r: "A regressed position holds the band rather than counting upward.", d: "Doc 13 EC-06 · Batch 3 prompt rules" },
+  { t: "Agent joined line", r: "“Sara joined”, with identity rendered per first_name / alias / team_name.", d: "Doc 13 FR-12 · §8" },
+  { t: "Live human chat", r: "The human phase of the same thread, header identity switched.", d: "Doc 13 FR-12 · §8 Panel" },
+  { t: "Resolution + CSAT", r: "Star row inline, softly — no “this chat has ended” wall.", d: "Doc 13 FR-12 · BR-04 · Doc 12 FR-25" },
+  { t: "Thread continues after CSAT", r: "The visitor types again and the same thread carries on.", d: "Doc 13 BR-04" },
+  { t: "Messages — empty", r: "Friendly prompt plus shortcuts.", d: "Doc 13 §8 Empty/loading/error" },
+  { t: "Thread virtualization", r: "Beyond 200 messages, shown as the long-thread behaviour.", d: "Doc 13 §12 · Doc 04 patterns" }
+]},
+{ id: "E", name: "Help tab", note: "Doc 10's contract rendered inside the panel. The content is not mine; the rendering is.", rows: [
+  { t: "Browse", r: "Category and article browse per Doc 10 FR-18.", d: "Doc 13 FR-11 · Doc 10 FR-18" },
+  { t: "Search-as-you-type", r: "Debounced search with results in-panel.", d: "Doc 13 FR-11 · §12" },
+  { t: "Article view", r: "Reader typography on the widget theme, sanitized render.", d: "Doc 13 FR-11 · §9 · SEC-04" },
+  { t: "Article feedback", r: "Thumbs up and down on the article.", d: "Doc 13 FR-11 · Doc 10 FR-18" },
+  { t: "Persistent start-chat footer", r: "“Still need help → start chat” always reachable from Help.", d: "Doc 13 FR-11" },
+  { t: "Help — offline", r: "“Articles unavailable — chat still works”; Messages unaffected.", d: "Doc 13 §8 · FS-05" }
+]},
+{ id: "F", name: "Identity, forms and hours", note: "Who the visitor is, what is asked of them before they can type, and what happens at 3 AM.", rows: [
+  { t: "Anonymous visitor", r: "First load issues a token; no customer record until the first message.", d: "Doc 13 FR-05 · Doc 02 FR-21" },
+  { t: "Pre-chat form — off", r: "The default path: straight into typing.", d: "Doc 13 FR-06" },
+  { t: "Pre-chat form — optional", r: "Offered and skippable.", d: "Doc 13 FR-06" },
+  { t: "Pre-chat form — required", r: "Name and phone before the first message, rendered as a Doc 12 form on the widget theme.", d: "Doc 13 FR-06 · Doc 12" },
+  { t: "Duplicate-phone conflict", r: "Attaches nothing, flags for staff, never blocks the visitor — and says nothing alarming.", d: "Doc 13 FR-06 · Doc 08 FR-09" },
+  { t: "Signed identity — asserted", r: "The visitor sees their own asserted name; “operator site asserted”, never platform-verified language.", d: "Doc 13 FR-07 · BR-05 · Doc 08 BR-01" },
+  { t: "Business hours — in hours", r: "Normal service: nothing in the widget changes.", d: "Doc 13 FR-15 · Doc 12 calendars" },
+  { t: "Out of hours, chatbot on", r: "The AI serves and hands off with the off-hours line — “the team returns at 08:00 — I've saved everything”.", d: "Doc 13 FR-15 · Doc 09" },
+  { t: "Out of hours, chatbot off", r: "Offline form in-panel, seeded name, phone and issue, creating an offline-tagged ticket with confirmation copy.", d: "Doc 13 FR-15 · Doc 12 · Doc 06 FR-14" },
+  { t: "Offline-form SMS follow-up", r: "A phone left in the form gets the ticket-created SMS per template settings — notification only, never a conversation.", d: "Doc 13 FR-15 · Doc 14" },
+  { t: "Hours flip mid-conversation", r: "17:59 → 18:00 does not cut off an in-flight conversation; only new sessions get off-hours.", d: "Doc 13 EC-07 · Doc 11 EC-09" },
+  { t: "Continuity across pages", r: "History restores across pages and visits; a cleared cookie is a new visitor.", d: "Doc 13 FR-08 · Doc 02 EC-09" },
+  { t: "Site identity switch", r: "A different signed user_ref mid-conversation: the thread continues, staff get the flag.", d: "Doc 13 EC-04 · Doc 08 BR-02" }
+]},
+{ id: "G", name: "Composer, uploads, voice", note: "Doc 13 §8 specifies the composer tightly. Voice appears only when the platform flag is on.", rows: [
+  { t: "Composer — normal", r: "Single line growing to five, attach, emoji, Enter sends and Shift+Enter breaks.", d: "Doc 13 §8 Composer" },
+  { t: "Composer — blocked visitor", r: "Neutral “messaging unavailable”, no accusation, no explanation the visitor cannot act on.", d: "Doc 13 §8 Composer · Doc 04" },
+  { t: "Composer — offline banner", r: "“You're offline — messages will send when you reconnect”, with the composer still usable.", d: "Doc 13 FR-22 · §8" },
+  { t: "Queued sends", r: "“Sending…” chips, flushed in order on reconnect with no duplicates.", d: "Doc 13 FR-22 · Doc 04 idempotency" },
+  { t: "Upload — drag, paste, picker", r: "All three paths with progress and cancel, within the Doc 04 caps.", d: "Doc 13 FR-16 · Doc 04 §8" },
+  { t: "Paste a screenshot", r: "First-class, not an afterthought — deposit receipts arrive pasted.", d: "Doc 13 FR-16" },
+  { t: "Upload — over cap", r: "A 200 MB video refused before any bytes move, with a friendly limit message.", d: "Doc 13 EC-08 · FR-16" },
+  { t: "Voice recording", r: "Behind the platform flag and off by default; absent rather than disabled when the flag is off.", d: "Doc 13 FR-16 · T-02 · §4.4 Behavior" },
+  { t: "Oversized paste", r: "Text beyond max_text soft-splits with a “sent as 2 messages” note.", d: "Doc 13 EC-10 · Doc 05 FR-16" },
+  { t: "Keyboard-only upload", r: "Upload completable without a pointer.", d: "Doc 13 §13" }
+]},
+{ id: "H", name: "Proactive triggers", note: "The part of the widget most likely to annoy a player, which is why Doc 13 constrains it structurally.", rows: [
+  { t: "Proactive open", r: "The panel opens itself with the configured message or shortcut set.", d: "Doc 13 FR-14 · T-06" },
+  { t: "Dismissal respected", r: "Dismissed on a page, it never re-fires there.", d: "Doc 13 FR-14 · BR-06" },
+  { t: "Cooldown", r: "One proactive per visitor per cooldown window, 24 h by default.", d: "Doc 13 FR-14 · BR-06" },
+  { t: "Politeness while typing", r: "A trigger firing while the visitor types into a page form defers until focus leaves.", d: "Doc 13 EC-05" }
+]},
+{ id: "I", name: "Notifications, sound, multi-tab", note: "Three channels for the same event — sound, title bar, browser notification — all silent while the visitor is already looking at the thread.", rows: [
+  { t: "Permission after the first message", r: "The browser permission is requested once the visitor has sent their first message, never on load.", d: "Doc 13 FR-17 · BR-03" },
+  { t: "Reply while the tab is unfocused", r: "Browser notification, title-bar unread counter and the in-page sound together.", d: "Doc 13 FR-17" },
+  { t: "Suppressed when visible", r: "Thread visible and focused: no sound, no counter, no notification.", d: "Doc 13 FR-17" },
+  { t: "In-page sound", r: "On by default, switchable in the overflow menu, operator default behind it.", d: "Doc 13 FR-17 · §4.4 Behavior" },
+  { t: "No Notification API", r: "In the Android WebView the notification path no-ops cleanly.", d: "Doc 13 EC-09 · NFR-05" },
+  { t: "Multi-tab leader", r: "BroadcastChannel election: one socket, one sound, synchronized unread, handoff within 2 s. Panel open or closed stays per tab by design.", d: "Doc 13 FR-18 · EC-03 · Doc 07 FR-04" }
+]},
+{ id: "J", name: "Widget Designer — the operator's admin", note: "Five tabs, named by Doc 13 §4.4. This is a Backoffice surface, so desktop leads and mobile follows.", rows: [
+  { t: "Appearance tab", r: "Brand colours with contrast validation, launcher icon, position and offsets, dark/light/auto, font incl. Ethiopic, avatar.", d: "Doc 13 §4.4 Appearance · Doc 16" },
+  { t: "Live preview pane", r: "Desktop and mobile frames previewing the configured widget.", d: "Doc 13 §4.4 Appearance" },
+  { t: "Contrast refusal", r: "A failing colour pair cannot be published; the validator suggests corrections.", d: "Doc 13 §9 · Doc 16 validator" },
+  { t: "Content tab", r: "Welcome per language, shortcut builder, tab toggles, agent-identity mode, pre-chat and offline form pickers.", d: "Doc 13 §4.4 Content" },
+  { t: "Behavior tab", r: "Chatbot on/off shown read-only with its link, proactive builder, business-hours source, upload toggle, voice flag, sound defaults, CSAT on/off.", d: "Doc 13 §4.4 Behavior" },
+  { t: "Install tab", r: "Snippet, secret rotation, allowlist editor, framework notes.", d: "Doc 13 §4.4 Install" },
+  { t: "Health tab", r: "Loads, opens, messages, error rate, invalid-signature counter, blocked-origin attempts with origins, active version, test-mode toggle.", d: "Doc 13 §4.4 Health · FR-07 · BR-07" },
+  { t: "Publish and rollback", r: "Versioned publishes, one-click rollback, propagation stated in the UI.", d: "Doc 13 FR-20 · NFR-04" },
+  { t: "Multiple widgets", r: "Site, subdomain and app-WebView each with their own key and config.", d: "Doc 13 FR-19" },
+  { t: "Config rollback mid-session", r: "What a visitor with the panel open experiences when config changes under them.", d: "Doc 13 EC-11 · FR-20" }
+]},
+{ id: "K", name: "Degradation", note: "Doc 13 spends more words on failure than on success. Every one of these is a state a visitor can actually reach.", rows: [
+  { t: "Socket lost → polling", r: "Fallback within 10 s; the visitor sees nothing but slightly slower updates.", d: "Doc 13 FR-21 · FS-01" },
+  { t: "Full offline", r: "Soft banner, cached history readable, sends queued.", d: "Doc 13 FR-22" },
+  { t: "Hard API outage", r: "Launcher survives; the panel shows a minimal retry card. The last-resort state.", d: "Doc 13 FS-02 · §8" },
+  { t: "Chatbot down", r: "Straight to the queue experience — the visitor never sees an AI error.", d: "Doc 13 FS-04" },
+  { t: "Help index down", r: "Help degrades alone; Messages keeps working.", d: "Doc 13 FS-05" },
+  { t: "Below the support matrix", r: "Silent no-mount — a dead widget is invisible, never a broken site.", d: "Doc 13 NFR-05, NFR-06 · BR-01" }
+]},
+{ id: "L", name: "Theme, language, access", note: "Audited as its own set so nothing is proved on one theme, one language or one input method.", rows: [
+  { t: "Light theme", r: "Complete, neutral default.", d: "Doc 13 §9 · Batch 3 prompt Step 2" },
+  { t: "Dark theme", r: "Genuine dark surfaces, not inverted brand colour.", d: "Doc 13 §9" },
+  { t: "Auto theme", r: "Following prefers-color-scheme, shown as a state of the same screen.", d: "Doc 13 §4.4 Appearance · §9" },
+  { t: "Amharic", r: "Real Amharic including long strings; Noto Sans Ethiopic; flagged for native review.", d: "Doc 13 §9, §14" },
+  { t: "Language switcher", r: "In the overflow menu, persisted, ahead of browser language in the resolution chain.", d: "Doc 13 §8 · §14" },
+  { t: "RTL-ready layout", r: "The layout mirrors; drawn once as proof.", d: "Doc 13 §14" },
+  { t: "Panel as a dialog", r: "Focus trap, Esc closes and returns focus to the launcher.", d: "Doc 13 §13" },
+  { t: "Thread as a log region", r: "Polite live region announcing author and kind.", d: "Doc 13 §13 · Doc 04 §13" },
+  { t: "Queue announcements", r: "Announced on position change only, not on every recompute.", d: "Doc 13 §13" },
+  { t: "Star row as radiogroup", r: "CSAT operable and announced as a radiogroup.", d: "Doc 13 §13 · Doc 12" },
+  { t: "44px touch targets", r: "Every interactive element in the panel at 375.", d: "Batch 3 prompt design rules" },
+  { t: "Nothing by colour alone", r: "Unread, queue, delivery and error states all carry text or a glyph.", d: "Batch 3 prompt design rules · Doc 13 §13" },
+  { t: "Text zoom", r: "The panel respects browser text-zoom; rem-based type survives it.", d: "Doc 13 §9" }
+]},
+{ id: "M", name: "Hard product rules, visible", note: "The rules the design must never contradict, each with the screen that proves it.", rows: [
+  { t: "AI always labelled", r: "Non-removable disclosure on every AI message.", d: "Doc 13 §9 · Batch 3 prompt rules" },
+  { t: "No impersonation", r: "Agent identity modes never present the bot as a named human.", d: "Doc 13 FR-12 · Batch 3 prompt rules" },
+  { t: "No verified language", r: "Asserted identity is “operator site asserted”, never verified.", d: "Doc 13 BR-05 · Doc 08 BR-01" },
+  { t: "Honest presence", r: "No decorative online dot when nobody is routable.", d: "Doc 13 BR-02" },
+  { t: "Queue never counts upward", r: "Proved on the queue card itself.", d: "Doc 13 EC-06" },
+  { t: "Notes never appear", r: "Internal notes are structurally absent from the transcript and the thread.", d: "Doc 13 SEC-06 · Doc 04 BR-01" },
+  { t: "No page scraping", r: "Context capture is an allowlist; no cookies, no storage reads, no form scraping — shown in the Health and Install copy.", d: "Doc 13 FR-24 · SEC-01" }
+]}
+];
+
+class Component extends DCLogic {
+  state = { q: "" };
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    let n = 0, total = 0, shown = 0;
+    const sections = [];
+    SECTIONS.forEach(sec => {
+      const rows = [];
+      let k = 0;
+      sec.rows.forEach(r => {
+        n += 1; total += 1; k += 1;
+        const hay = (r.t + " " + r.r + " " + r.d).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown += 1;
+        rows.push({ n: sec.id + ("0" + k).slice(-2), t: r.t, r: r.r, d: r.d });
+      });
+      if (rows.length) sections.push({ id: sec.id, name: sec.name, note: sec.note, count: rows.length + " rows", rows });
+    });
+    return {
+      sections,
+      q: this.state.q || "",
+      counts: q ? (shown + " of " + total + " rows") : (total + " rows"),
+      onFilter: e => this.setState({ q: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

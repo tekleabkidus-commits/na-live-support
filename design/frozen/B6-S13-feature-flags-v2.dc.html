@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #22211D; }
+  a:hover { color: #6B675D; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px; min-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B6-S13-feature-flags-v2</span>
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FFFFFF; border: 1px solid #CFCBC1; color: #4A4842; padding: 4px 8px; border-radius: 3px;">rows L01–L12</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Feature flags</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">This is the screen someone opens at two in the morning with a channel misbehaving, and the design has one job: <strong style="font-weight: 600;">make the cost of the switch visible before it is flipped, and make the promise that nothing is destroyed believable</strong>. Every card carries live usage rather than a description, because “Telegram: 3 bots, ~1,200 conversations a day” is the number that decides whether you flip it, and no amount of prose substitutes.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">Off is stated honestly and in the same three clauses everywhere: the navigation goes, the API answers <span style="font-family: ui-monospace, monospace; font-size: 12.5px;">feature_disabled</span>, and new work parks rather than vanishing. The parked count is live on the card while the module is off, so an operator can see the queue building and knows exactly what drains when they turn it back on.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Components are <a href="B1-DS-design-system-v2.dc.html">B1-DS</a> verbatim; the shell and the per-key anatomy are <a href="B6-S11-settings-shell-v1.dc.html">B6-S11</a>'s.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #4A4842; max-width: 900px;"><strong style="font-weight: 600;">v2 — scope-limited reopen, 3 Aug 2026.</strong> Adds the shared ◼ stop-controls button to the top bar, giving <a href="B6-S16-incident-page-v1.dc.html">the incident page</a> its second route and meeting Doc 16 AC-10 structurally. Nothing else on this screen changed.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The board — 1440, both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows L01, L02, L05, L07, L09, L11 · Doc 16 FR-11, FR-12, EC-06, R-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Thirteen modules and their registered sub-flags, each with state, switch, live usage and who last touched it. Light is the normal board with Voice Messages off and parking work. Dark is the same board mid-incident, with the SMS gateway struggling.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">L01 · L02 · L05 · L07 · L09 · L11</span></div>
+    <div data-screen-label="L01 flags board light" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search settings…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; padding: 5px 11px;">◼ Stop controls</span><span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">Settings</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 6px 10px; border-radius: 6px;">General</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">Quotas &amp; Usage</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">Feature Flags</span>
+            <span style="padding: 6px 10px; border-radius: 6px; color: #6B675D;">Branding ↗</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #6B675D;">Settings</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Feature flags</h1>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; border: 1px solid #CFCBC1; border-radius: 4px; padding: 4px 7px;">settings.features.manage</span>
+              <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">All stop buttons →</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 14px; margin-top: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12px; font-weight: 600; color: #1D1C18;">These switches apply to everyone in NA BET</div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">A flag is not a permission. To give a module to some people and not others, change their role instead.</div>
+            </div>
+            <a href="B6-S08-permission-matrix-v1.dc.html" style="margin-left: auto; font-size: 11.5px; font-weight: 600; flex: none;">Open roles →</a>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Telegram</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.telegram</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">3 bots · ~1,200 conversations a day</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">
+                <span style="font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">Business accounts · on</span>
+                <span style="font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">Bot menus · on</span>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Live Chat</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.live_chat</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">1 widget · ~340 conversations a day</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">SMS</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.sms</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">~180 conversations a day · 9,120 segments this month</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">AI Chatbot</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.ai_chatbot</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">Answers 62% of first messages</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 21 Jun · Dawit Bekele</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">Needs Knowledge Base</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">AI Copilot</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.ai_copilot</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">41 agents used it this week</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 3 Jul · Sara Bekele</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">Needs Knowledge Base</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Knowledge Base</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.knowledge_base</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">312 articles · 2 modules depend on it</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1.5px solid #CFCBC1; border-radius: 10px; padding: 13px 14px; background: #F6F5F2;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Voice Messages</span><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: #EEECE6; color: #4A4842; padding: 1px 7px; border-radius: 999px;">Off</span></div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.voice_messages</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 7px; padding: 8px 10px; margin-top: 9px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #1D1C18;">47 voice notes waiting</div>
+                <div style="font-size: 11px; line-height: 1.55; color: #4A4842; margin-top: 2px;">Arriving from customers and parked, not dropped. They deliver to the inbox the moment this goes back on.</div>
+              </div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 7px;">Off since 29 Jul, 21:10 · Dawit Bekele</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">File Uploads</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.file_uploads</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">~90 files a day · 104 GB stored</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 13px 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Translation</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.translation</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+              <div style="font-size: 11.5px; color: #4A4842; margin-top: 8px;">am + en · 14 strings missing</div>
+              <div style="font-size: 10.5px; color: #6B675D; margin-top: 5px;">On since 14 Jun · Sara Bekele</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 12px; flex: none;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 10px;">
+              <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Reports</div><div style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; margin-top: 1px;">flag.reports</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">28 saved · on 14 Jun · Sara</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; width: 38px; height: 22px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 10px;">
+              <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Surveys</div><div style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; margin-top: 1px;">flag.surveys</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">Never used · off since setup</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; width: 38px; height: 22px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; flex: none;"><span style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 10px;">
+              <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">SLA</div><div style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; margin-top: 1px;">flag.sla</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">4 policies · on 14 Jun · Sara</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; width: 38px; height: 22px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 10px;">
+              <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #1D1C18;">Automation</div><div style="font-family: ui-monospace, monospace; font-size: 10px; color: #6B675D; margin-top: 1px;">flag.automation</div><div style="font-size: 10.5px; color: #6B675D; margin-top: 2px;">11 rules · on 14 Jun · Sara</div></div>
+              <span style="margin-left: auto; display: inline-flex; align-items: center; width: 38px; height: 22px; border-radius: 999px; background: #22211D; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF;"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 26px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · off-behaviour and dependencies in full</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">L03 · L05 · L06 · L11 · Amharic chrome</span></div>
+    <div data-screen-label="L03 flags detail dark" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Tenant logo</span>
+        <span style="flex: 1; max-width: 360px; display: flex; align-items: center; gap: 6px; background: #232320; border: 1px solid #343430; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #918C80;">⌕ ፈልግ…<span style="margin-left: auto; font-size: 10px; border: 1px solid #343430; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: #C9C5BB;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F0B54A;"></span>SMS degraded</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; padding: 5px 11px;">◼ ማቆሚያ</span><span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 176px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">ቅንብሮች</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 6px 10px; border-radius: 6px;">አጠቃላይ</span>
+            <span style="padding: 6px 10px; border-radius: 6px;">ማሳወቂያዎች</span>
+            <span style="padding: 6px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">የባህሪ መቀየሪያዎች</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 16px 20px; min-width: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 11.5px; color: #A6A296;">ቅንብሮች · የባህሪ መቀየሪያዎች</div>
+              <h1 style="font-size: 19px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">የእውቀት ቋት · Knowledge Base</h1>
+            </div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #ECEAE4; padding: 2px; justify-content: flex-end; flex: none;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #171714;"></span></span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; flex: none;">
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ቢያጠፉት ምን ይሆናል</div>
+              <div style="display: flex; flex-direction: column; gap: 9px; margin-top: 10px;">
+                <div style="display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px;"><span style="font-size: 12px; color: #A6A296;">1</span><span style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ከምናሌው ይወጣል። ወኪሎችና አስተዳዳሪዎች የእውቀት ቋቱን ማየት አይችሉም።</span></div>
+                <div style="display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px;"><span style="font-size: 12px; color: #A6A296;">2</span><span style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">ማንኛውም ጥሪ <span style="font-family: ui-monospace, monospace; font-size: 11px;">feature_disabled</span> ብሎ ይመልሳል — በዝምታ ባዶ ውጤት አይሰጥም።</span></div>
+                <div style="display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px;"><span style="font-size: 12px; color: #A6A296;">3</span><span style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB;">አዲስ የሚመጣ ሥራ ይቆማል እንጂ አይጠፋም። ሲመለስ ወደ ቦታው ይፈስሳል።</span></div>
+              </div>
+              <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 11px;">
+                <div style="font-size: 11.5px; font-weight: 600; color: #ECEAE4;">ምንም አይጠፋም</div>
+                <div style="font-size: 11.5px; line-height: 1.8; color: #C9C5BB; margin-top: 2px;">312ቱም ጽሑፎች፣ ምድቦቻቸውና ቅንብሮቻቸው እንዳሉ ይቆያሉ። መልሰው ሲያበሩት ልክ እንደነበረው ይመለሳል።</div>
+              </div>
+            </div>
+
+            <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ጥገኝነቶች</div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px;">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 7px;">
+                  <div style="border: 1px solid #45443E; border-radius: 7px; padding: 7px 10px; font-size: 11.5px; color: #ECEAE4; text-align: center;">AI Chatbot</div>
+                  <div style="border: 1px solid #45443E; border-radius: 7px; padding: 7px 10px; font-size: 11.5px; color: #ECEAE4; text-align: center;">AI Copilot</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; width: 58px;">
+                  <span style="font-size: 10px; color: #A6A296;">require</span>
+                  <span style="font-size: 15px; color: #ECEAE4;">⟶</span>
+                </div>
+                <div style="flex: 1; border: 1.5px solid #ECEAE4; border-radius: 7px; padding: 11px 10px; font-size: 11.5px; font-weight: 600; color: #ECEAE4; text-align: center;">Knowledge Base</div>
+              </div>
+              <div style="border-top: 1px solid #262622; margin-top: 12px; padding-top: 10px;">
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በጽሑፍ</div>
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 7px; font-size: 11.5px; line-height: 1.7; color: #C9C5BB;">
+                  <div>• <strong style="color: #ECEAE4; font-weight: 600;">AI Chatbot</strong> የእውቀት ቋቱን ይፈልጋል።</div>
+                  <div>• <strong style="color: #ECEAE4; font-weight: 600;">AI Copilot</strong> የእውቀት ቋቱን ይፈልጋል።</div>
+                  <div>• የእውቀት ቋቱ ራሱ ምንም ሌላ ነገር አይፈልግም።</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 15px; margin-top: 14px; flex: none;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">የSMS ሁኔታ — አሁን</div>
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 10px;">
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">በቀን ውይይቶች</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">180</div></div>
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">ያልተላኩ</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #F0B54A; margin-top: 3px;">62</div></div>
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የወር ክፍልፋዮች</div><div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: #ECEAE4; margin-top: 3px;">9,120</div></div>
+              <div><div style="font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">የመጨረሻ ለውጥ</div><div style="font-size: 12.5px; color: #ECEAE4; margin-top: 6px;">ሰኔ 14 · ሳራ</div></div>
+            </div>
+            <p style="margin: 10px 0 0; font-size: 11.5px; line-height: 1.8; color: #A6A296;">SMSን ማጥፋት 62ቱን ያልተላኩ መልእክቶች አያጠፋም — ይቆማሉ። ግን ደንበኞች በSMS መልስ ማግኘት ያቆማሉ፤ ስለዚህ ከማጥፋት በፊት የመተላለፊያውን ችግር ማየት ይሻላል።</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 12px 14px; margin-top: 14px; flex: none;">
+            <div style="min-width: 0;">
+              <div style="font-size: 12px; font-weight: 600; color: #ECEAE4;">ሁሉንም የማቆሚያ አዝራሮች በአንድ ገጽ</div>
+              <div style="font-size: 11.5px; line-height: 1.7; color: #A6A296; margin-top: 2px;">በአደጋ ጊዜ የሚያስፈልጉ ማቆሚያዎች — AI፣ ራስ-ሰር ምላሽ፣ የወጪ መልእክቶች — በአንድ ቦታ።</div>
+            </div>
+            <span style="margin-left: auto; font-size: 11.5px; font-weight: 600; color: #ECEAE4; flex: none;">ክፈት →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Confirms and failure states — each in both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">rows L04, L06, L08, L10, L12 · Doc 16 FR-12, BR-04, EC-10, FS-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Disabling names its dependents; enabling a dependent offers to bring its dependency with it rather than failing. The last-channel case is allowed and says what it costs. And when the flag store itself is unreachable, the switches freeze where they are and say why — a flag screen that guesses is worse than one that admits it cannot reach the truth.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px;">Light</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">L04 · L06 — disabling, with dependents</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Turn off Knowledge Base?</div>
+          <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8F5F08;">Two modules stop working too</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #8F5F08; margin-top: 3px;">AI Chatbot and AI Copilot both need it. They will be turned off with it, and turned back on together when you re-enable it.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">
+            <div>• The Knowledge Base disappears from the menu for all 53 staff.</div>
+            <div>• Any call to it answers <span style="font-family: ui-monospace, monospace; font-size: 11px;">feature_disabled</span>.</div>
+            <div>• The chatbot stops answering; those conversations go straight to the queue — roughly 62% of first messages, about 740 a day.</div>
+          </div>
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #4A4842;"><strong style="font-weight: 600; color: #1D1C18;">Nothing is deleted.</strong> All 312 articles, their categories and every AI setting stay exactly as they are. Turning it back on restores the modules as they were.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Turn off all three</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">L04 — enabling a dependent</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">AI Copilot needs the Knowledge Base</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">The Knowledge Base is currently off. Turning it on alongside Copilot takes one click; on its own, Copilot would have nothing to draw on.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Turn on both</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">L12 — loading, and a registry with no sub-flags</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px;"><div style="height: 9px; width: 54%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 74%; background: #F2F1ED; border-radius: 3px; margin-top: 8px;"></div><div style="height: 8px; width: 46%; background: #F2F1ED; border-radius: 3px; margin-top: 6px;"></div></div>
+            <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px;"><div style="height: 9px; width: 44%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #F2F1ED; border-radius: 3px; margin-top: 8px;"></div><div style="height: 8px; width: 52%; background: #F2F1ED; border-radius: 3px; margin-top: 6px;"></div></div>
+          </div>
+          <div style="border: 1px solid #E5E2DB; border-radius: 9px; padding: 12px; margin-top: 10px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">Surveys</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 4px;">No sub-flags registered. When the Surveys team registers one, it appears on this card by itself.</div>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin: 14px 0 6px;">L08 — the last customer channel</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Turn off Telegram — your last customer channel?</div>
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Customers will have no way to reach support through the platform</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">Live Chat and SMS are already off. With Telegram off as well, nothing new can arrive — from anyone, on any channel.</div>
+          </div>
+          <div style="background: #F6F5F2; border-left: 3px solid #22211D; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 9px; font-size: 11.5px; line-height: 1.6; color: #4A4842;">This is allowed — sometimes closing the doors is the right call. Messages are parked, 41 open conversations stay readable, and nothing is deleted.</div>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #6B675D;">Type <strong style="color: #1D1C18; font-family: ui-monospace, monospace;">CLOSE ALL</strong> to confirm</div>
+          <div style="border: 1px solid #CFCBC1; border-radius: 5px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #726D63; margin-top: 5px;">Type CLOSE ALL</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #EEECE6; color: #ADA89D; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Turn off Telegram</button><button style="font-family: inherit; background: transparent; color: #6B675D; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">L10 — the flag store is unreachable</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #8E2222;">Cannot reach the flag store — since 21:48</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #7A3232; margin-top: 3px;">Every module is holding the state it had at 21:47 and carrying on. Nothing has switched itself.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #E5E2DB; border-radius: 8px; padding: 11px 12px; margin-top: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #ADA89D;">Telegram</div><div style="font-size: 11px; color: #ADA89D; margin-top: 1px;">On — last known 21:47</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 2px; justify-content: flex-end; flex: none; opacity: 0.5;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF;"></span></span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">Switching is off until the store answers. A flag screen that guessed would be worse than one that says it cannot see.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-bottom: 6px;">L12 — a toggle that failed</div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 14px;">
+          <div style="background: #FBE5E5; border: 1px solid #EFC7C7; border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11.5px; color: #8E2222;">Couldn't turn off <strong style="font-weight: 600;">Voice Messages</strong> — it is still on</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #8E2222; font-size: 11px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.6; color: #4A4842;">The switch went back to on and said so. It does not sit in the position you left it in while the module behaves the other way.</p>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 12px;">Dark</div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">L08 — the last customer channel</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Turn off Telegram — your last customer channel?</div>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Customers will have no way to reach support through the platform</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">Live Chat and SMS are already off. With Telegram off as well, nothing new can arrive — from anyone, on any channel.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">
+            <div>• 3 bots stop receiving. About 1,200 conversations a day have nowhere to land.</div>
+            <div>• Messages sent to your bots are parked and deliver when you turn it back on.</div>
+            <div>• 41 open conversations stay open and readable; agents can still work them, but cannot reply.</div>
+          </div>
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">This is allowed — sometimes closing the doors is the right call. Nothing is deleted and nothing is lost.</div>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #A6A296;">Type <strong style="color: #ECEAE4; font-family: ui-monospace, monospace;">CLOSE ALL</strong> to confirm</div>
+          <div style="border: 1px solid #45443E; border-radius: 5px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #918C80; margin-top: 5px;">Type CLOSE ALL</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Turn off Telegram</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">L10 — the flag store is unreachable</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 10px 12px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F5A7A7;">Cannot reach the flag store — since 21:48</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E0A0A0; margin-top: 3px;">Every module is holding the state it had at 21:47 and carrying on. Nothing has switched itself.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #343430; border-radius: 8px; padding: 11px 12px; margin-top: 9px;">
+            <div style="min-width: 0;"><div style="font-size: 12px; font-weight: 600; color: #6B6860;">Telegram</div><div style="font-size: 11px; color: #6B6860; margin-top: 1px;">On — last known 21:47</div></div>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; width: 42px; height: 24px; border-radius: 999px; background: #282822; border: 1px solid #45443E; padding: 2px; justify-content: flex-end; flex: none; opacity: 0.5;"><span style="width: 18px; height: 18px; border-radius: 50%; background: #45443E;"></span></span>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">Switching is off until the store answers. A flag screen that guessed would be worse than one that says it cannot see.</p>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">L12 — a toggle that failed</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11.5px; color: #F5A7A7;">Couldn't turn off <strong style="font-weight: 600;">Voice Messages</strong> — it is still on</span>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; border: none; color: #F5A7A7; font-size: 11px; font-weight: 600; cursor: pointer;">Retry</button>
+          </div>
+          <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">The switch went back to on and said so. It does not sit in the position you left it in while the module behaves the other way.</p>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin: 14px 0 6px;">L04 · L06 — disabling, with dependents</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13.5px; font-weight: 600; color: #ECEAE4;">Turn off Knowledge Base?</div>
+          <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 7px; padding: 10px 12px; margin-top: 9px;">
+            <div style="font-size: 12px; font-weight: 600; color: #F0B54A;">Two modules stop working too</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #E8C25A; margin-top: 3px;">AI Chatbot and AI Copilot both need it. They will be turned off with it, and turned back on together when you re-enable it.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">
+            <div>• The Knowledge Base disappears from the menu for all 53 staff.</div>
+            <div>• Any call to it answers <span style="font-family: ui-monospace, monospace; font-size: 11px;">feature_disabled</span>.</div>
+            <div>• The chatbot stops answering; those conversations go straight to the queue — roughly 62% of first messages, about 740 a day.</div>
+          </div>
+          <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;"><strong style="font-weight: 600; color: #ECEAE4;">Nothing is deleted.</strong> All 312 articles, their categories and every AI setting stay exactly as they are. Turning it back on restores the modules as they were.</div>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Turn off all three</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">L04 — enabling a dependent</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 15px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ECEAE4;">AI Copilot needs the Knowledge Base</div>
+          <p style="margin: 5px 0 0; font-size: 11.5px; line-height: 1.6; color: #C9C5BB;">The Knowledge Base is currently off. Turning it on alongside Copilot takes one click; on its own, Copilot would have nothing to draw on.</p>
+          <div style="display: flex; gap: 7px; margin-top: 11px;"><button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Turn on both</button><button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Cancel</button></div>
+        </div>
+
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-bottom: 6px;">L12 — loading, and a registry with no sub-flags</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+            <div style="border: 1px solid #343430; border-radius: 9px; padding: 12px;"><div style="height: 9px; width: 54%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 74%; background: #262622; border-radius: 3px; margin-top: 8px;"></div><div style="height: 8px; width: 46%; background: #262622; border-radius: 3px; margin-top: 6px;"></div></div>
+            <div style="border: 1px solid #343430; border-radius: 9px; padding: 12px;"><div style="height: 9px; width: 44%; background: #2F2F29; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #262622; border-radius: 3px; margin-top: 8px;"></div><div style="height: 8px; width: 52%; background: #262622; border-radius: 3px; margin-top: 6px;"></div></div>
+          </div>
+          <div style="border: 1px solid #343430; border-radius: 9px; padding: 12px; margin-top: 10px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Surveys</div>
+            <div style="font-size: 11.5px; line-height: 1.6; color: #A6A296; margin-top: 4px;">No sub-flags registered. When the Surveys team registers one, it appears on this card by itself.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px; min-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">375 — both themes</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">row L04's mobile exception · Doc 16 §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Doc 16 §9 makes its own exception here: the confirm goes <strong style="font-weight: 600;">full-screen on mobile</strong>, because this is the one dialog nobody should be able to dismiss by mistiming a tap. Flipping a flag during an incident is a phone job, so the board is operable — the read-only settings ruling does not reach a stop button.</p>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; max-width: 1180px; min-width: 1180px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; margin-bottom: 8px;">Light · 375 wide · the board</div>
+        <div data-screen-label="L 375 board light" style="width: 375px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+          <div style="background: #FFFFFF; border-bottom: 1px solid #E5E2DB; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Back" style="font-family: inherit; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 8px; color: #1D1C18; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 11px; color: #6B675D;">Settings</div><div style="font-size: 15px; font-weight: 600; color: #1D1C18;">Feature flags</div></div>
+          </div>
+          <div style="padding: 12px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Telegram</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.telegram</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">3 bots · ~1,200 a day</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">On since 14 Jun · Sara Bekele</div><div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;"><span style="font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">Business accounts · on</span><span style="font-size: 10.5px; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">Bot menus · on</span></div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 52px; height: 30px; border-radius: 999px; background: #22211D; padding: 3px; justify-content: flex-end; flex: none;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="min-width: 0;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">AI Chatbot</div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.ai_chatbot</div><div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Answers 62% of first messages</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">On since 21 Jun · Dawit Bekele</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 52px; height: 30px; border-radius: 999px; background: #22211D; padding: 3px; justify-content: flex-end; flex: none;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF;"></span></span>
+              </div>
+            </div>
+            <div style="background: #F6F5F2; border: 1.5px solid #CFCBC1; border-radius: 10px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="min-width: 0;"><div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">Voice Messages</span><span style="font-size: 10px; font-weight: 600; text-transform: uppercase; background: #EEECE6; color: #4A4842; padding: 1px 7px; border-radius: 999px;">Off</span></div><div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6B675D; margin-top: 2px;">flag.voice_messages</div><div style="font-size: 11.5px; color: #8F5F08; margin-top: 3px;">47 waiting · they deliver to the inbox the moment this goes back on</div><div style="font-size: 11px; color: #6B675D; margin-top: 3px;">Off since 29 Jul, 21:10 · Dawit Bekele</div></div>
+                <span style="margin-left: auto; display: inline-flex; align-items: center; width: 52px; height: 30px; border-radius: 999px; background: #EEECE6; border: 1px solid #DEDAD1; padding: 3px; flex: none;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF; border: 1px solid #DEDAD1;"></span></span>
+              </div>
+            </div>
+            <div style="background: #EEECE6; border: 1px solid #CFCBC1; border-radius: 10px; padding: 11px 12px; margin-top: 10px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">These apply to everyone</div>
+              <div style="font-size: 11.5px; line-height: 1.55; color: #4A4842; margin-top: 2px;">A flag is not a permission — change a role for that.</div>
+            </div>
+            <button style="font-family: inherit; width: 100%; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; margin-top: 10px; cursor: pointer;">All stop buttons →</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 14px;">
+        <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; margin-bottom: 8px;">Dark · 375 wide · full-screen confirm</div>
+        <div data-screen-label="L04 375 confirm dark" style="width: 375px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+          <div style="background: #1C1C19; border-bottom: 1px solid #343430; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="ዝጋ" style="font-family: inherit; background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+            <div style="min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">የእውቀት ቋትን ማጥፋት</div></div>
+          </div>
+          <div style="padding: 12px; flex: 1;">
+            <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 11px 12px;">
+              <div style="font-size: 13px; font-weight: 600; color: #F0B54A;">ሁለት ተጨማሪ ክፍሎችም ይቆማሉ</div>
+              <div style="font-size: 12px; line-height: 1.8; color: #E8C25A; margin-top: 4px;">AI Chatbot እና AI Copilot ሁለቱም የእውቀት ቋቱን ይፈልጋሉ። አብረው ይጠፋሉ፤ መልሰው ሲያበሩትም አብረው ይመለሳሉ።</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 11px; font-size: 12px; line-height: 1.8; color: #C9C5BB;">
+              <div>• ለ53ቱም ሠራተኞች ከምናሌው ይወጣል።</div>
+              <div>• ማንኛውም ጥሪ <span style="font-family: ui-monospace, monospace; font-size: 11.5px;">feature_disabled</span> ይመልሳል።</div>
+              <div>• ቻትቦቱ መመለስ ያቆማል፤ በቀን ~740 ውይይቶች በቀጥታ ወደ ወረፋ ይሄዳሉ።</div>
+            </div>
+            <div style="background: #232320; border-left: 3px solid #ECEAE4; border-radius: 0 6px 6px 0; padding: 11px 12px; margin-top: 11px;">
+              <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">ምንም አይሰረዝም</div>
+              <div style="font-size: 12px; line-height: 1.8; color: #C9C5BB; margin-top: 2px;">312ቱም ጽሑፎችና ቅንብሮች እንዳሉ ይቆያሉ። መልሰው ሲያበሩት ልክ እንደነበረው ይሆናል።</div>
+            </div>
+          </div>
+          <div style="border-top: 1px solid #343430; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+            <button style="font-family: inherit; width: 100%; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 8px; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer;">ሦስቱንም አጥፋ</button>
+            <button style="font-family: inherit; width: 100%; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 8px; font-size: 13px; font-weight: 500; min-height: 44px; cursor: pointer;">ተወው</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 40px; max-width: 1180px; min-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> L01 (all thirteen modules, each with its key name, state, switch and last-toggled provenance, and Telegram's two registered sub-flags as chips — §A light in full; the three cards shown at 375 carry the same four parts — key name, usage, provenance and switch — §C light), L02 (live usage on every card — §A light and §C light; §A dark is the single-module detail view, where the same live figures appear as the SMS status panel), L03 (dependency edges with direction arrows and the text-list equivalent beneath — §A dark), L04 (disable-with-dependents and enable-a-dependent — §B both themes; full-screen on mobile — §C dark), L05 (the three off-behaviour clauses, in the same order on the card and in the dialog — §A dark, §B both themes, §C dark), L06 (nothing is destroyed — §A dark, §B both themes, §C dark), L07 (47 parked voice notes on the card, with the drain stated — §A light, §C light), L08 (last customer channel, allowed and costed — §B both themes), L09 (tenant-wide, pointing at roles — §A light, §C light), L10 (fail-static — §B both themes), L11 (the all-stop-buttons link into Section P — §A both themes, §C light), L12 (skeletons, a registry with no sub-flags, and a toggle that failed rather than silently reverting — §B both themes, each state drawn in both columns).</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations to record:</strong> the 375 board is operable, not read-only. Doc 16 §9's own mobile exception for the confirm dialog implies the toggle it confirms is reachable there, and a stop button you cannot press from a phone is not a stop button. Switch targets at 375 are 52 × 30 px, above the floor.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One thing I want your eye on:</strong> every card states usage as a live number rather than a description of the feature. It reads as an operations screen instead of a settings page, which I think is right for something people touch during incidents — but it does mean each card depends on the realtime tier, and a card with no number would look broken. Worth deciding what a card shows when its usage query times out; my instinct is the last known figure with its age, never a blank.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

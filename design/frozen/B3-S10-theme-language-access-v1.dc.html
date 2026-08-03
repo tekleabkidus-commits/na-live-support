@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B3-S10-theme-language-access-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Theme, language, access — and the rules made visible</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Checklist rows L01–L13 and M01–M07 · Doc 13 §9, §13, §14 · BR-02, BR-05, FR-12, FR-24, SEC-01, SEC-06, EC-06. These two sections are cross-cutting: most of their rows are proved by screens already delivered rather than by new frames. This sheet draws only what has no home elsewhere — the RTL mirror, the language switcher, the focus and announcement model — and for everything else names the screen that carries it, so the closing audit points at something real instead of at a claim.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">L05, L06 · The language switcher, and the mirror</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §14 · resolution chain, RTL-ready</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">L05 · Light — the switcher, and what outranks what</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 12px 14px; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">Language</div>
+            <div style="padding: 6px 0;" role="radiogroup" aria-label="Language">
+              <button role="radio" aria-checked="true" style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 16px; min-height: 52px; font-size: 15px; color: #1D1C18; cursor: pointer; display: flex; align-items: center; gap: 11px;">English <span style="margin-left: auto; font-size: 14px;">✓</span></button>
+              <button role="radio" aria-checked="false" style="font-family: inherit; width: 100%; text-align: left; background: transparent; border: none; padding: 0 16px; min-height: 52px; font-size: 15px; color: #1D1C18; cursor: pointer;">አማርኛ</button>
+            </div>
+            <div style="padding: 10px 16px 14px; border-top: 1px solid #F0EEE9; font-size: 12px; color: #6B675D; line-height: 1.55;">Your choice is remembered on this device and outranks everything else.</div>
+          </div>
+          <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6A61; margin-bottom: 9px;">How the language is decided</div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 13px; color: #1D1C18;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #22211D; color: #FFFFFF; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">1</span>What the visitor picked here</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 13px; color: #4A4842;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">2</span>What the operator's site set for them</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 13px; color: #4A4842;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">3</span>The browser's language</div>
+              <div style="display: flex; align-items: center; gap: 9px; font-size: 13px; color: #4A4842;"><span style="flex: none; width: 20px; height: 20px; border-radius: 50%; background: #EEECE6; color: #4A4842; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">4</span>The widget's default</div>
+            </div>
+            <div style="font-size: 11.5px; color: #6B675D; margin-top: 10px; line-height: 1.55;">A language with unfinished strings never reaches this list — it is better to be in English than half-translated mid-sentence.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">L06 · Dark — the same panel mirrored for RTL</div>
+        <div dir="rtl" role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="width: 375px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="flex: none; padding: 12px 14px; background: #232320; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 11px;">
+            <span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #ECEAE4; color: #171714; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">H</span>
+            <div style="flex: 1 1 auto; min-width: 0;"><div style="font-size: 15px; font-weight: 600; color: #ECEAE4;">Hana</div><div style="font-size: 12px; color: #A6A296; margin-top: 1px;">مساعد الدعم</div></div>
+            <button aria-label="Close chat" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 17px; min-width: 44px; min-height: 44px; cursor: pointer;">✕</button>
+          </div>
+          <div role="log" aria-live="polite" aria-label="Conversation" style="flex: none; padding: 16px; background: #171715; display: flex; flex-direction: column; gap: 11px;">
+            <div style="align-self: flex-start; max-width: 84%;"><div style="background: #232320; border: 1px solid #343430; border-radius: 14px 14px 4px 14px; padding: 11px 14px; font-size: 15px; line-height: 1.6; color: #ECEAE4;">مرحبًا 👋 كيف يمكننا المساعدة؟</div><div style="font-size: 11.5px; color: #9A9588; margin-top: 4px;">Hana · 14:02</div></div>
+            <div style="align-self: flex-end; max-width: 84%;"><div style="background: #ECEAE4; border-radius: 14px 14px 14px 4px; padding: 11px 14px; font-size: 15px; line-height: 1.6; color: #171714;">لم يصل السحب الخاص بي.</div><div style="font-size: 11.5px; color: #9A9588; margin-top: 4px; text-align: left;">✓✓ 14:03</div></div>
+          </div>
+          <div style="flex: none; padding: 12px 14px 14px; border-top: 1px solid #343430; display: flex; align-items: center; gap: 10px;">
+            <button aria-label="Attach a file" style="font-family: inherit; flex: none; background: transparent; border: none; color: #ECEAE4; font-size: 18px; min-width: 44px; min-height: 44px; cursor: pointer;">＋</button>
+            <div style="flex: 1 1 auto; border: 1px solid #45443E; border-radius: 22px; padding: 12px 15px; font-size: 15px; color: #8C877C; min-height: 44px;">اكتب رسالة…</div>
+            <button aria-label="Send" style="font-family: inherit; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #ECEAE4; border: none; color: #171714; font-size: 15px; cursor: pointer;"><span style="display: inline-block; transform: scaleX(-1);">➤</span></button>
+          </div>
+          <div role="tablist" aria-label="Sections" style="flex: none; border-top: 1px solid #343430; display: flex;">
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">الرئيسية</button>
+            <button role="tab" aria-selected="true" style="font-family: inherit; flex: 1; background: transparent; border: none; border-top: 2px solid #ECEAE4; margin-top: -1px; min-height: 56px; font-size: 12.5px; font-weight: 600; color: #ECEAE4; cursor: pointer;">الرسائل</button>
+            <button role="tab" aria-selected="false" style="font-family: inherit; flex: 1; background: transparent; border: none; min-height: 56px; font-size: 12.5px; color: #A6A296; cursor: pointer;">المساعدة</button>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Amharic is left-to-right, so nothing in this market forces the mirror — which is exactly why it gets drawn once now rather than discovered later. Bubbles swap sides, the send arrow flips, the tab order reverses, and the delivery ticks move to the other end. Arabic is a placeholder for “some future tenant”, flagged for review if it ever ships.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">L03 · Auto theme — one widget, two systems</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="width: 182px; height: 300px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="flex: none; padding: 9px 11px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; font-size: 11.5px; font-weight: 600; color: #1D1C18;">Hana</div>
+            <div style="flex: 1; padding: 11px; display: flex; flex-direction: column; gap: 8px;"><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">Hello 👋</div><div style="font-size: 11.5px; color: #4A4842; line-height: 1.5;">Ask us anything.</div></div>
+            <div style="flex: none; padding: 8px 11px; border-top: 1px solid #E5E2DB; font-size: 10px; color: #6B675D;">system: light</div>
+          </div>
+          <div style="width: 182px; height: 300px; background: #1C1C19; border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="flex: none; padding: 9px 11px; background: #232320; border-bottom: 1px solid #343430; font-size: 11.5px; font-weight: 600; color: #ECEAE4;">Hana</div>
+            <div style="flex: 1; padding: 11px; display: flex; flex-direction: column; gap: 8px; background: #171715;"><div style="font-size: 14px; font-weight: 600; color: #ECEAE4;">Hello 👋</div><div style="font-size: 11.5px; color: #C9C5BB; line-height: 1.5;">Ask us anything.</div></div>
+            <div style="flex: none; padding: 8px 11px; border-top: 1px solid #343430; font-size: 10px; color: #A6A296;">system: dark</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Genuine dark surfaces, not the brand colour dimmed. The widget follows the visitor's own system setting, never the host page's stylesheet — it cannot see it, and that isolation is the point.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">L07–L11 · What a screen reader and a keyboard get</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §13 · WCAG 2.2 AA inside the iframes</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">L07 · Focus, trapped and returned</div>
+        <div style="position: relative; width: 375px; height: 470px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 13px 15px; border-bottom: 1px solid #EFEDE8; display: flex; align-items: center; gap: 10px;"><span style="width: 68px; height: 11px; background: #E5E2DB; border-radius: 3px;"></span></div>
+          <div style="padding: 15px; display: flex; flex-direction: column; gap: 9px;"><div style="height: 74px; background: #F2F1ED; border-radius: 8px;"></div><div style="height: 11px; width: 62%; background: #EFEDE8; border-radius: 3px;"></div></div>
+          <div role="dialog" aria-modal="true" aria-label="Chat with Na Support" style="position: absolute; left: 14px; right: 14px; bottom: 88px; background: #FFFFFF; border: 2px solid #2F5AC8; border-radius: 12px; box-shadow: 0 10px 30px rgba(29,28,24,0.18); overflow: hidden;">
+            <div style="padding: 11px 13px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 9px;"><span style="font-size: 13.5px; font-weight: 600; color: #1D1C18; flex: 1 1 auto;">Hana</span><span style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #4A4842; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 4px; padding: 3px 7px;">Esc closes</span></div>
+            <div style="padding: 13px; font-size: 13px; color: #4A4842; line-height: 1.6;">Tab cycles inside the panel only — it never leaks into the page behind. Closing returns focus to the launcher, so a keyboard user is exactly where they were, not at the top of the site.</div>
+          </div>
+          <div style="position: absolute; right: 15px; bottom: 18px;"><button aria-label="Chat with us" style="font-family: inherit; width: 56px; height: 56px; border-radius: 50%; background: #22211D; border: 3px solid #2F5AC8; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 20px; cursor: pointer;">✻</button></div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">The focus ring is the platform's, unmodified — never removed for looks, never a faint custom outline that disappears on a bright brand colour.</div>
+      </div>
+
+      <div style="width: 500px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">L08–L10, L13 · Announced, and how often</div>
+        <div style="padding: 4px 0;">
+          <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">The thread is a polite log</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 4px; line-height: 1.55;">New messages announce their author and kind — “Selam, message” or “AI assistant, message” — and never interrupt what is already being read.</div></div>
+          <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Queue position, on change only</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 4px; line-height: 1.55;">“Now second in line” is spoken when the number actually moves. The card recomputes far more often than that, and announcing every recompute would make the widget unusable with a screen reader on.</div></div>
+          <div style="padding: 12px 16px; border-bottom: 1px solid #F0EEE9;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">The star row is a radiogroup</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 4px; line-height: 1.55;">Five radios labelled one to five stars, arrow keys between them, and skipping it entirely is a legitimate answer.</div></div>
+          <div style="padding: 12px 16px;"><div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Text zoom to 200%</div><div style="font-size: 12.5px; color: #6B675D; margin-top: 4px; line-height: 1.55;">Type is rem-based, so the panel grows with the browser's setting instead of clipping. A visitor who needs large text is often the visitor who most needs the help.</div></div>
+        </div>
+      </div>
+
+      <div style="width: 500px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #E5E2DB; font-size: 14px; font-weight: 600; color: #1D1C18;">L12 · Nothing carried by colour alone</div>
+        <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; min-width: 22px; height: 22px; border-radius: 999px; background: #B32B2B; color: #FFFFFF; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; padding: 0 6px;">2</span><span style="font-size: 13px; color: #4A4842; line-height: 1.55;">Unread is a number and a spoken label, not a coloured dot</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; font-size: 12.5px; color: #1D1C18; background: #F6F5F2; border-radius: 6px; padding: 5px 9px;">✓✓ Delivered</span><span style="font-size: 13px; color: #4A4842; line-height: 1.55;">Delivery is a glyph plus a word</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; font-size: 12.5px; color: #8F5F08; background: #FCF0D9; border-radius: 6px; padding: 5px 9px;">◌ Sending when you're back</span><span style="font-size: 13px; color: #4A4842; line-height: 1.55;">Queued says so in words</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: none; font-size: 12.5px; color: #1D1C18; background: #F6F5F2; border-radius: 6px; padding: 5px 9px;">#3 in line · about 5 min</span><span style="font-size: 13px; color: #4A4842; line-height: 1.55;">Queue state is text before it is a progress bar</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">M01–M07 · The hard rules, and where each is proved</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 13 §9, BR-02, BR-05, EC-06, SEC-01, SEC-06 · Doc 08 BR-01</span>
+    </div>
+    <div style="max-width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <sc-for list="{{ rules }}" as="r" hint-placeholder-count="7">
+        <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr) 210px; gap: 14px; padding: 13px 16px; border-bottom: 1px solid #F0EEE9; align-items: start;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ r.t }}</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ r.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; line-height: 1.6;">{{ r.where }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">L01, L02, L04, L11 · Proved elsewhere, listed here</h2>
+    </div>
+    <div style="max-width: 1180px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; overflow: hidden;">
+      <sc-for list="{{ carried }}" as="c" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr) 210px; gap: 14px; padding: 13px 16px; border-bottom: 1px solid #F0EEE9; align-items: start;">
+          <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">{{ c.t }}</div>
+          <div style="font-size: 12.5px; color: #4A4842; line-height: 1.6;">{{ c.d }}</div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B675D; line-height: 1.6;">{{ c.where }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RULES = [
+  ["M01 · AI always labelled", "Every AI message carries the violet accent and the words “AI assistant”. The label is not a setting an operator can remove, and the accent is a platform token rather than part of their palette.", "B3-S03 · B3-S05 · B3-S09"],
+  ["M02 · No impersonation", "Agent identity renders as a first name, an alias or the team name — whichever the operator chose. None of those modes lets the bot wear a person's name, and the handoff line marks the change of who is speaking.", "B3-S03 · B3-S05"],
+  ["M03 · Asserted, never verified", "A signed identity shows the visitor their own name for continuity and tells staff the site asserted it. The word “verified” appears on no surface of this product.", "B3-S05 F06"],
+  ["M04 · Honest presence", "The reply band is Doc 11's data. Out of hours the green dot is absent rather than recoloured, because nobody is routable and a dot that lies is worse than no dot.", "B3-S02 C02, C03"],
+  ["M05 · The queue never counts upward", "A position that regresses drops to the band and holds it until it improves. The visitor is never shown themselves losing ground.", "B3-S03 D13"],
+  ["M06 · Notes can never appear", "Internal notes never reach the adapter, so they cannot reach the widget, the transcript download or the visitor's export. Not filtered out — structurally absent.", "B3-S01 B08 · B3-S07"],
+  ["M07 · No page scraping", "Context is an allowlist the operator declares: URL, referrer, title, device, viewport, language, timezone. No cookies, no storage reads, no form scraping — the widget has no host-DOM access to scrape with.", "B3-S01 B10 · B3-S08 Install"]
+];
+const CARRIED = [
+  ["L01 · Light theme", "Complete and neutral across every screen set — the default an operator starts from before they touch a colour.", "B3-S01 – B3-S09"],
+  ["L02 · Dark theme", "Complete, on genuine dark surfaces, in every screen set. Not a single frame is light-only.", "B3-S01 – B3-S09"],
+  ["L04 · Amharic", "Real Amharic including long strings, in the Home tab, the Help search, the offline form, the bot's night-shift reply and the Widget Designer's content editor. Flagged for native review before i18n keys freeze.", "B3-S02 · B3-S04 · B3-S05 · B3-S08"],
+  ["L11 · 44px touch targets", "Every interactive element at 375 across all nine screen sets, verified frame by frame. The desktop panel uses the approved 36px metric from B1-DS-v2's lightbox addendum.", "B3-S01 – B3-S09"]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rules: RULES.map(r => ({ t: r[0], d: r[1], where: r[2] })),
+      carried: CARRIED.map(c => ({ t: c[0], d: c[1], where: c[2] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px; display: flex; flex-direction: column; gap: 34px;">
+
+  <header style="max-width: 900px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B12-S03-macro-palette-v1</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">Macro and saved-reply palette</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; text-wrap: pretty;">Doc 07 FR-19 · your rulings. <span style="font-family: ui-monospace, monospace; font-size: 13px;">/</span> in the composer opens it; personal macros list before shared ones; fuzzy search; a preview pane; variables resolve live and missing ones are warned. Insertion drops resolved text into the composer for editing — it never sends. Saved replies share this palette. No language switcher: macro language variants are Doc 12's territory, not this batch's. Composer, chips and warning surfaces are taken from <span style="font-family: ui-monospace, monospace; font-size: 13px;">B1-DS</span>.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.65; color: #7E650F; background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 11px 13px; max-width: 900px; text-wrap: pretty;"><strong style="font-weight: 600;">Variable treatment, ruled.</strong> One variable language across the palette and the composer: a brace-free pill, with the warning treatment mandatory wherever a value is missing. Rendering trigger for the record — the literal <span style="font-family: ui-monospace, monospace;">&#x7B;&#x7B;</span> form could not be shown here because the runtime reads that sequence as a template hole and consumes it, so the pill is the single form in both surfaces rather than two notations for one idea.</p>
+  </header>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">1440 — open, personal before shared</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-19 · Insertions</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — nothing typed after the slash</div>
+        <div style="width: 720px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; box-shadow: 0 10px 30px rgba(29,28,24,0.14); overflow: hidden;">
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">/</span>
+              <span style="font-size: 12.5px; color: #726D63; flex: 1 1 auto;">Search macros and saved replies</span>
+              <span style="font-size: 11px; color: #6F6A61;">7</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 300px minmax(0, 1fr);">
+              <div style="border-right: 1px solid #F0EEE9;">
+                <div style="padding: 8px 12px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Yours</div>
+                <div style="padding: 8px 12px; background: #22211D; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #FFFFFF; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal delay — first reply</span><span style="font-size: 10px; font-weight: 600; background: rgba(255,255,255,0.18); color: #FFFFFF; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+                <div style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Ask for the telebirr reference</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+                <div style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Shift handover — night to day</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">SAVED</span></div>
+                <div style="padding: 10px 12px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61; border-top: 1px solid #F0EEE9;">Shared · Payments</div>
+                <div style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposit not credited — investigating</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+                <div style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">KYC documents needed</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+                <div style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bonus terms — wagering</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">SAVED</span></div>
+                <div style="padding: 8px 12px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #1D1C18; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">የክፍያ ማረጋገጫ ጠይቅ</span><span style="font-size: 10px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+              </div>
+              <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 9px;">
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A61;">Preview · variables filled from this ticket</div>
+                <div style="background: #FBFAF8; border: 1px solid #E5E2DB; border-radius: 6px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #1D1C18;">Hi <span style="background: #EEECE6; border-radius: 3px; padding: 0 3px;">አበበ ታደሰ</span>, thanks for your patience. I can see the withdrawal of <span style="background: #EEECE6; border-radius: 3px; padding: 0 3px;">2,500 ETB</span> on <span style="background: #EEECE6; border-radius: 3px; padding: 0 3px;">#4812</span> and I'm checking it with our finance team now.</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                  <span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">customer_name ✓</span>
+                  <span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">amount ✓</span>
+                  <span style="font-size: 10.5px; font-weight: 600; background: #EEECE6; color: #4A4842; border-radius: 4px; padding: 2px 7px;">ticket_id ✓</span>
+                </div>
+                <div style="font-size: 11px; color: #6B675D; line-height: 1.5;">Yours · used 34 times this month · last edited by you on 12 July</div>
+                <div style="margin-top: auto; display: flex; align-items: center; gap: 8px;">
+                  <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">Insert into composer</button>
+                  <span style="font-size: 11px; color: #6B675D;">It lands in the composer for editing. Nothing sends.</span>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; border-top: 1px solid #F0EEE9; background: #FBFAF8; display: flex; gap: 14px; font-size: 10.5px; color: #4A4842;">
+              <span><span style="font-family: ui-monospace, monospace;">↑↓</span> move</span>
+              <span><span style="font-family: ui-monospace, monospace;">↵</span> insert</span>
+              <span><span style="font-family: ui-monospace, monospace;">Esc</span> close</span>
+              <span style="margin-left: auto;">Personal macros always list first</span>
+            </div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 10px 12px;">
+            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+              <span style="font-size: 11.5px; font-weight: 600; background: #EEECE6; color: #1D1C18; border-radius: 6px; padding: 4px 11px;">Reply</span>
+              <span style="font-size: 11.5px; font-weight: 500; color: #6F6A61; padding: 4px 11px;">Note</span>
+            </div>
+            <div style="font-size: 12.5px; color: #1D1C18; min-height: 34px;">/<span style="display: inline-block; width: 1.5px; height: 14px; background: #22211D; vertical-align: -2px; margin-left: 1px;"></span></div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+              <span style="font-size: 13px; color: #6B675D;">📎</span><span style="font-size: 13px; color: #6B675D;">🙂</span><span style="font-size: 11.5px; color: #1D1C18; font-weight: 600;">/ macros</span>
+              <span style="margin-left: auto; display: inline-flex;"><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px 0 0 6px; font-size: 12px; font-weight: 600; padding: 7px 13px; cursor: pointer;">Send reply</button><button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-left: 1px solid rgba(255,255,255,0.28); border-radius: 0 6px 6px 0; font-size: 11px; padding: 7px 9px; cursor: pointer;">▾</button></span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 720px; line-height: 1.5;">Macros and saved replies live in one list and carry a type tag, so an agent hunting for wording does not have to remember which of the two it was.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">Fuzzy search, and a variable the ticket cannot fill</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-19 · missing-variable warnings</span>
+    </div>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark — “wd” fuzzy-matches, and payout_eta has no value</div>
+        <div style="width: 720px; background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 16px;">
+          <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.45); overflow: hidden;">
+            <div style="padding: 9px 12px; border-bottom: 1px solid #262622; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #ECEAE4;">/wd</span>
+              <span style="display: inline-block; width: 1.5px; height: 13px; background: #ECEAE4;"></span>
+              <span style="margin-left: auto; font-size: 11px; color: #9A9588;">2 of 7</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 300px minmax(0, 1fr);">
+              <div style="border-right: 1px solid #262622;">
+                <div style="padding: 8px 12px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Yours</div>
+                <div style="padding: 8px 12px; background: #ECEAE4; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; font-weight: 600; color: #171714; flex: 1 1 auto; min-width: 0;"><strong>W</strong>ith<strong>d</strong>rawal delay — first reply</span><span style="font-size: 10px; font-weight: 600; background: rgba(0,0,0,0.12); color: #171714; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+                <div style="padding: 10px 12px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; border-top: 1px solid #262622;">Shared · Payments</div>
+                <div style="padding: 8px 12px 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 12.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0;">With<strong>d</strong>ra<strong>w</strong>al limits explained</span><span style="font-size: 10px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 3px; padding: 1px 5px;">SAVED</span></div>
+              </div>
+              <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 9px;">
+                <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Preview</div>
+                <div style="background: #171715; border: 1px solid #343430; border-radius: 6px; padding: 10px 12px; font-size: 12.5px; line-height: 1.6; color: #ECEAE4;">Hi <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">አበበ ታደሰ</span>, thanks for your patience. I can see the withdrawal of <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">2,500 ETB</span> on <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">#4812</span>. I'll come back to you within <span style="background: #3A2D10; border: 1px dashed #6B551A; border-radius: 3px; padding: 0 3px; color: #F0B54A;">payout_eta</span>.</div>
+                <div style="background: #3A2D10; border: 1px solid #6B551A; border-radius: 6px; padding: 9px 11px; display: flex; gap: 9px;" role="alert">
+                  <span style="flex: none; font-size: 12px; color: #F0B54A;">⚠</span>
+                  <div style="font-size: 11.5px; color: #F0B54A; line-height: 1.55;"><strong style="font-weight: 700;">payout_eta has no value on this ticket.</strong> Insert anyway and the placeholder comes with it, selected, for you to type over. It is never sent as-is — the send button stays off while a placeholder is unfilled.</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                  <span style="font-size: 10.5px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">customer_name ✓</span>
+                  <span style="font-size: 10.5px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 4px; padding: 2px 7px;">amount ✓</span>
+                  <span style="font-size: 10.5px; font-weight: 600; background: #3A2D10; color: #F0B54A; border-radius: 4px; padding: 2px 7px;">payout_eta — missing</span>
+                </div>
+                <div style="margin-top: auto; display: flex; align-items: center; gap: 8px;">
+                  <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">Insert and fill</button>
+                  <button style="font-family: inherit; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12px; font-weight: 600; min-height: 36px; padding: 0 13px; cursor: pointer;">Edit this macro</button>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; border-top: 1px solid #262622; background: #171715; display: flex; gap: 14px; font-size: 10.5px; color: #C9C5BB;">
+              <span><span style="font-family: ui-monospace, monospace;">↑↓</span> move</span>
+              <span><span style="font-family: ui-monospace, monospace;">↵</span> insert</span>
+              <span><span style="font-family: ui-monospace, monospace;">Esc</span> close</span>
+              <span style="margin-left: auto;">Letters match anywhere in the name</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — nothing matches</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; box-shadow: 0 10px 30px rgba(29,28,24,0.14); overflow: hidden;">
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">/chapa</span><span style="margin-left: auto; font-size: 11px; color: #6F6A61;">0 of 7</span></div>
+            <div style="padding: 22px 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No macro matches “chapa”</div>
+              <div style="font-size: 12px; color: #6B675D; margin: 4px 0 10px; line-height: 1.5;">Keep typing to send it as normal text, or save this reply as a macro once you've written it.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 13px; cursor: pointer;">New macro from this reply</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light — no macros exist yet</div>
+          <div style="width: 420px; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; box-shadow: 0 10px 30px rgba(29,28,24,0.14); overflow: hidden;">
+            <div style="padding: 9px 12px; border-bottom: 1px solid #F0EEE9; display: flex; align-items: center; gap: 8px;"><span style="font-family: ui-monospace, monospace; font-size: 12.5px; color: #1D1C18;">/</span><span style="font-size: 12.5px; color: #726D63; flex: 1 1 auto;">Search macros and saved replies</span></div>
+            <div style="padding: 22px 16px; text-align: center;">
+              <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No macros yet</div>
+              <div style="font-size: 12px; color: #6B675D; margin: 4px 0 10px; line-height: 1.5;">Your team hasn't shared any, and you haven't saved one. The wording you type most is usually the first.</div>
+              <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 7px 13px; cursor: pointer;">Create the first one</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #1B1B18; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 600; margin: 0;">375 — sheet, preview, and what insertion leaves behind</h2>
+      <span style="font-family: ui-monospace, monospace; font-size: 11px; color: #4A4842;">Doc 07 FR-19 · 44px floor</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · palette as a sheet, list first</div>
+        <div style="width: 375px; height: 600px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; padding: 10px 0 14px;">
+            <div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 10px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: ui-monospace, monospace; font-size: 13px; color: #ECEAE4;">/</span>
+              <span style="font-size: 13px; color: #918C80; flex: 1 1 auto;">Search macros</span>
+              <span style="font-size: 11.5px; color: #9A9588;">7</span>
+            </div>
+            <div style="border-top: 1px solid #262622;">
+              <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588;">Yours</div>
+              <div style="padding: 0 16px; min-height: 52px; display: flex; align-items: center; gap: 8px; background: #232320; border-left: 3px solid #ECEAE4;"><span style="font-size: 13.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal delay — first reply</span><span style="font-size: 10px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+              <div style="padding: 0 16px; min-height: 52px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Ask for the telebirr reference</span><span style="font-size: 10px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+              <div style="padding: 8px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9588; border-top: 1px solid #262622;">Shared · Payments</div>
+              <div style="padding: 0 16px; min-height: 52px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Deposit not credited</span><span style="font-size: 10px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+              <div style="padding: 0 16px; min-height: 52px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">የክፍያ ማረጋገጫ ጠይቅ</span><span style="font-size: 10px; font-weight: 600; background: #2F2F29; color: #C9C5BB; border-radius: 3px; padding: 1px 5px;">MACRO</span></div>
+            </div>
+            <div style="padding: 12px 16px 0; display: flex; gap: 8px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Insert</button>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; padding: 0 16px; cursor: pointer;">Preview</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">At 375 the preview is one tap away rather than always on screen — the list is what an agent is scanning, and a phone has room for one of the two.</div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Dark · preview open, missing variable</div>
+        <div style="width: 375px; height: 600px; background: rgba(0,0,0,0.55); border: 1px solid #343430; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+          <div style="background: #1C1C19; border-radius: 16px 16px 0 0; padding: 10px 0 14px;">
+            <div style="width: 36px; height: 4px; background: #45443E; border-radius: 999px; margin: 0 auto 12px;"></div>
+            <div style="padding: 0 16px 10px; display: flex; align-items: center; gap: 8px;">
+              <button aria-label="Back to the list" style="font-family: inherit; background: transparent; border: none; color: #ECEAE4; font-size: 15px; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+              <span style="font-size: 14px; font-weight: 600; color: #ECEAE4; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Withdrawal delay — first reply</span>
+            </div>
+            <div style="padding: 0 16px 12px;">
+              <div style="background: #171715; border: 1px solid #343430; border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; color: #ECEAE4;">Hi <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">አበበ ታደሰ</span>, thanks for your patience. I can see the withdrawal of <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">2,500 ETB</span> on <span style="background: #2F2F29; border-radius: 3px; padding: 0 3px;">#4812</span>. I'll come back to you within <span style="background: #3A2D10; border: 1px dashed #6B551A; border-radius: 3px; padding: 0 3px; color: #F0B54A;">payout_eta</span>.</div>
+            </div>
+            <div style="margin: 0 16px 12px; background: #3A2D10; border: 1px solid #6B551A; border-radius: 8px; padding: 10px 12px; display: flex; gap: 9px;" role="alert">
+              <span style="flex: none; font-size: 12px; color: #F0B54A;">⚠</span>
+              <div style="font-size: 11.5px; color: #F0B54A; line-height: 1.55;">payout_eta has no value here. It comes across selected so your first keystroke replaces it.</div>
+            </div>
+            <div style="padding: 0 16px; display: flex; gap: 8px;">
+              <button style="font-family: inherit; flex: 1 1 auto; background: #ECEAE4; color: #171714; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; cursor: pointer;">Insert and fill</button>
+              <button style="font-family: inherit; flex: none; background: transparent; color: #ECEAE4; border: 1px solid #45443E; border-radius: 10px; font-size: 13px; font-weight: 600; min-height: 48px; padding: 0 16px; cursor: pointer;">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Light · after insertion — in the composer, unsent</div>
+        <div style="width: 375px; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="padding: 8px 12px; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 8px;">
+            <button aria-label="Back" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; padding: 0; text-align: left; cursor: pointer;">←</button>
+            <div style="min-width: 0;"><div style="font-size: 13.5px; font-weight: 600; color: #1D1C18;">አበበ ታደሰ</div><div style="font-size: 11px; color: #6B675D;">#4812 · Telegram</div></div>
+          </div>
+          <div style="padding: 14px; background: #FBFAF8; display: flex; flex-direction: column; gap: 9px;">
+            <div style="align-self: flex-start; max-width: 78%; background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px 10px 10px 3px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: #1D1C18;">ገንዘቤ አልደረሰኝም።</div>
+          </div>
+          <div style="padding: 10px 12px 14px; border-top: 1px solid #E5E2DB; background: #FFFFFF;">
+            <div style="border: 1.5px solid #22211D; border-radius: 12px; padding: 11px 13px; font-size: 13px; line-height: 1.6; color: #1D1C18;">Hi አበበ ታደሰ, thanks for your patience. I can see the withdrawal of 2,500 ETB on #4812. I'll come back to you within <span style="background: #22211D; color: #FFFFFF; border-radius: 3px; padding: 0 4px;">payout_eta</span>.</div>
+            <div style="background: #FCF0D9; border: 1px solid #E8CF9B; border-radius: 8px; padding: 9px 11px; margin-top: 9px; font-size: 11.5px; color: #8F5F08; line-height: 1.5;" role="status">One placeholder still to fill — it is selected, so type over it. Send stays off until it's gone.</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+              <button aria-label="Attach" style="font-family: inherit; background: transparent; border: none; font-size: 17px; color: #1D1C18; min-width: 44px; min-height: 44px; cursor: pointer;">＋</button>
+              <span style="font-size: 12px; color: #6B675D; flex: 1 1 auto;">Draft saved</span>
+              <button aria-label="Send reply — unavailable while a placeholder is unfilled" aria-disabled="true" style="font-family: inherit; flex: none; background: #EEECE6; color: #8C877C; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 15px; cursor: not-allowed;">➤</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #4A4842; margin-top: 5px; max-width: 375px; line-height: 1.5;">Insertion is the end of the palette's job. The reply sits in the composer, editable, unsent — and a half-finished macro cannot leave by accident.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

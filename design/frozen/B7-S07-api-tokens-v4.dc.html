@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #2F5AC8; }
+  a:hover { color: #1E3E92; }
+</style>
+</helmet>
+
+<div style="padding: 40px 32px 100px;">
+
+  <header style="max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #1B1B18; color: #F4F3F1; padding: 4px 8px; border-radius: 3px;">B7-S07-api-tokens-v4</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; background: #FCF0D9; border: 1px solid #E8CF9B; color: #8F5F08; padding: 4px 8px; border-radius: 3px;">Section G · 11 rows · v4 · dark frame added</span>
+      <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0;">API tokens — personal and machine</h1>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">A token is a credential with a face: someone owns it, it can do a named subset of what that person can do, and it was last used at a particular moment. Design the list around those three and token sprawl becomes visible instead of invisible — which is the whole point, since the risk here is not a dramatic breach but forty forgotten tokens nobody can account for.</p>
+    <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #4A4842; max-width: 900px; text-wrap: pretty;">The rule that shapes every screen: a token can never exceed its owner's live permissions. Not at creation — at every request. So the scope picker shows what the owner actually holds, and the list says out loud that losing a permission quietly narrows the token within ten seconds.</p>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #6B6862; max-width: 900px;">Profile → API tokens, same shell as Section F. Permission keys are the Doc 03 catalog verbatim.</p>
+  </header>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§A</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The list — 1440, and what it makes obvious</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G01 · G05 · G08 · G11 · Doc 02 FR-18, T-05, EC-06, R-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Last-used is a column, not a detail on a sub-page — a token unused for four months is the one to ask about, and it should be visible without clicking anything. Scopes are shown as the real keys rather than a count, because “3 scopes” tells an auditor nothing and <code style="font-family: ui-monospace, monospace; font-size: 12px;">tickets.reply</code> tells them everything.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Light · 1440 × 900 · three personal tokens</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G01 · G05 · G08 · G11</span></div>
+    <div data-screen-label="G01 tokens list light en" style="width: 1440px; height: 900px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #6B675D; border: 1px dashed #CFCBC1; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="flex: 1; max-width: 380px; display: flex; align-items: center; gap: 6px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #726D63;">⌕ Search…<span style="margin-left: auto; font-size: 10px; border: 1px solid #E5E2DB; border-radius: 4px; padding: 1px 5px;">⌘K</span></span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #4A4842; border: 1px solid #E5E2DB; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #22A55B;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEECE6; color: #6B675D; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">DB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 214px; flex: none; background: #FFFFFF; border-right: 1px solid #E5E2DB; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6F6A61; padding: 0 10px 8px;">My profile</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #4A4842;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Details</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #EEECE6; color: #1D1C18;">API tokens</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div>
+              <div style="font-size: 11.5px; color: #6B675D;">My profile · API tokens</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #1D1C18;">Your API tokens</h1>
+            </div>
+            <button style="font-family: inherit; margin-left: auto; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Create token</button>
+          </div>
+
+          <div style="background: #EDEEF2; border: 1px solid #D5D8DE; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #4A5460;">A token can never do more than you can. If a permission is taken away from your role, every token of yours loses it too — within about ten seconds, without anyone editing the token.</div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) 120px 150px 100px; background: #F6F5F2; border-bottom: 1px solid #E5E2DB;">
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Name</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Can do</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Expires</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61;">Last used</span>
+              <span style="padding: 9px 12px;"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) 120px 150px 100px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Daily SLA export</span>
+              <span style="padding: 12px; display: flex; gap: 5px; flex-wrap: wrap;"><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px; color: #4A4842;">reports.view</code><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px; color: #4A4842;">tickets.read</code></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">4 Nov 2026</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">Today 06:00</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) 120px 150px 100px; border-bottom: 1px solid #F0EEE9; align-items: center;">
+              <span style="padding: 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Zendesk migration script</span>
+              <span style="padding: 12px; display: flex; gap: 5px; flex-wrap: wrap;"><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px; color: #4A4842;">tickets.read</code><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px; color: #4A4842;">customers.read</code></span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">No expiry</span>
+              <span style="padding: 12px; font-size: 12px; color: #6B675D;">4 months ago</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) 120px 150px 100px; align-items: center;">
+              <span style="padding: 12px; font-size: 12.5px; font-weight: 600; color: #1D1C18;">Grafana health poller</span>
+              <span style="padding: 12px; display: flex; gap: 5px; flex-wrap: wrap;"><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 2px 6px; color: #4A4842;">telegram.health.view</code></span>
+              <span style="padding: 12px; font-size: 12px; color: #8E2222; font-weight: 600;">In 6 days</span>
+              <span style="padding: 12px; font-size: 12px; color: #4A4842;">11 minutes ago</span>
+              <span style="padding: 12px;"><button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+          </div>
+
+          <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #7E650F; display: flex; gap: 9px;"><span style="flex: none; font-weight: 700;">◈</span><span><strong style="font-weight: 600;">One token hasn't been used in four months.</strong> If the migration is finished, revoke it — an unused token is all risk and no benefit.</span></div>
+          <div style="margin-top: auto; font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61;">G11 — last-used earns a column. G08 — the ten-second bound is stated, not implied.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§B</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Creating one — scope, expiry, and the second show-once</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G02 · G03 · G04 · Doc 02 FR-18 · Doc 03 §4.1</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The scope list is the person's own permissions, not the whole catalog — you cannot grant what you do not hold, and showing keys you could never select would be an invitation to file a support ticket. Keys the owner lacks appear greyed with the reason, so “why can't I pick that?” is answered in place. The token itself then follows the recovery-code contract exactly: shown once, copyable, and the screen says so before it says anything else.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Create a token</h2>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">What is it for?</label>
+            <input type="text" value="Nightly deposits reconciliation" readonly="readonly" style="font-family: inherit; width: 100%; background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 6px; padding: 9px 11px; font-size: 13px; color: #1D1C18; min-height: 38px;" />
+            <div style="font-size: 11px; color: #6B675D; margin-top: 5px;">You'll thank yourself in six months. “Test” is not a name.</div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 5px;">Expires</label>
+            <div style="display: flex; gap: 6px;">
+              <span style="font-size: 12px; font-weight: 500; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 12px;">30 days</span>
+              <span style="font-size: 12px; font-weight: 600; color: #FFFFFF; background: #22211D; border-radius: 6px; padding: 8px 12px;">90 days</span>
+              <span style="font-size: 12px; font-weight: 500; color: #4A4842; border: 1px solid #CFCBC1; border-radius: 6px; padding: 8px 12px;">365 days</span>
+              <span style="font-size: 12px; font-weight: 500; color: #ADA89D; border: 1px solid #E5E2DB; border-radius: 6px; padding: 8px 12px;">Never</span>
+            </div>
+            <div style="font-size: 11px; color: #6B675D; margin-top: 5px;">Selam Bet's policy doesn't allow non-expiring personal tokens.</div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 600; color: #4A4842; margin-bottom: 6px;">What it may do — 2 of your 47 permissions</label>
+            <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; width: 15px; height: 15px; border: 1px solid #22211D; border-radius: 4px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span><code style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18;">tickets.read</code><span style="margin-left: auto; font-size: 11px; color: #6B675D;">Read tickets in your department</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; width: 15px; height: 15px; border: 1px solid #22211D; border-radius: 4px; background: #22211D; color: #FFFFFF; font-size: 10px; display: inline-flex; align-items: center; justify-content: center;">✓</span><code style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18;">reports.view</code><span style="margin-left: auto; font-size: 11px; color: #6B675D;">Open saved reports</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-bottom: 1px solid #F0EEE9;"><span style="flex: none; width: 15px; height: 15px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF;"></span><code style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #1D1C18;">tickets.reply</code><span style="margin-left: auto; font-size: 11px; color: #6B675D;">Send replies as you</span></div>
+              <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; background: #F6F5F2;"><span style="flex: none; width: 15px; height: 15px; border: 1px solid #E5E2DB; border-radius: 4px; background: #EEECE6;"></span><code style="font-family: ui-monospace, monospace; font-size: 11.5px; color: #ADA89D;">admin.users.manage</code><span style="margin-left: auto; font-size: 11px; color: #6B675D;">You don't have this permission</span></div>
+            </div>
+          </div>
+          <button style="font-family: inherit; width: 100%; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Create token</button>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">G02 · G03 · light · en · keys you don't hold are visible but unselectable, with the reason</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4;">Copy your token now</h2>
+          <div style="background: #2C2612; border: 1px solid #6B551A; border-radius: 7px; padding: 11px 12px; font-size: 12px; line-height: 1.6; color: #E8C25A; display: flex; gap: 9px;"><span style="flex: none; font-weight: 700;">◈</span><span><strong style="font-weight: 600;">This is the only time it is shown.</strong> We store a hash, not the token — if you lose it, revoke it and make another. There is no “show again”.</span></div>
+          <div>
+            <code style="display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: #ECEAE4; background: #232320; border: 1px solid #45443E; border-radius: 6px; padding: 12px; word-break: break-all;">slb_pat_9fK2mQ7xR4tL8vB3nZ6wY1jH5sD0aG</code>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Copy token</button>
+              <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 14px; min-height: 36px; cursor: pointer;">Download as file</button>
+            </div>
+          </div>
+          <div style="background: #232320; border-left: 3px solid #45443E; border-radius: 0 6px 6px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #C9C5BB;">Nightly deposits reconciliation · expires 1 November 2026 · <code style="font-family: ui-monospace, monospace; font-size: 11px;">tickets.read</code> and <code style="font-family: ui-monospace, monospace; font-size: 11px;">reports.view</code>. Its creation is recorded in the audit trail under your name.</div>
+          <label style="display: flex; align-items: flex-start; gap: 9px; cursor: pointer;">
+            <span style="flex: none; width: 16px; height: 16px; border: 1px solid #45443E; border-radius: 4px; background: #232320; margin-top: 1px;"></span>
+            <span style="font-size: 12.5px; font-weight: 500; color: #ECEAE4;">I've stored it somewhere safe</span>
+          </label>
+          <button disabled="disabled" style="font-family: inherit; width: 100%; background: #282822; color: #6B6860; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px;">Done</button>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">G04 · dark · en · the same show-once contract as recovery codes, deliberately</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§C</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">Machine tokens and rotation with no downtime</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G06 · G07 · Doc 02 FR-19, BR-03, SS-04</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">A machine token belongs to a service account with its own role and its own name in the audit trail — never to a person who might leave, and never to “the system”. Rotation is three states rather than a button: create the replacement, run both through an overlap you choose, then revoke the old one. The overlap is the whole point, and the screen counts it down so nobody forgets step three.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <div>
+              <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18;">Machine tokens</h2>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Backoffice · Integrations · admin only</div>
+            </div>
+            <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 8px 13px; min-height: 36px; cursor: pointer;">New service account</button>
+          </div>
+          <div style="border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 12px; border-bottom: 1px solid #F0EEE9;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 600; color: #1D1C18;">svc.payments-reconciler</span>
+                <span style="font-size: 10.5px; font-weight: 600; color: #4A4842; background: #EEECE6; border-radius: 999px; padding: 3px 8px;">Service account · cannot sign in</span>
+              </div>
+              <div style="font-size: 11.5px; line-height: 1.6; color: #6B675D; margin-top: 5px;">Role: <strong style="font-weight: 600; color: #4A4842;">Integration — payments</strong> · <code style="font-family: ui-monospace, monospace; font-size: 11px;">tickets.read</code> <code style="font-family: ui-monospace, monospace; font-size: 11px;">customers.read</code> · created by Hanna Girma, 14 Jun 2026</div>
+              <div style="font-size: 11.5px; color: #6B675D; margin-top: 3px;">Appears in the audit trail as <strong style="font-weight: 600; color: #4A4842;">svc.payments-reconciler</strong>, never as “the system”.</div>
+            </div>
+            <div style="padding: 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 12px; color: #4A4842;">Last used 2 minutes ago · expires 14 Jun 2027</span>
+              <button style="font-family: inherit; margin-left: auto; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Rotate</button>
+              <button style="font-family: inherit; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">G06 · light · en · the account is visible, so the audit trail names something real</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4;">Rotating svc.payments-reconciler</h2>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 11px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #ECEAE4; color: #171714; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">✓</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">New token created</div><div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Shown once, 09:14. Same role, same scopes.</div></div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #2C2612; border: 1px solid #6B551A; color: #E8C25A; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">2</span>
+              <div style="flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">Both tokens work — overlap ends in 46 hours</div><div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Deploy the new one, watch your integration, then finish. The old token has been used 312 times since the overlap started.</div></div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #232320; border: 1px solid #45443E; color: #A6A296; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">3</span>
+              <div><div style="font-size: 12.5px; font-weight: 600; color: #A6A296;">Revoke the old token</div><div style="font-size: 11.5px; line-height: 1.6; color: #A6A296;">Available now. Automatic when the overlap ends.</div></div>
+            </div>
+          </div>
+          <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.65; color: #A7B2BE;">Still 312 calls a day on the old token — revoking now would break something. The count is the check nobody remembers to do manually.</div>
+          <div style="display: flex; gap: 8px;">
+            <button style="font-family: inherit; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">Revoke the old token</button>
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 8px 12px; min-height: 36px; cursor: pointer;">Extend the overlap</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">G07 · dark · en · every step audited; the usage count is the safety rail</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§D</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The three refusals, the empty list, and the phone</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">G09 · G10 · Doc 02 FR-20, AC-05, §9</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">The API's refusals are read by a developer at a terminal, not by an agent — so they are designed as responses, with the missing permission named. That last part is the difference between a ten-minute fix and an afternoon: <code style="font-family: ui-monospace, monospace; font-size: 12px;">insufficient_scope</code> that names <code style="font-family: ui-monospace, monospace; font-size: 12px;">tickets.reply</code> tells you exactly which checkbox to tick. The docs page in the empty state exists for the same reason.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; align-items: start;">
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4;">G09 · what the API answers</div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div style="font-size: 11px; font-weight: 600; color: #F5A7A7; margin-bottom: 6px;">401 · invalid_token</div>
+          <code style="display: block; font-family: ui-monospace, monospace; font-size: 11.5px; line-height: 1.7; color: #C9C5BB; white-space: pre;">{
+  "error": "invalid_token",
+  "message": "This token is not recognised.",
+  "trace_id": "01J9F2K7QX"
+}</code>
+        </div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div role="alert" style="font-size: 11px; font-weight: 600; color: #F5A7A7; margin-bottom: 6px;">401 · token_expired</div>
+          <code style="display: block; font-family: ui-monospace, monospace; font-size: 11.5px; line-height: 1.7; color: #C9C5BB; white-space: pre;">{
+  "error": "token_expired",
+  "message": "This token expired on 2026-08-01.",
+  "trace_id": "01J9F2K8B3"
+}</code>
+        </div>
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 8px; padding: 14px;">
+          <div role="alert" style="font-size: 11px; font-weight: 600; color: #E8C25A; margin-bottom: 6px;">403 · insufficient_scope</div>
+          <code style="display: block; font-family: ui-monospace, monospace; font-size: 11.5px; line-height: 1.7; color: #C9C5BB; white-space: pre;">{
+  "error": "insufficient_scope",
+  "message": "This token cannot reply to tickets.",
+  "missing_permission": "tickets.reply",
+  "trace_id": "01J9F2K9M1"
+}</code>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; line-height: 1.6;">The missing key is named — AC-05's requirement, and the one field that saves an afternoon.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; padding: 24px 16px; text-align: center;">
+            <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">No tokens yet</div>
+            <div style="font-size: 12px; line-height: 1.6; color: #6B675D; margin: 5px auto 12px; max-width: 300px;">A token lets a script or a service act with a slice of your permissions — a nightly export, a dashboard, a migration.</div>
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 8px 13px; min-height: 36px; cursor: pointer;">Create your first token</button>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 8px; overflow: hidden; margin-top: 12px;">
+            <div style="padding: 12px; border-bottom: 1px solid #F0EEE9;"><div style="height: 9px; width: 42%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 66%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+            <div style="padding: 12px;"><div style="height: 9px; width: 50%; background: #EEECE6; border-radius: 3px;"></div><div style="height: 8px; width: 58%; background: #F2F1ED; border-radius: 3px; margin-top: 7px;"></div></div>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">G10 · empty and loading, light</div>
+        </div>
+
+        <div>
+          <div style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862; margin-bottom: 8px;">375 × 812 · light · en · the list on a phone</div>
+          <div data-screen-label="G01 tokens light en mobile" style="width: 375px; height: 812px; background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.08);">
+            <div style="height: 28px; flex: none; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: #6B675D; padding: 0 16px;">10:24<span style="margin-left: auto;">▮▮▮</span></div>
+            <div style="height: 48px; flex: none; background: #FFFFFF; border-bottom: 1px solid #E5E2DB; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+              <button aria-label="Back" style="font-family: inherit; width: 44px; height: 44px; background: transparent; border: none; color: #1D1C18; font-size: 15px; cursor: pointer;">←</button>
+              <div style="min-width: 0;"><div style="font-size: 10.5px; color: #6B675D;">My profile</div><div style="font-size: 14px; font-weight: 600; color: #1D1C18;">API tokens</div></div>
+            </div>
+            <div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Daily SLA export</div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px;"><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 3px 7px; color: #4A4842;">reports.view</code><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 3px 7px; color: #4A4842;">tickets.read</code></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 7px;">Used today 06:00 · expires 4 Nov</div>
+                <button style="font-family: inherit; width: 100%; margin-top: 10px; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 13px; font-weight: 500; padding: 11px; min-height: 44px; cursor: pointer;">Revoke</button>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">Zendesk migration script</div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px;"><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 3px 7px; color: #4A4842;">tickets.read</code><code style="font-family: ui-monospace, monospace; font-size: 10.5px; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 4px; padding: 3px 7px; color: #4A4842;">customers.read</code></div>
+                <div style="font-size: 11.5px; color: #6B675D; margin-top: 7px;">Last used 4 months ago · no expiry</div>
+                <button style="font-family: inherit; width: 100%; margin-top: 10px; background: transparent; color: #B32B2B; border: 1px solid #E3B6B6; border-radius: 6px; font-size: 13px; font-weight: 500; padding: 11px; min-height: 44px; cursor: pointer;">Revoke</button>
+              </div>
+              <div style="background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 8px; padding: 11px 12px; font-size: 11.5px; line-height: 1.6; color: #7E650F;"><strong style="font-weight: 600;">One token unused for four months.</strong> Revoke it if the migration is done.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§F</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">The token list in dark — last-used is the column that matters</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">v4 · G01 · G05 · G08 · G11 · Doc 02 FR-18, R-03</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">Added after <a href="B7-S22-cross-cutting-v1.dc.html">Section V</a> measured that this file had dark dialogs but no dark rendering of the list. The state pills here are the point: <em>Active</em>, <em>Paused</em> and <em>Revoked</em> are B1-DS fixed tokens, and on dark they take the table's own dark column — not the light values, and not something mixed to sit nicely against the shell.</p>
+
+    <div style="margin-top: 16px; display: flex; align-items: baseline; gap: 10px;"><h3 style="font-size: 14px; font-weight: 600; margin: 0;">Dark · 1440 × 900 · four personal tokens, two machine tokens</h3><span style="font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">state pills from B1-DS §2 dark column</span></div>
+    <div data-screen-label="G01 tokens list dark en" style="width: 1440px; height: 900px; background: #141412; border: 1px solid #343430; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 14px rgba(0,0,0,0.18); margin-top: 10px;">
+      <div style="height: 52px; flex: none; background: #1C1C19; border-bottom: 1px solid #343430; display: flex; align-items: center; gap: 14px; padding: 0 16px;">
+        <span style="font-size: 12px; font-weight: 600; color: #A6A296; border: 1px dashed #45443E; border-radius: 5px; padding: 3px 9px;">Selam Bet logo</span>
+        <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; color: #C9C5BB; border: 1px solid #45443E; border-radius: 999px; padding: 4px 10px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3ECB80;"></span>Online</span>
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #282822; color: #A6A296; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600;">SB</span>
+      </div>
+      <div style="flex: 1; display: flex; min-height: 0;">
+        <nav style="width: 214px; flex: none; background: #1C1C19; border-right: 1px solid #343430; padding: 12px 10px;">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #9A9588; padding: 0 10px 8px;">My profile</div>
+          <div style="display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: #C9C5BB;">
+            <span style="padding: 7px 10px; border-radius: 6px;">Details</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Security</span>
+            <span style="padding: 7px 10px; border-radius: 6px;">Notifications</span>
+            <span style="padding: 7px 10px; border-radius: 6px; font-weight: 600; background: #2F2F29; color: #ECEAE4;">API tokens</span>
+          </div>
+        </nav>
+        <div style="flex: 1; padding: 18px 22px; min-width: 0; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 11.5px; color: #A6A296;">My profile · API tokens</div>
+              <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin: 2px 0 0; color: #ECEAE4;">Tokens</h1>
+            </div>
+            <button style="font-family: inherit; margin-left: auto; background: #ECEAE4; color: #171714; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 14px; min-height: 36px; cursor: pointer;">New token</button>
+          </div>
+          <div style="background: #1C1C19; border: 1px solid #45443E; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) 118px 128px 96px; background: #232320; border-bottom: 1px solid #45443E;">
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Name</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Scopes</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Expires</span>
+              <span style="padding: 9px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #9A9588;">Last used</span>
+              <span style="padding: 9px 12px;"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) 118px 128px 96px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 11px 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">reporting-dashboard</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #5AD190; margin-top: 5px;"><span style="font-size: 8px;">●</span>Active</span></span>
+              <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; line-height: 1.6;">reports.read<br />conversations.read</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">12 Nov 2026</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">2 hours ago</span>
+              <span style="padding: 11px 12px;"><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) 118px 128px 96px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 11px 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">svc.payments-reconciler</span><span style="display: inline-flex; align-items: center; gap: 6px; margin-top: 5px;"><span style="display: inline-flex; align-items: center; gap: 5px; background: #123322; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #5AD190;"><span style="font-size: 8px;">●</span>Active</span><span style="font-size: 10px; color: #A6A296;">machine · svc account</span></span></span>
+              <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB; line-height: 1.6;">payments.read<br />payments.reconcile</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">No expiry</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">4 minutes ago</span>
+              <span style="padding: 11px 12px;"><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) 118px 128px 96px; border-bottom: 1px solid #262622; align-items: center;">
+              <span style="padding: 11px 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #ECEAE4;">telegram-bridge-staging</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #3A2D10; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #F0B54A; margin-top: 5px;"><span style="font-size: 8px;">●</span>Paused</span></span>
+              <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #C9C5BB;">conversations.write</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #C9C5BB;">3 Sep 2026</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #F0B54A;">Never used</span>
+              <span style="padding: 11px 12px;"><button style="font-family: inherit; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 11.5px; font-weight: 500; padding: 7px 11px; min-height: 36px; cursor: pointer;">Revoke</button></span>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) 118px 128px 96px; align-items: center; opacity: 0.72;">
+              <span style="padding: 11px 12px; min-width: 0;"><span style="display: block; font-size: 12.5px; font-weight: 600; color: #C9C5BB;">old-export-script</span><span style="display: inline-flex; align-items: center; gap: 5px; background: #3D1B1B; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #F08A8A; margin-top: 5px;"><span style="font-size: 8px;">●</span>Revoked</span></span>
+              <span style="padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 11px; color: #A6A296;">exports.read</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #A6A296;">—</span>
+              <span style="padding: 11px 12px; font-size: 12px; color: #A6A296;">14 Jun 2026</span>
+              <span style="padding: 11px 12px;"></span>
+            </div>
+          </div>
+          <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: #A7B2BE;">A token can never do more than you can. If a permission is taken off your role, every token you own loses it within ten seconds — including the two machine tokens above.</div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1180px; margin-top: 10px; font-size: 12.5px; line-height: 1.7; color: #4A4842;">The three state pills take B1-DS §2's dark column verbatim — Active <code style="font-family: ui-monospace, monospace; font-size: 12px;">#123322</code>/<code style="font-family: ui-monospace, monospace; font-size: 12px;">#5AD190</code>, Paused <code style="font-family: ui-monospace, monospace; font-size: 12px;">#3A2D10</code>/<code style="font-family: ui-monospace, monospace; font-size: 12px;">#F0B54A</code>, Revoked <code style="font-family: ui-monospace, monospace; font-size: 12px;">#3D1B1B</code>/<code style="font-family: ui-monospace, monospace; font-size: 12px;">#F08A8A</code>. One treatment that is not an inversion: the revoked row keeps its <code style="font-family: ui-monospace, monospace; font-size: 12px;">0.72</code> opacity but loses its revoke button entirely rather than showing a disabled one — there is nothing left to do to it, and G11's point is that <em>Never used</em> in the last-used column is the sprawl signal worth reading, which is why it carries the amber rather than the muted grey.</div>
+  </section>
+
+  <section style="margin-top: 30px; max-width: 1180px;">
+    <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-radius: 10px; padding: 16px 18px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #1D1C18;">Delivery note</h2>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">v4 — 3 August: the token list never rendered dark.</strong> Dark dialogs shipped from v1 but no dark frame of the list, and the notes read as complete; found by Section V. §F adds it with the three state pills on B1-DS §2’s dark column. <strong style="font-weight: 600;">v3</strong> added <code style="font-family: ui-monospace, monospace; font-size: 12px;">role="alert"</code> to both scope errors.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Delivered:</strong> all eleven rows. G01, G05, G08 and G11 in §A; G02, G03 and G04 in §B; G06 and G07 in §C; G09 and G10 in §D, with the phone frame beside them. Permission keys are the Doc 03 catalog verbatim — nothing invented.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">One row is English-only, and I am flagging it rather than hiding it.</strong> The three API responses in §D are JSON bodies read by developers; their <code style="font-family: ui-monospace, monospace; font-size: 12px;">message</code> fields are English because Doc 02 §14 scopes localization to the <code style="font-family: ui-monospace, monospace; font-size: 12px;">auth.*</code> UI strings and Doc 01's error format is machine-facing. Every human-facing string in this section is in both languages. If you want the API messages localized too, that is a documents question for the owner, not a design change I should make alone.</p>
+      <p style="margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Deviations, flagged:</strong> none. No new colour, no new component; the token panel reuses the show-once pattern from Section C and the rotation steps reuse the wizard step markers.</p>
+      <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #4A4842; max-width: 920px;"><strong style="font-weight: 600;">Next on your word:</strong> Section H — the five administrator actions on the frozen profile, and the minimal user list you authorised at H08–H15.</p>
+    </div>
+  </section>
+
+  <section style="margin-top: 36px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #1B1B18; max-width: 1180px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 13px; font-weight: 600;">§E</span>
+      <h2 style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">አማርኛ — revoke, rotation, and the show-once screen</h2>
+      <span style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: #6B6862;">v2 reopen · G04 · G05 · G07 · tier row 4b</span>
+    </div>
+    <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.65; color: #4A4842; max-width: 900px; text-wrap: pretty;">v1 shipped English-only, against the program rule. These are the section's destructive strings in Amharic at full length — not squeezed to fit the English layout. Two places needed real change rather than translation, and both are named beneath the frames.</p>
+
+    <div style="max-width: 1180px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4; line-height: 1.45;">“svc.payments-reconciler”ን መሻር?</h2>
+          <div style="background: #3D1B1B; border: 1px solid #6B3838; border-radius: 8px; padding: 12px 13px; font-size: 12px; line-height: 1.85; color: #F5A7A7;">ይህ ቶክን ወዲያውኑ ይሻራል። በዚህ ቶክን የሚሠራ ማንኛውም ውህደት <strong style="font-weight: 600;">በሚቀጥለው ጥሪ ላይ ወዲያውኑ ይቆማል</strong> — የክፍያ ማስታረቅ ሥራውን ጨምሮ። ይህን መመለስ አይቻልም፤ አዲስ ቶክን መፍጠር ብቻ ነው የሚቻለው።</div>
+          <div style="background: #232320; border: 1px solid #45443E; border-radius: 8px; padding: 12px; font-size: 11.5px; line-height: 1.85; color: #C9C5BB;">ከመሻርዎ በፊት ማሽከርከር ይሻላል፦ አዲስ ቶክን ፈጥረው፣ ሁለቱም በሚሠሩበት የመሸጋገሪያ ጊዜ ውስጥ ውህደቱን አዘምነው፣ ከዚያ አሮጌውን ይሻሩ። ያኔ ምንም አገልግሎት አይቋረጥም።</div>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid #262622; padding-top: 13px;">
+            <button style="font-family: inherit; background: transparent; color: #A6A296; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 12px; min-height: 36px; cursor: pointer; line-height: 1.6;">ተወው</button>
+            <button style="font-family: inherit; background: #1C1C19; color: #ECEAE4; border: 1px solid #45443E; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">በምትኩ አሽከርክር</button>
+            <button style="font-family: inherit; margin-left: auto; background: transparent; color: #F08A8A; border: 1px solid #6B3838; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">አሁኑኑ ሻር</button>
+          </div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">G05 · dark · am · the safe way out sits first, the destructive one alone at the far end</div>
+      </div>
+
+      <div style="background: #141412; border: 1px solid #343430; border-radius: 10px; padding: 18px;">
+        <div style="background: #1C1C19; border: 1px solid #343430; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #ECEAE4; line-height: 1.45;">svc.payments-reconciler በማሽከርከር ላይ</h2>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 11px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #ECEAE4; color: #171714; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">✓</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">አዲስ ቶክን ተፈጥሯል</div><div style="font-size: 11.5px; line-height: 1.85; color: #A6A296;">በ09:14 አንድ ጊዜ ብቻ ታይቷል። ተመሳሳይ ሚናና ተመሳሳይ ፈቃዶች።</div></div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #2C2612; border: 1px solid #6B551A; color: #E8C25A; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">2</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">ሁለቱም እየሠሩ ናቸው — 6 ሰዓት ከ12 ደቂቃ ይቀራል</div><div style="font-size: 11.5px; line-height: 1.85; color: #A6A296;">ውህደትዎን አሁን ወደ አዲሱ ቶክን ያዘምኑ። በዚህ ጊዜ ውስጥ ሁለቱም ይሠራሉ።</div></div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: flex-start; opacity: 0.55;">
+              <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #45443E; color: #A6A296; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">3</span>
+              <div style="min-width: 0;"><div style="font-size: 12.5px; font-weight: 600; color: #ECEAE4; line-height: 1.6;">አሮጌውን ቶክን መሻር</div><div style="font-size: 11.5px; line-height: 1.85; color: #A6A296;">የመሸጋገሪያው ጊዜ ሲያልቅ አሮጌው በራሱ ይሻራል — ወይም አሁኑኑ ይሻሩት።</div></div>
+            </div>
+          </div>
+          <div style="background: #262C33; border: 1px solid #3A424B; border-radius: 7px; padding: 10px 12px; font-size: 11.5px; line-height: 1.85; color: #A7B2BE;">ሦስቱም ደረጃዎች በኦዲት መዝገብ ውስጥ በእርስዎ ስም ይመዘገባሉ።</div>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #9A9588; margin-top: 9px;">G07 · dark · am · step 2 carries the longest line and the card grew to hold it</div>
+      </div>
+    </div>
+
+    <div style="max-width: 1180px; margin-top: 14px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px;">
+      <div style="background: #F6F5F2; border: 1px solid #CFCBC1; border-radius: 10px; padding: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 13px;">
+          <div>
+            <h2 style="font-size: 15px; font-weight: 600; margin: 0; color: #1D1C18; line-height: 1.45;">ቶክኑን አሁን ይቅዱ</h2>
+            <div style="font-size: 12.5px; line-height: 1.85; color: #4A4842; margin-top: 6px;">ይህ ቶክን የሚታየው <strong style="font-weight: 600;">አሁን አንድ ጊዜ ብቻ ነው</strong>። ይህን መስኮት ከዘጉ በኋላ እኛም እንኳ ልናሳይዎት አንችልም።</div>
+          </div>
+          <code style="display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.7; color: #1D1C18; background: #F6F5F2; border: 1px solid #E5E2DB; border-radius: 6px; padding: 12px; word-break: break-all;">nls_pat_7Kx2mQ9vRt4bYw8ZaLc3EfHj</code>
+          <div style="display: flex; gap: 8px;">
+            <button style="font-family: inherit; background: #22211D; color: #FFFFFF; border: none; border-radius: 6px; font-size: 12.5px; font-weight: 600; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">ቅዳ</button>
+            <button style="font-family: inherit; background: #FFFFFF; color: #1D1C18; border: 1px solid #CFCBC1; border-radius: 6px; font-size: 12.5px; font-weight: 500; padding: 9px 14px; min-height: 36px; cursor: pointer; line-height: 1.6;">አውርድ</button>
+          </div>
+          <label style="display: flex; align-items: flex-start; gap: 9px; border-top: 1px solid #F0EEE9; padding-top: 13px; cursor: pointer;">
+            <span style="flex: none; width: 16px; height: 16px; border: 1px solid #CFCBC1; border-radius: 4px; background: #FFFFFF; margin-top: 3px;"></span>
+            <span style="font-size: 12.5px; line-height: 1.8; color: #1D1C18;">ቶክኑን አስቀምጫለሁ</span>
+          </label>
+        </div>
+        <div style="font-family: ui-monospace, monospace; font-size: 10.5px; color: #6F6A61; margin-top: 9px;">G04 · light · am · the show-once contract, in the language it has to be believed in</div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #CFCBC1; border-left: 4px solid #8F5F08; border-radius: 10px; padding: 16px 18px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1D1C18;">v2 — what expansion broke, and what I changed</div>
+        <p style="margin: 8px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">The revoke dialog's button row.</strong> Cancel · rotate instead · revoke now fits English on one line; the Amharic runs about a fifth longer and the middle button collided with the danger button. Rather than shortening the Amharic, the row wraps and the destructive button is pushed to the far end by its own margin — so it is never adjacent to the button someone actually wants.</p>
+        <p style="margin: 9px 0 0; font-size: 12.5px; line-height: 1.7; color: #4A4842;"><strong style="font-weight: 600;">The rotation step list.</strong> Step 2 carries a countdown and an instruction; in Amharic at 1.85 line-height it took a third line and pushed step 3 toward the card edge. Row gaps went 10 → 12 px and every step sizes to its content, so the card grows instead of clipping — the correct direction, since the alternative was truncating the one instruction that prevents an outage.</p>
+        <p style="margin: 9px 0 0; font-size: 11.5px; line-height: 1.65; color: #6B675D; border-top: 1px solid #F0EEE9; padding-top: 10px;">Both are layout corrections, not copy compromises. No Amharic string here was shortened to fit a frame. G and H stay ❌ in the audit until your deferred clearance lines cover them.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>
