@@ -92,6 +92,17 @@ Route::group([], function (): void {
             // permission-exempt like logout; the mutations audit through the
             // revoker (auth.session.revoked per session) plus the always-fired
             // bulk entry (auth.session.revoked_others).
+            // §8's timeout warning (step 13): the deadline heartbeat. A GET
+            // that mutates nothing beyond what EVERY staff request already
+            // does — EnforceSessionLifetime, ahead of it in this stack, rolls
+            // the idle clock; the absolute clock is untouchable by design (see
+            // the controller). Self-service, permission-exempt like the
+            // sessions routes; the sentinel also uses it as its known-good
+            // probe to tell a dead session from a genuine 404 (C-10 makes the
+            // two look alike on purpose — interpretation A-2 in ANSWERS).
+            Route::get('session/deadline', [App\Http\Controllers\Auth\SessionDeadlineController::class, 'show'])
+                ->name('auth.session.deadline');
+
             Route::get('security/sessions', [SecuritySessionsController::class, 'index'])
                 ->name('auth.sessions.index');
             Route::delete('security/sessions/{digest}', [SecuritySessionsController::class, 'destroy'])

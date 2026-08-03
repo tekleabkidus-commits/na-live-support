@@ -160,3 +160,27 @@ metric for the same reason in reverse.
 **Doc 14 revisits with the doc author only if a real gateway's retry semantics conflict**
 (e.g., a gateway that treats 403 as permanent and stops retrying DLRs). Until then this
 interpretation stands.
+
+## 2026-08-03 — Doc 02 step 13 rulings (Session 17, authentication screens)
+
+### A-2. EC-02's "401" vs Doc 01 C-10's 404: the sentinel confirms before it modals (FILED INTERPRETATION)
+
+**Resolves a cross-document tension at step-13 implementation; the sentinel's scope itself was
+owner-ruled at plan approval, and this records the mechanism.**
+
+Doc 02 EC-02 says "session revoked in another tab → **next request 401** → re-login modal
+preserving in-page state." But Doc 01 C-10/SEC-06 make failed staff resolution answer **404,
+indistinguishable from a missing resource, on purpose** — and the staff API honours that
+(empirically: a dead session's `/api/staff/*` request 404s; S7 recorded the same shape). Read
+literally, EC-02's trigger never fires; triggering the modal on any 404 would pop a re-login
+dialog on every genuinely missing resource.
+
+**Interpretation: the modal's TRIGGER is client-side confirmation, not a status code.** On a
+401 or 404 from a staff-surface fetch, the sentinel probes `auth.session.deadline` — a route
+that always exists for an authenticated caller — with the unwrapped fetch. Probe 200 → the
+original response was a genuine answer and passes through untouched. Probe non-200 → the
+session is dead; the modal opens, and the original request replays after re-login. C-10 is not
+weakened: the server's responses are unchanged, and the probe reveals only the caller's OWN
+session state — a fact the caller already holds. The owner-ruled scope stands: staff Inertia
+surface only, never the widget, never the bearer API (FR-20's contract belongs to
+integrations, not modals).

@@ -161,6 +161,16 @@ return [
         'recovery_used' => 'You\'re signed in. That recovery code is now used up — you have :count left.',
     ],
 
+    // Step 13: the session sentinel — §8's T-2 min warning toast and EC-02's
+    // re-login modal. `relogin_intro` carries EC-02's promise in words: the
+    // page state survives, because the modal never navigates.
+    'session' => [
+        'timeout_warning' => 'You\'ll be signed out in about two minutes unless you stay active.',
+        'stay_signed_in' => 'Stay signed in',
+        'relogin_title' => 'Sign in again to continue',
+        'relogin_intro' => 'Your session has ended. Sign back in to pick up where you left off — your work on this page hasn\'t gone anywhere.',
+    ],
+
     // FR-12's Security page (§8/§9). `location_unavailable` is FS-04's designed
     // degradation copy — a null city from GeoIP renders as this, never as an
     // error. `only_here` is §9's empty state, verbatim.

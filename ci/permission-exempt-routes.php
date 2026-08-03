@@ -47,6 +47,7 @@ return [
      | the catalog's authority the same way a free-text permission would.
      */
     'auth.security.page' => 'Self-service Security page shell; the caller sees only their own sessions.',
+    'auth.session.deadline' => 'Self-service heartbeat for the §8 timeout toast (owner-ruled): reports the caller\'s OWN session clocks; rolls idle exactly as any authenticated request does, never the absolute cap.',
     'auth.sessions.index' => 'Self-service: lists only the authenticated caller\'s own sessions (FR-12).',
     'auth.sessions.revoke' => 'Self-service: a session owner may always end their own session, as with logout.',
     'auth.sessions.revoke_others' => 'Self-service: bulk form of the same right; scoped to the caller by construction.',

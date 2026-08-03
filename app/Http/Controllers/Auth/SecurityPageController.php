@@ -27,6 +27,31 @@ final class SecurityPageController extends Controller
             // FR-06: the page needs to know which face of the 2FA card to show;
             // everything else about 2FA state stays server-side.
             'twoFactorEnabled' => $user?->getAttribute('two_factor_confirmed_at') !== null,
+
+            // Step 13: the sentinel (§8 timeout toast + EC-02 re-login modal).
+            // The email is the caller's OWN — the modal re-authenticates the
+            // same person; there is no account chooser in a session-recovery
+            // dialog.
+            'sentinel' => [
+                'email' => (string) $user?->getAttribute('email'),
+                'copy' => [
+                    'timeoutWarning' => __('auth.session.timeout_warning'),
+                    'staySignedIn' => __('auth.session.stay_signed_in'),
+                    'reloginTitle' => __('auth.session.relogin_title'),
+                    'reloginIntro' => __('auth.session.relogin_intro'),
+                    'passwordLabel' => __('auth.login.password_label'),
+                    'showPassword' => __('auth.login.show_password'),
+                    'hidePassword' => __('auth.login.hide_password'),
+                    'submit' => __('auth.login.submit'),
+                    'submitting' => __('auth.login.submitting'),
+                    'errorFallback' => __('auth.login.error_fallback'),
+                    'codeLabel' => __('auth.2fa.code_label'),
+                    'useRecovery' => __('auth.2fa.use_recovery'),
+                    'useTotp' => __('auth.2fa.use_totp'),
+                    'recoveryLabel' => __('auth.2fa.recovery_label'),
+                    'recoverySubmit' => __('auth.2fa.recovery_submit'),
+                ],
+            ],
             'copy' => [
                 'title' => __('auth.devices.title'),
                 'subtitle' => __('auth.devices.subtitle'),

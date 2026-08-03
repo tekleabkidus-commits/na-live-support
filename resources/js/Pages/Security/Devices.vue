@@ -20,6 +20,7 @@
 // shown-once set is a shown-once set however it was minted (SEC-03).
 import { nextTick, onMounted, ref, watch } from 'vue';
 import SegmentedCodeInput from '../../Components/Auth/SegmentedCodeInput.vue';
+import SessionTimeoutSentinel from '../../Components/Auth/SessionTimeoutSentinel.vue';
 
 interface SessionRow {
     digest: string;
@@ -74,7 +75,28 @@ interface Copy {
     copied: string;
 }
 
-const props = defineProps<{ copy: Copy; twoFactorEnabled: boolean }>();
+interface SentinelProps {
+    email: string;
+    copy: {
+        timeoutWarning: string;
+        staySignedIn: string;
+        reloginTitle: string;
+        reloginIntro: string;
+        passwordLabel: string;
+        showPassword: string;
+        hidePassword: string;
+        submit: string;
+        submitting: string;
+        errorFallback: string;
+        codeLabel: string;
+        useRecovery: string;
+        useTotp: string;
+        recoveryLabel: string;
+        recoverySubmit: string;
+    };
+}
+
+const props = defineProps<{ copy: Copy; twoFactorEnabled: boolean; sentinel: SentinelProps }>();
 
 const sessions = ref<SessionRow[]>([]);
 const loading = ref(true);
@@ -328,6 +350,10 @@ onMounted(() => {
 
 <template>
     <main class="mx-auto min-h-screen max-w-4xl bg-slate-950 px-4 py-10 text-slate-100">
+        <!-- Step 13: §8's timeout toast and EC-02's re-login modal ride every
+             staff Inertia page; Doc 07's shell inherits this mount. -->
+        <SessionTimeoutSentinel :email="props.sentinel.email" :copy="props.sentinel.copy" />
+
         <h1 class="text-2xl font-semibold">{{ props.copy.title }}</h1>
         <p class="mt-1 text-sm text-slate-400">{{ props.copy.subtitle }}</p>
 
