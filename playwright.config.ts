@@ -16,7 +16,14 @@ export default defineConfig({
     // independent by wishing.
     workers: 1,
     forbidOnly: !!process.env.CI,
+
+    // Retries exist to CAPTURE flakes (trace-on-first-retry), not to absorb
+    // them: in S17 a real WCAG violation passed on retry and CI stayed green
+    // for a whole session. failOnFlakyTests keeps the trace from the retry
+    // but fails the build loudly when a test only passed on a second attempt
+    // — a flaky pass is a red build, never a green one.
     retries: process.env.CI ? 2 : 0,
+    failOnFlakyTests: !!process.env.CI,
     reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
     use: {
         // https, not http (Doc 02 SEC-06): the stack refuses cleartext, so a

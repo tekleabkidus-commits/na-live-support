@@ -51,6 +51,7 @@ interface Copy {
     revokeOthersBody: string;
     cancel: string;
     onlyHere: string;
+    tableRegionLabel: string;
     loadFailed: string;
     twoFactorTitle: string;
     twoFactorOn: string;
@@ -382,7 +383,17 @@ onMounted(() => {
             <div class="h-6 animate-pulse rounded bg-slate-800"></div>
         </div>
 
-        <div v-else class="mt-6 overflow-x-auto">
+        <!-- §13 / WCAG 2.1.1: at narrow widths this wrapper scrolls, and when
+             only the current session exists no cell holds a focusable control
+             (the revoke button is other-rows-only) — so the wrapper itself
+             must be keyboard-focusable, with a name for what focus landed on. -->
+        <div
+            v-else
+            class="mt-6 overflow-x-auto"
+            role="region"
+            tabindex="0"
+            :aria-label="props.copy.tableRegionLabel"
+        >
             <table class="w-full text-start text-sm" data-testid="devices-table">
                 <thead>
                     <tr class="border-b border-slate-800 text-start text-slate-400">

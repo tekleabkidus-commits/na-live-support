@@ -208,12 +208,32 @@ test('§14: the language switcher re-renders the card in Amharic via the guest c
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 });
 
-test('§8 wizard: focus lands on each step heading, the code field is structurally ONE input that auto-submits, and the codes step gates on checkbox OR download', async ({
+test('§8 wizard: focus lands on each step heading, the code field is structurally ONE input that auto-submits, and the codes step gates on checkbox OR download; the devices table is axe-clean in the single-current-session state', async ({
     page,
 }) => {
+    // Deterministic seed for the axe sweeps below: sessions accumulate in
+    // Redis across runs, and whether the devices table holds a focusable
+    // revoke button depends on that leftover state. The one violation this
+    // suite exists to catch (scrollable-region-focusable, when the lone
+    // current-session row has no focusable cell) therefore only fired when
+    // earlier runs happened to leave Redis empty. Clearing the tenant BEFORE
+    // login makes the login below the only session, every run.
+    inspect('clear-tenant', `--tenant=${primaryTenantId()}`);
     await cardLogin(page, TWO_FACTOR_EMAIL, PASSWORD);
     await page.waitForURL('**/');
     await page.goto('/security');
+
+    // Prove the seeded state before relying on it — a failed seed must fail
+    // HERE, not silently hand the axe sweep the easy many-sessions table.
+    await expect(page.getByTestId('device-row-current')).toBeVisible();
+    await expect(page.getByTestId('devices-empty-state')).toBeVisible();
+    await expect(page.getByTestId('device-row')).toHaveCount(0);
+
+    // §13 / WCAG 2.1.1: at 360 px the table wrapper scrolls horizontally and
+    // no cell is focusable, so the wrapper itself must take keyboard focus
+    // (axe: scrollable-region-focusable, serious).
+    await expectAxeClean(page, 'security page (single current session)');
+
     await expect(page.getByTestId('two-factor-enable')).toBeVisible();
 
     // Step 1: scan. Focus rule (§13) on entry.

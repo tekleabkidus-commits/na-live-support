@@ -191,6 +191,7 @@ return [
         'revoke_others_body' => 'Every session except this one will be signed out immediately, including open tabs on other devices.',
         'cancel' => 'Cancel',
         'only_here' => 'You\'re only signed in here.',
+        'table_region_label' => 'Signed-in devices',
         'load_failed' => 'Your sessions could not be loaded. Refresh to try again.',
         'cannot_revoke_current' => 'This is your current session. Use sign out to end it.',
         'session_not_found' => 'That session no longer exists.',

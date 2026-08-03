@@ -69,6 +69,7 @@ final class SecurityPageController extends Controller
                 'revokeOthersBody' => __('auth.devices.revoke_others_body'),
                 'cancel' => __('auth.devices.cancel'),
                 'onlyHere' => __('auth.devices.only_here'),
+                'tableRegionLabel' => __('auth.devices.table_region_label'),
                 'loadFailed' => __('auth.devices.load_failed'),
 
                 'twoFactorTitle' => __('auth.2fa.title'),
