@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–11 COMPLETE (13 of 14 steps)** | S4–S15 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; 2 ACs not-implemented (AC-08 step 12, AC-09 views) | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. Remaining: FR-09 role enforcement (needs Doc 03), SEC-08 + AC-08 (step 12), views + AC-09 |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–12 COMPLETE (14 of 14 approved steps; FR-09 and the §8/§9 views remain outside the step plan)** | S4–S16 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; **AC-08 covered (S16 — log-scrubber gate over all five sinks, per-sink/per-sentinel positive controls, sabotaged six ways)**; 1 AC not-implemented (AC-09 views) | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. S16 closed step 12 (SEC-08 both clauses + AC-08 + the C-13 secrets-never-serialize sweep: ScrubSecrets/AttachLogContext on every channel via SecurityLogTap, the fail-closed `log-scrubber` gate, 21+ seeded sentinels swept from logs/jobs/outbox/audit/relayed-events, model hidden-pin roster extended, sabotages (a)–(f) each red; one real find: Laravel's config-merge injects an untapped framework `monthly` channel — caught by the channel-pin test on its first run) — local: pest 394/3980, gates 11/11, lint clean. Remaining: FR-09 role enforcement (needs Doc 03), views + AC-09 |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -1416,6 +1416,147 @@ reference model, Doc 18's slot).
 - The comparator pin is source-text matching: a refactor that renames variables
   will fail it spuriously (annoying, safe) rather than silently (dangerous,
   the failure mode it trades away).
+
+## Session-16 report (Doc 02 step 12 — SEC-08 secret hygiene: log scrubber + serialization sweep)
+
+Step 12 closed: SEC-08 (both clauses), AC-08 (all five sinks), the C-13
+secrets-never-serialize sweep the step-11 ruling assigned here, and the
+inherited roster in full — `hmac_secret`, `two_factor_secret`, visitor
+tokens/cookies, the webhook auth headers in access-log shapes, and every
+other credential class this document minted (21+ sentinels).
+
+Local proof: **pest 394 passed / 11 skipped (3980 assertions)**, `make gates`
+**11/11** (the new `log-scrubber` gate among them), Pint + PHPStan (max, 1G)
+clean. New suites: `LogScrubberTest` (7), `SecretsNeverSerializeTest` (3) —
+274 assertions between them.
+
+### The architecture that landed
+
+- **Two Monolog processors, one tap** (`app/Support/Logging/`):
+  `AttachLogContext` puts `tenant_id` + `trace_id` (TenantContext's C-14
+  correlation id, container-resolved per record — the Octane-safe way) on
+  every record; `ScrubSecrets` redacts by key/header shape, recursively,
+  case-insensitively, with `_id`/`_count` suffixes exempt so tracing ids
+  survive. `SecurityLogTap` pushes both on every channel; push order makes
+  the scrub run last. `null` and `emergency` are exempt by the approved
+  ruling, and the exemption list is safe because the **channel-pin test**
+  fails on any channel — present or future — that omits the tap.
+- **The pin test caught a real gap on its first run**: Laravel's
+  slimmed-config merge injects the framework's `monthly` channel into the
+  live channel list even though `config/logging.php` never declared it — it
+  was arriving WITHOUT the tap. Now declared explicitly, tapped, with the
+  find recorded in a config comment. This is the exact failure mode the
+  owner's ruling on interpretation 1 predicted.
+- **Division of labour, held honestly (interpretation 2)**: the runtime
+  scrubber is defence-in-depth by key shape; the guarantee AC-08 counts is
+  the seeded-VALUE sweep over the real flows. Sabotage (a) proved the
+  boundary: a password logged under an innocent key sailed past the
+  scrubber and the sweep went red on it.
+- **One flow driver, every credential class** (`driveSeededCredentialFlows`
+  in Pest.php): real HTTP against login (wrong+right), 2FA enrolment +
+  TOTP challenge + recovery-code challenge, PAT + machine-token minting,
+  password reset, invitation, widget session issue/context, telegram
+  secret-header (match+mismatch), DLR HMAC (signed+tampered).
+  Server-generated credentials are CAPTURED from the real responses rather
+  than seeded — the sweep scans for the actual live values the platform
+  minted.
+- **Sinks and counting bar**: rendered log file (the real `single` channel,
+  path repointed only), `jobs` (real serialization on the database driver),
+  `outbox`, `audit_log`, and `events` after a genuine committed
+  `OutboxRelay` run (commitFixtures + platform-worker relay + cleanup, the
+  OutboxChaosTest pattern; `cleanupTenants` extended with the Doc 02
+  tables). Every absence assertion is preceded by plant → detect → remove:
+  file plants for the log sink, savepoint-rollback inserts for the DB sinks
+  (works even on audit_log, where DELETE is revoked by grant).
+- **The recorded C-13 carve-out is now encoded, not just documented**:
+  PasswordResetMail/InvitationMail tokens may appear in `queue='mail'` job
+  rows ONLY. The sweep asserts both directions — present there (so the
+  carve-out cannot silently close without reopening the ruling), absent
+  everywhere else (so it cannot silently widen).
+- **Model hidden-pin roster (owner ruling)**: `AuthActionToken.token_hash`
+  and `UserRecoveryCode.code_hash` gained `#[Hidden]`; the pin test covers
+  User (`password`, `remember_token`, `two_factor_secret`),
+  WebhookCredential (both columns), PersonalAccessToken (`token`), and
+  TenantKey (`hash` — Doc 01's model, on the roster because Doc 02's widget
+  and webhook keys ride it). `Device.fingerprint_hash` excluded with the
+  reason in the test: it hashes public client hints, not credential
+  material.
+- **The gate** (`ci/log-scrubber.sh`, registered in gates.yaml → Doc02
+  AC-08): container-aware like isolation-suite, and **fail-closed by
+  ruling** — missing suite files or a stack that is not running exit
+  nonzero with "did not run is never passed" in the message. Proven by
+  running it from a directory without the suites (exit 1) and via
+  `make gates` (11/11).
+
+### Sabotage ledger (all reverted; each red on the assertion that counts it)
+
+| # | Sabotage | Result |
+|---|---|---|
+| (a) | `Log::info('debug aid', ['note' => $password])` in the real login flow | RED — `seeded credential "staff_password" leaked into the rendered log sink (AC-08)` |
+| (b) | Tap removed from `stack` + `single` | RED ×5 — channel pin names `stack`; scrub liveness, header shapes, both trace tests fail. (Seeded sweep stays green — honest: first-party flows do not log secrets themselves; the scrubber is defence-in-depth) |
+| (c) | `ScrubSecrets` stubbed to passthrough | RED ×2 — liveness and header-shape values reach the rendered sink |
+| (d) | `AttachLogContext` stubbed to passthrough | RED ×2 — "the record shipped without the bound correlation id"; refused-request line carries no trace_id |
+| (e) | Reset-token plaintext wedged into the `auth.password.reset_requested` audit payload | RED — `seeded credential "reset_token" reached an audit payload (C-13)` |
+| (f) | `$hidden` emptied on WebhookCredential | RED — DecryptException the moment the encrypted column enters serialization (red by crash rather than exposure; either way the pin trips) |
+
+### Interpretations applied (owner-approved this session)
+
+1. Channel exemptions (`null`, `emergency`) with the new-channel pin making
+   the list safe — and it did, on day one (`monthly`).
+2. Key-shape scrubber as defence-in-depth; seeded-value sweep as the
+   counted guarantee.
+3. TOTP codes scanned with digit boundaries; the challenge-path
+   captured-records fallback is PRE-AUTHORIZED on the first flake — switch
+   immediately, never re-run red (the S4 lesson).
+
+### Sink boundary (recorded in the traceability row, per ruling)
+
+Swept: rendered logs, jobs, outbox, audit payloads, relayed events.
+Out: Reverb/Redis publish payloads — `session.revoked:{id}` is
+identifier-only by T-04's design and the event catalog's closed-payload rule
+polices bus shapes.
+
+### Step-11 inheritance — discharged
+
+Both items: `webhook_credentials.hmac_secret` is in the seeded roster AND
+the serialization sweep (alongside `two_factor_secret`, visitor
+tokens/cookies, and the rest), and the webhook headers themselves
+(X-Telegram-Bot-Api-Secret-Token, X-Webhook-Signature) are scrub-asserted in
+nested access-log shapes.
+
+### Self-audit (Doc 02 §18, honest statuses)
+
+| AC | Test path | Status |
+|---|---|---|
+| AC-01 | EnumerationTest + PasswordResetFlowTest (reset half, S12) | PASS (prior sessions) |
+| AC-02 | LockoutTest | PASS (S5) |
+| AC-03 | TwoFactorChallengeTest / TwoFactorEnrolmentTest | PASS (S11) |
+| AC-04 | SessionLifetimeTest + SessionRevocationSocketTest | PASS (S10) |
+| AC-05 | TokenScopeIntersectionTest | PASS — PARTIAL per ruling Q5 (S13) |
+| AC-06 | WidgetSessionTest + CORS layer tests | PASS (S14) |
+| AC-07 | WebhookSecretTest + WebhookHmacTest | PASS (S15) |
+| AC-08 | tests/Security/LogScrubberTest.php + tests/Security/SecretsNeverSerializeTest.php, enforced by the `log-scrubber` gate | **PASS (this session — output above, sabotaged six ways)** |
+| AC-09 | — | NOT-IMPLEMENTED — no auth views exist yet (the views step); traceability row remains honest `not-implemented` |
+
+### Risks / residuals worth naming
+
+- **The `emergency` channel is exempt and therefore unscrubbed.** Bounded:
+  it only receives records when the logging system itself throws, and the
+  sweep + first-party context discipline keep secrets out of log calls in
+  the first place — but a secret-shaped context key logged during a logging
+  outage would land unredacted. Named rather than hidden; revisit if Doc 18
+  centralizes log shipping.
+- **TOTP digit-boundary scan retains a ~1-in-10⁶-per-line collision chance
+  with rendered microsecond fields.** Fallback pre-authorized (ruling on
+  interpretation 3); zero flakes across this session's runs.
+- **The scrubber redacts context, not message strings.** Free text has no
+  keys to match; a secret interpolated into a message is the sweep's to
+  catch (sabotage (a) class). Recorded in the ScrubSecrets docblock.
+- The committed events-relay test leaves no residue on success (cleanup in
+  `finally`, jobs rows deleted by fixture markers), but an aborted run can
+  strand committed fixture rows in the test database — same standing
+  caveat as the Doc 01 chaos tests, self-identifying via `@fixture`/
+  `FAKECRED` markers.
 
 ## Deferred with reason
 
