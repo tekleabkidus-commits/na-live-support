@@ -7,7 +7,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–10 COMPLETE (12 of 14 steps)** | S4–S14 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; 3 ACs not-implemented | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** Remaining: FR-09 role enforcement (needs Doc 03), webhook auth (step 11), SEC-08 (step 12), views |
+| 02 | Authentication, Sessions & Security Core | **IN PROGRESS — steps 6–11 COMPLETE (13 of 14 steps)** | S4–S15 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; 2 ACs not-implemented (AC-08 step 12, AC-09 views) | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. Remaining: FR-09 role enforcement (needs Doc 03), SEC-08 + AC-08 (step 12), views + AC-09 |
 | 03 | RBAC, Roles, Permissions, Overrides | NOT STARTED | S3 | — | |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
@@ -1275,6 +1275,145 @@ always worked."
 - Doc 13 FR-08 says "token per Doc 02 (sliding 30 d)" — if Doc 13 later wants the
   TTL operator-tunable, that is a settings-registry addition under `auth.*` with
   a platform minimum, and it reopens ruling D-1's sizing arithmetic.
+
+## Session-15 report (Doc 02 step 11 — inbound webhook authentication)
+
+Step 11 closed: FR-23, FR-24 (signing contract covers timestamp+nonce+body —
+load-bearing, see below), FR-25 (all three clauses), AC-07 (all three clauses,
+spy-proven), plus the A-1 filed interpretation and a real Doc 01-era defect fixed
+(TenantCache outage 500s). Rulings D-1…D-6 applied as approved.
+
+Local proof: **pest 384 passed / 11 skipped (3703 assertions)**, `make gates`
+**10/10**, Pint + PHPStan(max, 1G) + ESLint clean. CI pending at report time —
+link appended when green. New suites: `WebhookSecretTest` (6), `WebhookHmacTest`
+(9), `WebhookComparatorPinTest` (2), one new `MiddlewareOrderTest` matrix case;
+`SuspendedTenantMatrixTest` webhook cells now authenticate with both mechanisms
+(expectations unchanged — suspended still accepts inbound, behind a proven
+credential).
+
+### The architecture that landed
+
+- **The 403/404 layering**: route key resolves the tenant (wrong key stays 404,
+  C-10); the FR-23/24 secret is a SECOND credential checked after resolution —
+  AC-07's 403 leaks no tenant existence because reaching it required a valid
+  unguessable key.
+- **`webhook_credentials`** (Doc 02-minimal, widgets precedent): `key_id` unique
+  → tenant_keys, `header_secret_hash` (SHA-256, equality credential) and
+  `hmac_secret` (encrypted cast — the TOTP posture, ruling D-5). Physics verified
+  in the test DB: RLS on+forced, app grants exactly INSERT/SELECT/UPDATE.
+- **`webhook.auth`** (`VerifyWebhookSecret`): two channel-agnostic MECHANISMS
+  (N-20 — routes bind mechanism + header name; no code branches on channel).
+  `secret_header`: hash_equals on digests, Redis-free. `body_hmac`:
+  HMAC-SHA256 over `{timestamp}.{nonce}.{raw body}` — covering ts+nonce is what
+  makes the window real (a body-only HMAC replays forever behind fresh nonces;
+  the captured-signature-fresh-nonce test pins it); ±300 s both directions;
+  nonce single-use via atomic `SET NX` on volatile (ruling D-1), spent only
+  AFTER the signature verifies so unsigned callers cannot burn a gateway's
+  nonces. One `webhook_rejected` 403, byte-identical across every cause;
+  metrics (`webhook.secret_rejected` + reason, `webhook.replay_cache_unavailable`)
+  carry the distinctions responses withhold.
+- **`webhook.throttle`** (`ThrottleWebhookKey`): FR-25 per key — one flooding
+  bot never starves its sibling (two-keys-one-tenant test). The number is the
+  new registered `auth.webhook.rate_per_minute` (default 600, floor 60,
+  platform-scoped, ruling D-4). A plain class, NOT the priority-listed
+  ThrottleRequests — the step-10 sorter lesson applied preemptively;
+  MiddlewareOrderTest fails if either Authenticate or ThrottleRequests ever
+  appears on these stacks.
+- **Outage postures, all three proven against ONE real closed port** in a single
+  FS test: replay guard CLOSED (A-1), throttle OPEN with metric (capacity
+  protection must not convert a cache outage into a channel outage), and
+  TenantCache's pre-context keymap OPEN to a DB-resolved miss.
+
+### A pre-existing defect fixed: the resolver's own cache could down every key surface
+
+`TenantCache::preContext*` had no outage handling, so a dead volatile instance
+threw straight through **tenant resolution itself** — every key-resolved surface
+(telegram, widget, DLR, public API) 500'd, which inverts C-07's "cache is never
+the source of truth" and falsified FS-01's "webhooks unaffected" before step 11
+ever touched the stack. Now: unreachable cache = miss, the SECURITY DEFINER door
+answers from the database, `tenant.keymap_cache_unavailable` says why p99 moved.
+The revocation-forget path is safe to lose because the resolver re-verifies
+revocation against the DB on every hit (documented at the catch).
+
+### A self-inflicted bug the first red run caught, kept as a lesson
+
+phpredis's `SET` takes an options array, not protocol-style variadics; the
+variadic form threw `TypeError`, and the middleware's original broad
+`catch (\Throwable)` dressed that coding bug up as a permanent "cache outage" —
+every valid DLR refused 403. The catch is now `\RedisException` only: coding
+bugs stay loud 500s, outages stay quiet refusals. The general lesson matches
+S4's: **a fail-safe branch that catches too much converts bugs into the exact
+condition it exists to survive.**
+
+### Falsification ledger (sabotage before counting — every red observed in-session)
+
+| Sabotage | Expected red | Result |
+|---|---|---|
+| (a) comparison stubbed always-true | mismatch + byte-identity + spy tests | **red** (3 tests), restored |
+| (b) hash_equals → `==` | ONLY the pin | **red — exactly the pin, nothing else** (the approved expectation of what a pin does), restored |
+| (c) SET NX → plain SET | nonce single-use | **red**, restored |
+| (d) timestamp window deleted | boundary test | **red**, restored — and this red is what makes D-1's LRU residual acceptable (the bound is real and independent) |
+| (e) limiter re-keyed per tenant | per-key isolation | **red**, restored |
+| (f) outage waved through | FS fails-CLOSED test | **red**, restored |
+| (g) StartSession planted on the stack | executed-stack absence sweep | **red**, restored |
+
+### Registry / catalog deltas
+
+`settings`: +1 (`auth.webhook.rate_per_minute`). `traceability`: AC-07 →
+covered; new rows FR-23/FR-24/FR-25. `ANSWERS-FROM-DOC-AUTHOR.md`: +A-1 (the
+filed interpretation, with its Doc 14 revisit condition). `permission-exempt` /
+`audit-exempt`: **unchanged** — the probe lines still belong to Docs 05/14 per
+ruling. `permissions`, `notifications`, `gates.yaml`, `EVENT-CATALOG`: unchanged
+(§4.8 has no webhook event; refusals are metrics, not audit rows).
+
+### ⚠ Standing operational note (ruling, decision 6)
+
+**Any environment exercising the ingress probes — staging included — needs
+seeded `webhook_credentials` rows from this step forward, or its telegram/DLR
+probes return 403 BY DESIGN** (fail-closed unconfigured keys). Doc 05's bot
+registration and Doc 14's gateway setup become the production write paths.
+
+### ⚠ Doc 18 handoff, extended (rulings D-1 and D-5)
+
+Beside S14's eviction-policy entry: (1) the volatile instance now also holds
+webhook replay nonces — same eviction concern, bounded by the independent ±5 min
+timestamp check (sabotage (d) proves the bound); (2) **the vault migration
+obligation now covers BOTH encrypted-cast secrets in one entry**:
+`users.two_factor_secret` and `webhook_credentials.hmac_secret` (C-13's vault
+reference model, Doc 18's slot).
+
+### Inherited by step 12 (SEC-08 / AC-08), by ruling
+
+- `webhook_credentials.hmac_secret` joins the log-scrubber's seeded fake
+  credentials AND the secrets-never-serialize sweep (alongside
+  `two_factor_secret`, visitor tokens/cookies, and every other credential class
+  this document has minted).
+- The scrubber must also cover the webhook headers themselves
+  (X-Telegram-Bot-Api-Secret-Token, X-Webhook-Signature) in access-log shapes.
+
+### Deliberately NOT built in step 11, with reasons
+
+- **Real Telegram webhook URL shape, bot records, secret registration at setup**
+  — Doc 05; the probe's audit-exemption line is Doc 05's to delete.
+- **Gateway records, native-signature drivers, DLR processing** — Doc 14; its
+  drivers adapt native schemes onto the `body_hmac` contract.
+- **A timing measurement for constant-time comparison** — refused by ruling
+  (noise-level signal, flaky-test hazard); the pin + always-true sabotage are
+  the approved substitute, honestly labeled.
+- **Per-channel rate-limit re-defaults** — Docs 05/14 under their own rulings
+  when real traffic numbers exist.
+
+### Risks / residuals worth naming
+
+- The A-1 interpretation is filed, not author-confirmed: if a real gateway
+  treats 403 as permanent and stops retrying DLRs, Doc 14 must reopen it with
+  the doc author.
+- LRU eviction of a nonce inside the 5-minute window re-admits a replay only
+  when the attacker also holds a valid in-window signature — bounded, named,
+  and inherited by the Doc 18 sizing entry.
+- The comparator pin is source-text matching: a refactor that renames variables
+  will fail it spuriously (annoying, safe) rather than silently (dangerous,
+  the failure mode it trades away).
 
 ## Deferred with reason
 
