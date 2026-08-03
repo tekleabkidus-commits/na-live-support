@@ -481,19 +481,25 @@ entries:
       the blanket handler (T-06 posture, documented in the file).
 
   - ac_ref: "Doc02 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Auth/WebhookSecretTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      Planned suite: tests/Feature/Auth/WebhookAuthTest.php (converted from "manual" the moment the
-      file exists and executes).
-      Planned for the webhook-auth step (step 11): secret mismatch → 403, nothing
-      processed, metric incremented — against Doc 01's existing ingress probes.
-      Not yet built.
+      All three clauses, separately pinned, on BOTH webhook surfaces (S15;
+      the HMAC half lives in tests/Feature/Auth/WebhookHmacTest.php): 403
+      with the unified webhook_rejected code (mismatch, absent header,
+      unconfigured key, stale timestamp and replayed nonce all render
+      byte-identically, trace_id normalized — the no-oracle ruling); metric
+      incremented, asserted off the log bus with the internal cause
+      monitoring gets and responses withhold; nothing processed, proven by a
+      spy handler on the REAL middleware stack that records its own
+      invocation (spy liveness proven first) and stays at zero across
+      refusals. Sabotage (a) stubbed the comparison always-true — the
+      mismatch, byte-identity and spy tests all went red.
 
   - ac_ref: "Doc02 AC-08"
     suite_path: manual
@@ -740,3 +746,72 @@ entries:
       VisitorTokenStore's public surface shows no operation accepting a
       visitor identity, so auto-linking has no code path to grow from. Doc 08
       owns the staff merge.
+
+  # ── Doc 02 step 11 (S15): inbound webhook authentication ───────────────────
+  - ac_ref: "Doc02 FR-23"
+    suite_path: tests/Feature/Auth/WebhookSecretTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      The secret_header mechanism on the telegram probe: correct header →
+      202 (positive control first), mismatch/absent/unconfigured → the
+      unified 403 + metric. Comparison is SHA-256 digests through hash_equals
+      — the constant-time posture is an ARCHITECTURE PIN by ruling
+      (WebhookComparatorPinTest; a noise-level timing measurement was
+      deliberately refused), and sabotage (b) swapping in `==` reddened
+      exactly the pin and nothing else, which is the pin doing precisely
+      what it claims. The mechanism is channel-agnostic (N-20): the route
+      names the header as a middleware parameter. Doc 05 owns bot records,
+      the real URL shape, and secret registration at webhook setup.
+  - ac_ref: "Doc02 FR-24"
+    suite_path: tests/Feature/Auth/WebhookHmacTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      The body_hmac mechanism on the DLR probe. The signing contract covers
+      "{timestamp}.{nonce}.{raw body}" — proven load-bearing by the
+      captured-signature-behind-a-fresh-nonce refusal, without which the
+      window is fiction. Window: ±300 s at exact boundaries with an injected
+      clock (sabotage (d) deleted the check — red, which is also what makes
+      the volatile nonce cache's LRU residual acceptable per ruling D-1: the
+      timestamp bound is real and independent). Nonce: atomic SET NX
+      single-use (sabotage (c) — red), spent only AFTER signature
+      verification so unsigned callers cannot burn a gateway's nonces.
+      Outage: fails CLOSED with webhook.replay_cache_unavailable — a FILED
+      INTERPRETATION against FS-01's wording, recorded in
+      ANSWERS-FROM-DOC-AUTHOR.md (A-1) and proven against a real closed
+      port; the secret_header surface on the same broken Redis stays 202,
+      keeping FS-01 true where its no-session rationale applies. HMAC
+      secrets at rest use the encrypted cast (the TOTP posture, ruling D-5);
+      the vault migration is a named Doc 18 obligation. Doc 14's drivers
+      adapt native gateway schemes onto this contract.
+  - ac_ref: "Doc02 FR-25"
+    suite_path: tests/Feature/Auth/WebhookSecretTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      All three clauses. CSRF-exemption and never-establishes-a-session are
+      proven as ABSENCE, structurally: MiddlewareOrderTest sweeps both
+      executed webhook stacks for StartSession/ValidateCsrfToken/
+      EncryptCookies (sabotage (g) planted StartSession — red) and the
+      response-level test asserts zero Set-Cookie on accept and refuse
+      alike. Rate limit: per KEY, not per tenant/IP — one flooding bot's
+      sibling stays live (sabotage (e) re-keyed per tenant — red); the
+      number is the registered auth.webhook.rate_per_minute (default 600,
+      floor 60, platform-scoped, ruling D-4); the counter fails OPEN with
+      webhook.throttle_unavailable — capacity protection must not convert a
+      cache outage into a channel outage, while both SECURITY postures keep
+      their own rules on the same broken Redis (the FS test drives all
+      three at once).

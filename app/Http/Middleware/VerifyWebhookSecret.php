@@ -150,7 +150,12 @@ final class VerifyWebhookSecret
 
         try {
             $firstUse = $this->replayGuard->firstUse($tenantId, $nonce);
-        } catch (\RedisException|\Predis\Connection\ConnectionException $e) {
+        } catch (\RedisException $e) {
+            // phpredis's connection failure class — the ONLY client this
+            // stack runs (config/database.php pins REDIS_CLIENT=phpredis;
+            // a Predis alternative isn't installed, so catching its
+            // exception class would be dead code referencing a missing
+            // symbol).
             // Ruling, decision 3 (filed interpretation): unverifiable-for-
             // replay is REFUSED, never waved through; the gateway's retry
             // carries availability. CONNECTION failures only — a broad

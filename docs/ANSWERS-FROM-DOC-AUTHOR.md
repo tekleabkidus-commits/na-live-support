@@ -133,3 +133,30 @@ the owner ruling on ambiguity requires one token PER MATCHING ACCOUNT. The flow 
 `resolve_auth_action_token` door, while Fortify remains the substrate it already is for login.
 The dead stock `password_reset_tokens` table is dropped in a later **contract** release per C-12,
 not in this step.
+
+## 2026-08-03 — Doc 02 step 11 ruling (Session 15, webhook authentication)
+
+### A-1. FS-01 vs FR-24: the replay cache fails CLOSED (FILED INTERPRETATION)
+
+**Resolves an internal tension in Doc 02, by owner ruling at step-11 plan approval; the doc
+author has NOT been consulted, and this record exists so the interpretation cannot silently
+become "how it has always worked."**
+
+FS-01 says "Redis down → staff auth fail-closed (maintenance screen); **webhooks unaffected (no
+sessions)**" — a sentence that states its own rationale: webhooks carry no session dependency.
+FR-24 then mandates a replay window "≤ 5 min via timestamp/nonce cache", which is a Redis
+dependency FS-01's sentence predates. The two cannot both be read literally during a volatile
+outage: honoring "unaffected" would accept traffic whose replay status is unverifiable,
+silently unbounding the replay window exactly while the platform is degraded.
+
+**Ruling: bounded replay beats degraded-mode acceptance.** The `body_hmac` surface refuses
+(403, `webhook.replay_cache_unavailable` metric) when the nonce cache is unreachable; real
+gateways' retry semantics carry availability. FS-01 stays true where its rationale applies:
+the `secret_header` surface touches no Redis and is PROVEN to keep answering 202 against the
+same dead instance (WebhookHmacTest's FS case drives both surfaces at one broken port). The
+per-key rate limiter — capacity protection, not authentication — fails OPEN with its own
+metric for the same reason in reverse.
+
+**Doc 14 revisits with the doc author only if a real gateway's retry semantics conflict**
+(e.g., a gateway that treats 403 as permanent and stops retrying DLRs). Until then this
+interpretation stands.
