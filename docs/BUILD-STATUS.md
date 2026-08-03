@@ -1682,7 +1682,10 @@ and its props carry nothing account-shaped, asserted).**
 Pint + PHPStan(max) + ESLint + vue-tsc clean; browser 25 passed ×3 CONSECUTIVE full runs
 (1.6 m / 1.5 m / 1.4 m). Sabotage: the fixed attribute removed → the axe assertion red on
 3/3 runs with the exact violation (`scrollable-region-focusable`, serious, target `.mt-6`);
-restored → green.** CI run recorded below after push.
+restored → green. CI-proven on `66f2b63`: run
+[30850307901](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30850307901),
+Stages 1–6 green on first push — Stage 4 ran the 25-test browser suite with
+`failOnFlakyTests` active — Stage 7 the by-design manual stub.**
 
 ### The defect: a real WCAG 2.1.1 violation that retries had been laundering green
 
