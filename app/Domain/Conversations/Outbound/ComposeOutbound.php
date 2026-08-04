@@ -1,0 +1,88 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Conversations\Outbound;
+
+use App\Domain\Conversations\Adapters\AdapterRegistry;
+use App\Domain\Conversations\Storage\MessageRepository;
+use App\Jobs\Conversations\EnqueueOutboundLane;
+use App\Models\Conversation;
+use App\Models\Message;
+use App\Support\Events\EventPublisher;
+use DomainException;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * FR-12: every compose source — agent (Doc 07), AI (Doc 09), automation
+ * (Doc 12), system — enters HERE and only here: one transaction writes the row
+ * in `queued` plus its `message.queued` outbox event, and the lane push rides an
+ * afterCommit job on the channel's outbound family (C-06: the queue leg never
+ * outruns the commit).
+ *
+ * T-03's outbound half: a caller-supplied idempotency key finds the ORIGINAL row
+ * on retry — an offline composer reconciling (§9) or a double-clicked send never
+ * writes a sibling. Uniqueness is this lookup + the compose path's single door,
+ * not a DB unique (the messages migration records why a partitioned unique
+ * cannot span retries across a month boundary).
+ *
+ * BR-02's early half: composing INTO a blocked conversation refuses immediately
+ * with `conversation_blocked` — automations included, no exceptions. (EC-04 —
+ * blocked BETWEEN compose and send — is the lane worker's check.)
+ *
+ * kind=note never composes here: notes are not deliverable (SEC-07's type-level
+ * exclusion — DeliverablePayload has no note constructor) and take the notes
+ * path (step 6). The guard below just makes the refusal loud and named.
+ */
+final class ComposeOutbound
+{
+    public function __construct(
+        private readonly MessageRepository $messages,
+        private readonly EventPublisher $events,
+        private readonly AdapterRegistry $registry,
+    ) {}
+
+    public function compose(
+        Conversation $conversation,
+        string $authorType,
+        ?string $authorId,
+        string $kind,
+        ?string $body,
+        ?string $idempotencyKey = null,
+    ): Message {
+        if ($kind === 'note') {
+            throw new DomainException('notes are not deliverable and never compose as outbound (SEC-07/BR-01) — use the notes path.');
+        }
+
+        if ($conversation->state === 'blocked') {
+            throw new DomainException('conversation_blocked: no outbound to a blocked conversation, no exceptions (BR-02).');
+        }
+
+        if ($idempotencyKey !== null) {
+            $original = $this->messages->findByIdempotencyKey($conversation, $idempotencyKey);
+
+            if ($original instanceof Message) {
+                return $original; // T-03: the retry finds the original, never a sibling
+            }
+        }
+
+        $message = DB::transaction(function () use ($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey): Message {
+            $message = $this->messages->persistOutbound($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey);
+
+            $this->events->publish('message.queued', [
+                'tenant_id' => $conversation->getAttribute('tenant_id'),
+                'message_id' => $message->identifier(),
+                'conversation_id' => $conversation->identifier(),
+            ]);
+
+            return $message;
+        });
+
+        // afterCommit by bus default (C-06): the lane learns of the row only
+        // after the row exists for every reader.
+        EnqueueOutboundLane::dispatch($conversation->identifier(), $message->identifier())
+            ->onQueue($this->registry->outboundFamily($conversation->channel));
+
+        return $message;
+    }
+}

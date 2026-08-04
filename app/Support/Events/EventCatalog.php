@@ -311,6 +311,50 @@ final class EventCatalog
             'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketRouting', 'Doc07/Realtime', 'Doc07/UnreadCounters'],
             'description' => 'An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.',
         ],
+        'message.queued' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id'],
+            'producers' => ['Doc04/ComposeOutbound', 'Doc04/DeliveryStateMachine'],
+            'consumers' => ['Doc07/Realtime', 'Doc06/TicketRouting'],
+            'description' => 'An outbound message entered `queued` (FR-12 compose, or a failed_final manual retry re-entering — FR-13).',
+        ],
+        'message.sent' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id'],
+            'producers' => ['Doc04/DeliveryStateMachine'],
+            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting'],
+            'description' => 'The adapter accepted the send (FR-13). Terminal-success where the channel has no receipts; NEVER rolls back (EC-05).',
+        ],
+        'message.delivered' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id'],
+            'producers' => ['Doc04/DeliveryStateMachine'],
+            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting'],
+            'description' => 'A channel receipt confirmed delivery — only where capability provides receipts (FR-13; Doc 05 defines the Telegram mapping).',
+        ],
+        'message.failed' => [
+            'schema_version' => 1,
+            // `reason` is the FR-14 code (a DeliveryFailureReason value) the UI
+            // maps to messaging.fail.* guidance — a stable identifier, not text.
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'reason'],
+            'producers' => ['Doc04/DeliveryStateMachine'],
+            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting', 'Doc18/Alerting'],
+            'description' => 'A send reached failed_final — non-retryable class immediately, or the FR-13 backoff exhausted (×5). Retryable interim failures are event-silent by design.',
+        ],
+        'message.canceled' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'reason'],
+            'producers' => ['Doc04/DeliveryStateMachine'],
+            'consumers' => ['Doc07/Realtime'],
+            'description' => 'A queued outbound was canceled PRE-SEND (FR-13; EC-04\'s blocked-between-compose-and-send is the first producer).',
+        ],
+        'conversation.lane_skipped' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'message_id'],
+            'producers' => ['Doc04/LaneWorker'],
+            'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
+            'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
+        ],
     ];
 
     /**

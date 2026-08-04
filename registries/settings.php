@@ -422,4 +422,25 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc03',
     ],
+    [
+        // Doc 04 FR-16 token bucket, names filed as interpretation A-5:
+        // steady-state refill per channel endpoint. tenant_editable false until
+        // Doc 16 rules otherwise (A-5's own text).
+        'key' => 'messaging.rate.outbound_per_second',
+        'type' => 'int',
+        'default' => 25,
+        'validation' => 'required|integer|min:1|max:100',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        // A-5: bucket capacity; NFR-02's 50 msg/s burst-absorption figure is
+        // the default's source. Over-limit messages WAIT in queued, never drop.
+        'key' => 'messaging.rate.outbound_burst',
+        'type' => 'int',
+        'default' => 50,
+        'validation' => 'required|integer|min:1|max:200',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
 ];

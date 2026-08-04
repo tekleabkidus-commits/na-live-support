@@ -465,4 +465,14 @@ return [
         'required_fields' => ['conversation_id', 'message_id'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // FR-15's 10-min cap fired: a stuck head was demoted and the lane
+        // drained past it — an accepted out-of-order risk worth an audit trail
+        // (interpretation A-4 names the event and requires this entry).
+        'action_key' => 'conversation.lane_skipped',
+        'entity' => 'conversation',
+        'actor_types' => ['system'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
 ];

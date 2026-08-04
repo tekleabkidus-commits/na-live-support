@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-31 event(s).
+37 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -149,6 +149,51 @@ First contact created THE permanent conversation for {tenant, channel endpoint, 
 - **Producers:** Doc04/InboundPersister
 - **Consumers:** Doc06/TicketRouting, Doc07/Inbox
 
+## `conversation.lane_skipped`
+
+FR-15's 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `message_id`
+- **Producers:** Doc04/LaneWorker
+- **Consumers:** Doc07/Inbox, Doc18/Alerting
+
+## `message.canceled`
+
+A queued outbound was canceled PRE-SEND (FR-13; EC-04's blocked-between-compose-and-send is the first producer).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `reason`
+- **Producers:** Doc04/DeliveryStateMachine
+- **Consumers:** Doc07/Realtime
+
+## `message.delivered`
+
+A channel receipt confirmed delivery — only where capability provides receipts (FR-13; Doc 05 defines the Telegram mapping).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`
+- **Producers:** Doc04/DeliveryStateMachine
+- **Consumers:** Doc07/Realtime, Doc15/Reporting
+
+## `message.failed`
+
+A send reached failed_final — non-retryable class immediately, or the FR-13 backoff exhausted (×5). Retryable interim failures are event-silent by design.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `reason`
+- **Producers:** Doc04/DeliveryStateMachine
+- **Consumers:** Doc07/Realtime, Doc15/Reporting, Doc18/Alerting
+
+## `message.queued`
+
+An outbound message entered `queued` (FR-12 compose, or a failed_final manual retry re-entering — FR-13).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`
+- **Producers:** Doc04/ComposeOutbound, Doc04/DeliveryStateMachine
+- **Consumers:** Doc07/Realtime, Doc06/TicketRouting
+
 ## `message.received`
 
 An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.
@@ -157,6 +202,15 @@ An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`, `customer_id`, `kind`
 - **Producers:** Doc04/InboundPersister
 - **Consumers:** Doc09/AiTurnDecision, Doc06/TicketRouting, Doc07/Realtime, Doc07/UnreadCounters
+
+## `message.sent`
+
+The adapter accepted the send (FR-13). Terminal-success where the channel has no receipts; NEVER rolls back (EC-05).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`
+- **Producers:** Doc04/DeliveryStateMachine
+- **Consumers:** Doc07/Realtime, Doc15/Reporting
 
 ## `rbac.highrisk.confirmed`
 

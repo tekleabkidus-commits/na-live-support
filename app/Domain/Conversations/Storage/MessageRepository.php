@@ -117,6 +117,38 @@ final class MessageRepository
         );
     }
 
+    /**
+     * The delivery-state write half of FR-13's machine — legality lives in
+     * DeliveryStateMachine; this is the only door to the column (T-01/R-05).
+     * `$deliveryError === null` leaves the existing delivery_error untouched.
+     *
+     * @param  array<string, mixed>|null  $deliveryError
+     */
+    public function updateDeliveryState(Message $message, string $state, ?array $deliveryError = null): void
+    {
+        $update = ['delivery_state' => $state];
+
+        if ($deliveryError !== null) {
+            $update['delivery_error'] = json_encode($deliveryError, JSON_THROW_ON_ERROR);
+        }
+
+        Message::query()->whereKey($message->identifier())->update($update);
+        $message->refresh();
+    }
+
+    /** The channel's own id for a sent message, recorded once the adapter reports it. */
+    public function recordExternalMessageId(Message $message, string $externalMessageId): void
+    {
+        Message::query()->whereKey($message->identifier())->update(['external_message_id' => $externalMessageId]);
+        $message->refresh();
+    }
+
+    /** One row by id, tenant-scoped (the lane worker's lookup). */
+    public function findById(string $messageId): ?Message
+    {
+        return Message::query()->whereKey($messageId)->first();
+    }
+
     /** Address one row in this conversation (partition-safe: id + conversation scope). */
     public function findInConversation(Conversation $conversation, string $messageId): ?Message
     {
