@@ -54,6 +54,14 @@ class AppServiceProvider extends ServiceProvider
         // definition resolving its registered default (FR-11, ADR 0005).
         $this->app->make(FeatureRegistry::class)->defineAll();
 
+        // Doc 03 T-01/FS-03: boot-time DB-grants ⊆ catalog check — orphans
+        // logged and ignored, never enforced. Skipped under the test harness
+        // (each test boots a fresh app; the FS-03 suite drives run() directly)
+        // — under Octane this is genuine once-per-worker boot work.
+        if (! $this->app->runningUnitTests()) {
+            $this->app->make(\App\Support\Rbac\CatalogBootCheck::class)->run();
+        }
+
         // Doc 02 FR-18/FR-19: Sanctum runs on the platform's tenant-scoped,
         // UUIDv7 token model — the stock model is tenant-blind and bigint-keyed
         // (see the personal_access_tokens migration for the full argument).

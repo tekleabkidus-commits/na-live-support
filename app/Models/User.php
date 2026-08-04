@@ -115,6 +115,20 @@ class User extends Authenticatable implements TenantScoped
     }
 
     /**
+     * Doc 03 FR-02/BR-01: exactly one role, as a single column — no pivot
+     * exists in the schema, so multi-role is unexpressible. NULL (pre-seeder
+     * accounts) resolves to no permissions: implicit deny, fail-closed.
+     * `role_id` is deliberately NOT fillable — assignment is its own audited
+     * action (rbac.user.role_changed), never a profile update side effect.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Role, $this>
+     */
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
      * FR-06/FR-07: 2FA gates login only once ENROLMENT IS CONFIRMED. A started
      * but unconfirmed enrolment must not challenge, or a user who abandoned the
      * wizard could never log in again.

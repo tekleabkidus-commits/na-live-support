@@ -217,7 +217,10 @@ function cleanupTenants(array $tenantIds): void
     foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
         'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',
         'tenant_keys', 'devices', 'auth_action_tokens', 'user_recovery_codes',
-        'user_password_history', 'personal_access_tokens', 'users'] as $table) {
+        'user_password_history', 'personal_access_tokens',
+        // Doc 03: grant rows reference users AND roles, users.role_id
+        // references roles — so overrides/pending first, roles after users.
+        'pending_grants', 'user_permission_overrides', 'users', 'roles'] as $table) {
         $platform->table($table)->whereIn('tenant_id', $tenantIds)->delete();
     }
 

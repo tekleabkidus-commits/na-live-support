@@ -32,6 +32,9 @@ it('denies the app role DELETE on every tenant-scoped table (BR-02/N-05: nothing
 })->with([
     'tenants', 'users', 'tenant_keys', 'tenant_sequences', 'tenant_provisioning_steps',
     'audit_log', 'outbox', 'events', 'tenant_quota_usage', 'tenant_cold_summaries',
+    // Doc 03 (S19): roles soft-delete by ruling R-11; overrides and pending
+    // grants revoke/transition, never vanish.
+    'roles', 'user_permission_overrides', 'pending_grants',
 ]);
 
 it('denies the app role UPDATE on audit_log (N-13: append-only by grants, not discipline)', function () {
