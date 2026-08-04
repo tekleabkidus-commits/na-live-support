@@ -925,3 +925,125 @@ entries:
       recovery-alternative halves of EC-01 were proven in S11
       (TwoFactorChallengeTest). The Amharic sentence joins the standing
       native-review queue. The Doc 02 enumeration suite is untouched.
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # Doc 03 — RBAC: Roles, Permissions & Overrides (S19)
+  # All eight ACs mapped in the SAME COMMIT that flips the BUILD-STATUS row to
+  # IN PROGRESS (ADR 0004). Rows start not-implemented with the step that builds
+  # them named; each step updates its own row when its test actually executes.
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - ac_ref: "Doc03 AC-01"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 7 (the enforce flip): the CI
+      route→permission table plus an under-privileged sweep of every route that
+      EXISTS (Doc 02's + Doc 03's own; 403 with the key for staff, 404 masking
+      per SEC-02). The table extends automatically as later docs land because
+      the permission-mapping gate is already blocking.
+
+  - ac_ref: "Doc03 AC-02"
+    suite_path: manual
+    type: manual
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 3: the full 10-cell precedence matrix
+      {role grant yes/no} × {override none/allow/deny} × {expired n/a/yes},
+      written red-first, then the deny/allow precedence swapped as sabotage and
+      the matrix pasted failing before anything counts as proven.
+
+  - ac_ref: "Doc03 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 4 against FIXTURE membership (Own /
+      Team / Department / All exact visible sets on list and object endpoints).
+      Doc 11 supplies the real Team/Department membership sources; this row
+      re-proves against them when Doc 11 lands — a bare DONE here would be a
+      false DONE (pre-agreed bucket).
+
+  - ac_ref: "Doc03 AC-04"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 9: automated browser test that a role
+      change reaches an OPEN session's capabilities ≤ 10 s without re-login
+      (FR-07/SS-03), plus the token-surface propagation bound (both caches
+      explicitly invalidated; pub/sub-lost worst case documented at TTL sums).
+
+  - ac_ref: "Doc03 AC-05"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 8: last-admin demotion blocked through
+      BOTH paths (role edit strip + UserDisabler), delete-assigned-role blocked
+      (EC-01), four-eyes distinct-second-admin (ruling R-9 defines approval
+      rights: admin.roles.manage / admin.overrides.manage holders), guard
+      deleted as sabotage and pasted failing.
+
+  - ac_ref: "Doc03 AC-06"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 8: the Read Only template (ratified
+      Appendix B, ruling R-10: the 18 .view-suffix non-high keys) swept across
+      every mutation route with zero accepted writes (BR-05).
+
+  - ac_ref: "Doc03 AC-07"
+    suite_path: manual
+    type: manual
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — arrives at S19 step 3: expiring override allowed before /
+      denied after via injected clock against DB time (EC-09),
+      rbac.override.expired emitted, audit complete; clock frozen past expiry as
+      sabotage and pasted failing.
+
+  - ac_ref: "Doc03 AC-08"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT YET BUILT — DOM half arrives at S19 step 9: for 20 sampled
+      permissions, controls hidden/disabled exactly where verdict=deny, at the
+      drawn viewports, en+am, light+dark. The PIXEL half is design-export
+      blocked (pre-agreed bucket): baselines attach when the owner fires the
+      Batch 6 export — this row must not claim visual coverage until then.

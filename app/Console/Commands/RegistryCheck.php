@@ -23,6 +23,17 @@ final class RegistryCheck extends Command
 
     private const SCOPES = ['Own', 'Team', 'Dept', 'All'];
 
+    /** Doc 03 §4.1's fourteen modules — the only legal `module` values. */
+    private const PERMISSION_MODULES = [
+        'tickets', 'conversations', 'customers', 'telegram', 'webchat', 'sms',
+        'ai', 'kb', 'automation', 'organization', 'users_roles', 'reports',
+        'supervision', 'platform_settings',
+    ];
+
+    private const PERMISSION_RISKS = ['normal', 'high'];
+
+    private const PERMISSION_SCOPE_DIMENSIONS = ['scoped', 'unscoped'];
+
     private const SETTING_TYPES = ['string', 'int', 'bool', 'json', 'encrypted-string'];
 
     private const CHANNELS = ['in_app', 'email', 'sms', 'telegram'];
@@ -157,7 +168,7 @@ final class RegistryCheck extends Command
         $seen = [];
         foreach ($this->loadPhpRegistry($path, 'permissions') as $i => $entry) {
             $ref = sprintf('permissions[%d]', $i);
-            if (! $this->requireFields($entry, ['key', 'label_i18n_key', 'group', 'scopes', 'owning_doc'], $ref)) {
+            if (! $this->requireFields($entry, ['key', 'label_i18n_key', 'description_i18n_key', 'group', 'module', 'scopes', 'scope_dimension', 'risk', 'owning_doc'], $ref)) {
                 continue;
             }
             $key = $entry['key'];
@@ -171,10 +182,35 @@ final class RegistryCheck extends Command
             if (! is_string($entry['label_i18n_key']) || $entry['label_i18n_key'] === '') {
                 $this->errors[] = sprintf('%s: label_i18n_key must be a non-empty string', $ref);
             }
+            if (! is_string($entry['description_i18n_key']) || $entry['description_i18n_key'] === '') {
+                $this->errors[] = sprintf('%s: description_i18n_key must be a non-empty string', $ref);
+            }
             if (! is_string($entry['group']) || $entry['group'] === '') {
                 $this->errors[] = sprintf('%s: group must be a non-empty string', $ref);
             }
+            if (! is_string($entry['module']) || ! in_array($entry['module'], self::PERMISSION_MODULES, true)) {
+                $this->errors[] = sprintf('%s: module must be one of the fourteen §4.1 modules', $ref);
+            }
+            if (! is_string($entry['risk']) || ! in_array($entry['risk'], self::PERMISSION_RISKS, true)) {
+                $this->errors[] = sprintf('%s: risk must be one of %s', $ref, implode('|', self::PERMISSION_RISKS));
+            }
             $this->checkStringListSubset($entry['scopes'], self::SCOPES, $ref, 'scopes');
+            $dimension = $entry['scope_dimension'];
+            if (! is_string($dimension) || ! in_array($dimension, self::PERMISSION_SCOPE_DIMENSIONS, true)) {
+                $this->errors[] = sprintf('%s: scope_dimension must be one of %s', $ref, implode('|', self::PERMISSION_SCOPE_DIMENSIONS));
+            } elseif (is_array($entry['scopes']) && array_is_list($entry['scopes'])) {
+                // FR-01/FR-03 consistency: a scoped key offers all four levels for a
+                // role to pick from; an unscoped key has no scope choice at all.
+                $expected = $dimension === 'scoped' ? self::SCOPES : ['All'];
+                if ($entry['scopes'] !== $expected) {
+                    $this->errors[] = sprintf(
+                        '%s: scopes must be exactly [%s] for a %s key',
+                        $ref,
+                        implode(', ', $expected),
+                        $dimension,
+                    );
+                }
+            }
             $this->checkOwningDoc($entry['owning_doc'], $ref);
         }
     }
