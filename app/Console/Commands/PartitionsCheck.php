@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Domain\Conversations\Storage\MessagePartitions;
 use App\Support\Events\EventPartitions;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
@@ -22,33 +23,54 @@ use Illuminate\Support\Facades\Log;
  *      once; a monitor that stayed green here would be reporting on the wrong thing.
  *
  * Exit code is the interface: scheduled daily, and any non-zero exit is the alert.
+ *
+ * Since Doc 04 the same two assertions run for the messages table (Doc 04 T-01/R-01,
+ * FS-04): a row in messages_default is the "write to a missing partition" FS-04 says
+ * should never fire — this monitor IS the pager path, and its test drives a row into
+ * the default partition to prove the pager exists.
  */
 final class PartitionsCheck extends Command
 {
     protected $signature = 'partitions:check';
 
-    protected $description = 'Assert future events partitions exist and the DEFAULT partition is empty (Doc 01 EC-10 monitor)';
+    protected $description = 'Assert future events + messages partitions exist and the DEFAULT partitions are empty (Doc 01 EC-10, Doc 04 FS-04)';
 
-    public function handle(EventPartitions $partitions): int
+    public function handle(EventPartitions $eventPartitions, MessagePartitions $messagePartitions): int
     {
         $today = CarbonImmutable::now('UTC');
         $failures = [];
 
-        $covered = $partitions->futureMonthsCovered($today);
-        if ($covered < EventPartitions::MONTHS_AHEAD) {
-            $failures[] = sprintf(
-                'only %d future month(s) covered, need %d — run partitions:maintain and find out why the schedule did not',
-                $covered,
-                EventPartitions::MONTHS_AHEAD,
-            );
-        }
+        $surfaces = [
+            'events' => [
+                'covered' => $eventPartitions->futureMonthsCovered($today),
+                'ahead' => EventPartitions::MONTHS_AHEAD,
+                'strays' => $eventPartitions->defaultPartitionRows(),
+            ],
+            'messages' => [
+                'covered' => $messagePartitions->futureMonthsCovered($today),
+                'ahead' => MessagePartitions::MONTHS_AHEAD,
+                'strays' => $messagePartitions->defaultPartitionRows(),
+            ],
+        ];
 
-        $strays = $partitions->defaultPartitionRows();
-        if ($strays > 0) {
-            $failures[] = sprintf(
-                '%d row(s) in events_default — the partition window already failed once; move them into a real partition and diagnose',
-                $strays,
-            );
+        foreach ($surfaces as $table => $facts) {
+            if ($facts['covered'] < $facts['ahead']) {
+                $failures[] = sprintf(
+                    '%s: only %d future month(s) covered, need %d — run partitions:maintain and find out why the schedule did not',
+                    $table,
+                    $facts['covered'],
+                    $facts['ahead'],
+                );
+            }
+
+            if ($facts['strays'] > 0) {
+                $failures[] = sprintf(
+                    '%s: %d row(s) in %s_default — the partition window already failed once; move them into a real partition and diagnose',
+                    $table,
+                    $facts['strays'],
+                    $table,
+                );
+            }
         }
 
         if ($failures !== []) {
@@ -56,17 +78,18 @@ final class PartitionsCheck extends Command
                 $this->error('partitions:check: FAIL — '.$failure);
             }
 
-            Log::error('events partition monitor failing', [
+            Log::error('partition monitor failing', [
                 'failures' => $failures,
-                'metric' => 'events.partition_monitor_failed',
+                'metric' => 'partitions.monitor_failed',
             ]);
 
             return self::FAILURE;
         }
 
         $this->info(sprintf(
-            'partitions:check: PASS (%d future month(s) covered, events_default empty).',
-            $covered,
+            'partitions:check: PASS (events %d, messages %d future month(s) covered; both DEFAULT partitions empty).',
+            $surfaces['events']['covered'],
+            $surfaces['messages']['covered'],
         ));
 
         return self::SUCCESS;

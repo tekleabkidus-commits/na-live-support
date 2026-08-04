@@ -99,6 +99,10 @@ final class CursorPagination
      */
     public function paginate(Builder $query, string $column = 'id'): CursorPage
     {
+        if ($this->afterId !== null && str_contains($this->afterId, '|')) {
+            throw new InvalidPaginationRequest('The cursor does not belong to this collection.');
+        }
+
         $rows = $query
             ->when($this->afterId !== null, fn (Builder $q): Builder => $q->where($column, '>', $this->afterId))
             ->orderBy($column)
@@ -127,6 +131,66 @@ final class CursorPagination
         return new CursorPage($items->collect(), $nextCursor);
     }
 
+    /**
+     * Composite-keyset variant for tables whose display order is (timestamp, id) —
+     * Doc 04 §12's thread pagination ("cursor by (created_at, id)", FR-07). Receipt
+     * time is the first key and the UUIDv7 id breaks same-second ties (C-11: DB time
+     * and UUIDv7 monotonicity, never app-server clocks). The cursor stays opaque; the
+     * page window is a row-value comparison so Postgres walks the composite index.
+     *
+     * Column names are literal-string: they are interpolated into SQL, so they must
+     * be code-authored identifiers, never runtime data.
+     *
+     * @param  literal-string  $timestampColumn
+     * @param  literal-string  $idColumn
+     * @return CursorPage<stdClass>
+     */
+    public function paginateByTimestampAndId(Builder $query, string $timestampColumn, string $idColumn = 'id'): CursorPage
+    {
+        if ($this->afterId !== null) {
+            $parts = explode('|', $this->afterId, 2);
+
+            if (count($parts) !== 2) {
+                throw new InvalidPaginationRequest('The cursor does not belong to this collection.');
+            }
+
+            [$afterTimestamp, $afterRowId] = $parts;
+            $query->whereRaw(
+                '('.$timestampColumn.', '.$idColumn.') > (?, ?)',
+                [$afterTimestamp, $afterRowId],
+            );
+        }
+
+        $rows = $query
+            ->orderBy($timestampColumn)
+            ->orderBy($idColumn)
+            ->limit($this->limit + 1)
+            ->get();
+
+        $hasMore = $rows->count() > $this->limit;
+        $items = $rows->take($this->limit);
+
+        $nextCursor = null;
+
+        if ($hasMore) {
+            $last = $items->last();
+            $lastTimestamp = $last->{$timestampColumn} ?? null;
+            $lastId = $last->{$idColumn} ?? null;
+
+            if (! is_string($lastTimestamp) || ! is_string($lastId)) {
+                throw new InvalidPaginationRequest(sprintf(
+                    'Cursor columns "%s"/"%s" are missing from the selected rows — select both.',
+                    $timestampColumn,
+                    $idColumn,
+                ));
+            }
+
+            $nextCursor = self::encode($lastTimestamp.'|'.$lastId);
+        }
+
+        return new CursorPage($items->collect(), $nextCursor);
+    }
+
     private static function encode(string $id): string
     {
         return rtrim(strtr(base64_encode(self::CURSOR_VERSION.':'.$id), '+/', '-_'), '=');
@@ -140,12 +204,26 @@ final class CursorPagination
             throw new InvalidPaginationRequest('"cursor" is not a value this API issued.');
         }
 
-        $id = substr($decoded, strlen(self::CURSOR_VERSION) + 1);
+        $payload = substr($decoded, strlen(self::CURSOR_VERSION) + 1);
 
-        if (! preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $id)) {
+        // Two sanctioned payload shapes, one per paginate variant: a bare UUID, or
+        // "timestamp|uuid" from paginateByTimestampAndId. Each variant refuses the
+        // other shape at its own boundary; decode only vouches the payload was ours.
+        $parts = explode('|', $payload);
+
+        $uuid = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/';
+        $timestamp = '/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(\.\d+)?([+-]\d{2}(:?\d{2})?)?$/';
+
+        $wellFormed = match (count($parts)) {
+            1 => preg_match($uuid, $parts[0]) === 1,
+            2 => preg_match($timestamp, $parts[0]) === 1 && preg_match($uuid, $parts[1]) === 1,
+            default => false,
+        };
+
+        if (! $wellFormed) {
             throw new InvalidPaginationRequest('"cursor" is not a value this API issued.');
         }
 
-        return $id;
+        return $payload;
     }
 }

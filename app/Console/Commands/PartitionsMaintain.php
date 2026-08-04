@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Domain\Conversations\Storage\MessagePartitions;
 use App\Support\Events\EventPartitions;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
@@ -25,22 +26,30 @@ final class PartitionsMaintain extends Command
 {
     protected $signature = 'partitions:maintain';
 
-    protected $description = 'Create future monthly events partitions and drop those beyond NFR-07 retention (Doc 01 EC-10)';
+    protected $description = 'Create future monthly events + messages partitions; drop events beyond NFR-07 retention (Doc 01 EC-10, Doc 04 T-01)';
 
-    public function handle(EventPartitions $partitions): int
+    public function handle(EventPartitions $partitions, MessagePartitions $messagePartitions): int
     {
         $today = CarbonImmutable::now('UTC');
 
         $created = $partitions->ensureFutureMonths($today);
         $dropped = $partitions->dropExpired($today);
 
+        // Messages: window maintenance only. Their retention drop is SETTINGS-driven
+        // with legal-hold copy-out (Doc 04 T-08/EC-09/AC-09) and lives in the
+        // retention job, never in this blind monthly pass.
+        $messagesCreated = $messagePartitions->ensureFutureMonths($today);
+
         $this->info(sprintf(
-            'partitions:maintain: %d created (%s), %d dropped (%s), %d future month(s) covered.',
+            'partitions:maintain: events %d created (%s), %d dropped (%s), %d future month(s) covered; messages %d created (%s), %d covered.',
             count($created),
             $created === [] ? 'none' : implode(', ', $created),
             count($dropped),
             $dropped === [] ? 'none' : implode(', ', $dropped),
             $partitions->futureMonthsCovered($today),
+            count($messagesCreated),
+            $messagesCreated === [] ? 'none' : implode(', ', $messagesCreated),
+            $messagePartitions->futureMonthsCovered($today),
         ));
 
         return self::SUCCESS;

@@ -214,7 +214,12 @@ function cleanupTenants(array $tenantIds): void
 
     $platform = DB::connection('pgsql_platform');
 
-    foreach (['events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
+    foreach ([
+        // Doc 04: messages reference conversations, conversations reference
+        // customers — so drafts/revisions/messages first, customers last.
+        'message_drafts', 'message_revisions', 'messages', 'conversations',
+        'customer_identities', 'customers',
+        'events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
         'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',
         'tenant_keys', 'devices', 'auth_action_tokens', 'user_recovery_codes',
         'user_password_history', 'personal_access_tokens',
