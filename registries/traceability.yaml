@@ -1057,3 +1057,139 @@ entries:
       design-export-blocked (pre-agreed bucket): baselines attach when the
       owner fires the Batch 6 export; this row must not claim visual
       coverage until then.
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # Doc 04 — Conversations & Messaging Core (S20). Enforcement flips with the
+  # BUILD-STATUS row in the same commit (ADR 0004; the flip and the rows land
+  # together). Rows start not-implemented with the step that builds them named;
+  # each step updates its own row when its test actually executes. A row claiming
+  # coverage before its test runs is the false PASS this registry exists to
+  # prevent.
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - ac_ref: "Doc04 AC-01"
+    suite_path: tests/Contract/AdapterConformance/FakeAdapterConformanceTest.php
+    type: automated
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      The conformance suite runs the full matrix (32 capability combinations, all six
+      error classifications, dedupe stability, ordering purity, contract-boundary note
+      isolation) against the FAKE reference adapter — executed and green in S20 step 1.
+      "Every shipped adapter" is satisfied vacuously until real adapters exist:
+      re-proof subclasses attach when Doc 05 (Telegram) and Doc 13 (widget) ship theirs
+      (pre-agreed bucket). The second-fake-adapter zero-core-edits proof (SS-02, ruling
+      R-16) lands in step 9.
+
+  - ac_ref: "Doc04 AC-02"
+    suite_path: manual
+    type: manual
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Unit/Conversations/DeliveryStateMachineTest.php.
+      NOT IMPLEMENTED YET — the delivery state machine is S20 step 4's deliverable; the
+      full legal + illegal transition matrix lands with it. This row flips when that
+      test executes.
+
+  - ac_ref: "Doc04 AC-03"
+    suite_path: manual
+    type: manual
+    tier: property
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Property/LaneOrderingSoakTest.php.
+      NOT IMPLEMENTED YET — FIFO lanes are S20 step 4; the induced head-failure test
+      and the 10k-message ordering soak land with them.
+
+  - ac_ref: "Doc04 AC-04"
+    suite_path: tests/Security/NoteIsolationTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      The TYPE/STATIC half is executed and green (S20 step 1): DeliverableKind pinned
+      to the seven customer kinds, the conversion point refuses note/system, the
+      adapter-namespace reflection sweep finds no other content door, and the
+      conformance suite asserts the send-path types. The RUNTIME guard half (the
+      compose path refusing internal content in flight) arrives with notes in step 6.
+
+  - ac_ref: "Doc04 AC-05"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Integration/Conversations/MediaPipelineTest.php.
+      NOT IMPLEMENTED YET — the media pipeline is S20 step 5; oversized, EICAR and
+      scan-timeout fixtures land with it.
+
+  - ac_ref: "Doc04 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Feature/Conversations/EditDeleteTest.php.
+      NOT IMPLEMENTED YET — edit/delete revisions and the conversations.history.full
+      gate are S20 step 7.
+
+  - ac_ref: "Doc04 AC-07"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Feature/Conversations/RealtimeTest.php.
+      NOT IMPLEMENTED YET — realtime distribution is S20 step 8. Mechanism-level
+      visibility proof lands there; the formal ≤1.5 s p95 under load profile L2 is
+      Doc 19's (pre-agreed bucket) and this row will say so when it flips.
+
+  - ac_ref: "Doc04 AC-08"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Feature/Conversations/DraftsTest.php.
+      NOT IMPLEMENTED YET — drafts are S20 step 6; the cross-device ≤10 s recovery is
+      proven at mechanism level on the minimal harness (never product UI, per the
+      session's design-fidelity scoping).
+
+  - ac_ref: "Doc04 AC-09"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      Planned test: tests/Feature/Conversations/RetentionTest.php.
+      NOT IMPLEMENTED YET — retention with legal hold is S20 step 9; the
+      exact-eligible-partitions drop, hold copy-out and retention.completed counts land
+      with it.

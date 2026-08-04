@@ -117,3 +117,12 @@ gates:
     owner: platform-engineering
     added_date: "2026-07-27"
     blocking: true
+
+  - gate_id: adapter-conformance
+    name: Channel adapters pass the FR-08 conformance suite (fake reference adapter now; every shipped adapter as Docs 05/13 land)
+    command: bash ci/adapter-conformance.sh
+    owning_doc: Doc04
+    owning_ac: AC-01
+    owner: platform-engineering
+    added_date: "2026-08-04"
+    blocking: true
