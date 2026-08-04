@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Support\Rbac;
+
+use App\Models\User;
+
+/**
+ * T-04: the UI capability payload is MINIMAL — each Inertia page receives
+ * only the keys it actually uses, computed from this manifest, never the
+ * full matrix. Adding a capability to a page means adding it HERE, which is
+ * what keeps the payload auditable (the test pins payload ⊆ manifest).
+ */
+final class PageCapabilities
+{
+    /** @var array<string, list<string>> page component → the keys it renders against */
+    public const MANIFEST = [
+        'Admin/Rbac/RolesList' => [
+            'admin.roles.view', 'admin.roles.manage', 'admin.users.manage',
+        ],
+        'Admin/Rbac/RoleEditor' => [
+            'admin.roles.view', 'admin.roles.manage',
+        ],
+        'Admin/Rbac/UserOverrides' => [
+            'admin.users.view', 'admin.overrides.manage',
+        ],
+        'Admin/Rbac/PendingGrants' => [
+            'admin.roles.view', 'admin.roles.manage', 'admin.overrides.manage',
+        ],
+    ];
+
+    public function __construct(private readonly CapabilityMapProvider $maps) {}
+
+    /**
+     * @return array<string, bool> only the manifest's keys for this page
+     */
+    public function for(User $user, string $page): array
+    {
+        $map = $this->maps->mapFor($user);
+
+        $can = [];
+        foreach (self::MANIFEST[$page] ?? [] as $key) {
+            $can[$key] = $map->allows($key);
+        }
+
+        return $can;
+    }
+}

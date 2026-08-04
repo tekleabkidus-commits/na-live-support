@@ -69,6 +69,10 @@ final class BrowserFixtureSeeder extends Seeder
     // the suite resets it with `auth:session-inspect clear-2fa` either way.
     public const TWO_FACTOR_EMAIL = 'twofactor-fixture@fixture.example';
 
+    // Doc 03 (S19, rbac.spec.ts): a READ ONLY principal for AC-08's deny half
+    // — controls must be hidden/disabled exactly where verdict=deny.
+    public const READ_ONLY_EMAIL = 'readonly-fixture@fixture.example';
+
     public function run(): void
     {
         if (! app()->environment(['local', 'testing', 'ci'])) {
@@ -83,6 +87,27 @@ final class BrowserFixtureSeeder extends Seeder
         $this->user($primary, self::RESET_EMAIL);
         $this->invitedUser($primary, self::INVITED_EMAIL);
         $this->user($primary, self::TWO_FACTOR_EMAIL);
+
+        // Doc 03 (S19): the flip made every permission declaration real — the
+        // fixture accounts need ROLES now. Appendix B's templates seed via the
+        // real seeder; the primary agent gets Super Admin (the specs drive the
+        // admin surfaces), the AC-08 fixture gets the Read Only template.
+        $this->user($primary, self::READ_ONLY_EMAIL);
+        app(TenantContext::class)->runFor(
+            $primary->identifier(),
+            ResolutionSource::Console,
+            function (): void {
+                app(\App\Domain\Rbac\RoleSeeder::class)->seed();
+                $superAdmin = \App\Models\Role::query()->where('name', 'Super Admin')->firstOrFail();
+                $readOnly = \App\Models\Role::query()->where('name', 'Read Only')->firstOrFail();
+                foreach ([self::PRIMARY_EMAIL, self::RESET_EMAIL, self::TWO_FACTOR_EMAIL] as $email) {
+                    User::query()->where('email', $email)
+                        ->update(['role_id' => $superAdmin->identifier()]);
+                }
+                User::query()->where('email', self::READ_ONLY_EMAIL)
+                    ->update(['role_id' => $readOnly->identifier()]);
+            },
+        );
 
         $second = $this->tenant('Fixture Operator B');
         $this->user($second, self::SECOND_TENANT_EMAIL);

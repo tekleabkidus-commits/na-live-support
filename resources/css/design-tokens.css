@@ -1,0 +1,158 @@
+/*
+ * Design tokens — encoded ONCE from the frozen design system, per
+ * DESIGN-FIDELITY-MANDATE §2/§4.3 (S19, first encoding: no token file
+ * existed before this session; S17's auth screens predate the frozen
+ * export and reconcile when their pixel pass runs).
+ *
+ * Sources, verbatim — never mixed by eye:
+ *  - FIXED tokens (design-system law R-07/R-08; a tenant cannot re-skin
+ *    them): B1-DS-design-system-v2 §2, BOTH colourways, transcribed
+ *    hex-for-hex. Status hues are reserved to their semantic components;
+ *    generic pass/fail UI uses the neutral success/danger tokens.
+ *  - SURFFACE/system palette: the values the frozen B6-S07..S10 frames are
+ *    drawn with (their delivery notes bind them to B1-DS verbatim).
+ *
+ * Dark values come from the dark column/frames only (the program's worst
+ * recorded error was twice inventing dark tokens — not repeated here).
+ */
+
+:root {
+    /* ── Surfaces & text (light frames) ── */
+    --ds-page-bg: #f4f3f1;
+    --ds-canvas-bg: #e8e7e3;
+    --ds-panel-bg: #ffffff;
+    --ds-panel-soft: #f6f5f2;
+    --ds-row-hover: #f0eee9;
+    --ds-inset-bg: #eeece6;
+    --ds-border: #e5e2db;
+    --ds-border-strong: #cfcbc1;
+    --ds-border-soft: #f0eee9;
+    --ds-text-primary: #1d1c18;
+    --ds-text-ink: #22211d;
+    --ds-text-secondary: #4a4842;
+    --ds-text-muted: #6b675d;
+    --ds-text-faint: #6f6a61;
+    /* FILED DEVIATION (S19, DESIGN-DEVIATIONS): the frames draw uppercase
+       10px labels in #9A9588, which measures ≈2.9:1 on the white panel —
+       below Doc 03 §13's AA floor. The document outranks the drawn value
+       (mandate §1), so the label token maps to the system's own compliant
+       gray in each colourway; flagged class-3 for the design track. */
+    --ds-text-label: #6f6a61;
+    --ds-accent: #22211d;
+    --ds-accent-contrast: #ffffff;
+    --ds-danger-text: #b32b2b;
+    --ds-danger-strong: #8e2222;
+    --ds-danger-bg: #fbe5e5;
+    --ds-danger-border: #e7c4c4;
+    --ds-success-text: #156f45;
+    --ds-success-bg: #e4f4ea;
+    --ds-warn-text: #8f5f08;
+    --ds-warn-bg: #fcf0d9;
+    --ds-warn-border: #e8cf9b;
+    --ds-focus-ring: #1d4fd7;
+
+    /* ── FIXED: status pills (Doc 06 §9) ── */
+    --ds-status-new-bg: #e7effe;         --ds-status-new-fg: #1d4fd7;
+    --ds-status-open-bg: #e4f4ea;        --ds-status-open-fg: #156f45;
+    --ds-status-pending-customer-bg: #fcf0d9;  --ds-status-pending-customer-fg: #8f5f08;
+    --ds-status-pending-internal-bg: #f0eafd;  --ds-status-pending-internal-fg: #6231c7;
+    --ds-status-escalated-bg: #fcebdc;   --ds-status-escalated-fg: #af4910;
+    --ds-status-resolved-bg: #def4f1;    --ds-status-resolved-fg: #0a7266;
+    --ds-status-closed-bg: #eceef1;      --ds-status-closed-fg: #59636f;
+    --ds-status-spam-bg: #f4e8e8;        --ds-status-spam-fg: #8c4646;
+
+    /* ── FIXED: priority dots (Doc 06 §9) ── */
+    --ds-priority-low: #8a94a0;
+    --ds-priority-normal: #3b82f6;
+    --ds-priority-high: #f97316;
+    --ds-priority-urgent: #ef4444;
+
+    /* ── FIXED: SLA chip (Doc 12 / Doc 07 FR-09) ── */
+    --ds-sla-ok-bg: #e4f4ea;     --ds-sla-ok-fg: #156f45;
+    --ds-sla-soon-bg: #fcf0d9;   --ds-sla-soon-fg: #8f5f08;
+    --ds-sla-breach-bg: #fbe5e5; --ds-sla-breach-fg: #b32b2b;
+
+    /* ── FIXED: reply-window chip (Doc 05 §9/FR-22) ── */
+    --ds-window-open-bg: #edeef2;   --ds-window-open-fg: #4a5460;
+    --ds-window-soon-bg: #fcf0d9;   --ds-window-soon-fg: #8f5f08;
+    --ds-window-expired-bg: #fbe5e5; --ds-window-expired-fg: #b32b2b;
+
+    /* ── FIXED: connection state (Doc 05 §9) ── */
+    --ds-conn-active-bg: #e4f4ea;  --ds-conn-active-fg: #156f45;
+    --ds-conn-paused-bg: #fcf0d9;  --ds-conn-paused-fg: #8f5f08;
+    --ds-conn-revoked-bg: #fbe5e5; --ds-conn-revoked-fg: #b32b2b;
+
+    /* ── FIXED: channel-health rollup (Doc 07 FR-03 / Doc 05 FR-29) ── */
+    --ds-health-healthy: #22a55b;
+    --ds-health-degraded: #e0a33a;
+    --ds-health-down: #c93b3b;
+
+    /* ── FIXED: note + AI accent (Doc 07 FR-17 / §9) ── */
+    --ds-note-bg: #fbf3d6;  --ds-note-fg: #7e650f;
+    --ds-ai-bg: #f1edfe;    --ds-ai-fg: #5b3fd6;
+}
+
+[data-theme='dark'] {
+    /* ── Surfaces & text (dark frames) ── */
+    --ds-page-bg: #141412;
+    --ds-canvas-bg: #141412;
+    --ds-panel-bg: #1c1c19;
+    --ds-panel-soft: #232320;
+    --ds-row-hover: #262622;
+    --ds-inset-bg: #2f2f29;
+    --ds-border: #343430;
+    --ds-border-strong: #45443e;
+    --ds-border-soft: #262622;
+    --ds-text-primary: #eceae4;
+    --ds-text-ink: #eceae4;
+    --ds-text-secondary: #c9c5bb;
+    --ds-text-muted: #a6a296;
+    --ds-text-faint: #9a9588;
+    --ds-text-label: #a6a296; /* same filed deviation — dark colourway */
+    --ds-accent: #eceae4;
+    --ds-accent-contrast: #171714;
+    --ds-danger-text: #f08a8a;
+    --ds-danger-strong: #e06b6b;
+    --ds-danger-bg: #3d1b1b;
+    --ds-danger-border: #6b3838;
+    --ds-success-text: #5ad190;
+    --ds-success-bg: #123322;
+    --ds-warn-text: #e8c25a;
+    --ds-warn-bg: #332b12;
+    --ds-warn-border: #5a4a1e;
+    --ds-focus-ring: #8fb6ff;
+
+    /* ── FIXED: status pills — dark column ── */
+    --ds-status-new-bg: #182b50;         --ds-status-new-fg: #8fb6ff;
+    --ds-status-open-bg: #123322;        --ds-status-open-fg: #5ad190;
+    --ds-status-pending-customer-bg: #3a2d10;  --ds-status-pending-customer-fg: #f0b54a;
+    --ds-status-pending-internal-bg: #2a2047;  --ds-status-pending-internal-fg: #b69cf5;
+    --ds-status-escalated-bg: #3b2210;   --ds-status-escalated-fg: #f5945a;
+    --ds-status-resolved-bg: #0f312e;    --ds-status-resolved-fg: #52d0bf;
+    --ds-status-closed-bg: #272d34;      --ds-status-closed-fg: #9aa6b2;
+    --ds-status-spam-bg: #342325;        --ds-status-spam-fg: #cc8f8f;
+
+    --ds-priority-low: #8a94a0;
+    --ds-priority-normal: #5c95ff;
+    --ds-priority-high: #fb923c;
+    --ds-priority-urgent: #f87171;
+
+    --ds-sla-ok-bg: #123322;     --ds-sla-ok-fg: #5ad190;
+    --ds-sla-soon-bg: #3a2d10;   --ds-sla-soon-fg: #f0b54a;
+    --ds-sla-breach-bg: #3d1b1b; --ds-sla-breach-fg: #f08a8a;
+
+    --ds-window-open-bg: #262c33;   --ds-window-open-fg: #a7b2be;
+    --ds-window-soon-bg: #3a2d10;   --ds-window-soon-fg: #f0b54a;
+    --ds-window-expired-bg: #3d1b1b; --ds-window-expired-fg: #f08a8a;
+
+    --ds-conn-active-bg: #123322;  --ds-conn-active-fg: #5ad190;
+    --ds-conn-paused-bg: #3a2d10;  --ds-conn-paused-fg: #f0b54a;
+    --ds-conn-revoked-bg: #3d1b1b; --ds-conn-revoked-fg: #f08a8a;
+
+    --ds-health-healthy: #3ecb80;
+    --ds-health-degraded: #f0b54a;
+    --ds-health-down: #e06b6b;
+
+    --ds-note-bg: #332b12;  --ds-note-fg: #e8c25a;
+    --ds-ai-bg: #292144;    --ds-ai-fg: #bca9ff;
+}
