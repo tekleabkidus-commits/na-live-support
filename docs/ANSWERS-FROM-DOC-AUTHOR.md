@@ -295,3 +295,55 @@ subject encounter — because it is the only moment that exists for every path i
 never predate the user's ability to comply. The stamp is a guarded fill-only UPDATE in DB
 time (it can never RESET anyone's grace window), the column is nullable expand-contract
 (C-12), and the days-left comparison runs in SQL against now() (C-11).
+
+## 2026-08-04 — Doc 04 plan-approval rulings (Session 20)
+
+Filed at plan approval, before implementation, by owner order. R-15…R-17 are owner rulings;
+A-4/A-5 are filed interpretations (the doc author has NOT been consulted). This record is
+canonical over any restatement in commits or BUILD-STATUS.
+
+### R-15. Doc 04 stack growth approved
+
+ADR 0008 (egress-proxy compose service; `league/flysystem-aws-s3-v3`; `intervention/image`
+on the GD driver; lane workers as a worker-container process per ADR 0007's precedent; a
+hand-rolled clamd INSTREAM client instead of a client dependency) and ADR 0009
+(`dompdf/dompdf` with embedded Noto Sans Ethiopic for FR-24's Amharic transcripts) are
+approved. Each ADR is written BEFORE the code it covers; compose/CI commits fall under the
+efficiency ruling's infra exception.
+
+### R-16. SS-02 is claimed via the second fake adapter
+
+The zero-core-edits architecture property (Doc 04 SS-02) is proven THIS session by a second
+minimal fake adapter with a different capability profile driven through the conformance
+suite, with the zero-core-edits diff pasted. Its traceability row carries verbatim:
+"architecture property proven via a second fake adapter; the literal WhatsApp demonstration
+re-proves if such an adapter is ever built (§19)". Never a bare DONE.
+
+### R-17. FS-05's ops re-drive view ships as a class-2 gap fill
+
+Doc 04 FS-05's "ops UI lists parked items with re-drive" ships this session under
+DESIGN-FIDELITY-MANDATE class 2 (required functionality no frame draws): existing
+design-system patterns only (data table, confirmation component), tokens from the B1-DS
+lineage (v2 §2 + all three addenda), filed in BUILD-STATUS's DESIGN-DEVIATIONS. This amends
+the session's scoping row to: "no drawn-FILE surface built; exactly ONE class-2 fill
+(FS-05 ops view), filed." Everything else stays harness-only, never styled as product UI.
+
+### A-4. Names for events Doc 04 requires but does not name (FILED INTERPRETATION)
+
+FR-17's mention event = `note.mentioned` · FR-15's lane-skip warning =
+`conversation.lane_skipped` · FS-01's channel health events = `channel.health.changed`.
+All three: closed payloads, identifiers only (Q7's posture), audit-coverage entries,
+catalog regenerated. FR-26's enumerated list is otherwise untouched.
+
+### A-5. Names for the FR-16 rate-bucket settings (FILED INTERPRETATION)
+
+FR-16 requires token-bucket settings but names no keys. Registered under `messaging.*`
+with platform validation, `tenant_editable: false` until Doc 16 rules otherwise:
+
+- `messaging.rate.outbound_per_second` — int, default 25, validation 1..100. Steady-state
+  token refill per channel endpoint.
+- `messaging.rate.outbound_burst` — int, default 50, validation 1..200. Bucket capacity
+  (NFR-02's 50 msg/s burst-absorption figure is the default's source).
+
+Adapter capability remains the harder cap where lower; over-limit messages WAIT in
+`queued`, never dropped (FR-16's own text).
