@@ -39,11 +39,11 @@ use Illuminate\Support\Facades\Hash;
 function fixationUser(string $email = 'agent@fixture.example'): array
 {
     $tenant = createTenant();
-    $user = asTenant($tenant, fn (): User => User::factory()->create([
+    $user = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create([
         'email' => $email,
         'password' => Hash::make('the-correct-password'),
         'password_set_at' => now(),
-    ]));
+    ])));
     activateTenant($tenant);
 
     app(TenantContext::class)->clear();

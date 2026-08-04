@@ -444,6 +444,61 @@ function &capturedLogsRef(): array
 
 /*
 |--------------------------------------------------------------------------
+| RBAC fixtures (Doc 03, S19 — the enforce flip)
+|--------------------------------------------------------------------------
+|
+| Since S19 step 7 every `permission:` declaration is a REAL staff check, so
+| a fixture user with no role holds nothing (implicit deny — fail-closed by
+| design). Suites that exercise permission-gated routes grant a role first;
+| granting everything is the Super Admin template's legitimate shape, not a
+| test cheat.
+|
+*/
+
+/**
+ * Assign the user a role granting every catalog key (all scopes All) —
+ * the Super Admin shape. Creates the role once per tenant.
+ */
+function grantAllPermissions(User $user): User
+{
+    $role = App\Models\Role::query()->firstOrCreate(
+        ['name' => 'Fixture Super Role'],
+        [
+            'color' => 'role-super-admin',
+            'permissions' => array_keys(app(App\Support\Rbac\PermissionCatalog::class)->all()),
+            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
+        ],
+    );
+    $user->forceFill(['role_id' => $role->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
+
+    return $user;
+}
+
+/**
+ * Assign a role granting exactly the named keys (scopes All on the four
+ * scoped modules) — for under-privilege and boundary fixtures.
+ *
+ * @param  list<string>  $permissions
+ */
+function grantPermissions(User $user, array $permissions, string $roleName = 'Fixture Scoped Role'): User
+{
+    $role = App\Models\Role::query()->firstOrCreate(
+        ['name' => $roleName],
+        [
+            'color' => 'role-agent',
+            'permissions' => $permissions,
+            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
+        ],
+    );
+    $user->forceFill(['role_id' => $role->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
+
+    return $user;
+}
+
+/*
+|--------------------------------------------------------------------------
 | Perf-budget helpers (Doc 01 AC-07 / Doc 03 NFR-01 — dev-hardware-indicative)
 |--------------------------------------------------------------------------
 |
@@ -630,11 +685,14 @@ function driveSeededCredentialFlows(bool $mailOnDatabaseQueue, bool $staffOnly =
 
     // ── Staff account: password + login, wrong then right (FR-01/FR-04) ──
     $tenant = createTenant();
-    $user = asTenant($tenant, fn (): User => User::factory()->create([
+    $user = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create([
         'email' => 'seeded-staff@fixture.example',
         'password' => Hash::make(SEEDED_STAFF_PASSWORD),
         'password_set_at' => now(),
-    ]));
+    ])));
+    // BR-07 (S19): the machine-token mint below must name a real role.
+    $serviceRoleId = asTenant($tenant, fn () => (string) App\Models\Role::query()
+        ->where('name', 'Fixture Super Role')->value('id'));
     activateTenant($tenant);
     $tenants[] = (string) $tenant->getKey();
 
@@ -705,6 +763,7 @@ function driveSeededCredentialFlows(bool $mailOnDatabaseQueue, bool $staffOnly =
         'name' => 'seeded reporting',
         'abilities' => ['settings.view'],
         'expiry' => '90',
+        'role_id' => $serviceRoleId,
     ]);
     $machine->assertCreated();
     $sentinels['machine_token_plaintext'] = (string) $machine->json('plaintext');

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Log;
 function localeUser(?string $locale): User
 {
     $tenant = createTenant();
-    $user = asTenant($tenant, fn (): User => User::factory()->create(['locale' => $locale]));
+    $user = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create(['locale' => $locale])));
     activateTenant($tenant);
 
     return $user;

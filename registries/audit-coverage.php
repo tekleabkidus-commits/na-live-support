@@ -362,6 +362,16 @@ return [
         'owning_doc' => 'Doc02',
     ],
 
+    [
+        // SEC-05 (S19): the dedicated allowlist-violation entry beside the
+        // generic auth.login.failed(reason=ip_blocked) row.
+        'action_key' => 'auth.ip.blocked',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ip'],
+        'owning_doc' => 'Doc02',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Doc 03 — RBAC (FR-12; S19). Audit carries the OLD/NEW payloads the

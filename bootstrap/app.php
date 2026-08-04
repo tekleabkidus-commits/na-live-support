@@ -155,6 +155,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // guest, a disabled max-age (the default) and a fresh password are all
         // no-ops. The staff API group appends it in routes/api.php.
         $middleware->appendToGroup('web', App\Http\Middleware\EnforcePasswordExpiry::class);
+        // Doc 02 FR-09 (closed at S19 with the role resolver): required-role
+        // 2FA enforcement, grace countdown; runs after auth + password expiry.
+        $middleware->appendToGroup('web', App\Http\Middleware\EnforceTwoFactorForRole::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

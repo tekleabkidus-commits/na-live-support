@@ -301,6 +301,8 @@ final class StaffSessionController extends Controller
     {
         return [
             \App\Domain\Auth\Login\Pipes\RefuseBlockedPrincipal::class,
+            // SEC-05 (S19): per-role IP allowlist, post-auth pre-session.
+            \App\Domain\Auth\Login\Pipes\RefuseBlockedIp::class,
         ];
     }
 }

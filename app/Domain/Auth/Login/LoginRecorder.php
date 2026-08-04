@@ -119,6 +119,51 @@ final class LoginRecorder
     }
 
     /**
+     * SEC-05 (S19): a correct credential refused because the role's IP
+     * allowlist excludes this address. TWO records on purpose: the generic
+     * auth.login.failed (reason ip_blocked — the standing failure trail) AND
+     * the dedicated auth.ip.blocked event + audit entry SEC-05 names, so a
+     * security officer can alert on allowlist violations without parsing
+     * failure reasons.
+     */
+    public function ipBlocked(User $user, Request $request): void
+    {
+        $candidate = new StaffLoginCandidate(
+            userId: $user->identifier(),
+            tenantId: $user->tenantId(),
+            passwordHash: '',
+            disabled: $user->isDisabled(),
+            lockedUntil: null,
+            failedLoginAttempts: 0,
+            firstFailedLoginAt: null,
+            twoFactorEnabled: $user->hasTwoFactorEnabled(),
+            passwordSet: true,
+            locale: null,
+            tenantState: \App\Domain\Foundation\Tenancy\TenantState::Active,
+        );
+
+        $this->failedForKnownAccount($candidate, FailureReason::IpBlocked, $request);
+
+        $this->withinTenant($user->tenantId(), function () use ($user, $request): void {
+            $this->audit->record(
+                actionKey: 'auth.ip.blocked',
+                entity: 'user',
+                entityId: $user->identifier(),
+                actorType: AuditActor::Staff,
+                payload: ['ip' => $this->ip($request)],
+                actorId: $user->identifier(),
+                tenantId: $user->tenantId(),
+            );
+
+            $this->publishOutsideTheAuditWrite('auth.ip.blocked', [
+                'tenant_id' => $user->tenantId(),
+                'user_id' => $user->identifier(),
+                'ip_hash' => $this->hashIp($request),
+            ]);
+        }, $this->context);
+    }
+
+    /**
      * FR-07 / §4.8: one failed 2FA challenge attempt. The fifth becomes a void,
      * which the LOCKOUT records separately — this entry is the per-attempt
      * trace a security officer correlates against a TOTP-guessing pattern.

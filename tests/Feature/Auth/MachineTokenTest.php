@@ -19,18 +19,23 @@ use Illuminate\Testing\TestResponse;
 function machineFixture(): array
 {
     $tenant = createTenant();
-    $admin = asTenant($tenant, fn (): User => User::factory()->create([
+    $admin = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create([
         'email' => 'admin@fixture.example',
         'password' => Hash::make('the-correct-password'),
         'password_set_at' => now(),
-    ]));
+    ])));
+    // BR-07 (S19): a NEW service account requires a real role at creation.
+    $serviceRole = asTenant($tenant, fn () => App\Models\Role::query()->firstOrCreate(
+        ['name' => 'Fixture Service Role'],
+        ['color' => 'role-agent', 'permissions' => ['settings.view', 'settings.edit', 'tickets.view'], 'scopes' => []],
+    ));
     activateTenant($tenant);
 
     app(TenantContext::class)->clear();
     app(RlsSession::class)->clear();
     test()->flushSession();
 
-    return [$tenant, $admin];
+    return [$tenant, $admin, $serviceRole];
 }
 
 function createMachineToken(User $admin, array $overrides = []): TestResponse
@@ -41,6 +46,7 @@ function createMachineToken(User $admin, array $overrides = []): TestResponse
         'name' => 'reporting integration',
         'abilities' => ['settings.view'],
         'expiry' => '90',
+        'role_id' => asTenant($admin->tenantId(), fn () => App\Models\Role::query()->where('name', 'Fixture Service Role')->value('id')),
     ], $overrides));
 }
 

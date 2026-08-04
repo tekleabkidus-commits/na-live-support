@@ -87,6 +87,24 @@ final class MachineTokensController extends Controller
         $now = CarbonImmutable::now();
         $account = $this->serviceAccounts->findOrCreate($serviceAccountName, $now, $admin->identifier());
 
+        // BR-07 (S19): a service account holds a REAL role like anyone. A new
+        // account without one would mint dead tokens (implicit deny × T-05
+        // intersection = nothing), so creation requires `role_id`; reuse keeps
+        // the current role unless the caller names a different one.
+        $roleId = $request->string('role_id')->toString();
+        $role = $roleId === '' ? null : \App\Models\Role::query()->whereKey($roleId)->first();
+        if ($role === null && ($roleId !== '' || $account->getAttribute('role_id') === null)) {
+            return ProblemDetails::response(
+                code: ErrorCode::ValidationFailed,
+                status: 422,
+                detail: (string) __('foundation.error.validation_failed'),
+                errors: ['role_id' => [(string) __('validation.required', ['attribute' => 'role_id'])]],
+            );
+        }
+        if ($role !== null) {
+            $this->serviceAccounts->assignRole($account, $role, $admin->identifier());
+        }
+
         /** @var list<string> $abilities */
         $abilities = $request->input('abilities');
 

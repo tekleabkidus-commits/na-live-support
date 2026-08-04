@@ -103,6 +103,14 @@ enum ErrorCode: string
     case InsufficientScope = 'insufficient_scope';
 
     /**
+     * Doc 03 T-02/SEC-02: a STAFF principal's role/overrides deny the
+     * declared permission — 403 naming the key for staff clients
+     * (`{code:"forbidden", permission:key}`); object EXISTENCE stays masked
+     * separately (out-of-scope object reads are 404 per Doc 01 SEC-06).
+     */
+    case Forbidden = 'forbidden';
+
+    /**
      * FR-21/AC-06/EC-08: a widget session request from an origin (or with a
      * frame ancestor) outside the widget's domain allowlist. ONE code for
      * origin and ancestor refusals alike — distinguishing them would tell a

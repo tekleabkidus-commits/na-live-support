@@ -39,11 +39,11 @@ use Illuminate\Support\Facades\Route;
 function scopeFixture(): array
 {
     $tenant = createTenant();
-    $user = asTenant($tenant, fn (): User => User::factory()->create([
+    $user = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create([
         'email' => 'scope.owner@fixture.example',
         'password' => Hash::make('the-correct-password'),
         'password_set_at' => now(),
-    ]));
+    ])));
     activateTenant($tenant);
 
     app(TenantContext::class)->clear();

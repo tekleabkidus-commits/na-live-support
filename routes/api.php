@@ -82,6 +82,9 @@ Route::group([], function (): void {
         // FR-15 max-age: after locale so the confinement notice renders in the
         // user's language; the change endpoint itself is on its allowlist.
         App\Http\Middleware\EnforcePasswordExpiry::class,
+        // FR-09 (closed at S19): required-role 2FA enforcement — the staff
+        // DATA surface locks with the screens, or the lockout is decorative.
+        App\Http\Middleware\EnforceTwoFactorForRole::class,
     ])
         ->prefix('staff')
         ->group(function (): void {
@@ -178,6 +181,15 @@ Route::group([], function (): void {
             Route::delete('admin/users/{userId}/two-factor', [TwoFactorAdminResetController::class, 'destroy'])
                 ->middleware(['permission:admin.2fa.reset', 'audit:auth.2fa.reset_by_admin'])
                 ->name('auth.2fa.admin_reset');
+
+            // S19 step 7 — the Doc 02 admin surfaces that waited for real
+            // enforcement (see AdminUsersController's docblock).
+            Route::post('admin/users/{userId}/unlock', [App\Http\Controllers\Auth\AdminUsersController::class, 'unlock'])
+                ->middleware(['permission:admin.users.manage', 'audit:auth.lockout.unlocked'])
+                ->name('auth.admin_users.unlock');
+            Route::post('admin/users/{userId}/disable', [App\Http\Controllers\Auth\AdminUsersController::class, 'disable'])
+                ->middleware(['permission:admin.users.disable', 'audit:auth.user.disabled'])
+                ->name('auth.admin_users.disable');
 
             // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
             // which is a deletion of the override row rather than a write of the

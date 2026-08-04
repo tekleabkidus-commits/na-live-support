@@ -10,7 +10,7 @@ use App\Support\Auth\Sessions\TenantHint;
 use App\Support\Flags\FeatureRegistry;
 use App\Support\I18n\TelemetricTranslator;
 use App\Support\Rbac\EffectivePermissions;
-use App\Support\Rbac\RegisteredKeysEffectivePermissions;
+use App\Support\Rbac\ResolvedEffectivePermissions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Translation\Translator;
@@ -29,11 +29,11 @@ class AppServiceProvider extends ServiceProvider
         // for the bug that produced this design.
         $this->app->singleton(TenantHint::class, fn (Application $app): TenantHint => new TenantHint($app));
 
-        // THE T-05 SEAM (Doc 02 ↔ Doc 03). TokenScopeGate consumes the
-        // interface; this binding is the ONLY line Doc 03's session changes
-        // when its real capability-map resolver replaces the registered-keys
-        // stand-in. See EffectivePermissions' docblock.
-        $this->app->bind(EffectivePermissions::class, RegisteredKeysEffectivePermissions::class);
+        // THE T-05 SEAM (Doc 02 ↔ Doc 03), CLOSED at S19 step 7: the real
+        // capability-map resolver replaced the registered-keys stand-in (its
+        // class was deleted, as its docblock ordered). TokenScopeGate
+        // consumes the interface unchanged.
+        $this->app->bind(EffectivePermissions::class, ResolvedEffectivePermissions::class);
 
         // C-08's fallback chain (user → tenant default → English) with §14's
         // missing-translation telemetry, replacing the stock single-fallback translator.

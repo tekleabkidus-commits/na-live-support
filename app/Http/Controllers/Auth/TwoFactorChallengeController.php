@@ -187,7 +187,7 @@ final class TwoFactorChallengeController extends Controller
 
             return app(Pipeline::class)
                 ->send($request)
-                ->through([RefuseBlockedPrincipal::class])
+                ->through([RefuseBlockedPrincipal::class, \App\Domain\Auth\Login\Pipes\RefuseBlockedIp::class])
                 ->then(fn (Request $request): JsonResponse|RedirectResponse => $this->establisher->establish($request, $user, $extraPayload));
         });
 

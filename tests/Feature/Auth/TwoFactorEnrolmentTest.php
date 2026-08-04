@@ -205,7 +205,7 @@ it('regeneration mints a fresh batch and the OLD batch is dead (FR-07 banner pat
 
 it('FR-08: admin reset — typed name enforced server-side, target sessions all die, user re-enrols', function (): void {
     [$tenantId, $target] = enrolmentUser();
-    $admin = asTenant($tenantId, fn (): User => User::factory()->create(['name' => 'Admin Fixture']));
+    $admin = asTenant($tenantId, fn (): User => grantAllPermissions(User::factory()->create(['name' => 'Admin Fixture'])));
 
     app(TenantContext::class)->clear();
     app(RlsSession::class)->clear();

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-28 event(s).
+29 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -48,6 +48,15 @@ An admin cleared a user's 2FA; the user re-enrols at next login (FR-08).
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `user_id`, `admin_id`
 - **Producers:** Doc02/TwoFactor
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `auth.ip.blocked`
+
+A correct credential was refused because the role's IP allowlist excludes the address (SEC-05; user-facing error stays generic per FR-02).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `ip_hash`
+- **Producers:** Doc02/LoginPipeline
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
 ## `auth.login.failed`

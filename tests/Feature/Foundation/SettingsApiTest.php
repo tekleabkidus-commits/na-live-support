@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 function settingsActor(): User
 {
     $tenant = createTenant();
-    $user = asTenant($tenant, fn (): User => User::factory()->create());
+    $user = asTenant($tenant, fn (): User => grantAllPermissions(User::factory()->create()));
     activateTenant($tenant);
     app(TenantContext::class)->clear();
 

@@ -207,6 +207,13 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
             'description' => 'An API token was revoked — self-service, admin action, or BR-04\'s disable cascade; the audit entry carries which.',
         ],
+        'auth.ip.blocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'ip_hash'],
+            'producers' => ['Doc02/LoginPipeline'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A correct credential was refused because the role\'s IP allowlist excludes the address (SEC-05; user-facing error stays generic per FR-02).',
+        ],
         'auth.token.scope_denied' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'user_id', 'token_id', 'permission'],

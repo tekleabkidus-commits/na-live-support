@@ -24,30 +24,21 @@ use Symfony\Component\HttpFoundation\Response;
  * Doc 03 AC-01).
  *
  * ─────────────────────────────────────────────────────────────────────────────
- * WHAT THIS DOES AND DOES NOT ENFORCE TODAY — STATED SO NOBODY MISREADS IT.
+ * BOTH LAYERS ENFORCE, FOR REAL (the Doc 02-era staff pass-through closed at
+ * S19 step 7 — this is the flip its old docblock declared):
  *
- * This middleware DECLARES which permission a route requires, verifies the key
- * is registered (a typo'd declaration throws in local/testing, exactly like
- * DeclareAuditAction), and records the requirement on the request.
+ *   - STAFF principals: the declared key is resolved through the Doc 03
+ *     capability map (role + overrides + expiries, ≤10 s cache, R-04 bypass
+ *     keys always fresh). A deny is T-02's 403 problem-details
+ *     `{code:"forbidden", permission:key}` — named for staff clients — and is
+ *     logged + counted per tenant (FR-11). Object-existence masking (SEC-02's
+ *     404 for out-of-scope reads) belongs to the scope layer on object
+ *     routes; this middleware answers the VERB.
  *
- *   - STAFF SESSION enforcement (does this user's role grant the key?) is
- *     Doc 03's resolver. Until Doc 03 lands, an authenticated staff user passes:
- *     there are no roles to check a grant against, and inventing interim role
- *     logic here was ruled scope creep in the Doc 02 plan. The declaration is
- *     still load-bearing NOW: the gate proves every route names its key, so
- *     Doc 03 flips enforcement on without a route audit.
- *
- *   - TOKEN principals are enforced HERE, for real, since the token step: a
- *     request that arrived through ResolveBearerTenant carries a token id, and
- *     the declared key is checked against the T-05 intersection
- *     (token.abilities ∩ owner.effective_permissions, TokenScopeGate's 10 s
- *     cache). A miss is FR-20's 403 insufficient_scope NAMING THIS KEY
- *     (AC-05), audited as auth.token.scope_denied and published on the bus.
- *
- * If you are reading this while building Doc 03: replace the staff pass-through
- * with the resolver verdict; do not add a second permission middleware, and do
- * not touch the token branch — it already consumes your resolver through the
- * EffectivePermissions seam.
+ *   - TOKEN principals: the T-05 intersection (token.abilities ∩
+ *     owner.effective_permissions — now GENUINELY resolved, service accounts
+ *     included per BR-07). A miss is FR-20's 403 insufficient_scope NAMING
+ *     THIS KEY (AC-05), audited as auth.token.scope_denied and published.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 final class RequirePermission
@@ -59,6 +50,8 @@ final class RequirePermission
         private readonly TokenScopeGate $gate,
         private readonly AuditLogger $audit,
         private readonly EventPublisher $events,
+        private readonly \App\Support\Rbac\CapabilityMapProvider $maps,
+        private readonly \App\Support\Rbac\DeniedCheckRecorder $denials,
     ) {}
 
     /**
@@ -83,9 +76,56 @@ final class RequirePermission
             if ($verdict !== null) {
                 return $verdict;
             }
+
+            return $next($request);
+        }
+
+        $verdict = $this->enforceStaffPermission($request, $permissionKey);
+        if ($verdict !== null) {
+            return $verdict;
         }
 
         return $next($request);
+    }
+
+    /**
+     * THE STAFF ENFORCEMENT FLIP (S19 step 7 — the docblock's declared seam,
+     * closed): every `permission:` declaration is now a real verdict against
+     * the Doc 03 resolver. Null means "allowed, continue".
+     */
+    private function enforceStaffPermission(Request $request, string $permissionKey): ?Response
+    {
+        $user = $request->user();
+
+        // A permission-declared route with no authenticated STAFF principal is
+        // a wiring mistake (the auth middleware runs first by construction) —
+        // refuse rather than pass, same posture as the token branch.
+        if (! $user instanceof User) {
+            abort(401);
+        }
+
+        $verdict = $this->maps->verdictFor($user, $permissionKey);
+        if ($verdict->allowed) {
+            return null;
+        }
+
+        // FR-11: every API check failure logged + counted per tenant.
+        $this->denials->record(
+            permission: $permissionKey,
+            source: $verdict->source,
+            actorId: $user->identifier(),
+        );
+
+        // T-02/SEC-02: 403 problem-details NAMING the key for staff clients.
+        // Object-existence masking (out-of-scope reads → 404) is the SCOPE
+        // layer's job on object routes — this branch answers "may this VERB
+        // happen at all".
+        return ProblemDetails::response(
+            code: ErrorCode::Forbidden,
+            status: 403,
+            detail: (string) __('rbac.denied', ['permission' => $permissionKey]),
+            extra: ['permission' => $permissionKey],
+        );
     }
 
     /**
