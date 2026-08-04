@@ -1,0 +1,115 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Jobs\Conversations;
+
+use App\Domain\Conversations\Adapters\AdapterRegistry;
+use App\Domain\Conversations\Identity\CustomerResolver;
+use App\Domain\Conversations\Inbound\BatchTailHint;
+use App\Domain\Conversations\Inbound\InboundDedupeStore;
+use App\Domain\Conversations\Inbound\InboundPersister;
+use App\Domain\Foundation\Retention\ColdSummaryStore;
+use App\Domain\Foundation\Retention\InboundAccrual;
+use App\Domain\Foundation\Retention\InboundAccrualPolicy;
+use App\Models\Tenant;
+use App\Support\Tenancy\TenantAware;
+use Carbon\CarbonImmutable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
+/**
+ * FR-10 steps 2–4, off the request path: normalize via the adapter, dedupe,
+ * resolve identity, persist-with-outbox. The webhook controller's ONLY job was to
+ * ACK ≤ 250 ms and enqueue this (step 1, never inline) — everything that can be
+ * slow, fail, or retry lives here, on the channel's inbound family queue.
+ *
+ * tries = 3 is FS-05's number: a normalizer crash loop gets three attempts and
+ * then parks in the dead-letter with full payload (the parking + ops re-drive
+ * arrive in step 9; until then Horizon's failed-jobs table holds the payload —
+ * nothing is lost, the re-drive view is what's pending).
+ *
+ * BR-05 (Doc 01's frozen contract) sits between dedupe and identity: a suspended
+ * tenant past its accrual window gets the message ACKed and COUNTED
+ * (ColdSummaryStore) but never STORED — no body, no shell customer, no
+ * conversation. Deduped first so channel redeliveries do not inflate the count.
+ */
+final class NormalizeInbound implements ShouldQueue
+{
+    use Queueable, TenantAware;
+
+    /** FS-05: ×3, then the dead-letter path (step 9). */
+    public int $tries = 3;
+
+    /**
+     * @param  array<string, mixed>  $raw
+     */
+    public function __construct(
+        public readonly string $channel,
+        public readonly string $channelRefId,
+        public readonly array $raw,
+    ) {
+        $this->captureTenant();
+    }
+
+    public function handle(
+        AdapterRegistry $registry,
+        InboundDedupeStore $dedupe,
+        InboundAccrualPolicy $accrual,
+        ColdSummaryStore $coldSummaries,
+        CustomerResolver $identity,
+        InboundPersister $persister,
+        BatchTailHint $batchTail,
+    ): void {
+        $adapter = $registry->adapter($this->channel);
+
+        // Step 2a: normalize. A malformed payload throws here — that is the FS-05
+        // poison path (tries ×3), never a silent partial persist.
+        $inbound = $adapter->handleWebhook($this->raw);
+
+        // Step 2b: dedupe (EC-03). Claimant = this job's uuid, constant across
+        // retries — see InboundDedupeStore for why that must be true.
+        $claimant = is_string($this->job?->uuid()) ? $this->job->uuid() : (string) Str::uuid7();
+
+        if (! $dedupe->firstSight($this->channel, $inbound->dedupeKey, $claimant)) {
+            Log::info('inbound duplicate dropped', [
+                'metric' => 'messaging.inbound.duplicate_dropped',
+                'channel' => $this->channel,
+                'dedupe_key_hash' => hash('sha256', $inbound->dedupeKey),
+            ]);
+
+            return;
+        }
+
+        // BR-05: suspended-tenant accrual (Doc 01's frozen contract, consumed —
+        // never reimplemented). ColdSummary → count + pointer, body never stored.
+        $tenant = Tenant::query()->findOrFail($this->tenantId);
+
+        if ($accrual->modeFor($tenant, CarbonImmutable::now('UTC')) === InboundAccrual::ColdSummary) {
+            $coldSummaries->record(
+                $this->channel,
+                sprintf('%s:%s:%s', $this->channel, $inbound->externalChatId, $inbound->externalMessageId),
+            );
+
+            return;
+        }
+
+        // Step 3: identity (the Doc 08 seam — match or create shell).
+        $customerId = $identity->resolve($this->channel, $inbound->sender);
+
+        // Step 4: one transaction — row + outbox event (or FR-11 quarantine+audit).
+        $message = $persister->persist($this->channel, $this->channelRefId, $inbound, $customerId);
+
+        // EC-01: the batch-tail debounce — fan-out territory, so quarantined rows
+        // (FR-11: no fan-out except audit) never reach it.
+        if (! $message->quarantined) {
+            $batchTail->recordArrival($message->conversation_id, $message->identifier());
+
+            ConfirmBatchTail::dispatch($message->conversation_id, $message->identifier())
+                ->onQueue($registry->inboundFamily($this->channel))
+                ->delay(2);
+        }
+    }
+}

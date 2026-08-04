@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-29 event(s).
+31 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -139,6 +139,24 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 - **Payload:** `tenant_id`, `user_id`, `token_id`, `permission`
 - **Producers:** Doc02/RequirePermission
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `conversation.created`
+
+First contact created THE permanent conversation for {tenant, channel endpoint, external chat} (Doc 04 FR-01).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `customer_id`, `channel`
+- **Producers:** Doc04/InboundPersister
+- **Consumers:** Doc06/TicketRouting, Doc07/Inbox
+
+## `message.received`
+
+An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `customer_id`, `kind`
+- **Producers:** Doc04/InboundPersister
+- **Consumers:** Doc09/AiTurnDecision, Doc06/TicketRouting, Doc07/Realtime, Doc07/UnreadCounters
 
 ## `rbac.highrisk.confirmed`
 

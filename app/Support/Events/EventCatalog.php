@@ -295,6 +295,22 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
             'description' => 'A second admin rejected a pending high-risk grant; nothing was ever applied (FS-04\'s fail-safe posture).',
         ],
+        'conversation.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'customer_id', 'channel'],
+            'producers' => ['Doc04/InboundPersister'],
+            'consumers' => ['Doc06/TicketRouting', 'Doc07/Inbox'],
+            'description' => 'First contact created THE permanent conversation for {tenant, channel endpoint, external chat} (Doc 04 FR-01).',
+        ],
+        'message.received' => [
+            'schema_version' => 1,
+            // Identifiers only (SEC-07/Q7): the body never rides the bus —
+            // subscribers re-fetch by id under their own permission checks.
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'customer_id', 'kind'],
+            'producers' => ['Doc04/InboundPersister'],
+            'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketRouting', 'Doc07/Realtime', 'Doc07/UnreadCounters'],
+            'description' => 'An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.',
+        ],
     ];
 
     /**

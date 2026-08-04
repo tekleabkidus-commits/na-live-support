@@ -50,13 +50,16 @@ final class ConversationRepository
         }
 
         try {
-            return Conversation::query()->create([
+            // Nested transaction = savepoint: the caught violation below must not
+            // poison the caller's enclosing persist transaction (Postgres aborts
+            // the whole transaction on any error unless a savepoint contains it).
+            return DB::transaction(fn (): Conversation => Conversation::query()->create([
                 'channel' => $channel,
                 'channel_ref_id' => $channelRefId,
                 'external_chat_id' => $externalChatId,
                 'customer_id' => $customerId,
                 'state' => 'active',
-            ]);
+            ]));
         } catch (\Illuminate\Database\UniqueConstraintViolationException) {
             // The concurrent first-contact won the insert; adopt its row.
             $winner = Conversation::query()

@@ -455,4 +455,14 @@ return [
         'required_fields' => ['permission', 'requested_by'],
         'owning_doc' => 'Doc03',
     ],
+    [
+        // FR-11: inbound on a blocked conversation is stored quarantined with NO
+        // fan-out except this entry — the audit trail is the only trace until
+        // Doc 06's spam disposition reads the flag.
+        'action_key' => 'conversation.message_quarantined',
+        'entity' => 'message',
+        'actor_types' => ['customer'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
 ];
