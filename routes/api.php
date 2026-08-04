@@ -191,6 +191,47 @@ Route::group([], function (): void {
                 ->middleware(['permission:admin.users.disable', 'audit:auth.user.disabled'])
                 ->name('auth.admin_users.disable');
 
+            // ── Doc 03 §8/§9 — the RBAC admin API (S19 step 8). Keys from the
+            // catalog; every mutation audits + events in its service.
+            Route::get('admin/roles', [App\Http\Controllers\Admin\RbacRolesController::class, 'index'])
+                ->middleware('permission:admin.roles.view')
+                ->name('rbac.roles.index');
+            Route::post('admin/roles', [App\Http\Controllers\Admin\RbacRolesController::class, 'store'])
+                ->middleware(['permission:admin.roles.manage', 'audit:rbac.role.created'])
+                ->name('rbac.roles.store');
+            Route::put('admin/roles/{roleId}', [App\Http\Controllers\Admin\RbacRolesController::class, 'update'])
+                ->middleware(['permission:admin.roles.manage', 'audit:rbac.role.updated'])
+                ->name('rbac.roles.update');
+            Route::delete('admin/roles/{roleId}', [App\Http\Controllers\Admin\RbacRolesController::class, 'destroy'])
+                ->middleware(['permission:admin.roles.manage', 'audit:rbac.role.deleted'])
+                ->name('rbac.roles.destroy');
+            Route::put('admin/users/{userId}/role', [App\Http\Controllers\Admin\RbacRolesController::class, 'assign'])
+                ->middleware(['permission:admin.users.manage', 'audit:rbac.user.role_changed'])
+                ->name('rbac.users.assign_role');
+
+            Route::get('admin/users/{userId}/overrides', [App\Http\Controllers\Admin\RbacOverridesController::class, 'index'])
+                ->middleware('permission:admin.overrides.manage')
+                ->name('rbac.overrides.index');
+            Route::get('admin/users/{userId}/effective', [App\Http\Controllers\Admin\RbacOverridesController::class, 'effective'])
+                ->middleware('permission:admin.users.view')
+                ->name('rbac.overrides.effective');
+            Route::post('admin/users/{userId}/overrides', [App\Http\Controllers\Admin\RbacOverridesController::class, 'store'])
+                ->middleware(['permission:admin.overrides.manage', 'audit:rbac.override.added'])
+                ->name('rbac.overrides.store');
+            Route::delete('admin/users/{userId}/overrides/{overrideId}', [App\Http\Controllers\Admin\RbacOverridesController::class, 'destroy'])
+                ->middleware(['permission:admin.overrides.manage', 'audit:rbac.override.removed'])
+                ->name('rbac.overrides.destroy');
+
+            Route::get('admin/pending-grants', [App\Http\Controllers\Admin\RbacPendingGrantsController::class, 'index'])
+                ->middleware('permission:admin.roles.view')
+                ->name('rbac.pending.index');
+            Route::post('admin/pending-grants/{grantId}/approve', [App\Http\Controllers\Admin\RbacPendingGrantsController::class, 'approve'])
+                ->middleware(['permission:admin.roles.view', 'audit:rbac.highrisk.confirmed'])
+                ->name('rbac.pending.approve');
+            Route::post('admin/pending-grants/{grantId}/reject', [App\Http\Controllers\Admin\RbacPendingGrantsController::class, 'reject'])
+                ->middleware(['permission:admin.roles.view', 'audit:rbac.highrisk.rejected'])
+                ->name('rbac.pending.reject');
+
             // FR-07's settings.read/write API. DELETE is "reset to default" (§8),
             // which is a deletion of the override row rather than a write of the
             // default — see SettingsRepository::reset().

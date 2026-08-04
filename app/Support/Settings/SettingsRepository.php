@@ -104,6 +104,26 @@ final class SettingsRepository
         return $out;
     }
 
+    /** @var array<string, callable(mixed): void> */
+    private static array $writeGuards = [];
+
+    /**
+     * Register a dynamic precondition for writes to one setting key. The
+     * guard receives the validated value and THROWS to refuse the write.
+     * REPLACE semantics per key: providers re-register on every boot (the
+     * test harness boots one app per test), and accumulating closures would
+     * pin stale container references.
+     */
+    public static function registerWriteGuard(string $key, callable $guard): void
+    {
+        self::$writeGuards[$key] = $guard;
+    }
+
+    public static function flushWriteGuards(): void
+    {
+        self::$writeGuards = [];
+    }
+
     /**
      * Write a per-tenant override.
      *
@@ -132,6 +152,15 @@ final class SettingsRepository
         }
 
         $this->registry->validate($key, $value);
+
+        // Per-key WRITE GUARDS: dynamic preconditions a static validation
+        // rule cannot express (first consumer: Doc 03 EC-08 — rbac.four_eyes
+        // refuses to enable without ≥2 approval-rights holders). A guard
+        // throws to refuse; registration is a boot-time act by the owning
+        // module's provider.
+        if (isset(self::$writeGuards[$key])) {
+            (self::$writeGuards[$key])($value);
+        }
 
         $tenantId = $this->context->tenantId();
         $encoded = $definition['type']->encode($value);

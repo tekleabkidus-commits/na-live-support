@@ -67,6 +67,17 @@ class AppServiceProvider extends ServiceProvider
         // definition resolving its registered default (FR-11, ADR 0005).
         $this->app->make(FeatureRegistry::class)->defineAll();
 
+        // Doc 03 EC-08: rbac.four_eyes refuses to ENABLE without ≥2
+        // approval-rights holders — the deadlock guard, on the write path.
+        \App\Support\Settings\SettingsRepository::registerWriteGuard(
+            'rbac.four_eyes',
+            function (mixed $value): void {
+                if ($value === true) {
+                    $this->app->make(\App\Domain\Rbac\FourEyes::class)->assertCanEnable();
+                }
+            },
+        );
+
         // Doc 03 T-01/FS-03: boot-time DB-grants ⊆ catalog check — orphans
         // logged and ignored, never enforced. Skipped under the test harness
         // (each test boots a fresh app; the FS-03 suite drives run() directly)

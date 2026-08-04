@@ -59,6 +59,18 @@ final class UserPermissionOverride extends Model implements TenantScoped
         ];
     }
 
+    /** The primary key as the string it always is (C-01) — validating accessor. */
+    public function identifier(): string
+    {
+        $key = $this->getKey();
+
+        if (! is_string($key) || $key === '') {
+            throw new \LogicException('Override has no string primary key — C-01 requires a UUIDv7.');
+        }
+
+        return $key;
+    }
+
     /**
      * The tenant id as the string it always is (C-02 NOT NULL) — same
      * validating-accessor shape as User::identifier().

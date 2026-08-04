@@ -53,6 +53,29 @@ final class PendingGrant extends Model implements TenantScoped
         ];
     }
 
+    /** The primary key as the string it always is (C-01) — validating accessor. */
+    public function identifier(): string
+    {
+        $key = $this->getKey();
+
+        if (! is_string($key) || $key === '') {
+            throw new \LogicException('PendingGrant has no string primary key — C-01 requires a UUIDv7.');
+        }
+
+        return $key;
+    }
+
+    public function tenantId(): string
+    {
+        $tenantId = $this->getAttribute('tenant_id');
+
+        if (! is_string($tenantId) || $tenantId === '') {
+            throw new \LogicException('PendingGrant has no tenant_id — the column is NOT NULL (Doc 01 C-02).');
+        }
+
+        return $tenantId;
+    }
+
     /** @return BelongsTo<Role, $this> */
     public function role(): BelongsTo
     {

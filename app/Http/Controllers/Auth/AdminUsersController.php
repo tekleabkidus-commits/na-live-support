@@ -41,10 +41,23 @@ final class AdminUsersController extends Controller
         return new JsonResponse(['status' => 'unlocked']);
     }
 
-    public function disable(Request $request, string $userId, UserDisabler $disabler): JsonResponse
+    public function disable(Request $request, string $userId, UserDisabler $disabler): \Symfony\Component\HttpFoundation\Response
     {
         $admin = $this->admin($request);
         $user = User::query()->whereKey($userId)->firstOrFail();
+
+        // FR-08a (S19 step 8, as this class's docblock promised): disabling
+        // the last admin-pair holder is a demotion in disguise.
+        try {
+            app(\App\Domain\Rbac\LastAdminGuard::class)->assertNotLastAdmin($user);
+        } catch (\App\Domain\Rbac\LastAdminProtected $blocked) {
+            return \App\Support\Problem\ProblemDetails::response(
+                code: \App\Support\Problem\ErrorCode::Forbidden,
+                status: 403,
+                detail: (string) __('rbac.blocked.last_admin'),
+                extra: ['other_holders' => $blocked->otherHolders],
+            );
+        }
 
         $revoked = $disabler->disable($user, CarbonImmutable::now(), $admin->identifier());
 

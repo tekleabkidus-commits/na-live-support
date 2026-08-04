@@ -49,7 +49,8 @@ final class RbacExpireOverrides extends Command
             PlatformActor::RetentionJob,
             'FR-09 override-expiry tidy: find tenants with expired live overrides',
             static fn (): array => DB::connection(PlatformConnection::NAME)->select(
-                'SELECT DISTINCT tenant_id FROM user_permission_overrides WHERE revoked_at IS NULL AND expires_at <= now()',
+                'SELECT DISTINCT tenant_id FROM user_permission_overrides WHERE revoked_at IS NULL AND expires_at <= now()
+                 UNION SELECT DISTINCT tenant_id FROM pending_grants WHERE status = \'pending\' AND expires_at <= now()',
             ),
         );
 
@@ -62,6 +63,15 @@ final class RbacExpireOverrides extends Command
                     app(\App\Support\Tenancy\RlsSession::class)->set($tenantRow->tenant_id);
 
                     try {
+                        // T-06: pending high-risk grants auto-expire 24 h — a
+                        // STATUS flip only (the resolver ignored them all
+                        // along; the index endpoint's DB-time filter already
+                        // hid them). FR-12 names no event for it.
+                        \App\Models\PendingGrant::query()
+                            ->where('status', 'pending')
+                            ->whereRaw('expires_at <= now()')
+                            ->update(['status' => 'expired']);
+
                         return $this->tidyBoundTenant($events, $audit, $invalidator);
                     } finally {
                         app(\App\Support\Tenancy\RlsSession::class)->clear();
