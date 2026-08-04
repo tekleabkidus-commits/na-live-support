@@ -30,3 +30,8 @@ Schedule::command('quota:reconcile')->hourly();
 // role cannot DELETE on that table, by grant). 03:00, after the partition
 // jobs, so the maintenance window stays one contiguous block.
 Schedule::command('tokens:prune')->dailyAt('03:00')->timezone('UTC');
+
+// Doc 03 FR-09: expired overrides tidied (revoke + event + audit). Enforcement
+// never waits for this — the resolver's DB-time check already denies; the
+// cadence is bookkeeping latency only (AC-07's event within ≤15 min).
+Schedule::command('rbac:expire-overrides')->everyFifteenMinutes();

@@ -370,4 +370,56 @@ return [
         'tenant_editable' => true,
         'owning_doc' => 'Doc02',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 03 — RBAC (S19)
+    |--------------------------------------------------------------------------
+    */
+
+    [
+        // FR-08b/T-06: four-eyes on high-risk grants. Default OFF is the
+        // document's own decision (R-05: accepted; in-product tip recommends
+        // enabling at ≥3 admins). The EC-08 deadlock guard — refuse to enable
+        // without ≥2 users holding approval rights (ruling R-9) — is DYNAMIC
+        // and lives in the settings write path (S19 step 8), not in this
+        // static rule.
+        'key' => 'rbac.four_eyes',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        // BR-02: overrides are exceptions, not policy — warn when more than
+        // this many users carry an override for the SAME permission.
+        'key' => 'rbac.override.warn_threshold',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:1|max:1000',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        // BR-04: an editor cannot grant a permission they do not themselves
+        // hold. Default off — the single-owner-admin bootstrap pattern.
+        'key' => 'rbac.strict_grant',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        // EC-10: soft-limit warning in the roles UI. Platform-only by ruling
+        // R-11.3 — the architecture supports 500+; the warning threshold is
+        // the PLATFORM's dial, not an operator preference.
+        'key' => 'rbac.roles.soft_limit',
+        'type' => 'int',
+        'default' => 100,
+        'validation' => 'required|integer|min:1',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc03',
+    ],
 ];

@@ -69,4 +69,10 @@ final readonly class CapabilityMap
     {
         return $this->scopes;
     }
+
+    /** @return array<string, Verdict> */
+    public function verdicts(): array
+    {
+        return $this->verdicts;
+    }
 }

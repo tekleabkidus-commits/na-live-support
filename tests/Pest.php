@@ -444,6 +444,89 @@ function &capturedLogsRef(): array
 
 /*
 |--------------------------------------------------------------------------
+| Perf-budget helpers (Doc 01 AC-07 / Doc 03 NFR-01 — dev-hardware-indicative)
+|--------------------------------------------------------------------------
+|
+| Shared here so targeted runs of any Performance suite load them; every
+| number they print is indicative, and PERF_BUDGETS_ENFORCE=1 (`make perf`)
+| asserts the spec budgets exactly. See FoundationBudgetsTest's docblock.
+|
+*/
+
+const PERF_SAMPLES = 2000;
+
+/**
+ * @param  callable(): void  $operation
+ * @return array{p50: float, p99: float, max: float} milliseconds
+ */
+function measure(callable $operation, int $samples = PERF_SAMPLES): array
+{
+    foreach (range(1, 50) as $i) {
+        $operation(); // warm-up: connections, statement cache, opcache
+    }
+
+    $timings = [];
+    foreach (range(1, $samples) as $i) {
+        $start = hrtime(true);
+        $operation();
+        $timings[] = (hrtime(true) - $start) / 1_000_000;
+    }
+
+    sort($timings);
+
+    return [
+        'p50' => $timings[(int) ($samples * 0.50)],
+        'p99' => $timings[(int) ($samples * 0.99)],
+        'max' => $timings[$samples - 1],
+    ];
+}
+
+function reportBudget(string $name, float $budgetMs, array $stats): void
+{
+    fwrite(STDERR, sprintf(
+        "  [dev-hardware-indicative] %-28s p50 %7.3f ms   p99 %7.3f ms   max %7.3f ms   budget(p99) %.1f ms   %s\n",
+        $name,
+        $stats['p50'],
+        $stats['p99'],
+        $stats['max'],
+        $budgetMs,
+        $stats['p99'] <= $budgetMs ? 'WITHIN' : 'OVER',
+    ));
+}
+
+/** The spec budget under PERF_BUDGETS_ENFORCE=1; a 5× regression ceiling otherwise. */
+function assertedBudget(float $specBudgetMs): float
+{
+    return getenv('PERF_BUDGETS_ENFORCE') === '1' ? $specBudgetMs : $specBudgetMs * 5.0;
+}
+
+/**
+ * @param  array{p50: float, p99: float, max: float}  $stats
+ */
+function assertBudget(string $name, array $stats, float $specBudgetMs): void
+{
+    $ceiling = assertedBudget($specBudgetMs);
+    $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+
+    expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+        '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+        .'%s',
+        $name,
+        $stats['p99'],
+        $strict ? 'SPEC BUDGET' : '5x regression ceiling',
+        $ceiling,
+        $specBudgetMs,
+        $stats['p50'],
+        $stats['max'],
+        $strict
+            ? 'Strict mode (`make perf`): this is the spec budget itself, on dev hardware.'
+            : 'This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a '
+                .'machine under heavy load — compare p50 against the spec budget to tell which.',
+    ));
+}
+
+/*
+|--------------------------------------------------------------------------
 | Secret-hygiene fixtures (Doc 02 step 12 — SEC-08 / AC-08 / C-13)
 |--------------------------------------------------------------------------
 |

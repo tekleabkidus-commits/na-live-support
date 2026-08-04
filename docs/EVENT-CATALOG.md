@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-18 event(s).
+28 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -129,6 +129,96 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `user_id`, `token_id`, `permission`
 - **Producers:** Doc02/RequirePermission
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `rbac.highrisk.confirmed`
+
+A DISTINCT second admin approved a pending high-risk grant (T-06, ruling R-9) and it took effect.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `pending_grant_id`, `permission`, `actor_id`
+- **Producers:** Doc03/FourEyes
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `rbac.highrisk.granted`
+
+A high-risk permission was granted (FR-08b): applied directly, or written pending when rbac.four_eyes is on — `pending` says which. Feeds SEC-03's audit view and US-05's monthly report.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `permission`, `subject_type`, `subject_id`, `actor_id`, `pending`
+- **Producers:** Doc03/RoleAdministration, Doc03/OverrideAdministration
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring, Doc15/Reporting
+
+## `rbac.highrisk.rejected`
+
+A second admin rejected a pending high-risk grant; nothing was ever applied (FS-04's fail-safe posture).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `pending_grant_id`, `permission`, `actor_id`
+- **Producers:** Doc03/FourEyes
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `rbac.override.added`
+
+A per-user allow/deny exception was granted (FR-04); the mandatory reason is in the audit entry (SEC-04).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `permission`, `effect`, `actor_id`
+- **Producers:** Doc03/OverrideAdministration
+- **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `rbac.override.expired`
+
+The cleanup pass tidied an override whose expires_at had passed (FR-09/AC-07). Enforcement never waited for this — the resolver's DB-time check already denied.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `permission`
+- **Producers:** Doc03/ExpireOverrides
+- **Consumers:** Doc17/Audit
+
+## `rbac.override.removed`
+
+An override was revoked by an admin before any expiry.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `permission`, `actor_id`
+- **Producers:** Doc03/OverrideAdministration
+- **Consumers:** Doc17/Audit
+
+## `rbac.role.created`
+
+A role was created — by an admin or by the tenant-provisioning seeder (FR-10).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `role_id`, `actor_id`
+- **Producers:** Doc03/RoleAdministration, Doc03/RoleSeeder
+- **Consumers:** Doc17/Audit
+
+## `rbac.role.deleted`
+
+A role was deleted (soft, ruling R-11 — grant physics forbid hard deletes) after FR-08c's nobody-assigned guard passed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `role_id`, `actor_id`
+- **Producers:** Doc03/RoleAdministration
+- **Consumers:** Doc17/Audit
+
+## `rbac.role.updated`
+
+A role's grants, scopes or fields changed; version is EC-03's optimistic lock after the write. Capability caches for every holder are invalidated (FR-07).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `role_id`, `actor_id`, `version`
+- **Producers:** Doc03/RoleAdministration
+- **Consumers:** Doc17/Audit
+
+## `rbac.user.role_changed`
+
+A user was moved between roles (BR-01: exactly one). Queued work re-resolves at execution, so post-change rights govern (SEC-06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `old_role_id`, `new_role_id`, `actor_id`
+- **Producers:** Doc03/RoleAdministration
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
 ## `tenant.provisioned`

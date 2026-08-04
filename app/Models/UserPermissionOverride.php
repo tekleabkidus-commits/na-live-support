@@ -60,6 +60,21 @@ final class UserPermissionOverride extends Model implements TenantScoped
     }
 
     /**
+     * The tenant id as the string it always is (C-02 NOT NULL) — same
+     * validating-accessor shape as User::identifier().
+     */
+    public function tenantId(): string
+    {
+        $tenantId = $this->getAttribute('tenant_id');
+
+        if (! is_string($tenantId) || $tenantId === '') {
+            throw new \LogicException('Override has no tenant_id — the column is NOT NULL (Doc 01 C-02).');
+        }
+
+        return $tenantId;
+    }
+
+    /**
      * Not-revoked rows. Expired-but-untidied rows ARE included: the resolver
      * applies the expiry check against DB time itself, so tidiness is never a
      * security dependency (FR-09 — cleanup only tidies).

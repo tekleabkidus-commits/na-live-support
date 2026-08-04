@@ -361,4 +361,88 @@ return [
         'required_fields' => ['revoked_token_count'],
         'owning_doc' => 'Doc02',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 03 — RBAC (FR-12; S19). Audit carries the OLD/NEW payloads the
+    | events deliberately omit (SEC-07 keeps diffs out of the 13-month
+    | stream; the append-only audit table is their home).
+    */
+
+    [
+        'action_key' => 'rbac.role.created',
+        'entity' => 'role',
+        // 'system': the FR-10 provisioning seeder creates the nine templates.
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['new'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.role.updated',
+        'entity' => 'role',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.role.deleted',
+        'entity' => 'role',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.user.role_changed',
+        'entity' => 'user',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['old_role_id', 'new_role_id'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.override.added',
+        'entity' => 'user',
+        // SEC-04: the mandatory ≥10-char reason is audited here.
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission', 'effect', 'expires_at', 'reason'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.override.removed',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.override.expired',
+        'entity' => 'user',
+        // The cleanup pass, never a person (FR-09 — resolver is enforcement
+        // truth; this only tidies).
+        'actor_types' => ['system'],
+        'required_fields' => ['permission'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.highrisk.granted',
+        'entity' => 'permission_grant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission', 'subject_type', 'subject_id', 'pending'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.highrisk.confirmed',
+        'entity' => 'permission_grant',
+        // AC-05/R-9: decided_by <> requested_by is a table constraint; the
+        // audit entry names both.
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission', 'requested_by'],
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        'action_key' => 'rbac.highrisk.rejected',
+        'entity' => 'permission_grant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['permission', 'requested_by'],
+        'owning_doc' => 'Doc03',
+    ],
 ];

@@ -47,12 +47,17 @@ final class CapabilityMapBuilder implements CapabilityMapProvider
     public function __construct(private readonly PermissionCatalog $catalog) {}
 
     /**
-     * The CapabilityMapProvider seam: today a fresh build per call; step 5's
-     * cache decorates this binding without touching any consumer.
+     * The CapabilityMapProvider seam: a fresh build per call — the cached
+     * decorator (CachedCapabilityMaps) fronts this in production.
      */
     public function mapFor(User $user): CapabilityMap
     {
         return $this->build($user);
+    }
+
+    public function verdictFor(User $user, string $key): Verdict
+    {
+        return $this->build($user)->verdict($key);
     }
 
     public function build(User $user): CapabilityMap

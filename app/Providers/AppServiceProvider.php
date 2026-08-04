@@ -38,11 +38,12 @@ class AppServiceProvider extends ServiceProvider
         // C-08's fallback chain (user → tenant default → English) with §14's
         // missing-translation telemetry, replacing the stock single-fallback translator.
         // Doc 03 T-02/T-03: enforcement points resolve maps through the
-        // provider seam (step 5's cache decorates it); Team/Dept membership
-        // is EMPTY until Doc 11 binds real sources — fail closed, never open.
+        // provider seam — bound to the CACHED decorator (TTL 10 s + explicit
+        // invalidation; R-04 keys bypass); Team/Dept membership is EMPTY
+        // until Doc 11 binds real sources — fail closed, never open.
         $this->app->bind(
             \App\Support\Rbac\CapabilityMapProvider::class,
-            \App\Support\Rbac\CapabilityMapBuilder::class,
+            \App\Support\Rbac\CachedCapabilityMaps::class,
         );
         $this->app->bind(
             \App\Support\Rbac\Scopes\MembershipSource::class,

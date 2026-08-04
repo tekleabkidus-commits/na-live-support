@@ -17,4 +17,13 @@ use App\Models\User;
 interface CapabilityMapProvider
 {
     public function mapFor(User $user): CapabilityMap;
+
+    /**
+     * One key's verdict. Semantically identical to mapFor()->verdict() —
+     * EXCEPT that the cached implementation bypasses the cache entirely for
+     * R-04's highest-sensitivity keys (customers.rg_flag.*, audit.view,
+     * audit.export): those verdicts are always resolved fresh, so revocation
+     * takes effect with ZERO staleness window, not ≤10 s.
+     */
+    public function verdictFor(User $user, string $key): Verdict;
 }

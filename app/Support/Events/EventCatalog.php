@@ -214,6 +214,80 @@ final class EventCatalog
             'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
             'description' => 'A token-authenticated request failed the T-05 intersection for the named permission (FR-20 insufficient_scope, AC-05).',
         ],
+
+        // ── Doc 03 — RBAC (FR-12, T-07; S19). Closed payloads, identifiers
+        // only — old/new DIFFS live in the audit entries, never in the
+        // 13-month event stream (SEC-07; same split as Doc 02's Q7 ruling).
+        'rbac.role.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'role_id', 'actor_id'],
+            'producers' => ['Doc03/RoleAdministration', 'Doc03/RoleSeeder'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'A role was created — by an admin or by the tenant-provisioning seeder (FR-10).',
+        ],
+        'rbac.role.updated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'role_id', 'actor_id', 'version'],
+            'producers' => ['Doc03/RoleAdministration'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'A role\'s grants, scopes or fields changed; version is EC-03\'s optimistic lock after the write. Capability caches for every holder are invalidated (FR-07).',
+        ],
+        'rbac.role.deleted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'role_id', 'actor_id'],
+            'producers' => ['Doc03/RoleAdministration'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'A role was deleted (soft, ruling R-11 — grant physics forbid hard deletes) after FR-08c\'s nobody-assigned guard passed.',
+        ],
+        'rbac.user.role_changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'old_role_id', 'new_role_id', 'actor_id'],
+            'producers' => ['Doc03/RoleAdministration'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A user was moved between roles (BR-01: exactly one). Queued work re-resolves at execution, so post-change rights govern (SEC-06).',
+        ],
+        'rbac.override.added' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'permission', 'effect', 'actor_id'],
+            'producers' => ['Doc03/OverrideAdministration'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A per-user allow/deny exception was granted (FR-04); the mandatory reason is in the audit entry (SEC-04).',
+        ],
+        'rbac.override.removed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'permission', 'actor_id'],
+            'producers' => ['Doc03/OverrideAdministration'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'An override was revoked by an admin before any expiry.',
+        ],
+        'rbac.override.expired' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'user_id', 'permission'],
+            'producers' => ['Doc03/ExpireOverrides'],
+            'consumers' => ['Doc17/Audit'],
+            'description' => 'The cleanup pass tidied an override whose expires_at had passed (FR-09/AC-07). Enforcement never waited for this — the resolver\'s DB-time check already denied.',
+        ],
+        'rbac.highrisk.granted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'permission', 'subject_type', 'subject_id', 'actor_id', 'pending'],
+            'producers' => ['Doc03/RoleAdministration', 'Doc03/OverrideAdministration'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring', 'Doc15/Reporting'],
+            'description' => 'A high-risk permission was granted (FR-08b): applied directly, or written pending when rbac.four_eyes is on — `pending` says which. Feeds SEC-03\'s audit view and US-05\'s monthly report.',
+        ],
+        'rbac.highrisk.confirmed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'pending_grant_id', 'permission', 'actor_id'],
+            'producers' => ['Doc03/FourEyes'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A DISTINCT second admin approved a pending high-risk grant (T-06, ruling R-9) and it took effect.',
+        ],
+        'rbac.highrisk.rejected' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'pending_grant_id', 'permission', 'actor_id'],
+            'producers' => ['Doc03/FourEyes'],
+            'consumers' => ['Doc17/Audit', 'Doc18/SecurityMonitoring'],
+            'description' => 'A second admin rejected a pending high-risk grant; nothing was ever applied (FS-04\'s fail-safe posture).',
+        ],
     ];
 
     /**
