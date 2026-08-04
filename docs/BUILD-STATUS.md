@@ -26,6 +26,13 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 18 | Infrastructure & DevOps | CONTINUOUS | all | — | gates added per session |
 | 19 | QA Strategy & Test Plans | CONTINUOUS | all | — | traceability grows per session |
 
+## SESSION-03 (S19) launch incident note
+
+SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
+mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
+gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
+this note. All subsequent S19 work is single-session.
+
 ## Session-0 close-out notes
 
 - `tests/Feature/ExampleTest.php` (Laravel scaffolding, `GET /`) was replaced by

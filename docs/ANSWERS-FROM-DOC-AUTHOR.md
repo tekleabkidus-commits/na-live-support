@@ -14,6 +14,44 @@ sanctioned route for a binding decision that is not already in Docs 01–19.
 
 ---
 
+## 2026-07-31 — The document author's Q1–Q9 responses (merged verbatim 2026-08-04, S19, by owner order)
+
+The author's response document to `QUESTIONS-FOR-DOC-AUTHOR.md`, delivered from the owner's
+machine and merged here unaltered so the interpretation record is one file. Its own header:
+_"Author: the specification-series author · 2026-07-31 · Format: confirm/conflict per
+question, citations included."_
+
+**Q1 — Master document status: (a) CONFIRMED — the 19-doc series fully supersedes the master document. Close the gap permanently.**
+The master document was the earlier, shallower pass; every binding decision it contained was carried into, refined by, or deliberately changed by the series. Phase 22 (schema) contains **no deltas** that survive contact with Doc 01's conventions — the built schema (UUIDv7, timestamptz, RLS'd partitions, the four-role grant model) is the law and must not be re-litigated. Phase 23 (endpoint catalog) likewise contains no contract the series does not already state where it matters (e.g., `409 reply_window_expired` is Doc 01 T-07's own example; template-only `POST /v1/sms/send` is Doc 14 FR-02/BR-01; the webhook-out event list is Doc 01/Doc 15/Doc 17). If the master doc ever enters the repo, mark it `reference/non-binding — superseded by Docs 01–19`. CONFLICTS.md's ruling stands and becomes permanent.
+
+**Q2 — Tenant selection at staff login: CONFIRMED, with two required refinements.**
+Your `resolve_staff_login(p_email)` design is the intended shape — Doc 02 was genuinely silent, and host-based resolution is indeed not v1 (Doc 16 §19). Refinements: (1) the >1-tenant-verifies refusal must use the *same generic error* as bad credentials (Doc 02 FR-02's non-enumeration bar) but log a distinct reason category `ambiguous_tenant` in the FR-04 failure event so it's diagnosable; (2) the refusal path's documented escape hatch is exactly your Q3 ruling (reset in one tenant breaks the collision) — put that sentence in the runbook/help copy, never in the error message. Timing equalization (FR-02 ±50 ms) must hold across 0/1/N-candidate paths — add that case to the AC-01 timing test.
+
+**Q3 — Cross-tenant reset & lockout: CONFIRMED as ruled.**
+One token per matching account, each bound user+tenant, uniform response (FR-16's "if the account exists…" survives intact). Lockout counting against every candidate account is the correct conservative reading of FR-03; the cross-tenant amplification of EC-11's lockout-DoS is acceptable because (a) the per-IP throttle remains the primary anti-DoS control and (b) EC-11's self-unlock-via-reset holds per account, which is also Q2's escape hatch. No change.
+
+**Q4 — Bearer tokens under FORCE RLS: CONFIRMED never-exempt; preference = lookup-prefix tenant routing.**
+Both mechanisms are acceptable, but prefer the **TenantKey lookup-prefix convention**: Doc 01 SEC-03 already mandates a lookup prefix on tenant keys, and Doc 01 FR-03's principle is that *every* surface resolves tenant from server-controlled context before any tenant-table read. Encoding the tenant key in the token's public prefix → `resolve_tenant_key()` → bind TenantContext → then the `personal_access_tokens` row is read under ordinary RLS. This keeps the SECURITY DEFINER surface at its current size (one function stays one function — `resolve_staff_login` from Q2 is the sanctioned second; don't grow a third for this) and makes API auth follow the same resolution order as webhooks and widget keys. Constant-time behavior across unknown-prefix vs unknown-token paths, per the Doc 02 SEC posture.
+
+**Q5 — SEC-06 plain-HTTP refusal: CONFIRMED literal.**
+"Any environment" means any environment — the wording was deliberate, and your implementation (FrankenPHP local TLS, refusal middleware with no env exemption, TLS'd CI) is exactly Doc 18 BR-03's parity rule applied to auth. Keep it.
+
+**Q6 — Recovery codes: CONFIRMED — SEC-03 wins, replacement store is the intended reading.**
+Doc 02 FR-06 ("stored hashed") + SEC-03 ("argon2id; displayed exactly once") knowingly contradict stock Fortify's retrievable storage; the intended design was always "Fortify drives the flows (T-01), our store owns persistence." Your `used_at` consumption + no-reversible-column-by-grant-physics is the right realization. Ensure the "2 codes remaining → regenerate" banner (FR-07) reads counts from the hashed store's unconsumed rows.
+
+**Q7 — Auth event path & payload split: CONFIRMED, both halves.**
+(1) Path: Doc 17 FR-02 makes auth the one synchronous class, sharing insert code/schema with the future consumer — build it now exactly as ruled. (2) Payloads: bus events carry identifiers and reason categories only; IP/UA/fingerprint live in the audit entry and the Device record. That is the intended reading of Doc 02 FR-04's "record" — it names *what is captured*, and Doc 17 FR-01/FR-04 + the catalog's closed-payload rule name *where it lives*. A 13-month event stream must never accumulate IP/UA history; the audit table (with its own retention, masking, and access gates) is the only home for it.
+
+**Q8 — AC-09 timing vs design Batch 7: CONFIRMED as ruled.**
+AC-09's pixel baselines are defined against *approved* designs by construction, so the AC is structurally PARTIAL until Batch 7 exists — that is the series' intent, not a deviation. Ship functional, themed, i18n-keyed auth screens now; attach baselines at design approval. Do not pull auth forward in the batch order for this reason alone; the only legitimate reason to re-order batches is operator-facing demo needs, which is an owner call, not a spec requirement.
+
+**Q9 — Permission count: both numbers are approximations of the same thing; the enumerated catalog governs.**
+The discrepancy is *inside Doc 03 itself*: its Executive Summary says "~130" (an estimate including reserved namespaces) while §4.1's closing line says "118 v1 keys + reserved namespaces" — the enumerated catalog. Ruling: the **code registry is the only true count**, seeded from Doc 03 §4.1's 118 keys plus the additions the series registered through its own change-log mechanism (at minimum: `views.share` [Doc 07 FR-06], `ai.providers.manage` [Doc 09 FR-02]; Doc 09 T-04/Doc 10 also register the `embed` task in the AI task catalog, which is not a permission). PROJECT-SUMMARY's "118" is the pre-additions figure; treat prose counts everywhere as descriptive, the registry as normative — which is exactly what your seven-registry CI gate already enforces.
+
+_Author's closing note: "Nothing above is invented beyond the documents; where the docs were silent (Q2, Q3, Q4's choice, Q8's ordering) I have confirmed your rulings as the intended design and they are now part of the series' interpretation record. Please file this document alongside CONFLICTS.md."_
+
+---
+
 ## 2026-08-01 — Doc 02 ruling reconciliation (Session 8)
 
 Four rulings, filed after reviewing what Doc 02's implementation had actually built against what
@@ -184,3 +222,61 @@ weakened: the server's responses are unchanged, and the probe reveals only the c
 session state — a fact the caller already holds. The owner-ruled scope stands: staff Inertia
 surface only, never the widget, never the bearer API (FR-20's contract belongs to
 integrations, not modals).
+
+## 2026-08-04 — Doc 03 plan-approval rulings (Session 19)
+
+Filed at plan approval, before implementation. The owner's approval message numbered these
+R-1…R-6; they are filed here as R-9…R-14 to continue this record's numbering, with the
+owner's labels noted.
+
+### R-9 (owner R-1). Four-eyes "approval rights" need no new key; the catalog stays closed at 111
+
+**Resolves the B6-S10 design-vs-document conflict.** The drawn approver surface is gated by an
+`admin.roles.approve` chip, but Doc 03 §4.1's closed catalog (BR-03) defines no such key.
+Ruling: **option (a)** — approval rights = holding `admin.roles.manage` (for role/permission
+grants) or `admin.overrides.manage` (for override grants), with FR-08b's "second admin"
+enforced by the distinct-person rule; EC-08's deadlock guard requires ≥ 2 such holders before
+`rbac.four_eyes` may be enabled. The drawn `admin.roles.approve` label is filed as a
+**class-3 design defect** (wrong key name on the gate; the surface itself is unchanged) in
+BUILD-STATUS's DESIGN-DEVIATIONS section.
+
+### R-10 (owner R-2). Appendix B ratified
+
+The nine-template grant matrix proposed in the S19 plan is ratified as proposed, including:
+agent-tier templates carry **zero high-risk keys** (the B6-S07 fixture's "2 high-risk" badge
+is operator-edited content, not template law); **Read Only = exactly the 18 `.view`-suffix
+non-high keys** — `kb.view_internal` excluded (BR-05 read strictly: the action segment is not
+`view`), `audit.view` excluded (a high-risk key never rides a seeded convenience template).
+Committed as `docs/Doc03-AppendixB-role-templates.md` + the seeder fixtures.
+
+### R-11 (owner R-3). Three filed interpretations
+
+1. **Role deletion ships as soft-delete** (`deleted_at`) under ADR 0003's DELETE-revoked
+   grant physics (Doc 01 BR-02: nothing hard-deletes at tenant scope); FR-08c's semantics are
+   fully served and `rbac.role.deleted` is still emitted.
+2. **Capability cache key is `t:{tenant}:cap:{user}`** per convention C-07; Doc 03 T-02's
+   literal `cap:{tenant}:{user}` is read as descriptive.
+3. **`rbac.roles.soft_limit` registers platform-only** (`tenant_editable: false`).
+
+### R-12 (owner R-4). Counts: 111 keys, 38 high — text-derived, on the record
+
+§4.1 enumerates **111** keys and marks **38** of them `(high)`; both counts are taken from the
+document text (twice-counted, grep-confirmed). The session prompt's "20 high" is corrected on
+the record. Q9's principle (registry normative, prose descriptive) governs the seeding rule
+already filed: the 111 enumerated keys seed **verbatim and nothing else** — Q9's own "118"
+citation of §4.1's closing line is one of the descriptive prose counts; the seven keys the
+closing line implies were never enumerated and enter only by owner ruling if they ever arrive.
+`views.share` (Doc 07) and `ai.providers.manage` (Doc 09) register when their documents land.
+Related filed mapping: Doc 02 AC-05's literal `tickets.read` ≙ catalog `tickets.view` — the
+catalog governs (BR-03, NFR-03); no `tickets.read` key exists or will be invented, and Doc 06
+builds that fixture with catalog keys under this filed interpretation.
+
+### R-13 (owner R-5). The B6-S10 "recent decisions" table stays excluded
+
+It is drawn as an explicit OPTION frame ("OPTION, not in spec") and no spec id requires it.
+Recorded in DESIGN-DEVIATIONS as the frame's own marking, not a deviation.
+
+### R-14 (owner R-6). Amharic destructive-tier review rider
+
+At session close-out, every new destructive-tier Amharic string (role delete confirmation,
+override deny confirmation, four-eyes reject) is flagged for the standing native-review queue.
