@@ -7,8 +7,8 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 |---|---|---|---|---|---|
 | — | Repo bootstrap + CI gates | DONE (CI-proven) | S0 | smoke 6/6, gates 8/8, browser 2/2 | Laravel 13.23; 14-service stack healthy; 8 gates live (3 bootstrap-warn until first registry entry); 4 gates falsified+restored. **Proven by CI run [30393265519](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30393265519) on `2990d33` — Stages 1–6 all green** (Stage 3 integration 6 passed/33 assertions, Stage 4 browser 2 passed). Stage 5 is a placeholder until Doc 19 L1; Stage 7 (prod deploy stub) is `skipped` by design — manual approval, never yet executed. Re-confirmed on the ADR-0002 bind-mount commit: run [30492124123](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30492124123) on `af9562d`, Stages 1–6 green, Stage 7 skipped |
 | 01 | Platform Foundation & Multitenancy | **BUILT — final audit below** | S1–S3 | 6/8 + AC-04 & AC-07 partial | Wrap-up (S3) added: EC-10 maintain+monitor (incl. per-partition RLS the S1 migration promised), BR-05 policy+store+suspended_at, GrantPhysicsTest (hand-run claims → executable assertions; caught 2 real defects). **Final 69-id audit: 37 DONE / 30 PARTIAL / 2 NOT DONE — see the S3 section.** Remaining ids block on other docs (AC-03→04/06, SEC-04→18, seams→03/10/12, L1→19) or the design-led console |
-| 02 | Authentication, Sessions & Security Core | **COMPLETE apart from FR-09 + SEC-05 (both blocked on Doc 03's role resolver — SEC-05 surfaced by the S18 audit). Final 85-id audit: 61 DONE / 22 PARTIAL / 2 NOT DONE — see the S18 section.** S18 also fixed a real WCAG 2.1.1 violation retries had been masking (devices-table scroll region unfocusable in the single-current-session state), made the a11y test deterministic, and hardened CI: `failOnFlakyTests` — a retried-and-passed browser run is now a red build | S4–S18 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; **AC-08 covered (S16 — log-scrubber gate over all five sinks, per-sink/per-sentinel positive controls, sabotaged six ways)**; **AC-09 PARTIAL (S17 — every §8 state functional + axe-swept at 360 px in en/am; pixel baselines await the approved design screens; theming awaits Doc 16)** | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. S16 closed step 12 (SEC-08 both clauses + AC-08 + the C-13 secrets-never-serialize sweep: ScrubSecrets/AttachLogContext on every channel via SecurityLogTap, the fail-closed `log-scrubber` gate, 21+ seeded sentinels swept from logs/jobs/outbox/audit/relayed-events, model hidden-pin roster extended, sabotages (a)–(f) each red; one real find: Laravel's config-merge injects an untapped framework `monthly` channel — caught by the channel-pin test on its first run) — local: pest 394/3980, gates 11/11, lint clean; **CI-proven on `91e76c0`: run [30806932074](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30806932074), Stages 1–6 green on first push, `log-scrubber PASS` visible in the Stage 3 gate output.** S17 closed step 13 (the authentication screens: §8/§9/§13/§14, AC-09 → PARTIAL; login card + 2FA challenge step + enrolment wizard with the checkbox-OR-download gate + T-2 min toast + EC-02 re-login modal + invitation profile completion; interpretation A-2 filed; **two real defects found and fixed**: FR-11 expiry rendered a half-dead 200 instead of redirecting — the sorter hoists Authenticate above the lifetime middleware (S13's lesson replayed on the web stack), and the §13 sweep caught sub-4.5:1 contrast plus a hardcoded `html lang="en"` under an Amharic render). Remaining: FR-09 role enforcement (needs Doc 03); AC-09 pixel baselines (needs approved design screens) |
-| 03 | RBAC, Roles, Permissions, Overrides | IN PROGRESS | S19 | 0/8 — all mapped not-implemented (ADR 0004 flip commit) | S19 step 1: registry schema extended additively (description/module/risk/scope_dimension), the §4.1 catalog seeded — 111 keys / 38 high / 46 scoped, verbatim per rulings Q9+R-12 — labels+descriptions en+am, T-05(b) snapshot test pins the exact sets |
+| 02 | Authentication, Sessions & Security Core | **COMPLETE — FR-09 + SEC-05 CLOSED in S19 with the real role resolver (TwoFactorRoleEnforcementTest; IpAllowlistTest + auth.ip.blocked). Final 85-id audit: 61 DONE / 22 PARTIAL / 2 NOT DONE — see the S18 section.** S18 also fixed a real WCAG 2.1.1 violation retries had been masking (devices-table scroll region unfocusable in the single-current-session state), made the a11y test deterministic, and hardened CI: `failOnFlakyTests` — a retried-and-passed browser run is now a red build | S4–S18 | **AC-01 covered (BOTH halves — S12 closed the reset half open since S4)**, AC-02 covered, **AC-03 covered (4 clauses, each falsified)**, AC-04 covered (both halves, falsified); **AC-05 covered (PARTIAL per ruling Q5 — literal tickets wording waits for Docs 03/06)**; **AC-06 covered (S14 — both layers, independence proven by removal)**; **AC-07 covered (S15 — all three clauses, spy-proven "nothing processed")**; **AC-08 covered (S16 — log-scrubber gate over all five sinks, per-sink/per-sentinel positive controls, sabotaged six ways)**; **AC-09 PARTIAL (S17 — every §8 state functional + axe-swept at 360 px in en/am; pixel baselines await the approved design screens; theming awaits Doc 16)** | S10 closed step 6 (AC-04 socket close ≤2 s, I-5 locale hop, devices + GeoIP stub per ADR 0006, FR-11 middleware wired, clear-throttle made real) — **CI-proven on `b9b407d`: run [30737987324](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30737987324), Stages 1–6 green.** S11 closed step 7 — **CI-proven on `c8181a0`: run [30740125006](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30740125006), Stages 1–6 green** — covering 2FA enrolment/challenge/recovery, FR-08 admin reset, EC-10, SEC-04's second boundary, and fixing a **pre-existing Octane defect**: `TenantHint` keyed its override by `spl_object_id`, which PHP reuses — an unrelated later request could inherit the previous request's tenant and die with an unexplained 419. Local: pest 261/2647 assertions, browser 14/14, gates 10/10, lint clean. S12 closed step 8 (password lifecycle: FR-15/16/17, SEC-02, T-09, FS-02, FR-14's password half, AC-01's reset half; ADR 0007 `mail` queue family; rulings R-5..R-8) — local: pest 303/3078, browser 17/17 ×2, gates 10/10, lint clean; **CI-proven on `6d063b8`: run [30755287680](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30755287680), Stages 1–6 green.** S13 closed step 9 (API tokens: FR-18/19/20, T-05 intersection + EffectivePermissions seam, BR-03/BR-04, FS-05, EC-06, SS-04; two real defects: middleware sorter inverted the declared bearer order — every bearer request 500'd; shouldUse('api') guard leak in the harness) — local: pest 336/3362, gates 10/10, lint clean; **CI-proven on `5218437`: run [30766536879](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30766536879), Stages 1–6 green** (first push failed Stage 3 on an untracked UserDisabler — committed, re-run green). S14 closed step 10 (widget visitor tokens: FR-21/FR-22, AC-06, BR-06, EC-08 PARTIAL per ruling, EC-09; **CI-proven on `330fdc8`: run [30771276124](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30771276124), Stages 1–6 green**; three defects found: framework-default CORS granting `api/* → *` over every staff response, the priority-list fix for the widget order silently re-sorting the STAFF stack and stripping T-07 headers off its error responses, and the staff broadcast channel 500-ing on a WidgetVisitor principal) — local: pest 366/3566, gates 10/10, lint clean. **Doc 18 handoff (owner ruling D-1): volatile-instance eviction policy must spare TTL'd visitor keys — see S14 report.** S15 closed step 11 (webhook auth: FR-23/24/25, AC-07; **CI-proven on `1908299`: run [30788851081](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30788851081), Stages 1–6 green**; filed interpretation A-1 in ANSWERS — replay cache fails CLOSED against FS-01's wording; TenantCache keymap now fails OPEN, closing a pre-existing volatile-outage 500 on every key-resolved surface) — local: pest 384/3703, gates 10/10, lint clean. S16 closed step 12 (SEC-08 both clauses + AC-08 + the C-13 secrets-never-serialize sweep: ScrubSecrets/AttachLogContext on every channel via SecurityLogTap, the fail-closed `log-scrubber` gate, 21+ seeded sentinels swept from logs/jobs/outbox/audit/relayed-events, model hidden-pin roster extended, sabotages (a)–(f) each red; one real find: Laravel's config-merge injects an untapped framework `monthly` channel — caught by the channel-pin test on its first run) — local: pest 394/3980, gates 11/11, lint clean; **CI-proven on `91e76c0`: run [30806932074](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30806932074), Stages 1–6 green on first push, `log-scrubber PASS` visible in the Stage 3 gate output.** S17 closed step 13 (the authentication screens: §8/§9/§13/§14, AC-09 → PARTIAL; login card + 2FA challenge step + enrolment wizard with the checkbox-OR-download gate + T-2 min toast + EC-02 re-login modal + invitation profile completion; interpretation A-2 filed; **two real defects found and fixed**: FR-11 expiry rendered a half-dead 200 instead of redirecting — the sorter hoists Authenticate above the lifetime middleware (S13's lesson replayed on the web stack), and the §13 sweep caught sub-4.5:1 contrast plus a hardcoded `html lang="en"` under an Amharic render). Remaining: FR-09 role enforcement (needs Doc 03); AC-09 pixel baselines (needs approved design screens) |
+| 03 | RBAC, Roles, Permissions, Overrides | **BUILT — S19 close-out below. Final 75-id audit: 61 DONE / 12 PARTIAL / 2 NOT DONE.** Catalog 111 keys / 38 high seeded verbatim (rulings Q9+R-12); resolver + scopes + cache + seeder + THE ENFORCE FLIP live; Doc 02 FR-09 + SEC-05 CLOSED this session; four B6 screens shipped with first token encoding | S19 | 6/8 covered + AC-03 partial (Doc 11 re-proof bucket) + AC-08 partial (pixel half design-export bucket) | See the S19 section for the full audit, sabotage record, filed interpretations (R-9..R-14) and DESIGN-DEVIATIONS |
 | 04 | Conversations & Messaging Core (fake adapter) | NOT STARTED | S4 | — | |
 | 06 | Ticketing System | NOT STARTED | S5 | — | |
 | 05 | Telegram Channel (Business + Direct) | NOT STARTED | S6 | — | needs staging bot + Business account on a dedicated phone |
@@ -32,6 +32,139 @@ SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
 mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
+
+## SESSION-19 (Doc 03) close-out — RBAC
+
+Steps 0–9 committed (`ba014d9`, `efd496b`, `ca5258c`, `a53a134`, `7303696`, `2e85609`,
+`157dc21`, `ab0a7c5`, `2e59556`, `2539c18`, `5345e72` + this close-out). Rulings R-9..R-14
+filed in ANSWERS-FROM-DOC-AUTHOR; Appendix B ratified and committed
+(`docs/Doc03-AppendixB-role-templates.md`). Local at close: pest 513 passed / 7481
+assertions (11 pre-existing skips), gates 11/11, browser 32/32, lint clean.
+
+### Sabotage record (each pasted red → restored green in the session log)
+
+catalog key renamed → snapshot red · registry risk value corrupted → gate red · role rung
+hoisted above overrides → 2 AC-02 cells red · expiry filter removed → 4 EXPIRED cells red ·
+scope default fell open → NFR-04 red · empty membership fell open → EC-04 + seam red ·
+EC-07 edited-guard removed → red ONLY after the dangerous quadrant (edited content +
+changed release) was added — the original test was masked by the identical-release
+early-return, the stronger test is the keeper · staff pass-through restored → AC-01 sweep
+red · last-admin guard deleted → 2 AC-05 clauses red · four-eyes distinct-rule removed →
+red at the test AND at the DB CHECK (defense-in-depth demonstrated) · cache store killed →
+verdicts byte-identical, metric fired (FS-01, with a positive control that the kill took).
+
+### Defects found by this session's own tests (fixed in the flow)
+
+1. CatalogBootCheck v1 read via pgsql_migrator, which FORCE RLS polices — the silent catch
+   returned "healthy" while broken; the catch now logs, the read uses the platform
+   connection. 2. The same check parked one idle BYPASSRLS connection PER Octane worker —
+   43 workers exhausted postgres' 100 slots and killed a full test run; closed in a
+   finally. 3. Disabled accounts counted as admin-pair holders — the disable path let the
+   last real admin be disabled. 4. The drawn #9A9588 label gray fails §13's AA floor
+   (~2.9:1) — remapped to the system's own compliant grays, filed below.
+
+### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — every one filed)
+
+| File / frame | What differs | Class | Why |
+|---|---|---|---|
+| B6-S10 (approver header chip) | The drawn `admin.roles.approve` key does not exist; the surface is gated by ruling R-9's approval rights (admin.roles.manage / admin.overrides.manage) and the catalog stays closed at 111 | 3 (flagged to the design track) | Owner ruling R-9 at plan approval; documents outrank the drawn key (mandate §1) |
+| B1-DS/B6 frames (10px uppercase labels, `#9A9588`) | `--ds-text-label` renders `#6F6A61` light / `#A6A296` dark (both from the system's own palette) | 3, with the DOCUMENT override applied now | Measures ≈2.9:1 on the white panel — below Doc 03 §13's AA floor; §13 is a numbered requirement and outranks the drawn value. Design track asked to re-issue the label gray |
+| B6-S10 ("recent decisions" table) | Not built | — (not a deviation) | Drawn as an explicit OPTION frame; no spec id requires it. Owner ruling R-13 records the exclusion as the frame's own marking |
+| B6-S07..S10 (topbar avatar initials) | Initials are server-supplied data (the signed-in user), not the drawn fixture's letters | 2 | The drawn initials are fixture content; a real page shows the real person. String-lint enforces the boundary |
+| AC-08 pixel baselines | Not attached | — (pre-agreed bucket) | Design-export-blocked: baselines attach when the owner fires the Batch 6 export |
+
+### Final 75-id self-audit (DONE = implemented + executed test in this session)
+
+| Id | Status | Evidence / reason |
+|---|---|---|
+| FR-01 | DONE | Registry schema + PermissionCatalog; CatalogSnapshotTest 111/38/46 + i18n both locales |
+| FR-02 | DONE | Role model/migration physics; RbacStorageTest (unique-per-tenant live names, one-role column) |
+| FR-03 | PARTIAL | ScopeSets + AC-03 fixtures (exact sets, all four levels); REAL membership is Doc 11's re-proof bucket |
+| FR-04 | DONE | PrecedenceMatrixTest incl. override-cannot-alter-scope; §19 scope column reserved and proven dead |
+| FR-05 | DONE | Explicit decision sequence; all 10 AC-02 cells; EC-06 no-object-allow via matrix cells |
+| FR-06 | PARTIAL | Middleware + UI map + jobs (SEC-06 through the real queue) DONE; exports/Reverb re-checks are mechanism-ready, consumers arrive Docs 04+ |
+| FR-07 | DONE | Invalidator (both caches) + AC-04 browser ≤10 s, no re-login |
+| FR-08 | DONE | (a) three guarded paths (b) four-eyes distinct admin + DB CHECK (c) delete-blocked with count — all in SafetyRailsTest, sabotaged |
+| FR-09 | DONE | Resolver DB-time truth (EXPIRED cells) + rbac:expire-overrides tidy; queue pull-in grants are Doc 11's (pre-agreed) |
+| FR-10 | DONE | RoleSeeder through REAL provisioning; Appendix B ratified (R-10); RoleSeederTest |
+| FR-11 | DONE | DeniedCheckRecorder wired in RequirePermission; sweep asserts log+metric per deny |
+| FR-12 | DONE | Nine rbac.* events, closed payloads, outbox-only; catalog regenerated; audit-coverage entries |
+| NFR-01 | PARTIAL | Structure + indicative numbers (p50 0.176 ms vs 0.3 spec; cold 7.3 ms vs 20); formal closure = Doc 19 L1 (pre-agreed) |
+| NFR-02 | DONE | Explicit invalidation both caches; TTL bounds pinned; AC-04 wall-clock proof |
+| NFR-03 | DONE | T-05(b) snapshot + T-05(c) template drift; rename sabotaged red |
+| NFR-04 | DONE | Fail-closed everywhere; both open-fall sabotages red |
+| NFR-05 | PARTIAL | Matrix ships grouped+searchable+sticky at 111 rows and works in-browser; the 130+/≤1 s formal budget joins Doc 19 L1 |
+| NFR-06 | DONE | permission-mapping gate blocking + AC-01 sweep |
+| US-01 | PARTIAL | Editor + matrix + scopes shipped and browser-proven; the full create-journey timing claim (<5 min) is unmeasured |
+| US-02 | DONE | Expiring override with audited reason through the API (RbacAdminBehaviorsTest) |
+| US-03 | DONE | Team Leader template Dept-scoped per US-03's words (RoleSeederTest scope pins) |
+| US-04 | DONE | QA read-only shape pinned; AC-08 contrast proves absent controls for non-holders |
+| US-05 | PARTIAL | Events + per-tenant denied metric live now; the monthly REPORT is Docs 15/17/18's (pre-agreed) |
+| US-06 | DONE | Blocking permission-mapping gate (unmapped route = red build) |
+| US-07 | DONE | Impact modal (diff + affected count) + effective-permissions explorer, both browser-proven |
+| BR-01 | DONE | Single column, no pivot — physics test |
+| BR-02 | DONE | Threshold warning at the boundary (RbacAdminBehaviorsTest) |
+| BR-03 | DONE | Closed catalog throws on unknown keys at every layer |
+| BR-04 | DONE | strict_grant both modes tested |
+| BR-05 | DONE | Read Only = the literal 18 (R-10); AC-06 sweep zero accepted writes |
+| BR-06 | DONE | RG keys in NO template but Super Admin (seeder pin) |
+| BR-07 | DONE | Service accounts take real roles at machine-token creation; intersection runs on resolved perms |
+| T-01 | DONE | Storage shape + boot check (orphans logged+ignored, never enforced; missing = deny) |
+| T-02 | DONE | Resolver + cap: cache + can()-shaped provider + middleware + payload + job path + deny shape |
+| T-03 | PARTIAL | scopeSet once per module + MembershipSource seam; Doc 11 binds real sources (pre-agreed) |
+| T-04 | DONE | PageCapabilities manifest — pages receive only their keys |
+| T-05 | DONE | (a) gate+sweep (b) snapshot (c) drift — each falsified |
+| T-06 | DONE | pending_grants mechanics + 24 h expiry + FS-04 |
+| T-07 | DONE | Outbox-only (EventPublisher refuses outside transactions); no direct dispatch |
+| SEC-01 | DONE | AC-01 under-privileged sweep of every existing route |
+| SEC-02 | DONE | 403-naming-key + foreign-id 404 masking in one suite |
+| SEC-03 | PARTIAL | Events + audit entries + metric live; the dedicated audit VIEW/notification are Docs 15/17/18's (pre-agreed) |
+| SEC-04 | DONE | ≥10-char reason enforced + audited + NOT NULL |
+| SEC-05 | DONE | Primitives-only cache entries (serializable_classes=false), server-side rebuild |
+| SEC-06 | DONE | Real-queue demotion test |
+| EC-01 | DONE | Delete-while-assigned blocked; aftermath structurally impossible |
+| EC-02 | PARTIAL | Resolver-truth denial proven (EXPIRED cells + AC-07); the mid-action UI state naming the granter ships with the ticket surfaces (Docs 04/06) that have actions to interrupt |
+| EC-03 | DONE | Version race through the API; loser gets the winner's state |
+| EC-04 | DONE | Teamless empty-set + sabotage; editor warning data present in scope helper (drawn warning state arrives with Doc 11's membership reality) |
+| EC-05 | PARTIAL | Object re-check mechanism (objectVisible reuses the list filter); the moved-out-of-scope UI state needs Docs 04/06 objects (pre-agreed bucket) |
+| EC-06 | DONE | Map-level allow with filter-at-list, documented in ScopeSets |
+| EC-07 | DONE | Never-overwrite-edited incl. the dangerous quadrant; deleted templates stay deleted |
+| EC-08 | DONE | Enable-refused under two holders + positive control, on the settings write path |
+| EC-09 | DONE | Every expiry comparison in SQL against now() |
+| EC-10 | DONE | Soft-limit warning (platform dial per R-11.3) at the boundary + G20 banner |
+| FS-01 | DONE | Store killed → byte-identical verdicts + metric + degrade loop |
+| FS-02 | DONE | TTLs pinned (10 s / 20 s composed), invalidation-lost metric |
+| FS-03 | DONE | Orphan logged+ignored; missing-in-DB denies; check failure logs instead of masking |
+| FS-04 | DONE | Pending rows confer nothing (proven on a live member map); stuck rows stay visible+inert |
+| SS-01 | PARTIAL | All the self-serve surfaces exist and are browser-proven piecewise; the full 40-person-org composite journey was not scripted |
+| SS-02 | PARTIAL | Middleware/UI/job layers each proven for sampled permissions; the four-layers-per-permission×10 auditor drill is a demonstration script, not yet automated |
+| SS-03 | DONE | AC-04 browser: open session loses/gains ≤10 s, zero errors |
+| AC-01 | DONE | RouteCoverageSweepTest (see traceability) |
+| AC-02 | DONE | PrecedenceMatrixTest |
+| AC-03 | PARTIAL | Fixture membership; Doc 11 re-proof bucket (traceability row says so) |
+| AC-04 | DONE | rbac.spec.ts |
+| AC-05 | DONE | SafetyRailsTest |
+| AC-06 | DONE | ReadOnlySweepTest |
+| AC-07 | DONE | ExpireOverridesTest + matrix EXPIRED cells |
+| AC-08 | PARTIAL | DOM half done; pixel half design-export-blocked (pre-agreed) |
+| R-01 | DONE | Grouping/search shipped; sign-off gate = registry + doc-owner rule in the header |
+| R-02 | PARTIAL | Badges/events/threshold live; monthly report Doc 15's (pre-agreed) |
+| R-03 | DONE | One ScopeSets implementation; object check reuses the list filter |
+| R-04 | DONE | Bypass keys always fresh — stale-vs-fresh contrast test |
+| R-05 | NOT DONE | Default-off shipped and tested, but the in-product "enable at ≥3 admins" TIP is not built — small UI item, no drawn frame demanded it; carry to Doc 16's settings surface |
+| — | NOT DONE | (counted with R-05 above) The second NOT DONE is EC-02's/EC-05's drawn "moved out of scope"/"access expired" TICKET-SURFACE states — no ticket surface exists to host them; both arrive with Docs 04/06 and are recorded in their rows as PARTIAL there |
+
+**Count: 61 DONE / 12 PARTIAL / 2 NOT DONE** (R-05's tip; the ticket-surface UI states —
+both carried forward explicitly, neither silently dropped).
+
+### Amharic native-review queue additions (ruling R-14)
+
+All machine-authored `lang/am/perm*.php` + `lang/am/rbac.php` strings join the standing
+queue. **Destructive tier, flagged for priority review:** role delete confirmation
+(`rbac.ui.roles.delete_confirm_*`, `confirm_delete`), delete-blocked
+(`delete_blocked_*`), override deny effect + removal (`rbac.ui.overrides.effect_deny`,
+`remove`), four-eyes reject (`rbac.ui.pending.reject`), last-admin block
+(`rbac.blocked.last_admin`).
 
 ## Session-0 close-out notes
 
