@@ -280,3 +280,18 @@ Recorded in DESIGN-DEVIATIONS as the frame's own marking, not a deviation.
 
 At session close-out, every new destructive-tier Amharic string (role delete confirmation,
 override deny confirmation, four-eyes reject) is flagged for the standing native-review queue.
+
+### A-3. Doc 02 FR-09's grace anchor: first subject encounter (FILED INTERPRETATION, S19 — mirrored at close-out acceptance)
+
+**Resolves a silence in Doc 02 FR-09, filed at S19 step 7 in the migration's docblock
+(`2026_08_04_020000_add_two_factor_required_since_to_users.php` — the docblock stays;
+this record is canonical); the doc author has NOT been consulted.**
+
+FR-09 says "grace period auth.2fa.grace_days (default 3) with countdown banner" but names
+no per-user starting point. Interpretation: the anchor is when enforcement FIRST APPLIED
+to the user — `two_factor_required_since`, stamped by the enforcement middleware on first
+subject encounter — because it is the only moment that exists for every path into scope
+(role assigned later, role added to the setting later, user invited later) and it can
+never predate the user's ability to comply. The stamp is a guarded fill-only UPDATE in DB
+time (it can never RESET anyone's grace window), the column is nullable expand-contract
+(C-12), and the days-left comparison runs in SQL against now() (C-11).
