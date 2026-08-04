@@ -313,11 +313,15 @@ final class TenantProvisioner
         match ($step) {
             ProvisioningStep::DefaultSettings => $this->applyDefaultSettings(),
 
-            // The seams. Recorded as completed with nothing created, because Doc 01 owns the
-            // sequencing and the idempotency while Docs 03/10/12 own the contents. Logged at
-            // debug so a developer wondering why "roles seeded" produced no roles finds the
+            // Doc 03 (S19) filled its declared seam: the nine Appendix B
+            // templates, idempotent under this class's retry/concurrency
+            // semantics (the seeder's own contract — see RoleSeeder).
+            ProvisioningStep::DefaultRoles => app(\App\Domain\Rbac\RoleSeeder::class)->seed(),
+
+            // The remaining seams. Recorded as completed with nothing created, because Doc 01
+            // owns the sequencing and the idempotency while Docs 10/12 own the contents.
+            // Logged at debug so a developer wondering why a step produced nothing finds the
             // answer rather than a mystery.
-            ProvisioningStep::DefaultRoles,
             ProvisioningStep::SlaPolicy,
             ProvisioningStep::BusinessHours,
             ProvisioningStep::KnowledgeBase => Log::debug('provisioning seam has no owner yet', [

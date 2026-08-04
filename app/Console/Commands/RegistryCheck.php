@@ -452,8 +452,13 @@ final class RegistryCheck extends Command
                 $this->errors[] = sprintf('%s: ac_ref must look like "Doc01 AC-01", got %s', $ref, var_export($acRef, true));
             } else {
                 // Cross-check: the referenced id must exist verbatim in the doc.
+                // Appendices (Doc03-AppendixB-…) are addenda, not the spec
+                // document — they must not shadow it in this glob.
                 [$doc, $id] = explode(' ', $acRef);
-                $docFiles = glob(base_path('docs/'.$doc.'-*.md')) ?: [];
+                $docFiles = array_values(array_filter(
+                    glob(base_path('docs/'.$doc.'-*.md')) ?: [],
+                    static fn (string $file): bool => ! str_contains(basename($file), 'Appendix'),
+                ));
                 if ($docFiles === []) {
                     $this->errors[] = sprintf('%s: no spec file found for %s', $ref, $doc);
                 } else {

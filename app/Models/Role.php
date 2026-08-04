@@ -65,4 +65,30 @@ final class Role extends Model implements TenantScoped
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * The primary key as the string it always is (C-01) — validating
+     * accessor, same shape as User::identifier().
+     */
+    public function identifier(): string
+    {
+        $key = $this->getKey();
+
+        if (! is_string($key) || $key === '') {
+            throw new \LogicException('Role has no string primary key — C-01 requires a UUIDv7.');
+        }
+
+        return $key;
+    }
+
+    public function tenantId(): string
+    {
+        $tenantId = $this->getAttribute('tenant_id');
+
+        if (! is_string($tenantId) || $tenantId === '') {
+            throw new \LogicException('Role has no tenant_id — the column is NOT NULL (Doc 01 C-02).');
+        }
+
+        return $tenantId;
+    }
 }

@@ -44,7 +44,14 @@ $root = dirname(__DIR__);
 require $root.'/vendor/autoload.php';
 
 // --- collect every AC id from every spec document ----------------------------
-$docFiles = glob($root.'/docs/Doc*.md') ?: [];
+// Appendices (docs/Doc03-AppendixB-…, owner-ordered filename) are ratified
+// ADDENDA to a numbered document, not spec documents of their own — they carry
+// no §18 and must neither raise the 19-count nor shadow their parent document
+// in the per-doc glob below.
+$docFiles = array_values(array_filter(
+    glob($root.'/docs/Doc*.md') ?: [],
+    static fn (string $file): bool => ! str_contains(basename($file), 'Appendix'),
+));
 sort($docFiles);
 if (count($docFiles) !== 19) {
     fwrite(STDERR, sprintf("traceability: FAIL — expected 19 spec documents in /docs, found %d\n", count($docFiles)));

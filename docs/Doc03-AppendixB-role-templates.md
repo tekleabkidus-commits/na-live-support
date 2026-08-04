@@ -1,0 +1,98 @@
+# Doc 03 — Appendix B: the nine seeded role templates
+
+**Status:** RATIFIED by owner ruling R-10 (2026-08-04, S19 plan approval) — filed in
+`docs/ANSWERS-FROM-DOC-AUTHOR.md`. Doc 03 FR-10 cites "Appendix B of the implementation
+repo" for the templates' exact grants; no such appendix was ever supplied, so this file IS
+it: proposed from the §4.1 catalog under the document's own constraints, ratified verbatim.
+`app/Domain/Rbac/RoleTemplates.php` is the machine-readable twin; T-05(c)'s drift test pins
+the two together with the seeder's fixtures.
+
+**Constraints carried from the document (each has a test):**
+
+- Super Admin = all 111 permissions, all scopes All (FR-10).
+- Read Only = **exactly** the 18 keys whose action segment is `view` and whose risk is
+  normal (BR-05 read strictly, ruling R-10): `kb.view_internal` excluded (action is
+  `view_internal`), `audit.view` excluded (high-risk never rides a seeded convenience
+  template). AC-06 sweeps every mutation route against it.
+- `customers.rg_flag.*` appears in NO template except Super Admin (BR-06 — granting RG
+  access is always an explicit act).
+- Agent-tier templates (Senior Agent, Agent, Junior Agent) and QA/Read Only carry **zero
+  high-risk keys** (ruling R-10; the B6-S07 fixture's "2 high-risk" badge on Senior Agent
+  is operator-edited content, not template law).
+- All nine are `is_system`: editable, never deletable while assigned (FR-02); releases
+  never overwrite an edited template (EC-07 — the seeder's fingerprint contract).
+
+**Scope maps** (scoped modules: tickets, conversations, customers, reports):
+
+| Template | tickets | conversations | customers | reports |
+|---|---|---|---|---|
+| Super Admin | All | All | All | All |
+| Admin | All | All | All | All |
+| Manager | Dept | Dept | Dept | Dept |
+| Team Leader | Dept | Dept | Dept | Dept |
+| Senior Agent | Team | Team | Team | Team |
+| Agent | Own | Own | Own | Own |
+| Junior Agent | Own | Own | Own | Own |
+| QA | All | All | All | All |
+| Read Only | All | All | All | All |
+
+Team Leader is Department-scoped by US-03's own words ("within my department"); QA is
+All-scoped by US-04 ("read all conversations"). Team/Dept resolve to EMPTY sets until
+Doc 11 supplies membership sources (T-03 seam, fail-closed).
+
+**Grants per template.** 🛡 = high-risk.
+
+- **Super Admin** — every catalog key (111).
+- **Admin** — every key EXCEPT `tickets.delete` 🛡, `customers.delete` 🛡,
+  `customers.rg_flag.view` 🛡, `customers.rg_flag.set` 🛡 (107). Hard destruction and RG
+  stay explicit acts.
+- **Manager** (57) — tickets: all 20 except delete (incl. export 🛡); conversations: view,
+  history.full; customers: view, create, edit, notes.add, notes.view, identity.link,
+  block; telegram: send, message.delete, bots.view, health.view; webchat: respond,
+  widgets.view; sms: send, templates.view, templates.create, templates.edit,
+  optout.manage; ai: copilot.use, copilot.insert_draft, decisions.view; kb: view_internal,
+  articles.create, articles.edit, articles.publish, categories.manage, feedback.view;
+  automation: rules.view, rules.edit, macros.personal.manage, macros.shared.manage,
+  forms.view, forms.edit, sla.policies.view; org: teams.manage, queues.manage,
+  queues.pull_in, business_hours.edit; admin: users.view, roles.view; reports: view,
+  dashboards.create, dashboards.share, export 🛡, schedule, supervisor.live,
+  agents.individual 🛡; supervision: monitor 🛡, whisper 🛡, reassign,
+  agent_status.force 🛡, broadcast; settings: view.
+- **Team Leader** (38) — tickets: the 19 non-high keys; conversations: view, history.full;
+  customers: view, create, edit, notes.add, notes.view, block; telegram: send; webchat:
+  respond; sms: send, templates.view; ai: copilot.use, copilot.insert_draft,
+  decisions.view; kb: view_internal, feedback.view; automation: rules.view,
+  macros.personal.manage, macros.shared.manage, forms.view, sla.policies.view; org:
+  queues.pull_in; admin: users.view; reports: view, dashboards.create, supervisor.live;
+  supervision: monitor 🛡, reassign, broadcast.
+- **Senior Agent** (36) — tickets: view, create, edit, reply, note, assign, assign_self,
+  status.change, priority.change, close, reopen, merge, split, escalate, follow,
+  tags.manage, fields.edit, spam.mark; conversations: view, history.full; customers:
+  view, create, edit, notes.add, notes.view, identity.link; telegram: send; webchat:
+  respond; sms: templates.view; ai: copilot.use, copilot.insert_draft; kb: view_internal,
+  articles.create, articles.edit, feedback.view; automation: macros.personal.manage,
+  forms.view; org: queues.pull_in; reports: view. Zero high-risk.
+- **Agent** (24) — tickets: view, create, edit, reply, note, assign_self, status.change,
+  close, reopen, escalate, follow, fields.edit, spam.mark; conversations: view;
+  customers: view, create, notes.add, notes.view; telegram: send; webchat: respond; ai:
+  copilot.use, copilot.insert_draft; kb: view_internal; automation:
+  macros.personal.manage, forms.view. Zero high-risk. *(Count includes both automation
+  keys — 25 total.)*
+- **Junior Agent** (14) — tickets: view, create, reply, note, assign_self, follow;
+  conversations: view; customers: view, notes.add, notes.view; telegram: send; webchat:
+  respond; ai: copilot.use; kb: view_internal; automation: macros.personal.manage.
+  Zero high-risk. *(Count: 15.)*
+- **QA** (9) — tickets.view, conversations.view, conversations.history.full,
+  customers.view, customers.notes.view, ai.decisions.view, kb.view_internal,
+  kb.feedback.view, reports.view. Read-and-score; every reply/edit control absent
+  (US-04, proven in AC-08's sample).
+- **Read Only** (18) — tickets.view, conversations.view, customers.view,
+  customers.notes.view, telegram.bots.view, telegram.health.view, webchat.widgets.view,
+  sms.templates.view, sms.gateways.view, ai.decisions.view, kb.feedback.view,
+  automation.rules.view, forms.view, sla.policies.view, admin.users.view,
+  admin.roles.view, reports.view, settings.view.
+
+`RoleTemplates::all()` is authoritative for the exact machine-readable sets; the counts
+above are descriptive (the registry-is-normative rule applies to this appendix too). The
+seeder test pins Super Admin at 111, Read Only at the literal 18, and zero-high on the
+agent tier + QA + Read Only.
