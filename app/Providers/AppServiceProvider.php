@@ -37,6 +37,18 @@ class AppServiceProvider extends ServiceProvider
 
         // C-08's fallback chain (user → tenant default → English) with §14's
         // missing-translation telemetry, replacing the stock single-fallback translator.
+        // Doc 03 T-02/T-03: enforcement points resolve maps through the
+        // provider seam (step 5's cache decorates it); Team/Dept membership
+        // is EMPTY until Doc 11 binds real sources — fail closed, never open.
+        $this->app->bind(
+            \App\Support\Rbac\CapabilityMapProvider::class,
+            \App\Support\Rbac\CapabilityMapBuilder::class,
+        );
+        $this->app->bind(
+            \App\Support\Rbac\Scopes\MembershipSource::class,
+            \App\Support\Rbac\Scopes\EmptyMembership::class,
+        );
+
         $this->app->extend('translator', function (Translator $translator): TelemetricTranslator {
             $replacement = new TelemetricTranslator($translator->getLoader(), $translator->getLocale());
             $replacement->setFallback($translator->getFallback());

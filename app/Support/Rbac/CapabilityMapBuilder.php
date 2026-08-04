@@ -40,11 +40,20 @@ use DateTimeImmutable;
  * legal levels; a scoped module the role's map omits stays ABSENT (NFR-04:
  * consumers read null and fail closed).
  */
-final class CapabilityMapBuilder
+final class CapabilityMapBuilder implements CapabilityMapProvider
 {
     private const SCOPE_LEVELS = ['Own', 'Team', 'Dept', 'All'];
 
     public function __construct(private readonly PermissionCatalog $catalog) {}
+
+    /**
+     * The CapabilityMapProvider seam: today a fresh build per call; step 5's
+     * cache decorates this binding without touching any consumer.
+     */
+    public function mapFor(User $user): CapabilityMap
+    {
+        return $this->build($user);
+    }
 
     public function build(User $user): CapabilityMap
     {
