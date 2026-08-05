@@ -35,6 +35,7 @@ fresh:
 		$(COMPOSE) up -d app worker scheduler reverb; \
 	}
 	$(COMPOSE) exec app php artisan migrate:fresh --seed --force --database=pgsql_migrator
+	$(COMPOSE) exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
 	@echo "Fresh stack ready at http://localhost"
 
 ## re-read source in the long-lived processes, then wait for them to be healthy

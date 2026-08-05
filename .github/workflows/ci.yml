@@ -79,6 +79,12 @@ jobs:
       # need real schema there, and only local dev had ever migrated it.
       - name: Migrate the stack database (same command as `make fresh`)
         run: docker compose -f docker/compose.yaml exec -T app php artisan migrate:fresh --seed --force --database=pgsql_migrator
+      # The object store's schema-equivalent: the media bucket (Doc 04 T-04).
+      # Same command as `make fresh`; production bucket provisioning is Doc 18's
+      # IaC. Run 30991248392 is what happens without it — every media/retention
+      # test fails UnableToWriteFile against a bucketless MinIO.
+      - name: Provision the media bucket (same command as `make fresh`)
+        run: docker compose -f docker/compose.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
       # The gates run HERE, not in Stage 1: the isolation-suite gate is
       # container-only (Doc 01 §21 — it must never report PASS without running),
       # and the stack it needs exists only in this stage. Same placement as
