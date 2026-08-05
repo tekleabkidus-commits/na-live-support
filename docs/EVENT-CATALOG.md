@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-48 event(s).
+49 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -391,6 +391,15 @@ A user was moved between roles (BR-01: exactly one). Queued work re-resolves at 
 - **Payload:** `tenant_id`, `user_id`, `old_role_id`, `new_role_id`, `actor_id`
 - **Producers:** Doc03/RoleAdministration
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `retention.completed`
+
+A retention run finished (T-08/AC-09): counts per tenant; held rows moved to hold storage before their partition dropped (EC-09).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `partitions_dropped`, `messages_held`, `messages_removed`
+- **Producers:** Doc04/MessagesRetention
+- **Consumers:** Doc15/Reporting, Doc17/Audit, Doc18/Alerting
 
 ## `tenant.provisioned`
 

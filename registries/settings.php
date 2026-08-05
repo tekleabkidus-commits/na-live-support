@@ -453,4 +453,33 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc04',
     ],
+    [
+        // T-08 retention keys. min:6 IS the platform minimum T-08 demands — a
+        // shorter policy would erase betting-dispute evidence (BR-03).
+        // Partition drops are GLOBAL, so the retention run reads the PLATFORM
+        // value of each key; per-tenant override semantics (if ever) belong to
+        // the Doc 18 runbook + Doc 16 settings surface (pre-agreed bucket).
+        'key' => 'retention.messages.months',
+        'type' => 'int',
+        'default' => 13,
+        'validation' => 'required|integer|min:6|max:120',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        'key' => 'retention.media.months',
+        'type' => 'int',
+        'default' => 6,
+        'validation' => 'required|integer|min:6|max:120',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        'key' => 'retention.revisions.months',
+        'type' => 'int',
+        'default' => 13,
+        'validation' => 'required|integer|min:6|max:120',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
 ];

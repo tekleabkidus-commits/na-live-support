@@ -378,6 +378,13 @@ final class EventCatalog
             'consumers' => ['Doc09/Transcription'],
             'description' => 'T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.',
         ],
+        'retention.completed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'partitions_dropped', 'messages_held', 'messages_removed'],
+            'producers' => ['Doc04/MessagesRetention'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit', 'Doc18/Alerting'],
+            'description' => 'A retention run finished (T-08/AC-09): counts per tenant; held rows moved to hold storage before their partition dropped (EC-09).',
+        ],
         'conversation.blocked' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'conversation_id'],

@@ -533,4 +533,13 @@ return [
         'required_fields' => ['conversation_id', 'reason'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // T-08/AC-09: what a retention run did, per tenant — the paper trail a
+        // "where did that thread go" question resolves against.
+        'action_key' => 'retention.completed',
+        'entity' => 'partition',
+        'actor_types' => ['system'],
+        'required_fields' => ['partitions', 'messages_held', 'messages_removed'],
+        'owning_doc' => 'Doc04',
+    ],
 ];

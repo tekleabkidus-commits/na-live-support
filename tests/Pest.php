@@ -217,7 +217,7 @@ function cleanupTenants(array $tenantIds): void
     foreach ([
         // Doc 04: messages reference conversations, conversations reference
         // customers — so drafts/revisions/messages first, customers last.
-        'message_drafts', 'message_revisions', 'messages', 'conversations',
+        'message_drafts', 'message_revisions', 'legal_hold_messages', 'messages', 'conversations',
         'customer_identities', 'customers',
         'events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
         'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',
@@ -230,6 +230,36 @@ function cleanupTenants(array $tenantIds): void
     }
 
     $platform->table('tenants')->whereIn('id', $tenantIds)->delete();
+}
+
+/**
+ * Remove a synthetic messages partition: DETACH first (the message_revisions FK
+ * clones a dependency onto every attached partition, so a plain DROP is refused),
+ * with a throwaway tenant bound on the migrator session — the detach-time FK
+ * verification SELECT is policed by message_revisions' FORCE RLS and errors on an
+ * unbound current_setting('app.tenant_id'). Safe here ONLY because these synthetic
+ * partitions hold no revisions; the step-9 retention job must NOT rely on this
+ * check — see the MessagePartitions docblock.
+ */
+function removeMessagesPartition(string $name): void
+{
+    $migrator = DB::connection('pgsql_migrator');
+
+    $migrator->statement("SELECT set_config('app.tenant_id', '00000000-0000-0000-0000-000000000000', false)");
+
+    $attached = $migrator->select("
+        SELECT 1
+        FROM pg_inherits i
+        JOIN pg_class c ON c.oid = i.inhparent
+        JOIN pg_class c2 ON c2.oid = i.inhrelid
+        WHERE c.relname = 'messages' AND c2.relname = ?
+    ", [$name]);
+
+    if ($attached !== []) {
+        $migrator->statement(sprintf('ALTER TABLE messages DETACH PARTITION %s', $name));
+    }
+
+    $migrator->statement(sprintf('DROP TABLE IF EXISTS %s', $name));
 }
 
 /*
