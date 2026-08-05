@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Conversations\Storage;
 
 use App\Domain\Conversations\Adapters\NormalizedInbound;
+use App\Domain\Conversations\Messages\LanguageDetector;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Support\Http\CursorPage;
@@ -52,10 +53,17 @@ final class MessageRepository
                     'thumb_key' => null,
                     'transcript_ref' => null,
                     'ocr_ref' => null,
+                    // §13: the stored alt slot every image needs, staff-editable
+                    // (setMediaAltText) and reusable by the KB. The slot and its
+                    // writer are Doc 04's; the editing SURFACE is Doc 07's.
+                    'alt_text' => null,
                     'scan_status' => 'pending',
                 ],
                 $inbound->media,
             ),
+            // §14: detected language, stored per message and exposed. Nullable —
+            // no consumer may assume it is populated (see LanguageDetector).
+            'language' => app(LanguageDetector::class)->detect($inbound->body),
             'external_message_id' => $inbound->externalMessageId,
             'quarantined' => $quarantined,
             'channel_meta' => $inbound->channelMeta,
@@ -83,9 +91,24 @@ final class MessageRepository
             'author_id' => $authorId,
             'kind' => $kind,
             'body' => $body,
+            // §14: outbound carries a detected language too — Doc 09's
+            // translation features read it on both directions of the thread.
+            'language' => app(LanguageDetector::class)->detect($body),
             'delivery_state' => 'queued',
             'client_idempotency_key' => $idempotencyKey,
         ]);
+    }
+
+    /**
+     * §13's staff-editable alt text for one stored image. The SLOT and this
+     * writer are Doc 04's obligation; the editing surface (and the KB reuse it
+     * feeds) belong to Doc 07 and Doc 10. Writes only the alt slot — it can
+     * never touch scan_status or storage_key, so no accessibility edit can
+     * change what a scan decided (SEC-04's absence stays an absence).
+     */
+    public function setMediaAltText(Message $message, int $index, ?string $altText): void
+    {
+        $this->updateMediaItem($message, $index, ['alt_text' => $altText]);
     }
 
     /**

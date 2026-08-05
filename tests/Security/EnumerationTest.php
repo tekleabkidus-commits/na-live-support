@@ -223,14 +223,39 @@ it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner 
 
     $provider = app(App\Domain\Auth\Login\StaffUserProvider::class);
 
-    // Warm: the first call pays for the dummy hash's one-time computation.
-    $provider->retrieveByCredentials(['email' => 'warmup@fixture.example', 'password' => 'x']);
+    // ─────────────────────────────────────────────────────────────────────────
+    // WARM ALL THREE SHAPES TOGETHER, BEFORE TIMING ANY OF THEM.
+    //
+    // An earlier version warmed each path with a single call immediately before
+    // measuring it, and flaked roughly one run in four — always the same way:
+    // the 0-candidate path (measured first) read 55-90 ms slower than the other
+    // two, while those two sat within single-digit ms of each other.
+    //
+    // That shape is the tell. It is not an oracle — it is measurement order.
+    // argon2id allocates a 64 MiB working set per verification, and the first
+    // several verifications in a process fault those pages in. One warm call
+    // does not absorb that ramp, so whichever path is timed FIRST pays it.
+    //
+    // The floor estimator cannot save this the way it saves us from contention.
+    // Scheduler noise is transient, so the minimum of nine samples converges on
+    // the true cost; a cold working set is a MONOTONIC RAMP, so every one of the
+    // first path's nine samples sits on it and the minimum rides up with them.
+    //
+    // Twelve calls spread across all three shapes put every path on the same
+    // warm heap before the first measurement. Verified by a three-way probe
+    // (production order, reversed order, fully interleaved): with this warm the
+    // spread is ±4 ms in all three, and the DB resolver contributes 0.4 ms, so
+    // the hash budget is genuinely what is being measured. The ±50 ms bound
+    // below is unchanged — the estimator was wrong, not the requirement.
+    // ─────────────────────────────────────────────────────────────────────────
+    foreach (range(1, 4) as $ignored) {
+        foreach (['no.such.account@fixture.example', 'real.account@fixture.example', 'two.tenants@fixture.example'] as $shape) {
+            $provider->retrieveByCredentials(['email' => $shape, 'password' => 'warm']);
+        }
+    }
 
-    // Nine samples, and the FLOOR of each set — see floorOf(). Each path is also
-    // warmed once so no path pays a first-call cost the others do not.
+    // Nine samples, and the FLOOR of each set — see floorOf().
     $measure = function (string $email) use ($provider): float {
-        $provider->retrieveByCredentials(['email' => $email, 'password' => 'warm']);
-
         return floorOf(timeRequests(
             fn () => $provider->retrieveByCredentials([
                 'email' => $email,

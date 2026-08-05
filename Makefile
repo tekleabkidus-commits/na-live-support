@@ -52,8 +52,23 @@ reload:
 	@echo "Octane reloaded; worker/scheduler/reverb restarted and healthy."
 
 ## full Pest suite, run INSIDE the app container (parity; 'make up' first)
+## The `soak` group is EXCLUDED here and run by `make soak` — see that target.
 test: reload
-	$(COMPOSE) exec app ./vendor/bin/pest
+	$(COMPOSE) exec app ./vendor/bin/pest --exclude-group=soak
+
+## Doc 04 AC-03's 10k-message ordering soak, ALONE in its own process (~6-8 min)
+##
+## WHY IT IS NOT IN `make test`. The soak is the only test that commits its
+## fixtures (10k writes across partitioned tables exceed max_locks_per_transaction
+## in one transaction), and run inside the shared suite it corrupts the tests that
+## follow it: with the soak, the soak itself and every Performance test fail with
+## spurious "relation ... does not exist"; without it, 648 pass. That interaction
+## is NOT root-caused and is recorded as an open defect in BUILD-STATUS rather than
+## hidden. The soak is ALSO flaky in isolation (two green runs, one red with 50
+## violations on a clean DB), so AC-03's soak half is NOT claimed as proven —
+## see BUILD-STATUS RISK 0. Excluding it keeps the default suite honest.
+soak:
+	$(COMPOSE) exec app ./vendor/bin/pest --group=soak
 
 ## AC-07 latency budgets, STRICT spec assertions, dev-hardware-indicative (Doc 01 §12)
 perf:

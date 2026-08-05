@@ -41,6 +41,23 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | with "out of shared memory" — a harness limit, not a product defect (observed
 | on the first run of this soak). A soak is inherently a many-transactions
 | scenario, so it commits like production does and cleans up after itself.
+|
+| WHY IT RUNS ALONE (`make soak`, group `soak`, excluded from `make test`).
+| Running inside the shared suite, this test corrupts what follows it: the soak
+| dies mid-body and every Performance test after it fails with spurious
+| "relation ... does not exist" against a database whose tables demonstrably
+| still exist afterwards. Measured, not guessed — full suite WITHOUT the soak:
+| 648 passed, 0 failed; WITH it, on an otherwise idle machine: 7 failed. The
+| mechanism is NOT root-caused (the committed transaction interacting with the
+| harness's per-test transaction and the platform connection is the prime
+| suspect) and is filed as an open defect in BUILD-STATUS.
+|
+| AND IT IS FLAKY IN ISOLATION TOO. Alone on a clean database this has passed
+| twice (209 assertions, zero violations) and failed once with 50 violations —
+| every lane — which smells like the drain loop exiting early and leaving
+| messages unsent rather than a real ordering bug. Until that is fixed, AC-03's
+| soak half is NOT claimed as proven; the head-failure/lane-skip half is, in
+| LaneFifoTest. Do not treat a single green run of this file as evidence.
 */
 
 test('AC-03: zero order violations across a 10k-message soak with failures injected mid-flight', function () {

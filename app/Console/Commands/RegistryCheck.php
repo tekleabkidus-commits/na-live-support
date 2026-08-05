@@ -448,7 +448,11 @@ final class RegistryCheck extends Command
                 continue;
             }
             $acRef = $entry['ac_ref'];
-            if (! is_string($acRef) || preg_match('/^Doc(0[1-9]|1[0-9]) (AC|FR|NFR|BR|T|SEC|EC|FS)-\d{2}$/', $acRef) !== 1) {
+            // SS (§17 Success Scenarios) joined the list in S20: Doc 04 maps SS-02
+            // and SS-04 to executed tests, and they are as much a numbered spec
+            // family as FS. Widening WHICH ids may be mapped is not weakening the
+            // gate — an unmapped id is still a build failure.
+            if (! is_string($acRef) || preg_match('/^Doc(0[1-9]|1[0-9]) (AC|FR|NFR|BR|T|SEC|EC|FS|SS)-\d{2}$/', $acRef) !== 1) {
                 $this->errors[] = sprintf('%s: ac_ref must look like "Doc01 AC-01", got %s', $ref, var_export($acRef, true));
             } else {
                 // Cross-check: the referenced id must exist verbatim in the doc.

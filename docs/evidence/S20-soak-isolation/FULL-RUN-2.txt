@@ -1,0 +1,1521 @@
+
+   PASS  Tests\Unit\Auth\SafeReturnUrlTest
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both…  0.01s  
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "protocol-relative"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant /\"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant \/"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "any interior backslash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "triple slash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "scheme with no slash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "CR-LF (header injection material)"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "other control characters"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "origin lookalike host"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "empty string"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "bare origin prefix without separator"
+  ✓ it refuses non-strings without dying
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "plain path"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with query"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with fragment"
+  ✓ it reduces a same-origin ABSOLUTE URL to its local path — the shape the framework guest redirect stores
+
+   PASS  Tests\Unit\Conversations\AdapterRegistryTest
+  ✓ a registered channel resolves its adapter and queue families         0.02s  
+  ✓ an unregistered channel refuses by name
+  ✓ double registration refuses — one channel, one adapter
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   PASS  Tests\Feature\Auth\ActionTokenTest
+  ✓ it issues a 256-bit token, stores only its SHA-256, and resolves it… 3.98s  
+  ✓ it refuses cross-purpose redemption both ways (bound to purpose)     0.15s  
+  ✓ it is single-use: consume() wins exactly once, and a consumed token… 0.14s  
+  ✓ it dies when the account email changes after issuance (bound to ema… 0.14s  
+  ✓ it dies at expiry, two-sided at the DB-time boundary                 0.14s  
+  ✓ it supersedes the previous live token on reissue — EC-04 as physics… 0.15s  
+  ✓ it refuses garbage shapes without touching the door                  0.14s  
+  ✓ it refuses a token whose owner was disabled after issuance           0.14s  
+
+   PASS  Tests\Feature\Auth\ApiTokenLifecycleTest
+  ✓ it mints a personal token that AUTHENTICATES the bearer surface (FR… 0.18s  
+  ✓ it stores only the SHA-256 — the plaintext exists in exactly one re… 0.16s  
+  ✓ it surfaces last_used_at after a bearer request (FR-18 "last-used d… 0.16s  
+  ✓ it revokes a token individually, after proving it worked (FR-18 "in… 0.17s  
+  ✓ it refuses expiry choices outside FR-18's fixed set, and "none" onc… 0.17s  
+  ✓ it refuses abilities that are not registered permission keys (FR-18… 0.14s  
+  ✓ it answers a never-issued token with 401 invalid_token (FR-20)       0.13s  
+  ✓ it answers a missing Authorization header with the same 401 invalid… 0.14s  
+  ✓ it answers an EXPIRED token with 401 token_expired — the one distin… 0.15s  
+  ✓ it renders revoked-token and disabled-owner refusals BYTE-IDENTICAL… 0.25s  
+  ✓ it never lets a session cookie satisfy the bearer surface (T-02; sa… 0.14s  
+  ✓ it never lets a bearer token satisfy the staff session surface (T-0… 0.16s  
+  ✓ it audits and publishes creation and revocation (§4.8: auth.token.c… 0.15s  
+  ✓ it keeps two tenants' tokens fully apart — each resolves only its o… 0.32s  
+
+   PASS  Tests\Feature\Auth\BreachCheckTest
+  ✓ it sends exactly the 5-char SHA-1 prefix — never the password, its…  0.04s  
+  ✓ it flags a breached password on a suffix hit and lets the policy re… 0.23s  
+  ✓ it does not flag a clean password, and treats a padded zero-count d… 0.02s  
+  ✓ it fails OPEN on timeout, with the named metric — an outage never b… 0.02s  
+  ✓ it fails OPEN on a non-2xx, with the failure class in the metric     0.02s  
+  ✓ it fails OPEN when no endpoint is configured, without dialling anyt… 0.02s  
+  ✓ it makes zero calls when the tenant has turned the check off (FR-15… 0.23s  
+  ✓ it never logs anything password-derived on any path (SEC-08)         0.02s  
+
+   PASS  Tests\Feature\Auth\DeviceRegistrationTest
+  ✓ it records a device on first login: fingerprint, parsed label, IP,…  0.47s  
+  ✓ it a repeat login from the same machine UPDATES the row instead of…  0.65s  
+  ✓ it a different browser is a different device (T-03: family is a fin… 0.69s  
+  ✓ it a browser UPGRADE is NOT a new device (family, not version, is h… 0.64s  
+  ✓ it an address outside the database stores IP only — the row-level h… 0.44s  
+  ✓ it NFR-04: a CORRUPT GeoIP database never blocks a login             0.69s  
+
+   PASS  Tests\Feature\Auth\GeoIpTest
+  ✓ it positive control: the official MaxMind reader resolves the stub'… 0.02s  
+  ✓ it resolves a city with per-locale names and English fallback (§14)  0.02s  
+  ✓ it returns a country-only location for the city-less network         0.02s  
+  ✓ it returns null for an address the database does not know            0.02s  
+  ✓ it FS-04: a CORRUPT database degrades to null with the named metric… 0.02s  
+  ✓ it FS-04: a MISSING database file degrades the same way              0.02s  
+  ✓ it an UNCONFIGURED database is a quiet null — no metric spam from u… 0.02s  
+  ✓ it heals without a restart when a corrupt file is replaced (the un-… 0.04s  
+
+   PASS  Tests\Feature\Auth\InvitationTest
+  ✓ it walks FR-17 end to end: invited cannot log in, sets a password o… 1.18s  
+  ✓ it honours the 7-day validity, two-sided (FR-17)                     0.15s  
+  ✓ it invalidates the old link on self-service resend and answers unif… 0.79s  
+  ✓ it offers no structural path for anyone to choose a password for so… 0.06s  
+  ✓ it completes the profile on accept: name and language persist with…  0.54s  
+  ✓ it refuses a locale outside {en, am} loudly, spends nothing, and le… 0.59s  
+  ✓ it leaves the profile untouched when the PASSWORD is refused — no u… 0.24s  
+  ✓ it prefills the profile fields from what the admin already entered…  0.24s  
+
+   PASS  Tests\Feature\Auth\IpAllowlistTest
+  ✓ it matches exact IPs and CIDR ranges, v4 and v6, and fails closed o… 0.06s  
+  ✓ it refuses a CORRECT credential from an off-list IP with the GENERI… 0.68s  
+  ✓ it admits the same credential from an on-list IP, and leaves NULL-a… 1.26s  
+
+   PASS  Tests\Feature\Auth\LockoutTest
+  ✓ it gives the generic message for failures 1 to 4 and does not lock…  1.13s  
+  ✓ it locks the account on the 5th failure (AC-02)                      1.43s  
+  ✓ it refuses the CORRECT password while locked, without saying it is…  1.69s  
+  ✓ it audits every lockout transition (AC-02: admin unlock audited, an… 1.43s  
+  ✓ it rolls the window: failures older than auth.lockout.window do not… 0.17s  
+  ✓ it expires the lock after auth.lockout.duration without anyone inte… 0.02s  
+  ✓ it counts a failed attempt against EVERY candidate account for that… 1.36s  
+  ✓ it lets a victim always unlock via password reset, per account (EC-… 1.55s  
+  ✓ it registers the EC-11 captcha threshold setting even though no ven… 0.02s  
+  ✓ it throttles per IP independently of any account, including address… 4.61s  
+
+   PASS  Tests\Feature\Auth\LoginFlowTest
+  ✓ it signs a staff user in with the correct password (FR-01)           0.62s  
+  ✓ it binds the tenant discovered from the account (Doc 01 FR-03a)      0.56s  
+  ✓ it refuses the wrong password                                        0.56s  
+  ✓ it refuses when one email AND password verify in two tenants, recor… 0.55s  
+
+   PASS  Tests\Feature\Auth\LoginPageTest
+  ✓ it renders the card for a guest with nothing account-shaped in the…  0.03s  
+  ✓ it redirects an already-authenticated user away from the card inste… 0.05s  
+  ✓ it re-enters the 2FA step on reload while a challenge is pending (§… 0.09s  
+  ✓ it shows the FR-11 expired notice exactly when the lifetime middlew… 0.04s  
+  ✓ it walks FR-11 end to end: expiry redirects to the card, flags the…  0.04s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.03s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.03s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.03s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.03s  
+  ✓ it POSITIVE CONTROL: a legitimate stored return path survives the g… 0.03s  
+  ✓ it carries EC-01's time-sync help sentence into the challenge copy,… 0.04s  
+
+   PASS  Tests\Feature\Auth\MachineTokenTest
+  ✓ it creates a service-account-bound machine token that authenticates… 0.31s  
+  ✓ it reuses an existing service account by name instead of minting a…  0.31s  
+  ✓ it never lets a service account log in — refused at the SQL resolve… 0.95s  
+  ✓ it rotates with an overlap window: both tokens live until the expli… 0.37s  
+  ✓ it attributes a machine token's scope denial to its VISIBLE service… 0.35s  
+  ✓ it does not manage personal tokens through the machine surface — 40… 0.21s  
+
+   PASS  Tests\Feature\Auth\PasswordMailTest
+  ✓ it queues the reset mail on the mail family with tries=6 and the wi… 0.31s  
+  ✓ it pins the recipient locale at dispatch: user preference first      0.44s  
+  ✓ it falls back to the tenant default language when the user has no p… 0.42s  
+  ✓ it renders complete localized content in BOTH launch languages, wit… 0.05s  
+  ✓ it queues the invitation mail with the same FS-02 posture            0.03s  
+
+   PASS  Tests\Feature\Auth\PasswordPolicyTest
+  ✓ it refuses below the default 12 minimum and accepts at it, naming t… 0.41s  
+  ✓ it follows the tenant's own min_length setting (T-10)                0.36s  
+  ✓ it cannot be weakened below BR-05's platform floor of 10 — refused…  0.38s  
+  ✓ it ignores composition by default (length over composition) and enf… 0.56s  
+  ✓ it refuses reuse of the current password and each of the last N, an… 2.75s  
+  ✓ it writes a history row per change with the PRE-change hash (the mi… 0.59s  
+  ✓ it mutates nothing when policy refuses — no hash change, no history… 0.15s  
+  ✓ it never fires at the spec default of 0, however old the password    0.20s  
+  ✓ it confines an expired password to the change surface, two-sided at… 0.66s  
+
+   PASS  Tests\Feature\Auth\PasswordResetFlowTest
+  ✓ it runs the whole FR-16 journey: request → email → new password → o… 1.60s  
+  ✓ it keeps the token ALIVE through a policy failure and kills it on s… 0.77s  
+  ✓ it revokes every session on completion (FR-16's "all sessions revok… 0.75s  
+  ✓ it unlocks EXACTLY the account the token was bound to — R-6, with t… 2.71s  
+  ✓ it mints nothing for invited or disabled accounts, behind the ident… 0.86s  
+  ✓ it changes the password from a live session with FR-14's keep-curre… 1.28s  
+
+   PASS  Tests\Feature\Auth\RememberRecallerTest
+  ✓ it signs the user back in from the remember cookie when the session… 0.59s  
+  ✓ it NEGATIVE CONTROL: a recaller whose token no longer matches the s… 0.48s  
+
+   PASS  Tests\Feature\Auth\RouteRegistrationTest
+  ✓ it has removed the Doc 01 deferral and keeps Fortify auto-registrat… 0.02s  
+  ✓ it offers no self-registration route in v1                           0.02s  
+  ✓ it maps or exempts every route in the permission registry (permissi… 0.03s  
+  ✓ it declares a registered audit action on every mutating route (audi… 0.03s  
+
+   PASS  Tests\Feature\Auth\SecuritySessionsApiTest
+  ✓ it lists the caller's sessions with digests, metadata, and FS-04's…  0.06s  
+  ✓ it revokes one of the caller's other sessions by digest (FR-12, US-… 0.05s  
+  ✓ it refuses an unknown digest with 404 — expired-meanwhile and never… 0.05s  
+  ✓ it cannot revoke ANOTHER user's session by digest — the list is sco… 0.08s  
+  ✓ it revoke-others kills every planted session, audits the bulk actio… 0.06s  
+  ✓ it revoke-others with NOTHING to revoke still succeeds and still au… 0.04s  
+  ✓ it FR-11 WIRING: a session past its absolute limit is refused, not…  0.04s  
+
+   PASS  Tests\Feature\Auth\SessionCookieFlagsTest
+  ✓ it issues the staff session cookie HttpOnly, Secure and SameSite=La… 0.03s  
+  ✓ it POSITIVE CONTROL: the flag assertions read the live config→cooki… 0.03s  
+
+   PASS  Tests\Feature\Auth\SessionDeadlineTest
+  ✓ it answers 404 with no session — C-10's indistinguishable refusal,…  0.04s  
+  ✓ it rolls the idle clock by being called, and NEVER touches the abso… 0.07s  
+  ✓ it reports the ABSOLUTE clock as the effective deadline when it is…  0.05s  
+
+   PASS  Tests\Feature\Auth\SessionLifetimeTest
+  ✓ it reads FR-11 defaults from the settings registry                   0.02s  
+  ✓ it expires an idle session at the boundary and not one minute befor… 0.02s  
+  ✓ it expires a session at the absolute limit however recently it was…  0.02s  
+  ✓ it kills a CONTINUOUSLY ACTIVE session at the absolute limit (the s… 0.03s  
+  ✓ it treats a session with no recorded marks as live, not expired      0.02s  
+  ✓ it stamps an unstamped authenticated session with an absolute clock… 0.08s  
+
+   PASS  Tests\Feature\Auth\TenantHintOverrideTest
+  ✓ it serves the override to the request that set it (positive control… 0.03s  
+  ✓ it does NOT serve a previous request's override to a new request th… 0.03s  
+
+   PASS  Tests\Feature\Auth\TokenPruneTest
+  ✓ it prunes expired tokens across tenants and touches nothing else (F… 0.41s  
+  ✓ it scans on the documented partial index and runs nightly (FS-05 "i… 0.03s  
+
+   PASS  Tests\Feature\Auth\TokenScopeIntersectionTest
+  ✓ it refuses the write with 403 NAMING settings.edit while the SAME t… 0.22s  
+  ✓ it audits and publishes the denial (auth.token.scope_denied, BR-03…  0.21s  
+  ✓ it never lets a token EXCEED its owner — an ability the owner lacks… 0.20s  
+  ✓ it propagates permission loss within T-05's 10-second cache bound —… 0.29s  
+  ✓ it drops the cached verdict on revocation rather than serving it ou… 0.30s  
+
+   PASS  Tests\Feature\Auth\TwoFactorChallengeTest
+  ✓ it the login half: a correct password on a 2FA account yields 401 t… 2.08s  
+  ✓ it positive control: the challenge half establishes a session for a… 1.64s  
+  ✓ it AC-03: ±1 step accepted, ±2 rejected — exact boundaries, injecte… 0.02s  
+  ✓ it a wrong code is refused and the account is NOT signed in          1.56s  
+  ✓ it FR-07: the FIFTH failure voids the attempt, counts ONE failure t… 1.50s  
+  ✓ it AC-03: a recovery code signs in ONCE, reports the remaining coun… 2.18s  
+  ✓ it R-4: the ≤2-codes banner flag comes from the store, after real c… 1.98s  
+  ✓ it a user DISABLED mid-challenge is refused by the same pipe the pa… 1.18s  
+  ✓ it a challenge with no pending state is told to start with the pass… 1.20s  
+  ✓ it demands exactly one proof: both or neither is a validation error… 1.08s  
+
+   PASS  Tests\Feature\Auth\TwoFactorEnrolmentTest
+  ✓ it FR-06: begin → confirm with a valid code → active, with 8 single… 1.10s  
+  ✓ it SEC-03: stored recovery codes are argon2id digests, and no respo… 1.09s  
+  ✓ it refuses to activate on a wrong code — a mis-scanned QR must not…  0.07s  
+  ✓ it EC-10: two tabs, one winner — the superseded tab gets its DESIGN… 1.05s  
+  ✓ it begin is REFUSED while 2FA is active — otherwise it would be a c… 1.14s  
+  ✓ it FR-14: enabling 2FA revokes the user's OTHER sessions, sparing t… 0.91s  
+  ✓ it disable demands a CURRENT code; a wrong one changes nothing       1.07s  
+  ✓ it regeneration mints a fresh batch and the OLD batch is dead (FR-0… 2.86s  
+  ✓ it FR-08: admin reset — typed name enforced server-side, target ses… 1.09s  
+
+   PASS  Tests\Feature\Auth\TwoFactorRoleEnforcementTest
+  ✓ it stamps the grace anchor on first subject encounter and lets the…  0.07s  
+  ✓ it locks a past-grace member out of every screen EXCEPT enrolment/s… 0.10s  
+  ✓ it leaves unlisted roles, enrolled users and empty settings untouch… 0.07s  
+
+   PASS  Tests\Feature\Auth\UserDisableTest
+  ✓ it disables a user: tokens revoked, sessions gone, everything audit… 0.20s  
+  ✓ it is ALL-OR-NOTHING: an injected failure between the user write an… 0.17s  
+  ✓ it backstop 1 — the bearer door refuses a disabled owner's UNREVOKE… 0.26s  
+  ✓ it backstop 2 — staff rehydration refuses a disabled user whose ses… 0.19s  
+
+   PASS  Tests\Feature\Auth\UserLocaleTest
+  ✓ it positive control: the en and am strings this suite compares actu… 0.02s  
+  ✓ it serves a locale-less user in English (the chain's final hop, unc… 0.05s  
+  ✓ it I-5: a user whose locale is am is served Amharic on an ordinary…  0.05s  
+  ✓ it restores the worker locale after the request (the Octane leak, D… 0.09s  
+  ✓ it ignores a malformed users.locale instead of dying or traversing   0.08s  
+  ✓ it guest cookie hop: locale=am renders the login card in Amharic; e… 0.04s  
+  ✓ it holds the cookie to EXACT membership in {en, am} — a shape-plaus… 0.03s  
+  ✓ it users.locale ALWAYS beats the cookie for an authenticated reques… 0.06s  
+
+   PASS  Tests\Feature\Auth\WebhookHmacTest
+  ✓ it accepts a correctly signed DLR (FR-24 — the positive control)     0.05s  
+  ✓ it refuses a wrong signature and a tampered body alike (FR-24)       0.05s  
+  ✓ it refuses a captured signature behind a fresh nonce — the HMAC cov… 0.06s  
+  ✓ it enforces the ±300 s window at its exact boundaries, with an inje… 0.06s  
+  ✓ it spends a nonce exactly once: the identical request replayed is r… 0.05s  
+  ✓ it never lets an unsigned caller burn a nonce out of the cache (spe… 0.06s  
+  ✓ it refuses unconfigured keys and absent headers with the same byte-… 0.09s  
+  ✓ it fails CLOSED on replay-cache outage while the Redis-free surface… 0.10s  
+  ✓ it nonce single-use survives the window boundary honestly: expiry i… 0.05s  
+
+   PASS  Tests\Feature\Auth\WebhookSecretTest
+  ✓ it accepts the probe with the correct secret header (FR-23 — the po… 0.05s  
+  ✓ it refuses a mismatched secret: 403, nothing processed, metric incr… 0.05s  
+  ✓ it renders mismatch, absent header and unconfigured key byte-identi… 0.07s  
+  ✓ it never invokes the handler on a refused request — proven by a spy… 0.07s  
+  ✓ it rate-limits per KEY: one flooding bot never starves its sibling…  0.24s  
+  ✓ it establishes no session and sets no cookie on any outcome (FR-25…  0.05s  
+
+   PASS  Tests\Feature\Auth\WidgetSessionTest
+  ✓ it issues a working visitor session to an allowed origin (FR-21 — t… 0.05s  
+  ✓ it slides the 30-day TTL on every authenticated touch (FR-21 "slidi… 0.05s  
+  ✓ it refuses a disallowed origin at the server layer, issuing NOTHING… 0.05s  
+  ✓ it refuses at the server layer with the CORS layer REMOVED — AC-06…  0.06s  
+  ✓ it withholds the CORS grant even when the server layer waves everyt… 0.04s  
+  ✓ it refuses an allowed origin wrapped by a disallowed ancestor (EC-0… 0.05s  
+  ✓ it treats a top-level page (no ancestors) as allowed (EC-08)         0.09s  
+  ✓ it refuses when the Origin header and the declared origin disagree   0.07s  
+  ✓ it judges a non-browser caller by its declared origin — no Origin h… 0.07s  
+  ✓ it pins the wildcard dot boundary: *.brand.com never admits evil-br… 0.08s  
+  ✓ it compares ports exactly and refuses http origins outright (ruling… 0.08s  
+  ✓ it refuses a widget key with no widget record — fail-closed, same s… 0.12s  
+  ✓ it resolves nothing for an unknown widget key — 404, never 403 (C-1… 0.04s  
+  ✓ it answers a genuine preflight permissively and a bare OPTIONS with… 0.02s  
+  ✓ it keeps two tenants' widgets invisible to each other (N-01, the st… 0.05s  
+
+   PASS  Tests\Feature\Auth\WidgetTokenTheftTest
+  ✓ it rotates the cookie on every /session refresh, keeping visitor an… 0.10s  
+  ✓ it never lets a bare token act as its visitor — API requests get 40… 0.08s  
+  ✓ it silently issues a FRESH identity to a token without its cookie o… 0.06s  
+  ✓ it gives a visitor who cleared cookies a fresh identity with no pat… 0.05s  
+  ✓ it offers NO store operation that accepts a caller-chosen visitor i… 0.02s  
+  ✓ it refuses a token minted under one widget when presented under a s… 0.06s  
+  ✓ it refuses to plant a staff User behind the widget guard even delib… 0.14s  
+  ✓ it carries a WidgetVisitor principal that fails loudly if treated a… 0.02s  
+
+   PASS  Tests\Feature\Conversations\ConversationSchemaTest
+  ✓ FR-01: the same channel identity always resolves to the same conver… 0.04s  
+  ✓ FR-01: the identity unique index refuses a duplicate at the databas… 0.03s  
+  ✓ FR-09: an unregistered channel is refused by the repository boundar… 0.03s  
+  ✓ FR-04: the open-ticket slot claims atomically and refuses a second…  0.03s  
+  ✓ FR-04: release is holder-only — a stale ticket cannot clobber the s… 0.05s  
+  ✓ FR-06: a body over 16 KB is refused by CHECK constraint, not by val… 0.04s  
+  ✓ FR-05/SEC-07 row shadow: kind=note must be is_internal and nothing…  0.03s  
+  ✓ FR-13 shape: outbound rows must carry a delivery state; inbound row… 0.04s  
+  ✓ FR-03: the app role cannot DELETE conversations, messages, or revis… 0.02s  
+  ✓ FR-07: a same-second burst orders stably by (created_at, id) across… 0.06s  
+
+   PASS  Tests\Feature\Conversations\DeadLetterTest
+  ✓ FS-05: tries is exactly 3 — the crash-loop budget is a frozen contr… 0.03s  
+  ✓ FS-05: a poison message parks with its FULL payload, error, and aud… 0.05s  
+  ✓ FS-05: the conversation continues around a parked item — later inbo… 0.06s  
+  ✓ FR-03f: a job with no tenant does not park — the framework failed-j… 0.03s  
+  ✓ FS-05: re-drive flips the row (audited, DB time) and dispatches ont… 0.05s  
+  ✓ FS-05/EC-03: a re-driven message SURVIVES a pre-claimed dedupe slot… 0.06s  
+  ✓ FS-05: a second re-drive refuses — dead_letter_not_parked, row hist… 0.06s  
+  ✓ A-6: the page is gated conversations.view; the re-drive is gated ti… 0.13s  
+
+   PASS  Tests\Feature\Conversations\DeliveryStateMachineTest
+  ✓ AC-02 legal half: every FR-13 edge moves the row, with its event wh… 0.11s  
+  ✓ AC-02 illegal half: every pair OUTSIDE the diagram is rejected — en… 0.30s  
+  ✓ EC-05: a post-send channel invalidation is an ANNOTATION on the sen… 0.08s  
+  ✓ FR-13: inbound rows have no delivery lifecycle — the machine refuse… 0.06s  
+
+   PASS  Tests\Feature\Conversations\EditDeleteTranscriptTest
+  ✓ AC-06: customer edit + delete round-trip preserves originals; the f… 0.16s  
+  ✓ FR-21: a channel redelivery carrying a KNOWN external id becomes a…  0.14s  
+  ✓ FR-22: staff edit rides the capability interface, revises, audits,…  0.16s  
+  ✓ FR-22: staff delete requires the telegram.message.delete permission… 0.14s  
+  ✓ FR-22: a channel whose capability is off has NO staff edit path      0.12s  
+  ✓ FR-23: AI messages are never edited or deleted post-send — correcti… 0.11s  
+  ✓ FR-24/US-04: the transcript excludes notes by default, carries the…  0.12s  
+  ✓ FR-24: including notes takes BOTH flags — the double-confirm is str… 0.14s  
+  ✓ FR-24 PDF (ADR 0009): renders with the embedded Ethiopic font — Amh… 0.23s  
+
+   PASS  Tests\Feature\Conversations\FailureScenariosTest
+  ✓ FS-01: outage accumulates in queued with the lane intact, health go… 0.37s  
+  ✓ FS-01: the health signal is transition-only — a second outage failu… 0.09s  
+  ✓ FS-02: storage outage → text unaffected, media held "attachment pen… 0.47s  
+  ✓ FS-02: a storage outage outlasting x3 goes terminal failed with the… 0.79s  
+  ✓ FS-03: a media backlog cannot slow text — jobs land on the isolated… 0.15s  
+  ✓ FS-03: the isolation is supervisor physics — every queue family has… 0.05s  
+
+   PASS  Tests\Feature\Conversations\InboundPipelineTest
+  ✓ FR-10 step 1: the webhook ACKs 202 and enqueues to the channel inbo… 0.08s  
+  ✓ FR-10 step 1: an unregistered channel 404s indistinguishably (C-10)… 0.07s  
+  ✓ SEC-05 (Doc 01): the quota gate runs before the enqueue              0.08s  
+  ✓ FR-10 end-to-end: one inbound becomes shell customer + conversation… 0.15s  
+  ✓ FR-01: the same sender again lands in the SAME conversation and cus… 0.11s  
+  ✓ EC-03: a duplicate webhook delivery is dropped silently — one row,…  0.08s  
+  ✓ T-03: the dedupe slot admits its own claimant again (job retry) and… 0.04s  
+  ✓ FR-11: inbound on a blocked conversation is stored quarantined with… 0.11s  
+  ✓ BR-05: a suspended tenant past the accrual window gets ACK-but-summ… 0.11s  
+  ✓ BR-05: a suspended tenant INSIDE the window still stores in full (U… 0.14s  
+  ✓ EC-01: a 10-message burst confirms exactly ONE batch tail — the las… 0.34s  
+
+   PASS  Tests\Feature\Conversations\LaneFifoTest
+  ✓ FR-15: a lane sends in compose order, one attempt per cycle          0.23s  
+  ✓ FR-15: a failed(retryable) head BLOCKS the lane — the message behin… 0.09s  
+  ✓ FR-15: past the 10-minute cap the lane SKIPS — head demoted, conver… 0.09s  
+  ✓ §12 fairness: a hot lane cannot starve idle lanes — one attempt per… 0.16s  
+
+   PASS  Tests\Feature\Conversations\LocalizationAccessibilityTest
+  ✓ §14: the detector separates the two launch scripts and refuses to g… 0.05s  
+  ✓ §14: language is stored per message on BOTH directions of the threa… 0.09s  
+  ✓ §13: every stored image carries an alt slot, and staff can write it… 0.11s  
+
+   PASS  Tests\Feature\Conversations\MediaPipelineTest
+  ✓ AC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr… 0.23s  
+  ✓ AC-05 EICAR: infected — event with signature, bytes never stored, a… 0.10s  
+  ✓ AC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec… 0.12s  
+  ✓ EC-11: clamd down → held in scanning; the third unavailable attempt… 0.10s  
+  ✓ EC-11: the 15-minute hold cap quarantines even before three attempt… 0.13s  
+  ✓ T-05: a clean voice note emits media.needs_transcript with its stor… 0.23s  
+  ✓ SEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli… 0.11s  
+
+   PASS  Tests\Feature\Conversations\MessagePartitionTest
+  ✓ it finds every existing messages partition enabled, forced, and pol… 0.09s  
+  ✓ it protects messages partitions the MAINTENANCE COMMAND creates, no… 0.19s  
+  ✓ it monitor goes RED when a future messages partition is missing, an… 0.25s  
+  ✓ it monitor goes RED when any row sits in messages_default — FS-04's… 0.19s  
+  ✓ it maintain NEVER drops an old messages partition — retention is th… 0.20s  
+
+   PASS  Tests\Feature\Conversations\NodeKillReplayDrillTest
+  ✓ SS-04 / Doc01 AC-03: an inbound worker killed after the dedupe clai… 0.15s  
+  ✓ SS-04: an inbound worker killed after the persist commits produces…  0.14s  
+  ✓ FR-21 still holds after the idempotency fix: a GENUINE customer edi… 0.16s  
+  ✓ SS-04: a lane worker killed mid-send reconciles from recorded truth… 0.10s  
+  ✓ SS-04: a mid-send kill with NO recorded acceptance re-queues for re… 0.12s  
+  ✓ SS-04 / Doc01 AC-03: a 1k-message replay with each worker class ki… 31.44s  
+
+   PASS  Tests\Feature\Conversations\NotesTypingDraftsTest
+  ✓ FR-17: a note persists internal-only with note.added + audit, and a… 0.06s  
+  ✓ AC-04 runtime half: the compose path REFUSES kind=note before any r… 0.04s  
+  ✓ FR-18: staff composing signals the adapter at most once per 4 s win… 0.04s  
+  ✓ FR-18: the typing signal is capability-gated — a channel that canno… 0.04s  
+  ✓ EC-12: customer typing auto-expires by TTL physics — a dead Reverb…  0.08s  
+  ✓ T-07: one draft per (user, conversation) — saves upsert, the unique… 0.10s  
+  ✓ EC-06: last-writer-wins — the device holding a STALE updated_at los… 0.10s  
+  ✓ FR-20: cleared on send — a tombstone (the table cannot DELETE), and… 0.09s  
+  ✓ FR-26: draft.saved is LOCAL ONLY — absent from the catalog, so the…  0.10s  
+
+   PASS  Tests\Feature\Conversations\OutboundPipelineTest
+  ✓ FR-12: compose writes the queued row + message.queued event and dis… 0.08s  
+  ✓ FR-13 happy path: queued → sending → sent, external id recorded, la… 0.13s  
+  ✓ T-03: recomposing with the same idempotency key finds the ORIGINAL…  0.06s  
+  ✓ BR-02: composing INTO a blocked conversation refuses with conversat… 0.05s  
+  ✓ EC-04: blocked BETWEEN compose and send → canceled with reason, pre… 0.09s  
+  ✓ FR-13/FR-14 retryable path: backoff schedule stamps 1s then 5s; suc… 0.18s  
+  ✓ FR-13: the fifth failed attempt goes failed_final with message.fail… 0.23s  
+  ✓ FR-14: a non-retryable class goes failed_final IMMEDIATELY with its… 0.12s  
+  ✓ FR-16: over-limit sends WAIT in queued and drain once the bucket re… 0.18s  
+  ✓ FR-13: manual retry re-enters queued from failed_final and sends on… 0.15s  
+
+   PASS  Tests\Feature\Conversations\RealtimeBlockingTest
+  ✓ FR-03: block and unblock emit their events and audit entries; a dou… 0.13s  
+  ✓ FR-25: every push carries v:1 on the tenant-namespaced channel       0.10s  
+  ✓ FR-25: a payload over 32 KB is REFUSED — media rides as signed URLs… 0.10s  
+  ✓ SEC-06: outside production, a payload naming a FOREIGN tenant id re… 0.06s  
+  ✓ T-06: subscribe requires conversations.view AND scope — refusals ar… 0.09s  
+  ✓ FR-26: every named event exists in the catalog; draft.saved does no… 0.03s  
+
+   PASS  Tests\Feature\Conversations\RetentionTest
+  ✓ AC-09: the run drops exactly the eligible partition, copies held ro… 0.63s  
+
+   PASS  Tests\Feature\Foundation\ColdSummaryRetentionTest
+  ✓ it stamps every lifecycle timestamp from its single writer, in DB t… 0.09s  
+  ✓ it accrues in full inside the retention window and cold beyond it (… 0.09s  
+  ✓ it moves the boundary when the platform changes the retention setti… 0.11s  
+  ✓ it never cold-summarises a tenant that is not suspended, however ol… 0.06s  
+  ✓ it resolves a suspended tenant with NO suspended_at to full accrual… 0.11s  
+  ✓ it keeps exactly count + last pointer, per channel, atomically (BR-… 0.13s  
+  ✓ it refuses to record with no tenant bound                            0.04s  
+
+   PASS  Tests\Feature\Foundation\CursorPaginationTest
+  ✓ it walks an entire collection in strictly ascending UUIDv7 order wi… 0.08s  
+  ✓ it shapes the page as data + next_cursor, with next_cursor null on…  0.06s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.04s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.05s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.08s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('101')   0.04s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('0')     0.04s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('-5')    0.02s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('abc')   0.02s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('3.5')   0.02s  
+  ✓ it rejects a cursor this API never issued with ('not-base64!!!')     0.02s  
+  ✓ it rejects a cursor this API never issued with ('aGVsbG8')           0.02s  
+  ✓ it rejects a cursor this API never issued with ('djE6bm90LWEtdXVpZA… 0.05s  
+  ✓ it renders pagination misuse as a 400 invalid_pagination problem (C… 0.13s  
+  ✓ it keeps the cursor opaque: the row id never appears in the cursor…  0.05s  
+
+   PASS  Tests\Feature\Foundation\FeatureRegistryTest
+  ✓ it enumerates every registered flag with the full schema Doc 16 ren… 0.04s  
+  ✓ it resolves a registered flag to its default for the bound tenant    0.03s  
+  ✓ it throws on an unregistered flag — shadow flags cannot ship         0.04s  
+  ✓ it throws MissingTenantContext when no tenant is bound — a flag dec… 0.03s  
+  ✓ it scopes flag decisions per tenant: activating for tenant A change… 0.04s  
+  ✓ it never lets a registered flag key appear in a migration (N-19: fl… 0.02s  
+
+   PASS  Tests\Feature\Foundation\I18nFallbackTest
+  ✓ it renders EVERY shipped key in Amharic: no key leakage, telemetry…  0.05s  
+  ✓ it falls back user → TENANT DEFAULT → English, in that order (C-08)  0.05s  
+  ✓ it records telemetry per key and locale when a hop misses, then ser… 0.06s  
+  ✓ it dedupes telemetry per process so a hot loop cannot flood the log… 0.05s  
+  ✓ it returns the key and records EVERY hop when nothing can serve it   0.03s  
+  ✓ it is the translator actually bound — the chain is not an opt-in he… 0.03s  
+
+   PASS  Tests\Feature\Foundation\PartitionMaintenanceTest
+  ✓ it agrees with the migration about partition names, for the months…  0.06s  
+  ✓ it creates only the missing future months, idempotently (EC-10)      0.15s  
+  ✓ it drops partitions beyond the 13-month retention, with a logged me… 0.24s  
+  ✓ it runs partitions:maintain end-to-end, idempotently                 0.09s  
+
+   PASS  Tests\Feature\Foundation\PartitionMonitorTest
+  ✓ it monitor passes on a healthy window (EC-10)                        0.10s  
+  ✓ it monitor goes RED when a future partition is missing, and maintai… 0.24s  
+  ✓ it monitor goes RED when any row sits in the DEFAULT partition (EC-… 0.13s  
+
+   PASS  Tests\Feature\Foundation\QuotaTest
+  ✓ it admits under the limit and refuses over it with a 429 naming the… 0.05s  
+  ✓ it does not let a refused attempt consume capacity                   0.04s  
+  ✓ it raises the internal alert exactly once per window, at 80% (NFR-0… 0.03s  
+  ✓ it blocks forward writes and destroys nothing when a limit drops be… 0.03s  
+  ✓ it enforces the cumulative storage quota from the durable ledger, i… 0.03s  
+  ✓ it persists counters to the ledger and repairs a flushed counter fr… 0.37s  
+  ✓ it fails OPEN for staff and CLOSED for public ingestion when meteri… 0.08s  
+
+   WARN  Tests\Feature\Foundation\SettingsApiTest
+  ✓ it lists every setting with its i18n keys and default flag           0.10s  
+  ✓ it writes a setting and returns the new version token                0.14s  
+  ✓ it returns RFC 9457 problem-details for an unregistered key          0.10s  
+  ✓ it returns 422 problem-details with per-field errors on invalid inp… 0.13s  
+  ✓ it returns 403 when a tenant surface writes a platform-owned settin… 0.14s  
+  ✓ it returns 409 with the winning value on a concurrent write (EC-06)  0.20s  
+  ✓ it resets a setting to its registered default                        0.13s  
+  ✓ it records the audit entry a mutating route declares                 0.10s  
+  - it fails loudly if a declared audit action is not written → The sta… 0.04s  
+
+   PASS  Tests\Feature\Foundation\SettingsEngineTest
+  ✓ it returns the registered default when a tenant has no override      0.07s  
+  ✓ it returns the override once written, and the default again after r… 0.12s  
+  ✓ it refuses to read or write an unregistered key (FR-07)              0.06s  
+  ✓ it refuses a tenant-surface write to a platform-owned setting        0.04s  
+  ✓ it validates against the registered rule                             0.04s  
+  ✓ it audits every change old to new (FR-07)                            0.07s  
+  ✓ it encrypts an encrypted-string at rest and never exposes it in bul… 0.04s  
+  ✓ it keeps settings isolated between tenants                           0.04s  
+  ✓ it detects a concurrent write, audits both, and signals the loser (… 0.05s  
+  ✓ it falls back to the database when Redis is unreachable, and never…  0.04s  
+  ✓ it encodes and decodes every registered type                         0.03s  
+
+   PASS  Tests\Feature\Foundation\TenantCacheTest
+  ✓ it prefixes every key with the bound tenant, so two tenants cannot…  0.04s  
+  ✓ it is never the source of truth: a lost entry reloads from the load… 0.03s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.02s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.03s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.04s  
+  ✓ it refuses a write that does not name its invalidation event (C-07:… 0.03s  
+  ✓ it refuses a suffix that tries to smuggle its own prefix             0.03s  
+  ✓ it throws MissingTenantContext when no tenant is bound — there is n… 0.02s  
+  ✓ it confines the pre-context exception to the t:keymap: namespace     0.02s  
+
+   PASS  Tests\Feature\HealthEndpointTest
+  ✓ the application boots and answers the health route                   0.03s  
+
+   PASS  Tests\Feature\Rbac\CapabilityCacheTest
+  ✓ it serves the map from cache within the TTL and rebuilds after expl… 0.06s  
+  ✓ it bypasses the cache for R-04's highest-sensitivity keys — revocat… 0.06s  
+  ✓ it pins both composed TTLs at 10 s — the FS-02 bounds are 10 s sess… 0.04s  
+  ✓ it busts Doc 02's per-token scope cache in the same invalidation —…  0.08s  
+  ✓ it keeps VERDICTS BYTE-IDENTICAL with the cache store dead, logs th… 0.08s  
+  ✓ it stores PRIMITIVES ONLY — verdicts, never objects or secrets (SEC… 0.06s  
+  ✓ it degrades within the FS-01 latency budget shape: per-request DB r… 0.12s  
+
+   PASS  Tests\Feature\Rbac\CatalogSnapshotTest
+  ✓ it registers EXACTLY the 111 keys Doc 03 §4.1 enumerates — verbatim… 0.07s  
+  ✓ it marks high-risk exactly where §4.1 writes "(high)" — all 38, no…  0.05s  
+  ✓ it pins the scope dimension of every key: 46 scoped per the §4.1 mo… 0.04s  
+  ✓ it keeps the four Doc 02-era entries under their exact registered n… 0.03s  
+  ✓ it resolves every label and description i18n key in BOTH launch lan… 0.03s  
+  ✓ it groups every key under one of the fourteen §4.1 modules, each wi… 0.02s  
+  ✓ it treats an unknown key as a programming error, never a verdict (B… 0.02s  
+
+   PASS  Tests\Feature\Rbac\ExpireOverridesTest
+  ✓ it tidies expired overrides: revoke(cause=expired) + outbox event +… 0.29s  
+
+   PASS  Tests\Feature\Rbac\JobReResolutionTest
+  ✓ it runs a demoted user's queued action under POST-demotion rights (… 0.20s  
+
+   PASS  Tests\Feature\Rbac\PrecedenceMatrixTest
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.10s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.08s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.09s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.07s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.10s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.10s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.08s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.07s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.06s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.05s  
+  ✓ it denies EVERYTHING for a user with no role — implicit deny is the… 0.04s  
+  ✓ it never enforces an orphan DB key, and defaults a granted-nowhere…  0.04s  
+  ✓ it carries the granter and expiry on override verdicts — the explor… 0.04s  
+  ✓ it lets an override change the VERB only — the scope map stays the…  0.08s  
+  ✓ it fails closed on a scoped module missing from the role's scope ma… 0.08s  
+
+   PASS  Tests\Feature\Rbac\RbacAdminBehaviorsTest
+  ✓ it gives the EC-03 loser a 409 carrying the winner's state to re-ap… 0.16s  
+  ✓ it refuses an override without a ≥10-char reason, and audits the re… 0.18s  
+  ✓ it warns when more users than rbac.override.warn_threshold carry an… 0.19s  
+  ✓ it stops an editor granting keys they do not hold when rbac.strict_… 0.16s  
+  ✓ it answers the explorer with verdict + WHY: source, granter and exp… 0.13s  
+
+   PASS  Tests\Feature\Rbac\RbacStorageTest
+  ✓ it enforces one role per user as PHYSICS: a single column exists an… 0.07s  
+  ✓ it keeps role names unique per tenant among LIVE roles, and frees t… 0.08s  
+  ✓ it refuses a hard DELETE from the app role on all three rbac tables… 0.07s  
+  ✓ it enables AND forces RLS with a tenant policy on all three rbac ta… 0.06s  
+  ✓ it allows at most one LIVE override per user and permission, and fr… 0.07s  
+  ✓ it rejects garbage effect and revoke_cause values at the schema lay… 0.04s  
+  ✓ it refuses self-approval on pending grants BY TABLE CONSTRAINT, and… 0.05s  
+  ✓ it requires a subject: a role pending grant without a role, or with… 0.03s  
+  ✓ it logs and IGNORES orphan DB keys — never enforces them (T-01, FS-… 0.10s  
+  ✓ it reports a healthy catalog as empty — the check is quiet when not… 0.03s  
+
+   PASS  Tests\Feature\Rbac\ReadOnlySweepTest
+  ✓ it lets the seeded Read Only template accept ZERO writes across eve… 0.29s  
+
+   FAIL  Tests\Feature\Rbac\RoleSeederTest
+  ⨯ it seeds the nine Appendix B templates through REAL provisioning, f… 0.05s  
+  ⨯ it pins the ratified grant constraints: SA=111/all-All, RO=the lite… 0.02s  
+  ⨯ it is idempotent: provisioning-style double seed yields ONE consist… 0.02s  
+  ⨯ it NEVER overwrites an edited template, updates an untouched one on… 0.02s  
+  ⨯ it emits rbac.role.created through the outbox and writes the audit…  0.02s  
+
+   FAIL  Tests\Feature\Rbac\RouteCoverageSweepTest
+  ⨯ it refuses EVERY permission-declared staff route to an under-privil… 0.03s  
+  ⨯ it POSITIVE CONTROL: a holder passes the same middleware on the sam… 0.02s  
+  ⨯ it masks object existence on out-of-scope reads — 404, never 403, f… 0.02s  
+
+   FAIL  Tests\Feature\Rbac\SafetyRailsTest
+  ⨯ it blocks demoting the LAST admin-pair holder, naming who else hold… 0.02s  
+  ⨯ it blocks a ROLE EDIT that would strip the pair from its last holde… 0.02s  
+  ⨯ it blocks disabling the last admin THROUGH the UserDisabler route (… 0.03s  
+  ⨯ it blocks deleting an assigned role with the count, and deletes an…  0.03s  
+  ⨯ it routes a high-risk grant through a DISTINCT second admin when fo… 0.04s  
+  ⨯ it REFUSES to enable four-eyes with fewer than two approval-rights…  0.02s  
+
+   FAIL  Tests\Feature\Rbac\ScopeFixtureTest
+  ⨯ it produces the EXACT visible set for each scope level on list quer… 0.07s  
+  ⨯ it answers the OBJECT check with the same implementation as the lis… 0.03s  
+  ⨯ it resolves Team scope with NO team to the empty set — fails closed… 0.04s  
+  ⨯ it resolves a scope map SILENT about the module to the empty set (N… 0.05s  
+  ⨯ it gives the production pre-Doc 11 binding EMPTY membership — Team/… 0.07s  
+
+   PASS  Tests\Contract\AdapterConformance\FakeAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.03s  
+  ✓ dedupe key is stable for identical payloads                          0.02s  
+  ✓ dedupe keys differ across distinct payloads                          0.02s  
+  ✓ normalization is pure per item and never reorders                    0.02s  
+  ✓ channel timestamp survives as metadata                               0.02s  
+  ✓ an adapter cannot emit an internal note                              0.02s  
+  ✓ send success reports state sent                                      0.02s  
+  ✓ error classification matches the frozen table                        0.02s  
+  ✓ capability matrix gates every operation                              0.05s  
+  ✓ health answers with the contract shape                               0.02s  
+  ✓ send paths accept only deliverable payloads                          0.02s  
+
+   PASS  Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.03s  
+  ✓ dedupe key is stable for identical payloads                          0.02s  
+  ✓ dedupe keys differ across distinct payloads                          0.02s  
+  ✓ normalization is pure per item and never reorders                    0.02s  
+  ✓ channel timestamp survives as metadata                               0.02s  
+  ✓ an adapter cannot emit an internal note                              0.02s  
+  ✓ send success reports state sent                                      0.02s  
+  ✓ error classification matches the frozen table                        0.02s  
+  ✓ capability matrix gates every operation                              0.02s  
+  ✓ health answers with the contract shape                               0.02s  
+  ✓ send paths accept only deliverable payloads                          0.02s  
+
+   FAIL  Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest
+  ✓ SS-02: the second adapter implements ONLY the base contract — the m… 0.04s  
+  ⨯ SS-02: the whole inbound pipeline works on the second adapter uncha… 0.03s  
+  ⨯ SS-02: the whole outbound pipeline works on the second adapter unch… 0.03s  
+  ⨯ SS-02: the capability envelope binds the core, not conditionals — a… 0.04s  
+
+   WARN  Tests\Integration\SessionRevocationSocketTest
+  ✓ it deletes the session key and drops it from the index when revoked… 0.17s  
+  - it publishes session.revoked so other nodes learn about it (T-04) →… 0.02s  
+  ✓ it closes a live Reverb socket within 2 seconds of revocation (AC-0… 0.27s  
+  ✓ it Doc 01 EC-03: suspending a tenant kills its LIVE sessions, not j… 0.30s  
+  ✓ it leaves OTHER tenants' sessions untouched when one tenant is susp… 0.32s  
+
+   PASS  Tests\Integration\StackSmokeTest
+  ✓ every port compose.yaml publishes has a real listener on the host    0.03s  
+  ✓ host-published database ports reach the stack containers, not a hos… 0.04s  
+  ✓ the running app server answers /up over TLS with a chain that valid… 0.07s  
+  ✓ the app serves NOTHING over cleartext: :80 only redirects (SEC-06)   0.02s  
+  ✓ the app certificate covers every name the stack addresses it by      0.04s  
+  ✓ postgres role physics: app cannot bypass RLS, platform_admin is the… 0.04s  
+  ✓ app credentials cannot authenticate as platform_admin                0.05s  
+  ✓ both redis instances respond and are distinct servers with opposite… 0.03s  
+  ✓ horizon supervises all twelve queue families                         0.03s  
+  ✓ reverb accepts a websocket connection over WSS with a validated cha… 0.08s  
+
+   PASS  Tests\Isolation\ConcurrentProvisioningTest
+  ✓ it provisions a tenant through every step and ends active exactly o… 0.47s  
+  ✓ it is idempotent when run twice sequentially (EC-05 retry case)      0.13s  
+  ✓ it is idempotent when the job is dispatched twice (double-click / q… 0.11s  
+  ✓ it refuses to run a job that carries no tenant context (FR-03f)      0.02s  
+  ✓ it halts cleanly between steps when the tenant is suspended mid-fli… 0.21s  
+  ✓ it lets exactly one of two concurrent workers claim a step (AC-05)   0.14s  
+
+   PASS  Tests\Isolation\CrossTenantAccessTest
+  ✓ it discovers every tenant-scoped table from the schema rather than…  0.04s  
+  ✓ it returns zero rows for direct SQL against another tenant, on ever… 0.12s  
+  ✓ it refuses to write a row stamped with another tenant, on every wri… 0.04s  
+  ✓ it returns 404 rather than 403 for another tenant's row (SEC-06)     0.08s  
+
+   PASS  Tests\Isolation\ForgedTenantIdFuzzTest
+  ✓ it ignores forged tenant_id in body, query and header across 500 re… 2.32s  
+  ✓ it resolves the same tenant with and without a forged tenant_id      0.06s  
+
+   PASS  Tests\Isolation\GrantPhysicsTest
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.07s  
+  ✓ it denies the app role UPDATE on audit_log (N-13: append-only by gr… 0.05s  
+  ✓ it denies the app role SELECT on the tenant_keys hash column (SEC-0… 0.03s  
+  ✓ it ships no timestamp column without a timezone (NFR-08/C-03: every… 0.04s  
+  ✓ it keeps after_commit TRUE on the durable queue connection (C-06/EC… 0.03s  
+  ✓ it stores no recovery code in a readable form (SEC-03/BR-02/Q6: has… 0.04s  
+  ✓ it keeps every credential column out of reach of a plaintext read (… 0.06s  
+
+   WARN  Tests\Isolation\OctaneConnectionLifecycleTest
+  ✓ it leaves app.tenant_id unset on a fresh connection                  0.04s  
+  ✓ it clears the variable when the context is cleared, so a reused con… 0.03s  
+  ✓ it makes an unscoped query fail loudly rather than return rows once… 0.04s  
+  - it re-applies the variable when a bound connection is re-establishe… 0.02s  
+  ✓ it does not touch the database from the connection hook when no ten… 0.02s  
+
+   WARN  Tests\Isolation\OutboxChaosTest
+  ✓ it never publishes an event for a write that rolled back (T-03)      0.05s  
+  - it refuses to publish outside a transaction (T-03) → The test harne… 0.02s  
+  ✓ it delivers a committed event even though the relay crashed before…  0.14s  
+  ✓ it produces one event, not two, when a crashed relay re-processes t… 0.14s  
+  ✓ it relays in UUIDv7 order, which is causal order without a wall clo… 0.15s  
+  ✓ it reports lag from the OLDEST unrelayed row, so a stuck row is vis… 0.12s  
+
+   PASS  Tests\Isolation\PreTenantLookupTest
+  ✓ it resolves the same email in TWO tenants with no tenant bound (Q1:… 0.29s  
+  ✓ it is the ONLY pre-tenant path: a direct read of users with no tena… 0.28s  
+  ✓ it grants no lasting cross-tenant visibility after it is used        0.32s  
+  ✓ it matches an exact address only — it cannot be walked to enumerate… 0.28s  
+  ✓ it returns no 2FA secret and no recovery material to the login path  0.28s  
+  ✓ it resolves a bearer token with no tenant bound, and refuses a dire… 0.31s  
+  ✓ it reports a revoked, expired or disabled-owner token as such rathe… 0.29s  
+  ✓ it answers an unknown token with zero rows, indistinguishable from…  0.29s  
+  ✓ it keeps both doors owned by the NOLOGIN key_resolver role (ADR 000… 0.04s  
+
+   PASS  Tests\Isolation\RlsCoverageTest
+  ✓ it finds every existing events partition enabled, forced, and polic… 0.04s  
+  ✓ it protects partitions the MAINTENANCE COMMAND creates, not only th… 2.85s  
+
+   PASS  Tests\Isolation\SequenceAllocatorTest
+  ✓ it allocates 1, 2, 3 … per (tenant, name), and tenants never share…  0.04s  
+  ✓ it rolls the counter back with the owning transaction, so the seque… 0.04s  
+  ✓ it allocates in a single atomic statement — no app-side read exists… 0.03s  
+  ✓ it refuses to allocate outside a transaction (C-01: the owning tran… 0.09s  
+  ✓ it throws MissingTenantContext when no tenant is bound               0.02s  
+  ✓ it serialises two concurrent allocators on the row lock: no duplica… 1.22s  
+
+   PASS  Tests\Isolation\SuspendedTenantMatrixTest
+  ✓ it behaves exactly per FR-05 on every entry surface, in every tenan… 0.39s  
+  ✓ it shows a non-dismissable banner key when a surface is refused for… 0.04s  
+  ✓ it revokes every key when a tenant is archived (FR-05)               0.06s  
+
+   PASS  Tests\Isolation\TenantBindingSurfacesTest
+  ✓ it binds the console to exactly the tenant named by --tenant (T-05)  0.06s  
+  ✓ it refuses a console run with no --tenant BEFORE any model is touch… 0.06s  
+  ✓ it gives an unknown --tenant the same TenantNotResolved as every ot… 0.06s  
+  ✓ it resumes a stuck provisioning via tenant:provision-retry, idempot… 0.20s  
+  ✓ it authorizes a socket channel from the USER record and binds both…  0.06s  
+  ✓ it refuses a channel addressed to another tenant, identically to on… 0.11s  
+  ✓ it refuses sockets for a suspended tenant — realtime is a staff sur… 0.08s  
+
+   PASS  Tests\Isolation\TenantScopeTest
+  ✓ it filters reads to the bound tenant                                 0.06s  
+  ✓ it auto-fills tenant_id on create from the context, never from the…  0.04s  
+  ✓ it throws when a tenant-scoped model is read with no bound context   0.05s  
+  ✓ it throws when a tenant-scoped model is created with no bound conte… 0.04s  
+  ✓ it throws when a model loaded under one tenant is saved under anoth… 0.06s  
+  ✓ it scopes the tenants table to the bound tenant so one tenant canno… 0.07s  
+  ✓ it refuses to rebind a context that is already bound                 0.07s  
+  ✓ it refuses a platform operation while a tenant is bound (SEC-02)     0.05s  
+
+   PASS  Tests\Isolation\TwoLayerIndependenceTest
+  ✓ it contains cross-tenant reads with the Eloquent scope REMOVED (RLS… 0.08s  
+  ✓ it contains cross-tenant reads with RLS PERMITTING the other tenant… 0.06s  
+
+   WARN  Tests\Security\EnumerationTest
+  ✓ it returns a byte-identical body for an existing and a non-existing… 1.02s  
+  ✓ it returns a byte-identical body regardless of which TENANT the add… 1.11s  
+  ✓ it spends the same work across 0, 1 and N candidate paths (AC-01 ti… 8.79s  
+  - it does the password-verification work even when no account matches… 0.02s  
+  ✓ it never reveals which of several tenants the address belongs to, e… 0.47s  
+  ✓ it returns a byte-identical reset-request body across 0, 1 and N ca… 0.94s  
+  ✓ it answers reset requests at the fixed floor whatever matched — and… 2.23s  
+
+   WARN  Tests\Security\HttpsRefusalTest
+  ✓ it refuses a cleartext request in the testing environment            0.05s  
+  ✓ it refuses a cleartext API request with the problem-details shape    0.03s  
+  ✓ it serves the same request over TLS                                  0.04s  
+  ✓ it refuses cleartext even when the app believes it is production     0.05s  
+  - it honours a trusted proxy's X-Forwarded-Proto rather than double-r… 0.03s  
+  ✓ it marks the session cookie secure and http-only in every environme… 0.03s  
+
+   FAIL  Tests\Security\LogScrubberTest
+  ✓ it SEC-08: every configured channel carries SecurityLogTap — null a… 0.03s  
+  ✓ it scrubs secret-shaped keys on the rendered sink and passes benign… 0.03s  
+  ✓ it scrubs the webhook auth headers in nested access-log shapes (ste… 0.04s  
+  ✓ it never scrubs identifier suffixes — token_id and key_id stay trac… 0.06s  
+  ⨯ it SEC-08/C-14: every rendered record carries trace_id and tenant_i… 0.04s  
+  ⨯ it a real refused request logs WITH a trace_id and WITHOUT the pres… 0.03s  
+  ⨯ it AC-08: seeded credentials from every real flow are absent from t… 0.05s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.06s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.04s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.06s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.03s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.05s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.04s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.08s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.05s  
+
+   PASS  Tests\Security\NoImpersonationTest
+  ✓ it exposes no impersonation route                                    0.04s  
+  ✓ it registers no impersonation permission, setting, flag, or notific… 0.02s  
+  ✓ it contains no impersonation class or file in the application tree   0.03s  
+
+   PASS  Tests\Security\NoteIsolationTest
+  ✓ DeliverableKind is exactly the seven customer-content kinds — no no… 0.02s  
+  ✓ the single kind-conversion point refuses note and system, and maps…  0.03s  
+  ✓ a channel cannot originate a note: NormalizedInbound refuses kind=n… 0.05s  
+  ✓ DeliverablePayload is constructible only through kind-safe named co… 0.05s  
+  ✓ no adapter-namespace method accepts message kinds or message rows —… 0.04s  
+
+   FAIL  Tests\Security\SecretsNeverSerializeTest
+  ⨯ it AC-08/C-13: seeded credentials never serialize into jobs, outbox… 0.41s  
+  ⨯ it AC-08: the events sink, after a real committed relay run, carrie… 0.16s  
+  ✓ it C-13 model pins: no Doc 02-minted credential column serializes o… 0.03s  
+
+   FAIL  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.03s  
+  ⨯ it carries the full T-07 header set on an authenticated staff API r… 0.03s  
+  ✓ it carries the full T-07 header set on an error response             0.03s  
+  ✓ it rotates the CSP nonce on every request                            0.03s  
+
+   FAIL  Tests\Security\SessionFixationTest
+  - it regenerates the session id when the password is accepted (SEC-04… 0.03s  
+  - it does not carry pre-login session data into the authenticated ses… 0.02s  
+  - it regenerates again after the 2FA challenge (SEC-04, boundary 2) →… 0.02s  
+  ⨯ it writes a signed tenant hint at login that matches the account te… 0.20s  
+  ⨯ it POSITIVE CONTROL: an authenticated request with a MATCHING hint…  0.25s  
+  - it treats a MISMATCHED tenant hint as no session (Q7) → NOT PROVEN:… 0.02s  
+  - it treats a TAMPERED or ABSENT tenant hint as no session (Q7) → NOT… 0.02s  
+  ✓ it signs and verifies only intact values                             0.04s  
+
+   PASS  Tests\Security\WebhookComparatorPinTest
+  ✓ it compares the header secret and the HMAC through hash_equals, pin… 0.03s  
+  ✓ it spends replay nonces through an atomic SET NX, pinned at the sou… 0.02s  
+
+   PASS  Tests\Security\WidgetPartitionTest
+  ✓ it refuses a valid visitor session on the staff and bearer surfaces… 0.10s  
+  ✓ it refuses staff credentials on the widget surface (BR-06, staff →…  0.27s  
+  ✓ it gives the widget guard no user provider to misconfigure (BR-06 s… 0.04s  
+  ✓ it authorizes a visitor onto exactly their own Reverb channel and n… 0.20s  
+  ✓ it refuses the widget broadcasting door to anyone who is not a visi… 0.26s  
+
+   FAIL  Tests\Property\LaneOrderingSoakTest
+  ⨯ AC-03: zero order violations across a 10k-message soak with failure… 0.13s  
+  [dev-hardware-indicative] NFR-01 webhook ACK (burst)   p50   3.980 ms   p99   9.632 ms   max  15.490 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] §12 thread page (50 msgs)   p50   2.144 ms   p99   6.773 ms   max   8.390 ms   budget(p99) 120.0 ms   WITHIN
+
+   PASS  Tests\Performance\ConversationsBudgetsTest
+  ✓ SS-01/NFR-01 indicatively: the webhook edge ACKs within budget unde… 1.54s  
+  ✓ §12 indicatively: a 50-message thread page reads within the paginat… 1.45s  
+  [dev-hardware-indicative] tenant resolution (NFR-02)   p50   0.912 ms   p99   2.712 ms   max   6.268 ms   budget(p99) 1.0 ms   OVER
+  [dev-hardware-indicative] settings cached read (NFR-03) p50   0.056 ms   p99   0.307 ms   max   0.868 ms   budget(p99) 0.5 ms   WITHIN
+  [dev-hardware-indicative] events table insert (§12)   p50   1.003 ms   p99   2.922 ms   max   4.249 ms   budget(p99) 1.0 ms   OVER
+  [dev-hardware-indicative] outbox publish (NFR-04)      p50   0.486 ms   p99   2.035 ms   max   8.799 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] registry cold-load (§12)    once   0.232 ms   budget 50.0 ms   WITHIN
+
+   PASS  Tests\Performance\FoundationBudgetsTest
+  ✓ it meets the §12 budgets on dev hardware: resolution ≤1ms, settings… 5.84s  
+  ✓ it cold-loads the settings registry within 50 ms (§12)               0.06s  
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.298 ms   p99   1.014 ms   max   2.011 ms   budget(p99) 0.3 ms   OVER
+  [dev-hardware-indicative] NFR-01 cold map rebuild      p50   3.448 ms   p99   9.943 ms   max  10.140 ms   budget(p99) 20.0 ms   WITHIN
+
+   PASS  Tests\Performance\RbacBudgetsTest
+  ✓ it meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil… 1.14s  
+  [dev-hardware-indicative] NFR-01 TOTP verify           p50   0.019 ms   p99   0.057 ms   max   0.265 ms   budget(p99) 150.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 recovery-code verify  p50 111.041 ms   p99 160.715 ms   max 160.715 ms   budget(p99) 150.0 ms   OVER
+
+   PASS  Tests\Performance\TwoFactorBudgetsTest
+  ✓ it verifies 2FA within NFR-01's 150 ms p99 (dev-hardware-indicative… 8.99s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RoleSeederTest > it seeds the…   QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("id", "name", "slug", "state", "regio...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("id", "name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "updated_at", "created_at") values (019fd3c6-528b-7365-bf85-71334dda4dea, Fixture Seeder Operator, fixture-seeder-operator-gsw1dn, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +9 vendor frames 
+  10  app/Domain/Foundation/Provisioning/TenantProvisioner.php:298
+  11  app/Domain/Foundation/Provisioning/TenantProvisioner.php:135
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RoleSeederTest > it pins the r…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator ATUN, fixture-knatun, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-52ba-73b3-a976-3b11ad4c572d, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RoleSeederTest.php:50
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RoleSeederTest > it is idempot…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator HVEI, fixture-xjhvei, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-52d1-7293-81d8-5159ba5e6af2, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RoleSeederTest.php:103
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RoleSeederTest > it NEVER over…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator MCEQ, fixture-hgmceq, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-52e7-73c6-92ed-7c15ab2216cc, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RoleSeederTest.php:113
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RoleSeederTest > it emits rbac…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator DXMJ, fixture-ccdxmj, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-52ff-738a-87ca-704253ee00bb, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RoleSeederTest.php:182
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RouteCoverageSweepTest > it re…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator HBAB, fixture-tbhbab, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-531b-70f8-88f5-1ef1d9a1e2f9, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RouteCoverageSweepTest.php:42
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RouteCoverageSweepTest > it PO…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator VHGC, fixture-cxvhgc, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5331-7104-9f2a-8d513b8352a8, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RouteCoverageSweepTest.php:70
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\RouteCoverageSweepTest > it ma…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator IAPH, fixture-idiaph, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5349-72fe-927c-a66aa65fb1fd, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/RouteCoverageSweepTest.php:78
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it blocks de…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator DZPB, fixture-xtdzpb, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5361-71be-ab13-f25ee07d9ece, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it blocks a…   QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator ULDN, fixture-nbuldn, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-537a-73cb-86a2-e8fe99e6c120, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it blocks di…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator FRZK, fixture-tgfrzk, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5391-7190-a03b-377048b44b3d, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it blocks de…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator RPAB, fixture-akrpab, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-53ae-731f-9082-7e8f5601ab41, 2026-08-05 21:13:37, 2026-08-05 21:13:37))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it routes a…   QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator TVAL, fixture-titval, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-53c8-708a-aed8-2b8ac66c4261, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:24
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\SafetyRailsTest > it REFUSES t…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator QGPL, fixture-ouqgpl, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-53ec-70d1-99c6-af66af4a7098, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/SafetyRailsTest.php:190
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\ScopeFixtureTest > it produces…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator XEQZ, fixture-vpxeqz, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5432-72a8-a0c2-2b21028f374a, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/ScopeFixtureTest.php:98
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\ScopeFixtureTest > it answers…   QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator ILLF, fixture-kmillf, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-5452-7183-9b17-7dae14247a23, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Feature/Rbac/ScopeFixtureTest.php:98
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\ScopeFixtureTest > it resolves…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-5473-70cb-8cb2-e2fee1016e99, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\ScopeFixtureTest > it resolves…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-54a4-708a-99b0-6e3343b76ef5, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Rbac\ScopeFixtureTest > it gives th…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-54d0-73a4-ac70-09e96171173d, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Contract\AdapterConformance\SecondAdapterZe…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT resolve_tenant_state(019fd3c6-572f-7398-b8a0-81a4715d78e0::uuid) AS state)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      +6 vendor frames 
+  7   app/Support/Tenancy/TenantResolver.php:208
+  8   app/Support/Tenancy/TenantResolver.php:171
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Contract\AdapterConformance\SecondAdapterZe…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "id", "tenant_id", "updated_at", "created_at") values (Fixture, @fixture_minimal, 1, 019fd3c6-5757-7202-a850-3ba4cba52833, 019fd3c6-574e-71fa-8f43-9b8794e0cd0c, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +12 vendor frames 
+  13  tests/Contract/AdapterConformance/SecondAdapterZeroCoreEditsTest.php:101
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Contract\AdapterConformance\SecondAdapterZe…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "id", "tenant_id", "updated_at", "created_at") values (Fixture, @fixture_minimal, 1, 019fd3c6-5781-71a7-bb4e-c593ac9e88a2, 019fd3c6-576d-7286-a183-3a9c23233030, 2026-08-05 21:13:38, 2026-08-05 21:13:38))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +12 vendor frames 
+  13  tests/Contract/AdapterConformance/SecondAdapterZeroCoreEditsTest.php:120
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\LogScrubberTest > it SEC-08/C-14:…   QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator UILL, fixture-eyuill, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-cfd1-720b-b75c-74021788cf24, 2026-08-05 21:14:09, 2026-08-05 21:14:09))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Security/LogScrubberTest.php:140
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\LogScrubberTest > it a real refuse…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator JDYF, fixture-mxjdyf, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-cfef-73a4-bb46-203bba09a167, 2026-08-05 21:14:09, 2026-08-05 21:14:09))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Pest.php:425
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\LogScrubberTest > it AC-08: seeded…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator OPWQ, fixture-cbopwq, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 019fd3c6-d01b-71e8-892f-fb5279bff194, 2026-08-05 21:14:09, 2026-08-05 21:14:09))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +14 vendor frames 
+  15  tests/Pest.php:70
+  16  tests/Pest.php:723
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\SecretsNeverSerializeTest > it AC-…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-d324-736a-b0c3-43fdbe69ecd1, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\SecretsNeverSerializeTest > it AC-…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-d492-71a2-8682-225044d6bae8, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\SecurityHeadersTest > it carries t…  QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-d567-7065-b053-652213ab276e, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\SessionFixationTest > it writes a…   QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-d689-72cb-a218-8edd609071a0, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\SessionFixationTest > it POSITIVE…   QueryException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fd3c6-d758-7037-a9a3-803e4898da11, false))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +4 vendor frames 
+  5   app/Support/Tenancy/RlsSession.php:94
+  6   app/Support/Tenancy/RlsSession.php:58
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Property\LaneOrderingSoakTest > AC-03: zero…  QueryException   
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "message_drafts" does not exist
+LINE 1: delete from "message_drafts" where "tenant_id" in ($1)
+                    ^ (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "message_drafts" where "tenant_id" in (019fd3c6-dc40-72b2-9b07-b7f47e11ca10))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:626
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      +6 vendor frames 
+  7   tests/Pest.php:230
+  8   tests/Property/LaneOrderingSoakTest.php:181
+
+
+  Tests:    31 failed, 11 skipped, 618 passed (7792 assertions)
+  Duration: 191.39s
+
+EXIT:2
