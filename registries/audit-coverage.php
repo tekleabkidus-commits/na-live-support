@@ -542,4 +542,22 @@ return [
         'required_fields' => ['partitions', 'messages_held', 'messages_removed'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // FS-05: a tries-exhausted inbound parked in the dead letter with its
+        // full payload. System actor — the queue parked it, nobody chose to.
+        'action_key' => 'conversation.message_parked',
+        'entity' => 'message_dead_letter',
+        'actor_types' => ['system'],
+        'required_fields' => ['dead_letter_id', 'channel', 'error_class'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        // FS-05: an operator re-drove a parked item back through the inbound
+        // pipeline. Staff actor with id — re-drives are accountable decisions.
+        'action_key' => 'conversation.message_redriven',
+        'entity' => 'message_dead_letter',
+        'actor_types' => ['staff'],
+        'required_fields' => ['dead_letter_id', 'channel'],
+        'owning_doc' => 'Doc04',
+    ],
 ];

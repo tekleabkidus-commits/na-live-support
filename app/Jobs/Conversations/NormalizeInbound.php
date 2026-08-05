@@ -7,6 +7,7 @@ namespace App\Jobs\Conversations;
 use App\Domain\Conversations\Adapters\AdapterRegistry;
 use App\Domain\Conversations\Identity\CustomerResolver;
 use App\Domain\Conversations\Inbound\BatchTailHint;
+use App\Domain\Conversations\Inbound\DeadLetters;
 use App\Domain\Conversations\Inbound\InboundDedupeStore;
 use App\Domain\Conversations\Inbound\InboundPersister;
 use App\Domain\Foundation\Retention\ColdSummaryStore;
@@ -19,6 +20,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use RuntimeException;
+use Throwable;
 
 /**
  * FR-10 steps 2–4, off the request path: normalize via the adapter, dedupe,
@@ -27,9 +30,15 @@ use Illuminate\Support\Str;
  * slow, fail, or retry lives here, on the channel's inbound family queue.
  *
  * tries = 3 is FS-05's number: a normalizer crash loop gets three attempts and
- * then parks in the dead-letter with full payload (the parking + ops re-drive
- * arrive in step 9; until then Horizon's failed-jobs table holds the payload —
- * nothing is lost, the re-drive view is what's pending).
+ * then parks in the dead-letter with full payload via failed() → DeadLetters
+ * (step 9b). The framework failed_jobs row still exists underneath — harmless
+ * duplication; message_dead_letters is the canonical FS-05 store the ops
+ * re-drive view reads.
+ *
+ * $claimantOverride exists FOR the re-drive: the parked job may have claimed
+ * its dedupe slot (EC-03) before dying, and a re-driven job presenting a fresh
+ * claimant would read as a duplicate and silently drop. The dead letter stores
+ * the parked claimant; DeadLetters::redrive() passes it back in here.
  *
  * BR-05 (Doc 01's frozen contract) sits between dedupe and identity: a suspended
  * tenant past its accrual window gets the message ACKed and COUNTED
@@ -50,6 +59,7 @@ final class NormalizeInbound implements ShouldQueue
         public readonly string $channel,
         public readonly string $channelRefId,
         public readonly array $raw,
+        public readonly ?string $claimantOverride = null,
     ) {
         $this->captureTenant();
     }
@@ -70,8 +80,11 @@ final class NormalizeInbound implements ShouldQueue
         $inbound = $adapter->handleWebhook($this->raw);
 
         // Step 2b: dedupe (EC-03). Claimant = this job's uuid, constant across
-        // retries — see InboundDedupeStore for why that must be true.
-        $claimant = is_string($this->job?->uuid()) ? $this->job->uuid() : (string) Str::uuid7();
+        // retries — see InboundDedupeStore for why that must be true. A re-driven
+        // job carries the PARKED job's claimant instead (FS-05 — see the class
+        // docblock), or its own retries would drop against the parked claim.
+        $claimant = $this->claimantOverride
+            ?? (is_string($this->job?->uuid()) ? $this->job->uuid() : (string) Str::uuid7());
 
         if (! $dedupe->firstSight($this->channel, $inbound->dedupeKey, $claimant)) {
             Log::info('inbound duplicate dropped', [
@@ -142,5 +155,35 @@ final class NormalizeInbound implements ShouldQueue
                 FetchInboundMedia::dispatch($message->identifier(), (int) $index)->onQueue('media');
             }
         }
+    }
+
+    /**
+     * FS-05: the third crash lands here — park with the FULL payload so the ops
+     * view can list and re-drive it while the conversation continues around it.
+     * The worker calls failed() OUTSIDE the job middleware, so no tenant is
+     * bound; DeadLetters::park() binds and clears its own context.
+     */
+    public function failed(?Throwable $error): void
+    {
+        if (! is_string($this->tenantId) || $this->tenantId === '') {
+            // FR-03f's victim: dispatched with no tenant, refused by the job
+            // middleware. There is no tenant to park under — the framework
+            // failed_jobs row is the record, and the dispatcher is the bug.
+            return;
+        }
+
+        $claimant = $this->claimantOverride
+            ?? (is_string($this->job?->uuid()) ? $this->job->uuid() : null);
+
+        app(DeadLetters::class)->park(
+            tenantId: $this->tenantId,
+            correlationId: $this->correlationId,
+            channel: $this->channel,
+            channelRefId: $this->channelRefId,
+            payload: $this->raw,
+            claimant: $claimant,
+            attempts: (int) ($this->job?->attempts() ?? $this->tries),
+            error: $error ?? new RuntimeException('normalizer failed with no exception recorded'),
+        );
     }
 }

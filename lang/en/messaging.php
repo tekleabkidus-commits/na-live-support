@@ -50,4 +50,25 @@ return [
     'lane' => [
         'skipped' => 'A stuck message was set aside so newer replies could send; it will keep retrying.',
     ],
+    // Doc 04 FS-05 — the dead-letter ops view (R-17 class-2 fill).
+    'dead_letters' => [
+        'title' => 'Parked messages',
+        'breadcrumb' => 'Conversations › Parked messages',
+        'intro' => 'Incoming messages that failed processing three times are parked here with their full content. Nothing is lost — re-drive sends a message back through processing.',
+        'empty' => 'No parked messages. Incoming messages are flowing normally.',
+        'col_parked_at' => 'Parked',
+        'col_channel' => 'Channel',
+        'col_error' => 'Error',
+        'col_attempts' => 'Attempts',
+        'col_actions' => 'Actions',
+        'payload_show' => 'Show raw payload',
+        'payload_hide' => 'Hide raw payload',
+        'redrive' => 'Re-drive',
+        'redrive_confirm' => 'Send this message back through processing? If it fails three more times it will park here again.',
+        'redrive_yes' => 'Yes, re-drive',
+        'redrive_cancel' => 'Cancel',
+        'redriven_ok' => 'Message re-driven.',
+        'not_parked' => 'This item was already re-driven — likely by another operator just now.',
+        'load_more' => 'Load more',
+    ],
 ];

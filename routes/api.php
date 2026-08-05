@@ -251,6 +251,12 @@ Route::group([], function (): void {
             Route::delete('settings/{key}', [TenantSettingsController::class, 'destroy'])
                 ->middleware(['permission:settings.edit', 'audit:tenant.setting_changed'])
                 ->name('foundation.settings.reset');
+
+            // ── Doc 04 FS-05: the dead-letter re-drive (interpretation A-6 —
+            // FR-13's manual-retry precedent, tickets.reply — no key invented).
+            Route::post('conversations/dead-letters/{deadLetterId}/redrive', [App\Http\Controllers\Conversations\DeadLettersController::class, 'redrive'])
+                ->middleware(['permission:tickets.reply', 'audit:conversation.message_redriven'])
+                ->name('conversations.dead_letters.redrive');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.

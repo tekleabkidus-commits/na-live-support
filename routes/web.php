@@ -41,3 +41,17 @@ Route::middleware([
         ->middleware('permission:admin.roles.view')
         ->name('rbac.screens.pending');
 });
+
+// ── Doc 04 FS-05 — the dead-letter ops view (ruling R-17's class-2 fill).
+// Same staff chain as the admin screens; parked payloads are conversation
+// content, so the page is gated by the seeded conversations.view key (A-6).
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('conversations')->group(function (): void {
+    Route::get('dead-letters', [App\Http\Controllers\Conversations\DeadLettersController::class, 'index'])
+        ->middleware('permission:conversations.view')
+        ->name('conversations.dead_letters.index');
+});

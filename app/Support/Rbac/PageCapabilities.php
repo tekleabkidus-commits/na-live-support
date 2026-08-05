@@ -28,6 +28,11 @@ final class PageCapabilities
         'Admin/Rbac/PendingGrants' => [
             'admin.roles.view', 'admin.roles.manage', 'admin.overrides.manage',
         ],
+        // Doc 04 FS-05 (R-17 class-2 fill): the re-drive button renders only
+        // for holders of the key that gates the re-drive route (A-6).
+        'Conversations/DeadLetters' => [
+            'tickets.reply',
+        ],
     ];
 
     public function __construct(private readonly CapabilityMapProvider $maps) {}

@@ -55,6 +55,8 @@ return [
         'origin_not_allowed' => 'ይህ ድረ-ገጽ ይህን የውይይት መስኮት መጠቀም አይችልም',
         // Doc 02 FR-23/FR-24/AC-07: webhook second-credential refusal.
         'webhook_rejected' => 'የዌብሁክ ጥያቄ ውድቅ ተደርጓል',
+        // Doc 04 FS-05: re-drive attempted on an item that is no longer parked.
+        'dead_letter_not_parked' => 'አስቀድሞ እንደገና ተልኳል',
     ],
 
     'provisioning' => [

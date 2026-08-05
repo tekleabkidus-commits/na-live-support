@@ -56,6 +56,8 @@ return [
         'origin_not_allowed' => 'This site can\'t use this chat widget',
         // Doc 02 FR-23/FR-24/AC-07: webhook second-credential refusal.
         'webhook_rejected' => 'Webhook request rejected',
+        // Doc 04 FS-05: re-drive attempted on an item that is no longer parked.
+        'dead_letter_not_parked' => 'Already re-driven',
     ],
 
     'provisioning' => [

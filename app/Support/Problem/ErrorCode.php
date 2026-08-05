@@ -128,6 +128,12 @@ enum ErrorCode: string
     case WebhookRejected = 'webhook_rejected';
 
     /**
+     * Doc 04 FS-05: a re-drive was attempted on a dead letter that is not
+     * parked (already re-driven by a racing operator, usually).
+     */
+    case DeadLetterNotParked = 'dead_letter_not_parked';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

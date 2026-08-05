@@ -347,3 +347,19 @@ with platform validation, `tenant_editable: false` until Doc 16 rules otherwise:
 
 Adapter capability remains the harder cap where lower; over-limit messages WAIT in
 `queued`, never dropped (FR-16's own text).
+
+### A-6. Permissions for the FS-05 ops re-drive view (FILED INTERPRETATION, S20 step 9b)
+
+FS-05 mandates "ops UI lists parked items with re-drive" but names no permission, and
+the catalog is closed (NFR-03; the plan's inherited row 7 confines every new route to
+the seven seeded keys). Filed mapping, from the document's own precedents:
+
+- **List** (`GET /conversations/dead-letters`) — `conversations.view`. A parked payload
+  is inbound conversation content that has not yet persisted; seeing it is seeing
+  conversation content.
+- **Re-drive** (`POST …/redrive`) — `tickets.reply`. FR-13 gates the manual retry of a
+  failed(final) OUTBOUND with `tickets.reply`; the re-drive is the same operator
+  decision applied to the inbound side. No key invented.
+
+The doc author has NOT been consulted; if overruled, only the two route middleware
+lines and the PageCapabilities manifest entry change.
