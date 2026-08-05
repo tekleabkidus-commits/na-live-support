@@ -80,3 +80,38 @@ Broadcast::channel('tenant.{tenantId}.visitor.{visitorId}', function (
         && hash_equals($principal->tenantId, $tenantId)
         && hash_equals($principal->visitorId, $visitorId);
 }, ['guards' => ['widget']]);
+
+/*
+|------------------------------------------------------------------------------
+| Conversation channels (Doc 04 FR-19/FR-25, T-06 — Doc 03 scope ON SUBSCRIBE)
+|------------------------------------------------------------------------------
+|
+| The presence channel powering "who is viewing conversation X" (Doc 07's
+| collision UX). Auth = Doc 02's tenant binding, then Doc 03's permission +
+| scope through ConversationChannelGate — the export re-check's sibling,
+| closing Doc 03 FR-06's Reverb half (Doc 04 inherited row 2). Every refusal
+| is the same false: the socket layer explains nothing (C-10).
+*/
+Broadcast::channel('tenant.{tenantId}.conversation.{conversationId}', function (
+    User $user,
+    string $tenantId,
+    string $conversationId,
+): array|false {
+    if (! app(ChannelTenantBinding::class)->authorize($user, $tenantId)) {
+        return false;
+    }
+
+    return app(App\Domain\Conversations\Realtime\ConversationChannelGate::class)
+        ->authorize($user, $conversationId);
+}, ['guards' => ['staff']]);
+
+// FR-25's user.{id} channel: mentions and assignments land here — a user may
+// subscribe to exactly their own.
+Broadcast::channel('tenant.{tenantId}.user.{userId}', function (
+    User $user,
+    string $tenantId,
+    string $userId,
+): bool {
+    return app(ChannelTenantBinding::class)->authorize($user, $tenantId)
+        && hash_equals($user->identifier(), $userId);
+}, ['guards' => ['staff']]);

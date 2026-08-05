@@ -116,6 +116,18 @@ final class NormalizeInbound implements ShouldQueue
         // EC-01: the batch-tail debounce — fan-out territory, so quarantined rows
         // (FR-11: no fan-out except audit) never reach it.
         if (! $message->quarantined) {
+            // FR-25: the ephemeral realtime push (post-commit, at-most-once —
+            // EC-12's sync endpoint is the recovery, the bus is the durable
+            // truth). One producer proves the path; the remaining producers
+            // (state changes, edits) wire with Doc 07's live inbox (bucket).
+            app(\App\Domain\Conversations\Realtime\RealtimePusher::class)
+                ->toConversation($message->conversation_id, 'message.received', [
+                    'tenant_id' => $this->tenantId,
+                    'message_id' => $message->identifier(),
+                    'conversation_id' => $message->conversation_id,
+                    'kind' => $message->kind,
+                ]);
+
             $batchTail->recordArrival($message->conversation_id, $message->identifier());
 
             ConfirmBatchTail::dispatch($message->conversation_id, $message->identifier())

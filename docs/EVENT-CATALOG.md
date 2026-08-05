@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-46 event(s).
+48 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -140,6 +140,15 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 - **Producers:** Doc02/RequirePermission
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
+## `conversation.blocked`
+
+A conversation was blocked (FR-03): outbound refuses (BR-02), inbound quarantines (FR-11). The reason lives in the audit entry.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`
+- **Producers:** Doc04/ConversationBlocking
+- **Consumers:** Doc06/SpamDisposition, Doc07/Inbox
+
 ## `conversation.created`
 
 First contact created THE permanent conversation for {tenant, channel endpoint, external chat} (Doc 04 FR-01).
@@ -157,6 +166,15 @@ FR-15's 10-minute head-block cap fired: the stuck head was demoted and the lane 
 - **Payload:** `tenant_id`, `conversation_id`, `message_id`
 - **Producers:** Doc04/LaneWorker
 - **Consumers:** Doc07/Inbox, Doc18/Alerting
+
+## `conversation.unblocked`
+
+A blocked conversation returned to active. Nothing retro-fans-out (FR-11): quarantined rows stay off the bus, by construction.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`
+- **Producers:** Doc04/ConversationBlocking
+- **Consumers:** Doc06/SpamDisposition, Doc07/Inbox
 
 ## `media.infected`
 

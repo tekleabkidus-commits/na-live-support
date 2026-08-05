@@ -517,4 +517,20 @@ return [
         'required_fields' => ['conversation_id', 'format', 'notes_included'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // FR-03: blocking changes what every pipeline does with this thread —
+        // the reason is required, the actor may be staff or an automation.
+        'action_key' => 'conversation.blocked',
+        'entity' => 'conversation',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['conversation_id', 'reason'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        'action_key' => 'conversation.unblocked',
+        'entity' => 'conversation',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['conversation_id', 'reason'],
+        'owning_doc' => 'Doc04',
+    ],
 ];

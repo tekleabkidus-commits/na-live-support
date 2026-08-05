@@ -378,6 +378,20 @@ final class EventCatalog
             'consumers' => ['Doc09/Transcription'],
             'description' => 'T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.',
         ],
+        'conversation.blocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id'],
+            'producers' => ['Doc04/ConversationBlocking'],
+            'consumers' => ['Doc06/SpamDisposition', 'Doc07/Inbox'],
+            'description' => 'A conversation was blocked (FR-03): outbound refuses (BR-02), inbound quarantines (FR-11). The reason lives in the audit entry.',
+        ],
+        'conversation.unblocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id'],
+            'producers' => ['Doc04/ConversationBlocking'],
+            'consumers' => ['Doc06/SpamDisposition', 'Doc07/Inbox'],
+            'description' => 'A blocked conversation returned to active. Nothing retro-fans-out (FR-11): quarantined rows stay off the bus, by construction.',
+        ],
         'message.edited' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'message_id', 'conversation_id'],
