@@ -35,6 +35,17 @@ this note. All subsequent S19 work is single-session.
 
 ## SESSION-20 (Doc 04) close-out — Conversations & Messaging Core (fake adapter)
 
+### OWNER RULING R-18 — Doc 04 accepted at close-out (2026-08-06)
+
+> Doc 04 accepted with AC-03 PARTIAL. Root-causing the AC-03 soak (deterministic result +
+> `make test`/CI reconciled, most likely a dedicated CI job) and the RISK 0b capture
+> protocol are STEP 0 of the next build session; no Doc 06 plan may be approved before the
+> soak is deterministic. A flaky test is not a proof, and an ordering guarantee that is
+> only probably true is not a guarantee.
+
+Filed in `docs/ANSWERS-FROM-DOC-AUTHOR.md` as R-18. **SESSION-04 / Doc 04 is CLOSED.**
+
+
 Steps 1–10 committed (`a6c68e0`, `c1211c3`, `0a9c1eb`, `466e74d`, `3944334`, `6f8f6e9`,
 `2c49c2f`, `615446e`, `8813028`, `1cfd0be`, `5cd4b5e`, and this session's `b7ec21a` (9b),
 `b9fb15a` + `d7ee65b` (9c), and this close-out). Rulings R-15…R-17 and interpretations A-4/A-5 were filed at plan
@@ -155,43 +166,55 @@ form of the same evidence, and both fixes carry positive controls.
 
 ### RISKS carried forward
 
-**0. OPEN DEFECT — the AC-03 soak corrupts the shared test run, and the mechanism is
-not root-caused.** This is the top risk because it is unresolved, not because it is the
-most damaging. The checkpoint's "one unidentified single-test failure that never
-reproduced" **RECURRED in this session and was then made reproducible**: running the
-full suite WITH `tests/Property/LaneOrderingSoakTest` fails the soak mid-body and every
-`Performance` test after it with `SQLSTATE[42P01] relation "…" does not exist`;
-running it WITHOUT the soak passes 648/648. Measured on an otherwise idle machine, twice.
-What rules the obvious explanations out: the tables demonstrably still exist after such a
-run (53 present), `migrate:fresh` is process-once and nothing else in the test path calls
-it, and no concurrent pest process was running. The prime suspect is the soak's
+**0a. OPEN DEFECT — the AC-03 soak corrupts the shared test run, and the mechanism is
+not root-caused.** Top risk because it is unresolved, not because it is the most
+damaging. Running the full suite WITH `tests/Property/LaneOrderingSoakTest` fails the
+soak mid-body and every `Performance` test after it with
+`SQLSTATE[42P01] relation "…" does not exist`; running it WITHOUT the soak passes
+648/648. Measured on an otherwise idle machine, twice. What rules the obvious
+explanations out: the tables demonstrably still exist after such a run (53 present),
+`migrate:fresh` is process-once and nothing else in the test path calls it, and no
+concurrent pest process was running. The prime suspect is the soak's
 `commitFixtures()` interacting with the harness's per-test transaction and the separate
-`pgsql_platform` connection, but that is a hypothesis, not a finding.
-**And it is ALSO flaky in isolation.** Run alone on a clean database it has passed twice
+`pgsql_platform` connection — a hypothesis, not a finding.
+**And it is ALSO flaky in isolation.** Alone on a clean database it has passed twice
 (209 assertions, zero order violations) and failed once with **50 violations — every
-lane**, which is systematic rather than a subtle ordering bug (the likely shape is the
-drain loop exiting early and leaving messages unsent, so their external ids are null and
-the monotonicity check trips; unconfirmed).
+lane**, systematic rather than a subtle ordering bug (likely shape: the drain loop
+exiting early and leaving messages unsent, so their external ids are null and the
+monotonicity check trips; unconfirmed).
 **Consequence, stated plainly: AC-03's soak half is NOT PROVEN and is not claimed as
 such** — its audit row is PARTIAL. AC-03's head-failure/lane-skip half IS proven, by
 `LaneFifoTest`, which runs in the default suite and is green.
 **Containment:** the soak lives in the `soak` group, is EXCLUDED from `make test`, and
-runs via `make soak`. Captured evidence is in the repo at
-`docs/evidence/S20-soak-isolation/`. **The next session owns both halves of this: make
-the soak deterministic, then make it safe to run in the shared suite (or as its own CI
-job).**
+runs via `make soak`. Captured evidence: `docs/evidence/S20-soak-isolation/`.
 **A CI data point that cuts the other way, and a live inconsistency.** CI Stage 3 runs
-`pest` BARE — no `--exclude-group=soak` — so run [31051334145](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31051334145) executed
-the soak inside the full suite on a fresh ephemeral stack and went GREEN, Stages 1-6 all
-green. So the corruption reproduces on this WSL2 dev host and did not reproduce on the
-Linux runner, which points at the environment rather than the test's logic — but ONE green
-CI run does not overturn a local red with 50 violations, so AC-03's soak half stays
-PARTIAL. It also leaves `make test` and CI DISAGREEING about whether the soak runs: until
-this is fixed CI may redden intermittently, which is precisely the flaky-red that teaches
-people to ignore red. Reconciling the two (most likely a dedicated CI job for the soak) is
-part of the next session's ownership. Note also that the first
-recurrence destroyed its own evidence because the run was piped through `tail`; capture
-full output when chasing this.
+`pest` BARE — no `--exclude-group=soak` — so run [31051334145](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31051334145)
+executed the soak inside the full suite on a fresh ephemeral stack and went GREEN,
+Stages 1-6 all green. So the corruption reproduces on this WSL2 dev host and did not
+reproduce on the Linux runner, pointing at the environment rather than the test's logic
+— but ONE green CI run does not overturn a local red with 50 violations, so AC-03's soak
+half stays PARTIAL. It also leaves `make test` and CI DISAGREEING about whether the soak
+runs: until fixed, CI may redden intermittently, which is precisely the flaky-red that
+teaches everyone to ignore red.
+
+**0b. KNOWN INTERMITTENT — `PasswordResetFlowTest > it keeps the token ALIVE…`,
+undiagnosed, and DISTINCT from 0a.** Recorded separately because conflating the two
+would hide it. It has now **recurred twice** (once in the S20 checkpoint session, once
+during this session's step-9b verification) and has **never been diagnosed**.
+**Its log was never captured, twice, and that is the whole problem.** Both times the run
+was piped through `grep`/`tail`, so only the test NAME and the summary line survived; the
+247-byte `FAILING-RUN-CAPTURED.txt` is a *different, later* run, not this failure. There
+is no assertion detail on record for it anywhere.
+**It is NOT attributable to the soak (0a): it predates the soak**, which was created in
+step 9c (`d7ee65b`), and it involves the Doc 02 password-reset surface, not messaging.
+Neither (a) a harness-isolation cause nor (b) a genuine Doc 02 product defect has been
+ruled out; no Doc 02 code was touched, correctly, since nothing was diagnosed. On both
+occasions the test passed alone (6 passed / 72 assertions) and the next full run was
+green — which is exactly why it keeps escaping.
+**STANDING INSTRUCTION — CAPTURE FIRST, RERUN SECOND.** On any recurrence: redirect the
+WHOLE run to a file (`./vendor/bin/pest > run.txt 2>&1`) — never through `grep`, `tail`
+or `head` — commit that file under `docs/evidence/`, and only then re-run. A re-run that
+goes green destroys the only evidence, and that has now happened twice.
 
 1. **Detach-time FK verification is RLS-policed.** A partition DROP is refused while
    `message_revisions` holds an FK onto it, and the detach-time verification SELECT is
@@ -275,7 +298,7 @@ remainder is stated and bucketed. A false DONE is a Sev-1.
 | US-04 | DONE | Clean transcript with notes excluded, watermarked, audited (SS-03's fixture) |
 | US-05 | PARTIAL | Proven via the SECOND fake adapter with zero core edits (R-16); the literal WhatsApp adapter is §19's |
 | US-06 | DONE | Edited/deleted content retained internally, access permission-gated and audited |
-| US-07 | DONE | Media chain works end to end; ordering never violated (10k soak, zero violations) |
+| US-07 | DONE | Media chain works end to end (`MediaPipelineTest`); ordering holds under induced head failure (`LaneFifoTest`) and across the 1k node-kill replay, which reconciles to zero lost and zero duplicated with per-conversation order intact (`NodeKillReplayDrillTest`). **No soak citation** — the 10k soak is disowned by AC-03 (RISK 0a); this row rests only on evidence that stands |
 | BR-01 | DONE | Notes carry no deliverable payload path — type-level + runtime + DB CHECK, three layers |
 | BR-02 | DONE | No outbound to blocked, automations included; `conversation_blocked` refusal |
 | BR-03 | DONE | Originals retained per retention, exposed only via `conversations.history.full` |

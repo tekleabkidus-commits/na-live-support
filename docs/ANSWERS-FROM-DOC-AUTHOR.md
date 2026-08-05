@@ -363,3 +363,16 @@ the seven seeded keys). Filed mapping, from the document's own precedents:
 
 The doc author has NOT been consulted; if overruled, only the two route middleware
 lines and the PageCapabilities manifest entry change.
+
+Owner-ratified at close-out acceptance; stands unless the doc author overrules, in which
+case only the two middleware lines + the manifest entry change.
+
+## 2026-08-06 — Doc 04 close-out acceptance (Session 20)
+
+### R-18. Doc 04 accepted with AC-03 PARTIAL; the soak is the next session's step 0
+
+Doc 04 accepted with AC-03 PARTIAL. Root-causing the AC-03 soak (deterministic result +
+`make test`/CI reconciled, most likely a dedicated CI job) and the RISK 0b capture
+protocol are STEP 0 of the next build session; no Doc 06 plan may be approved before the
+soak is deterministic. A flaky test is not a proof, and an ordering guarantee that is
+only probably true is not a guarantee.
