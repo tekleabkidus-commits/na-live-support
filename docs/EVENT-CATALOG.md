@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-37 event(s).
+41 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -157,6 +157,42 @@ FR-15's 10-minute head-block cap fired: the stuck head was demoted and the lane 
 - **Payload:** `tenant_id`, `conversation_id`, `message_id`
 - **Producers:** Doc04/LaneWorker
 - **Consumers:** Doc07/Inbox, Doc18/Alerting
+
+## `media.infected`
+
+The scan found malware: item blocked with NO download path for any role (SEC-04); bytes never stored.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`, `signature`
+- **Producers:** Doc04/MediaPipeline
+- **Consumers:** Doc07/Realtime, Doc18/SecurityMonitoring
+
+## `media.needs_ocr`
+
+T-05 hook, emitted after media.stored for photos: Doc 09 runs OCR and writes back ocr_ref; core stays provider-agnostic.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`, `storage_key`
+- **Producers:** Doc04/MediaPipeline
+- **Consumers:** Doc09/Ocr
+
+## `media.needs_transcript`
+
+T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`, `storage_key`
+- **Producers:** Doc04/MediaPipeline
+- **Consumers:** Doc09/Transcription
+
+## `media.stored`
+
+One media item passed the scan CLEAN and was stored (FR-10 step 5, T-04); only this branch ever writes a storage_key.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`
+- **Producers:** Doc04/MediaPipeline
+- **Consumers:** Doc07/Realtime, Doc15/Reporting
 
 ## `message.canceled`
 

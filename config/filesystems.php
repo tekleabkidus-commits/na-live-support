@@ -62,6 +62,23 @@ return [
             'report' => false,
         ],
 
+        // Doc 04 T-04/SEC-02 (ADR 0008): the cookie-less media origin — MinIO
+        // in dev, the production media domain in Doc 18's wiring. `throw` is
+        // TRUE, unlike the defaults above: a silent false from the media store
+        // would let a "stored" claim stand with no object behind it, and the
+        // scan pipeline must never lie about that.
+        'media' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', true),
+            'throw' => true,
+            'report' => false,
+        ],
+
     ],
 
     /*

@@ -110,6 +110,14 @@ final class NormalizeInbound implements ShouldQueue
             ConfirmBatchTail::dispatch($message->conversation_id, $message->identifier())
                 ->onQueue($registry->inboundFamily($this->channel))
                 ->delay(2);
+
+            // FR-10 step 5: one media job PER ITEM, on the isolated media family
+            // (FS-03). Quarantined messages keep their placeholders unfetched —
+            // spam bytes are never downloaded, scanned, or stored (FR-11's
+            // no-fan-out extended to the one place fan-out costs money).
+            foreach (array_keys($message->media) as $index) {
+                FetchInboundMedia::dispatch($message->identifier(), (int) $index)->onQueue('media');
+            }
         }
     }
 }

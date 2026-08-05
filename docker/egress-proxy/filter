@@ -1,0 +1,13 @@
+# Per-destination allowlist (Doc 04 SEC-03) — one regex per line, matched
+# against destination hosts. DEV VALUES: the mock channel services plus MinIO
+# (test fixtures serve media bytes from the object store; the fake adapter is a
+# code fixture with no host of its own). Production values are real channel API
+# hosts only — Doc 18 owns that wiring (ADR 0008).
+#
+# NOT on this list, deliberately: mailpit (the SEC-03 test fetches from it to
+# prove the deny), postgres, redis — an SSRF that can reach the data layer is
+# the exact attack this file exists to stop.
+^mock-telegram$
+^mock-sms$
+^mock-ai$
+^minio$

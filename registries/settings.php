@@ -443,4 +443,14 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc04',
     ],
+    [
+        // NFR-05: the media size cap, enforced IN-STREAM mid-download (EC-02) —
+        // never against the Content-Length header alone.
+        'key' => 'media.max_mb',
+        'type' => 'int',
+        'default' => 25,
+        'validation' => 'required|integer|min:1|max:100',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc04',
+    ],
 ];

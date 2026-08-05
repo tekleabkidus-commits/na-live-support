@@ -185,6 +185,17 @@ services:
       timeout: 5s
       retries: 6
 
+  egress-proxy:
+    build:
+      context: ./egress-proxy
+    image: na-live-support/egress-proxy:dev
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8888"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
   clamav:
     image: clamav/clamav:stable
     volumes:

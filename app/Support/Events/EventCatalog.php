@@ -355,6 +355,36 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
+        'media.stored' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index'],
+            'producers' => ['Doc04/MediaPipeline'],
+            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting'],
+            'description' => 'One media item passed the scan CLEAN and was stored (FR-10 step 5, T-04); only this branch ever writes a storage_key.',
+        ],
+        'media.infected' => [
+            'schema_version' => 1,
+            // The signature is the scanner's detection name — an identifier,
+            // and the thing Doc 18's threshold alerting groups by (SEC-04).
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index', 'signature'],
+            'producers' => ['Doc04/MediaPipeline'],
+            'consumers' => ['Doc07/Realtime', 'Doc18/SecurityMonitoring'],
+            'description' => 'The scan found malware: item blocked with NO download path for any role (SEC-04); bytes never stored.',
+        ],
+        'media.needs_transcript' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index', 'storage_key'],
+            'producers' => ['Doc04/MediaPipeline'],
+            'consumers' => ['Doc09/Transcription'],
+            'description' => 'T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.',
+        ],
+        'media.needs_ocr' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index', 'storage_key'],
+            'producers' => ['Doc04/MediaPipeline'],
+            'consumers' => ['Doc09/Ocr'],
+            'description' => 'T-05 hook, emitted after media.stored for photos: Doc 09 runs OCR and writes back ocr_ref; core stays provider-agnostic.',
+        ],
     ];
 
     /**

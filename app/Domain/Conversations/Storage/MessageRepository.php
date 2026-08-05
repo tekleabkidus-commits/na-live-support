@@ -136,6 +136,49 @@ final class MessageRepository
         $message->refresh();
     }
 
+    /**
+     * Patch ONE media item in the jsonb array (FR-10 step 5's scan_status
+     * lifecycle: pending → scanning|clean|infected|failed|quarantined_pending|
+     * rejected — the FR-06 trio plus EC-02's rejected and EC-11's held states).
+     *
+     * @param  array<string, mixed>  $patch
+     */
+    public function updateMediaItem(Message $message, int $index, array $patch): void
+    {
+        $media = $message->media;
+
+        if (! array_key_exists($index, $media)) {
+            throw new \DomainException(sprintf('message %s has no media item %d.', $message->identifier(), $index));
+        }
+
+        $media[$index] = array_merge($media[$index], $patch);
+
+        Message::query()->whereKey($message->identifier())
+            ->update(['media' => json_encode($media, JSON_THROW_ON_ERROR)]);
+        $message->refresh();
+    }
+
+    /**
+     * A SYSTEM thread marker (EC-02's media_rejected note, EC-11's staff
+     * notice): kind=system, no delivery lifecycle, structurally undeliverable —
+     * DeliverableKind has no System case (SEC-07), so no adapter can ever
+     * serialize one. The renderer (Doc 07) maps channel_meta.system_code to its
+     * i18n string; the row itself carries no user-visible text (N-03).
+     *
+     * @param  array<string, mixed>  $meta
+     */
+    public function persistSystemMarker(Conversation $conversation, string $systemCode, array $meta = []): Message
+    {
+        return Message::query()->create([
+            'conversation_id' => $conversation->identifier(),
+            'direction' => 'in',
+            'author_type' => 'system',
+            'kind' => 'system',
+            'body' => null,
+            'channel_meta' => ['system_code' => $systemCode] + $meta,
+        ]);
+    }
+
     /** The channel's own id for a sent message, recorded once the adapter reports it. */
     public function recordExternalMessageId(Message $message, string $externalMessageId): void
     {
