@@ -475,4 +475,13 @@ return [
         'required_fields' => ['conversation_id', 'message_id'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // FR-17: internal notes are state-mutating staff actions; the note body
+        // stays in the row — the audit entry carries identifiers only.
+        'action_key' => 'conversation.note_added',
+        'entity' => 'message',
+        'actor_types' => ['staff'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
 ];

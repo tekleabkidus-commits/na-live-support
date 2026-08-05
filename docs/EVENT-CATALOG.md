@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-41 event(s).
+43 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -247,6 +247,24 @@ The adapter accepted the send (FR-13). Terminal-success where the channel has no
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`
 - **Producers:** Doc04/DeliveryStateMachine
 - **Consumers:** Doc07/Realtime, Doc15/Reporting
+
+## `note.added`
+
+A staff member added an internal note (FR-17). The body never rides the bus and the note itself is structurally undeliverable (SEC-07/BR-01).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `author_id`
+- **Producers:** Doc04/NotesWriter
+- **Consumers:** Doc07/Realtime, Doc17/Audit
+
+## `note.mentioned`
+
+An @mention inside a note named a staff member (FR-17; event name filed as interpretation A-4) — the notification consumer is Doc 07/18's.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`, `author_id`, `mentioned_user_id`
+- **Producers:** Doc04/NotesWriter
+- **Consumers:** Doc07/Notifications, Doc18/NotificationDelivery
 
 ## `rbac.highrisk.confirmed`
 

@@ -40,6 +40,9 @@ return [
     'cancel_reason' => [
         'conversation_blocked' => 'Canceled because the conversation was blocked before sending.',
     ],
+    'draft' => [
+        'updated_elsewhere' => 'This draft was updated on another device; showing the newer version.',
+    ],
     'lane' => [
         'skipped' => 'A stuck message was set aside so newer replies could send; it will keep retrying.',
     ],

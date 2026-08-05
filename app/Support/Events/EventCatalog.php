@@ -378,6 +378,20 @@ final class EventCatalog
             'consumers' => ['Doc09/Transcription'],
             'description' => 'T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.',
         ],
+        'note.added' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'author_id'],
+            'producers' => ['Doc04/NotesWriter'],
+            'consumers' => ['Doc07/Realtime', 'Doc17/Audit'],
+            'description' => 'A staff member added an internal note (FR-17). The body never rides the bus and the note itself is structurally undeliverable (SEC-07/BR-01).',
+        ],
+        'note.mentioned' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id', 'author_id', 'mentioned_user_id'],
+            'producers' => ['Doc04/NotesWriter'],
+            'consumers' => ['Doc07/Notifications', 'Doc18/NotificationDelivery'],
+            'description' => 'An @mention inside a note named a staff member (FR-17; event name filed as interpretation A-4) — the notification consumer is Doc 07/18\'s.',
+        ],
         'media.needs_ocr' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index', 'storage_key'],
