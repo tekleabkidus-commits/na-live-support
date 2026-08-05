@@ -191,7 +191,7 @@ services:
     image: na-live-support/egress-proxy:dev
     networks: [na-net]
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8888"]
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 8888"]  # 127.0.0.1, NOT localhost: alpine resolves localhost to ::1 first and tinyproxy listens on IPv4 only
       interval: 10s
       timeout: 3s
       retries: 6
