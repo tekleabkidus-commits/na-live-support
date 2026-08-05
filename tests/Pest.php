@@ -217,7 +217,8 @@ function cleanupTenants(array $tenantIds): void
     foreach ([
         // Doc 04: messages reference conversations, conversations reference
         // customers — so drafts/revisions/messages first, customers last.
-        'message_drafts', 'message_revisions', 'legal_hold_messages', 'messages', 'conversations',
+        'message_drafts', 'message_revisions', 'legal_hold_messages', 'message_dead_letters',
+        'messages', 'conversations',
         'customer_identities', 'customers',
         'events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
         'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',

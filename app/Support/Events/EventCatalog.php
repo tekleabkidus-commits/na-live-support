@@ -355,6 +355,14 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
+        'channel.health.changed' => [
+            'schema_version' => 1,
+            // `status` is up|down — an enum, not free text (Q7's posture).
+            'payload' => ['tenant_id', 'channel', 'channel_ref_id', 'status'],
+            'producers' => ['Doc04/ChannelHealthTracker'],
+            'consumers' => ['Doc05/ChannelSurfaces', 'Doc13/ChannelSurfaces', 'Doc18/Alerting'],
+            'description' => 'FS-01\'s health signal, fired on TRANSITION only: a channel endpoint crossed the consecutive-failure threshold (down) or recovered on the first successful send (up). Event name filed as interpretation A-4.',
+        ],
         'media.stored' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index'],

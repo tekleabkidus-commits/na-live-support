@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-49 event(s).
+50 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -139,6 +139,15 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 - **Payload:** `tenant_id`, `user_id`, `token_id`, `permission`
 - **Producers:** Doc02/RequirePermission
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `channel.health.changed`
+
+FS-01's health signal, fired on TRANSITION only: a channel endpoint crossed the consecutive-failure threshold (down) or recovered on the first successful send (up). Event name filed as interpretation A-4.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `channel`, `channel_ref_id`, `status`
+- **Producers:** Doc04/ChannelHealthTracker
+- **Consumers:** Doc05/ChannelSurfaces, Doc13/ChannelSurfaces, Doc18/Alerting
 
 ## `conversation.blocked`
 

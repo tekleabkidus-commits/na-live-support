@@ -57,6 +57,7 @@ final class LaneWorker
         private readonly AdapterRegistry $registry,
         private readonly EventPublisher $events,
         private readonly AuditLogger $audit,
+        private readonly ChannelHealthTracker $health,
     ) {}
 
     /** One round-robin cycle over every active lane. Returns attempted sends. */
@@ -174,10 +175,17 @@ final class LaneWorker
             $this->machine->transition($message, DeliveryState::Sent);
             $this->lanes->popHead($conversation->identifier());
 
+            // FS-01: first success after a down transition announces recovery.
+            $this->health->observeSuccess($conversation->channel, $conversation->channel_ref_id);
+
             return;
         }
 
         $error = $result->error;
+
+        // FS-01: channel-class failures feed the health streak (transition-only
+        // announcements; see ChannelHealthTracker for which classes count).
+        $this->health->observeFailure($conversation->channel, $conversation->channel_ref_id, $error?->reason);
         $reason = $error?->reason->value ?? 'unknown';
         $priorAttempts = $priorError['attempts'] ?? 0;
         $attempts = (is_int($priorAttempts) ? $priorAttempts : 0) + 1;

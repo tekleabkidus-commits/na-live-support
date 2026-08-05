@@ -552,6 +552,16 @@ return [
         'owning_doc' => 'Doc04',
     ],
     [
+        // FS-01 (A-4): a channel endpoint's health TRANSITIONED (down on the
+        // consecutive-failure threshold, up on first recovery) — one entry per
+        // transition, never per failure.
+        'action_key' => 'channel.health_changed',
+        'entity' => 'channel',
+        'actor_types' => ['system'],
+        'required_fields' => ['channel', 'channel_ref_id', 'status'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
         // FS-05: an operator re-drove a parked item back through the inbound
         // pipeline. Staff actor with id — re-drives are accountable decisions.
         'action_key' => 'conversation.message_redriven',

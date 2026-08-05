@@ -16,6 +16,7 @@ use DomainException;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use League\Flysystem\FilesystemException;
 use RuntimeException;
 
 /**
@@ -120,13 +121,25 @@ final class MediaPipeline
         }
 
         rewind($stream);
-        $storageKey = $this->store->store(
-            $conversation->identifier(),
-            $message->identifier(),
-            $index,
-            $this->extensionFor($item),
-            $stream,
-        );
+
+        try {
+            $storageKey = $this->store->store(
+                $conversation->identifier(),
+                $message->identifier(),
+                $index,
+                $this->extensionFor($item),
+                $stream,
+            );
+        } catch (FilesystemException) {
+            // FS-02: object storage down. Same posture as a fetch-transport
+            // failure — held "attachment pending" with redispatch (retry with
+            // backoff), ×3 then terminal `failed` + staff marker; text was
+            // never touched (it doesn't pass through here). Found by the step
+            // 9c drill: this throw previously killed the tries=1 job with the
+            // item stuck in `pending` and no retry at all. Alert routing is
+            // Doc 18's (bucket).
+            return $this->holdOrFail($message, $index, $conversation, $attempts, $firstAttemptAt, $now, 'failed');
+        }
 
         DB::transaction(function () use ($message, $index, $conversation, $storageKey, $kind): void {
             $this->messages->updateMediaItem($message, $index, [

@@ -30,6 +30,18 @@
             <directory>tests/Performance</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <!--
+            HARNESS PROVISIONING, not a product setting. AC-03 mandates a
+            10 000-message ordering soak (tests/Property/LaneOrderingSoakTest);
+            running it in the SAME process as the other 600+ tests exceeds PHP's
+            128M default and dies with "Allowed memory size exhausted" — the soak
+            passes alone and fails in the full run, which is a harness limit, not
+            a leak in the product. Raising the TEST process's limit is the fix;
+            nothing about the application's own memory posture changes.
+        -->
+        <ini name="memory_limit" value="512M"/>
+    </php>
     <source>
         <include>
             <directory>app</directory>

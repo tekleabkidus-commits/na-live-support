@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Support\Adapters;
 
+use App\Domain\Conversations\Adapters\AdapterError;
 use App\Domain\Conversations\Adapters\AdapterHealth;
 use App\Domain\Conversations\Adapters\Capabilities;
 use App\Domain\Conversations\Adapters\ChannelAdapter;
 use App\Domain\Conversations\Adapters\DeliverableKind;
 use App\Domain\Conversations\Adapters\DeliveryFailureReason;
-use App\Domain\Conversations\Adapters\AdapterError;
 use App\Domain\Conversations\Adapters\InboundSender;
 use App\Domain\Conversations\Adapters\NormalizedInbound;
 use App\Domain\Conversations\Adapters\OutboundMessage;

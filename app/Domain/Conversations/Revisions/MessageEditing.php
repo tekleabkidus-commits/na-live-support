@@ -56,6 +56,18 @@ final class MessageEditing
     /** FR-21: a channel-originated edit — revision + new body, original kept. */
     public function customerEdited(Message $message, ?string $newBody): Message
     {
+        // C-09/NFR-04: an "edit" that changes nothing is a REDELIVERY, not an
+        // edit. At-least-once is assumed everywhere, so a normalizer that
+        // committed its row and died before ACKing gets replayed — and without
+        // this guard that replay wrote a revision, stamped edited_at, emitted
+        // message.edited and an audit entry, i.e. exactly the duplicated side
+        // effects SS-04 forbids. Found by the step-9c node-kill drill: 78
+        // spurious revisions across a 1k replay. Returning early keeps the
+        // consumer idempotent at the domain layer, for every caller.
+        if ($message->body === $newBody) {
+            return $message;
+        }
+
         return DB::transaction(function () use ($message, $newBody): Message {
             $this->writeRevision($message, 'edit', 'customer', null);
 
