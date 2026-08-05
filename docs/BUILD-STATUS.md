@@ -46,6 +46,7 @@ together are the full surface, split for the reason in RISK 0 below. The Doc 04 
 alone are **130 tests / 948 assertions**. `make gates` **12/12**; browser
 **dead-letters 3/3**; Pint + PHPStan(max) + ESLint + vue-tsc clean.
 **This is not a single clean green run and is not presented as one.**
+**CI-proven on `e05df89`: run [31051334145](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31051334145), Stages 1-6 green, Stage 7 the by-design manual stub** — and that run included the soak (see RISK 0).
 
 ### The twelfth gate
 
@@ -178,7 +179,17 @@ such** — its audit row is PARTIAL. AC-03's head-failure/lane-skip half IS prov
 runs via `make soak`. Captured evidence is in the repo at
 `docs/evidence/S20-soak-isolation/`. **The next session owns both halves of this: make
 the soak deterministic, then make it safe to run in the shared suite (or as its own CI
-job).** Note also that the first
+job).**
+**A CI data point that cuts the other way, and a live inconsistency.** CI Stage 3 runs
+`pest` BARE — no `--exclude-group=soak` — so run [31051334145](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31051334145) executed
+the soak inside the full suite on a fresh ephemeral stack and went GREEN, Stages 1-6 all
+green. So the corruption reproduces on this WSL2 dev host and did not reproduce on the
+Linux runner, which points at the environment rather than the test's logic — but ONE green
+CI run does not overturn a local red with 50 violations, so AC-03's soak half stays
+PARTIAL. It also leaves `make test` and CI DISAGREEING about whether the soak runs: until
+this is fixed CI may redden intermittently, which is precisely the flaky-red that teaches
+people to ignore red. Reconciling the two (most likely a dedicated CI job for the soak) is
+part of the next session's ownership. Note also that the first
 recurrence destroyed its own evidence because the run was piped through `tail`; capture
 full output when chasing this.
 
