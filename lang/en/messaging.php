@@ -43,6 +43,10 @@ return [
     'draft' => [
         'updated_elsewhere' => 'This draft was updated on another device; showing the newer version.',
     ],
+    'transcript' => [
+        'watermark' => 'Exported by :name at :at',
+        'deleted_tombstone' => '[message deleted]',
+    ],
     'lane' => [
         'skipped' => 'A stuck message was set aside so newer replies could send; it will keep retrying.',
     ],

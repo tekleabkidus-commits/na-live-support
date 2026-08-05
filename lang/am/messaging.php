@@ -39,6 +39,10 @@ return [
     'draft' => [
         'updated_elsewhere' => 'ይህ ረቂቅ በሌላ መሣሪያ ላይ ተዘምኗል፤ አዲሱ ስሪት እየታየ ነው።',
     ],
+    'transcript' => [
+        'watermark' => 'በ:name የተላከ ቅጂ፣ :at',
+        'deleted_tombstone' => '[መልእክቱ ተሰርዟል]',
+    ],
     'lane' => [
         'skipped' => 'የተጣበቀ መልእክት ወደ ጎን ተደርጎ አዳዲስ መልሶች እንዲላኩ ተፈቅዷል፤ እሱም መሞከሩን ይቀጥላል።',
     ],

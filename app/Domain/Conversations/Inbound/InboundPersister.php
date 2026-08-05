@@ -45,6 +45,12 @@ final class InboundPersister
         private readonly AuditLogger $audit,
     ) {}
 
+    /** The repository, for the pipeline's FR-21 external-id lookup. */
+    public function messages(): MessageRepository
+    {
+        return $this->messages;
+    }
+
     public function persist(
         string $channel,
         string $channelRefId,

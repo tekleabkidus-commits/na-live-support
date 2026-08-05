@@ -186,6 +186,16 @@ final class MessageRepository
         $message->refresh();
     }
 
+    /**
+     * A prior row carrying this channel-native id (FR-21: an inbound whose
+     * external id already exists IS an edit — the frozen FR-08 contract needs
+     * no edit flag). The partial index (tenant, external_message_id) serves it.
+     */
+    public function findByExternalMessageId(string $externalMessageId): ?Message
+    {
+        return Message::query()->where('external_message_id', $externalMessageId)->first();
+    }
+
     /** One row by id, tenant-scoped (the lane worker's lookup). */
     public function findById(string $messageId): ?Message
     {

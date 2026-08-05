@@ -96,6 +96,17 @@ final class NormalizeInbound implements ShouldQueue
             return;
         }
 
+        // FR-21: an inbound whose external id we already hold is a channel-
+        // originated EDIT — it becomes a revision, never a second row.
+        $existing = $persister->messages()->findByExternalMessageId($inbound->externalMessageId);
+
+        if ($existing !== null) {
+            app(\App\Domain\Conversations\Revisions\MessageEditing::class)
+                ->customerEdited($existing, $inbound->body);
+
+            return;
+        }
+
         // Step 3: identity (the Doc 08 seam — match or create shell).
         $customerId = $identity->resolve($this->channel, $inbound->sender);
 

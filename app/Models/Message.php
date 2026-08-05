@@ -42,6 +42,9 @@ use LogicException;
  * @property bool $quarantined
  * @property string|null $client_idempotency_key
  * @property array<string, mixed> $channel_meta
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $edited_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  */
 #[Fillable([
     'conversation_id',

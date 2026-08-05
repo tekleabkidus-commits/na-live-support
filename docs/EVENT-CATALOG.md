@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-43 event(s).
+46 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -203,6 +203,15 @@ A queued outbound was canceled PRE-SEND (FR-13; EC-04's blocked-between-compose-
 - **Producers:** Doc04/DeliveryStateMachine
 - **Consumers:** Doc07/Realtime
 
+## `message.deleted`
+
+A message was tombstoned (deleted_at) — staff still see the tombstone, content survives per retention (FR-21/FR-22, US-02).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`
+- **Producers:** Doc04/MessageEditing
+- **Consumers:** Doc07/Realtime, Doc17/Audit
+
 ## `message.delivered`
 
 A channel receipt confirmed delivery — only where capability provides receipts (FR-13; Doc 05 defines the Telegram mapping).
@@ -211,6 +220,15 @@ A channel receipt confirmed delivery — only where capability provides receipts
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`
 - **Producers:** Doc04/DeliveryStateMachine
 - **Consumers:** Doc07/Realtime, Doc15/Reporting
+
+## `message.edited`
+
+A message body was revised — the prior content moved into message_revisions, never overwritten (FR-21/FR-22, BR-03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `message_id`, `conversation_id`
+- **Producers:** Doc04/MessageEditing
+- **Consumers:** Doc07/Realtime, Doc17/Audit
 
 ## `message.failed`
 
@@ -400,3 +418,12 @@ A tenant moved between lifecycle states (Doc 01 FR-05).
 - **Payload:** `tenant_id`, `old_state`, `new_state`
 - **Producers:** Doc01/TenantLifecycle
 - **Consumers:** Doc02/SessionInvalidation, Doc16/Backoffice, Doc17/Audit
+
+## `transcript.exported`
+
+A watermarked conversation transcript was produced (FR-24, SEC-05) — notes excluded unless double-confirmed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `exporter_id`, `format`
+- **Producers:** Doc04/TranscriptExporter
+- **Consumers:** Doc17/Audit, Doc15/Reporting

@@ -378,6 +378,27 @@ final class EventCatalog
             'consumers' => ['Doc09/Transcription'],
             'description' => 'T-05 hook, emitted after media.stored for voice: Doc 09 transcribes and writes back transcript_ref; core stays provider-agnostic.',
         ],
+        'message.edited' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id'],
+            'producers' => ['Doc04/MessageEditing'],
+            'consumers' => ['Doc07/Realtime', 'Doc17/Audit'],
+            'description' => 'A message body was revised — the prior content moved into message_revisions, never overwritten (FR-21/FR-22, BR-03).',
+        ],
+        'message.deleted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'message_id', 'conversation_id'],
+            'producers' => ['Doc04/MessageEditing'],
+            'consumers' => ['Doc07/Realtime', 'Doc17/Audit'],
+            'description' => 'A message was tombstoned (deleted_at) — staff still see the tombstone, content survives per retention (FR-21/FR-22, US-02).',
+        ],
+        'transcript.exported' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'exporter_id', 'format'],
+            'producers' => ['Doc04/TranscriptExporter'],
+            'consumers' => ['Doc17/Audit', 'Doc15/Reporting'],
+            'description' => 'A watermarked conversation transcript was produced (FR-24, SEC-05) — notes excluded unless double-confirmed.',
+        ],
         'note.added' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'author_id'],

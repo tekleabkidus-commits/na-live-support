@@ -484,4 +484,37 @@ return [
         'required_fields' => ['conversation_id', 'message_id'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // FR-21/FR-22: every edit audited, customer- and staff-originated both.
+        'action_key' => 'conversation.message_edited',
+        'entity' => 'message',
+        'actor_types' => ['customer', 'staff'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        'action_key' => 'conversation.message_deleted',
+        'entity' => 'message',
+        'actor_types' => ['customer', 'staff'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        // AC-06: ACCESS to preserved history is itself the audited mutation of
+        // record — who read the disputed content, and when.
+        'action_key' => 'conversation.history_viewed',
+        'entity' => 'message',
+        'actor_types' => ['staff'],
+        'required_fields' => ['conversation_id', 'message_id'],
+        'owning_doc' => 'Doc04',
+    ],
+    [
+        // FR-24/SEC-05: exports carry who, what format, and whether notes rode
+        // along (the double-confirmed case a dispute review will ask about).
+        'action_key' => 'conversation.transcript_exported',
+        'entity' => 'conversation',
+        'actor_types' => ['staff'],
+        'required_fields' => ['conversation_id', 'format', 'notes_included'],
+        'owning_doc' => 'Doc04',
+    ],
 ];
