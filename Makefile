@@ -7,7 +7,11 @@
 # compose.yaml alone, so the pipeline always exercises the immutable image.
 COMPOSE := docker compose -f docker/compose.yaml -f docker/compose.dev.yaml
 
-.PHONY: up down fresh reload test gates lint browser shell logs status
+# Evidence set for captured runs (RISK 0b). Override per session:
+#   make soak SET=S21-step0
+SET ?= manual
+
+.PHONY: up down fresh reload test soak capture perf gates lint browser shell logs status
 
 ## bring the whole stack up (builds images on first run)
 # --renew-anon-volumes: the dev override pins vendor/ and friends to
@@ -67,8 +71,20 @@ test: reload
 ## hidden. The soak is ALSO flaky in isolation (two green runs, one red with 50
 ## violations on a clean DB), so AC-03's soak half is NOT claimed as proven —
 ## see BUILD-STATUS RISK 0. Excluding it keeps the default suite honest.
+## Captured by default (RISK 0b): the full run lands under docs/evidence/
+## BEFORE you get a chance to pipe it through grep. See ci/capture.sh.
 soak:
-	$(COMPOSE) exec app ./vendor/bin/pest --group=soak
+	CAPTURE_SET=$(SET) bash ci/capture.sh soak $(COMPOSE) exec -T app ./vendor/bin/pest --group=soak
+
+## capture-first wrapper for ANY diagnostic run (RISK 0b, governance #6).
+## The whole run is written to docs/evidence/$(SET)/ and ALSO passed through, so
+## filtering downstream can no longer destroy the only copy of a failure.
+##   make capture LABEL=drain-probe CMD='make soak'
+##   make capture LABEL=full-suite SET=S21-step0 CMD='make test'
+capture:
+	@test -n "$(LABEL)" || { echo "usage: make capture LABEL=<kebab-name> CMD='<command>' [SET=<dir>]"; exit 64; }
+	@test -n "$(CMD)" || { echo "usage: make capture LABEL=<kebab-name> CMD='<command>' [SET=<dir>]"; exit 64; }
+	CAPTURE_SET=$(SET) bash ci/capture.sh $(LABEL) $(CMD)
 
 ## AC-07 latency budgets, STRICT spec assertions, dev-hardware-indicative (Doc 01 §12)
 perf:
