@@ -197,6 +197,36 @@ half stays PARTIAL. It also leaves `make test` and CI DISAGREEING about whether 
 runs: until fixed, CI may redden intermittently, which is precisely the flaky-red that
 teaches everyone to ignore red.
 
+**0c. OPEN DEFECT — the thread ordering key is an app-server wall clock, which
+violates C-11. Found in S21 step 0, root-caused, NOT fixed.** This is the second
+defect under the AC-03 soak and it is a *product* defect, not a test defect.
+FR-07 display order is `(created_at, id)`. `created_at` is written by Eloquent from
+the **app-server wall clock, truncated to whole seconds** (Postgres grammar's
+`Y-m-d H:i:s`), so composing at `00:00:10.123456` stores `00:00:10+00`. The column is
+`timestamptz` and the migration declares `DEFAULT now()` — DB time — but Eloquent
+supplies the value on every insert, so that default never applies.
+C-01/C-11's other half is sound: `id` is a native `uuid` column (no collation effect)
+holding a UUIDv7 from `HasUuids::newUniqueId()`, monotonic per process, so ties inside
+one second are broken correctly. The defect is the *leading* component of the key.
+**Proven, not argued** — `tests/Property/ThreadOrderingKeyProbeTest.php`, captured in
+`docs/evidence/S21-step0/orderkey-probe-02.txt`: a forward-only clock preserves compose
+order (negative control); a clock stepping back 200 ms across a second boundary stores
+the LAST-composed message in slot 1 (positive control); a backstep *smaller* than the
+gap between two same-lane messages does not invert (threshold).
+**The host really does step its clock backward.** This WSL2 box boots with
+`hv_utils.timesync_implicit=1` and a Hyper-V TimeSync device. The instrumented soak
+measured backsteps on **every** run: `soak-12` 3 backsteps / max 435 ms, `soak-13` 1 /
+9 ms, `soak-14` 2 / 7 ms. All three were green because a lane's messages are ~1 s apart,
+so a sub-second backstep is absorbed — the violation needs a backstep EXCEEDING the
+same-lane gap, which the soak now measures directly as `laneBacksteps`.
+**Consequence beyond the test.** Under Octane the platform runs more than one app
+server; ordinary clock skew between two servers reorders a customer's thread with no
+backward step anywhere. Whole-second truncation is what turns millisecond skew into a
+whole-second inversion.
+**OWNER/ADVISOR DECISION REQUIRED — see the BLOCKER in the S21 step-0 report.** The
+fix touches the write path, the composite PK `(id, created_at)`, the partition key, and
+T-08's `(created_at, id)` cursor, so it is not a change to make unilaterally.
+
 **0b. KNOWN INTERMITTENT — `PasswordResetFlowTest > it keeps the token ALIVE…`,
 undiagnosed, and DISTINCT from 0a.** Recorded separately because conflating the two
 would hide it. It has now **recurred twice** (once in the S20 checkpoint session, once

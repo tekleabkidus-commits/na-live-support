@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      rbac-budgets
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Performance/RbacBudgetsTest.php
+# started:    2026-08-06T19:45:48Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.173 ms   p99   0.681 ms   max   0.983 ms   budget(p99) 0.3 ms   OVER
+  [dev-hardware-indicative] NFR-01 cold map rebuild      p50   1.800 ms   p99   4.008 ms   max   4.329 ms   budget(p99) 20.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\RbacBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil[39m[90m…[39m [90m4.44s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m4.49s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T19:45:53Z
+# duration:   5s
+# EXIT:       0

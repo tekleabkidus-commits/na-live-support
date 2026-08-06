@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      date-format-probe
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan tinker --execute=
+$m = new App\Models\Message;
+echo "model dateFormat      : ", $m->getDateFormat(), PHP_EOL;
+echo "freshTimestampString  : ", $m->freshTimestampString(), PHP_EOL;
+echo "timestamps enabled    : ", var_export($m->usesTimestamps(), true), PHP_EOL;
+echo PHP_EOL, "--- UUIDv7 monotonicity within one millisecond ---", PHP_EOL;
+$ids = [];
+for ($i = 0; $i < 12; $i++) { $ids[] = (string) Illuminate\Support\Str::uuid7(); }
+$sorted = $ids; sort($sorted);
+echo "generated in order == lexically sorted ? ", var_export($ids === $sorted, true), PHP_EOL;
+foreach ($ids as $id) { echo "  ", $id, PHP_EOL; }
+
+# started:    2026-08-06T09:37:19Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+model dateFormat      : Y-m-d H:i:s
+freshTimestampString  : 2026-08-06 09:37:20
+timestamps enabled    : true
+
+--- UUIDv7 monotonicity within one millisecond ---
+generated in order == lexically sorted ? true
+  019fd66f-3738-7274-ab9e-8267afb7cbc7
+  019fd66f-3739-7064-8f2c-1287f6f2575c
+  019fd66f-3739-7064-8f2c-1287f7825fbd
+  019fd66f-3739-7064-8f2c-1287f7bcef0a
+  019fd66f-3739-7064-8f2c-1287f8797d54
+  019fd66f-3739-7064-8f2c-1287f968dccb
+  019fd66f-3739-7064-8f2c-1287f9d76b97
+  019fd66f-3739-7064-8f2c-1287fa70101b
+  019fd66f-3739-7064-8f2c-1287faae9ac7
+  019fd66f-3739-7064-8f2c-1287fad19aec
+  019fd66f-3739-7064-8f2c-1287fb539bcf
+  019fd66f-3739-7064-8f2c-1287fc0116db
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T09:37:20Z
+# duration:   1s
+# EXIT:       0

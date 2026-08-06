@@ -105,7 +105,35 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
 
         // INTERLEAVED composes: round after round across every lane, so the lanes
         // are genuinely concurrent work rather than 50 sequential drains.
-        /** @var array<string, list<string>> $composedOrder conversation id → bodies in compose order */
+        // WALL-CLOCK MONOTONICITY WATCH (S21 step 0, prompted by run soak-10).
+        // `created_at` is written by the APP clock, truncated to whole seconds
+        // (proved in ThreadOrderingKeyProbeTest), so display order (created_at,
+        // id) inverts if the clock ever steps BACKWARD across a second boundary.
+        // This host runs WSL2 with Hyper-V TimeSync (hv_utils.timesync_implicit=1),
+        // which steps the guest clock against Windows -- so the soak measures the
+        // wall clock against the MONOTONIC clock while it composes. If a future
+        // red shows backsteps > 0, the body-order violations are explained; if it
+        // shows 0, they are NOT the clock and need a different answer. Either way
+        // the next session is told which, instead of having to infer it.
+        //
+        // TWO measurements, because they are not the same question. A backstep
+        // between two ADJACENT composes (any lanes) says the host clock moved.
+        // A backstep between two composes OF THE SAME LANE is the one that can
+        // actually reorder a thread, because only same-lane neighbours are
+        // compared by the ordering key. The lanes are ~1 round apart in wall
+        // time, so a small host backstep is absorbed: the same-lane gap stays
+        // positive and nothing inverts. `laneBacksteps > 0` is the precondition
+        // for a body-order violation; `clockBacksteps > 0` alone is not.
+        $clockBacksteps = 0;
+        $maxBackstepMs = 0.0;
+        $laneBacksteps = 0;
+        $maxLaneBackstepMs = 0.0;
+        $laneLastWall = [];
+        $prevWall = null;
+        $wallStart = microtime(true);
+        $monoStart = hrtime(true) / 1e9;
+
+        /** @var array<string, list<string>> $composedOrder conversation id => bodies in compose order */
         $composedOrder = [];
         for ($round = 0; $round < $perLane; $round++) {
             foreach ($conversations as $lane => $conversation) {
@@ -116,8 +144,25 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
                 // runs blind (the house pattern, see OutboundPipelineTest).
                 bindTenant($tenantId);
                 $composedOrder[$conversation->identifier()][] = $body;
+
+                $wall = microtime(true);
+                if ($prevWall !== null && $wall < $prevWall) {
+                    $clockBacksteps++;
+                    $maxBackstepMs = max($maxBackstepMs, ($prevWall - $wall) * 1000);
+                }
+                if (isset($laneLastWall[$lane]) && $wall < $laneLastWall[$lane]) {
+                    $laneBacksteps++;
+                    $maxLaneBackstepMs = max($maxLaneBackstepMs, ($laneLastWall[$lane] - $wall) * 1000);
+                }
+                $prevWall = $wall;
+                $laneLastWall[$lane] = $wall;
             }
         }
+
+        // Net divergence between the two clocks across the whole compose phase. A
+        // TimeSync correction shows up here even when it was applied in slices too
+        // small to register as a strictly-backward sample above.
+        $clockSkewMs = ((microtime(true) - $wallStart) - ((hrtime(true) / 1e9) - $monoStart)) * 1000;
 
         expect(Message::query()->where('direction', 'out')->count())->toBe($total);
 
@@ -127,6 +172,18 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         $cycle = 0;
         $injected = 0;
         $sentCount = 0;
+        $drainExit = 'loop-condition';   // DIAG (S21 step 0a)
+        $breakCycle = 0;                 // DIAG
+
+        // A zero-attempt cycle means "no lane was ELIGIBLE this cycle". It does
+        // NOT mean "drained" — every head could be inside its backoff window. The
+        // bound below is derived from the product's own constant rather than
+        // chosen: a head may legally block its lane for HEAD_BLOCK_CAP_SECONDS
+        // (600 s) before lane-skip, and each cycle advances 31 s, so ~20 cycles
+        // is the longest legitimate all-quiet stretch. Past that, with messages
+        // still unsent, the drain is genuinely STUCK and the soak says so.
+        $stallBudget = (int) ceil(LaneWorker::HEAD_BLOCK_CAP_SECONDS / 31) + 2;
+        $consecutiveIdle = 0;
 
         while ($sentCount < $total) {
             $cycle++;
@@ -146,14 +203,85 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
             // the recorded external ids below, so the objects are not needed.
             $adapter->sent = [];
 
-            if ($attempts === 0) {
-                break; // nothing left that is eligible: drained
-            }
-
+            // Measured BEFORE the idle decision: "nothing eligible" and
+            // "everything delivered" are different states and the old loop could
+            // not tell them apart.
             $sentCount = Message::query()->where('direction', 'out')->where('delivery_state', 'sent')->count();
+
+            if ($attempts === 0) {
+                if ($sentCount >= $total) {
+                    $drainExit = 'drained';   // DIAG — the only legitimate quiet exit
+                    $breakCycle = $cycle;     // DIAG
+
+                    break;
+                }
+
+                $consecutiveIdle++;
+
+                if ($consecutiveIdle > $stallBudget) {
+                    $drainExit = 'STALLED';   // DIAG
+                    $breakCycle = $cycle;     // DIAG
+
+                    break;
+                }
+            } else {
+                $consecutiveIdle = 0;
+            }
 
             expect($cycle)->toBeLessThan($perLane * 4, 'the soak failed to drain — investigate before trusting the order result');
         }
+
+        // DIAGNOSTICS FIRST, AND BEFORE EVERY ASSERTION THAT CAN ABORT THE TEST.
+        // Two reasons, both learned the hard way this session: (1) an assertion
+        // that fires above this point would take the state dump with it, which is
+        // the capture-first rule applied inside the test rather than around it;
+        // (2) Pest TRUNCATES long assertion messages on screen ('at cycle 23…t
+        // FIFO'), so the message alone cannot be the evidence channel — these
+        // lines can, and they land in the captured file intact. Printed on green
+        // runs too, so repeated runs are comparable rather than just "passed".
+        $states = Message::query()->where('direction', 'out')
+            ->selectRaw('delivery_state, count(*) as c')
+            ->groupBy('delivery_state')->pluck('c', 'delivery_state')->all();
+        $nullExternal = Message::query()->where('direction', 'out')->whereNull('external_message_id')->count();
+        $trueSent = Message::query()->where('direction', 'out')->where('delivery_state', 'sent')->count();
+        fwrite(STDERR, sprintf(
+            "\n[SOAK DIAG] drainExit=%s breakCycle=%d cycles=%d injected=%d stallBudget=%d\n".
+            "[SOAK DIAG] sentCount(var)=%d trueSent(db)=%d total=%d nullExternalId=%d\n".
+            "[SOAK DIAG] deliveryStates=%s\n".
+            "[SOAK DIAG] clockBacksteps=%d maxBackstepMs=%.3f clockSkewMs=%.3f\n".
+            "[SOAK DIAG] laneBacksteps=%d maxLaneBackstepMs=%.3f  <- the body-order precondition\n",
+            $drainExit, $breakCycle, $cycle, $injected, $stallBudget,
+            $sentCount, $trueSent, $total, $nullExternal,
+            json_encode($states),
+            $clockBacksteps, $maxBackstepMs, $clockSkewMs,
+            $laneBacksteps, $maxLaneBackstepMs,
+        ));
+
+        // COMPLETENESS BEFORE ORDER — the lesson of the S21 step-0 root cause.
+        // An undelivered message carries a NULL external id, and the receipt walk
+        // below parses NULL to 0, so two undelivered rows in a lane register as an
+        // "order violation". That is how a drain that delivered NOTHING reported
+        // itself as "50 order violations, every lane" and sent a whole session
+        // hunting an ordering bug that was never there. Order is only a meaningful
+        // question once delivery is established, so delivery is asserted FIRST and
+        // a stall is named as a stall.
+        $undelivered = Message::query()->where('direction', 'out')
+            ->where(function ($q): void {
+                $q->whereNull('external_message_id')->orWhere('delivery_state', '!=', 'sent');
+            })->count();
+
+        expect($drainExit)->not->toBe('STALLED', sprintf(
+            'the drain STALLED at cycle %d with %d of %d messages still undelivered — this is a DELIVERY '
+            .'failure, not an ordering failure; do not read the order result below as evidence about FIFO',
+            $breakCycle, $total - $sentCount, $total,
+        ));
+
+        expect($undelivered)->toBe(0, sprintf(
+            'the soak must DELIVER all %d messages before its ordering result means anything; %d were never '
+            .'sent. Order violations counted over undelivered rows are an artefact of NULL external ids, '
+            .'not evidence about FIFO',
+            $total, $undelivered,
+        ));
 
         // THE PROPERTY, read from recorded truth rather than test-double
         // bookkeeping: the fake adapter mints external ids from a monotonic
@@ -163,32 +291,81 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         // external ids must strictly increase. A later message overtaking a
         // blocked head would show up as a lower id after a higher one.
         $violations = 0;
+        $violationKinds = ['body-order' => 0, 'receipt-order' => 0];   // DIAG
+        $named = 0;   // DIAG — how many violating lanes have been dumped in full
         foreach ($conversations as $lane => $conversation) {
             $rows = Message::query()
                 ->where('conversation_id', $conversation->identifier())
                 ->where('direction', 'out')
                 ->orderBy('created_at')->orderBy('id')
-                ->get(['body', 'external_message_id']);
+                ->selectRaw('body, id, external_message_id, created_at::text as ts')
+                ->get();
 
             $bodies = $rows->map(fn (Message $m): string => (string) $m->body)->all();
-            if ($bodies !== $composedOrder[$conversation->identifier()]) {
+            $expected = $composedOrder[$conversation->identifier()];
+            if ($bodies !== $expected) {
                 $violations++;   // the stored thread itself is out of compose order
+                $violationKinds['body-order']++;   // DIAG
+
+                // NAME THE DEFECT, do not just count it. Counting is what made the
+                // historical red unreadable: "3 violations" sends the next session
+                // hunting with no idea WHICH rows or WHY. The dump below prints the
+                // first divergence with each row's stored created_at, so a clock
+                // back-step (two rows whose ts ordering contradicts their compose
+                // order) is visible on sight rather than inferred.
+                if ($named < 3) {
+                    $named++;
+                    $at = 0;
+                    while ($at < count($expected) && ($bodies[$at] ?? null) === $expected[$at]) {
+                        $at++;
+                    }
+
+                    fwrite(STDERR, sprintf(
+                        "[SOAK VIOLATION] lane=%d conversation=%s kind=body-order storedRows=%d expectedRows=%d firstDivergenceIndex=%d\n",
+                        $lane, $conversation->identifier(), count($bodies), count($expected), $at,
+                    ));
+
+                    $from = max(0, $at - 2);
+                    $to = min(count($bodies) - 1, $at + 2);
+                    for ($i = $from; $i <= $to; $i++) {
+                        $row = $rows[$i] ?? null;
+                        fwrite(STDERR, sprintf(
+                            "[SOAK VIOLATION]   slot %3d  ts=%s  stored=%-22s expected=%-22s ext=%s\n",
+                            $i,
+                            $row !== null ? (string) $row->ts : '-',
+                            $bodies[$i] ?? '-',
+                            $expected[$i] ?? '-',
+                            $row !== null ? (string) $row->external_message_id : '-',
+                        ));
+                    }
+                }
 
                 continue;
             }
 
             $previousReceipt = -1;
             foreach ($rows as $row) {
+                // Never let a NULL become a receipt of 0 — that silent coercion is
+                // what disguised a delivery failure as an ordering one. Completeness
+                // is asserted above, so this is belt-and-braces with a named message.
+                expect($row->external_message_id)->not->toBeNull(
+                    'an undelivered message has no receipt position; it cannot be evidence about ordering',
+                );
+
                 $receipt = (int) str_replace('fake-out-', '', (string) $row->external_message_id);
 
                 if ($receipt <= $previousReceipt) {
                     $violations++;   // this message was sent BEFORE the one ahead of it
+                    $violationKinds['receipt-order']++;   // DIAG
+
                     break;
                 }
 
                 $previousReceipt = $receipt;
             }
         }
+
+        fwrite(STDERR, sprintf("[SOAK DIAG] violations=%d kinds=%s\n\n", $violations, json_encode($violationKinds)));   // DIAG
 
         expect($violations)->toBe(0)
             ->and($sentCount)->toBe($total)

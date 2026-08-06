@@ -1,0 +1,40 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      soak
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest --group=soak
+# started:    2026-08-06T10:39:28Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[SOAK DIAG] drainExit=STALLED breakCycle=23 cycles=23 injected=0 stallBudget=22
+[SOAK DIAG] sentCount(var)=0 trueSent(db)=0 total=10000 nullExternalId=10000
+[SOAK DIAG] deliveryStates={"queued":10000}
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\LaneOrderingSoakTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-03: zero order violations across a 10k-message soak with failu[39m[90m…[39m [90m161.57s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\LaneOrderingSoakTest[22m [90m>[39m AC-03: zero order violation…   
+[39;1m  Expecting 'STALLED' not to be 'STALLED' 'the drain STALLED at cycle 23…t FIFO'.[39;22m
+
+  at [32mtests/Property/LaneOrderingSoakTest.php[39m:[32m224[39m
+    220▕             ->where(function ($q): void {
+    221▕                 $q->whereNull('external_message_id')->orWhere('delivery_state', '!=', 'sent');
+    222▕             })->count();
+    223▕ 
+  ➜ 224▕         expect($drainExit)->not->toBe('STALLED', sprintf(
+    225▕             'the drain STALLED at cycle %d with %d of %d messages still undelivered — this is a DELIVERY '
+    226▕             .'failure, not an ordering failure; do not read the order result below as evidence about FIFO',
+    227▕             $breakCycle, $total - $sentCount, $total,
+    228▕         ));
+
+  [33m1   [39m[39;1mtests/Property/LaneOrderingSoakTest.php[39;22m:[39;1m224[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m161.74s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T10:42:10Z
+# duration:   162s
+# EXIT:       1

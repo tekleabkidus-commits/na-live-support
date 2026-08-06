@@ -1,0 +1,42 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      soak
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest --group=soak
+# started:    2026-08-06T10:27:03Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[SOAK DIAG] drainExit=zero-attempts breakCycle=1 cycles=1 injected=0
+[SOAK DIAG] sentCount(var)=0 trueSent(db)=0 total=10000 nullExternalId=10000
+[SOAK DIAG] deliveryStates={"queued":10000}
+[SOAK DIAG] violations=50 kinds={"body-order":0,"receipt-order":50}
+
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\LaneOrderingSoakTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-03: zero order violations across a 10k-message soak with failu[39m[90m…[39m [90m165.70s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\LaneOrderingSoakTest[22m [90m>[39m AC-03: zero order violation…   
+[39;1m  Failed asserting that 50 is identical to 0.[39;22m
+
+  at [32mtests/Property/LaneOrderingSoakTest.php[39m:[32m222[39m
+    218▕         }
+    219▕ 
+    220▕         fwrite(STDERR, sprintf("[SOAK DIAG] violations=%d kinds=%s\n\n", $violations, json_encode($violationKinds)));   // DIAG
+    221▕ 
+  ➜ 222▕         expect($violations)->toBe(0)
+    223▕             ->and($sentCount)->toBe($total)
+    224▕             ->and($injected)->toBeGreaterThan(0, 'a soak that injected no failure proves less than it claims');
+    225▕     } finally {
+    226▕         // Committed fixtures clean themselves up, pass or fail.
+
+  [33m1   [39m[39;1mtests/Property/LaneOrderingSoakTest.php[39;22m:[39;1m222[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m165.97s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T10:29:49Z
+# duration:   166s
+# EXIT:       1

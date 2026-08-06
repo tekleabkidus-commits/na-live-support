@@ -1,0 +1,31 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      phpstan
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/phpstan analyse --no-progress
+# started:    2026-08-06T19:42:35Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Note: Using configuration file /app/phpstan.neon.
+ -- -------------------------------------------------------------------------- 
+     Error                                                                     
+ -- -------------------------------------------------------------------------- 
+     Child process error: PHPStan process crashed because it reached           
+     configured PHP memory limit: 128M                                         
+     Increase your memory limit in php.ini or run PHPStan with --memory-limit  
+     CLI option.                                                               
+      while running parallel worker                                            
+     Child process error (exit code 255):  while running parallel worker       
+ -- -------------------------------------------------------------------------- 
+
+
+ [ERROR] Found 2 errors                                                         
+
+⚠️  Result is incomplete because of severe errors. ⚠️
+   Fix these errors first and then re-run PHPStan
+   to get all reported errors.
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T19:42:40Z
+# duration:   5s
+# EXIT:       1

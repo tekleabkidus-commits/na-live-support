@@ -1,0 +1,35 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      orderkey-probe
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Property/ThreadOrderingKeyProbeTest.php
+# started:    2026-08-06T18:25:58Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[ORDERKEY PROBE] composed at : 2026-01-01 00:00:10.123456
+[ORDERKEY PROBE] stored ts    : 2026-01-01 00:00:10+00
+
+[ORDERKEY PROBE] forward clock — composed: a-first,b-second,c-third,d-fourth
+[ORDERKEY PROBE] forward clock — stored  : a-first,b-second,c-third,d-fourth
+[ORDERKEY PROBE] slot 0  ts=2026-01-01 00:00:10+00  body=a-first
+[ORDERKEY PROBE] slot 1  ts=2026-01-01 00:00:10+00  body=d-fourth-after-backstep
+[ORDERKEY PROBE] slot 2  ts=2026-01-01 00:00:11+00  body=b-second
+[ORDERKEY PROBE] slot 3  ts=2026-01-01 00:00:11+00  body=c-third
+[ORDERKEY PROBE] back-step — composed: a-first,b-second,c-third,d-fourth-after-backstep
+[ORDERKEY PROBE] back-step — stored  : a-first,d-fourth-after-backstep,b-second,c-third
+[ORDERKEY PROBE] INVERTED? true
+
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\ThreadOrderingKeyProbeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFACT 1: created_at is written by the app clock and truncated to who[39m[90m…[39m [90m4.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNEGATIVE CONTROL: a forward-only clock keeps the thread in compose[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL: a backward app-clock step inverts the (created_at[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m3 passed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m5.68s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T18:26:04Z
+# duration:   6s
+# EXIT:       0

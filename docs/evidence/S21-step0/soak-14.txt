@@ -1,0 +1,26 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      soak
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest --group=soak
+# started:    2026-08-06T19:22:04Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[SOAK DIAG] drainExit=loop-condition breakCycle=0 cycles=205 injected=5 stallBudget=22
+[SOAK DIAG] sentCount(var)=10000 trueSent(db)=10000 total=10000 nullExternalId=0
+[SOAK DIAG] deliveryStates={"sent":10000}
+[SOAK DIAG] clockBacksteps=2 maxBackstepMs=7.457 clockSkewMs=-93.825
+[SOAK DIAG] violations=0 kinds={"body-order":0,"receipt-order":0}
+
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\LaneOrderingSoakTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-03: zero order violations across a 10k-message soak with failu[39m[90m…[39m [90m647.46s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (10211 assertions)[39m
+  [90mDuration:[39m [39m647.77s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T19:32:52Z
+# duration:   648s
+# EXIT:       0

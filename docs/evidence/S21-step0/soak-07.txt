@@ -1,0 +1,36 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      soak
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest --group=soak
+# started:    2026-08-06T10:32:07Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\LaneOrderingSoakTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-03: zero order violations across a 10k-message soak with failu[39m[90m…[39m [90m162.51s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\LaneOrderingSoakTest[22m [90m>[39m AC-03: zero order violation…   
+[39;1m  Expecting 'STALLED' not to be 'STALLED' 'the drain STALLED at cycle 23…t FIFO'.[39;22m
+
+  at [32mtests/Property/LaneOrderingSoakTest.php[39m:[32m202[39m
+    198▕             ->where(function ($q): void {
+    199▕                 $q->whereNull('external_message_id')->orWhere('delivery_state', '!=', 'sent');
+    200▕             })->count();
+    201▕ 
+  ➜ 202▕         expect($drainExit)->not->toBe('STALLED', sprintf(
+    203▕             'the drain STALLED at cycle %d with %d of %d messages still undelivered — this is a DELIVERY '
+    204▕             .'failure, not an ordering failure; do not read the order result below as evidence about FIFO',
+    205▕             $breakCycle, $total - $sentCount, $total,
+    206▕         ));
+
+  [33m1   [39m[39;1mtests/Property/LaneOrderingSoakTest.php[39;22m:[39;1m202[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m162.92s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T10:34:50Z
+# duration:   163s
+# EXIT:       1

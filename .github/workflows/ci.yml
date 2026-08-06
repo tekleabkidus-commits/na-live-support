@@ -92,8 +92,61 @@ jobs:
       # blocking; run 30607808128 is what happens when they run stackless.
       - name: CI gates (registries/gates.yaml order)
         run: bash ci/run-gates.sh
+      # PARITY IS THE POINT, AND IT USED TO BE A LIE. This step ran bare `pest`
+      # under a comment claiming parity with `make test` — but `make test` is
+      # `pest --exclude-group=soak`. So CI silently ran the 10k soak INSIDE the
+      # shared suite, which is the one configuration known to corrupt the tests
+      # that follow it, while the owner was told the soak "runs in CI". The flag
+      # below makes the comment true. The soak has its own job (Stage 3b) — it
+      # is not skipped, it is OWNED.
       - name: Full Pest suite inside the stack (parity with local `make test`)
-        run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest
+        run: docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --exclude-group=soak
+      - name: Stack teardown
+        if: always()
+        run: docker compose -f docker/compose.yaml down -v
+
+  # ---------------------------------------------------------------------------
+  # Stage 3b: the AC-03 ordering soak, ALONE in its own process and its own
+  # stack (owner ruling R-18, session S21 step 0b).
+  #
+  # WHY A DEDICATED JOB. Before this existed the soak sat in a gap: excluded
+  # from `make test`, and in CI only as an unnamed passenger of the bare `pest`
+  # invocation above. Nobody owned it, no artifact survived it, and the question
+  # "is AC-03's ordering guarantee proven?" had two different answers depending
+  # on which command you happened to run. That gap is how a flaky proof survived
+  # a close-out. This job is now the SINGLE place that question is answered.
+  #
+  # It runs the soak alone — the same shape as local `make soak` — because the
+  # soak commits its fixtures and the interaction between that and the shared
+  # harness transaction is an OPEN defect (BUILD-STATUS RISK 0a). Running it
+  # alone is the containment, and it is stated rather than implied.
+  #
+  # The run is CAPTURED to docs/evidence/ and uploaded as an artifact even on
+  # failure — RISK 0b's capture-first protocol. An intermittent failure whose
+  # log died with the runner is the exact incident this pipeline has had twice.
+  # ---------------------------------------------------------------------------
+  soak:
+    name: "Stage 3b: AC-03 10k ordering soak (alone)"
+    runs-on: ubuntu-latest
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cp .env.example .env
+          sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
+      - name: Bring up the ephemeral stack (same compose as local — parity)
+        run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      - name: Provision the media bucket (same command as `make fresh`)
+        run: docker compose -f docker/compose.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
+      - name: The soak, alone, captured first (RISK 0b)
+        run: CAPTURE_SET=ci-soak bash ci/capture.sh soak docker compose -f docker/compose.yaml exec -T app ./vendor/bin/pest --group=soak
+      - name: Upload the captured run (pass OR fail — this is the evidence)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ac03-soak-capture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/evidence/ci-soak/
+          if-no-files-found: error
       - name: Stack teardown
         if: always()
         run: docker compose -f docker/compose.yaml down -v
@@ -143,7 +196,10 @@ jobs:
   deploy-staging:
     name: "Stage 6: deploy to staging (STUB)"
     runs-on: ubuntu-latest
-    needs: performance
+    # `soak` is named here so the AC-03 job is BLOCKING rather than a leaf job
+    # nobody's release depends on. A green pipeline now means the soak was run
+    # and passed, not that it was quietly skipped.
+    needs: [performance, soak]
     if: github.ref == 'refs/heads/main'
     steps:
       - run: echo "STUB — staging deploy is implemented in Doc 18's session."

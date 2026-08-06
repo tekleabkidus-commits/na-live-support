@@ -1,0 +1,39 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      rbac-budgets
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Performance/RbacBudgetsTest.php
+# started:    2026-08-06T19:45:01Z
+# git:        6418ec7 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.705 ms   p99   1.505 ms   max   2.280 ms   budget(p99) 0.3 ms   OVER
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Performance\RbacBudgetsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil[39m[90m…[39m [90m4.66s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\RbacBudgetsTest[22m [90m>[39m it meets NFR-01 indicatively:…   
+[39;1m  NFR-01 cached map + checks: p99 1.505 ms exceeds the asserted 5x regression ceiling of 1.500 ms (spec budget 0.3 ms; p50 0.705 ms, max 2.280 ms). This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a machine under heavy load — compare p50 against the spec budget to tell which.
+Failed asserting that 1.505194 is equal to 1.5 or is less than 1.5.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m602[39m
+    598▕ {
+    599▕     $ceiling = assertedBudget($specBudgetMs);
+    600▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+    601▕ 
+  ➜ 602▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+    603▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+    604▕         .'%s',
+    605▕         $name,
+    606▕         $stats['p99'],
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m602[39;22m
+  [33m2   [39m[39;1mtests/Performance/RbacBudgetsTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m4.72s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-06T19:45:06Z
+# duration:   5s
+# EXIT:       1

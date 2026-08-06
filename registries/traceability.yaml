@@ -1119,12 +1119,23 @@ entries:
       the lane through the backoff, caps at 10 minutes, then emits
       conversation.lane_skipped with its audit entry (head-block sabotage pasted
       red->green, S20 step 4). The 10k SOAK half is NOT PROVEN. The soak exists
-      (tests/Property/LaneOrderingSoakTest.php, group `soak`, run by `make soak`) and has
-      passed twice with 209 assertions and zero order violations — but it also FAILED once
-      alone on a clean database with 50 violations, i.e. every lane, and inside the shared
-      suite it corrupts the tests that follow it. Both problems are open and evidenced in
-      docs/evidence/S20-soak-isolation/. Recorded PARTIAL rather than covered because a
-      flaky test is not a proof; the next session owns making it deterministic.
+      (tests/Property/LaneOrderingSoakTest.php, group `soak`, run by `make soak`, and in
+      CI as its own blocking job Stage 3b since S21). S21 step 0 root-caused TWO separate
+      defects under it and fixed only the first, so the row stays PARTIAL.
+      (1) FIXED — the historical "50 violations, every lane" was NOT an ordering result at
+      all: undelivered rows carry a NULL external id which the receipt walk coerced to 0,
+      so a drain that delivered nothing reported itself as an ordering failure. Delivery
+      is now asserted before order and a stall is named as a stall.
+      (2) OPEN — with that fixed, run soak-10 still went red on a FULLY DRAINED run with
+      violations=3 kinds={"body-order":3,"receipt-order":0}: the STORED THREAD was out of
+      compose order. Root cause is the ordering key itself — created_at is an app-server
+      wall clock truncated to whole seconds, so a backward clock step larger than the gap
+      between two same-lane messages inverts the thread. That is a C-11 violation and is
+      filed as BUILD-STATUS RISK 0c, with positive/negative/threshold controls in
+      tests/Property/ThreadOrderingKeyProbeTest.php.
+      Run record on the fixed test: 5 PASS / 1 FAIL in 6 runs (docs/evidence/S21-step0/).
+      Recorded PARTIAL rather than covered because a flaky test is not a proof, and three
+      greens after a red are not determinism.
   - ac_ref: "Doc04 AC-04"
     suite_path: tests/Security/NoteIsolationTest.php
     type: automated
