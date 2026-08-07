@@ -164,6 +164,39 @@ form of the same evidence, and both fixes carry positive controls.
 | 7 | **Route→permission mapping** | Every new route mapped in the same commit, from seeded keys only. The blocking `permission-mapping` gate is green |
 | 8 | **Standing PARTIALs untouched** | Doc 03 SS-01/SS-02 and Doc 02 AC-05 were not re-claimed and not touched |
 
+### CI RECORD — run 31127499107 on `d1c11f4` was INFRASTRUCTURE, NOT A RED TEST
+
+Recorded explicitly so nobody reads "CI failed on `d1c11f4`" and goes hunting a defect
+that was never there. **No test executed in that run at all.**
+
+- Run [31127499107](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31127499107),
+  `head_sha=d1c11f4`, run-level `conclusion=failure`.
+- Stage 1 (lint + static) ran 2026-08-06T20:17:45Z → 20:32:46Z (15m1s) and ended
+  `cancelled`, with the annotation **"The job was not acquired by Runner of type hosted
+  even after multiple attempts."**
+- Every other job — Stage 2, **Stage 3b (the AC-03 soak)**, Stages 3, 4, 5, 6, 7 — is
+  `skipped`. `gh run view --log-failed` returns **zero log lines**, because nothing ran.
+- Cause: the repository's GitHub Actions budget was $0 with stop-usage, so the run was
+  created but no runner was ever allocated and it aged out. The budget has since been
+  raised. This is also why an earlier check saw no runs at all for `d1c11f4`.
+- **It carries no information about the AC-03 soak, the ordering key (RISK 0c), or
+  `Performance/RbacBudgetsTest`, in either direction.**
+
+Captured: `docs/evidence/S21-step0/ci-run-31127499107-view-01.txt`,
+`-jobs-01.txt`, `-logfailed-01.txt` (the empty log is itself the evidence).
+
+**`d1c11f4` IS CI-proven — by run
+[31169076186](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31169076186),
+`conclusion=success`, all stages green (Stage 7 skipped by design, manual approval).**
+That run's head is `186f58e` ("ci: re-trigger after Actions budget change"), an EMPTY
+commit whose parent is `d1c11f4` and whose tree hash is byte-identical —
+`eb7b9851c549d12041044a2b0af163c341dcb8d6` for both, verified with
+`git rev-parse <sha>^{tree}` and an empty `git diff d1c11f4 186f58e`. Same code,
+different run. This is the first execution of **Stage 3b**, and the first time the AC-03
+soak has ever run in CI as an owned, blocking job rather than an unnamed passenger.
+Its capture artifact is filed at
+`docs/evidence/S21-step0/ci-soak-31169076186-stage3b.txt`.
+
 ### RISKS carried forward
 
 **0a. OPEN DEFECT — the AC-03 soak corrupts the shared test run, and the mechanism is
@@ -226,6 +259,35 @@ whole-second inversion.
 **OWNER/ADVISOR DECISION REQUIRED — see the BLOCKER in the S21 step-0 report.** The
 fix touches the write path, the composite PK `(id, created_at)`, the partition key, and
 T-08's `(created_at, id)` cursor, so it is not a change to make unilaterally.
+
+**0d. KNOWN INTERMITTENT — `Performance/RbacBudgetsTest > it meets NFR-01
+indicatively`, host-specific, NOT a regression.** Numbered rather than left as a
+footnote because an unnumbered intermittent is the one that gets forgotten, and because
+a test that reddens at random is how a real regression eventually gets waved through.
+There are now **three** numbered intermittents: 0b (password reset), 0c's soak
+(ordering), and this.
+**Datum 1 — local, red 2 of 4 isolated runs.** Run alone, with none of the S21 step-0
+files loaded, `p99` ranged **0.681 – 2.648 ms** against the asserted 5x ceiling of
+**1.500 ms** (spec budget 0.3 ms):
+
+| run | p50 | p99 | result |
+|---|---|---|---|
+| `rbac-budgets-01` | 0.705 ms | 1.505 ms | FAIL (by 0.005 ms) |
+| `rbac-budgets-02` | 0.173 ms | 0.681 ms | pass |
+| `rbac-budgets-03` | 0.664 ms | 2.648 ms | FAIL |
+| `rbac-budgets-04` | 0.709 ms | 1.303 ms | pass |
+
+**Datum 2 — GREEN on the GitHub runner**, inside Stage 3's full suite, in CI run
+[31169076186](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31169076186).
+So the failure does not reproduce off this WSL2 dev host.
+**Attribution.** Not caused by the S21 step-0 changes: it fails with only its own file
+loaded, and it measures RBAC permission checks, which none of those changes touch. The
+p50 spread alone (0.173 → 0.709 ms, ~4x) is host noise, not code.
+**The ceiling was NOT touched, and must not be.** Raising it to make the red go away is
+gate-weakening and needs the signed change-file process. The open question is whether
+the budget harness should measure on a quiesced host or report a distribution instead of
+a single p99 — a Doc 19 (L1 profile) question, not a licence to edit the number.
+Captured: `docs/evidence/S21-step0/rbac-budgets-0{1,2,3,4}.txt`.
 
 **0b. KNOWN INTERMITTENT — `PasswordResetFlowTest > it keeps the token ALIVE…`,
 undiagnosed, and DISTINCT from 0a.** Recorded separately because conflating the two

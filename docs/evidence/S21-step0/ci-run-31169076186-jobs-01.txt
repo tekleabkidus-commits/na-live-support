@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      ci-run-31169076186-jobs
+# set:        S21-step0
+# command:    sh -c gh api repos/tekleabkidus-commits/na-live-support/actions/runs/31169076186/jobs --jq ".jobs[] | \"\(.name)\t\(.conclusion)\""; echo "--- run-level ---"; gh api repos/tekleabkidus-commits/na-live-support/actions/runs/31169076186 --jq "\"status=\(.status) conclusion=\(.conclusion) head_sha=\(.head_sha[0:7])\""
+# started:    2026-08-07T10:27:52Z
+# git:        186f58e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Stage 1: lint + static	success
+Stage 2: unit	success
+Stage 3b: AC-03 10k ordering soak (alone)	success
+Stage 3: integration (ephemeral stack)	success
+Stage 4: browser (Playwright + axe)	success
+Stage 5: performance budgets (placeholder until Doc 19 L1 profile)	success
+Stage 6: deploy to staging (STUB)	success
+Stage 7: deploy to production (STUB, manual approval)	skipped
+--- run-level ---
+status=completed conclusion=success head_sha=186f58e
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T10:27:54Z
+# duration:   2s
+# EXIT:       0

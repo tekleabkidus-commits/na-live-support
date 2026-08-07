@@ -130,6 +130,56 @@ THRESHOLD case in the probe. A violation requires a backstep **exceeding the sam
 gap**, which the soak now measures directly as `laneBacksteps` / `maxLaneBackstepMs`
 rather than leaving to inference.
 
+### The second host — CI Stage 3b, and what it does and does not settle
+
+The soak's first run on a **GitHub-hosted runner** (`runnervmvrwv9`, tree `186f58e` =
+`d1c11f4`), captured by the same `ci/capture.sh` and downloaded from the job artifact
+`ac03-soak-capture-31169076186-1` (filed here as
+`ci-soak-31169076186-stage3b.txt`):
+
+```
+[SOAK DIAG] drainExit=loop-condition breakCycle=0 cycles=205 injected=5 stallBudget=22
+[SOAK DIAG] sentCount(var)=10000 trueSent(db)=10000 total=10000 nullExternalId=0
+[SOAK DIAG] deliveryStates={"sent":10000}
+[SOAK DIAG] clockBacksteps=0 maxBackstepMs=0.000 clockSkewMs=-0.000
+[SOAK DIAG] laneBacksteps=0 maxLaneBackstepMs=0.000  <- the body-order precondition
+[SOAK DIAG] violations=0 kinds={"body-order":0,"receipt-order":0}
+PASS — 1 passed (10211 assertions), 143.33s
+```
+
+**The environmental contrast is sharp and is the point.** This WSL2 host recorded
+backsteps on *every* run (3 / 1 / 2, max 435 ms, net skew −388 / −80 / −94 ms). The
+GitHub runner recorded **zero**, with wall and monotonic clocks agreeing to
+`-0.000 ms` across the whole compose phase. That is exactly what
+`hv_utils.timesync_implicit=1` predicts as a host-specific property, and it is now
+measured on two hosts rather than asserted about one.
+
+**What this settles: NOTHING about the clock. It is a NULL TEST.** The result is
+`clockBacksteps=0` and `laneBacksteps=0` with `violations=0` — the third case, which
+the decision tree did not enumerate. **The trigger was absent, so the hypothesis was
+never exercised.** This run is not support for RISK 0c and must not be cited as such.
+
+An earlier draft of this file argued the run "removes the outcome that would have
+refuted it". That was inflated and is withdrawn. Violations are rare even on the host
+that *does* step its clock — 1 red in 6 local runs — so a single green run had a low
+chance of producing the refuting outcome whether or not the hypothesis is true. A test
+that was unlikely to falsify the claim is not evidence for it.
+
+The confirming observation is still outstanding: a run showing `laneBacksteps > 0`
+**with** `violations > 0`. Until that exists, RISK 0c's mechanism is proven *by
+construction* (the probe's positive control) and its role in the historical `soak-10`
+red remains a **candidate, not a finding**.
+
+**One caveat that cuts toward sensitivity, not away.** The runner completed the soak in
+143 s against ~600 s locally, so its compose phase is ~4× faster and the gap between two
+same-lane messages is correspondingly ~4× smaller. A smaller gap makes the soak *more*
+easily inverted by a given backstep, not less. So the green is not explained by the
+runner being a laxer instrument.
+
+`Performance/RbacBudgetsTest` also passed on the runner, inside Stage 3's full suite —
+consistent with the local flake being host-specific (p99 0.681–2.648 ms against a
+1.5 ms ceiling over four isolated local runs).
+
 So: **the soak is not deterministic, and AC-03's soak half remains unproven.**
 `soak-10` is a genuine red on a fully-drained run — it is *not* the NULL-external-id
 artefact that 0a root-caused (`nullExternalId=0`), and it is *not* a lane FIFO

@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      ci-run-31127499107-jobs
+# set:        S21-step0
+# command:    sh -c gh api repos/tekleabkidus-commits/na-live-support/actions/runs/31127499107/jobs --jq ".jobs[] | \"\(.name)\t\(.status)\t\(.conclusion)\t\(.started_at)\t\(.completed_at)\""; echo "--- run-level ---"; gh api repos/tekleabkidus-commits/na-live-support/actions/runs/31127499107 --jq "\"status=\(.status) conclusion=\(.conclusion) head_sha=\(.head_sha[0:7])\""
+# started:    2026-08-07T10:15:57Z
+# git:        186f58e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Stage 1: lint + static	completed	cancelled	2026-08-06T20:17:45Z	2026-08-06T20:32:46Z
+Stage 2: unit	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:46Z
+Stage 3b: AC-03 10k ordering soak (alone)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+Stage 3: integration (ephemeral stack)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+Stage 4: browser (Playwright + axe)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+Stage 5: performance budgets (placeholder until Doc 19 L1 profile)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+Stage 6: deploy to staging (STUB)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+Stage 7: deploy to production (STUB, manual approval)	completed	skipped	2026-08-06T20:32:47Z	2026-08-06T20:32:47Z
+--- run-level ---
+status=completed conclusion=failure head_sha=d1c11f4
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T10:16:02Z
+# duration:   5s
+# EXIT:       0
