@@ -1298,3 +1298,128 @@ entries:
       correctly, and retention.completed carries its per-tenant counts. The step-2
       discovery is applied and load-bearing: detach-time FK verification is RLS-policed,
       so revisions are purged cross-tenant BEFORE the detach.
+  # ── Doc 06: Ticketing System (S22) ─────────────────────────────────────────
+  # The row flip makes all nine ACs blocking (ADR 0004). Honest statuses: only
+  # what has an EXECUTED test claims anything; the rest name the step that lands
+  # them. A false row here is the worst lie in the repo.
+
+  - ac_ref: "Doc06 AC-01"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 2 as
+      tests/Feature/Tickets/TransitionMatrixTest.php with TicketTransitionService (§21: the
+      matrix test is built FIRST, everything else composes on it). Gated behind ruling
+      R-20's trigger design note.
+
+  - ac_ref: "Doc06 AC-02"
+    suite_path: tests/Isolation/TicketOpenFamilyInvariantTest.php
+    type: automated
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      The T-02 index half is covered (step 1): every open-family pair refused by
+      direct SQL, platform-role bypass included; linked_work exemption and
+      non-open-family coexistence proven. The concurrent-creates half (exactly one
+      open ticket + open_ticket_exists refusals) arrives with the creation paths in
+      step 3.
+
+  - ac_ref: "Doc06 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 5 as
+      tests/Feature/Tickets/ReopenAutoCloseTest.php with the timers (T-03), EC-01/EC-02
+      fixtures and the message.received subscriber.
+
+  - ac_ref: "Doc06 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 6 as
+      tests/Feature/Tickets/MergeUnmergeTest.php; the unmerge snapshot ships before the
+      merge route is callable (§21).
+
+  - ac_ref: "Doc06 AC-05"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 6 as tests/Feature/Tickets/SplitTest.php
+      with FR-21.
+
+  - ac_ref: "Doc06 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 7 as
+      tests/Feature/Tickets/SpamDispositionTest.php. The exclusion flags, restore semantics
+      and golden fixtures are this session's; Doc 15's CONSUMING assertions are the
+      pre-agreed deferral.
+
+  - ac_ref: "Doc06 AC-07"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 7 as
+      tests/Feature/Tickets/BulkOperationsTest.php with FR-25/T-06/SEC-04/EC-12.
+
+  - ac_ref: "Doc06 AC-08"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 3 as
+      tests/Feature/Tickets/HandoffPacketTest.php (createFromHandoff + Doc 09 fixture). The
+      insert-only grant physics it will assert are ALREADY live (step 1:
+      TicketGrantPhysicsTest covers SEC-02's absence-of-UPDATE on ticket_handoff_packets).
+
+  - ac_ref: "Doc06 AC-09"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 2 as
+      tests/Feature/Tickets/MetricTimestampsTest.php on the shared golden lifecycle fixtures
+      (authored there, before any timestamp assertion exists to pin — §21). Gated behind
+      ruling R-20's trigger design note.

@@ -473,3 +473,78 @@ list reads through Doc 07's read models, so those columns are ordered by constru
 The schema-derived guard generalises with it: each such table gets the same assertion,
 reading information_schema.columns and proving app's denied set for both INSERT and
 UPDATE is exactly the DB-time columns. Same shape, per table.
+
+## 2026-08-07 — Doc 06 plan-approval rulings (Session 22)
+
+Filed at plan approval, before implementation, by owner order (advisor-audited plan).
+R-20…R-22 are owner rulings; A-7…A-9 are filed interpretations approved as proposed
+(the doc author has NOT been consulted). This record is canonical over any restatement
+in commits or BUILD-STATUS.
+
+### R-20. The FR-24 metric-timestamp trigger is approved in principle, with a condition
+
+The migrator-owned `BEFORE UPDATE` trigger on `tickets` is approved as the only
+R-19a-compatible mechanism for MUTABLE metric columns (a default cannot re-stamp; a
+granted column cannot be trusted). CONDITION: before step 2's commit, a half-page
+trigger design note covering (a) how `first_response_at` and `agent_first_response_at`
+stamp when a qualifying public reply lands WITHOUT a status transition (e.g. an AI
+reply on an already-open ticket), (b) the waiting-seconds accumulator arithmetic by
+OLD.status class, and (c) how the golden fixtures drive the trigger deterministically
+in tests — pasted and advisor-confirmed. No step-2 commit before that confirmation.
+
+### R-21. All four `tickets.*` settings are `tenant_editable: true`
+
+Including `tickets.resolve.requires_reply` — it is operator policy in US-07's spirit.
+The four keys: `tickets.implicit_claim` (bool, default true),
+`tickets.resolve.requires_reply` (bool, default true), `tickets.autoclose.hours`
+(int, default 48), `tickets.reopen.days` (int, default 7).
+
+### R-22. The tag rename/merge SURFACE defers to Doc 07 with the §8/§9 rendering bucket
+
+It is the filed design gap it already is (`B2-S06-closing-audit-v2`: "Tags —
+per-tenant autocomplete; no rename or merge designed"). The T-07 engine builds
+headless in this session, fully tested. Before Doc 07 begins the owner chooses
+between a scope-limited design-track reopen and a class-2 fill; that choice does not
+block this session. Nothing is improvised.
+
+### A-7. FR-01's base ticket field list (FILED INTERPRETATION)
+
+FR-01 cites "Doc 01 Phase-22 schema", which ruling Q1 permanently superseded
+(`docs/CONFLICTS.md`); the reference resolves to nothing, so the base row is derived
+from Doc 06's own text plus Doc 01/Doc 04 conventions and filed here. The `tickets`
+row: `id` (UUIDv7), `tenant_id`, `conversation_id`, `customer_id`, `number`
+(per-tenant integer, unique per tenant, from `tenant_sequences`), `subject` +
+`subject_source` (ai|staff|null), `status` (the 8 fixed statuses), `priority`
+(low|normal|high|urgent), `source` (FR-01's enum), `assignee_id`, `department_id`
+(nullable uuid, NO FK — Doc 11 owns departments, consistent with the
+MembershipSource seam), `escalation` jsonb, `pending_reason` (FR-01's nullable enum),
+`spam_marked_by`/`spam_marked_at`, `reopened_count`, `channel_unreachable`
+(bool, Doc 05's field, schema-only), `linked_work` (bool), `origin_ticket_id`,
+`previous_ticket_id`, `merged_into`, `parent_ticket_id` (reserved, §19),
+`form_data` jsonb, `tags` text[] (GIN), FR-24's metric columns
+(`first_response_at`, `agent_first_response_at`, `resolved_at`, `closed_at`,
+`waiting_customer_seconds`, `waiting_staff_seconds`) + `last_status_changed_at`,
+`created_at`/`updated_at`. Nothing beyond what Doc 06's text requires.
+
+### A-8. FR-26's event-family reconciliations (FILED INTERPRETATION)
+
+(i) `follower_added|removed` reads as TWO events — `ticket.follower_added` and
+`ticket.follower_removed` — matching the list's own idiom
+(`spam_marked|spam_unmarked`, `tagged|untagged`). (ii) FR-25's `tickets.bulk_completed`
+ships as **`ticket.bulk_completed`**: FR-26's enumerated `ticket.*` family governs
+(Q9: enumerations normative, prose descriptive); FR-25's prefix is read as
+descriptive. (iii) **`ticket.assignee_deactivated`** — required by EC-06, unnamed in
+FR-26's list — enters the catalog by this filed interpretation, the A-4 precedent.
+Doc 06's catalog total: 23 events (FR-26's 22 + EC-06's one); `ticket.resolved`
+doubles as Doc 14's `ticket_resolved` SMS signal (FR-06), no separate event.
+
+### A-9. Route→permission mappings Doc 06 does not name inline (FILED INTERPRETATION)
+
+All from the seeded 21-key `tickets.*` catalog (counted from the registry this
+session); no key invented (NFR-03): the generic transition route →
+`tickets.status.change`; manual/bulk close → `tickets.close`; ticket notes incl.
+FR-06's resolution note → `tickets.note`; tag operations incl. T-07 rename/merge →
+`tickets.tags.manage`; adding OTHERS as followers → `tickets.assign` (FR-18's
+"assigners"; self follow/unfollow stays `tickets.follow`); `tickets.fields.edit`
+reserved for Doc 12's custom fields, no route this session; `tickets.delete`
+platform-disabled, no route (BR-01).

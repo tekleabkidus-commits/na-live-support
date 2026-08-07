@@ -482,4 +482,47 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc04',
     ],
+    [
+        // Doc 06 SS-03: all four tickets.* keys are tenant_editable by owner ruling
+        // R-21 (US-07's spirit — operator policy). SS-03's change semantics: a change
+        // applies to FUTURE resolutions only; armed timers keep their value, and the
+        // settings page says exactly that (proven in TicketSettingsTest, step 5).
+        // FR-05/BR-03: a reply IS a claim; R-04's per-tenant toggle is this key.
+        'key' => 'tickets.implicit_claim',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-06/BR-04: resolution requires substance — a public staff/AI reply or an
+        // explicit resolution note. tenant_editable per R-21.
+        'key' => 'tickets.resolve.requires_reply',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-07: resolved → closed after this many hours of customer silence.
+        // US-07's 72 h example sits inside the range.
+        'key' => 'tickets.autoclose.hours',
+        'type' => 'int',
+        'default' => 48,
+        'validation' => 'required|integer|min:1|max:720',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-08/EC-02: customer message within this many days of closed_at reopens
+        // the same ticket (DB-time comparison, inclusive). US-07's 14 d fits.
+        'key' => 'tickets.reopen.days',
+        'type' => 'int',
+        'default' => 7,
+        'validation' => 'required|integer|min:1|max:90',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc06',
+    ],
 ];

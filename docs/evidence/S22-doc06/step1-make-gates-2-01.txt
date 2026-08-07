@@ -1,0 +1,31 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step1-make-gates-2
+# set:        S22-doc06
+# command:    make gates
+# started:    2026-08-07T17:36:14Z
+# git:        602d6ee (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 12 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+-----------------------------------------------------------------
+Gate summary: 12 passed, 0 failed, 0 skipped.
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T17:36:46Z
+# duration:   32s
+# EXIT:       0

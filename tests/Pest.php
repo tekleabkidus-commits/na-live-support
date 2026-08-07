@@ -215,6 +215,12 @@ function cleanupTenants(array $tenantIds): void
     $platform = DB::connection('pgsql_platform');
 
     foreach ([
+        // Doc 06: everything references tickets, tickets reference conversations —
+        // so ticket children first, tickets before conversations. Self-FKs inside
+        // tickets (merged_into, origin/previous/parent) are fine in one statement:
+        // NO ACTION FK triggers fire at end of statement, when both sides are gone.
+        'ticket_message_anchors', 'ticket_bulk_job_items', 'ticket_bulk_jobs',
+        'ticket_merge_snapshots', 'ticket_handoff_packets', 'ticket_followers', 'tickets',
         // Doc 04: messages reference conversations, conversations reference
         // customers — so drafts/revisions/messages first, customers last.
         'message_drafts', 'message_revisions', 'legal_hold_messages', 'message_dead_letters',

@@ -1,0 +1,652 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step1-tickets-first-run
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TicketSchemaTest.php tests/Isolation/TicketGrantPhysicsTest.php tests/Isolation/TicketOpenFamilyInvariantTest.php
+# started:    2026-08-07T17:28:07Z
+# git:        602d6ee (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interpretation[39m
+  [31;1m⨯[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision, and tags is a real array[39m
+  [31;1m⨯[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform-fixed[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason enums are database physics[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer, and the DB stamps created_at itself[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('tickets')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('ticket_handoff_packets')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('ticket_merge_snapshots')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('ticket_bulk_jobs')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('ticket_bulk_job_items')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05) with ('ticket_message_anchors')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception (unfollow IS row deletion)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC-02: insert-only by physics) with ('ticket_handoff_packets')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC-02: insert-only by physics) with ('ticket_merge_snapshots')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-time/metric columns (R-19b) with ('INSERT')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-time/metric columns (R-19b) with ('UPDATE')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.created_at (R-19b: the 24 h window authority)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('tickets')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_followers')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_handoff_packets')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_merge_snapshots')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_bulk_jobs')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_bulk_job_items')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with ('ticket_message_anchors')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update that moves a metric column[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR-01)[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketOpenFamilyInvariantTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mT-02: every open-family pair on one conversation is refused by the index, all 25 cells[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-10: resolved, closed and spam are NOT open-family — they coexist with one open ticket[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-21: linked_work rows are exempt from the index — the one sanctioned multi-open case[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-02: the direct-SQL bypass fails on the index even for the RLS-bypassing platform role[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m FR-01/A-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m R-19b: e… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m R-01: th… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m FR-01 CH… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m FR-02: t… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it keeps… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it enabl… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it refus… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it refus… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketOpenFamilyInvariantTest[22m [90m>[39m T… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketOpenFamilyInvariantTest[22m [90m>[39m F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketOpenFamilyInvariantTest[22m [90m>[39m F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketOpenFamilyInvariantTest[22m [90m>[39m A… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42830]: Invalid foreign key: 7 ERROR:  there is no unique constraint matching given keys for referenced table "tickets" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: alter table "tickets" add constraint "tickets_origin_ticket_id_foreign" foreign key ("origin_ticket_id") references "tickets" ("id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_08_07_100000_create_tickets_table.php[39;22m:[39;1m68[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+
+  [90mTests:[39m    [31;1m30 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m82.30s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T17:29:30Z
+# duration:   83s
+# EXIT:       2

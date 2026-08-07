@@ -1,0 +1,42 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step1-make-gates
+# set:        S22-doc06
+# command:    make gates
+# started:    2026-08-07T17:33:53Z
+# git:        602d6ee (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 12 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            FAIL
+      registry-check: traceability[65]: suite_path "tests/Feature/Tickets/TransitionMatrixTest.php" does not exist
+      registry-check: traceability[67]: suite_path "tests/Feature/Tickets/ReopenAutoCloseTest.php" does not exist
+      registry-check: traceability[68]: suite_path "tests/Feature/Tickets/MergeUnmergeTest.php" does not exist
+      registry-check: traceability[69]: suite_path "tests/Feature/Tickets/SplitTest.php" does not exist
+      registry-check: traceability[70]: suite_path "tests/Feature/Tickets/SpamDispositionTest.php" does not exist
+      registry-check: traceability[71]: suite_path "tests/Feature/Tickets/BulkOperationsTest.php" does not exist
+      registry-check: traceability[72]: suite_path "tests/Feature/Tickets/HandoffPacketTest.php" does not exist
+      registry-check: traceability[73]: suite_path "tests/Feature/Tickets/MetricTimestampsTest.php" does not exist
+      registry-check: FAIL (8 violation(s))
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+-----------------------------------------------------------------
+Gate summary: 11 passed, 1 failed, 0 skipped.
+FAILED: registry-check
+make: *** [Makefile:95: gates] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T17:34:29Z
+# duration:   36s
+# EXIT:       2
