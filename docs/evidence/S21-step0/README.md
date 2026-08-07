@@ -130,6 +130,82 @@ THRESHOLD case in the probe. A violation requires a backstep **exceeding the sam
 gap**, which the soak now measures directly as `laneBacksteps` / `maxLaneBackstepMs`
 rather than leaving to inference.
 
+### FORCED-BACKSTEP POSITIVE CONTROL — RISK 0c IS SUFFICIENT IN THE REAL GEOMETRY
+
+The probe proved a backstep inverts the key in a four-message toy. That is not the
+same as producing run `soak-10`'s shape. So the shape was **manufactured** rather than
+waited for, in the soak's exact geometry — 50 lanes x 200 = 10 000 interleaved composes,
+failures injected, full drain — by driving the clock that actually writes `created_at`
+(Carbon via `setTestNow`; the OS clock cannot be moved by a test).
+
+The predictions were **quantitative and made before the run**, because "some violations"
+would prove almost nothing. `forced-backstep-01.txt`:
+
+| excursion | predicted | measured |
+|---|---|---|
+| **transient** — 2 s drop over 3 composes, then restored | exactly **3** lanes invert | `stampBacksteps=3`, `violations=3 kinds={"body-order":3,"receipt-order":0}` |
+| **persistent** — 2 s drop, never corrected | **every** lane inverts (50) | `stampBacksteps=50`, `violations=50 kinds={"body-order":50,"receipt-order":0}` |
+
+Both fully drained: `trueSent=10000 total=10000 nullExternalId=0`.
+
+**The transient case is `soak-10` to the number** — 3 of 50 lanes, `body-order` only,
+`receipt-order` clean, on a fully drained 10 000-message run. Both predicted counts were
+hit exactly, which makes this a check of the model rather than a coincidence.
+
+**Verdict, plainly: RISK 0c is SUFFICIENT in the real geometry.** A backward step in the
+clock that writes `created_at`, larger than the same-lane gap, produces exactly the red
+that was observed. **No third defect is required to explain `soak-10`.**
+
+**What this does NOT establish, stated so nobody over-reads it.** Sufficiency is not
+necessity. This proves a clock excursion *can* produce that shape and does so exactly;
+it does not prove one *did* occur during `soak-10`, because that run predates the
+instrument and no competing cause has been positively excluded. The supporting facts are
+that this host measurably steps its clock on every run, and that no alternative
+hypothesis is on the table.
+
+It also yields a specific, checkable inference about `soak-10`: the excursion must have
+been **transient** (roughly 3 composes wide). A *persistent* step gives 50, not 3.
+
+**One trap for a future reader.** The persistent case produces `50 violations`, the same
+COUNT as the historical red — but a different KIND. The historical 50 was
+`kinds={"body-order":0,"receipt-order":50}` (`soak-06`, the NULL-external-id artefact of
+0a); this is `{"body-order":50,"receipt-order":0}`. Same number, unrelated causes. Read
+the `kinds` map, never the total.
+
+### INSTRUMENT DEFECT — the backstep counter was measuring the wrong clock
+
+Raised by the advisor, checked, and **confirmed**. The counter I added measured
+`microtime()`. `created_at` is written by Eloquent's `freshTimestamp()`, which is
+`Date::now()` — **Carbon**, which honours `setTestNow`. `microtime()` reads the OS
+clock and honours nothing. They are two different sources, and the suite mocks Carbon
+in at least five files (`SessionLifetimeTest`, `SessionDeadlineTest`, `LoginPageTest`,
+`WebhookHmacTest`, `ApiTokenLifecycleTest`).
+
+Proven, not conceded in the abstract — `instrument-validity-01.txt`:
+
+```
+[ORDERKEY PROBE] written created_at values : 2026-08-07 10:44:00 | 2026-08-07 10:44:02 | 2026-08-07 10:43:58
+[ORDERKEY PROBE] microtime() backsteps      : 0   <- the OLD instrument
+[ORDERKEY PROBE] created_at  backsteps      : 1   <- the REAL precondition
+```
+
+The third message was written **two seconds before** the second, the stored thread is
+out of order — and the old counter reports a clean run. **So "the next red will be
+decisive" was not true as built.**
+
+**Honest scope of the damage.** In the runs already taken, nothing mocked Carbon while
+the soak ran (it runs alone, and it sets no test-now), so `Carbon::now()` and
+`microtime()` were reading the same OS clock and those readings are very probably
+valid. But *"probably valid"* is not a property the instrument deciding a migration of
+the ordering key is allowed to have.
+
+**Fixed** by removing the proxy entirely: the soak now records `stampBacksteps`, the
+same-lane regression of the **actual `created_at` value Eloquent wrote**, formatted
+exactly as the insert truncates it. It observes the ordering key's leading component at
+the source, so no clock-equivalence assumption survives. The OS-clock counters are kept,
+demoted to an environment observation — they are what distinguishes this WSL2 host from
+a CI runner, and nothing more.
+
 ### The second host — CI Stage 3b, and what it does and does not settle
 
 The soak's first run on a **GitHub-hosted runner** (`runnervmvrwv9`, tree `186f58e` =

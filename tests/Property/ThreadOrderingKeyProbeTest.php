@@ -180,6 +180,61 @@ test('NEGATIVE CONTROL: a forward-only clock keeps the thread in compose order',
     expect($stored)->toBe($composed);
 });
 
+test('INSTRUMENT VALIDITY: microtime() is NOT the clock that writes created_at', function () {
+    $tenant = activateTenant(createTenant());
+    bindTenant($tenant);
+    $tenantId = $tenant->tenantId();
+
+    [$compose, $conversation] = probeThread('probe-instrument');
+
+    // Eloquent's HasTimestamps::freshTimestamp() returns Date::now() — CARBON,
+    // which honours setTestNow. microtime() reads the OS clock and honours
+    // nothing. They are two different sources, and this test measures both
+    // across the same three composes to show they can disagree completely.
+    $microBacksteps = 0;
+    $stampBacksteps = 0;
+    $prevMicro = null;
+    $prevStamp = null;
+    $observed = [];
+
+    $base = CarbonImmutable::now('UTC')->startOfMinute();
+    // Forward, forward, then a 2-SECOND CARBON BACKSTEP on the third compose.
+    foreach ([0, 2, -2] as $i => $offset) {
+        composeAtClock($compose, $conversation, $tenantId, $base->addSeconds($offset), 'm-'.$i);
+
+        $micro = microtime(true);
+        $stamp = $base->addSeconds($offset)->format('Y-m-d H:i:s');
+        $observed[] = $stamp;
+
+        if ($prevMicro !== null && $micro < $prevMicro) {
+            $microBacksteps++;
+        }
+        if ($prevStamp !== null && $stamp < $prevStamp) {
+            $stampBacksteps++;
+        }
+        $prevMicro = $micro;
+        $prevStamp = $stamp;
+    }
+
+    fwrite(STDERR, sprintf(
+        "\n[ORDERKEY PROBE] written created_at values : %s\n".
+        "[ORDERKEY PROBE] microtime() backsteps      : %d   <- the OLD instrument\n".
+        "[ORDERKEY PROBE] created_at  backsteps      : %d   <- the REAL precondition\n",
+        implode(' | ', $observed), $microBacksteps, $stampBacksteps,
+    ));
+
+    // THE POINT. The OS clock marched forward the whole time, so a
+    // microtime-based counter reports a clean run...
+    expect($microBacksteps)->toBe(0);
+    // ...while the clock that actually WROTE created_at went backwards.
+    expect($stampBacksteps)->toBe(1);
+
+    // And the thread really is out of order on disk, which the OS-clock
+    // counter would have reported as nothing at all.
+    $stored = array_column(storedThread($conversation), 'body');
+    expect($stored)->not->toBe(['m-0', 'm-1', 'm-2']);
+});
+
 test('THRESHOLD: a backstep SMALLER than the gap between two same-lane messages does not invert', function () {
     $tenant = activateTenant(createTenant());
     bindTenant($tenant);

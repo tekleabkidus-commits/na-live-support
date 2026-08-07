@@ -256,6 +256,37 @@ same-lane gap, which the soak now measures directly as `laneBacksteps`.
 server; ordinary clock skew between two servers reorders a customer's thread with no
 backward step anywhere. Whole-second truncation is what turns millisecond skew into a
 whole-second inversion.
+**INSTRUMENT CORRECTION (advisor-raised, confirmed).** The first backstep counter
+measured `microtime()`, but `created_at` is written from `Date::now()` — Carbon, which
+honours `setTestNow`, while `microtime()` honours nothing. `ThreadOrderingKeyProbeTest`
+demonstrates the divergence: microtime backsteps **0**, `created_at` backsteps **1**,
+thread out of order on disk. The counter could therefore have reported a clean run
+through a real inversion, so "the next red is decisive" was **not true as built**. The
+prior readings are probably valid (nothing mocks Carbon while the soak runs alone), but
+probably is not good enough for the instrument that would justify migrating the key.
+Fixed: the soak now records `stampBacksteps`, the same-lane regression of the ACTUAL
+written `created_at`, truncated as the insert truncates it — no proxy clock, no
+equivalence assumption.
+**FORCED-BACKSTEP POSITIVE CONTROL — 0c IS SUFFICIENT IN THE REAL GEOMETRY.**
+`tests/Property/LaneOrderingForcedBackstepTest.php` manufactures the shape instead of
+waiting for it, in the soak's exact geometry (50 lanes x 200, interleaved, failures
+injected, full drain), by driving Carbon — the clock that actually writes `created_at`.
+Counts were predicted BEFORE the run and both hit exactly
+(`docs/evidence/S21-step0/forced-backstep-01.txt`):
+
+| excursion | predicted | measured |
+|---|---|---|
+| transient (2 s over 3 composes, restored) | 3 lanes | `stampBacksteps=3`, `violations=3 kinds={"body-order":3,"receipt-order":0}` |
+| persistent (2 s, never corrected) | all 50 | `stampBacksteps=50`, `violations=50 kinds={"body-order":50,"receipt-order":0}` |
+
+Both fully drained (`trueSent=10000 nullExternalId=0`). **The transient case is `soak-10`
+to the number**, so **no third defect is needed to explain that red.**
+**Sufficiency, not necessity.** It proves a clock excursion CAN produce that exact shape;
+it does not prove one DID occur in `soak-10`, which predates the instrument. It does
+imply the excursion there was transient (~3 composes) — a persistent step yields 50.
+**Trap for a future reader:** the persistent case's `50 violations` is the same COUNT as
+the historical red but a different KIND (`body-order:50` here vs `receipt-order:50` in
+`soak-06`, the 0a artefact). Read the `kinds` map, never the total.
 **OWNER/ADVISOR DECISION REQUIRED — see the BLOCKER in the S21 step-0 report.** The
 fix touches the write path, the composite PK `(id, created_at)`, the partition key, and
 T-08's `(created_at, id)` cursor, so it is not a change to make unilaterally.

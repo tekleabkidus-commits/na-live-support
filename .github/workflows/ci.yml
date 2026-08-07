@@ -125,8 +125,19 @@ jobs:
   # failure — RISK 0b's capture-first protocol. An intermittent failure whose
   # log died with the runner is the exact incident this pipeline has had twice.
   # ---------------------------------------------------------------------------
+  # WHAT RUNS HERE, kept current on purpose. As of S21 step 0 the `soak` group
+  # holds THREE tests, not one: LaneOrderingSoakTest (the 10k AC-03 soak) and
+  # LaneOrderingForcedBackstepTest's two forced-backstep controls, which share
+  # the group because they too commit their fixtures and must run alone.
+  #
+  # THE TWO CONTROLS ARE CHARACTERISATION TESTS AND ARE MEANT TO GO RED WHEN
+  # RISK 0c IS FIXED. They assert that a backward step in the clock writing
+  # created_at reorders a thread — true of TODAY's code. Whoever migrates the
+  # ordering key to DB time must update them in the same commit; a red here
+  # after that change is the tripwire firing, not a regression. Do not "fix" it
+  # by deleting them.
   soak:
-    name: "Stage 3b: AC-03 10k ordering soak (alone)"
+    name: "Stage 3b: AC-03 ordering evidence — 10k soak + backstep controls (alone)"
     runs-on: ubuntu-latest
     needs: unit
     steps:

@@ -1,0 +1,32 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      forced-backstep
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Property/LaneOrderingForcedBackstepTest.php
+# started:    2026-08-07T10:50:34Z
+# git:        d07837a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[BACKSTEP DIAG] mode=transient backstep=2000ms restoreAfter=3 affectedLanes=3
+[BACKSTEP DIAG] drainExit=loop-condition trueSent=10000 total=10000 nullExternalId=0
+[BACKSTEP DIAG] stampBacksteps=3
+[BACKSTEP DIAG] violations=3 kinds={"body-order":3,"receipt-order":0}
+
+
+[BACKSTEP DIAG] mode=persistent backstep=2000ms restoreAfter=none
+[BACKSTEP DIAG] drainExit=loop-condition trueSent=10000 total=10000 nullExternalId=0
+[BACKSTEP DIAG] stampBacksteps=50
+[BACKSTEP DIAG] violations=50 kinds={"body-order":50,"receipt-order":0}
+
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\LaneOrderingForcedBackstepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFORCED BACKSTEP (transient): a 2 s excursion over 3 composes repr[39m[90m…[39m [90m598.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFORCED BACKSTEP (persistent): a 2 s step that is never corrected[39m[90m… [39m [90m608.46s[39m  
+
+  [90mTests:[39m    [32;1m2 passed[39;22m[90m (423 assertions)[39m
+  [90mDuration:[39m [39m1206.98s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T11:11:34Z
+# duration:   1260s
+# EXIT:       0

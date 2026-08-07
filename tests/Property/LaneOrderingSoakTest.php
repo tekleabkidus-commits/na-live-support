@@ -116,14 +116,20 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         // shows 0, they are NOT the clock and need a different answer. Either way
         // the next session is told which, instead of having to infer it.
         //
-        // TWO measurements, because they are not the same question. A backstep
-        // between two ADJACENT composes (any lanes) says the host clock moved.
-        // A backstep between two composes OF THE SAME LANE is the one that can
-        // actually reorder a thread, because only same-lane neighbours are
-        // compared by the ordering key. The lanes are ~1 round apart in wall
-        // time, so a small host backstep is absorbed: the same-lane gap stays
-        // positive and nothing inverts. `laneBacksteps > 0` is the precondition
-        // for a body-order violation; `clockBacksteps > 0` alone is not.
+        // THREE measurements, and only the THIRD is authoritative.
+        //
+        // microtime() is NOT the clock that writes created_at. Eloquent's
+        // freshTimestamp() returns Date::now() — CARBON, which honours
+        // setTestNow; microtime() reads the OS clock and honours nothing. They
+        // can disagree completely, and ThreadOrderingKeyProbeTest proves it:
+        // microtime backsteps 0, created_at backsteps 1, thread out of order on
+        // disk. A microtime-based counter would have called that run clean.
+        //
+        // So the OS-clock counters below are kept only as an environment
+        // observation (they are what distinguishes this WSL2 host from a CI
+        // runner), and `stampBacksteps` — measured on the ACTUAL created_at
+        // value Eloquent wrote, truncated exactly as the insert truncates it —
+        // is the real precondition for a body-order violation.
         $clockBacksteps = 0;
         $maxBackstepMs = 0.0;
         $laneBacksteps = 0;
@@ -133,12 +139,26 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         $wallStart = microtime(true);
         $monoStart = hrtime(true) / 1e9;
 
+        // THE AUTHORITATIVE COUNTER: same-lane regression of the written
+        // created_at, in the whole-second form that actually reaches the column.
+        $stampBacksteps = 0;
+        $laneLastStamp = [];
+
         /** @var array<string, list<string>> $composedOrder conversation id => bodies in compose order */
         $composedOrder = [];
         for ($round = 0; $round < $perLane; $round++) {
             foreach ($conversations as $lane => $conversation) {
                 $body = sprintf('lane-%d-seq-%03d', $lane, $round);
-                $compose->compose($conversation, 'agent', null, 'text', $body);
+                $message = $compose->compose($conversation, 'agent', null, 'text', $body);
+
+                // Read the timestamp Eloquent actually wrote, truncated the way
+                // the insert truncates it. This is the ordering key's leading
+                // component, observed at the source rather than via a proxy clock.
+                $stamp = $message->created_at?->format('Y-m-d H:i:s') ?? '';
+                if (isset($laneLastStamp[$lane]) && $stamp < $laneLastStamp[$lane]) {
+                    $stampBacksteps++;
+                }
+                $laneLastStamp[$lane] = $stamp;
                 // The sync dispatch inside compose runs the job middleware, whose
                 // finally clears both tenancy layers — re-bind or the next query
                 // runs blind (the house pattern, see OutboundPipelineTest).
@@ -249,12 +269,14 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
             "[SOAK DIAG] sentCount(var)=%d trueSent(db)=%d total=%d nullExternalId=%d\n".
             "[SOAK DIAG] deliveryStates=%s\n".
             "[SOAK DIAG] clockBacksteps=%d maxBackstepMs=%.3f clockSkewMs=%.3f\n".
-            "[SOAK DIAG] laneBacksteps=%d maxLaneBackstepMs=%.3f  <- the body-order precondition\n",
+            "[SOAK DIAG] laneBacksteps=%d maxLaneBackstepMs=%.3f  (OS clock, environment only)\n".
+            "[SOAK DIAG] stampBacksteps=%d  <- THE body-order precondition (written created_at)\n",
             $drainExit, $breakCycle, $cycle, $injected, $stallBudget,
             $sentCount, $trueSent, $total, $nullExternal,
             json_encode($states),
             $clockBacksteps, $maxBackstepMs, $clockSkewMs,
             $laneBacksteps, $maxLaneBackstepMs,
+            $stampBacksteps,
         ));
 
         // COMPLETENESS BEFORE ORDER — the lesson of the S21 step-0 root cause.

@@ -1133,6 +1133,18 @@ entries:
       between two same-lane messages inverts the thread. That is a C-11 violation and is
       filed as BUILD-STATUS RISK 0c, with positive/negative/threshold controls in
       tests/Property/ThreadOrderingKeyProbeTest.php.
+      SUFFICIENCY PROVEN IN THE REAL GEOMETRY (S21 step-0 continuation):
+      tests/Property/LaneOrderingForcedBackstepTest.php drives Carbon — the clock that
+      actually writes created_at — through the soak's exact 50x200 geometry and
+      reproduces soak-10 to the number. Counts were predicted before the run and both
+      hit exactly: a transient 2 s excursion over 3 composes gives violations=3
+      kinds={"body-order":3,"receipt-order":0} fully drained; a persistent 2 s step
+      gives 50/50. So no third defect is needed to explain the red. Sufficiency, not
+      necessity — soak-10 predates the instrument.
+      NOTE ON THE INSTRUMENT: the first backstep counter measured microtime(), which is
+      NOT the clock that writes created_at (Date::now() is Carbon and honours
+      setTestNow). It could read zero through a real inversion. Replaced by
+      stampBacksteps, measured on the written created_at itself.
       Run record on the fixed test: 5 PASS / 1 FAIL in 6 runs (docs/evidence/S21-step0/).
       Recorded PARTIAL rather than covered because a flaky test is not a proof, and three
       greens after a red are not determinism.
