@@ -1,0 +1,46 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step2-metrics-first
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-07T18:07:47Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m4.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.11s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m FR-2… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  new row violates row-level security policy for table "messages" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "messages" ("id", "tenant_id", "conversation_id", "direction", "author_type", "kind", "body", "is_internal", "delivery_state") values (019fdd68-fe8c-73f7-978f-3b96e735d164, 019fdd68-fe64-737c-91bb-f8f1ed5007ea, 019fdd68-fe81-71d9-bcd4-29768333298e, out, agent, text, fixture reply, 0, sent))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m139[39;22m
+  [33m8   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m224[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (43 assertions)[39m
+  [90mDuration:[39m [39m5.77s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:07:53Z
+# duration:   6s
+# EXIT:       2

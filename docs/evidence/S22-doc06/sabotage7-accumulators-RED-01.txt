@@ -1,0 +1,63 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage7-accumulators-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-07T18:14:35Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m4.60s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m AC-09: the golden li…   
+[39;1m  waiting_staff_seconds is 0, below the fixture's 1980 — an interval was lost or credited to the other party
+Failed asserting that 0 is equal to 1980 or is greater than 1980.[39;22m
+
+  at [32mtests/Feature/Tickets/MetricTimestampsTest.php[39m:[32m113[39m
+    109▕         // was missed or attributed to the wrong party), never more than the harness's
+    110▕         // own runtime above it.
+    111▕         foreach (['waiting_staff_seconds', 'waiting_customer_seconds'] as $column) {
+    112▕             $want = (int) $expect[$column];
+  ➜ 113▕             expect($final->{$column})->toBeGreaterThanOrEqual($want, sprintf(
+    114▕                 '%s is %d, below the fixture\'s %d — an interval was lost or credited to the other party',
+    115▕                 $column, $final->{$column}, $want,
+    116▕             ))->toBeLessThanOrEqual($want + $tolerance, sprintf(
+    117▕                 '%s is %d, more than %d seconds above the fixture\'s %d',
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m113[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m AC-09: the golden li…   
+[39;1m  waiting_staff_seconds is 0, below the fixture's 105 — an interval was lost or credited to the other party
+Failed asserting that 0 is equal to 105 or is greater than 105.[39;22m
+
+  at [32mtests/Feature/Tickets/MetricTimestampsTest.php[39m:[32m113[39m
+    109▕         // was missed or attributed to the wrong party), never more than the harness's
+    110▕         // own runtime above it.
+    111▕         foreach (['waiting_staff_seconds', 'waiting_customer_seconds'] as $column) {
+    112▕             $want = (int) $expect[$column];
+  ➜ 113▕             expect($final->{$column})->toBeGreaterThanOrEqual($want, sprintf(
+    114▕                 '%s is %d, below the fixture\'s %d — an interval was lost or credited to the other party',
+    115▕                 $column, $final->{$column}, $want,
+    116▕             ))->toBeLessThanOrEqual($want + $tolerance, sprintf(
+    117▕                 '%s is %d, more than %d seconds above the fixture\'s %d',
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m113[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (31 assertions)[39m
+  [90mDuration:[39m [39m5.45s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:14:41Z
+# duration:   6s
+# EXIT:       1

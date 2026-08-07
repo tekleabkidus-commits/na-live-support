@@ -80,10 +80,15 @@ test('FR-01/A-7: the tickets column inventory is exactly the filed interpretatio
     $actual = array_map(static fn (object $c): string => $c->column_name, $columns);
     sort($actual);
 
+    // A-7 as filed, PLUS the two signal columns of its advisor-approved amendment
+    // (first_response_message_id / agent_first_response_message_id, ruling R-20's
+    // note). This assertion is why the amendment had to be filed at all: the columns
+    // arrived in step 2 and this list went red until the record caught up.
     $expected = [
-        'agent_first_response_at', 'assignee_id', 'channel_unreachable', 'closed_at',
-        'conversation_id', 'created_at', 'customer_id', 'department_id', 'escalation',
-        'first_response_at', 'form_data', 'id', 'last_status_changed_at', 'linked_work',
+        'agent_first_response_at', 'agent_first_response_message_id', 'assignee_id',
+        'channel_unreachable', 'closed_at', 'conversation_id', 'created_at', 'customer_id',
+        'department_id', 'escalation', 'first_response_at', 'first_response_message_id',
+        'form_data', 'id', 'last_status_changed_at', 'linked_work',
         'merged_into', 'number', 'origin_ticket_id', 'parent_ticket_id', 'pending_reason',
         'previous_ticket_id', 'priority', 'reopened_count', 'resolved_at',
         'source', 'spam_marked_at', 'spam_marked_by', 'status', 'subject',

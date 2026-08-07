@@ -1,0 +1,20 @@
+{
+  "id": "reopen-clears-resolved-at",
+  "spec": "Doc 06 FR-24, AC-09",
+  "shared_with": "Doc 15",
+  "description": "FR-24's most easily-lost clause: \"reopen clears resolved_at until re-resolved; history preserved in events\". A ticket resolves, is reopened by the customer, and resolves again — resolved_at must be NULL in between and must carry the SECOND resolution's stamp afterwards, never the first.",
+  "start_status": "open",
+  "tolerance_seconds": 10,
+  "steps": [
+    { "hold_seconds": 60, "to": "resolved", "accrues": "staff", "expect_after": { "resolved_at": "set" } },
+    { "hold_seconds": 30, "to": "open", "accrues": "none", "expect_after": { "resolved_at": "null" }, "why": "the customer replied inside the reopen window (FR-08); the ticket is unresolved again and the metric must say so" },
+    { "hold_seconds": 45, "to": "resolved", "accrues": "staff", "expect_after": { "resolved_at": "set" }, "why": "re-resolved: the stamp is the LAST transition into the state" }
+  ],
+  "expect": {
+    "waiting_staff_seconds": 105,
+    "waiting_customer_seconds": 0,
+    "resolved_at": "set",
+    "closed_at": "null",
+    "final_status": "resolved"
+  }
+}

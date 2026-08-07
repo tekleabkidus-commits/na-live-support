@@ -1304,18 +1304,22 @@ entries:
   # them. A false row here is the worst lie in the repo.
 
   - ac_ref: "Doc06 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/TransitionMatrixTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 2 as
-      tests/Feature/Tickets/TransitionMatrixTest.php with TicketTransitionService (§21: the
-      matrix test is built FIRST, everything else composes on it). Gated behind ruling
-      R-20's trigger design note.
+    status: covered
+    notes: >-
+      All three clauses, over all 64 ordered pairs of the eight statuses, with the cells
+      GENERATED from the status enum rather than hand-listed: 15 legal edges succeed and
+      emit ticket.status_changed with old/new plus an audit entry; 41 illegal pairs are
+      refused with illegal_transition {from, to} and leave the row untouched; 8 same-state
+      calls no-op successfully with no event and no audit entry (EC-07). The edge and
+      illegal counts are themselves asserted, so removing an edge cannot quietly shrink
+      the test. Sabotage: legalising closed -> spam turned both count assertions red,
+      restored green.
 
   - ac_ref: "Doc06 AC-02"
     suite_path: tests/Isolation/TicketOpenFamilyInvariantTest.php
@@ -1411,15 +1415,25 @@ entries:
       TicketGrantPhysicsTest covers SEC-02's absence-of-UPDATE on ticket_handoff_packets).
 
   - ac_ref: "Doc06 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/MetricTimestampsTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 2 as
-      tests/Feature/Tickets/MetricTimestampsTest.php on the shared golden lifecycle fixtures
-      (authored there, before any timestamp assertion exists to pin — §21). Gated behind
-      ruling R-20's trigger design note.
+    status: partial
+    notes: >-
+      Driven by the shared golden fixtures in fixtures/tickets/lifecycle/, which ship now
+      for Doc 15 to run unchanged (§21). Proven: both accumulators over a full SS-01
+      lifecycle; FR-24's reopen-clears-resolved_at clause; first_response_at equal to the
+      signal message's own DB timestamp to the microsecond; agent_first_response_at as the
+      first HUMAN reply; fill-only signals surviving a redelivery (C-09); and the trigger
+      REFUSING a note, a cross-conversation message, a pre-ticket message and a customer
+      message. Sabotage: neutering the accumulators in the trigger migration turned both
+      golden fixtures red (0 vs 1980 and 0 vs 105), restored green.
+    gap: >-
+      "Exactly the values Doc 15's dictionary asserts" cannot be fully closed until Doc 15
+      HAS a dictionary — the fixtures are the contract both sides will run, and the
+      consuming assertions are the pre-agreed Doc 15 deferral. R-03's DST-dated fixtures
+      arrive with the timers in step 5, where a date boundary can actually affect a
+      comparison.

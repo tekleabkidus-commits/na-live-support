@@ -1,0 +1,29 @@
+{
+  "id": "ss01-deposit-dispute",
+  "spec": "Doc 06 SS-01, FR-24, AC-09",
+  "shared_with": "Doc 15 (metric dictionary) — §21: \"share golden lifecycle fixtures with Doc 15 from day one; metric disputes die when both sides run the same fixtures\"",
+  "description": "A deposit dispute travelling new -> open -> pending_internal -> open -> pending_customer -> open -> resolved -> auto-closed. Every hold is the time the ticket spent in the status it is LEAVING, which is what the FR-24 accumulators measure.",
+  "contract": {
+    "hold_seconds": "how long the ticket sat in its current status before this transition; the harness backdates last_status_changed_at by exactly this much through the platform role, because the app role cannot write that column (R-19b)",
+    "accrues": "which FR-24 accumulator the OLD status feeds: staff | customer | none",
+    "tolerance_seconds": "the harness's own runtime between backdating and transitioning; the accumulator may exceed the expected total by at most this, never fall below it"
+  },
+  "start_status": "new",
+  "tolerance_seconds": 10,
+  "steps": [
+    { "hold_seconds": 120, "to": "open", "accrues": "staff", "why": "FR-05: first assignment or first staff public reply claims it" },
+    { "hold_seconds": 300, "to": "pending_internal", "accrues": "staff", "why": "US-02: waiting on the payments team" },
+    { "hold_seconds": 900, "to": "open", "accrues": "staff", "why": "answered — the wait was the platform's, not the player's" },
+    { "hold_seconds": 600, "to": "pending_customer", "accrues": "staff", "why": "staff needs the player's deposit reference" },
+    { "hold_seconds": 1800, "to": "open", "accrues": "customer", "why": "the player replied; this stretch is the ONLY one that is theirs" },
+    { "hold_seconds": 60, "to": "resolved", "accrues": "staff", "why": "FR-06: resolution with substance" },
+    { "hold_seconds": 172800, "to": "closed", "accrues": "none", "why": "FR-07 auto-close after 48 h of silence; a resolved ticket waits on nobody" }
+  ],
+  "expect": {
+    "waiting_staff_seconds": 1980,
+    "waiting_customer_seconds": 1800,
+    "resolved_at": "set",
+    "closed_at": "set",
+    "final_status": "closed"
+  }
+}

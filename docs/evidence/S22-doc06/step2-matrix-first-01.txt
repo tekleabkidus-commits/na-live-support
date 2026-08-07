@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step2-matrix-first
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TransitionMatrixTest.php
+# started:    2026-08-07T18:04:43Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  Cannot redeclare non-readonly property Exception::$code as readonly App\Domain\Tickets\Transitions\TransitionRefused::$code[39;22m
+
+  at [32mapp/Domain/Tickets/Transitions/TransitionRefused.php[39m:[32m18[39m
+     14▕  *   reason_too_short           FR-23/BR-06 — escalation reasons are ≥ 10 characters
+     15▕  *   channel_unreachable_hold   BR-07 — an unreachable customer's ticket is never
+     16▕  *                              auto-resolved or auto-closed; a human decides
+     17▕  */
+  ➜  18▕ final class TransitionRefused extends RuntimeException
+     19▕ {
+     20▕     public function __construct(public readonly string $code, string $detail)
+     21▕     {
+     22▕         parent::__construct(sprintf('%s: %s', $code, $detail));
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:04:51Z
+# duration:   8s
+# EXIT:       1

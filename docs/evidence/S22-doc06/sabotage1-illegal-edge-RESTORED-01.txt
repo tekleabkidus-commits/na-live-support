@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage1-illegal-edge-RESTORED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TransitionMatrixTest.php
+# started:    2026-08-07T18:12:53Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m5.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.04s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (369 assertions)[39m
+  [90mDuration:[39m [39m7.35s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:13:01Z
+# duration:   8s
+# EXIT:       0

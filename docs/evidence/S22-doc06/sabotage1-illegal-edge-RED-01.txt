@@ -1,0 +1,64 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage1-illegal-edge-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TransitionMatrixTest.php
+# started:    2026-08-07T18:12:32Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m5.56s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TransitionMatrixTest[22m [90m>[39m AC-01 clause 1: ever…   
+[39;1m  the FR-04 machine has 15 edges read off §4.2; the matrix now reports a different number
+Failed asserting that 16 is identical to 15.[39;22m
+
+  at [32mtests/Feature/Tickets/TransitionMatrixTest.php[39m:[32m107[39m
+    103▕         $proven++;
+    104▕     }
+    105▕ 
+    106▕     // The count is asserted so that DELETING an edge cannot quietly shrink this test.
+  ➜ 107▕     expect($proven)->toBe(15, 'the FR-04 machine has 15 edges read off §4.2; the matrix now reports a different number');
+    108▕ });
+    109▕ 
+    110▕ test('AC-01 clause 2: every illegal cell is refused with illegal_transition {from, to}', function () {
+    111▕     $matrix = new TransitionMatrix;
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TransitionMatrixTest.php[39;22m:[39;1m107[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TransitionMatrixTest[22m [90m>[39m AC-01 clause 2: ever…   
+[39;1m  64 ordered pairs = 15 legal + 8 same-state + 41 illegal; that arithmetic no longer holds
+Failed asserting that 40 is identical to 41.[39;22m
+
+  at [32mtests/Feature/Tickets/TransitionMatrixTest.php[39m:[32m139[39m
+    135▕             $refused++;
+    136▕         }
+    137▕     }
+    138▕ 
+  ➜ 139▕     expect($refused)->toBe(41, '64 ordered pairs = 15 legal + 8 same-state + 41 illegal; that arithmetic no longer holds');
+    140▕ });
+    141▕ 
+    142▕ test('AC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, no event, no audit entry', function () {
+    143▕     $service = app(TicketTransitionService::class);
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TransitionMatrixTest.php[39;22m:[39;1m139[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (375 assertions)[39m
+  [90mDuration:[39m [39m6.99s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:12:40Z
+# duration:   8s
+# EXIT:       1

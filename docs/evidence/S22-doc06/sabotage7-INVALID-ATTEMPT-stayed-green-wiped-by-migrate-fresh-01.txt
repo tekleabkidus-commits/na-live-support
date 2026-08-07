@@ -1,0 +1,27 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage7-trigger-neutered-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-07T18:13:24Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m4.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.09s[39m  
+
+  [90mTests:[39m    [32;1m9 passed[39;22m[90m (47 assertions)[39m
+  [90mDuration:[39m [39m5.75s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:13:31Z
+# duration:   7s
+# EXIT:       0

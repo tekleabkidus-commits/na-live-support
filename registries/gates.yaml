@@ -126,3 +126,12 @@ gates:
     owner: platform-engineering
     added_date: "2026-08-04"
     blocking: true
+
+  - gate_id: ticket-status-writer
+    name: TicketTransitionService is the sole ticket status writer (grep half of NFR-03's two proofs)
+    command: bash ci/ticket-status-writer.sh
+    owning_doc: Doc06
+    owning_ac: NFR-03
+    owner: platform-engineering
+    added_date: "2026-08-07"
+    blocking: true

@@ -492,6 +492,40 @@ reply on an already-open ticket), (b) the waiting-seconds accumulator arithmetic
 OLD.status class, and (c) how the golden fixtures drive the trigger deterministically
 in tests — pasted and advisor-confirmed. No step-2 commit before that confirmation.
 
+**NOTE CONFIRMED (advisor-audited, 2026-08-07), filed:** one plain (never
+SECURITY DEFINER) migrator-owned plpgsql function `tickets_stamp_transition()`,
+`BEFORE UPDATE ON tickets FOR EACH ROW`, writing `NEW.*` only (not privilege-checked,
+so the R-19a column grants stay intact; R-1's four-definer ceiling untouched; writes
+no `status`, so NFR-03's sole-writer rule is unaffected). (a) App-writable fill-only
+signal columns `first_response_message_id` / `agent_first_response_message_id`
+(A-7 amendment below): the service writes the message id in the same transaction as
+the reply; the trigger stamps the metric columns from the signal message's own
+DB-time `created_at` (+ `author_type` for the agent stamp), refusing
+cross-conversation and pre-ticket messages. (b) Only when status actually changes:
+`interval := clock_timestamp() − OLD.last_status_changed_at`; OLD=pending_customer →
+customer accumulator; OLD∈{new,open,pending_internal,escalated} → staff accumulator;
+OLD∈{resolved,closed,spam} → nothing; stamps resolved_at/closed_at/spam_marked_at on
+entry; reopen clears ONLY resolved_at; spam-unmark clears spam_marked_at;
+last_status_changed_at re-stamps. (c) Determinism: DB-value-to-DB-value equality for
+first-response stamps; backdated intervals via `pgsql_platform` (the R-19a escape
+hatch) with `clock_timestamp()` probe-bracketed tolerance; relational assertions for
+fresh stamps; DST dates in the backdated instants; no clock mocking anywhere.
+
+**Two required strengthenings, both binding:** (1) the trigger ALSO refuses (RAISE)
+when the signal message is an internal note — FR-24's note exclusion gets the same
+in-trigger physics as its pre-ticket exclusion; the service not signalling on notes
+is convention, the trigger refusing them is the guarantee. (2)
+`last_status_changed_at`'s INSERT default is `clock_timestamp()` and, being
+app-unwritable under R-19b, the default is the ONLY legal source — so the first
+accumulator interval measures from the row's birth instant; stated in the migration
+comment and asserted in the schema guard.
+
+**A-7 AMENDMENT (approved with the note):** the `tickets` field list gains
+`first_response_message_id` and `agent_first_response_message_id` — uuid, nullable,
+APP-WRITABLE (they are signals/provenance, not timestamps), made FILL-ONLY by the
+trigger (an occupied signal column can never be overwritten, so C-09 redeliveries and
+later replies cannot move an existing stamp).
+
 ### R-21. All four `tickets.*` settings are `tenant_editable: true`
 
 Including `tickets.resolve.requires_reply` — it is operator policy in US-07's spirit.

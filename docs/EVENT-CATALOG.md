@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-50 event(s).
+51 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -454,6 +454,15 @@ A tenant moved between lifecycle states (Doc 01 FR-05).
 - **Payload:** `tenant_id`, `old_state`, `new_state`
 - **Producers:** Doc01/TenantLifecycle
 - **Consumers:** Doc02/SessionInvalidation, Doc16/Backoffice, Doc17/Audit
+
+## `ticket.status_changed`
+
+FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_status`, `new_status`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TicketTransitionService
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
 
 ## `transcript.exported`
 

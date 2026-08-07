@@ -449,6 +449,25 @@ final class EventCatalog
             'consumers' => ['Doc09/Ocr'],
             'description' => 'T-05 hook, emitted after media.stored for photos: Doc 09 runs OCR and writes back ocr_ref; core stays provider-agnostic.',
         ],
+
+        // ── Doc 06: the ticket event family (FR-26) ──────────────────────────
+        // Registered per STEP, each with its full payload from the day it first
+        // fires — never a payload that has to grow later, because a payload that
+        // grows is a schema version bump for every consumer. The family's full
+        // enumeration (23 events, per filed interpretation A-8) completes as its
+        // operations land; step 2 ships the one the transition machine itself
+        // emits.
+        'ticket.status_changed' => [
+            'schema_version' => 1,
+            // Identifiers and status names only (Q7's posture): no subject, no
+            // reason text. The reason lives in the audit entry, which has its own
+            // retention and access gates — a 13-month event stream must not
+            // accumulate free-text an agent typed about a player.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_status', 'new_status', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/TicketTransitionService'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.',
+        ],
     ];
 
     /**

@@ -1,0 +1,14 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step2-make-lint
+# set:        S22-doc06
+# command:    make lint
+# started:    2026-08-07T18:31:14Z
+# git:        11c6724 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"fail","files":[{"path":"app\/Domain\/Tickets\/Storage\/TicketRepository.php","fixers":["phpdoc_align"]},{"path":"app\/Domain\/Tickets\/Transitions\/IllegalTransition.php","fixers":["single_quote"]},{"path":"tests\/Pest.php","fixers":["fully_qualified_strict_types","unary_operator_spaces","not_operator_with_successor_space"]}]}make: *** [Makefile:99: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:31:15Z
+# duration:   1s
+# EXIT:       2

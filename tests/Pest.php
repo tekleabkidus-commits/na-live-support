@@ -497,6 +497,89 @@ function &capturedLogsRef(): array
 |
 */
 
+/*
+|--------------------------------------------------------------------------
+| Doc 06 ticket fixtures
+|--------------------------------------------------------------------------
+|
+| Shared here rather than in one suite because several Doc 06 files need the
+| same shape and Pest loads them all into one process, where two identically
+| named file-local helpers would collide.
+|
+| The insert is deliberately RAW and names no FR-24 column: the app role has no
+| privilege on those (R-19b), so a fixture that tried to seed `resolved_at`
+| would fail — which is the point. A fixture needing a chosen metric value
+| writes through `pgsql_platform`, exactly as MetricTimestampsTest does.
+|
+*/
+
+/**
+ * A tenant + customer + conversation + one ticket at the requested status.
+ *
+ * Claims the conversation's Doc 04 open-ticket slot when the status is
+ * open-family and the ticket is not linked work, so the fixture leaves the FR-10
+ * invariant in the state the creation path (step 3) will produce for real.
+ *
+ * @param  array<string, mixed>  $attributes
+ * @return array{0: Tenant, 1: App\Models\Conversation, 2: App\Models\Ticket}
+ */
+function ticketFixture(string $status = 'new', array $attributes = []): array
+{
+    $tenant = createTenant();
+
+    $customer = App\Models\Customer::query()->create([
+        'display_name' => 'Fixture Player',
+        'username' => '@fixture_ticket_'.Str::random(6),
+        'is_shell' => true,
+    ]);
+
+    $conversationId = (string) Str::uuid7();
+    DB::table('conversations')->insert([
+        'id' => $conversationId,
+        'tenant_id' => $tenant->identifier(),
+        'channel' => 'fakechan',
+        'channel_ref_id' => 'bot-1',
+        'external_chat_id' => 'chat-'.Str::random(10),
+        'customer_id' => $customer->identifier(),
+        'state' => 'active',
+    ]);
+
+    $ticketId = (string) Str::uuid7();
+    DB::table('tickets')->insert(array_merge([
+        'id' => $ticketId,
+        'tenant_id' => $tenant->identifier(),
+        'conversation_id' => $conversationId,
+        'customer_id' => $customer->identifier(),
+        'number' => random_int(1, 2_000_000_000),
+        'status' => $status,
+        'priority' => 'normal',
+        'source' => 'agent',
+    ], $attributes));
+
+    /** @var App\Models\Conversation $conversation */
+    $conversation = App\Models\Conversation::query()->findOrFail($conversationId);
+    /** @var App\Models\Ticket $ticket */
+    $ticket = App\Models\Ticket::query()->findOrFail($ticketId);
+
+    $openFamily = in_array($status, ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'], true);
+    if ($openFamily && ! ($attributes['linked_work'] ?? false)) {
+        app(App\Domain\Conversations\Storage\ConversationRepository::class)
+            ->claimOpenTicket($conversation, $ticketId);
+    }
+
+    return [$tenant, $conversation, $ticket];
+}
+
+/**
+ * A staff user in the bound tenant holding exactly the named permission keys.
+ *
+ * @param  list<string>  $permissions
+ */
+function ticketActor(array $permissions, string $roleName = 'Fixture Ticket Role'): User
+{
+    return grantPermissions(User::factory()->create(), $permissions, $roleName);
+}
+
 /**
  * Assign the user a role granting every catalog key (all scopes All) —
  * the Super Admin shape. Creates the role once per tenant.

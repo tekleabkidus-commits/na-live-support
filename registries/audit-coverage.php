@@ -570,4 +570,21 @@ return [
         'required_fields' => ['dead_letter_id', 'channel'],
         'owning_doc' => 'Doc04',
     ],
+    [
+        // Doc 06 FR-04 + SEC-03: EVERY transition is audited with actor and
+        // old/new. SEC-03 names spam-unmark, staff reopen and escalation reasons
+        // as always-audited; auditing every transition is the superset, and it is
+        // also the only honest answer to "who moved this ticket, and why" — the
+        // question a betting dispute actually asks six months later.
+        //
+        // `reason` is a required FIELD but may be null: FR-04 requires a reason
+        // only on escalate, spam and staff reopen-of-closed (the transition
+        // service enforces which), and the audit entry records its presence or
+        // absence either way rather than hiding the distinction.
+        'action_key' => 'ticket.status_changed',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ticket_id', 'old_status', 'new_status', 'reason'],
+        'owning_doc' => 'Doc06',
+    ],
 ];
