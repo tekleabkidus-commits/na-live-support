@@ -27,6 +27,21 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | FR-07/BR-04 receipt-order truth with the composite cursor (T-08's first real
 | consumer). Everything below drives the REPOSITORIES (T-01/R-05) — the only
 | sanctioned path to these tables.
+|
+| WHY THE RAW FIXTURES NO LONGER NAME `created_at` (R-19a, ADR 0010). The app role has
+| lost column-level INSERT on `messages.created_at`, so no fixture on this connection
+| may supply it. Two of the three raw inserts here never cared about the value — they
+| exist to trip a CHECK constraint — and simply let the DB default fill it. The FR-07
+| burst genuinely needs an exact tie, and forces one with an UPDATE after the insert:
+| R-19a revoked INSERT on that column, not UPDATE, and the UPDATE runs on the SAME
+| connection and transaction as the conversation it points at.
+|
+| It deliberately does NOT route these through `pgsql_platform` the way RetentionTest
+| and MessagePartitionTest do. Those suites commit their fixtures; these do not, so a
+| second connection cannot see the in-transaction conversation row and every insert
+| would die on the FK instead of on the constraint under test — which is exactly what
+| happened when this was first tried, and it made two CHECK tests pass for the wrong
+| reason.
 */
 
 function conversationsFixture(): array
@@ -161,7 +176,6 @@ test('FR-05/SEC-07 row shadow: kind=note must be is_internal and nothing else ma
         'media' => '[]',
         'is_internal' => $isInternal,
         'channel_meta' => '{}',
-        'created_at' => now(),
     ]);
 
     expect(fn () => $insert('note', false))->toThrow(QueryException::class)
@@ -184,7 +198,6 @@ test('FR-13 shape: outbound rows must carry a delivery state; inbound rows must 
         'media' => '[]',
         'delivery_state' => $state,
         'channel_meta' => '{}',
-        'created_at' => now(),
     ]);
 
     expect(fn () => $insert('out', null))->toThrow(QueryException::class)
@@ -236,9 +249,14 @@ test('FR-07: a same-second burst orders stably by (created_at, id) across cursor
             // The channel claims a LATER clock for the earliest id — BR-04 says that
             // must not matter (it is metadata; EC-10 renders it, never sorts by it).
             'channel_occurred_at' => '2026-08-01 10:59:00+00',
-            'created_at' => $sameSecond,
         ]);
     }
+
+    // FORCE THE TIE. The DB assigned ten distinct microsecond stamps, which would make
+    // this test prove nothing about the tiebreak. The app role may not NAME created_at
+    // on INSERT (R-19a) but may still UPDATE it, and this runs on the same connection
+    // and transaction as the rows above, so they are visible.
+    DB::table('messages')->whereIn('id', $ids)->update(['created_at' => $sameSecond]);
 
     $messages = app(MessageRepository::class);
     $seen = [];

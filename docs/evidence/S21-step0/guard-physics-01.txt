@@ -1,0 +1,39 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      guard-physics
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/GrantPhysicsTest.php
+# started:    2026-08-07T12:32:50Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\GrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m4.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE on audit_log (N-13: append-only by gr[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role SELECT on the tenant_keys hash column (SEC-0[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ships no timestamp column without a timezone (NFR-08/C-03: every[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps after_commit TRUE on the durable queue connection (C-06/EC[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores no recovery code in a readable form (SEC-03/BR-02/Q6: has[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps every credential column out of reach of a plaintext read ([39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on messages.created_at and on nothing[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the platform role able to write historical rows (retention[39m[90m…[39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m21 passed[39;22m[90m (29 assertions)[39m
+  [90mDuration:[39m [39m5.42s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:32:56Z
+# duration:   6s
+# EXIT:       0

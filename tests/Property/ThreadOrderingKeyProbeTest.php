@@ -52,10 +52,18 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | app-server wall clocks") is the convention this violates. The positive
 | control below is the proof that the violation is reachable, not theoretical.
 |
-| STATUS: this is a PROBE, not a regression test. It asserts what the code
-| does TODAY so the behaviour is recorded and reproducible. When the ordering
-| key is fixed, the positive control here MUST start failing — that is the
-| tripwire, and it is intended.
+| STATUS: INVERTED AT THE FIX, and now a regression proof (R-19 / ADR 0010).
+| Everything above is the diagnosis that led to the ruling and is kept because
+| it is what these numbers mean. The behaviour it describes is GONE:
+| `created_at` now comes from PostgreSQL's clock_timestamp(), at microsecond
+| precision, and the application cannot supply it at all (R-19a revoked the app
+| role's column-level INSERT).
+|
+| Three tests below carry "(INVERTED at R-19)" and assert the opposite of what
+| they originally proved. The tripwire fired exactly as intended when the fix
+| landed — they went red on the first full-suite run after the cutover, which is
+| how a characterisation test is supposed to behave. Each still drives the app
+| clock just as hard; the point is that the ordering key no longer listens.
 */
 
 /**
@@ -123,7 +131,7 @@ afterEach(function () {
     CarbonImmutable::setTestNow();
 });
 
-test('FACT 1: created_at is written by the app clock and truncated to whole seconds', function () {
+test('FACT 1 (INVERTED at R-19): created_at is DB time at full precision, not the app clock truncated to seconds', function () {
     $tenant = activateTenant(createTenant());
     bindTenant($tenant);
     $tenantId = $tenant->tenantId();
@@ -143,9 +151,12 @@ test('FACT 1: created_at is written by the app clock and truncated to whole seco
         $rows[0]['ts'],
     ));
 
-    // The microseconds the column CAN hold are gone: the app truncated them.
-    expect($rows[0]['ts'])->toContain('00:00:10')
-        ->and($rows[0]['ts'])->not->toContain('123456');
+    // BEFORE R-19 this asserted the opposite: the stored value was '00:00:10+00',
+    // the app clock truncated to a whole second. Now PostgreSQL's clock_timestamp()
+    // supplies it, so the stored stamp ignores the pinned app clock entirely AND
+    // carries sub-second precision.
+    expect($rows[0]['ts'])->not->toContain('2026-01-01', 'created_at still follows the app clock — R-19/ADR 0010 is broken')
+        ->and($rows[0]['ts'])->toMatch('/\d{2}:\d{2}:\d{2}\.\d+/', 'created_at lost its sub-second precision; the whole-second truncation is back');
 });
 
 test('NEGATIVE CONTROL: a forward-only clock keeps the thread in compose order', function () {
@@ -180,7 +191,7 @@ test('NEGATIVE CONTROL: a forward-only clock keeps the thread in compose order',
     expect($stored)->toBe($composed);
 });
 
-test('INSTRUMENT VALIDITY: microtime() is NOT the clock that writes created_at', function () {
+test('INSTRUMENT VALIDITY (INVERTED at R-19): neither clock writes created_at any more — the database does', function () {
     $tenant = activateTenant(createTenant());
     bindTenant($tenant);
     $tenantId = $tenant->tenantId();
@@ -223,16 +234,17 @@ test('INSTRUMENT VALIDITY: microtime() is NOT the clock that writes created_at',
         implode(' | ', $observed), $microBacksteps, $stampBacksteps,
     ));
 
-    // THE POINT. The OS clock marched forward the whole time, so a
-    // microtime-based counter reports a clean run...
+    // BEFORE R-19 this file's whole point was that these two counters disagreed:
+    // microtime said 0 while the Carbon clock that wrote created_at said 1, and the
+    // thread was out of order on disk. The PINNED CARBON CLOCK STILL STEPS BACK 2 s —
+    // $observed proves it — but it no longer reaches the column, so the stored thread
+    // stays in compose order.
     expect($microBacksteps)->toBe(0);
-    // ...while the clock that actually WROTE created_at went backwards.
-    expect($stampBacksteps)->toBe(1);
+    expect($stampBacksteps)->toBe(1, 'the intended Carbon excursion did not happen; this test would prove nothing');
 
-    // And the thread really is out of order on disk, which the OS-clock
-    // counter would have reported as nothing at all.
+    // The excursion is real and the ordering key ignores it.
     $stored = array_column(storedThread($conversation), 'body');
-    expect($stored)->not->toBe(['m-0', 'm-1', 'm-2']);
+    expect($stored)->toBe(['m-0', 'm-1', 'm-2'], 'a backward APP clock reordered the stored thread — DB time is no longer the source of created_at');
 });
 
 test('THRESHOLD: a backstep SMALLER than the gap between two same-lane messages does not invert', function () {
@@ -273,7 +285,7 @@ test('THRESHOLD: a backstep SMALLER than the gap between two same-lane messages 
     expect($stored)->toBe($composed);
 });
 
-test('POSITIVE CONTROL: a backward app-clock step inverts the (created_at, id) thread order', function () {
+test('POSITIVE CONTROL (INVERTED at R-19): a backward app-clock step no longer touches the thread order', function () {
     $tenant = activateTenant(createTenant());
     bindTenant($tenant);
     $tenantId = $tenant->tenantId();
@@ -311,11 +323,8 @@ test('POSITIVE CONTROL: a backward app-clock step inverts the (created_at, id) t
         var_export($stored !== $composed, true),
     ));
 
-    // THE POSITIVE CONTROL. The soak's body-order check compares exactly these
-    // two arrays. If this assertion passes, a backward clock step is a
-    // sufficient cause for `body-order` violations — the instrument can see it.
-    expect($stored)->not->toBe($composed, 'if this passes, the ordering key survived a backward clock step and body-order violations need another explanation');
-
-    // And name the shape precisely: the last-composed message sorted early.
-    expect($stored[1])->toBe('d-fourth-after-backstep');
+    // INVERTED. This used to assert the arrays DIFFERED — that a 200 ms backward step
+    // put the last-composed message into slot 1. created_at now comes from the
+    // database, so the same excursion changes nothing at all.
+    expect($stored)->toBe($composed, 'a backward app-clock step reordered the thread — R-19/ADR 0010 has regressed');
 });

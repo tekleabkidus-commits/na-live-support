@@ -1,0 +1,31 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-a
+# set:        S21-step0
+# command:    bash /tmp/claude-1000/-home-kidus-projects-na-live-support/c8862f5d-8927-4d5d-b74c-a28604e9c254/scratchpad/sabotage_a.sh /tmp/claude-1000/-home-kidus-projects-na-live-support/c8862f5d-8927-4d5d-b74c-a28604e9c254/scratchpad
+# started:    2026-08-07T12:41:34Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+### SABOTAGE (a): put created_at back on the APP clock
+/home/kidus/projects/na-live-support/database/migrations/2026_08_07_010000_messages_created_at_db_time.php:70:        // SABOTAGE(a): grant restored so the app may name created_at
+/home/kidus/projects/na-live-support/database/migrations/2026_08_07_010000_messages_created_at_db_time.php:71:        // SABOTAGE(a): column grant removed
+/home/kidus/projects/na-live-support/app/Models/Message.php:86:    // SABOTAGE(a): Eloquent supplies created_at from the app clock again
+### the INVERTED controls must now go RED with the ORIGINAL numbers (3 and 50)
+[BACKSTEP DIAG] mode=transient backstep=2000ms restoreAfter=3 affectedLanes=3
+[BACKSTEP DIAG] drainExit=loop-condition trueSent=10000 total=10000 nullExternalId=0
+[BACKSTEP DIAG] stampBacksteps=3
+[BACKSTEP DIAG] violations=3 kinds={"body-order":3,"receipt-order":0}
+[BACKSTEP DIAG] mode=persistent backstep=2000ms restoreAfter=none
+[BACKSTEP DIAG] drainExit=loop-condition trueSent=10000 total=10000 nullExternalId=0
+[BACKSTEP DIAG] stampBacksteps=50
+[BACKSTEP DIAG] violations=50 kinds={"body-order":50,"receipt-order":0}
+  ⨯ REGRESSION (transient): a 2 s excursion over 3 composes now inver… 586.45s  
+  ⨯ REGRESSION (persistent): a 2 s step that is never corrected still… 595.83s  
+   FAILED  Tests\Property\LaneOrderingForcedBackstepTest > REGRESSION (trans…   
+   FAILED  Tests\Property\LaneOrderingForcedBackstepTest > REGRESSION (persi…   
+  Tests:    2 failed (418 assertions)
+### RESTORED (migration + model)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T13:02:15Z
+# duration:   1241s
+# EXIT:       0

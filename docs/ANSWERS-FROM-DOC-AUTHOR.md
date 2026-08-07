@@ -418,3 +418,40 @@ Doc 15's shared golden fixtures are not pinned to an app clock. Non-ordering, no
 timestamps are unchanged and reviewed at Doc 18/19.
 
 ARCHITECTURAL CHANGE — requires an ADR (see ADR 0010).
+
+### R-19a (addendum to R-19). The app must be STRUCTURALLY unable to supply `created_at`
+
+**ADVISOR RULING, 2026-08-07.** A column `DEFAULT` is overridable, so R-19's guarantee
+rests on developer discipline unless it is enforced. CLAUDE.md §1 requires physics over
+discipline. The application must be made structurally unable to supply
+`messages.created_at`.
+
+Preferred mechanism: a column-level grant — `REVOKE INSERT (created_at) ON messages FROM
+app` — the ADR 0003 pattern applied one level finer. A role without column-level INSERT
+cannot name the column; the default still fills it. Fall back to a blocking CI grep gate
+registered in `registries/gates.yaml` only if the fixtures that must keep writing
+historical rows cannot survive the grant without contortion.
+
+**MECHANISM TAKEN: the grant.** Verified before choosing, not assumed:
+
+- `RetentionTest` and `MessagePartitionTest` — the two suites whose whole purpose is
+  writing historical rows — already backdate through
+  `DB::connection('pgsql_platform')->table('messages')->insert([... 'created_at' => ...])`.
+  `platform_admin` keeps table-level INSERT, so **their capability is untouched**.
+- Only `ConversationSchemaTest` backdated on the **app** connection (three sites,
+  including the FR-07 same-second-burst cursor test). Those three fixture writes moved to
+  `pgsql_platform`, which is alignment with the precedent the other two suites already
+  set, not a contortion: writing a synthetic or historical timestamp is a platform-role
+  capability, and what those tests actually assert (CHECK constraints and cursor
+  ordering) is unchanged.
+- Postgres has no "revoke one column" for a role holding table-level INSERT, so the
+  grant is expressed as `REVOKE INSERT ON messages FROM app` followed by
+  `GRANT INSERT (<every column except created_at>) ON messages TO app` — exactly the
+  column-list form already used for `tenant_keys` in the RLS migration.
+- All writes go through the parent partitioned table (verified: no code inserts into a
+  monthly partition directly), so the parent's grant is the one Postgres checks.
+
+Two pre-coding checks required by this ruling, both clean: **no `->latest()` or
+`->oldest()` exists anywhere in `app/` or `tests/`**, so a null `CREATED_AT` cannot
+silently break their column derivation; and **nothing inserts into a monthly partition
+directly**, so both the default and the guard hold.

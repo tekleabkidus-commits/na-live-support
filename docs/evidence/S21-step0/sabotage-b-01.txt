@@ -1,0 +1,23 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b
+# set:        S21-step0
+# command:    sh -c 
+echo "### (b1) PRODUCTION PATH ATTEMPTS TO SUPPLY created_at (app role) — MUST BE REFUSED";
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U app_user -d na_live_support -X -q -c "INSERT INTO messages (id, tenant_id, conversation_id, direction, author_type, kind, created_at) VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 'in', 'customer', 'text', now());" 2>&1 | head -3;
+echo;
+echo "### (b2) SAME INSERT WITHOUT created_at — permission passes (fails later on FK/RLS, which is a DIFFERENT error)";
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U app_user -d na_live_support -X -q -c "INSERT INTO messages (id, tenant_id, conversation_id, direction, author_type, kind) VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 'in', 'customer', 'text');" 2>&1 | head -3;
+
+# started:    2026-08-07T12:34:00Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+### (b1) PRODUCTION PATH ATTEMPTS TO SUPPLY created_at (app role) — MUST BE REFUSED
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "app_user" does not exist
+
+### (b2) SAME INSERT WITHOUT created_at — permission passes (fails later on FK/RLS, which is a DIFFERENT error)
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "app_user" does not exist
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:34:01Z
+# duration:   1s
+# EXIT:       0

@@ -149,3 +149,75 @@ it('keeps every credential column out of reach of a plaintext read (SEC-08)', fu
         }
     }
 });
+
+/**
+ * R-19a / ADR 0010 — the app role cannot NAME messages.created_at.
+ *
+ * Owner ruling R-19 moved the thread ordering key's leading component to database time
+ * (`clock_timestamp()`). A column DEFAULT alone would leave that resting on discipline:
+ * any future code naming the column silently overrides it and the C-11 violation returns
+ * with nothing going red. CLAUDE.md §1 wants physics, so the app role lost column-level
+ * INSERT on `created_at` and cannot supply it at all.
+ *
+ * THE COLUMN LIST IS DERIVED FROM THE SCHEMA, NEVER HARDCODED. A fixed list of names
+ * still passes when a later migration adds a column the R-19a grant never covered — the
+ * app would lose INSERT on it and the failure would surface far away, with no trail back
+ * to this ruling. Reading information_schema instead turns that into an immediate, named
+ * failure here: the set of columns the app may not insert must be EXACTLY ['created_at'].
+ */
+function appInsertableColumnSplit(string $table): array
+{
+    /** @var list<object{column_name: string}> $columns */
+    $columns = DB::connection('pgsql_migrator')->select(
+        'SELECT column_name FROM information_schema.columns
+          WHERE table_schema = ? AND table_name = ?
+          ORDER BY ordinal_position',
+        ['public', $table],
+    );
+
+    expect($columns)->not->toBeEmpty("information_schema knows no columns for {$table} — the derivation below would assert nothing");
+
+    $granted = [];
+    $denied = [];
+
+    foreach ($columns as $column) {
+        /** @var list<object{ok: bool}> $rows */
+        $rows = DB::connection('pgsql_migrator')->select(
+            "SELECT has_column_privilege('app', ?, ?, 'INSERT') AS ok",
+            [$table, $column->column_name],
+        );
+
+        if ((bool) $rows[0]->ok) {
+            $granted[] = $column->column_name;
+        } else {
+            $denied[] = $column->column_name;
+        }
+    }
+
+    return [$granted, $denied];
+}
+
+it('denies the app role INSERT on messages.created_at and on nothing else (R-19a: DB time is physics, not discipline)', function () {
+    [$granted, $denied] = appInsertableColumnSplit('messages');
+
+    // One assertion covers both failure directions: created_at granted back (the C-11
+    // violation returns), or a newly added column left out of the R-19a grant.
+    expect($denied)->toBe(['created_at'], sprintf(
+        'the app role must be unable to insert EXACTLY messages.created_at. Denied: [%s]. Granted: [%s]. '
+        .'If created_at is missing from the denied list, R-19/ADR 0010 is broken and the ordering key is back on an '
+        .'app-server wall clock. If anything ELSE appears there, a migration added a column the R-19a grant never '
+        .'covered — add it to that grant, do not weaken this test.',
+        implode(', ', $denied), implode(', ', $granted),
+    ));
+});
+
+it('keeps the platform role able to write historical rows (retention and partition fixtures depend on it)', function () {
+    /** @var list<object{ok: bool}> $rows */
+    $rows = DB::connection('pgsql_migrator')->select(
+        "SELECT has_column_privilege('platform_admin', 'messages', 'created_at', 'INSERT') AS ok",
+    );
+
+    expect((bool) $rows[0]->ok)->toBeTrue(
+        'platform_admin lost INSERT on messages.created_at — backdating historical rows is a capability the retention and partition suites must keep',
+    );
+});

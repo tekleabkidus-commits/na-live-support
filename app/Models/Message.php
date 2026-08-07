@@ -70,6 +70,49 @@ final class Message extends Model implements TenantScoped
 
     protected $table = 'messages';
 
+    /**
+     * FULL PRECISION, BOTH WAYS (R-19 §3, ADR 0010).
+     *
+     * Laravel's Postgres grammar defaults every model's date format to whole seconds,
+     * and `Model::setAttribute()` runs a date-cast attribute through that format on
+     * ASSIGNMENT — not just on write. So even though the database now assigns
+     * `created_at` via `clock_timestamp()` and hands it back through RETURNING, the
+     * value was being truncated the moment it was set on the model: the row held
+     * 13:54:57.893601 while the model held 13:54:57. Anything copying the model's value
+     * into a composite FK (message_revisions.message_created_at) then pointed at a row
+     * that did not exist. Caught by EditDeleteTranscriptTest and NodeKillReplayDrillTest.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
+    /**
+     * DB TIME, NOT APP TIME (owner ruling R-19, ADR 0010).
+     *
+     * A null CREATED_AT makes Eloquent's updateTimestamps() skip setCreatedAt entirely,
+     * so `created_at` never enters the insert payload and PostgreSQL's
+     * `clock_timestamp()` default fills it at microsecond precision. `updated_at` is
+     * handled by a SEPARATE branch of that same method and is untouched.
+     *
+     * This is belt to the grant's braces: R-19a revokes the app role's column-level
+     * INSERT on `created_at`, so supplying it is impossible rather than merely avoided.
+     * Nothing in the codebase uses ->latest()/->oldest() (which derive their column from
+     * this constant), verified before the change.
+     */
+    public const CREATED_AT = null;
+
+    /**
+     * Hand back the timestamp the DATABASE chose, in the same round trip.
+     *
+     * Without this the model's `created_at` is null after create() — a silent null
+     * waiting for the first caller that wants one, and Doc 06's FR-24 timestamps and
+     * closed-schema event payloads will want one shortly. A refresh() would also work
+     * but queries by `id` alone, which cannot prune partitions: at soak volume that is
+     * 10 000 unpruned lookups. RETURNING costs nothing extra.
+     */
+    public function newEloquentBuilder($query): MessageBuilder
+    {
+        return new MessageBuilder($query);
+    }
+
     /** @return array<string, string> */
     protected function casts(): array
     {

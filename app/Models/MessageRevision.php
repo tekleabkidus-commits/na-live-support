@@ -41,6 +41,21 @@ final class MessageRevision extends Model implements TenantScoped
     protected $table = 'message_revisions';
 
     /** @return array<string, string> */
+    /**
+     * MICROSECOND PRECISION IS LOAD-BEARING HERE (R-19 / ADR 0010).
+     *
+     * `message_created_at` is half of the composite FK
+     * (message_id, message_created_at) -> messages (id, created_at). Since R-19 moved
+     * `messages.created_at` to PostgreSQL's `clock_timestamp()` it carries microseconds,
+     * and Eloquent re-serialises this cast attribute with the model's date format on the
+     * way back out. Laravel's Postgres grammar defaults that format to whole seconds, so
+     * writing a revision truncated the copy, it no longer equalled the row it pointed at,
+     * and the FK refused it — "Key is not present in table messages" against a message
+     * that plainly existed. Caught by EditDeleteTranscriptTest and NodeKillReplayDrillTest
+     * the first time the full suite ran after the cutover.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected function casts(): array
     {
         return [

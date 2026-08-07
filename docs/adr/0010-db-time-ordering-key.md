@@ -32,3 +32,34 @@ microsecond precision is retained. UUIDv7 `id` remains the same-microsecond tieb
   excursion no longer inverts any lane — and thereby become the regression proof.
   Deleting or relaxing them is a gate-weakening change requiring the signed process.
 - Doc 06 builds its FR-24 timestamps this way from the start.
+- **Scope assessment for the two other ordered/partitioned `created_at` columns**,
+  against R-19's scope sentence ("every column that participates in an ordering key, a
+  cursor, or a reported metric"; non-ordering, non-metric timestamps reviewed at Doc
+  18/19). Both were checked, not assumed:
+  - `conversations.created_at` — **OUT OF SCOPE.** `ConversationRepository` contains no
+    `orderBy` at all and never references the column; no cursor and no metric reads it.
+    UNBLOCKER: Doc 06's ticket lists and Doc 07's Unified Inbox will sort conversations.
+    The first sort or cursor that uses `conversations.created_at` brings it into scope
+    and must convert it in the same session.
+  - `events.created_at` — **DEFERRED, with an unblocker, not dismissed.** It is the
+    partition key of the append-only domain-event stream, and it is written from the
+    relay's app clock. Nothing orders by it today: `events` is only ever INSERTed
+    (`OutboxRelay`), and the relay's own cursor is `outbox.id` (UUIDv7), not a timestamp.
+    So it is out of scope by R-19's wording, but it carries the highest latent risk of
+    the three, because a replay or analytics consumer (Docs 14/15) would naturally order
+    an event stream by time and would silently inherit this defect. UNBLOCKER: convert it
+    at the FIRST ordered read or cursor over `events`, or when Doc 14/15 begins,
+    whichever is sooner. The change is mechanically identical to this one — one
+    `ALTER ... SET DEFAULT` plus one column grant — so deferring costs nothing but
+    forgetting would cost the same debugging session twice.
+- **The default is enforced by GRANT, not by discipline (owner addendum R-19a).** A
+  column default is overridable, so `app` loses column-level INSERT on `created_at`:
+  `REVOKE INSERT ON messages FROM app` then
+  `GRANT INSERT (<every column except created_at>) ON messages TO app` — the ADR 0003
+  pattern one level finer, in the column-list form already used for `tenant_keys`. A
+  role that cannot name the column cannot supply it; the default still fills it. This
+  is physics per CLAUDE.md §1, not a convention. `platform_admin` retains table-level
+  INSERT so fixtures that must write historical rows (retention, partition routing)
+  keep that capability; any future fixture needing a chosen `created_at` writes through
+  `pgsql_platform`. The grant is checked on the parent partitioned table, which is
+  where every write goes.

@@ -1,0 +1,43 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b-guard
+# set:        S21-step0
+# command:    sh -c 
+PSQL="docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U postgres -q -X";
+PEST="docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/GrantPhysicsTest.php --filter=created_at";
+echo "### SABOTAGE: grant INSERT(created_at) back to app on the TEST database";
+$PSQL -d na_live_support_test -c "GRANT INSERT (created_at) ON messages TO app;";
+echo "### the guard must now go RED";
+$PEST 2>&1 | sed "s/\x1b\[[0-9;]*m//g" | tail -12;
+echo;
+echo "### RESTORE: revoke it again";
+$PSQL -d na_live_support_test -c "REVOKE INSERT (created_at) ON messages FROM app;";
+echo "### the guard must be GREEN again";
+$PEST 2>&1 | sed "s/\x1b\[[0-9;]*m//g" | tail -8;
+
+# started:    2026-08-07T12:37:27Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+### SABOTAGE: grant INSERT(created_at) back to app on the TEST database
+### the guard must now go RED
+
+   PASS  Tests\Isolation\GrantPhysicsTest
+  ✓ it denies the app role INSERT on messages.created_at and on nothing… 3.50s  
+
+  Tests:    1 passed (2 assertions)
+  Duration: 3.57s
+
+
+### RESTORE: revoke it again
+### the guard must be GREEN again
+
+   PASS  Tests\Isolation\GrantPhysicsTest
+  ✓ it denies the app role INSERT on messages.created_at and on nothing… 3.25s  
+
+  Tests:    1 passed (2 assertions)
+  Duration: 3.30s
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:37:35Z
+# duration:   8s
+# EXIT:       0

@@ -1,0 +1,17 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b
+# set:        S21-step0
+# command:    sh -c docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U postgres -d na_live_support -X -q -v ON_ERROR_STOP=0 -f - < /tmp/claude-1000/-home-kidus-projects-na-live-support/c8862f5d-8927-4d5d-b74c-a28604e9c254/scratchpad/sab_b.sql
+# started:    2026-08-07T12:35:46Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+### (b1) app role NAMES created_at -- MUST BE REFUSED BY THE R-19a GRANT
+
+### (b2) SAME insert WITHOUT created_at -- the grant allows the columns, so it must fail on something ELSE (RLS), proving b1 was refused for the COLUMN
+psql:<stdin>:4: ERROR:  permission denied for table messages
+psql:<stdin>:8: ERROR:  unrecognized configuration parameter "app.tenant_id"
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:35:47Z
+# duration:   1s
+# EXIT:       0

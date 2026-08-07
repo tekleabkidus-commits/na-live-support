@@ -52,7 +52,20 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | Matching the predicted COUNT, not merely producing violations, is what makes
 | this evidence about the mechanism rather than a coincidence.
 |
-| READING THE RESULT — the fork this test exists to settle:
+| INVERTED AT THE FIX — THIS IS NOW THE REGRESSION PROOF (R-19 / ADR 0010).
+| The fork below was settled: the transient case reproduced soak-10 to the
+| number (stampBacksteps=3, violations=3, body-order only, fully drained) and
+| the persistent case inverted all 50 lanes. That established RISK 0c as
+| SUFFICIENT in the real geometry, the owner ruled, and created_at moved to
+| PostgreSQL's clock_timestamp().
+|
+| So both tests now assert the OPPOSITE, and that inversion is the proof the
+| fix works. The excursion is still driven exactly as hard — the app clock
+| still steps backwards by 2 s, transiently and permanently — but it no longer
+| reaches the ordering key, so stampBacksteps and violations must BOTH be zero.
+| If either test goes red, DB time has stopped being the source of created_at.
+|
+| The original fork, kept because it is what these numbers mean:
 |   reproduces soak-10's shape  -> RISK 0c is SUFFICIENT in the real geometry
 |   does NOT reproduce it       -> the clock is NOT the cause, a THIRD defect
 |                                  exists, and no one should migrate the
@@ -63,9 +76,9 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | through max_locks_per_transaction inside one harness transaction). It must
 | therefore run ALONE, which the `soak` group is what guarantees.
 |
-| STATUS: characterisation. It asserts what the code does TODAY. When the
-| ordering key is fixed, these tests MUST start failing — that is the tripwire,
-| and it is intended.
+| STATUS: REGRESSION PROOF for ADR 0010. Deleting or relaxing either assertion
+| is a gate-weakening change and requires the signed change-file process. If a
+| future refactor makes them awkward, that is a signal about the refactor.
 */
 
 /**
@@ -256,7 +269,7 @@ afterEach(function () {
     CarbonImmutable::setTestNow();
 });
 
-test('FORCED BACKSTEP (transient): a 2 s excursion over 3 composes reproduces soak-10 exactly — 3 body-order, 0 receipt-order, fully drained', function () {
+test('REGRESSION (transient): a 2 s excursion over 3 composes now inverts NOTHING — DB time ignores the app clock', function () {
     $tenant = activateTenant(createTenant());
     $tenantId = $tenant->tenantId();
     bindTenant($tenant);
@@ -281,19 +294,22 @@ test('FORCED BACKSTEP (transient): a 2 s excursion over 3 composes reproduces so
             ->and($r['trueSent'])->toBe($r['total'])
             ->and($r['nullExternalId'])->toBe(0);
 
-        // The instrument saw the excursion on the clock that writes created_at.
-        expect($r['stampBacksteps'])->toBe(3);
+        // THE REGRESSION PROOF (R-19 / ADR 0010). Before the fix this excursion put
+        // stampBacksteps=3 and violations=3 kinds={"body-order":3,...} on the board —
+        // soak-10's exact shape. created_at now comes from PostgreSQL's
+        // clock_timestamp(), so driving the APP clock backwards has no purchase on the
+        // ordering key at all: the excursion still happens, and nothing inverts.
+        expect($r['stampBacksteps'])->toBe(0, 'the app clock no longer reaches created_at; a backward step must leave the written stamps monotonic');
 
-        // soak-10's shape, to the number.
-        expect($r['kinds']['body-order'])->toBe(3)
+        expect($r['kinds']['body-order'])->toBe(0)
             ->and($r['kinds']['receipt-order'])->toBe(0)
-            ->and($r['violations'])->toBe(3);
+            ->and($r['violations'])->toBe(0);
     } finally {
         cleanupTenants([$tenantId]);
     }
 })->group('soak');
 
-test('FORCED BACKSTEP (persistent): a 2 s step that is never corrected inverts EVERY lane', function () {
+test('REGRESSION (persistent): a 2 s step that is never corrected still inverts NOTHING', function () {
     $tenant = activateTenant(createTenant());
     $tenantId = $tenant->tenantId();
     bindTenant($tenant);
@@ -317,9 +333,11 @@ test('FORCED BACKSTEP (persistent): a 2 s step that is never corrected inverts E
             ->and($r['trueSent'])->toBe($r['total'])
             ->and($r['nullExternalId'])->toBe(0);
 
-        // Every lane regressed exactly once, and every lane is out of order.
-        expect($r['stampBacksteps'])->toBe(50)
-            ->and($r['kinds']['body-order'])->toBe(50)
+        // Before the fix this was the worst case: stampBacksteps=50, every lane out of
+        // order. The clock still steps and never recovers; the ordering key simply does
+        // not listen to it any more.
+        expect($r['stampBacksteps'])->toBe(0)
+            ->and($r['kinds']['body-order'])->toBe(0)
             ->and($r['kinds']['receipt-order'])->toBe(0);
     } finally {
         cleanupTenants([$tenantId]);

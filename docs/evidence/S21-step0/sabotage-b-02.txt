@@ -1,0 +1,24 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U postgres -d na_live_support -X -q -v ON_ERROR_STOP=0 -c 
+\echo '### (b1) app role NAMES created_at -- MUST BE REFUSED BY GRANT'
+SET ROLE app;
+INSERT INTO messages (id, tenant_id, conversation_id, direction, author_type, kind, created_at)
+VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 'in', 'customer', 'text', now());
+\echo '### (b2) SAME insert WITHOUT created_at -- grant allows it; it must fail on something ELSE (RLS/FK), proving the refusal above was the COLUMN'
+INSERT INTO messages (id, tenant_id, conversation_id, direction, author_type, kind)
+VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 'in', 'customer', 'text');
+RESET ROLE;
+
+# started:    2026-08-07T12:34:24Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+ERROR:  syntax error at or near "\"
+LINE 2: \echo '### (b1) app role NAMES created_at -- MUST BE REFUSED...
+        ^
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:34:25Z
+# duration:   1s
+# EXIT:       1

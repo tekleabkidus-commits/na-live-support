@@ -154,6 +154,14 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
                 // Read the timestamp Eloquent actually wrote, truncated the way
                 // the insert truncates it. This is the ordering key's leading
                 // component, observed at the source rather than via a proxy clock.
+                // WHOLE SECONDS ON PURPOSE, and it is CONSERVATIVE, not authoritative.
+                // This mirrored the old failure mode exactly, when created_at could only
+                // differ by whole seconds. Since R-19 the column carries microseconds, so
+                // a sub-second regression would slip past this counter. That is
+                // acceptable because the counter is a PREDICTOR: the assertion that
+                // actually decides the test is `violations`, computed from the database's
+                // own ORDER BY (created_at, id) at full precision. Tighten to '.u' if this
+                // ever needs to be the primary signal.
                 $stamp = $message->created_at?->format('Y-m-d H:i:s') ?? '';
                 if (isset($laneLastStamp[$lane]) && $stamp < $laneLastStamp[$lane]) {
                     $stampBacksteps++;

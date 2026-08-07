@@ -1,0 +1,54 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b-guard
+# set:        S21-step0
+# command:    sh -c 
+M=database/migrations/2026_08_07_010000_messages_created_at_db_time.php; SC=/tmp/claude-1000/-home-kidus-projects-na-live-support/c8862f5d-8927-4d5d-b74c-a28604e9c254/scratchpad;
+PEST='docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/GrantPhysicsTest.php --filter=created_at';
+echo '### SABOTAGE: remove the R-19a REVOKE/GRANT from the migration itself';
+sed -i "s|^        DB::statement('REVOKE INSERT ON messages FROM app');|        // SABOTAGE: revoke removed|; s|^        DB::statement(\"GRANT INSERT ({\$columns}) ON messages TO app\");|        // SABOTAGE: column grant removed|" $M;
+grep -n 'SABOTAGE' $M;
+echo '### the guard must now go RED';
+$PEST 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | tail -14;
+echo;
+echo '### RESTORE the migration';
+cp $SC/mig.bak $M; grep -c 'REVOKE INSERT ON messages FROM app' $M;
+echo '### the guard must be GREEN again';
+$PEST 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | tail -8;
+
+# started:    2026-08-07T12:40:34Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+### SABOTAGE: remove the R-19a REVOKE/GRANT from the migration itself
+70:        // SABOTAGE: revoke removed
+71:        // SABOTAGE: column grant removed
+### the guard must now go RED
+    203▕     // One assertion covers both failure directions: created_at granted back (the C-11
+    204▕     // violation returns), or a newly added column left out of the R-19a grant.
+  ➜ 205▕     expect($denied)->toBe(['created_at'], sprintf(
+    206▕         'the app role must be unable to insert EXACTLY messages.created_at. Denied: [%s]. Granted: [%s]. '
+    207▕         .'If created_at is missing from the denied list, R-19/ADR 0010 is broken and the ordering key is back on an '
+    208▕         .'app-server wall clock. If anything ELSE appears there, a migration added a column the R-19a grant never '
+    209▕         .'covered — add it to that grant, do not weaken this test.',
+
+  1   tests/Isolation/GrantPhysicsTest.php:205
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 4.05s
+
+
+### RESTORE the migration
+1
+### the guard must be GREEN again
+
+   PASS  Tests\Isolation\GrantPhysicsTest
+  ✓ it denies the app role INSERT on messages.created_at and on nothing… 4.11s  
+
+  Tests:    1 passed (2 assertions)
+  Duration: 4.23s
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T12:40:43Z
+# duration:   9s
+# EXIT:       0

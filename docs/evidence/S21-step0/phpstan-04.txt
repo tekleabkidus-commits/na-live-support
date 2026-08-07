@@ -1,0 +1,120 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      phpstan
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+# started:    2026-08-07T13:37:07Z
+# git:        9a5d93a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Note: Using configuration file /app/phpstan.neon.
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Domain/Conversations/Notes/NotesWriter.php                         
+ ------ ----------------------------------------------------------------------- 
+  64     Call to an undefined method                                            
+         Illuminate\Database\Eloquent\Model::identifier().                      
+         🪪  method.notFound                                                    
+  74     Call to an undefined method                                            
+         Illuminate\Database\Eloquent\Model::identifier().                      
+         🪪  method.notFound                                                    
+  74     Parameter $entityId of method App\Support\Audit\AuditLogger::record()  
+         expects string|null, mixed given.                                      
+         🪪  argument.type                                                      
+  79     Call to an undefined method                                            
+         Illuminate\Database\Eloquent\Model::identifier().                      
+         🪪  method.notFound                                                    
+  87     Anonymous function should return App\Models\Message but returns        
+         Illuminate\Database\Eloquent\Model.                                    
+         🪪  return.type                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Domain/Conversations/Outbound/SendingReconciler.php                
+ ------ ----------------------------------------------------------------------- 
+  56     Access to an undefined property                                        
+         Illuminate\Database\Eloquent\Model::$external_message_id.              
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  57     Parameter #1 $message of method                                        
+         App\Domain\Conversations\Outbound\DeliveryStateMachine::transition()   
+         expects App\Models\Message, Illuminate\Database\Eloquent\Model given.  
+         🪪  argument.type                                                      
+  64     Cannot access offset 'attempts' on mixed.                              
+         🪪  offsetAccess.nonOffsetAccessible                                   
+  66     Parameter #1 $message of method                                        
+         App\Domain\Conversations\Outbound\DeliveryStateMachine::transition()   
+         expects App\Models\Message, Illuminate\Database\Eloquent\Model given.  
+         🪪  argument.type                                                      
+  69     Cannot access offset 'first_failed_at' on mixed.                       
+         🪪  offsetAccess.nonOffsetAccessible                                   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Domain/Conversations/Storage/MessageRepository.php                 
+ ------ ----------------------------------------------------------------------- 
+  36     Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::persistInbound()   
+         should return App\Models\Message but returns                           
+         Illuminate\Database\Eloquent\Model.                                    
+         🪪  return.type                                                        
+  87     Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::persistOutbound()  
+         should return App\Models\Message but returns                           
+         Illuminate\Database\Eloquent\Model.                                    
+         🪪  return.type                                                        
+  120    Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::findByIdempotency  
+         Key() should return App\Models\Message|null but returns                
+         Illuminate\Database\Eloquent\Model|null.                               
+         🪪  return.type                                                        
+  195    Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::persistSystemMark  
+         er() should return App\Models\Message but returns                      
+         Illuminate\Database\Eloquent\Model.                                    
+         🪪  return.type                                                        
+  219    Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::findByExternalMes  
+         sageId() should return App\Models\Message|null but returns             
+         Illuminate\Database\Eloquent\Model|null.                               
+         🪪  return.type                                                        
+  225    Method App\Domain\Conversations\Storage\MessageRepository::findById()  
+         should return App\Models\Message|null but returns                      
+         Illuminate\Database\Eloquent\Model|null.                               
+         🪪  return.type                                                        
+  231    Method                                                                 
+         App\Domain\Conversations\Storage\MessageRepository::findInConversatio  
+         n() should return App\Models\Message|null but returns                  
+         Illuminate\Database\Eloquent\Model|null.                               
+         🪪  return.type                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Domain/Conversations/Transcripts/TranscriptExporter.php            
+ ------ ----------------------------------------------------------------------- 
+  86     Parameter #1 $callback of method                                       
+         Illuminate\Database\Eloquent\Collection<int,Illuminate\Database\Eloqu  
+         ent\Model>::map() expects callable(Illuminate\Database\Eloquent\Model  
+         , int): non-falsy-string, Closure(App\Models\Message):                 
+         non-falsy-string given.                                                
+         🪪  argument.type                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/MessageBuilder.php                                          
+ ------ ----------------------------------------------------------------------- 
+  28     Class App\Models\MessageBuilder extends generic class                  
+         Illuminate\Database\Eloquent\Builder but does not specify its types:   
+         TModel                                                                 
+         🪪  missingType.generics                                               
+  43     Parameter #1 $values of method                                         
+         Illuminate\Database\Query\Builder::insertGetId() expects array<string  
+         , mixed>, array<int|string, mixed> given.                              
+         🪪  argument.type                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 20 errors                                                        
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T13:37:17Z
+# duration:   10s
+# EXIT:       1

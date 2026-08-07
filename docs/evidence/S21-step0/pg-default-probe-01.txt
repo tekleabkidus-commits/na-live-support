@@ -1,0 +1,43 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      pg-default-probe
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T postgres psql -U postgres -d postgres -X -q -c 
+CREATE TABLE _t_parent (id int, ts timestamptz NOT NULL DEFAULT now()) PARTITION BY RANGE (ts);
+CREATE TABLE _t_p1 PARTITION OF _t_parent FOR VALUES FROM ('2026-01-01') TO ('2027-01-01');
+ALTER TABLE _t_parent ALTER COLUMN ts SET DEFAULT clock_timestamp();
+INSERT INTO _t_parent (id) VALUES (1),(2),(3);
+SELECT id, ts FROM _t_parent ORDER BY id;
+SELECT count(DISTINCT ts) AS distinct_ts_in_one_txn FROM _t_parent;
+SELECT column_default AS parent_default FROM information_schema.columns WHERE table_name='_t_parent' AND column_name='ts';
+SELECT column_default AS partition_default FROM information_schema.columns WHERE table_name='_t_p1' AND column_name='ts';
+DROP TABLE _t_parent CASCADE;
+# started:    2026-08-07T11:49:11Z
+# git:        9a5d93a (clean working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+ id |              ts               
+----+-------------------------------
+  1 | 2026-08-07 11:49:11.69106+00
+  2 | 2026-08-07 11:49:11.69112+00
+  3 | 2026-08-07 11:49:11.691122+00
+(3 rows)
+
+ distinct_ts_in_one_txn 
+------------------------
+                      3
+(1 row)
+
+  parent_default   
+-------------------
+ clock_timestamp()
+(1 row)
+
+ partition_default 
+-------------------
+ clock_timestamp()
+(1 row)
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T11:49:11Z
+# duration:   0s
+# EXIT:       0
