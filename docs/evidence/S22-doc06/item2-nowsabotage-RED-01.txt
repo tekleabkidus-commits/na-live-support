@@ -1,0 +1,109 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      item2-nowsabotage-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/TicketGrantPhysicsTest.php tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-07T18:46:25Z
+# git:        00ee919 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m4.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit fills every DB-time column from clock_timestamp() and never from[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.cre[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it fills every DB-time c…   
+[39;1m  Failed asserting that two strings are equal.
+  [39;22m[31m-'tickets.created_at has NO default at all — nothing legal can fill a column the app cannot write'[39m[39;1m
+  [39;22m[32m+'clock_timestamp()'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/TicketGrantPhysicsTest.php[39m:[32m153[39m
+    149▕         $byColumn[$row->column_name] = (string) $row->default_expr;
+    150▕     }
+    151▕ 
+    152▕     foreach (['created_at', 'last_status_changed_at'] as $column) {
+  ➜ 153▕         expect($byColumn)->toHaveKey($column, "tickets.{$column} has NO default at all — nothing legal can fill a column the app cannot write");
+    154▕         expect($byColumn[$column])->toContain('clock_timestamp()', sprintf(
+    155▕             'tickets.%s defaults to "%s" — R-19b requires clock_timestamp()', $column, $byColumn[$column],
+    156▕         ));
+    157▕         // "never now()" as its own assertion, because a default such as
+
+  [33m1   [39m[39;1mtests/Isolation/TicketGrantPhysicsTest.php[39;22m:[39;1m153[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m R-19b strengthening…    
+[39;1m  Expected: [39;22m[31mnow()[39m[39;1m
+
+  To contain: [39;22m[32mclock_timestamp()[39m
+
+  at [32mtests/Feature/Tickets/MetricTimestampsTest.php[39m:[32m290[39m
+    286▕            FROM information_schema.columns
+    287▕           WHERE table_schema = 'public' AND table_name = 'tickets' AND column_name = 'last_status_changed_at'",
+    288▕     );
+    289▕ 
+  ➜ 290▕     expect((string) $definition->column_default)->toContain('clock_timestamp()')
+    291▕         ->and($definition->is_nullable)->toBe('NO',
+    292▕             'a nullable status clock would make the first accumulator interval measure from nothing');
+    293▕ 
+    294▕     // And it is genuinely populated on a row the app inserted without naming it.
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m290[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m R-19b strengthening…    
+[39;1m  last_status_changed_at (2026-08-07 18:46:32.830348+00) is EARLIER than the opening probe (2026-08-07 18:46:32.83134+00) — that is transaction-start time, i.e. now(), not clock_timestamp(): the first accumulator interval would measure from before the ticket existed (FR-24, R-19b).
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Tickets/MetricTimestampsTest.php[39m:[32m332[39m
+    328▕            FROM tickets WHERE id = ?',
+    329▕         [$opening, $closing, $opening, $ticket->identifier()],
+    330▕     );
+    331▕ 
+  ➜ 332▕     expect((bool) $bounds->at_or_after_opening)->toBeTrue(sprintf(
+    333▕         'last_status_changed_at (%s) is EARLIER than the opening probe (%s) — that is transaction-start '
+    334▕         .'time, i.e. now(), not clock_timestamp(): the first accumulator interval would measure from '
+    335▕         .'before the ticket existed (FR-24, R-19b).',
+    336▕         (string) $bounds->stamp, (string) $opening,
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m332[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m29 passed[39;22m[90m (95 assertions)[39m
+  [90mDuration:[39m [39m7.41s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:46:32Z
+# duration:   7s
+# EXIT:       1

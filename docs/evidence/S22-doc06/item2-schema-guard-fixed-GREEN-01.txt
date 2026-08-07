@@ -1,0 +1,59 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      item2-schema-guard-fixed-GREEN
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/TicketGrantPhysicsTest.php
+# started:    2026-08-07T18:49:11Z
+# git:        00ee919 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m4.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit fills every DB-time column from clock_timestamp() and never from[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.cre[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update t[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it fills every DB-time c…   
+[39;1m  Expected: [39;22m[31mclock_timestamp()[39m[39;1m
+
+  To contain: [39;22m[32mtickets.created_at defaults to "clock_timestamp()" — R-19b requires clock_timestamp()[39m
+
+  at [32mtests/Isolation/TicketGrantPhysicsTest.php[39m:[32m161[39m
+    157▕         // mechanics were fixed and both runs repeated.
+    158▕         expect(array_key_exists($column, $byColumn))->toBeTrue(
+    159▕             "tickets.{$column} has NO default at all — nothing legal can fill a column the app cannot write",
+    160▕         );
+  ➜ 161▕         expect($byColumn[$column])->toContain('clock_timestamp()', sprintf(
+    162▕             'tickets.%s defaults to "%s" — R-19b requires clock_timestamp()', $column, $byColumn[$column],
+    163▕         ));
+    164▕         // "never now()" as its own assertion, because a default such as
+    165▕         // `COALESCE(now(), clock_timestamp())` would satisfy the line above.
+
+  [33m1   [39m[39;1mtests/Isolation/TicketGrantPhysicsTest.php[39;22m:[39;1m161[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m21 passed[39;22m[90m (52 assertions)[39m
+  [90mDuration:[39m [39m6.01s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T18:49:18Z
+# duration:   7s
+# EXIT:       1

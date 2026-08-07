@@ -120,6 +120,70 @@ it('denies the app role INSERT and UPDATE on exactly the tickets DB-time/metric 
     ));
 })->with(['INSERT', 'UPDATE']);
 
+it('fills every DB-time column from clock_timestamp() and never from now() (R-19b, advisor strengthening 2)', function () {
+    // THE GRANTS SAY THE APP CANNOT WRITE THESE COLUMNS. This says what fills them
+    // INSTEAD — and the two together are the whole R-19b guarantee: unwritable by the
+    // app, filled by the database's per-row clock.
+    //
+    // WHY now() WOULD BE A DEFECT, NOT A STYLE CHOICE. now()/CURRENT_TIMESTAMP return
+    // TRANSACTION-START time, so every ticket created in one transaction would share
+    // one identical stamp and `last_status_changed_at` would be earlier than the row
+    // itself — making the first accumulator interval measure from the transaction's
+    // beginning rather than from the ticket's birth (FR-24). That is the same class of
+    // defect R-19 fixed for messages, and it would be invisible: the column would be
+    // populated, non-null, and plausible.
+    //
+    // Derived from the LIVE catalog via pg_get_expr, never from the migration file: a
+    // later ALTER that changed a default would leave the migration reading correctly
+    // while the database did something else.
+    $defaults = DB::connection('pgsql_migrator')->select("
+        SELECT a.attname AS column_name, pg_get_expr(d.adbin, d.adrelid) AS default_expr
+          FROM pg_attribute a
+          JOIN pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+         WHERE a.attrelid = 'public.tickets'::regclass
+           AND a.attname IN ('created_at', 'last_status_changed_at')
+    ");
+
+    $byColumn = [];
+    foreach ($defaults as $row) {
+        $byColumn[$row->column_name] = (string) $row->default_expr;
+    }
+
+    // EVERY ASSERTION BELOW IS `expect(<bool>)->toBeTrue($message)`, deliberately.
+    // Pest's toHaveKey($key, $value) reads its second argument as the expected VALUE
+    // and toContain(...$needles) reads its as ANOTHER NEEDLE — neither takes a
+    // message. Written the natural way, this test failed against a perfectly correct
+    // schema, and worse, it was RED BEFORE the now() sabotage, so its red during the
+    // sabotage proved nothing at all. Both runs were repeated after this fix. The
+    // boolean-plus-message form has no such trap.
+    foreach (['created_at', 'last_status_changed_at'] as $column) {
+        expect(array_key_exists($column, $byColumn))->toBeTrue(
+            "tickets.{$column} has NO default at all — nothing legal can fill a column the app cannot write",
+        );
+
+        $default = $byColumn[$column];
+
+        expect(str_contains($default, 'clock_timestamp()'))->toBeTrue(sprintf(
+            'tickets.%s defaults to "%s" — R-19b requires clock_timestamp()', $column, $default,
+        ));
+
+        // "never now()" as its own assertion, because a default such as
+        // `COALESCE(now(), clock_timestamp())` would satisfy the line above.
+        expect(str_contains($default, 'now()'))->toBeFalse(sprintf(
+            'tickets.%s default mentions now() ("%s") — transaction-start time cannot order rows written together (C-11)',
+            $column, $default,
+        ));
+    }
+
+    // NOT NULL matters for the same reason: a nullable status clock would make the
+    // first interval measure from nothing.
+    $nullable = DB::connection('pgsql_migrator')->selectOne("
+        SELECT is_nullable FROM information_schema.columns
+         WHERE table_schema = 'public' AND table_name = 'tickets' AND column_name = 'last_status_changed_at'
+    ");
+    expect($nullable->is_nullable)->toBe('NO');
+});
+
 it('denies the app role INSERT on exactly ticket_merge_snapshots.created_at (R-19b: the 24 h window authority)', function () {
     [, $denied] = ticketAppColumnSplit('ticket_merge_snapshots', 'INSERT');
 

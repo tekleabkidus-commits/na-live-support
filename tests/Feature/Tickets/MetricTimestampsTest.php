@@ -292,8 +292,58 @@ test('R-19b strengthening 2: last_status_changed_at is born from clock_timestamp
             'a nullable status clock would make the first accumulator interval measure from nothing');
 
     // And it is genuinely populated on a row the app inserted without naming it.
+    //
+    // NOTE ON WHAT THIS HALF DOES *NOT* PROVE — it is why the bracketed test below
+    // exists. A `now()` default would also produce a non-null value here, and would
+    // look entirely correct while silently stamping transaction-start time. Non-null
+    // is not the property that matters; WHEN is.
     [, , $ticket] = ticketFixture('new');
     expect($ticket->last_status_changed_at)->not->toBeNull()
         ->and($ticket->waiting_staff_seconds)->toBe(0)
         ->and($ticket->waiting_customer_seconds)->toBe(0);
+});
+
+test('R-19b strengthening 2 (behavioural): a fresh ticket\'s status clock lands BETWEEN two clock_timestamp() probes', function () {
+    // THE BEHAVIOURAL GOLDEN the schema check cannot give. No clock is mocked and no
+    // wall clock is asserted against — the bounds are two database readings taken
+    // around the insert, so the assertion is DB-value-to-DB-value throughout.
+    //
+    // WHY THIS DISCRIMINATES clock_timestamp() FROM now(), which is the entire point:
+    // the harness wraps each test in a transaction that began BEFORE the opening probe.
+    // A `now()` default returns transaction-start time, which is strictly EARLIER than
+    // that probe, so the lower bound below fails. Only a per-row clock read at insert
+    // time can land inside the window.
+    $opening = DB::selectOne('SELECT clock_timestamp() AS t')->t;
+
+    [, , $ticket] = ticketFixture('new');
+
+    $closing = DB::selectOne('SELECT clock_timestamp() AS t')->t;
+
+    // Compared IN the database, so no PHP datetime parsing can blunt the microseconds.
+    $bounds = DB::selectOne(
+        'SELECT (last_status_changed_at >= ?::timestamptz) AS at_or_after_opening,
+                (last_status_changed_at <= ?::timestamptz) AS at_or_before_closing,
+                (created_at            >= ?::timestamptz) AS created_at_or_after_opening,
+                last_status_changed_at AS stamp
+           FROM tickets WHERE id = ?',
+        [$opening, $closing, $opening, $ticket->identifier()],
+    );
+
+    expect((bool) $bounds->at_or_after_opening)->toBeTrue(sprintf(
+        'last_status_changed_at (%s) is EARLIER than the opening probe (%s) — that is transaction-start '
+        .'time, i.e. now(), not clock_timestamp(): the first accumulator interval would measure from '
+        .'before the ticket existed (FR-24, R-19b).',
+        (string) $bounds->stamp, (string) $opening,
+    ));
+
+    expect((bool) $bounds->at_or_before_closing)->toBeTrue(sprintf(
+        'last_status_changed_at (%s) is LATER than the closing probe (%s) — the stamp does not come from '
+        .'the insert at all.',
+        (string) $bounds->stamp, (string) $closing,
+    ));
+
+    // created_at is the same rule and the same window (R-19b applies to both).
+    expect((bool) $bounds->created_at_or_after_opening)->toBeTrue(
+        'created_at predates the opening probe — the ordering key is back on transaction-start time (C-11)',
+    );
 });
