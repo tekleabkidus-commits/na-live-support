@@ -31,18 +31,23 @@ namespace App\Domain\Tickets\Transitions;
  *   spam             -> new               unmark within 7 days, restoring the prior status (FR-09)
  *   spam             -> open              unmark within 7 days, restoring the prior status (FR-09)
  *
- * TWO READINGS WORTH STATING, because a future session will wonder:
+ * THREE READINGS WORTH STATING, because a future session will wonder. The first two
+ * are FILED AS INTERPRETATION A-10 in docs/ANSWERS-FROM-DOC-AUTHOR.md, which is
+ * canonical — this docblock summarises it and never replaces it. The whole edge list
+ * below was advisor-countersigned against §4.2 on 2026-08-07 (15 edges, no R-23).
  *
  * 1. SPAM IS ENTERED FROM `new` AND `open` ONLY. In the diagram the mark-spam line
- *    joins the descenders of exactly those two columns. So marking a pending_customer
+ *    joins the descenders of exactly those two columns — verified by character index,
+ *    not by eye (column 2 = new, column 23 = open). So marking a pending_customer
  *    ticket as spam is NOT an edge, and §8's "illegal targets absent, not disabled"
  *    means the panel simply never offers it there.
- * 2. SPAM'S UNMARK RETURNS TO {new, open} for the same reason — "prior status" can
- *    only be a status spam was reachable from.
- * 3. `closed` IS REACHED ONLY FROM `resolved`. FR-25's bulk `close` action therefore
- *    applies to resolved tickets, and a bulk close over an open ticket fails THAT ITEM
- *    with illegal_transition — which is exactly AC-07's honest per-item partial
- *    success, not an error in the batch.
+ * 2. SPAM'S UNMARK RETURNS TO {new, open} BY REACHABILITY (A-10) — §4.2 writes only
+ *    "unmark ≤ 7 d → prior status" and names no target, and a prior status can only be
+ *    one spam was reachable from.
+ * 3. `closed` IS REACHED ONLY FROM `resolved` — countersigned as the only inbound edge.
+ *    FR-25's bulk `close` action therefore applies to resolved tickets, and a bulk
+ *    close over an open ticket fails THAT ITEM with illegal_transition — which is
+ *    exactly AC-07's honest per-item partial success, not an error in the batch.
  *
  * PERMISSIONS RIDE THE EDGE, not the target status, because two edges into `open` need
  * different keys (a de-escalation is not a reopen). Every key below is verified present

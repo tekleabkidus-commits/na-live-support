@@ -572,6 +572,42 @@ FR-26's list — enters the catalog by this filed interpretation, the A-4 preced
 Doc 06's catalog total: 23 events (FR-26's 22 + EC-06's one); `ticket.resolved`
 doubles as Doc 14's `ticket_resolved` SMS signal (FR-06), no separate event.
 
+### A-10. §4.2's spam-unmark edge resolves to spam→new and spam→open (FILED INTERPRETATION)
+
+**Filed at the S22 step-2 checkpoint, advisor-countersigned 2026-08-07.** The doc
+author has NOT been consulted; this records an inference so it cannot silently become
+"how it has always worked".
+
+§4.2 draws the unmark edge as a parenthetical rather than an arrow —
+`spam (terminal; unmark ≤ 7 d → prior status)` — and FR-09 repeats the same wording
+("unmark within 7 days restores prior status"). Neither names a target status, so
+"prior status" has to be resolved before the FR-04 matrix can contain the edge at all.
+
+**THE BASIS IS REACHABILITY, not preference.** A ticket's prior status can only be a
+status from which `spam` is reachable. In §4.2 the mark-spam line joins exactly two
+descenders — verified mechanically by character index rather than by eye: column 2
+(`new`, the `└`) and column 23 (`open`, the `┴` at column 24 joining it). No other
+column's descender meets that line. So spam is entered from `new` and `open` and from
+nowhere else, and therefore:
+
+- `spam -> new` — unmark within 7 days, restoring the prior status
+- `spam -> open` — unmark within 7 days, restoring the prior status
+
+Both carry `tickets.spam.mark` (the catalog holds no separate unmark key, and the
+disposition is one permission) and both require a reason (SEC-03 audits spam-unmark
+with actor + old/new).
+
+**CONSEQUENCE WORTH STATING.** Because spam is reachable only from `new` and `open`,
+marking a `pending_customer`, `pending_internal`, `escalated`, `resolved` or `closed`
+ticket as spam is NOT an edge, and §8's "illegal targets absent, not disabled" means
+the status control simply never offers it there. FR-25's bulk `spam` action over such a
+ticket fails THAT ITEM with `illegal_transition` — AC-07's honest per-item partial
+success, not a batch error. The same reasoning applies to `closed`, whose only inbound
+edge is `resolved -> closed`: a bulk `close` over an open ticket per-item-fails, and
+the advisor's countersign records that as spec behaviour rather than a defect.
+
+Implemented in `TransitionMatrix::EDGES`, whose docblock cites this record.
+
 ### A-9. Route→permission mappings Doc 06 does not name inline (FILED INTERPRETATION)
 
 All from the seeded 21-key `tickets.*` catalog (counted from the registry this
