@@ -63,3 +63,7 @@ microsecond precision is retained. UUIDv7 `id` remains the same-microsecond tieb
   keep that capability; any future fixture needing a chosen `created_at` writes through
   `pgsql_platform`. The grant is checked on the parent partitioned table, which is
   where every write goes.
+- New tables inherit this rule from their first migration (advisor addendum R-19b):
+  ordering- and metric-bearing timestamps ship with the clock_timestamp() default and
+  the R-19a column grant from birth, with the schema-derived guard extended per table.
+  Doc 06's tables are the first application.

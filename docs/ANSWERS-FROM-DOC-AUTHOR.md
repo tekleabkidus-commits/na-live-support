@@ -455,3 +455,21 @@ Two pre-coding checks required by this ruling, both clean: **no `->latest()` or
 `->oldest()` exists anywhere in `app/` or `tests/`**, so a null `CREATED_AT` cannot
 silently break their column derivation; and **nothing inserts into a monthly partition
 directly**, so both the default and the guard hold.
+
+### R-19b (addendum to R-19). New tables inherit the DB-time rule from birth
+
+**ADVISOR RULING, 2026-08-07.** Everything R-19 says about the SOURCE of an ordering- or
+metric-bearing timestamp applies to every table created from here on, not only to
+messages. Concretely, for Doc 06 and every document after it: any new table whose
+created_at (or any other timestamp) participates in an ordering key, a cursor, or a
+reported metric ships in its FIRST migration with the clock_timestamp() default AND
+the R-19a column grant (INSERT and UPDATE both revoked on that column for app). Not
+retrofitted later.
+
+This explicitly includes Doc 06's tickets table and its companions — Doc 06 T-08 puts
+list reads through Doc 07's read models, so those columns are ordered by construction
+— and Doc 06's FR-24 metric timestamps, which ADR 0010 already names.
+
+The schema-derived guard generalises with it: each such table gets the same assertion,
+reading information_schema.columns and proving app's denied set for both INSERT and
+UPDATE is exactly the DB-time columns. Same shape, per table.
