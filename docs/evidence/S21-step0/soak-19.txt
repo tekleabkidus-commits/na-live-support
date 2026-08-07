@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      soak
+# set:        S21-step0
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Property/LaneOrderingSoakTest.php
+# started:    2026-08-07T14:53:31Z
+# git:        3a9d0af (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[SOAK DIAG] drainExit=loop-condition breakCycle=0 cycles=205 injected=5 stallBudget=22
+[SOAK DIAG] sentCount(var)=10000 trueSent(db)=10000 total=10000 nullExternalId=0
+[SOAK DIAG] deliveryStates={"sent":10000}
+[SOAK DIAG] clockBacksteps=0 maxBackstepMs=0.000 clockSkewMs=10438.965
+[SOAK DIAG] laneBacksteps=0 maxLaneBackstepMs=0.000  (OS clock, environment only)
+[SOAK DIAG] stampBacksteps=0  <- THE body-order precondition (written created_at, microsecond)
+[SOAK DIAG] violations=0 kinds={"body-order":0,"receipt-order":0}
+
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\LaneOrderingSoakTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-03: zero order violations across a 10k-message soak with failu[39m[90m…[39m [90m615.05s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (10211 assertions)[39m
+  [90mDuration:[39m [39m615.14s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T15:04:23Z
+# duration:   652s
+# EXIT:       0

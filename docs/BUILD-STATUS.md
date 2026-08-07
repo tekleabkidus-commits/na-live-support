@@ -163,6 +163,7 @@ form of the same evidence, and both fixes carry positive controls.
 | 6 | **Avatar-media seam** | **CLAIMED + docblocked.** `MediaStore::store()`/`signedUrl()` are channel-independent, so a staff avatar rides scan → store → serve; Doc 08 wires profile usage |
 | 7 | **Route→permission mapping** | Every new route mapped in the same commit, from seeded keys only. The blocking `permission-mapping` gate is green |
 | 8 | **Standing PARTIALs untouched** | Doc 03 SS-01/SS-02 and Doc 02 AC-05 were not re-claimed and not touched |
+| 9 | **`events.created_at` — DEFERRED DB-time conversion (ADR 0010, owner ruling R-19)** | Numbered so it cannot be lost in an ADR consequence list. `events` is the partition key of the append-only domain-event stream and is written from the relay's APP clock — the same C-11 defect R-19 fixed for `messages`. It is out of R-19's scope only because nothing orders it TODAY: `events` is INSERT-only (`OutboxRelay`) and the relay's own cursor is `outbox.id` (UUIDv7), not a timestamp. **UNBLOCKER: convert at the FIRST ordered read or cursor over `events`, or when Doc 14/15 begins, whichever is sooner.** Mechanically identical to the messages cutover — one `ALTER ... SET DEFAULT clock_timestamp()` plus the column grant — so deferring is cheap and forgetting costs the same debugging session twice. `conversations.created_at` is OUT of scope (no orderBy, no cursor, no metric reads it); its unblocker is Doc 06/07 sorting |
 
 ### CI RECORD — run 31127499107 on `d1c11f4` was INFRASTRUCTURE, NOT A RED TEST
 
@@ -196,6 +197,33 @@ different run. This is the first execution of **Stage 3b**, and the first time t
 soak has ever run in CI as an owned, blocking job rather than an unnamed passenger.
 Its capture artifact is filed at
 `docs/evidence/S21-step0/ci-soak-31169076186-stage3b.txt`.
+
+### R-18 CLOSED — the AC-03 soak is deterministic and the ordering key is fixed
+
+Owner ruling R-18 gated any Doc 06 plan on the soak becoming deterministic. **Advisor-
+confirmed CLOSED on `3a9d0af`**, against the three declared conditions:
+
+- **(a) The forced-backstep controls, INVERTED, green.** The same 2 s excursions that
+  reproduced run `soak-10` exactly (transient -> 3 lanes, persistent -> 50) now move
+  nothing: `stampBacksteps=0`, `violations=0 kinds={"body-order":0,"receipt-order":0}`,
+  both fully drained (`trueSent=10000 nullExternalId=0`).
+  Captured: `docs/evidence/S21-step0/final-controls-01.txt`.
+- **(b) Three consecutive unforced soaks green on this host**, each reporting its
+  precondition counter at microsecond precision — `soak-19`, `soak-20`, `soak-21`, all
+  `stampBacksteps=0 violations=0`, 10 211 assertions each. Stated honestly: the host
+  skewed FORWARD on all three (+10.4 s, +8.8 s, +8.1 s) and did not step backward, so
+  the "host stepped and nothing inverted" demonstration comes from the forced controls,
+  which manufacture it deterministically, not from these runs.
+- **(c) CI Stage 3b green** — run
+  [31188058863](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31188058863),
+  "Stage 3b: AC-03 ordering evidence — 10k soak + backstep controls (alone)": `success`.
+
+**RISK 0c is FIXED** (R-19/R-19a, ADR 0010): `created_at` is PostgreSQL
+`clock_timestamp()` at microsecond precision, and the app role is structurally unable to
+set OR move it — INSERT and UPDATE both revoked at column level, with a schema-derived
+guard asserting the denied set is exactly `['created_at']` for both privileges.
+**RISK 0a remains OPEN** (the soak corrupting the shared run) and **RISK 0d remains OPEN**
+and has worsened — see below.
 
 ### RISKS carried forward
 
@@ -310,7 +338,17 @@ files loaded, `p99` ranged **0.681 – 2.648 ms** against the asserted 5x ceilin
 
 **Datum 2 — GREEN on the GitHub runner**, inside Stage 3's full suite, in CI run
 [31169076186](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31169076186).
-So the failure does not reproduce off this WSL2 dev host.
+**Datum 3 — RED on a GitHub runner**, run
+[31188058863](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31188058863)
+Stage 3, `1 failed, 11 skipped, 655 passed` — the same test, the same budget, on the same
+tree that ran 656/0 locally minutes earlier.
+**"HOST-SPECIFIC" IS STRUCK.** Datum 2 was one green run and I over-read it. This is not a
+WSL2 artefact: it reproduces on hosted runners too, and the honest description is an
+intermittent whose trigger is unidentified.
+**IT NOW REDS FULL CI RUNS**, which is the ignore-red hazard arriving by another route —
+the same failure mode RISK 0a's flaky soak was contained to avoid. A pipeline that reddens
+at random teaches everyone to wave red away, and the next real regression rides in behind
+it. Containment is NOT yet decided; that is the open part of this entry.
 **Attribution.** Not caused by the S21 step-0 changes: it fails with only its own file
 loaded, and it measures RBAC permission checks, which none of those changes touch. The
 p50 spread alone (0.173 → 0.709 ms, ~4x) is host noise, not code.

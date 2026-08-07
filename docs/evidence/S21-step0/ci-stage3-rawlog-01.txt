@@ -1,0 +1,132 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      ci-stage3-rawlog
+# set:        S21-step0
+# command:    sh -c gh api repos/tekleabkidus-commits/na-live-support/actions/jobs/92898091538/logs 2>&1 | tail -120
+# started:    2026-08-07T15:34:54Z
+# git:        3a9d0af (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+2026-08-07T14:40:59.9684331Z   [41;1m FAILED [49;22m [1mTests\Performance\RbacBudgetsTest[22m [90m>[39m it meets NFR-01 indicatively:…   
+2026-08-07T14:40:59.9769840Z [39;1m  NFR-01 cached map + checks: p99 2.102 ms exceeds the asserted 5x regression ceiling of 1.500 ms (spec budget 0.3 ms; p50 0.222 ms, max 2.958 ms). This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a machine under heavy load — compare p50 against the spec budget to tell which.
+2026-08-07T14:40:59.9772275Z Failed asserting that 2.102477 is equal to 1.5 or is less than 1.5.[39;22m
+2026-08-07T14:40:59.9790800Z 
+2026-08-07T14:40:59.9797693Z   at [32mtests/Pest.php[39m:[32m602[39m
+2026-08-07T14:40:59.9843853Z     598▕ {
+2026-08-07T14:40:59.9845178Z     599▕     $ceiling = assertedBudget($specBudgetMs);
+2026-08-07T14:40:59.9846315Z     600▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+2026-08-07T14:40:59.9847143Z     601▕ 
+2026-08-07T14:40:59.9847975Z   ➜ 602▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+2026-08-07T14:40:59.9849328Z     603▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+2026-08-07T14:40:59.9850825Z     604▕         .'%s',
+2026-08-07T14:40:59.9851454Z     605▕         $name,
+2026-08-07T14:40:59.9852067Z     606▕         $stats['p99'],
+2026-08-07T14:40:59.9852539Z 
+2026-08-07T14:40:59.9860601Z   [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m602[39;22m
+2026-08-07T14:40:59.9862036Z   [33m2   [39m[39;1mtests/Performance/RbacBudgetsTest.php[39;22m:[39;1m45[39;22m
+2026-08-07T14:40:59.9862896Z 
+2026-08-07T14:40:59.9863093Z 
+2026-08-07T14:40:59.9864465Z   [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m11 skipped[39;22m[90m,[39m[39m [39m[32;1m655 passed[39;22m[90m (8703 assertions)[39m
+2026-08-07T14:40:59.9866008Z   [90mDuration:[39m [39m159.72s[39m
+2026-08-07T14:40:59.9866569Z 
+2026-08-07T14:41:00.0076044Z ##[error]Process completed with exit code 1.
+2026-08-07T14:41:00.0125100Z ##[group]Run docker compose -f docker/compose.yaml down -v
+2026-08-07T14:41:00.0125565Z [36;1mdocker compose -f docker/compose.yaml down -v[0m
+2026-08-07T14:41:00.0178810Z shell: /usr/bin/bash -e {0}
+2026-08-07T14:41:00.0179053Z env:
+2026-08-07T14:41:00.0179243Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-08-07T14:41:00.0179494Z   COMPOSER_NO_INTERACTION: 1
+2026-08-07T14:41:00.0179723Z   COMPOSER_NO_AUDIT: 1
+2026-08-07T14:41:00.0179927Z ##[endgroup]
+2026-08-07T14:41:00.1380583Z  Container na-live-support-app-1  Stopping
+2026-08-07T14:41:00.1866757Z  Container na-live-support-clamav-1  Stopping
+2026-08-07T14:41:00.2147633Z  Container na-live-support-mock-telegram-1  Stopping
+2026-08-07T14:41:00.2345376Z  Container na-live-support-worker-1  Stopping
+2026-08-07T14:41:00.2348030Z  Container na-live-support-egress-proxy-1  Stopping
+2026-08-07T14:41:00.2414857Z  Container na-live-support-mock-sms-1  Stopping
+2026-08-07T14:41:00.2417540Z  Container na-live-support-meilisearch-1  Stopping
+2026-08-07T14:41:00.2443226Z  Container na-live-support-scheduler-1  Stopping
+2026-08-07T14:41:00.2624507Z  Container na-live-support-mock-ai-1  Stopping
+2026-08-07T14:41:00.2737760Z  Container na-live-support-mailpit-1  Stopping
+2026-08-07T14:41:00.2769429Z  Container na-live-support-reverb-1  Stopping
+2026-08-07T14:41:00.2852889Z  Container na-live-support-minio-1  Stopping
+2026-08-07T14:41:00.7055575Z  Container na-live-support-egress-proxy-1  Stopped
+2026-08-07T14:41:00.7135466Z  Container na-live-support-egress-proxy-1  Removing
+2026-08-07T14:41:00.7375170Z  Container na-live-support-egress-proxy-1  Removed
+2026-08-07T14:41:00.9350602Z  Container na-live-support-meilisearch-1  Stopped
+2026-08-07T14:41:00.9460278Z  Container na-live-support-meilisearch-1  Removing
+2026-08-07T14:41:01.0050868Z  Container na-live-support-meilisearch-1  Removed
+2026-08-07T14:41:01.0170576Z  Container na-live-support-reverb-1  Stopped
+2026-08-07T14:41:01.0236901Z  Container na-live-support-reverb-1  Removing
+2026-08-07T14:41:01.0702985Z  Container na-live-support-reverb-1  Removed
+2026-08-07T14:41:01.0716963Z  Container na-live-support-app-1  Stopped
+2026-08-07T14:41:01.0723114Z  Container na-live-support-app-1  Removing
+2026-08-07T14:41:01.0737537Z  Container na-live-support-clamav-1  Stopped
+2026-08-07T14:41:01.0747432Z  Container na-live-support-clamav-1  Removing
+2026-08-07T14:41:01.0784909Z  Container na-live-support-clamav-1  Removed
+2026-08-07T14:41:01.0844904Z  Container na-live-support-app-1  Removed
+2026-08-07T14:41:01.1508052Z  Container na-live-support-minio-1  Stopped
+2026-08-07T14:41:01.1509659Z  Container na-live-support-minio-1  Removing
+2026-08-07T14:41:01.1563124Z  Container na-live-support-mailpit-1  Stopped
+2026-08-07T14:41:01.1565866Z  Container na-live-support-mailpit-1  Removing
+2026-08-07T14:41:01.1887735Z  Container na-live-support-minio-1  Removed
+2026-08-07T14:41:01.1889129Z  Container na-live-support-mailpit-1  Removed
+2026-08-07T14:41:01.6523250Z  Container na-live-support-scheduler-1  Stopped
+2026-08-07T14:41:01.6524322Z  Container na-live-support-scheduler-1  Removing
+2026-08-07T14:41:01.6602573Z  Container na-live-support-scheduler-1  Removed
+2026-08-07T14:41:02.3990530Z  Container na-live-support-worker-1  Stopped
+2026-08-07T14:41:02.4019034Z  Container na-live-support-worker-1  Removing
+2026-08-07T14:41:02.4075964Z  Container na-live-support-worker-1  Removed
+2026-08-07T14:41:02.4077149Z  Container na-live-support-redis-volatile-1  Stopping
+2026-08-07T14:41:02.4077944Z  Container na-live-support-redis-durable-1  Stopping
+2026-08-07T14:41:02.4078742Z  Container na-live-support-postgres-1  Stopping
+2026-08-07T14:41:02.5640027Z  Container na-live-support-redis-volatile-1  Stopped
+2026-08-07T14:41:02.5641057Z  Container na-live-support-redis-volatile-1  Removing
+2026-08-07T14:41:02.5781623Z  Container na-live-support-redis-volatile-1  Removed
+2026-08-07T14:41:02.6610504Z  Container na-live-support-redis-durable-1  Stopped
+2026-08-07T14:41:02.6611426Z  Container na-live-support-redis-durable-1  Removing
+2026-08-07T14:41:02.6686904Z  Container na-live-support-redis-durable-1  Removed
+2026-08-07T14:41:02.7242463Z  Container na-live-support-postgres-1  Stopped
+2026-08-07T14:41:02.7245121Z  Container na-live-support-postgres-1  Removing
+2026-08-07T14:41:02.7323535Z  Container na-live-support-postgres-1  Removed
+2026-08-07T14:41:10.2477102Z  Container na-live-support-mock-telegram-1  Stopped
+2026-08-07T14:41:10.2480246Z  Container na-live-support-mock-telegram-1  Removing
+2026-08-07T14:41:10.2630766Z  Container na-live-support-mock-telegram-1  Removed
+2026-08-07T14:41:10.3449517Z  Container na-live-support-mock-sms-1  Stopped
+2026-08-07T14:41:10.3450832Z  Container na-live-support-mock-sms-1  Removing
+2026-08-07T14:41:10.3507128Z  Container na-live-support-mock-sms-1  Removed
+2026-08-07T14:41:10.4849547Z  Container na-live-support-mock-ai-1  Stopped
+2026-08-07T14:41:10.4850518Z  Container na-live-support-mock-ai-1  Removing
+2026-08-07T14:41:10.4972702Z  Container na-live-support-mock-ai-1  Removed
+2026-08-07T14:41:10.4985285Z  Volume na-live-support_postgres-data  Removing
+2026-08-07T14:41:10.4986465Z  Volume na-live-support_clamav-data  Removing
+2026-08-07T14:41:10.4987186Z  Network na-live-support_na-net  Removing
+2026-08-07T14:41:10.5852655Z  Volume na-live-support_postgres-data  Removed
+2026-08-07T14:41:10.5856499Z  Volume na-live-support_minio-data  Removing
+2026-08-07T14:41:10.5859060Z  Volume na-live-support_redis-durable-data  Removing
+2026-08-07T14:41:10.5861161Z  Volume na-live-support_meilisearch-data  Removing
+2026-08-07T14:41:10.6151808Z  Volume na-live-support_clamav-data  Removed
+2026-08-07T14:41:10.6160799Z  Volume na-live-support_redis-durable-data  Removed
+2026-08-07T14:41:10.6215952Z  Volume na-live-support_meilisearch-data  Removed
+2026-08-07T14:41:10.6224423Z  Volume na-live-support_minio-data  Removed
+2026-08-07T14:41:10.6236348Z  Network na-live-support_na-net  Removed
+2026-08-07T14:41:10.6395606Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-07T14:41:10.6396854Z Post job cleanup.
+2026-08-07T14:41:10.8757103Z [command]/usr/bin/git version
+2026-08-07T14:41:10.9045811Z git version 2.54.0
+2026-08-07T14:41:10.9495158Z Temporarily overriding HOME='/home/runner/work/_temp/7ac8d33a-8361-4aed-9625-38e77e629326' before making global git config changes
+2026-08-07T14:41:10.9665493Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-07T14:41:10.9856539Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/na-live-support/na-live-support
+2026-08-07T14:41:10.9858295Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-07T14:41:10.9860273Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-07T14:41:11.0045661Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-07T14:41:11.0062253Z http.https://github.com/.extraheader
+2026-08-07T14:41:11.0211403Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-08-07T14:41:11.0213674Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-07T14:41:11.0916545Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-07T14:41:11.0951468Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-07T14:41:11.1161552Z Cleaning up orphan processes
+2026-08-07T14:41:11.1519488Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T15:34:58Z
+# duration:   4s
+# EXIT:       0

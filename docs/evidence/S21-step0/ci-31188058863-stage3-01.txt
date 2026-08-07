@@ -1,0 +1,30 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      ci-31188058863-stage3
+# set:        S21-step0
+# command:    sh -c gh run view --job 
+ --log-failed 2>&1 | tail -60
+# started:    2026-08-07T15:33:28Z
+# git:        3a9d0af (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+flag needs an argument: --job
+
+Usage:  gh run view [<run-id>] [flags]
+
+Flags:
+  -a, --attempt uint      The attempt number of the workflow run
+      --exit-status       Exit with non-zero status if run failed
+  -j, --job string        View a specific job ID from a run
+  -q, --jq expression     Filter JSON output using a jq expression
+      --json fields       Output JSON with the specified fields
+      --log               View full log for either a run or specific job
+      --log-failed        View the log for any failed steps in a run or specific job
+  -t, --template string   Format JSON output using a Go template; see "gh help formatting"
+  -v, --verbose           Show job steps
+  -w, --web               Open run in the browser
+  
+sh: 2: --log-failed: not found
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T15:33:28Z
+# duration:   0s
+# EXIT:       0
