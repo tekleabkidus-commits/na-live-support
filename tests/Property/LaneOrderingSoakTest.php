@@ -105,31 +105,28 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
 
         // INTERLEAVED composes: round after round across every lane, so the lanes
         // are genuinely concurrent work rather than 50 sequential drains.
-        // WALL-CLOCK MONOTONICITY WATCH (S21 step 0, prompted by run soak-10).
-        // `created_at` is written by the APP clock, truncated to whole seconds
-        // (proved in ThreadOrderingKeyProbeTest), so display order (created_at,
-        // id) inverts if the clock ever steps BACKWARD across a second boundary.
-        // This host runs WSL2 with Hyper-V TimeSync (hv_utils.timesync_implicit=1),
-        // which steps the guest clock against Windows -- so the soak measures the
-        // wall clock against the MONOTONIC clock while it composes. If a future
-        // red shows backsteps > 0, the body-order violations are explained; if it
-        // shows 0, they are NOT the clock and need a different answer. Either way
-        // the next session is told which, instead of having to infer it.
+        // CLOCK WATCH (S21 step 0, prompted by run soak-10; kept after R-19).
+        //
+        // HISTORY, because the counters only make sense with it. `created_at` used to
+        // be written by the APP clock at whole-second precision, so a backward step
+        // larger than the same-lane gap inverted the thread — proved by construction in
+        // LaneOrderingForcedBackstepTest, which reproduced soak-10 exactly. Owner ruling
+        // R-19 moved the column to PostgreSQL's clock_timestamp() and R-19a revoked the
+        // app role's INSERT and UPDATE on it, so the app clock can no longer reach it.
         //
         // THREE measurements, and only the THIRD is authoritative.
         //
-        // microtime() is NOT the clock that writes created_at. Eloquent's
-        // freshTimestamp() returns Date::now() — CARBON, which honours
-        // setTestNow; microtime() reads the OS clock and honours nothing. They
-        // can disagree completely, and ThreadOrderingKeyProbeTest proves it:
-        // microtime backsteps 0, created_at backsteps 1, thread out of order on
-        // disk. A microtime-based counter would have called that run clean.
+        // The two OS-clock counters are an ENVIRONMENT observation only: they are what
+        // distinguishes this WSL2 host (Hyper-V TimeSync, hv_utils.timesync_implicit=1,
+        // which really does step the guest clock) from a CI runner, and nothing more.
+        // They never could speak for created_at: microtime() reads the OS clock while
+        // Eloquent's freshTimestamp() returned Date::now(), i.e. CARBON, which honours
+        // setTestNow. ThreadOrderingKeyProbeTest demonstrates them disagreeing outright.
         //
-        // So the OS-clock counters below are kept only as an environment
-        // observation (they are what distinguishes this WSL2 host from a CI
-        // runner), and `stampBacksteps` — measured on the ACTUAL created_at
-        // value Eloquent wrote, truncated exactly as the insert truncates it —
-        // is the real precondition for a body-order violation.
+        // `stampBacksteps` is the real precondition: a same-lane regression of the
+        // ACTUAL created_at value that reached the row, compared at MICROSECOND
+        // precision. Post-R-19 it should be 0 on every run — and if it is ever not, DB
+        // time has stopped being the source and the ordering guarantee is gone.
         $clockBacksteps = 0;
         $maxBackstepMs = 0.0;
         $laneBacksteps = 0;
@@ -139,8 +136,8 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         $wallStart = microtime(true);
         $monoStart = hrtime(true) / 1e9;
 
-        // THE AUTHORITATIVE COUNTER: same-lane regression of the written
-        // created_at, in the whole-second form that actually reaches the column.
+        // THE AUTHORITATIVE COUNTER: same-lane regression of the written created_at,
+        // at full precision (see the '.u' format below).
         $stampBacksteps = 0;
         $laneLastStamp = [];
 
@@ -154,15 +151,13 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
                 // Read the timestamp Eloquent actually wrote, truncated the way
                 // the insert truncates it. This is the ordering key's leading
                 // component, observed at the source rather than via a proxy clock.
-                // WHOLE SECONDS ON PURPOSE, and it is CONSERVATIVE, not authoritative.
-                // This mirrored the old failure mode exactly, when created_at could only
-                // differ by whole seconds. Since R-19 the column carries microseconds, so
-                // a sub-second regression would slip past this counter. That is
-                // acceptable because the counter is a PREDICTOR: the assertion that
-                // actually decides the test is `violations`, computed from the database's
-                // own ORDER BY (created_at, id) at full precision. Tighten to '.u' if this
-                // ever needs to be the primary signal.
-                $stamp = $message->created_at?->format('Y-m-d H:i:s') ?? '';
+                // MICROSECONDS, NOT SECONDS. Whole-second granularity mirrored the OLD
+                // failure mode, when created_at could only differ by whole seconds. Since
+                // R-19 the column carries microseconds, so a whole-second comparison
+                // would read 0 unconditionally — a counter that can no longer fire, sat
+                // in the diagnostics line looking like evidence. At '.u' it can still
+                // catch the only regression left: a sub-second one.
+                $stamp = $message->created_at?->format('Y-m-d H:i:s.u') ?? '';
                 if (isset($laneLastStamp[$lane]) && $stamp < $laneLastStamp[$lane]) {
                     $stampBacksteps++;
                 }
@@ -278,7 +273,7 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
             "[SOAK DIAG] deliveryStates=%s\n".
             "[SOAK DIAG] clockBacksteps=%d maxBackstepMs=%.3f clockSkewMs=%.3f\n".
             "[SOAK DIAG] laneBacksteps=%d maxLaneBackstepMs=%.3f  (OS clock, environment only)\n".
-            "[SOAK DIAG] stampBacksteps=%d  <- THE body-order precondition (written created_at)\n",
+            "[SOAK DIAG] stampBacksteps=%d  <- THE body-order precondition (written created_at, microsecond)\n",
             $drainExit, $breakCycle, $cycle, $injected, $stallBudget,
             $sentCount, $trueSent, $total, $nullExternal,
             json_encode($states),

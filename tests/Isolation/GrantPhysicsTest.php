@@ -165,7 +165,7 @@ it('keeps every credential column out of reach of a plaintext read (SEC-08)', fu
  * to this ruling. Reading information_schema instead turns that into an immediate, named
  * failure here: the set of columns the app may not insert must be EXACTLY ['created_at'].
  */
-function appInsertableColumnSplit(string $table): array
+function appWritableColumnSplit(string $table, string $privilege): array
 {
     /** @var list<object{column_name: string}> $columns */
     $columns = DB::connection('pgsql_migrator')->select(
@@ -183,8 +183,8 @@ function appInsertableColumnSplit(string $table): array
     foreach ($columns as $column) {
         /** @var list<object{ok: bool}> $rows */
         $rows = DB::connection('pgsql_migrator')->select(
-            "SELECT has_column_privilege('app', ?, ?, 'INSERT') AS ok",
-            [$table, $column->column_name],
+            "SELECT has_column_privilege('app', ?, ?, ?) AS ok",
+            [$table, $column->column_name, $privilege],
         );
 
         if ((bool) $rows[0]->ok) {
@@ -197,19 +197,23 @@ function appInsertableColumnSplit(string $table): array
     return [$granted, $denied];
 }
 
-it('denies the app role INSERT on messages.created_at and on nothing else (R-19a: DB time is physics, not discipline)', function () {
-    [$granted, $denied] = appInsertableColumnSplit('messages');
+it('denies the app role INSERT and UPDATE on messages.created_at, and on nothing else (R-19a: DB time is physics, not discipline)', function (string $privilege) {
+    [$granted, $denied] = appWritableColumnSplit('messages', $privilege);
 
+    // BOTH privileges, because revoking only INSERT left the hole open from the other
+    // side: the app could still UPDATE created_at afterwards and reach exactly the same
+    // bad state — an ordering key set from an app clock — with an INSERT-only guard
+    // reporting everything fine. created_at is immutable; neither door is open.
     // One assertion covers both failure directions: created_at granted back (the C-11
     // violation returns), or a newly added column left out of the R-19a grant.
     expect($denied)->toBe(['created_at'], sprintf(
-        'the app role must be unable to insert EXACTLY messages.created_at. Denied: [%s]. Granted: [%s]. '
+        'the app role must be unable to %s EXACTLY messages.created_at. Denied: [%s]. Granted: [%s]. '
         .'If created_at is missing from the denied list, R-19/ADR 0010 is broken and the ordering key is back on an '
         .'app-server wall clock. If anything ELSE appears there, a migration added a column the R-19a grant never '
         .'covered — add it to that grant, do not weaken this test.',
-        implode(', ', $denied), implode(', ', $granted),
+        strtolower($privilege), implode(', ', $denied), implode(', ', $granted),
     ));
-});
+})->with(['INSERT', 'UPDATE']);
 
 it('keeps the platform role able to write historical rows (retention and partition fixtures depend on it)', function () {
     /** @var list<object{ok: bool}> $rows */

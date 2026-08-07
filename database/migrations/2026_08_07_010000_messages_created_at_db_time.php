@@ -50,11 +50,13 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
-     * Every column of `messages` EXCEPT `created_at`. Kept explicit rather than derived:
-     * a new column must be added here deliberately, and forgetting fails loudly on the
-     * first insert instead of silently re-opening the hole this migration closes.
+     * Every column of `messages` EXCEPT `created_at` — the set the app may INSERT and
+     * UPDATE. Kept explicit rather than derived: a new column must be added here
+     * deliberately, and forgetting fails loudly on the first write instead of silently
+     * re-opening the hole this migration closes. GrantPhysicsTest derives the same split
+     * from information_schema and fails if the two ever disagree.
      */
-    private const APP_INSERTABLE_COLUMNS = [
+    private const APP_WRITABLE_COLUMNS = [
         'id', 'tenant_id', 'conversation_id', 'direction', 'author_type', 'author_id',
         'kind', 'body', 'media', 'language', 'external_message_id', 'reply_to_message_id',
         'delivery_state', 'delivery_error', 'is_internal', 'quarantined', 'edited_at',
@@ -81,14 +83,24 @@ return new class extends Migration
         DB::statement('ALTER TABLE message_revisions ALTER COLUMN message_created_at TYPE timestamptz(6)');
         DB::statement('ALTER TABLE message_revisions ALTER COLUMN created_at TYPE timestamptz(6)');
 
-        $columns = implode(', ', self::APP_INSERTABLE_COLUMNS);
+        $columns = implode(', ', self::APP_WRITABLE_COLUMNS);
         DB::statement('REVOKE INSERT ON messages FROM app');
         DB::statement("GRANT INSERT ({$columns}) ON messages TO app");
+
+        // UPDATE TOO — created_at IS IMMUTABLE.
+        // Revoking only INSERT left the hole open from the other side: the app could
+        // still UPDATE the column afterwards, which reaches exactly the same bad state
+        // (an ordering key set from an app clock) while the INSERT-only guard reported
+        // everything fine. There is no legitimate reason for the application to move a
+        // message's receipt time, so it cannot.
+        DB::statement('REVOKE UPDATE ON messages FROM app');
+        DB::statement("GRANT UPDATE ({$columns}) ON messages TO app");
     }
 
     public function down(): void
     {
         DB::statement('GRANT INSERT ON messages TO app');
+        DB::statement('GRANT UPDATE ON messages TO app');
         DB::statement('ALTER TABLE message_revisions ALTER COLUMN created_at TYPE timestamptz(0)');
         DB::statement('ALTER TABLE message_revisions ALTER COLUMN message_created_at TYPE timestamptz(0)');
         DB::statement('ALTER TABLE messages ALTER COLUMN created_at SET DEFAULT now()');

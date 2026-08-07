@@ -28,20 +28,23 @@ use Tests\Support\Adapters\FakeChannelAdapter;
 | consumer). Everything below drives the REPOSITORIES (T-01/R-05) — the only
 | sanctioned path to these tables.
 |
-| WHY THE RAW FIXTURES NO LONGER NAME `created_at` (R-19a, ADR 0010). The app role has
-| lost column-level INSERT on `messages.created_at`, so no fixture on this connection
-| may supply it. Two of the three raw inserts here never cared about the value — they
-| exist to trip a CHECK constraint — and simply let the DB default fill it. The FR-07
-| burst genuinely needs an exact tie, and forces one with an UPDATE after the insert:
-| R-19a revoked INSERT on that column, not UPDATE, and the UPDATE runs on the SAME
-| connection and transaction as the conversation it points at.
+| WHY THE RAW FIXTURES NO LONGER NAME `created_at` (R-19a, ADR 0010). `created_at` is
+| IMMUTABLE to the app role: R-19a revoked its column-level INSERT *and* UPDATE, so no
+| fixture on this connection can set or move it. Two of the three raw inserts here never
+| cared about the value — they exist to trip a CHECK constraint — and simply let the DB
+| default fill it, which keeps them on the app connection where the constraint under
+| test actually lives.
 |
-| It deliberately does NOT route these through `pgsql_platform` the way RetentionTest
-| and MessagePartitionTest do. Those suites commit their fixtures; these do not, so a
-| second connection cannot see the in-transaction conversation row and every insert
-| would die on the FK instead of on the constraint under test — which is exactly what
-| happened when this was first tried, and it made two CHECK tests pass for the wrong
-| reason.
+| The FR-07 burst is different: it needs an EXACT timestamp tie, so the cursor's
+| tiebreak is what is under test rather than the clock. It therefore commits its
+| fixtures and writes through `pgsql_platform`, the pattern the soak and RetentionTest
+| already use — a second connection cannot see an in-transaction row, so committing
+| first is what makes the platform write legal. It cleans up after itself.
+|
+| An earlier attempt routed ALL THREE through `pgsql_platform` without committing. That
+| was wrong and is recorded so nobody repeats it: the conversation was invisible to the
+| second connection, so every insert died on the FK instead of the constraint, and two
+| CHECK tests passed for the wrong reason.
 */
 
 function conversationsFixture(): array
@@ -221,59 +224,67 @@ test('FR-03: the app role cannot DELETE conversations, messages, or revisions �
 // ── FR-07/BR-04: receipt-order truth + the composite cursor (T-08) ───────────
 
 test('FR-07: a same-second burst orders stably by (created_at, id) across cursor pages', function () {
-    [, $customer] = conversationsFixture();
-    $repo = app(ConversationRepository::class);
-    $conversation = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-o1', $customer->identifier());
-    $tenantId = $conversation->getAttribute('tenant_id');
+    [$tenant, $customer] = conversationsFixture();
+    $tenantId = $tenant->tenantId();
 
-    // Ten messages in ONE receipt second (EC-01's burst shape), inserted shuffled;
-    // their UUIDv7 ids carry the arrival order the shuffle tries to hide.
-    $sameSecond = '2026-08-01 10:00:00+00';
-    $ids = [];
-    for ($i = 0; $i < 10; $i++) {
-        $ids[] = (string) Str::uuid7();
-    }
-    $shuffled = $ids;
-    shuffle($shuffled);
-    foreach ($shuffled as $id) {
-        DB::table('messages')->insert([
-            'id' => $id,
-            'tenant_id' => $tenantId,
-            'conversation_id' => $conversation->identifier(),
-            'direction' => 'in',
-            'author_type' => 'customer',
-            'kind' => 'text',
-            'body' => 'burst',
-            'media' => '[]',
-            'channel_meta' => '{}',
-            // The channel claims a LATER clock for the earliest id — BR-04 says that
-            // must not matter (it is metadata; EC-10 renders it, never sorts by it).
-            'channel_occurred_at' => '2026-08-01 10:59:00+00',
-        ]);
-    }
+    // COMMIT FIRST, THEN WRITE THROUGH THE PLATFORM ROLE (R-19a). An exact timestamp
+    // tie is the whole point of this test, and the app role can neither INSERT nor
+    // UPDATE created_at any more. Only platform_admin may, and a second connection
+    // cannot see rows still inside this test's transaction — so the fixtures are
+    // committed first, exactly as the soak and RetentionTest do, and cleaned up below.
+    commitFixtures();
 
-    // FORCE THE TIE. The DB assigned ten distinct microsecond stamps, which would make
-    // this test prove nothing about the tiebreak. The app role may not NAME created_at
-    // on INSERT (R-19a) but may still UPDATE it, and this runs on the same connection
-    // and transaction as the rows above, so they are visible.
-    DB::table('messages')->whereIn('id', $ids)->update(['created_at' => $sameSecond]);
+    try {
+        $repo = app(ConversationRepository::class);
+        $conversation = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-o1', $customer->identifier());
 
-    $messages = app(MessageRepository::class);
-    $seen = [];
-    $cursor = null;
-    do {
-        $params = ['limit' => 3] + ($cursor !== null ? ['cursor' => $cursor] : []);
-        $page = $messages->threadPage($conversation, CursorPagination::fromRequest(Request::create('/t', 'GET', $params)));
-        foreach ($page->items as $row) {
-            $seen[] = $row->id;
+        // Ten messages in ONE receipt second (EC-01's burst shape), inserted shuffled;
+        // their UUIDv7 ids carry the arrival order the shuffle tries to hide.
+        $sameSecond = '2026-08-01 10:00:00+00';
+        $ids = [];
+        for ($i = 0; $i < 10; $i++) {
+            $ids[] = (string) Str::uuid7();
         }
-        $cursor = $page->nextCursor;
-        if ($cursor !== null) {
-            expect($cursor)->not->toContain('|'); // opaque (C-05), never readable structure
+        $shuffled = $ids;
+        shuffle($shuffled);
+        foreach ($shuffled as $id) {
+            DB::connection('pgsql_platform')->table('messages')->insert([
+                'id' => $id,
+                'tenant_id' => $tenantId,
+                'conversation_id' => $conversation->identifier(),
+                'direction' => 'in',
+                'author_type' => 'customer',
+                'kind' => 'text',
+                'body' => 'burst',
+                'media' => '[]',
+                'channel_meta' => '{}',
+                // The channel claims a LATER clock for the earliest id — BR-04 says that
+                // must not matter (it is metadata; EC-10 renders it, never sorts by it).
+                'channel_occurred_at' => '2026-08-01 10:59:00+00',
+                'created_at' => $sameSecond,
+            ]);
         }
-    } while ($cursor !== null);
 
-    sort($ids); // UUIDv7 lexical order IS generation order
-    expect($seen)->toBe($ids)
-        ->and(count($seen))->toBe(10);
+        $messages = app(MessageRepository::class);
+        $seen = [];
+        $cursor = null;
+        do {
+            $params = ['limit' => 3] + ($cursor !== null ? ['cursor' => $cursor] : []);
+            $page = $messages->threadPage($conversation, CursorPagination::fromRequest(Request::create('/t', 'GET', $params)));
+            foreach ($page->items as $row) {
+                $seen[] = $row->id;
+            }
+            $cursor = $page->nextCursor;
+            if ($cursor !== null) {
+                expect($cursor)->not->toContain('|'); // opaque (C-05), never readable structure
+            }
+        } while ($cursor !== null);
+
+        sort($ids); // UUIDv7 lexical order IS generation order
+        expect($seen)->toBe($ids)
+            ->and(count($seen))->toBe(10);
+    } finally {
+        // Committed fixtures clean themselves up, pass or fail.
+        cleanupTenants([$tenantId]);
+    }
 });
