@@ -486,6 +486,60 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc17/Audit'],
             'description' => 'FR-03: a subject was written — by Doc 09 within 30 s (subject_source=ai) or edited by staff under tickets.edit. A failed generation emits NOTHING and leaves the subject NULL (EC-11).',
         ],
+        'ticket.assigned' => [
+            'schema_version' => 1,
+            // FR-15 names this payload exactly: "{old, new, by}".
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_assignee_id', 'new_assignee_id', 'by'],
+            'producers' => ['Doc06/AssignTicket'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS the unassign that returns it to Doc 11\'s queue.',
+        ],
+        'ticket.priority_changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_priority', 'new_priority', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/ChangePriority'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-17: priority moved. Doc 12 decides whether its SLA policy re-targets — that decision is deliberately NOT made here. A no-op change emits nothing.',
+        ],
+        'ticket.follower_added' => [
+            'schema_version' => 1,
+            // A-8 (i): FR-26's `follower_added|removed` reads as TWO events.
+            'payload' => ['tenant_id', 'ticket_id', 'user_id', 'by'],
+            'producers' => ['Doc06/TicketFollowers'],
+            'consumers' => ['Doc07/Inbox', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'FR-18: someone follows this ticket — themselves (tickets.follow), added by an assigner, or auto-followed as the escalating assignee (FR-23).',
+        ],
+        'ticket.follower_removed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'user_id', 'by'],
+            'producers' => ['Doc06/TicketFollowers'],
+            'consumers' => ['Doc07/Inbox', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'FR-18: someone stopped following. Doc 16 stops notifying them; the history stays in the events (A-8 i).',
+        ],
+        'ticket.tagged' => [
+            'schema_version' => 1,
+            // The tag TEXT is operator free-text about a player's issue and rides the
+            // audit entry, never the 13-month stream (Q7). `count` is what a consumer
+            // needs to know something changed.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'count', 'actor_id'],
+            'producers' => ['Doc06/TicketTags'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-19: tags were added. The tags themselves are in the audit entry — free text an agent typed does not belong on a retained event stream.',
+        ],
+        'ticket.untagged' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'count', 'actor_id'],
+            'producers' => ['Doc06/TicketTags'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-19: tags were removed.',
+        ],
+        'ticket.assignee_deactivated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'previous_assignee_id'],
+            'producers' => ['Doc06/AssigneeDeactivated'],
+            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc17/Audit'],
+            'description' => 'EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26\'s list does not name it.',
+        ],
     ];
 
     /**

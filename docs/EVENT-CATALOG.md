@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-53 event(s).
+60 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -455,6 +455,24 @@ A tenant moved between lifecycle states (Doc 01 FR-05).
 - **Producers:** Doc01/TenantLifecycle
 - **Consumers:** Doc02/SessionInvalidation, Doc16/Backoffice, Doc17/Audit
 
+## `ticket.assigned`
+
+FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS the unassign that returns it to Doc 11's queue.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_assignee_id`, `new_assignee_id`, `by`
+- **Producers:** Doc06/AssignTicket
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `ticket.assignee_deactivated`
+
+EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26's list does not name it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_assignee_id`
+- **Producers:** Doc06/AssigneeDeactivated
+- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc17/Audit
+
 ## `ticket.created`
 
 A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.
@@ -463,6 +481,33 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/CreateTicket
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.follower_added`
+
+FR-18: someone follows this ticket — themselves (tickets.follow), added by an assigner, or auto-followed as the escalating assignee (FR-23).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `user_id`, `by`
+- **Producers:** Doc06/TicketFollowers
+- **Consumers:** Doc07/Inbox, Doc16/Notifications, Doc17/Audit
+
+## `ticket.follower_removed`
+
+FR-18: someone stopped following. Doc 16 stops notifying them; the history stays in the events (A-8 i).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `user_id`, `by`
+- **Producers:** Doc06/TicketFollowers
+- **Consumers:** Doc07/Inbox, Doc16/Notifications, Doc17/Audit
+
+## `ticket.priority_changed`
+
+FR-17: priority moved. Doc 12 decides whether its SLA policy re-targets — that decision is deliberately NOT made here. A no-op change emits nothing.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_priority`, `new_priority`, `actor_type`, `actor_id`
+- **Producers:** Doc06/ChangePriority
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.status_changed`
 
@@ -481,6 +526,24 @@ FR-03: a subject was written — by Doc 09 within 30 s (subject_source=ai) or ed
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `subject_source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/SubjectWriter
 - **Consumers:** Doc07/Inbox, Doc17/Audit
+
+## `ticket.tagged`
+
+FR-19: tags were added. The tags themselves are in the audit entry — free text an agent typed does not belong on a retained event stream.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `count`, `actor_id`
+- **Producers:** Doc06/TicketTags
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `ticket.untagged`
+
+FR-19: tags were removed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `count`, `actor_id`
+- **Producers:** Doc06/TicketTags
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `transcript.exported`
 

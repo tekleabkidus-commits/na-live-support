@@ -606,4 +606,69 @@ return [
         'required_fields' => ['ticket_id', 'old_subject', 'new_subject', 'subject_source'],
         'owning_doc' => 'Doc06',
     ],
+    [
+        // FR-15: every hand-over, including to nobody. old/new both required so an
+        // unassign is as legible in the record as an assignment.
+        'action_key' => 'ticket.assigned',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'old_assignee_id', 'new_assignee_id'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-17. Automation and AI change priority too, hence the system actor.
+        'action_key' => 'ticket.priority_changed',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ticket_id', 'old_priority', 'new_priority'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-18. `system` covers FR-23's auto-follow of the escalating assignee.
+        'action_key' => 'ticket.follower_added',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ticket_id', 'user_id'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        'action_key' => 'ticket.follower_removed',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'user_id'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-19: the tag TEXT lives here rather than on the event stream (Q7).
+        'action_key' => 'ticket.tagged',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'tags'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        'action_key' => 'ticket.untagged',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'tags'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // T-07: "audited with counts" — the count is the point of the record, because
+        // a historical rewrite is exactly the operation whose blast radius an operator
+        // cannot see any other way.
+        'action_key' => 'ticket.tags_rewritten',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['from_tag', 'to_tag', 'tickets_rewritten'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // EC-06: a system hand-back, one entry per ticket.
+        'action_key' => 'ticket.assignee_deactivated',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'previous_assignee_id'],
+        'owning_doc' => 'Doc06',
+    ],
 ];

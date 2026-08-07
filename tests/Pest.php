@@ -571,6 +571,40 @@ function ticketFixture(string $status = 'new', array $attributes = []): array
 }
 
 /**
+ * Another conversation inside the CURRENTLY BOUND tenant.
+ *
+ * Exists because `ticketFixture()`/`creationFixture()` each create a NEW tenant and
+ * rebind the context to it. Calling one of those twice in a test therefore leaves the
+ * users, roles and tickets from the first call invisible under RLS — which surfaces as
+ * a baffling `assignee_out_of_scope` or `MissingTenantContext` far from the cause. Any
+ * test needing several conversations for ONE tenant uses this instead.
+ */
+function anotherConversation(string $tenantId, string $label = ''): App\Models\Conversation
+{
+    $customer = App\Models\Customer::query()->create([
+        'display_name' => 'Fixture Player',
+        'username' => '@fixture_extra_'.Str::random(6),
+        'is_shell' => true,
+    ]);
+
+    $id = (string) Str::uuid7();
+    DB::table('conversations')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'channel' => 'fakechan',
+        'channel_ref_id' => 'bot-1',
+        'external_chat_id' => 'chat-'.$label.Str::random(10),
+        'customer_id' => $customer->identifier(),
+        'state' => 'active',
+    ]);
+
+    /** @var App\Models\Conversation $conversation */
+    $conversation = App\Models\Conversation::query()->findOrFail($id);
+
+    return $conversation;
+}
+
+/**
  * A staff user in the bound tenant holding exactly the named permission keys.
  *
  * @param  list<string>  $permissions

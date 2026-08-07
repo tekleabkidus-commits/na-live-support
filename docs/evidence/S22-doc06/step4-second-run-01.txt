@@ -1,0 +1,170 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step4-second-run
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets
+# started:    2026-08-07T21:01:48Z
+# git:        b8a024f (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m4.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.23s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ChannelScopeReproofTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mT-06 ADMIT: an Own-scoped agent may subscribe to a conversation the[39m[90m…[39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06 DENY: the same Own-scoped agent is refused on a conversation t[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06 DENY: unassigning takes the subscription right away again[39m[90m      [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membe[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: an All-scoped agent still subscribes, and conversations.view[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\FollowersPriorityTagsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a priority change is evented with old/new; a no-op change is[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: staff need tickets.priority.change; automation and AI need n[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a fifth priority is refused, by the enum and by the database[39m[90m [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: staff follow themselves with tickets.follow; adding someone[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: a follower who cannot see the ticket is refused — notificati[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: unfollowing removes the row and events it; the events are th[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tags are free-form per tenant, de-duplicated, and removable[39m[90m  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tagging needs tickets.tags.manage, and a blank tag is not a[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: autocomplete offers the tenant's own tags, prefix-matched[39m[90m    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rename is chunked, resumable, historical, and audited wit[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rewrite needs tickets.tags.manage and refuses a blank ren[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MidActionPermissionExpiryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a transition permitted by a temporary override is refused on[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: while the SAME override is live, the very same transition su[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a plain role denial carries no attribution — there is no gra[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m1.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproof[22m… [41;1m TransitionNotPermitted [49;22m  
+[39;1m  transition_not_permitted: tickets.status.change is required.[39;22m
+
+  at [32mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39m:[32m203[39m
+    199▕                 $grantedBy = $verdict->grantedBy;
+    200▕                 $expiresAt = $verdict->expiresAt;
+    201▕             }
+    202▕ 
+  ➜ 203▕             throw new TransitionNotPermitted($edge['permission'], $grantedBy, $expiresAt);
+    204▕         }
+    205▕     }
+    206▕ 
+    207▕     /**
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m203[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m68[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m… [41;1m OpenTicketExists [49;22m  
+[39;1m  conversation 019fde08-5213-7271-bbf5-01f4d952651c already has open ticket unknown ('open_ticket_exists') — transition it, do not duplicate (BR-05).[39;22m
+
+  at [32mapp/Domain/Conversations/Storage/ConversationRepository.php[39m:[32m101[39m
+     97▕ 
+     98▕         $current = Conversation::query()->whereKey($conversation->identifier())->first();
+     99▕         $existing = $current?->open_ticket_id;
+    100▕ 
+  ➜ 101▕         throw new OpenTicketExists(
+    102▕             $conversation->identifier(),
+    103▕             is_string($existing) ? $existing : 'unknown',
+    104▕         );
+    105▕     }
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Storage/ConversationRepository.php[39;22m:[39;1m101[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m105[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproof[22m… [41;1m TransitionNotPermitted [49;22m  
+[39;1m  transition_not_permitted: tickets.status.change is required.[39;22m
+
+  at [32mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39m:[32m203[39m
+    199▕                 $grantedBy = $verdict->grantedBy;
+    200▕                 $expiresAt = $verdict->expiresAt;
+    201▕             }
+    202▕ 
+  ➜ 203▕             throw new TransitionNotPermitted($edge['permission'], $grantedBy, $expiresAt);
+    204▕         }
+    205▕     }
+    206▕ 
+    207▕     /**
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m203[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m68[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m75 passed[39;22m[90m (700 assertions)[39m
+  [90mDuration:[39m [39m12.88s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T21:02:02Z
+# duration:   14s
+# EXIT:       2
