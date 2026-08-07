@@ -1,0 +1,173 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage11-packet-mutable-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/HandoffPacketTest.php tests/Isolation/TicketGrantPhysicsTest.php
+# started:    2026-08-07T19:46:45Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m4.83s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fills every DB-time column from clock_timestamp() and never from[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.cre[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08: a ticket…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08/SEC-02: th… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m BR-02: the trans… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m126[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the norma… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m141[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the packe… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m179[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denies the app role D…   
+[39;1m  SEV-1: the app role can DELETE from ticket_handoff_packets — BR-01's never-deleted physics is gone
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Isolation/TicketGrantPhysicsTest.php[39m:[32m92[39m
+     88▕     return [$granted, $denied];
+     89▕ }
+     90▕ 
+     91▕ it('denies the app role DELETE on every Doc 06 table except ticket_followers (BR-01/N-05)', function (string $table) {
+  ➜  92▕     expect(ticketAppHasPrivilege($table, 'DELETE'))->toBeFalse(
+     93▕         "SEV-1: the app role can DELETE from {$table} — BR-01's never-deleted physics is gone",
+     94▕     );
+     95▕ })->with(array_values(array_diff(DOC06_TABLES, ['ticket_followers'])));
+     96▕
+
+  [33m1   [39m[39;1mtests/Isolation/TicketGrantPhysicsTest.php[39;22m:[39;1m92[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketGrantPhysicsTest[22m [90m>[39m it denies the app role U…   
+[39;1m  SEV-1: the app role can UPDATE ticket_handoff_packets — SEC-02's immutability is politeness now, not physics
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Isolation/TicketGrantPhysicsTest.php[39m:[32m106[39m
+    102▕     );
+    103▕ });
+    104▕ 
+    105▕ it('denies the app role UPDATE entirely on the immutable stores (SEC-02: insert-only by physics)', function (string $table) {
+  ➜ 106▕     expect(ticketAppHasPrivilege($table, 'UPDATE'))->toBeFalse(
+    107▕         "SEV-1: the app role can UPDATE {$table} — SEC-02's immutability is politeness now, not physics",
+    108▕     );
+    109▕ })->with(['ticket_handoff_packets', 'ticket_merge_snapshots']);
+    110▕
+
+  [33m1   [39m[39;1mtests/Isolation/TicketGrantPhysicsTest.php[39;22m:[39;1m106[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m20 passed[39;22m[90m (56 assertions)[39m
+  [90mDuration:[39m [39m6.29s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:46:53Z
+# duration:   8s
+# EXIT:       2

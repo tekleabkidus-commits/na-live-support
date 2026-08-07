@@ -526,6 +526,16 @@ APP-WRITABLE (they are signals/provenance, not timestamps), made FILL-ONLY by th
 trigger (an occupied signal column can never be overwritten, so C-09 redeliveries and
 later replies cannot move an existing stamp).
 
+**A-7 AMENDMENT 2 (filed at S22 step 3, self-reported):** the field list gains
+`idempotency_key` — text, nullable, app-writable, with a PARTIAL unique index on
+`(tenant_id, idempotency_key) WHERE idempotency_key IS NOT NULL`. This one is a
+CORRECTION rather than a discovery: FR-13 says "duplicates prevented via idempotency
+keys" in as many words, so the field was required by the document all along and A-7's
+first pass simply missed it. Partial because FR-12's agent door has no key (a human
+deciding once), and NULLs would collide in a plain unique index the moment two
+key-less tickets existed. Recorded here rather than slipped into a migration, on the
+same principle as the amendment above.
+
 ### R-21. All four `tickets.*` settings are `tenant_editable: true`
 
 Including `tickets.resolve.requires_reply` — it is operator policy in US-07's spirit.

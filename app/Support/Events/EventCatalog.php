@@ -468,6 +468,24 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.',
         ],
+        'ticket.created' => [
+            'schema_version' => 1,
+            // `source` rides because FR-13 requires it recorded and Doc 15 counts by
+            // it; the subject does not, being staff- or AI-authored free text.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'customer_id', 'source', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/CreateTicket'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'A ticket was created through one of FR-12/13/14\'s doors or FR-11\'s handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.',
+        ],
+        'ticket.subject_changed' => [
+            'schema_version' => 1,
+            // Identifiers and provenance only — the subject TEXT lives in the audit
+            // entry (Q7): a 13-month stream must not accumulate what an agent typed.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'subject_source', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/SubjectWriter'],
+            'consumers' => ['Doc07/Inbox', 'Doc17/Audit'],
+            'description' => 'FR-03: a subject was written — by Doc 09 within 30 s (subject_source=ai) or edited by staff under tickets.edit. A failed generation emits NOTHING and leaves the subject NULL (EC-11).',
+        ],
     ];
 
     /**

@@ -1,0 +1,641 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-first-run
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets tests/Isolation/TicketNumberingConcurrencyTest.php
+# started:    2026-08-07T19:34:02Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m4.75s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.26s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.08s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MidActionPermissionExpiryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a transition permitted by a temporary override is refused on[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: while the SAME override is live, the very same transition su[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a plain role denial carries no attribution — there is no gra[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TicketNumberingConcurrencyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit gives 100 concurrent creates 100 unique numbers, with zero dupli[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a contention spike with backpressure and NEVER a duplica[39m[90m…[39m [90m2.21s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit lets a rolled-back create take its number with it — gaps are acc[39m[90m…[39m [90m0.17s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12/1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f3ce-7307-8d64-7399bdba276f, 019fddb7-f38f-7389-bc2b-5149fc9b0397, 019fddb7-f3bb-715c-8074-d133b35bc28b, 019fddb7-f3b8-7213-994c-6eae6cb595a5, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12/1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f42c-7306-a4e9-095f706263d3, 019fddb7-f413-73cf-be2a-68dbf4f0bdf8, 019fddb7-f421-7080-a902-093a31886364, 019fddb7-f41e-72b9-b2a2-eeba132cff1e, 1, new, normal, automation, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12/1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f47e-738a-9bd1-470ae1a4f5ba, 019fddb7-f45d-70bb-ae52-fe67375687ea, 019fddb7-f46f-73c3-bbe2-2ebc4138e19e, 019fddb7-f46d-71d0-83e9-9394690bcd86, 1, new, normal, api, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12/1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f4c1-71ca-b103-afa48f14e244, 019fddb7-f4a9-7323-903d-784b9a23c14b, 019fddb7-f4b7-72d5-9d62-8aaa1625f1b0, 019fddb7-f4b5-7020-88ff-dd6db908ae67, 1, new, normal, offline_form, ?, ?, ?, 0, ?, ?, {"question":"where is my deposit"}, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12/1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f4f4-71cb-a37d-b3f029f03d24, 019fddb7-f4e2-7356-b758-a463f5fd0a95, 019fddb7-f4eb-715d-a178-e7eb366f9596, 019fddb7-f4ea-73af-8238-5d03d3a05a97, 1, new, normal, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-14:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f525-73fa-adb5-035b7d80d75c, 019fddb7-f515-73b5-bbf2-db56ccea2886, 019fddb7-f51e-7194-9463-1a97c802822c, 019fddb7-f51c-7310-94c8-d394f46b6ce1, 1, new, normal, offline_form, ?, ?, ?, 0, ?, ?, {"question":"where is my deposit"}, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f557-711f-aff2-db5641010a3a, 019fddb7-f545-72fe-b867-b40ca64c34ed, 019fddb7-f54f-72ce-a5da-e7a577567363, 019fddb7-f54e-7055-a498-6256d480db8c, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-13:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f589-73ce-bd39-6e7812bdb7db, 019fddb7-f576-7167-b454-dc2baae22d4e, 019fddb7-f57f-72b4-b391-2d9c0c980a04, 019fddb7-f57d-70b5-b1a4-a9a258f726a1, 1, new, normal, api, ?, ?, ?, 0, ?, ?, ?, req-4812, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m AC-02 (… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql_ac02_0, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f62d-71b9-873b-22131e9b024b, 019fddb7-f5a8-7173-8d60-c455c9138cf5, 019fddb7-f5b2-71f6-98ff-4d677d17cc10, 019fddb7-f5b0-738c-af14-044280214fb4, 1, new, normal, api, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-21:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f6d6-73d2-b2b6-9bde611788a1, 019fddb7-f6bd-7247-8ee8-747c1d3ab8bb, 019fddb7-f6ca-73af-8e9a-b5e535e1209a, 019fddb7-f6c8-7080-8c6a-d6328d1c0615, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-03:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f729-704b-a548-a7aa1424c130, 019fddb7-f704-7164-9fd3-3c9c102cfe0c, 019fddb7-f71d-72ee-ad1e-13b9e4918829, 019fddb7-f71a-701e-9019-fbd7c034c604, 1, new, normal, agent, Deposit not credited, staff, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:08, 2026-08-07 19:34:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f786-726a-9810-e440d3903c5f, 019fddb7-f772-7218-8ce5-d3b309542244, 019fddb7-f77b-7156-b4af-af6836926055, 019fddb7-f778-72db-b7ba-3413ab13cbdf, 1, new, high, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:09, 2026-08-07 19:34:09))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08/S… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f7d3-7185-ac8a-da993f1af26b, 019fddb7-f7b8-72bb-987a-bc3c8dcc5bb8, 019fddb7-f7c5-72e1-8f0d-90fcaf18f553, 019fddb7-f7c2-7136-905c-a933e5681591, 1, new, high, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:09, 2026-08-07 19:34:09))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m BR-02:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f81a-7055-8091-132f11382262, 019fddb7-f801-70f1-a1df-6e5c9dd29501, 019fddb7-f80e-72b7-9fd8-f00ca5d8cd90, 019fddb7-f80b-72ca-9a3d-1610699f7167, 1, new, high, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:09, 2026-08-07 19:34:09))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the normative co…   
+[39;1m  Exception "InvalidArgumentException" not thrown.[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m155[39m
+    151▕     // "suggested {department, priority}" — the four of FR-17, no others
+    152▕     expect($with(['suggested' => ['priority' => 'critical']]))->toThrow(InvalidArgumentException::class, 'priority');
+    153▕ 
+    154▕     // "transcript_anchor (message id range)"
+  ➜ 155▕     expect($with(['transcript_anchor' => ['from_message_id' => 'x']]))->toThrow(InvalidArgumentException::class, 'to_message_id');
+    156▕ 
+    157▕     // "kb_shown[] (article ids)"
+    158▕     expect($with(['kb_shown' => ['']]))->toThrow(InvalidArgumentException::class, 'article');
+    159▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb7-f88e-7194-a60f-9aecac9e23ca, 019fddb7-f879-7331-b4e6-1003d1cc49d4, 019fddb7-f883-7193-a58b-b942c4980f08, 019fddb7-f881-70b8-9caa-fe61fd2cf7ab, 1, new, high, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:09, 2026-08-07 19:34:09))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\StatusWriterEncapsulationTest[22m [90m>[39m it has exac…   
+[39;1m  SEV-1: ticket status is written in 2 place(s): app/Domain/Tickets/Creation/CreateTicket.php, app/Domain/Tickets/Storage/TicketRepository.php
+Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, and leaves a ticket that looks entirely normal afterwards.
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'app/Domain/Tickets/Storage/TicketRepository.php',[39m[39;1m
+  [39;22m[32m+    0 => 'app/Domain/Tickets/Creation/CreateTicket.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Domain/Tickets/Storage/TicketRepository.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39m:[32m95[39m
+     91▕ 
+     92▕ it('has exactly one file in app/ that writes a ticket status (NFR-03 encapsulation)', function () {
+     93▕     $writers = array_values(array_filter(applicationPhpFiles(), writesTicketStatus(...)));
+     94▕ 
+  ➜  95▕     expect($writers)->toBe(['app/Domain/Tickets/Storage/TicketRepository.php'], sprintf(
+     96▕         "SEV-1: ticket status is written in %d place(s): %s\n".
+     97▕         'Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. '
+     98▕         .'A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, '
+     99▕         .'and leaves a ticket that looks entirely normal afterwards.',
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39;22m:[39;1m95[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: Doc 09… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-0179-7113-836f-0a3c6b418043, 019fddb8-0160-7275-a8f2-89d7e86fee5c, 019fddb8-016e-710d-a870-a9fc282f1dd5, 019fddb8-016b-70bf-9cd0-9223b7799f5f, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:11, 2026-08-07 19:34:11))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: the AI… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-01c1-72c8-9466-453d1ee80ccd, 019fddb8-01a4-70ef-908f-5cc708aedac4, 019fddb8-01b6-732f-b485-3f61312b5cf8, 019fddb8-01ad-730b-923b-da63c7635db4, 1, new, normal, agent, Written by the agent, staff, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:11, 2026-08-07 19:34:11))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: a staf… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-021c-73c2-9e3b-f0d61ac5330c, 019fddb8-01ef-7248-a5d9-050f2ed6ec09, 019fddb8-020e-7281-b57e-1e258aedbe17, 019fddb8-0208-718a-890e-2f3abd36baa7, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:11, 2026-08-07 19:34:11))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: a subj… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-0262-71be-9210-a6a8186b77bb, 019fddb8-024b-70c0-9439-45b271ac4a05, 019fddb8-0255-7271-941c-9d60ec6500ac, 019fddb8-0252-71bf-af81-6b1744967858, 1, new, normal, agent, Something, staff, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:11, 2026-08-07 19:34:11))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m EC-11: a fail… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-0296-72b7-92c1-6f2979712e33, 019fddb8-0286-71b5-a341-deebcd61736f, 019fddb8-028e-703a-81a9-f0a0b66d06a2, 019fddb8-028d-7212-95ff-216ba24c4b26, 1, new, normal, ai_handoff, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:11, 2026-08-07 19:34:11))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m FR-01/A-7: the tickets c…   
+[39;1m  tickets columns drifted from interpretation A-7 — schema changes to this table go through the record, not a quiet migration
+Failed asserting that two arrays are identical.
+  [39;22m[32m     11 => 'first_response_message_id',[39m[39;1m
+  [39;22m[32m     12 => 'form_data',[39m[39;1m
+  [39;22m[32m     13 => 'id',[39m[39;1m
+  [39;22m[31m-    14 => 'last_status_changed_at',[39m[39;1m
+  [39;22m[31m-    15 => 'linked_work',[39m[39;1m
+  [39;22m[31m-    16 => 'merged_into',[39m[39;1m
+  [39;22m[31m-    17 => 'number',[39m[39;1m
+  [39;22m[31m-    18 => 'origin_ticket_id',[39m[39;1m
+  [39;22m[31m-    19 => 'parent_ticket_id',[39m[39;1m
+  [39;22m[31m-    20 => 'pending_reason',[39m[39;1m
+  [39;22m[31m-    21 => 'previous_ticket_id',[39m[39;1m
+  [39;22m[31m-    22 => 'priority',[39m[39;1m
+  [39;22m[31m-    23 => 'reopened_count',[39m[39;1m
+  [39;22m[31m-    24 => 'resolved_at',[39m[39;1m
+  [39;22m[31m-    25 => 'source',[39m[39;1m
+  [39;22m[31m-    26 => 'spam_marked_at',[39m[39;1m
+  [39;22m[31m-    27 => 'spam_marked_by',[39m[39;1m
+  [39;22m[31m-    28 => 'status',[39m[39;1m
+  [39;22m[31m-    29 => 'subject',[39m[39;1m
+  [39;22m[31m-    30 => 'subject_source',[39m[39;1m
+  [39;22m[31m-    31 => 'tags',[39m[39;1m
+  [39;22m[31m-    32 => 'tenant_id',[39m[39;1m
+  [39;22m[31m-    33 => 'updated_at',[39m[39;1m
+  [39;22m[31m-    34 => 'waiting_customer_seconds',[39m[39;1m
+  [39;22m[31m-    35 => 'waiting_staff_seconds',[39m[39;1m
+  [39;22m[32m+    14 => 'idempotency_key',[39m[39;1m
+  [39;22m[32m+    15 => 'last_status_changed_at',[39m[39;1m
+  [39;22m[32m+    16 => 'linked_work',[39m[39;1m
+  [39;22m[32m+    17 => 'merged_into',[39m[39;1m
+  [39;22m[32m+    18 => 'number',[39m[39;1m
+  [39;22m[32m+    19 => 'origin_ticket_id',[39m[39;1m
+  [39;22m[32m+    20 => 'parent_ticket_id',[39m[39;1m
+  [39;22m[32m+    21 => 'pending_reason',[39m[39;1m
+  [39;22m[32m+    22 => 'previous_ticket_id',[39m[39;1m
+  [39;22m[32m+    23 => 'priority',[39m[39;1m
+  [39;22m[32m+    24 => 'reopened_count',[39m[39;1m
+  [39;22m[32m+    25 => 'resolved_at',[39m[39;1m
+  [39;22m[32m+    26 => 'source',[39m[39;1m
+  [39;22m[32m+    27 => 'spam_marked_at',[39m[39;1m
+  [39;22m[32m+    28 => 'spam_marked_by',[39m[39;1m
+  [39;22m[32m+    29 => 'status',[39m[39;1m
+  [39;22m[32m+    30 => 'subject',[39m[39;1m
+  [39;22m[32m+    31 => 'subject_source',[39m[39;1m
+  [39;22m[32m+    32 => 'tags',[39m[39;1m
+  [39;22m[32m+    33 => 'tenant_id',[39m[39;1m
+  [39;22m[32m+    34 => 'updated_at',[39m[39;1m
+  [39;22m[32m+    35 => 'waiting_customer_seconds',[39m[39;1m
+  [39;22m[32m+    36 => 'waiting_staff_seconds',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/TicketSchemaTest.php[39m:[32m99[39m
+     95▕         'subject_source', 'tags', 'tenant_id', 'updated_at', 'waiting_customer_seconds',
+     96▕         'waiting_staff_seconds',
+     97▕     ];
+     98▕ 
+  ➜  99▕     expect($actual)->toBe($expected,
+    100▕         'tickets columns drifted from interpretation A-7 — schema changes to this table go through the record, not a quiet migration');
+    101▕ });
+    102▕ 
+    103▕ test('R-19b: every DB-time column is timestamptz at microsecond precision, and tags is a real array', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TicketSchemaTest.php[39;22m:[39;1m99[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketNumberingConcurrencyTest[22m [90m>[39m…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql_num_worker_0, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-0929-73b9-a81a-14860035b343, 019fddb8-08a9-722a-b69f-99240eda38cd, 019fddb8-08ae-70ce-981e-d1ebe1ae56db, 019fddb8-08ad-734b-a451-0224be09b6cc, 1, new, normal, api, ?, ?, ?, 0, ?, ?, ?, num-0, 2026-08-07 19:34:13, 2026-08-07 19:34:13))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TicketNumberingConcurrencyTest[22m [90m>[39m…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at", "created_at") values (019fddb8-131d-732c-9168-0f8a510e35fa, 019fddb8-1300-7126-9922-3c40ce91d348, 019fddb8-130a-71f3-8024-53e1482d4ba2, 019fddb8-1308-7191-a13e-fd1400850e5f, 1, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:34:16, 2026-08-07 19:34:16))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+
+  [90mTests:[39m    [31;1m25 failed[39;22m[90m,[39m[39m [39m[32;1m32 passed[39;22m[90m (477 assertions)[39m
+  [90mDuration:[39m [39m12.76s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:34:16Z
+# duration:   14s
+# EXIT:       2

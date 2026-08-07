@@ -1,0 +1,113 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-iso-HandoffPacketTest
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/HandoffPacketTest.php
+# started:    2026-08-07T19:41:14Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m4.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08: a ticket…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08/SEC-02: th… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m BR-02: the trans… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m126[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the norma… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m141[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the packe… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m38[39m
+     34▕ 
+     35▕ /** @return array{0: App\Models\Tenant, 1: App\Models\Conversation, 2: array<string, mixed>} */
+     36▕ function handoffFixture(): array
+     37▕ {
+  ➜  38▕     [$tenant, $conversation] = creationFixture();
+     39▕ 
+     40▕     /** @var array<string, mixed> $packet */
+     41▕     $packet = json_decode(
+     42▕         (string) file_get_contents(base_path('fixtures/tickets/handoff/doc09-packet.json')),
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m38[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m179[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m4.53s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:41:19Z
+# duration:   5s
+# EXIT:       2

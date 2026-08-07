@@ -88,7 +88,7 @@ test('FR-01/A-7: the tickets column inventory is exactly the filed interpretatio
         'agent_first_response_at', 'agent_first_response_message_id', 'assignee_id',
         'channel_unreachable', 'closed_at', 'conversation_id', 'created_at', 'customer_id',
         'department_id', 'escalation', 'first_response_at', 'first_response_message_id',
-        'form_data', 'id', 'last_status_changed_at', 'linked_work',
+        'form_data', 'id', 'idempotency_key', 'last_status_changed_at', 'linked_work',
         'merged_into', 'number', 'origin_ticket_id', 'parent_ticket_id', 'pending_reason',
         'previous_ticket_id', 'priority', 'reopened_count', 'resolved_at',
         'source', 'spam_marked_at', 'spam_marked_by', 'status', 'subject',

@@ -587,4 +587,23 @@ return [
         'required_fields' => ['ticket_id', 'old_status', 'new_status', 'reason'],
         'owning_doc' => 'Doc06',
     ],
+    [
+        // FR-12/13/14 + FR-11: one creation path, four doors, and the audit entry
+        // records which door and the human-facing number that came out of it —
+        // the two facts a dispute six months later actually asks for.
+        'action_key' => 'ticket.created',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ticket_id', 'conversation_id', 'source', 'number'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-03: old/new subject with the provenance. Kept out of the event stream
+        // deliberately (Q7) — the audit table is where authored text belongs.
+        'action_key' => 'ticket.subject_changed',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['ticket_id', 'old_subject', 'new_subject', 'subject_source'],
+        'owning_doc' => 'Doc06',
+    ],
 ];

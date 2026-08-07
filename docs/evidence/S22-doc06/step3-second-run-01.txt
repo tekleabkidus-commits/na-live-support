@@ -1,0 +1,280 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-second-run
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets tests/Isolation/TicketNumberingConcurrencyTest.php
+# started:    2026-08-07T19:35:43Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m4.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.12s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MidActionPermissionExpiryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a transition permitted by a temporary override is refused on[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: while the SAME override is live, the very same transition su[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a plain role denial carries no attribution — there is no gra[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TicketNumberingConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives 100 concurrent creates 100 unique numbers, with zero dupli[39m[90m…[39m [90m2.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a contention spike with backpressure and NEVER a duplica[39m[90m…[39m [90m2.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a rolled-back create take its number with it — gaps are acc[39m[90m…[39m [90m0.29s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-12: an open-family t…   
+[39;1m  Expected: [39;22m[31mSQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "tickets_one_open_family" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at") values (019fddb9-7f5e-7229-a0b6-6efb6613822d, 019fddb9-7f3d-7043-b44a-3516de514b25, 019fddb9-7f47-703b-84cc-b53d59c8bffe, 019fddb9-7f44-71e2-bfd1-5c2b03a696b3, 2, new, normal, agent, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:35:49.343142))[39m[39;1m
+
+  To contain: [39;22m[32mopen_ticket_exists[39m
+
+  at [32mtests/Feature/Tickets/CreationPathsTest.php[39m:[32m107[39m
+    103▕     expect($creator->openFamilyTicketFor($conversation->fresh()))->toBe($first->identifier());
+    104▕ 
+    105▕     // And the authority is the claim itself, which refuses.
+    106▕     expect(fn () => $creator->create(new NewTicket($conversation->fresh(), TicketSource::Agent)))
+  ➜ 107▕         ->toThrow(OpenTicketExists::class, 'open_ticket_exists');
+    108▕ 
+    109▕     expect(Ticket::query()->where('conversation_id', $conversation->identifier())->count())
+    110▕         ->toBe(1, 'the refused create left a second ticket behind');
+    111▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/CreationPathsTest.php[39;22m:[39;1m107[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\CreationPathsTest[22m [90m>[39m FR-13: an idempotency k…   
+[39;1m  Failed asserting that an instance of class Illuminate\Database\UniqueConstraintViolationException is an instance of class App\Domain\Conversations\Storage\OpenTicketExists.[39;22m
+
+  at [32mtests/Feature/Tickets/CreationPathsTest.php[39m:[32m127[39m
+    123▕ 
+    124▕     // A DIFFERENT key on the same conversation is a genuine second create, and FR-10
+    125▕     // refuses it for the right reason — the invariant, not the key.
+    126▕     expect(fn () => $creator->create(new NewTicket($conversation->fresh(), TicketSource::Api, idempotencyKey: 'req-9999')))
+  ➜ 127▕         ->toThrow(OpenTicketExists::class);
+    128▕ });
+    129▕ 
+    130▕ test('AC-02 (concurrent half): concurrent creates on one conversation yield exactly one open ticket', function () {
+    131▕     $tenant = createTenant();
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/CreationPathsTest.php[39;22m:[39;1m127[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\Creatio[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "tickets_one_open_family" (Connection: pgsql_ac02_1, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at") values (019fddb9-8074-7097-89e1-68e968740f88, 019fddb9-7fd7-71a8-812b-6799865d147c, 019fddb9-7fdf-736e-b90e-2d15d49dd8ff, 019fddb9-7fde-726b-aca3-7402f5d83bb5, 2, new, normal, api, ?, ?, ?, 0, ?, ?, ?, ?, 2026-08-07 19:35:49.621106))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m109[39;22m
+      [2m+3 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m AC-08: a ticket is crea…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m+    'to_message_id' => '019fddb9-8220-7260-98c9-722382717626',[39m[39;1m
+  [39;22m[32m     'from_message_id' => '019fddb9-8220-7260-98c9-72238226ff53',[39m[39;1m
+  [39;22m[31m-    'to_message_id' => '019fddb9-8220-7260-98c9-722382717626',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m89[39m
+     85▕         ->and($stored['suggested']['department'])->toBeNull()
+     86▕         ->and($stored['suggested']['priority'])->toBe('high')
+     87▕         ->and($stored['suggested']['reasons'])->toHaveCount(2)
+     88▕         ->and($stored['kb_shown'])->toBe(['kb-deposit-timing-local-agents', 'kb-what-to-do-if-a-deposit-is-late'])
+  ➜  89▕         ->and($stored['transcript_anchor'])->toBe($data['transcript_anchor'])
+     90▕         ->and($stored['form_data'])->toBeNull()
+     91▕         ->and((int) $row->schema_version)->toBe(1);   // NFR-06's versioning
+     92▕ });
+     93▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\HandoffPacketTest[22m [90m>[39m FR-11: the normative co…   
+[39;1m  Exception "InvalidArgumentException" not thrown.[39;22m
+
+  at [32mtests/Feature/Tickets/HandoffPacketTest.php[39m:[32m155[39m
+    151▕     // "suggested {department, priority}" — the four of FR-17, no others
+    152▕     expect($with(['suggested' => ['priority' => 'critical']]))->toThrow(InvalidArgumentException::class, 'priority');
+    153▕ 
+    154▕     // "transcript_anchor (message id range)"
+  ➜ 155▕     expect($with(['transcript_anchor' => ['from_message_id' => 'x']]))->toThrow(InvalidArgumentException::class, 'to_message_id');
+    156▕ 
+    157▕     // "kb_shown[] (article ids)"
+    158▕     expect($with(['kb_shown' => ['']]))->toThrow(InvalidArgumentException::class, 'article');
+    159▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/HandoffPacketTest.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\StatusWriterEncapsulationTest[22m [90m>[39m it has exac…   
+[39;1m  SEV-1: ticket status is written in 2 place(s): app/Domain/Tickets/Creation/CreateTicket.php, app/Domain/Tickets/Storage/TicketRepository.php
+Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, and leaves a ticket that looks entirely normal afterwards.
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'app/Domain/Tickets/Storage/TicketRepository.php',[39m[39;1m
+  [39;22m[32m+    0 => 'app/Domain/Tickets/Creation/CreateTicket.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Domain/Tickets/Storage/TicketRepository.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39m:[32m95[39m
+     91▕ 
+     92▕ it('has exactly one file in app/ that writes a ticket status (NFR-03 encapsulation)', function () {
+     93▕     $writers = array_values(array_filter(applicationPhpFiles(), writesTicketStatus(...)));
+     94▕ 
+  ➜  95▕     expect($writers)->toBe(['app/Domain/Tickets/Storage/TicketRepository.php'], sprintf(
+     96▕         "SEV-1: ticket status is written in %d place(s): %s\n".
+     97▕         'Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. '
+     98▕         .'A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, '
+     99▕         .'and leaves a ticket that looks entirely normal afterwards.',
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39;22m:[39;1m95[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TicketSchemaTest[22m [90m>[39m FR-01/A-7: the tickets c…   
+[39;1m  tickets columns drifted from interpretation A-7 — schema changes to this table go through the record, not a quiet migration
+Failed asserting that two arrays are identical.
+  [39;22m[32m     11 => 'first_response_message_id',[39m[39;1m
+  [39;22m[32m     12 => 'form_data',[39m[39;1m
+  [39;22m[32m     13 => 'id',[39m[39;1m
+  [39;22m[31m-    14 => 'last_status_changed_at',[39m[39;1m
+  [39;22m[31m-    15 => 'linked_work',[39m[39;1m
+  [39;22m[31m-    16 => 'merged_into',[39m[39;1m
+  [39;22m[31m-    17 => 'number',[39m[39;1m
+  [39;22m[31m-    18 => 'origin_ticket_id',[39m[39;1m
+  [39;22m[31m-    19 => 'parent_ticket_id',[39m[39;1m
+  [39;22m[31m-    20 => 'pending_reason',[39m[39;1m
+  [39;22m[31m-    21 => 'previous_ticket_id',[39m[39;1m
+  [39;22m[31m-    22 => 'priority',[39m[39;1m
+  [39;22m[31m-    23 => 'reopened_count',[39m[39;1m
+  [39;22m[31m-    24 => 'resolved_at',[39m[39;1m
+  [39;22m[31m-    25 => 'source',[39m[39;1m
+  [39;22m[31m-    26 => 'spam_marked_at',[39m[39;1m
+  [39;22m[31m-    27 => 'spam_marked_by',[39m[39;1m
+  [39;22m[31m-    28 => 'status',[39m[39;1m
+  [39;22m[31m-    29 => 'subject',[39m[39;1m
+  [39;22m[31m-    30 => 'subject_source',[39m[39;1m
+  [39;22m[31m-    31 => 'tags',[39m[39;1m
+  [39;22m[31m-    32 => 'tenant_id',[39m[39;1m
+  [39;22m[31m-    33 => 'updated_at',[39m[39;1m
+  [39;22m[31m-    34 => 'waiting_customer_seconds',[39m[39;1m
+  [39;22m[31m-    35 => 'waiting_staff_seconds',[39m[39;1m
+  [39;22m[32m+    14 => 'idempotency_key',[39m[39;1m
+  [39;22m[32m+    15 => 'last_status_changed_at',[39m[39;1m
+  [39;22m[32m+    16 => 'linked_work',[39m[39;1m
+  [39;22m[32m+    17 => 'merged_into',[39m[39;1m
+  [39;22m[32m+    18 => 'number',[39m[39;1m
+  [39;22m[32m+    19 => 'origin_ticket_id',[39m[39;1m
+  [39;22m[32m+    20 => 'parent_ticket_id',[39m[39;1m
+  [39;22m[32m+    21 => 'pending_reason',[39m[39;1m
+  [39;22m[32m+    22 => 'previous_ticket_id',[39m[39;1m
+  [39;22m[32m+    23 => 'priority',[39m[39;1m
+  [39;22m[32m+    24 => 'reopened_count',[39m[39;1m
+  [39;22m[32m+    25 => 'resolved_at',[39m[39;1m
+  [39;22m[32m+    26 => 'source',[39m[39;1m
+  [39;22m[32m+    27 => 'spam_marked_at',[39m[39;1m
+  [39;22m[32m+    28 => 'spam_marked_by',[39m[39;1m
+  [39;22m[32m+    29 => 'status',[39m[39;1m
+  [39;22m[32m+    30 => 'subject',[39m[39;1m
+  [39;22m[32m+    31 => 'subject_source',[39m[39;1m
+  [39;22m[32m+    32 => 'tags',[39m[39;1m
+  [39;22m[32m+    33 => 'tenant_id',[39m[39;1m
+  [39;22m[32m+    34 => 'updated_at',[39m[39;1m
+  [39;22m[32m+    35 => 'waiting_customer_seconds',[39m[39;1m
+  [39;22m[32m+    36 => 'waiting_staff_seconds',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/TicketSchemaTest.php[39m:[32m99[39m
+     95▕         'subject_source', 'tags', 'tenant_id', 'updated_at', 'waiting_customer_seconds',
+     96▕         'waiting_staff_seconds',
+     97▕     ];
+     98▕ 
+  ➜  99▕     expect($actual)->toBe($expected,
+    100▕         'tickets columns drifted from interpretation A-7 — schema changes to this table go through the record, not a quiet migration');
+    101▕ });
+    102▕ 
+    103▕ test('R-19b: every DB-time column is timestamptz at microsecond precision, and tags is a real array', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TicketSchemaTest.php[39;22m:[39;1m99[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m50 passed[39;22m[90m (586 assertions)[39m
+  [90mDuration:[39m [39m15.14s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:35:59Z
+# duration:   16s
+# EXIT:       2

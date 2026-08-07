@@ -1,0 +1,41 @@
+{
+  "_fixture": {
+    "id": "doc09-packet",
+    "spec": "Doc 06 FR-11 (normative packet contract), T-05, SEC-02, AC-08",
+    "produced_by": "Doc 09 — NOT BUILT. This file is the contract Doc 09's real packet must satisfy; AC-08 is proven against it today so the seam is not a promise.",
+    "consumed_by": "Doc 07 renders it (§8's pinned handoff card, KB hover previews, applied/overridden routing indicator)",
+    "synthetic": "All data is synthetic per CLAUDE.md §8 — the customer is a fixture player, the article ids are fixture ids. Nothing here came from a real conversation."
+  },
+
+  "schema_version": 1,
+
+  "summary": "The player deposited 500 ETB through a local mobile-money agent about forty minutes ago and the balance has not moved. They have already checked the transaction history in the app and found nothing. They are calm but say they want to play a match that starts shortly.",
+
+  "intent": "deposit_not_credited",
+  "confidence": 0.87,
+
+  "language": "am",
+  "sentiment": "neutral",
+  "urgency": "high",
+
+  "suggested": {
+    "department": null,
+    "priority": "high",
+    "reasons": [
+      "Deposit-related intent with a stated time pressure",
+      "Player has already self-served the obvious check, so a first-line repeat would frustrate"
+    ]
+  },
+
+  "kb_shown": [
+    "kb-deposit-timing-local-agents",
+    "kb-what-to-do-if-a-deposit-is-late"
+  ],
+
+  "transcript_anchor": {
+    "from_message_id": "PLACEHOLDER_FROM_MESSAGE_ID",
+    "to_message_id": "PLACEHOLDER_TO_MESSAGE_ID"
+  },
+
+  "form_data": null
+}

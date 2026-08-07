@@ -1,0 +1,108 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-iso-SubjectTest
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/SubjectTest.php
+# started:    2026-08-07T19:41:19Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m4.46s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: Doc 09's seam w… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/SubjectTest.php[39m:[32m32[39m
+     28▕ | completely usable without a subject.
+     29▕ */
+     30▕ 
+     31▕ test('FR-03: Doc 09\'s seam writes the subject and marks it ai-authored', function () {
+  ➜  32▕     [, $conversation] = creationFixture();
+     33▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     34▕ 
+     35▕     expect($ticket->subject)->toBeNull();
+     36▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SubjectTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: the AI seam nev… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/SubjectTest.php[39m:[32m60[39m
+     56▕         ->and($auditPayload['new_subject'])->toBe('Deposit of 500 ETB not credited');
+     57▕ });
+     58▕ 
+     59▕ test('FR-03: the AI seam never overwrites a subject that already exists', function () {
+  ➜  60▕     [, $conversation] = creationFixture();
+     61▕     $ticket = app(CreateTicket::class)->create(
+     62▕         new NewTicket($conversation, TicketSource::Agent, subject: 'Written by the agent'),
+     63▕     );
+     64▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SubjectTest.php[39;22m:[39;1m60[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: a staff edit ne… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/SubjectTest.php[39m:[32m73[39m
+     69▕         ->and($ticket->fresh()->subject_source)->toBe('staff');
+     70▕ });
+     71▕ 
+     72▕ test('FR-03: a staff edit needs tickets.edit, and the source label follows the editor', function () {
+  ➜  73▕     [, $conversation] = creationFixture();
+     74▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     75▕     app(SubjectWriter::class)->generated($ticket, 'Deposit issue');
+     76▕ 
+     77▕     $withoutPermission = ticketActor(['tickets.view'], 'Fixture No Edit Role');
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SubjectTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m FR-03: a subject may b… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/SubjectTest.php[39m:[32m89[39m
+     85▕         ->and($ticket->fresh()->subject_source)->toBe('staff');
+     86▕ });
+     87▕ 
+     88▕ test('FR-03: a subject may be absent but may not be blanked to an empty string', function () {
+  ➜  89▕     [, $conversation] = creationFixture();
+     90▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent, subject: 'Something'));
+     91▕     $editor = ticketActor(['tickets.edit'], 'Fixture Edit Role');
+     92▕ 
+     93▕     // An empty subject is what Doc 09 FILLS; letting staff write one would make the
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SubjectTest.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SubjectTest[22m [90m>[39m EC-11: a failed genera… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/SubjectTest.php[39m:[32m102[39m
+     98▕     expect($ticket->fresh()->subject)->toBe('Something');
+     99▕ });
+    100▕ 
+    101▕ test('EC-11: a failed generation leaves the subject NULL — no sentinel, no error text, ticket still usable', function () {
+  ➜ 102▕     [, $conversation] = creationFixture();
+    103▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::AiHandoff));
+    104▕ 
+    105▕     // Doc 09's generation fails => it simply never calls the writer. Nothing to undo.
+    106▕     expect($ticket->subject)->toBeNull()
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SubjectTest.php[39;22m:[39;1m102[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m4.62s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:41:24Z
+# duration:   5s
+# EXIT:       2

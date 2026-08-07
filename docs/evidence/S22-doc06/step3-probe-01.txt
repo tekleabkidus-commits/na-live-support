@@ -1,0 +1,16 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-probe
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/CreationPathsTest.php --filter=every door produces
+# started:    2026-08-07T19:42:19Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Fatal error: Allowed memory size of 536870912 bytes exhausted (tried to allocate 262144 bytes) in /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php on line 664
+
+Fatal error: Allowed memory size of 536870912 bytes exhausted (tried to allocate 262144 bytes) in Unknown on line 0
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:42:26Z
+# duration:   7s
+# EXIT:       255

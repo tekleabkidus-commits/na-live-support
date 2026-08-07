@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-51 event(s).
+53 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -455,6 +455,15 @@ A tenant moved between lifecycle states (Doc 01 FR-05).
 - **Producers:** Doc01/TenantLifecycle
 - **Consumers:** Doc02/SessionInvalidation, Doc16/Backoffice, Doc17/Audit
 
+## `ticket.created`
+
+A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
+- **Producers:** Doc06/CreateTicket
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
 ## `ticket.status_changed`
 
 FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.
@@ -463,6 +472,15 @@ FR-04: a ticket moved between statuses, with old/new and the acting class. THE t
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_status`, `new_status`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.subject_changed`
+
+FR-03: a subject was written — by Doc 09 within 30 s (subject_source=ai) or edited by staff under tickets.edit. A failed generation emits NOTHING and leaves the subject NULL (EC-11).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `subject_source`, `actor_type`, `actor_id`
+- **Producers:** Doc06/SubjectWriter
+- **Consumers:** Doc07/Inbox, Doc17/Audit
 
 ## `transcript.exported`
 

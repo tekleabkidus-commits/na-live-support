@@ -1,0 +1,14 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-make-lint
+# set:        S22-doc06
+# command:    make lint
+# started:    2026-08-07T20:25:37Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"fail","files":[{"path":"app\/Domain\/Tickets\/Creation\/CreateTicket.php","fixers":["unary_operator_spaces","braces_position","no_unused_imports","not_operator_with_successor_space","single_line_empty_body"]},{"path":"tests\/Isolation\/TicketNumberingConcurrencyTest.php","fixers":["lambda_not_used_import","return_type_declaration"]}]}make: *** [Makefile:99: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T20:25:38Z
+# duration:   1s
+# EXIT:       2

@@ -84,6 +84,31 @@ final class Ticket extends Model implements TenantScoped
 
     protected $table = 'tickets';
 
+    /** Microsecond precision, or the R-19b stamps round-trip as whole seconds. */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
+    /**
+     * DB TIME, NOT APP TIME (owner ruling R-19/R-19b, ADR 0010) — the same shape
+     * Message adopted at the messages cutover.
+     *
+     * A null CREATED_AT makes Eloquent's updateTimestamps() skip setCreatedAt entirely,
+     * so `created_at` never enters the insert payload and PostgreSQL's
+     * `clock_timestamp()` default fills it. `updated_at` is a separate branch of that
+     * same method and is untouched — the app writes that one legitimately.
+     *
+     * THIS WAS NOT A PRECAUTION, IT WAS A CATCH. The first creation-path run failed with
+     * `permission denied for table tickets` because Eloquent had helpfully added
+     * `created_at` to the INSERT: the R-19b column grant refused it, loudly, before a
+     * single app-clock value could reach an ordering column. That is precisely the
+     * discipline-versus-physics distinction R-19a was filed over — a convention would
+     * have let it through and nothing would have gone red.
+     *
+     * Nothing derives its column from this constant: `->latest()`/`->oldest()` appear
+     * nowhere against tickets, verified before the change (the same check ADR 0010
+     * required for messages).
+     */
+    public const CREATED_AT = null;
+
     /** @return array<string, string> */
     protected function casts(): array
     {
@@ -105,12 +130,31 @@ final class Ticket extends Model implements TenantScoped
         ];
     }
 
+    /**
+     * READS THE RAW ATTRIBUTE, NEVER getAttribute() — and the difference is not
+     * stylistic, it is the difference between an exception and a hang.
+     *
+     * `status` is absent from the INSERT payload by design (NFR-03: creation lets the
+     * column's `new` default do the work so the transition service stays the only
+     * writer). A model that has not been refreshed therefore has no `status` key at
+     * all, and `getAttribute('status')` responds to a missing key by looking for a
+     * RELATION method of that name — which is this method — which calls getAttribute
+     * again. That recursion exhausted 512 MB and killed the process with a fatal
+     * rather than a failure, twice, before it was diagnosed.
+     *
+     * getAttributes() reads the array directly, so the missing case surfaces as the
+     * named exception below instead of a stack overflow.
+     */
     public function status(): TicketStatus
     {
-        $status = $this->getAttribute('status');
+        $status = $this->getAttributes()['status'] ?? null;
 
         if (! is_string($status)) {
-            throw new LogicException('Ticket has no string status — the column is NOT NULL with a CHECK over the eight fixed statuses (R-01).');
+            throw new LogicException(
+                'Ticket has no loaded `status` — the column is NOT NULL with a CHECK over the eight '
+                .'fixed statuses (R-01), so this model was built without refreshing after an insert '
+                .'that deliberately omitted the column.',
+            );
         }
 
         return TicketStatus::from($status);

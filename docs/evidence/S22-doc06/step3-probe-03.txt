@@ -1,0 +1,19 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step3-probe
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/CreationPathsTest.php --filter=idempotency key makes
+# started:    2026-08-07T19:42:31Z
+# git:        3ee1e6e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m4.59s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m4.69s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T19:42:36Z
+# duration:   5s
+# EXIT:       0
