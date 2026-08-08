@@ -340,6 +340,24 @@ test('the consumer does nothing when the conversation already holds an open-fami
     expect(Ticket::query()->where('conversation_id', $bare->identifier())->count())->toBe(0);
 });
 
+// ── The defensive wall, executed (owner order, step-6 commit 1) ──────────────
+// A defensive path that has never run is a claim, not a guard: the consumer's
+// decision ladder makes a wrong-status call unreachable in production, so this
+// is the only place the LogicException wall ever fires.
+
+test('reopenFromCustomerMessage on a wrong-status ticket throws the FR-08 LogicException and mutates nothing', function () {
+    [$tenant, $conversation, $ticket] = ticketFixture('open');   // open: not resolved, not closed
+    $messageId = reopenCustomerMessage($tenant->identifier(), $conversation->identifier());
+
+    expect(fn () => app(ReopenTicket::class)->reopenFromCustomerMessage($ticket, $messageId))
+        ->toThrow(LogicException::class, 'FR-08 reopens resolved or closed tickets only');
+
+    $ticket->refresh();
+    expect($ticket->status())->toBe(TicketStatus::Open, 'the refused call must not move the ticket')
+        ->and($ticket->reopened_count)->toBe(0)
+        ->and(DB::table('outbox')->where('name', 'ticket.reopened')->count())->toBe(0, 'the wall must not emit');
+});
+
 // ── R-03: DST dates cannot bend the window, because everything is UTC ────────
 
 test('R-03: the window arithmetic is exact across DST-change dates — the session is UTC and 7 days is 168 hours on both sides of both switches', function () {

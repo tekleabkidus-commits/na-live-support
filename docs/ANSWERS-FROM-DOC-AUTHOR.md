@@ -712,3 +712,84 @@ sources are platform-fixed shapes; inventing one is exactly what "never invent
 requirements" forbids).
 
 Implemented in `App\Jobs\Tickets\TicketReopenConsumer`, whose comment cites this record.
+
+### A-13. FR-20's merge-close and unmerge-restore are OPERATION DOORS of the sole writer, not matrix edges (FILED INTERPRETATION)
+
+**Filed at S22 step 6; needs advisor countersign.** FR-20: on confirm, "source →
+closed with merged_into=target … Reversible for 24 h via unmerge (restores prior
+state from snapshot)". FR-04: "Legal transitions are exactly the edges above" — and
+§4.2's advisor-countersigned 15 edges reach `closed` only from `resolved`. A merge
+source can be `new`, `open`, `pending_*`, `escalated` or `resolved`, so FR-20's close
+cannot ride the plain matrix; and NFR-03 ("one server-side writer") forbids the merge
+writing status anywhere else. Both requirements survive only one way:
+
+INTERPRETATION: `TicketTransitionService` carries two OPERATION DOORS —
+`closeForMerge` and `reopenFromUnmerge` — reachable only from the merge/unmerge
+operations, never from a plain status change. The matrix's cells are untouched:
+AC-01's 64-cell table still refuses `open → closed` on the ordinary door, which is
+what FR-04's sentence governs. The doors still use the guarded repository write, still
+emit `ticket.status_changed` + audit (SEC-03), and the FR-24 trigger still stamps.
+Riders, each forced:
+
+- **Sources**: open-family and `resolved` only. A `closed` ticket is immutable except
+  "reopen, tag management, and serving as a merge TARGET" (FR-07 — source is not on
+  the list); `spam` is metrics-excluded (N-14) and merging it into a live ticket would
+  smuggle excluded traffic back into FR-24's accumulators.
+- **Targets**: any non-spam ticket ("closed … serving as a merge target" is explicit).
+  A cycle (a source anywhere in the target's `merged_into` chain, including
+  source=target) is refused — EC-03's "resolve transitively" is satisfiable only on an
+  acyclic chain.
+- **Unmerge permission**: `tickets.merge` governs both directions — the
+  escalate/de-escalate same-key precedent; the catalog is closed (A-9/R-12).
+- **The merge-close does NOT emit `ticket.closed`** — that event anchors FR-08's
+  reopen window and Doc 12's SLA stop, and a superseded source has neither (its exit
+  is unmerge, not reopen — see A-14). It does cancel a resolved source's armed T-03
+  timer (the deadline is meaningless once superseded); the snapshot records
+  `auto_close_at` and unmerge restores both column and candidate, so AC-04's
+  byte-identical bar covers the timer too.
+- **Unmerge restores, then reconciles**: the snapshot restore is verbatim (AC-04
+  diff = ∅ over everything the merge touched: source {status, pending_reason,
+  assignee_id, auto_close_at, merged_into}, target {follower set, tag set}, moved
+  anchor rows); if the restored assignee was deactivated while the source sat merged
+  (EC-06's sweep skips closed tickets, so it cannot have caught this one), the same
+  hand-back applies afterwards, separately evented — the EC-06 rule is general.
+- **Unmerge open-slot conflict**: if the source's conversation grew a new open-family
+  ticket during the 24 h, restoring an open-family status collides with FR-10; the
+  refusal is the existing `open_ticket_exists`, and the operator resolves the newer
+  ticket first.
+
+REJECTED ALTERNATIVES: new matrix edges `* → closed (merge)` (breaks the
+countersigned 15 and AC-01's illegal-cell assertions); a repository-level write
+outside the service (NFR-03's gate exists to forbid exactly that); walking the source
+through `resolved → closed` (emits a false `ticket.resolved`, triggers CSAT, arms a
+timer — three lies for one convenience).
+
+### A-14. A merged-away source is FROZEN: out of FR-08's ladders, no reopen window, until unmerge (FILED INTERPRETATION)
+
+**Filed at S22 step 6; needs advisor countersign.** FR-20 gives a merged source "a
+permanent banner → target", while FR-08 would happily reopen any closed ticket within
+7 days of `closed_at` — and a merged source HAS a closed_at (the trigger stamps every
+entry into `closed`). Left unreconciled, a customer reply in the source's conversation
+within 7 days would reopen the superseded ticket alongside the surviving one, and a
+staff `closed → open` reopen would do the same — un-superseding a ticket while its
+`merged_into` pointer still says otherwise. "Permanent banner" decides it:
+
+INTERPRETATION: while `merged_into` is set, the source admits NO transition except
+A-13's `reopenFromUnmerge` (refusal code `merged_superseded`, naming the survivor);
+`TicketReopenConsumer`'s candidate ladder excludes merged tickets
+(`merged_into IS NULL`), so a customer reply in the source conversation lands as a
+message and takes no ticket action — surfacing it on the SURVIVING ticket is the
+banner's job (Doc 07) and, for fresh-ticket semantics, Doc 09's handoff decision, the
+same division as the consumer's rung 4. The sanctioned path back is unmerge within
+its window; after the window the source is simply a closed, superseded record.
+
+### A-15. EC-05's re-route emits `ticket.escalation_rerouted` (FILED INTERPRETATION, the A-8(iii) mechanism)
+
+**Filed at S22 step 6; needs advisor countersign.** EC-05 requires "auto-fallback to
+supervisor_review with a system note + notification to the escalator" when a named
+escalation target is later disabled. FR-26's enumerated family has no event for it,
+and Doc 16's notification needs one on the bus. Exactly as A-8(iii) filed
+`ticket.assignee_deactivated` for EC-06's unnamed event, EC-05's enters the catalog as
+`ticket.escalation_rerouted` {ticket_id, from_target_user_id, notify_user_id (the
+escalator), reason}: re-emitting `ticket.escalated` would overload one schema with two
+meanings, and inventing nothing means EC-05 cannot notify.
