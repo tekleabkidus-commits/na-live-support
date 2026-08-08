@@ -1,0 +1,34 @@
+{
+  "id": "spam-mark-excludes-unmark-restores",
+  "spec": "Doc 06 FR-09, AC-06; N-14",
+  "shared_with": "Doc 15",
+  "description": "AC-06's exclusion-and-restoration contract: marking spam EXCLUDES the ticket from every metric (N-14's one predicate: status = spam), the spam interval accrues to NEITHER party, and an unmark within the 7-day window restores the prior status and re-includes the ticket — no flag to flip, the same predicate answers false again. Doc 15's dictionary must apply MetricExclusion and get exactly these values.",
+  "start_status": "open",
+  "tolerance_seconds": 10,
+  "steps": [
+    {
+      "hold_seconds": 60,
+      "to": "spam",
+      "reason": "golden fixture: junk traffic per AC-06",
+      "accrues": "staff",
+      "expect_after": { "metrics_excluded": true },
+      "why": "the 60 open-seconds accrued to staff BEFORE the mark; from here the ticket is invisible to SLA/CSAT/agent metrics"
+    },
+    {
+      "hold_seconds": 120,
+      "to": "open",
+      "reason": "golden fixture: unmark within the 7-day window",
+      "accrues": "none",
+      "expect_after": { "metrics_excluded": false },
+      "why": "unmark ≤ 7 d restores the prior status; the 120 spam-seconds accrued to NEITHER party (the trigger's resolved/closed/spam rule)"
+    }
+  ],
+  "expect": {
+    "waiting_staff_seconds": 60,
+    "waiting_customer_seconds": 0,
+    "resolved_at": "null",
+    "closed_at": "null",
+    "final_status": "open",
+    "metrics_excluded": false
+  }
+}

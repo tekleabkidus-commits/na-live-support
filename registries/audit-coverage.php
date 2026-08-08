@@ -737,6 +737,22 @@ return [
         'owning_doc' => 'Doc06',
     ],
     [
+        // FR-09/SEC-03: the mark, with its reason and the separate-block flag.
+        'action_key' => 'ticket.spam_marked',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'reason', 'conversation_blocked'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // SEC-03: "Spam-unmark … always audited with actor + old/new."
+        'action_key' => 'ticket.spam_unmarked',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'restored_status', 'reason'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
         // EC-05: the fallback is the platform's own act.
         'action_key' => 'ticket.escalation_rerouted',
         'entity' => 'ticket',

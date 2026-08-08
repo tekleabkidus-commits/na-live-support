@@ -88,6 +88,10 @@ return [
 
         // FR-23 escalation (step 6).
         'escalation_target_invalid' => 'That person is deactivated or cannot see this ticket. Pick another target, or use supervisor review.',
+
+        // FR-09 spam (step 7).
+        'not_spam' => 'This ticket is not marked as spam — there is nothing to unmark.',
+        'spam_terminal' => 'The 7-day unmark window has passed, so this spam mark is permanent. If the customer writes again, a fresh ticket opens automatically.',
     ],
 
     // System-note bodies (NotesWriter::addSystemNote — localized at write time,

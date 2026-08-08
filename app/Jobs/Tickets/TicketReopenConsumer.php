@@ -40,9 +40,14 @@ use Illuminate\Support\Facades\DB;
  *      auto-close timer in the transition's own transaction (EC-01's other half)
  *   3. latest closed ticket → within EC-02's window: reopen; beyond: successor with
  *      previous_ticket_id (FR-08)
- *   4. nothing eligible (no tickets, or only spam — EC-09's fresh-ticket semantics
- *      are step 7's, with the spam disposition) → nothing: ticket CREATION on plain
- *      inbound traffic is Doc 09's handoff decision, never automatic here
+ *   4. latest ticket is TERMINAL spam (spam_marked_at + 7 d passed) → a FRESH ticket
+ *      (EC-09: "the customer's next message opens a fresh ticket — spam never blocks
+ *      the conversation"), unlinked and source=automation (A-17); while the spam is
+ *      still UNMARKABLE the message just lands — minting a ticket there would
+ *      collide with the unmark's restore (FR-10)
+ *   5. nothing eligible (no tickets, or only unmarkable spam) → nothing: ticket
+ *      CREATION on plain inbound traffic is Doc 09's handoff decision, never
+ *      automatic here
  */
 final class TicketReopenConsumer extends OutboxConsumer
 {
@@ -81,6 +86,8 @@ final class TicketReopenConsumer extends OutboxConsumer
         $closed = $this->latest($conversation, 'closed', 'closed_at');
 
         if (! $closed instanceof Ticket || $closed->closed_at === null) {
+            $this->freshTicketAfterTerminalSpam($conversation, $create);
+
             return;
         }
 
@@ -99,6 +106,46 @@ final class TicketReopenConsumer extends OutboxConsumer
             source: TicketSource::Automation,
             previousTicketId: $closed->identifier(),
             idempotencyKey: 'fr08:'.$this->eventId,
+        ));
+    }
+
+    /**
+     * EC-09's fresh ticket (A-17): the conversation's thread ended in TERMINAL spam —
+     * past its 7-day unmark window, in DB time — and the customer wrote anyway. "Spam
+     * never blocks the conversation unless block was chosen", so the message opens a
+     * FRESH ticket: UNLINKED (no previous_ticket_id — the spam row is excluded
+     * traffic, and threading excluded history into a live ticket would smuggle it
+     * back into view), source=automation (A-12's reasoning verbatim), idempotent on
+     * the event id (C-09 — creation is not naturally idempotent).
+     *
+     * While the spam is still UNMARKABLE, deliberately nothing: a staff unmark
+     * restores the prior ticket into the open slot (FR-10), and a ticket minted here
+     * would collide with that restore.
+     */
+    private function freshTicketAfterTerminalSpam(Conversation $conversation, CreateTicket $create): void
+    {
+        /** @var object{id: string}|null $terminal */
+        $terminal = DB::selectOne(
+            "SELECT id FROM tickets
+              WHERE conversation_id = ?
+                AND status = 'spam'
+                AND linked_work = FALSE
+                AND merged_into IS NULL
+                AND spam_marked_at IS NOT NULL
+                AND clock_timestamp() > spam_marked_at + make_interval(days => 7)
+              ORDER BY spam_marked_at DESC, id DESC
+              LIMIT 1",
+            [$conversation->identifier()],
+        );
+
+        if ($terminal === null) {
+            return;
+        }
+
+        $create->create(new NewTicket(
+            conversation: $conversation,
+            source: TicketSource::Automation,
+            idempotencyKey: 'ec09:'.$this->eventId,
         ));
     }
 

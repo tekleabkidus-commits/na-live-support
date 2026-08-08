@@ -1,0 +1,28 @@
+{
+  "id": "merge-supersede-no-close",
+  "spec": "Doc 06 FR-20 / A-13 rider (advisor countersign 2026-08-08); FR-24",
+  "shared_with": "Doc 15",
+  "description": "The A-13 rider, owned by the metric contract: a ticket merged away is closed superseded — closed_at stamps (the row fact FR-24 defines) but NO ticket.closed event exists, because that event anchors FR-08's reopen window and Doc 12's SLA stop, and a superseded source has neither. Doc 15's close counts are event-derived: this scenario must contribute ZERO to them while contributing one ticket.merged.",
+  "start_status": "open",
+  "tolerance_seconds": 10,
+  "steps": [
+    {
+      "hold_seconds": 45,
+      "op": "merge_into_fresh_target",
+      "why": "the supersede-close rides closeForMerge (A-13's operation door), never the plain machine; the 45 open-seconds still accrue to staff — the trigger fires on the door's own guarded write"
+    }
+  ],
+  "expect": {
+    "waiting_staff_seconds": 45,
+    "waiting_customer_seconds": 0,
+    "resolved_at": "null",
+    "closed_at": "set",
+    "final_status": "closed",
+    "metrics_excluded": false,
+    "events": {
+      "ticket.closed": 0,
+      "ticket.merged": 1,
+      "ticket.status_changed": 1
+    }
+  }
+}

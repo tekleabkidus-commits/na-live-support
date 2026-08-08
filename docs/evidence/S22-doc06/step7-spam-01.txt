@@ -1,0 +1,40 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step7-spam
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/SpamDispositionTest.php tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-08T20:14:47Z
+# git:        fa6f822 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SpamDispositionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-09: marking spam takes the machine edge, stamps the actor, exclu[39m[90m…[39m [90m5.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the separately-confirmed conversation block rides Doc 04's o[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09: unmark on day 8 is refused with the terminality explanation,[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-17: while the spam is still UNMARKABLE, a customer message takes[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the machine edge refuses a mark without tickets.spam.mark, a[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.08s[39m  
+
+  [90mTests:[39m    [32;1m20 passed[39;22m[90m (124 assertions)[39m
+  [90mDuration:[39m [39m8.55s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:14:56Z
+# duration:   9s
+# EXIT:       0

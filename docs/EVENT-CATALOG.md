@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-70 event(s).
+72 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -571,6 +571,24 @@ FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in 
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
 - **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `ticket.spam_marked`
+
+FR-09: a ticket was marked spam (reason on the audit entry, SEC-03). Excluded from SLA/CSAT/agent metrics while in this status (N-14); unmarkable for 7 days, terminal after (EC-09).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `conversation_blocked`, `actor_type`, `actor_id`
+- **Producers:** Doc06/SpamTicket
+- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit
+
+## `ticket.spam_unmarked`
+
+FR-09: a spam mark was reversed within its 7-day window — the prior status (new|open, A-10) restored from the event history, metrics re-included by the same one predicate that excluded them.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `restored_status`, `actor_type`, `actor_id`
+- **Producers:** Doc06/SpamTicket
+- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit
 
 ## `ticket.split`
 

@@ -82,20 +82,43 @@ test('AC-09: the golden lifecycle fixtures produce exactly the FR-24 values', fu
             backdateStatusClock($ticketId, (int) $step['hold_seconds']);
 
             $fresh = Ticket::query()->findOrFail($ticketId);
-            $service->transition(
-                $fresh,
-                TicketStatus::from($step['to']),
-                TransitionContext::system('golden fixture step '.$index),
-            );
+
+            if (($step['op'] ?? null) === 'merge_into_fresh_target') {
+                // The A-13 rider's scenario: the close is FR-20's supersede, driven
+                // through the real operation so the golden proves the real doors.
+                $mergeActor = ticketActor(['tickets.merge', 'tickets.view'], 'Fixture Golden Merge Role');
+                $targetConv = anotherConversation($tenantId, 'golden-tgt', $fresh->customer_id);
+                $target = machineClosedTicket($targetConv, 'open');
+                app(App\Domain\Tickets\Merge\MergeTickets::class)->merge([$fresh], $target, $mergeActor);
+            } else {
+                $service->transition(
+                    $fresh,
+                    TicketStatus::from($step['to']),
+                    // Spam edges carry FR-04's mandatory reason; the fixture supplies it.
+                    TransitionContext::system($step['reason'] ?? 'golden fixture step '.$index),
+                );
+            }
 
             if (isset($step['expect_after']['resolved_at'])) {
                 $after = Ticket::query()->findOrFail($ticketId);
                 $expected = $step['expect_after']['resolved_at'];
-                $message = sprintf('step %d (-> %s): resolved_at should be %s', $index, $step['to'], $expected);
+                $message = sprintf('step %d (-> %s): resolved_at should be %s', $index, $step['to'] ?? $step['op'], $expected);
 
                 $expected === 'set'
                     ? expect($after->resolved_at)->not->toBeNull($message)
                     : expect($after->resolved_at)->toBeNull($message);
+            }
+
+            if (isset($step['expect_after']['metrics_excluded'])) {
+                // AC-06/N-14: the ONE exclusion predicate, asked mid-lifecycle —
+                // sabotage #5's target.
+                $after = Ticket::query()->findOrFail($ticketId);
+                expect(app(App\Domain\Tickets\Metrics\MetricExclusion::class)->excluded($after))
+                    ->toBe($step['expect_after']['metrics_excluded'], sprintf(
+                        'step %d: MetricExclusion should answer %s here (AC-06/N-14)',
+                        $index,
+                        $step['expect_after']['metrics_excluded'] ? 'true' : 'false',
+                    ));
             }
         }
 
@@ -124,10 +147,39 @@ test('AC-09: the golden lifecycle fixtures produce exactly the FR-24 values', fu
                 ? expect($final->{$column})->not->toBeNull("{$column} should be set at the end of {$fixture['id']}")
                 : expect($final->{$column})->toBeNull("{$column} should be null at the end of {$fixture['id']}");
         }
+
+        if (isset($expect['metrics_excluded'])) {
+            expect(app(App\Domain\Tickets\Metrics\MetricExclusion::class)->excluded($final))
+                ->toBe($expect['metrics_excluded'], sprintf(
+                    'MetricExclusion should answer %s at the end of %s (AC-06/N-14)',
+                    $expect['metrics_excluded'] ? 'true' : 'false',
+                    $fixture['id'],
+                ));
+        }
+
+        if (isset($expect['events'])) {
+            // Event-derived metric counts (the A-13 rider): Doc 15 counts closes from
+            // ticket.closed — the golden pins how many of each event THIS ticket
+            // contributed. ticket.merged names the source in source_ticket_id.
+            foreach ($expect['events'] as $eventName => $count) {
+                $observed = DB::table('outbox')
+                    ->where('name', $eventName)
+                    ->where(function ($query) use ($ticketId): void {
+                        $query->whereRaw("payload->>'ticket_id' = ?", [$ticketId])
+                            ->orWhereRaw("payload->>'source_ticket_id' = ?", [$ticketId]);
+                    })
+                    ->count();
+
+                expect($observed)->toBe($count, sprintf(
+                    '%s: expected exactly %d %s event(s) for this ticket, found %d — the metric contract owns this count',
+                    $fixture['id'], $count, $eventName, $observed,
+                ));
+            }
+        }
     } finally {
         cleanupTenants([$tenantId]);
     }
-})->with(['ss01-deposit-dispute', 'reopen-clears-resolved-at']);
+})->with(['ss01-deposit-dispute', 'reopen-clears-resolved-at', 'spam-mark-excludes-unmark-restores', 'merge-supersede-no-close']);
 
 // ── FR-24's first-response definitions ───────────────────────────────────────
 

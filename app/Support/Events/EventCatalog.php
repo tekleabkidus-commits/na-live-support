@@ -623,6 +623,24 @@ final class EventCatalog
             'consumers' => ['Doc16/Notifications', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-23: an escalated ticket returned to `open` with its de-escalation note. The current escalation payload cleared; history lives in the event stream.',
         ],
+        'ticket.spam_marked' => [
+            'schema_version' => 1,
+            // Metric exclusion is NOT in this payload: N-14's predicate is
+            // MetricExclusion reading status = spam — one place, no flag to desync.
+            // `conversation_blocked` records whether the SEPARATE Doc 04 block was
+            // also taken (its own conversation.blocked event still fires).
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'conversation_blocked', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/SpamTicket'],
+            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit'],
+            'description' => 'FR-09: a ticket was marked spam (reason on the audit entry, SEC-03). Excluded from SLA/CSAT/agent metrics while in this status (N-14); unmarkable for 7 days, terminal after (EC-09).',
+        ],
+        'ticket.spam_unmarked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'restored_status', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/SpamTicket'],
+            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit'],
+            'description' => 'FR-09: a spam mark was reversed within its 7-day window — the prior status (new|open, A-10) restored from the event history, metrics re-included by the same one predicate that excluded them.',
+        ],
         'ticket.escalation_rerouted' => [
             'schema_version' => 1,
             // A-15 (the A-8(iii) mechanism): EC-05 requires this event and FR-26's

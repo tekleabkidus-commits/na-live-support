@@ -829,3 +829,25 @@ PARKED WITH OWNERS (same acceptance): the system-note tenant-locale question goe
 Doc 16's question list; `merged_superseded` + `unmerge_window_passed` join the R-14
 native-review queue at PRIORITY tier (to be stated in the S22 close-out per the
 standing rider).
+
+### A-17. EC-09's fresh ticket: minted only once the spam is TERMINAL, and unlinked (FILED INTERPRETATION)
+
+**Filed at S22 step 7; needs advisor countersign.** EC-09: "Spam unmark on day 8 →
+refused with terminality explanation; the customer's next message opens a fresh
+ticket (spam never blocks the conversation unless block was chosen)." Two gaps the
+sentence leaves open:
+
+(1) WHEN. The fresh ticket is minted only when the latest spam ticket is TERMINAL
+(spam_marked_at + 7 d passed, DB time). While the spam is still unmarkable, a
+customer message just lands in the conversation: a staff unmark restores the prior
+ticket into the FR-10 open slot, and a ticket minted meanwhile would collide with
+exactly that restore. EC-09's own framing is the day-8 scenario; nothing in FR-09
+asks for a ticket during the window, and the message is not lost — the conversation
+is alive and Doc 09's handoff can always act on it.
+
+(2) LINKED OR FRESH. Unlinked — no `previous_ticket_id`. FR-08's successor links
+because it continues a real issue's history; EC-09's word is "fresh", and the spam
+row is excluded traffic (N-14) — threading it into a live ticket's linked-tickets
+rail (§8) would smuggle excluded history back into view. The conversation itself
+still holds the full context for a human who goes looking. Source is `automation`
+(A-12's reasoning verbatim); idempotency on the event id (C-09).
