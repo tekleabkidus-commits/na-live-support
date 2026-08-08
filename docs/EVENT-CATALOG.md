@@ -491,6 +491,42 @@ FR-21: selected messages were split into a linked-work ticket in the same conver
 - **Producers:** Doc06/SplitTicket
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
 
+## `ticket.transferred`
+
+FR-22: a ticket changed department. `assignee_retained` is the outcome Doc 11 routes on (false = back to the queue with its department change); Doc 12 decides SLA re-targeting off this — the instance keeps original targets unless policy says otherwise. Status untouched.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_department_id`, `new_department_id`, `assignee_retained`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TransferTicket
+- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.escalated`
+
+FR-23: a ticket entered `escalated` with its mandatory ≥10-char reason. `target_id` is null for supervisor_review; Doc 16 notifies the target off path + target. The escalation SLA clock (Doc 12) starts here; the original assignee has auto-followed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `path`, `target_id`, `reason`, `actor_type`, `actor_id`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.deescalated`
+
+FR-23: an escalated ticket returned to `open` with its de-escalation note. The current escalation payload cleared; history lives in the event stream.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_path`, `actor_type`, `actor_id`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.escalation_rerouted`
+
+EC-05: a named escalation target was deactivated after the fact — the escalation fell back to supervisor_review with a system note, and the escalator (`notify_user_id`, recorded as `by` in the escalation payload precisely so this event can name them) is to be notified. Name filed as interpretation A-15, the A-8(iii) mechanism: EC-05 requires this event and FR-26's list does not name it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `from_target_user_id`, `notify_user_id`, `reason`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc17/Audit
+
 ## `ticket.assignee_deactivated`
 
 EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26's list does not name it.

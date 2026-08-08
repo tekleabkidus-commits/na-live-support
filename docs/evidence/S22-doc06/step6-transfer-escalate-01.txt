@@ -1,0 +1,26 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-transfer-escalate
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TransferEscalateTest.php
+# started:    2026-08-08T18:29:19Z
+# git:        03e259c (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m3.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to th[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: a Dept-scoped ACTOR cannot transfer into a department outsi[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.06s[39m  
+
+  [90mTests:[39m    [32;1m8 passed[39;22m[90m (49 assertions)[39m
+  [90mDuration:[39m [39m3.43s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:29:22Z
+# duration:   3s
+# EXIT:       0

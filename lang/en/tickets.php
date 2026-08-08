@@ -85,12 +85,16 @@ return [
         // FR-21 split (step 6).
         'split_cap_reached' => 'This conversation already carries :max linked tickets. Resolve or transfer existing linked work first.',
         'split_messages_foreign' => 'The selection includes messages that are not part of this conversation. Reselect and try again.',
+
+        // FR-23 escalation (step 6).
+        'escalation_target_invalid' => 'That person is deactivated or cannot see this ticket. Pick another target, or use supervisor review.',
     ],
 
     // System-note bodies (NotesWriter::addSystemNote — localized at write time,
     // because a note is an immutable historical record).
     'note' => [
         'split_origin' => 'Split: :count message(s) moved to linked ticket #:new. This ticket (#:origin) keeps the original thread.',
+        'escalation_rerouted' => 'The person this ticket (#:number) was escalated to has been deactivated. The escalation now goes to supervisor review.',
     ],
 
     // §8's merged-source banner (rendered by Doc 07 from merged_into, resolving

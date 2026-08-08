@@ -598,6 +598,41 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-21: selected messages were split into a linked-work ticket in the same conversation (origin_ticket_id set, cap 3 live per conversation — EC-04). The new ticket also emits its ordinary ticket.created.',
         ],
+        'ticket.transferred' => [
+            'schema_version' => 1,
+            // `assignee_retained` is the FR-22 outcome Doc 11 routes on: false means
+            // the ticket went back to the queue with its department change.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_department_id', 'new_department_id', 'assignee_retained', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/TransferTicket'],
+            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-22: a ticket changed department. Doc 11 re-routes off this; Doc 12 decides SLA re-targeting off this (the instance keeps original targets unless policy says otherwise); status untouched.',
+        ],
+        'ticket.escalated' => [
+            'schema_version' => 1,
+            // `target_id` is null for supervisor_review; Doc 16 notifies the target
+            // (or the supervisor queue) off path + target.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'path', 'target_id', 'reason', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/EscalateTicket'],
+            'consumers' => ['Doc16/Notifications', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-23: a ticket entered `escalated` with its mandatory ≥10-char reason. The escalation SLA clock (Doc 12) starts here; the original assignee has auto-followed.',
+        ],
+        'ticket.deescalated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'previous_path', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/EscalateTicket'],
+            'consumers' => ['Doc16/Notifications', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-23: an escalated ticket returned to `open` with its de-escalation note. The current escalation payload cleared; history lives in the event stream.',
+        ],
+        'ticket.escalation_rerouted' => [
+            'schema_version' => 1,
+            // A-15 (the A-8(iii) mechanism): EC-05 requires this event and FR-26's
+            // list does not name it. `notify_user_id` is the ESCALATOR — recorded as
+            // `by` in the escalation payload precisely so this event can name them.
+            'payload' => ['tenant_id', 'ticket_id', 'from_target_user_id', 'notify_user_id', 'reason'],
+            'producers' => ['Doc06/EscalateTicket'],
+            'consumers' => ['Doc16/Notifications', 'Doc07/Inbox', 'Doc17/Audit'],
+            'description' => 'EC-05: a named escalation target was deactivated after the fact — the escalation fell back to supervisor_review with a system note, and the escalator is to be notified.',
+        ],
     ];
 
     /**

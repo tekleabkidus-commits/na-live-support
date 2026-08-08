@@ -713,4 +713,35 @@ return [
         'required_fields' => ['source_ticket_id', 'target_ticket_id', 'reason'],
         'owning_doc' => 'Doc06',
     ],
+    [
+        // FR-22: the department change with its retention outcome.
+        'action_key' => 'ticket.transferred',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'old_department_id', 'new_department_id', 'assignee_retained'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // SEC-03: "escalation reasons always audited with actor + old/new."
+        'action_key' => 'ticket.escalated',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'path', 'reason'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        'action_key' => 'ticket.deescalated',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'note'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // EC-05: the fallback is the platform's own act.
+        'action_key' => 'ticket.escalation_rerouted',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'from_target_user_id'],
+        'owning_doc' => 'Doc06',
+    ],
 ];

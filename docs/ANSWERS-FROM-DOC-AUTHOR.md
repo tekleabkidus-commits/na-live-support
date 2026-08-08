@@ -793,3 +793,12 @@ and Doc 16's notification needs one on the bus. Exactly as A-8(iii) filed
 `ticket.escalation_rerouted` {ticket_id, from_target_user_id, notify_user_id (the
 escalator), reason}: re-emitting `ticket.escalated` would overload one schema with two
 meanings, and inventing nothing means EC-05 cannot notify.
+
+**A-15 RIDER (filed with the implementation, same step).** FR-01's escalation shape is
+`{path, reason, target, at}`; the implementation adds `by` — the escalator's user id —
+because EC-05's "notification to the escalator" is unanswerable without a record of
+who escalated, and the alternatives (audit-log lookup, event-stream replay) would make
+a notification path depend on retention-governed stores. `ticket.escalation_rerouted`
+reads `by` into its `notify_user_id`. The fallback also stamps `fallback_from` /
+`fallback_at` (DB time) into the payload so the re-route is legible in place;
+`path`, `reason`, `at` and `by` survive unchanged.
