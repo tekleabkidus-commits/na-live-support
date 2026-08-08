@@ -7,7 +7,6 @@ namespace App\Domain\Tickets\Bulk;
 use App\Jobs\Tickets\TicketBulkJob;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Support\Events\EventPublisher;
 use DomainException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,8 +31,6 @@ final class BulkOperation
     public const MAX_ITEMS = 200;
 
     public const ACTIONS = ['assign', 'transfer', 'tag', 'priority', 'resolve', 'close', 'spam'];
-
-    public function __construct(private readonly EventPublisher $events) {}
 
     /**
      * @param  list<string>  $ticketIds
@@ -72,7 +69,8 @@ final class BulkOperation
                 'action' => $action,
                 'params' => json_encode($params, JSON_THROW_ON_ERROR),
                 'total' => count($ids),
-                'status' => 'queued',
+                // `status` deliberately unnamed: the column defaults to 'queued', and
+                // bulk-state writes live in BulkJobStore (the NFR-03 constraint).
             ]);
 
             foreach ($ids as $position => $ticketId) {
@@ -82,7 +80,7 @@ final class BulkOperation
                     'bulk_job_id' => $jobId,
                     'ticket_id' => $ticketId,
                     'position' => $position,
-                    'status' => 'pending',
+                    // `status` defaults to 'pending' — same rule as the job row.
                 ]);
             }
         });

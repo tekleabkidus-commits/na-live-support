@@ -6,8 +6,8 @@ namespace App\Jobs\Tickets;
 
 use App\Domain\Conversations\Realtime\RealtimePusher;
 use App\Domain\Tickets\Assignment\AlreadyClaimed;
-use App\Domain\Tickets\Assignment\AssignTicket;
 use App\Domain\Tickets\Assignment\AssigneeOutOfScope;
+use App\Domain\Tickets\Assignment\AssignTicket;
 use App\Domain\Tickets\Creation\SequenceContention;
 use App\Domain\Tickets\Priority\ChangePriority;
 use App\Domain\Tickets\Resolution\ResolveTicket;
@@ -111,7 +111,8 @@ final class TicketBulkJob implements ShouldQueue
         /** @var array<string, mixed> $params */
         $params = $job->params !== null ? json_decode($job->params, true, 512, JSON_THROW_ON_ERROR) : [];
 
-        DB::table('ticket_bulk_jobs')->where('id', $job->id)->update(['status' => 'running', 'updated_at' => DB::raw('clock_timestamp()')]);
+        $store = app(\App\Domain\Tickets\Bulk\BulkJobStore::class);
+        $store->markRunning($job->id);
 
         // Re-drive resumes at the pending rows (C-09): completed items are history.
         /** @var list<object{id: string, ticket_id: string, position: int}> $items */
@@ -145,28 +146,28 @@ final class TicketBulkJob implements ShouldQueue
 
                 $this->finishItem($item->id, 'ok', null);
                 $ok++;
-                $outcome = ['status' => 'ok', 'reason' => null];
+                $outcome = ['result' => 'ok', 'reason' => null];
             } catch (TransitionRefused $e) {
                 $failed[] = $this->failItem($item, $e->refusalCode);
-                $outcome = ['status' => 'failed', 'reason' => $e->refusalCode];
+                $outcome = ['result' => 'failed', 'reason' => $e->refusalCode];
             } catch (IllegalTransition $e) {
                 $failed[] = $this->failItem($item, 'illegal_transition');
-                $outcome = ['status' => 'failed', 'reason' => 'illegal_transition'];
+                $outcome = ['result' => 'failed', 'reason' => 'illegal_transition'];
             } catch (TransitionNotPermitted $e) {
                 $failed[] = $this->failItem($item, 'transition_not_permitted');
-                $outcome = ['status' => 'failed', 'reason' => 'transition_not_permitted'];
+                $outcome = ['result' => 'failed', 'reason' => 'transition_not_permitted'];
             } catch (AlreadyClaimed $e) {
                 $failed[] = $this->failItem($item, 'already_claimed');
-                $outcome = ['status' => 'failed', 'reason' => 'already_claimed'];
+                $outcome = ['result' => 'failed', 'reason' => 'already_claimed'];
             } catch (AssigneeOutOfScope $e) {
                 $failed[] = $this->failItem($item, 'assignee_out_of_scope');
-                $outcome = ['status' => 'failed', 'reason' => 'assignee_out_of_scope'];
+                $outcome = ['result' => 'failed', 'reason' => 'assignee_out_of_scope'];
             } catch (SequenceContention $e) {
                 $failed[] = $this->failItem($item, 'sequence_contention');
-                $outcome = ['status' => 'failed', 'reason' => 'sequence_contention'];
+                $outcome = ['result' => 'failed', 'reason' => 'sequence_contention'];
             } catch (DomainException|InvalidArgumentException $e) {
                 $failed[] = $this->failItem($item, 'operation_refused');
-                $outcome = ['status' => 'failed', 'reason' => 'operation_refused'];
+                $outcome = ['result' => 'failed', 'reason' => 'operation_refused'];
             } catch (Throwable $e) {
                 // An unexpected failure is still ONE item's failure (per-item partial
                 // success, FR-25) — logged loudly, never re-thrown into the batch.
@@ -177,7 +178,7 @@ final class TicketBulkJob implements ShouldQueue
                     'message' => $e->getMessage(),
                 ]);
                 $failed[] = $this->failItem($item, 'error');
-                $outcome = ['status' => 'failed', 'reason' => 'error'];
+                $outcome = ['result' => 'failed', 'reason' => 'error'];
             }
 
             // NFR-04: per-item progress, over the requester's own channel.
@@ -191,7 +192,7 @@ final class TicketBulkJob implements ShouldQueue
             ]);
         }
 
-        DB::table('ticket_bulk_jobs')->where('id', $job->id)->update(['status' => 'completed', 'updated_at' => DB::raw('clock_timestamp()')]);
+        $store->markCompleted($job->id);
 
         // Failures recorded by EARLIER attempts of a re-driven job belong in the
         // summary too — the event describes the batch, not this process run.
@@ -235,11 +236,9 @@ final class TicketBulkJob implements ShouldQueue
 
     private function finishItem(string $itemId, string $status, ?string $reason): void
     {
-        DB::table('ticket_bulk_job_items')->where('id', $itemId)->update([
-            'status' => $status,
-            'failure_reason' => $reason,
-            'updated_at' => DB::raw('clock_timestamp()'),
-        ]);
+        // Bulk-state writes live in BulkJobStore — the NFR-03 constraint: a file
+        // holding Ticket context must not also assign a status key, ANY table's.
+        app(\App\Domain\Tickets\Bulk\BulkJobStore::class)->finishItem($itemId, $status, $reason);
     }
 
     /**
@@ -277,7 +276,13 @@ final class TicketBulkJob implements ShouldQueue
             throw new InvalidArgumentException(sprintf('bulk action requires a non-empty params.%s', $key));
         }
 
-        return array_values(array_map(static fn (mixed $v): string => (string) $v, $value));
+        return array_values(array_map(static function (mixed $v) use ($key): string {
+            if (! is_string($v) || trim($v) === '') {
+                throw new InvalidArgumentException(sprintf('params.%s must be a list of non-empty strings', $key));
+            }
+
+            return $v;
+        }, $value));
     }
 
     /** @param array<string, mixed> $params */

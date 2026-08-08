@@ -1,0 +1,32 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step7-gates
+# set:        S22-doc06
+# command:    make gates
+# started:    2026-08-08T20:31:07Z
+# git:        b7c02a0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 13 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 0 failed, 0 skipped.
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:32:04Z
+# duration:   57s
+# EXIT:       0

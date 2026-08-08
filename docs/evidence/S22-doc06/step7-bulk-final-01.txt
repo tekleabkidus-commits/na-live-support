@@ -1,0 +1,24 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step7-bulk-final
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/BulkOperationsTest.php
+# started:    2026-08-08T20:30:17Z
+# git:        b7c02a0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[NFR-04 indicative] 200-item tag batch: 3.00s
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\BulkOperationsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a mixed batch yields EXACT per-item allow/deny — the close o[39m[90m…[39m [90m4.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a 200-item batch completes with 200 per-item progress events[39m[90m…[39m [90m3.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: submit refuses an unknown action, an over-cap batch, unknown[39m[90m…[39m [90m0.10s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m8.56s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:30:27Z
+# duration:   10s
+# EXIT:       0

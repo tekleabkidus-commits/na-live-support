@@ -1,0 +1,58 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage4-batch-averaging-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/BulkOperationsTest.php
+# started:    2026-08-08T20:23:07Z
+# git:        b7c02a0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[NFR-04 indicative] 200-item tag batch: 2.51s
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\BulkOperationsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a mixed batch yields EXACT per-item allow/deny — the close o[39m[90m…[39m [90m5.27s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a 200-item batch completes with 200 per-item progress events[39m[90m…[39m [90m3.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: submit refuses an unknown action, an over-cap batch, unknown[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\BulkOperationsTest[22m [90m>[39m EC-12/SEC-04: a permis…   
+[39;1m  EC-12: items after the revocation must fail with the live answer — a cached verdict would close all four
+Failed asserting that two arrays are identical.
+  [39;22m[32m         1 => null,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     2 => Array &3 [[39m[39;1m
+  [39;22m[31m-        0 => 'failed',[39m[39;1m
+  [39;22m[31m-        1 => 'transition_not_permitted',[39m[39;1m
+  [39;22m[32m+        0 => 'ok',[39m[39;1m
+  [39;22m[32m+        1 => null,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     3 => Array &4 [[39m[39;1m
+  [39;22m[31m-        0 => 'failed',[39m[39;1m
+  [39;22m[31m-        1 => 'transition_not_permitted',[39m[39;1m
+  [39;22m[32m+        0 => 'ok',[39m[39;1m
+  [39;22m[32m+        1 => null,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/BulkOperationsTest.php[39m:[32m147[39m
+    143▕ 
+    144▕     /** @var list<object{status: string, failure_reason: string|null}> $items */
+    145▕     $items = DB::table('ticket_bulk_job_items')->where('bulk_job_id', $jobId)->orderBy('position')->get()->all();
+    146▕     expect(array_map(static fn (object $i): array => [$i->status, $i->failure_reason], $items))
+  ➜ 147▕         ->toBe([
+    148▕             ['ok', null],
+    149▕             ['ok', null],
+    150▕             ['failed', 'transition_not_permitted'],
+    151▕             ['failed', 'transition_not_permitted'],
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/BulkOperationsTest.php[39;22m:[39;1m147[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m8.79s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:23:17Z
+# duration:   10s
+# EXIT:       1

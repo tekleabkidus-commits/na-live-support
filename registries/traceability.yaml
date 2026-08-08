@@ -1398,30 +1398,45 @@ entries:
       foreign-message selections refused before creation.
 
   - ac_ref: "Doc06 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/SpamDispositionTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 7 as
-      tests/Feature/Tickets/SpamDispositionTest.php. The exclusion flags, restore semantics
-      and golden fixtures are this session's; Doc 15's CONSUMING assertions are the
-      pre-agreed deferral.
+    status: covered
+    notes: >-
+      Step 7. The exclusion is N-14's ONE predicate (MetricExclusion, status = spam —
+      sabotage #5's target) asserted operationally here and as golden values in
+      MetricTimestampsTest's spam-mark-excludes-unmark-restores fixture (mark excludes,
+      the spam interval accrues to neither party, unmark within 7 d restores the PRIOR
+      status from event history and re-includes — both prior statuses proven).
+      Terminality after day 8 (EC-09) refuses with spam_terminal; the customer's next
+      message then opens a FRESH unlinked automation ticket via the reopen consumer's
+      terminal-spam rung (A-17), idempotent on the event id; while unmarkable, a
+      message takes no ticket action. The separately-confirmed conversation block rides
+      Doc 04's own service. Doc 15's CONSUMING assertions remain the pre-agreed
+      deferral — the goldens are the shared contract.
 
   - ac_ref: "Doc06 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/BulkOperationsTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 7 as
-      tests/Feature/Tickets/BulkOperationsTest.php with FR-25/T-06/SEC-04/EC-12.
+    status: covered
+    notes: >-
+      Step 7. Mixed batch yields EXACT per-item allow/deny in submission order (the
+      illegal item fails alone with illegal_transition — per-item partial success);
+      EC-12/SEC-04 proven by revoking the permission BETWEEN items 2 and 3 — the
+      remaining items fail transition_not_permitted because the job holds no verdicts
+      (every item asks the owning operation's live check; sabotage #4 caches one
+      verdict and goes red exactly there). 200-item batch: 200 per-item Reverb
+      user.{requester} progress events observed, ok=200 summary, 2.29 s wall
+      (dev-indicative; NFR-04's ≤30 s becomes an enforced §12 budget with step 8's
+      perf structure). ticket.bulk_completed {ok, failed[]} + SEC-03 bulk-summary
+      audit; re-driven completed jobs re-publish nothing (C-09).
 
   - ac_ref: "Doc06 AC-08"
     suite_path: tests/Feature/Tickets/HandoffPacketTest.php

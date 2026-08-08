@@ -1,0 +1,94 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage5-exclusion-ignored-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/SpamDispositionTest.php tests/Feature/Tickets/MetricTimestampsTest.php
+# started:    2026-08-08T20:24:11Z
+# git:        b7c02a0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\SpamDispositionTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-09: marking spam takes the machine edge, stamps the actor, exclu[39m[90m…[39m [90m4.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the separately-confirmed conversation block rides Doc 04's o[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-09: unmark on day 8 is refused with the terminality explanation,[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-17: while the spam is still UNMARKABLE, a customer message takes[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the machine edge refuses a mark without tickets.spam.mark, a[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.38s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SpamDispositionTest[22m [90m>[39m FR-09: marking spam t…   
+[39;1m  N-14: spam never counts
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Tickets/SpamDispositionTest.php[39m:[32m37[39m
+     33▕     $ticket->refresh();
+     34▕     expect($ticket->status())->toBe(TicketStatus::Spam)
+     35▕         ->and($ticket->spam_marked_at)->not->toBeNull('the R-20 trigger stamps the mark')
+     36▕         ->and($ticket->spam_marked_by)->toBe($actor->identifier())
+  ➜  37▕         ->and(app(MetricExclusion::class)->excluded($ticket))->toBeTrue('N-14: spam never counts')
+     38▕         ->and($conversation->fresh()->open_ticket_id)->toBeNull('spam left the open family — the slot released');
+     39▕ 
+     40▕     $event = json_decode((string) DB::table('outbox')->where('name', 'ticket.spam_marked')->first()->payload, true, 512, JSON_THROW_ON_ERROR);
+     41▕     expect($event['conversation_blocked'])->toBeFalse()
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SpamDispositionTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SpamDispositionTest[22m [90m>[39m EC-09: unmark on day…    
+[39;1m  terminal spam stays excluded forever
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Tickets/SpamDispositionTest.php[39m:[32m109[39m
+    105▕             ->toThrow(TransitionRefused::class, 'spam_terminal');
+    106▕ 
+    107▕         $ticket->refresh();
+    108▕         expect($ticket->status())->toBe(TicketStatus::Spam, 'terminal means terminal')
+  ➜ 109▕             ->and(app(MetricExclusion::class)->excluded($ticket))->toBeTrue('terminal spam stays excluded forever');
+    110▕     } finally {
+    111▕         cleanupTenants([$tenantId]);
+    112▕     }
+    113▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SpamDispositionTest.php[39;22m:[39;1m109[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MetricTimestampsTest[22m [90m>[39m AC-09: the golden li…   
+[39;1m  step 0: MetricExclusion should answer true here (AC-06/N-14)
+Failed asserting that false is identical to true.[39;22m
+
+  at [32mtests/Feature/Tickets/MetricTimestampsTest.php[39m:[32m117[39m
+    113▕                 // AC-06/N-14: the ONE exclusion predicate, asked mid-lifecycle —
+    114▕                 // sabotage #5's target.
+    115▕                 $after = Ticket::query()->findOrFail($ticketId);
+    116▕                 expect(app(App\Domain\Tickets\Metrics\MetricExclusion::class)->excluded($after))
+  ➜ 117▕                     ->toBe($step['expect_after']['metrics_excluded'], sprintf(
+    118▕                         'step %d: MetricExclusion should answer %s here (AC-06/N-14)',
+    119▕                         $index,
+    120▕                         $step['expect_after']['metrics_excluded'] ? 'true' : 'false',
+    121▕                     ));
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MetricTimestampsTest.php[39;22m:[39;1m117[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m17 passed[39;22m[90m (105 assertions)[39m
+  [90mDuration:[39m [39m8.63s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:24:21Z
+# duration:   10s
+# EXIT:       1

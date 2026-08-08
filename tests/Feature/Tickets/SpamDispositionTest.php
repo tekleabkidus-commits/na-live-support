@@ -7,7 +7,6 @@ use App\Domain\Tickets\Spam\SpamTicket;
 use App\Domain\Tickets\Transitions\TicketStatus;
 use App\Domain\Tickets\Transitions\TransitionNotPermitted;
 use App\Domain\Tickets\Transitions\TransitionRefused;
-use App\Models\Conversation;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 
