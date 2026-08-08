@@ -1,0 +1,164 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-c2-regression
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets
+# started:    2026-08-08T18:19:22Z
+# git:        2163a2a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m5.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ChannelScopeReproofTest[39m
+  [32;1m✓[39;22m[90m [39m[90mT-06 ADMIT: an Own-scoped agent may subscribe to a conversation the[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: the same Own-scoped agent is refused on a conversation t[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: unassigning takes the subscription right away again[39m[90m      [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membe[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: an All-scoped agent still subscribes, and conversations.view[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\FollowersPriorityTagsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a priority change is evented with old/new; a no-op change is[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: staff need tickets.priority.change; automation and AI need n[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a fifth priority is refused, by the enum and by the database[39m[90m [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: staff follow themselves with tickets.follow; adding someone[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: a follower who cannot see the ticket is refused — notificati[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: unfollowing removes the row and events it; the events are th[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tags are free-form per tenant, de-duplicated, and removable[39m[90m  [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tagging needs tickets.tags.manage, and a blank tag is not a[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: autocomplete offers the tenant's own tags, prefix-matched[39m[90m    [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rename is chunked, resumable, historical, and audited wit[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rewrite needs tickets.tags.manage and refuses a blank ren[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MidActionPermissionExpiryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a transition permitted by a temporary override is refused on[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: while the SAME override is live, the very same transition su[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a plain role denial carries no attribution — there is no gra[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenAutoCloseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-07: after the auto-close window of customer silence, the sweep c[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-01: a persisted customer reply beats the due sweep — no close, n[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: a customer message on a resolved ticket reopens it unconditi[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se[39m[90m…[39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen onto a DEACTIVATED assignee hands the ticket back to[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-08: staff reopen of a closed ticket needs tickets.reopen AND a r[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe consumer does nothing when the conversation already holds an op[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreopenFromCustomerMessage on a wrong-status ticket throws the FR-08[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03: the window arithmetic is exact across DST-change dates — the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03 end-to-end: a reopen window that spans the October DST switch[39m[90m… [39m [90m0.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ResolveRequirementsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a bare resolve with no public reply and no note is refused ([39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an explicit resolution note satisfies the substance requirem[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a prior public staff reply satisfies the requirement with no[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an AI public reply is substance too — the definition is FR-2[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: with tickets.resolve.requires_reply off, a bare resolve is a[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-07/T-03: entering resolved arms the auto-close timer at EXACTLY[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mticket.resolved / ticket.closed / ticket.reopened ride EVERY door o[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TimerPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma stale candidate — the ticket long since moved on — is dropped by[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma candidate whose score lies about dueness is DEFERRED: the column[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-03: changing tickets.autoclose.hours applies to FUTURE resolutio[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: the sweep HOLDS an unreachable customer's due timer — refuse[39m[90m…[39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.04s[39m  
+
+  [90mTests:[39m    [32;1m116 passed[39;22m[90m (911 assertions)[39m
+  [90mDuration:[39m [39m22.29s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:19:45Z
+# duration:   23s
+# EXIT:       0

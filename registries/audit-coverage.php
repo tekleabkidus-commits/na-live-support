@@ -632,9 +632,12 @@ return [
         'owning_doc' => 'Doc06',
     ],
     [
+        // `system` joined in step 6: AC-04's unmerge resets the target's follower set
+        // to the snapshot, and those removals are the platform's restore, not a
+        // person's unfollow — the same staff|system split follower_added already has.
         'action_key' => 'ticket.follower_removed',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'user_id'],
         'owning_doc' => 'Doc06',
     ],
@@ -647,9 +650,12 @@ return [
         'owning_doc' => 'Doc06',
     ],
     [
+        // `system` joined in step 6: AC-04's unmerge resets the target's tag set to
+        // the snapshot, and the shed tags are the platform's restore, not a person's
+        // untag — the follower_removed reasoning exactly.
         'action_key' => 'ticket.untagged',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'tags'],
         'owning_doc' => 'Doc06',
     ],
@@ -669,6 +675,30 @@ return [
         'entity' => 'ticket',
         'actor_types' => ['system'],
         'required_fields' => ['ticket_id', 'previous_assignee_id'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-20: one entry per merge link, on the source.
+        'action_key' => 'ticket.merged',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['source_ticket_id', 'target_ticket_id'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-20/AC-04: the 24 h reversal, on the source.
+        'action_key' => 'ticket.unmerged',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['source_ticket_id', 'target_ticket_id', 'restored_status'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FS-04: "both attempts audited" — the refused unmerge is history too.
+        'action_key' => 'ticket.unmerge_refused',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['source_ticket_id', 'target_ticket_id', 'reason'],
         'owning_doc' => 'Doc06',
     ],
 ];

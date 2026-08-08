@@ -1,0 +1,89 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-merge-unmerge
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MergeUnmergeTest.php
+# started:    2026-08-08T18:15:27Z
+# git:        2163a2a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m3.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m AC-04: merge moves links…   
+[39;1m  the snapshot must capture the exact pre-merge shape
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     'source' => Array &1 [[39m[39;1m
+  [39;22m[32m         'status' => 'open',[39m[39;1m
+  [39;22m[31m-        'pending_reason' => null,[39m[39;1m
+  [39;22m[32m         'assignee_id' => '019fe296-53d0-72a9-a5b2-de04eafa5e53',[39m[39;1m
+  [39;22m[32m+        'merged_into' => null,[39m[39;1m
+  [39;22m[32m         'auto_close_at' => null,[39m[39;1m
+  [39;22m[31m-        'merged_into' => null,[39m[39;1m
+  [39;22m[32m+        'pending_reason' => null,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     'target' => Array &2 [[39m[39;1m
+  [39;22m[31m-        'follower_ids' => Array &3 [],[39m[39;1m
+  [39;22m[31m-        'tags' => Array &4 [[39m[39;1m
+  [39;22m[32m+        'tags' => Array &3 [[39m[39;1m
+  [39;22m[32m             0 => 'payments',[39m[39;1m
+  [39;22m[32m             1 => 'vip',[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m+        'follower_ids' => Array &4 [],[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     'anchor_ids' => Array &5 [[39m[39;1m
+  [39;22m[32m         0 => '019fe296-53e3-7342-889e-09931152a587',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/MergeUnmergeTest.php[39m:[32m119[39m
+    115▕         ->where('source_ticket_id', $source->identifier())
+    116▕         ->where('target_ticket_id', $target->identifier())
+    117▕         ->first();
+    118▕     expect($stored)->not->toBeNull('T-04: the snapshot row must exist')
+  ➜ 119▕         ->and(json_decode((string) $stored->snapshot, true))->toBe($expectedShape, 'the snapshot must capture the exact pre-merge shape');
+    120▕ 
+    121▕     // THE REVERSAL (AC-04). Post-merge noise on the target proves the reset is real.
+    122▕     DB::update("UPDATE tickets SET tags = ARRAY['payments','vip','merged-extra']::text[] WHERE id = ?", [$target->identifier()]);
+    123▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/MergeUnmergeTest.php[39;22m:[39;1m119[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m FS-04: o… [41;1m LogicException [49;22m  
+[39;1m  PlatformConnection::run() was called with tenant 019fe296-55f3-7212-82fc-efc7b3e6e3c5 bound (Doc 01 SEC-02: application tenant traffic can never reach the platform_admin role). A cross-tenant read from inside a tenant request is never legitimate — if this is a platform operation, it does not belong on a tenant-resolved code path.[39;22m
+
+  at [32mapp/Support/Tenancy/PlatformConnection.php[39m:[32m50[39m
+     46▕     {
+     47▕         $context = app(TenantContext::class);
+     48▕ 
+     49▕         if ($context->isBound()) {
+  ➜  50▕             throw new LogicException(sprintf(
+     51▕                 'PlatformConnection::run() was called with tenant %s bound (Doc 01 SEC-02: application '
+     52▕                 .'tenant traffic can never reach the platform_admin role). A cross-tenant read from '
+     53▕                 .'inside a tenant request is never legitimate — if this is a platform operation, it does '
+     54▕                 .'not belong on a tenant-resolved code path.',
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/PlatformConnection.php[39;22m:[39;1m50[39;22m
+  [33m2   [39m[39;1mapp/Console/Commands/TicketMergeSnapshotsPrune.php[39;22m:[39;1m29[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m9 passed[39;22m[90m (55 assertions)[39m
+  [90mDuration:[39m [39m4.16s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:15:31Z
+# duration:   4s
+# EXIT:       2

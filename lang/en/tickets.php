@@ -70,6 +70,23 @@ return [
         'open_ticket_exists' => 'This conversation already has an open ticket. Open it instead of starting another.',
         'resolution_requires_substance' => 'The customer has not received a reply on this ticket. Send a public reply, or add a resolution note explaining the outcome.',
         'reopen_window_passed' => 'The reopen window for this ticket has passed. Create a new ticket in the same conversation instead — it will link back to this one.',
+
+        // FR-20 merge / unmerge (step 6).
+        'cross_customer_merge' => 'These tickets belong to different customers. Merge the customer records first, then merge the tickets.',
+        'target_out_of_scope' => 'The merge target is outside your view scope. Choose a target you can open.',
+        'merge_target_spam' => 'A spam ticket cannot receive a merge.',
+        'merge_source_closed' => 'A closed ticket cannot be merged away — merge into it instead, or reopen it first.',
+        'merge_source_spam' => 'A spam ticket cannot be merged into a live ticket. Unmark it first if it is not spam.',
+        'merge_cycle' => 'This merge would point the tickets at each other in a circle. Merge in one direction only.',
+        'merged_superseded' => 'This ticket was merged into another and is read-only. Work the surviving ticket, or unmerge within 24 hours.',
+        'not_merged' => 'This ticket is not merged into anything — there is nothing to unmerge.',
+        'unmerge_window_passed' => 'The 24-hour unmerge window has passed. This merge is now permanent.',
+    ],
+
+    // §8's merged-source banner (rendered by Doc 07 from merged_into, resolving
+    // chains to the final survivor per EC-03).
+    'banner' => [
+        'merged_into' => 'This ticket was merged into #:number. Follow-ups belong there.',
     ],
 
     // State affordances and settings copy (Doc 06 §8, SS-03). Rendering lands with

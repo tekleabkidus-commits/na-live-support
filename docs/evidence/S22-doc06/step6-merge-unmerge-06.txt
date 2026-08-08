@@ -1,0 +1,36 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-merge-unmerge
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MergeUnmergeTest.php tests/Feature/Tickets/StatusWriterEncapsulationTest.php
+# started:    2026-08-08T18:20:04Z
+# git:        2163a2a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m5.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.02s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (76 assertions)[39m
+  [90mDuration:[39m [39m6.83s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:20:11Z
+# duration:   7s
+# EXIT:       0

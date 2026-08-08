@@ -464,6 +464,24 @@ FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS
 - **Producers:** Doc06/AssignTicket
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
 
+## `ticket.merged`
+
+FR-20: a source ticket was merged into a target (same customer, hard rule SEC-06). One event PER LINK carrying both sides — FR-20's "events on both": Doc 07 renders it on either timeline; Doc 12 closes the source's SLA instances superseded off exactly this signal. The source is closed with merged_into set and frozen (A-14); reversible 24 h via unmerge.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `source_conversation_id`, `target_conversation_id`, `actor_type`, `actor_id`
+- **Producers:** Doc06/MergeTickets
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.unmerged`
+
+FR-20/AC-04: a merge link was reversed within its 24 h window — the source restored byte-identically from the snapshot (status, assignee, timer, anchors; target follower/tag sets reset).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `restored_status`, `actor_type`, `actor_id`
+- **Producers:** Doc06/UnmergeTicket
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
 ## `ticket.assignee_deactivated`
 
 EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26's list does not name it.

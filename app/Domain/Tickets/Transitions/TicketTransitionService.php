@@ -217,6 +217,130 @@ final class TicketTransitionService
     }
 
     /**
+     * A-13's merge door: source → closed, outside the plain matrix, reachable only
+     * from MergeTickets (FR-20 — "source → closed with merged_into=target").
+     *
+     * WHY NOT AN EDGE. §4.2's countersigned 15 edges reach `closed` only from
+     * `resolved`, and AC-01's 64-cell test holds that line for every ORDINARY door.
+     * A merge source can be any open-family status or `resolved`, so its close is an
+     * operation door of the sole writer: same guarded repository write, same
+     * ticket.status_changed + audit (SEC-03), same R-20 trigger stamps — and
+     * deliberately NO ticket.closed and no lifecycle reopen-window: a superseded
+     * ticket's only exit is unmerge (A-14).
+     */
+    public function closeForMerge(Ticket $source, TransitionContext $context): void
+    {
+        $from = $source->status();
+
+        if (! $from->isOpenFamily() && $from !== TicketStatus::Resolved) {
+            throw new \LogicException(sprintf(
+                'closeForMerge on a %s ticket — A-13 admits open-family and resolved sources only; MergeTickets validates before calling.',
+                $from->value,
+            ));
+        }
+
+        DB::transaction(function () use ($source, $from, $context): void {
+            // FR-10: a source leaving the open family releases its conversation's slot.
+            if (! $source->linked_work && $from->isOpenFamily()) {
+                $this->conversations->releaseOpenTicket($this->conversationFor($source), $source->identifier());
+            }
+
+            $written = $this->tickets->writeStatus($source, $from, TicketStatus::Closed);
+
+            if (! $written) {
+                // A racing transition moved the source mid-merge: the merge was
+                // validated against a state that no longer exists, so the whole
+                // operation re-evaluates rather than closing blind.
+                $source->refresh();
+                throw new IllegalTransition($source->status(), TicketStatus::Closed);
+            }
+
+            $source->refresh();
+            $this->recordStatusChange($source, $from, TicketStatus::Closed, $context);
+
+            // A resolved source's armed timer is meaningless once superseded (A-13).
+            // The snapshot captured the deadline BEFORE this, so unmerge restores it.
+            if ($from === TicketStatus::Resolved) {
+                $this->timers->cancelAutoClose($source);
+                $source->refresh();
+            }
+        });
+    }
+
+    /**
+     * A-13's unmerge door: closed → the snapshot status, reachable only from
+     * UnmergeTicket. Re-claims the FR-10 slot for open-family restores (refusing
+     * open_ticket_exists on conflict), touches no reopened_count (an unmerge is not a
+     * reopen), arms nothing (UnmergeTicket restores the ORIGINAL deadline verbatim —
+     * arming fresh here would re-derive it from the current setting, which SS-03
+     * forbids for an already-materialized timer).
+     */
+    public function reopenFromUnmerge(Ticket $source, TicketStatus $restored, TransitionContext $context): void
+    {
+        $from = $source->status();
+
+        if ($from !== TicketStatus::Closed) {
+            throw new \LogicException(sprintf(
+                'reopenFromUnmerge on a %s ticket — a merged-away source is always closed (A-13); UnmergeTicket validates before calling.',
+                $from->value,
+            ));
+        }
+
+        if ($restored === TicketStatus::Closed) {
+            // The snapshot said closed?! A merge of a closed source is refused at the
+            // door (A-13), so a closed pre-merge status cannot have been snapshotted.
+            throw new \LogicException('an unmerge snapshot cannot restore to closed — merge never admits a closed source (A-13).');
+        }
+
+        DB::transaction(function () use ($source, $from, $restored, $context): void {
+            if (! $source->linked_work && $restored->isOpenFamily()) {
+                $this->conversations->claimOpenTicket($this->conversationFor($source), $source->identifier());
+            }
+
+            $written = $this->tickets->writeStatus($source, $from, $restored);
+
+            if (! $written) {
+                $source->refresh();
+                throw new IllegalTransition($source->status(), $restored);
+            }
+
+            $source->refresh();
+            $this->recordStatusChange($source, $from, $restored, $context);
+        });
+    }
+
+    /**
+     * The event + audit pair every status write carries (FR-04/SEC-03), shared by the
+     * plain transition and A-13's operation doors so no door can drift.
+     */
+    private function recordStatusChange(Ticket $ticket, TicketStatus $from, TicketStatus $to, TransitionContext $context): void
+    {
+        $this->events->publish('ticket.status_changed', [
+            'tenant_id' => $ticket->getAttribute('tenant_id'),
+            'ticket_id' => $ticket->identifier(),
+            'conversation_id' => $ticket->conversation_id,
+            'old_status' => $from->value,
+            'new_status' => $to->value,
+            'actor_type' => $context->actor->value,
+            'actor_id' => $context->user?->identifier(),
+        ]);
+
+        $this->audit->record(
+            actionKey: 'ticket.status_changed',
+            entity: 'ticket',
+            entityId: $ticket->identifier(),
+            actorType: $context->actor->auditActor(),
+            payload: [
+                'ticket_id' => $ticket->identifier(),
+                'old_status' => $from->value,
+                'new_status' => $to->value,
+                'reason' => $context->reason,
+            ],
+            actorId: $context->user?->identifier(),
+        );
+    }
+
+    /**
      * FR-24's first-response signal for a reply that changes no status.
      *
      * The AI answering an already-open ticket is the ordinary case, and it must still
@@ -324,6 +448,17 @@ final class TicketTransitionService
 
     private function assertInvariants(Ticket $ticket, TicketStatus $to, TransitionContext $context): void
     {
+        // A-14: a merged-away source is FROZEN — "permanent banner" (FR-20) decides
+        // it. No ordinary door may move it (a staff closed→open reopen would
+        // un-supersede a ticket whose merged_into still says otherwise); the one way
+        // back is UnmergeTicket, which clears the pointer before its door.
+        if ($ticket->merged_into !== null) {
+            throw new TransitionRefused(
+                'merged_superseded',
+                sprintf('this ticket was merged into %s and is frozen; unmerge it within the window, or work the surviving ticket (FR-20/A-14).', $ticket->merged_into),
+            );
+        }
+
         // BR-07: channel_unreachable "never auto-resolves or auto-closes a ticket …
         // humans decide outcomes for unreachable customers". So the bar is on the
         // AUTOMATED actors only — a staff member may still resolve deliberately.

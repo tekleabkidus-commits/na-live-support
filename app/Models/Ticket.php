@@ -49,7 +49,7 @@ use LogicException;
  * @property string|null $merged_into
  * @property string|null $parent_ticket_id
  * @property array<string, mixed>|null $form_data
- * @property list<string> $tags
+ * @property string|null $tags raw Postgres text[] literal — parse via TicketTags::tagsOf(), never by hand
  * @property Carbon|null $first_response_at
  * @property Carbon|null $agent_first_response_at
  * @property Carbon|null $resolved_at

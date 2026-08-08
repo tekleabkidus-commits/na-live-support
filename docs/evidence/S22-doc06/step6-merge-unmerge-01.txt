@@ -1,0 +1,173 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-merge-unmerge
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MergeUnmergeTest.php
+# started:    2026-08-08T18:14:05Z
+# git:        2163a2a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m5.21s[39m  
+  [31;1m⨯[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m AC-04: merge…  [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/MergeUnmergeTest.php[39;22m:[39;1m93[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m a resolved so… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m A-13: a close… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m A-14: a merge… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m EC-03: merged… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m FS-04: once t… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m A-13: unmerge… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m [90m>[39m A-13: an assi… [41;1m TypeError [49;22m  
+[39;1m  sort(): Argument #1 ($array) must be of type array, string given[39;22m
+
+  at [32mapp/Domain/Tickets/Merge/MergeTickets.php[39m:[32m139[39m
+    135▕         sort($followerIds);
+    136▕ 
+    137▕         /** @var list<string> $targetTags */
+    138▕         $targetTags = $target->tags ?? [];
+  ➜ 139▕         sort($targetTags);
+    140▕ 
+    141▕         return [
+    142▕             'source' => [
+    143▕                 'status' => $source->status()->value,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m139[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Merge/MergeTickets.php[39;22m:[39;1m194[39;22m
+
+
+  [90mTests:[39m    [31;1m8 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (15 assertions)[39m
+  [90mDuration:[39m [39m6.04s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:14:11Z
+# duration:   6s
+# EXIT:       2

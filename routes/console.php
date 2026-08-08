@@ -41,3 +41,7 @@ Schedule::command('rbac:expire-overrides')->everyFifteenMinutes();
 // individually safe (in-transaction re-check), so overlap costs noise, not
 // correctness — but noise every minute forever is still noise.
 Schedule::command('tickets:timers-sweep')->everyMinute()->withoutOverlapping();
+
+// Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
+// not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
+Schedule::command('tickets:merge-snapshots-prune')->hourly();

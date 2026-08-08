@@ -1,0 +1,47 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-merge-unmerge
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/MergeUnmergeTest.php
+# started:    2026-08-08T18:16:29Z
+# git:        2163a2a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m3.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\MergeUnmergeTest[22m…  [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit entry "ticket.follower_removed" was recorded with actor type "system", which the registry does not allow (permitted: staff). Either the caller is wrong about who it is, or the registry is out of date — both are worth stopping for.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m163[39m
+    159▕         /** @var list<string> $allowed */
+    160▕         $allowed = $entry['actor_types'] ?? [];
+    161▕ 
+    162▕         if (! in_array($actor->value, $allowed, true)) {
+  ➜ 163▕             throw new InvalidArgumentException(sprintf(
+    164▕                 'Audit entry "%s" was recorded with actor type "%s", which the registry does not allow '
+    165▕                 .'(permitted: %s). Either the caller is wrong about who it is, or the registry is out of '
+    166▕                 .'date — both are worth stopping for.',
+    167▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m163[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m75[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (61 assertions)[39m
+  [90mDuration:[39m [39m4.79s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:16:34Z
+# duration:   5s
+# EXIT:       2

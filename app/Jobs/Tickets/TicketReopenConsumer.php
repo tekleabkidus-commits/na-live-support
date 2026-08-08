@@ -103,10 +103,12 @@ final class TicketReopenConsumer extends OutboxConsumer
     }
 
     /**
-     * The reopen candidate: the most recent NON-LINKED ticket in the given state, by
-     * its own transition stamp (DB time, C-11; id as the same-microsecond tiebreak —
-     * the R-23 family principle). linked_work rows are FR-21's parallel track and
-     * never the conversation's primary thread.
+     * The reopen candidate: the most recent NON-LINKED, NON-MERGED ticket in the given
+     * state, by its own transition stamp (DB time, C-11; id as the same-microsecond
+     * tiebreak — the R-23 family principle). linked_work rows are FR-21's parallel
+     * track and never the conversation's primary thread; merged-away rows are frozen
+     * behind their permanent banner (A-14) — a reply lands as a message and the
+     * surviving ticket is where the follow-up belongs.
      */
     private function latest(Conversation $conversation, string $status, string $stampColumn): ?Ticket
     {
@@ -115,6 +117,7 @@ final class TicketReopenConsumer extends OutboxConsumer
             ->where('conversation_id', $conversation->identifier())
             ->where('status', $status)
             ->where('linked_work', false)
+            ->whereNull('merged_into')
             ->orderByDesc($stampColumn)
             ->orderByDesc('id')
             ->first();

@@ -91,6 +91,85 @@ final class TicketTags
     }
 
     /**
+     * THE parsed read for the `tags` column. The attribute on the model is the raw
+     * Postgres text[] literal (`{a,b,"c d"}`) because no Eloquent cast exists — and
+     * hand-parsing that literal breaks on FR-19's free text (commas, quotes), so the
+     * database serializes it to JSON instead.
+     *
+     * @return list<string>
+     */
+    public function tagsOf(Ticket $ticket): array
+    {
+        /** @var object{tags: string|null}|null $row */
+        $row = DB::selectOne('SELECT array_to_json(tags) AS tags FROM tickets WHERE id = ?', [$ticket->identifier()]);
+
+        if ($row === null || $row->tags === null) {
+            return [];
+        }
+
+        /** @var list<string> $tags */
+        $tags = json_decode($row->tags, true, 512, JSON_THROW_ON_ERROR);
+
+        return $tags;
+    }
+
+    /**
+     * FR-20's tags union into the merge target. No tickets.tags.manage check — the
+     * union is a defined consequence of the merge itself (tickets.merge governs the
+     * whole operation, A-13), not a separate tagging act. The standard ticket.tagged
+     * event and audit ride via apply(), same as any other tag write.
+     *
+     * @param  list<string>  $tags
+     */
+    public function unionForMerge(Ticket $target, array $tags, User $actor): void
+    {
+        $this->apply($target, $this->normalise($tags), $actor, 'ticket.tagged');
+    }
+
+    /**
+     * AC-04's restore: set the target's tags to exactly the snapshot array
+     * (FR-20/A-13). Verbatim assignment rather than set arithmetic, because the bar
+     * is byte-identical; emits ticket.untagged with the shed count when the set
+     * shrank, so Doc 15's tag surfaces see the change.
+     *
+     * @param  list<string>  $tags
+     */
+    public function resetForUnmerge(Ticket $target, array $tags): void
+    {
+        $current = $this->tagsOf($target);
+        $shed = array_values(array_diff($current, $tags));
+
+        if ($tags === []) {
+            DB::update("UPDATE tickets SET tags = '{}'::text[], updated_at = clock_timestamp() WHERE id = ?", [$target->identifier()]);
+        } else {
+            $placeholders = implode(', ', array_fill(0, count($tags), '?'));
+            DB::update(
+                "UPDATE tickets SET tags = ARRAY[{$placeholders}]::text[], updated_at = clock_timestamp() WHERE id = ?",
+                [...$tags, $target->identifier()],
+            );
+        }
+        $target->refresh();
+
+        if ($shed !== []) {
+            $this->events->publish('ticket.untagged', [
+                'tenant_id' => $target->getAttribute('tenant_id'),
+                'ticket_id' => $target->identifier(),
+                'conversation_id' => $target->conversation_id,
+                'count' => count($shed),
+                'actor_id' => null,
+            ]);
+
+            $this->audit->record(
+                actionKey: 'ticket.untagged',
+                entity: 'ticket',
+                entityId: $target->identifier(),
+                actorType: AuditActor::System,
+                payload: ['ticket_id' => $target->identifier(), 'tags' => $shed, 'reason' => 'unmerge_restore'],
+            );
+        }
+    }
+
+    /**
      * @param  list<string>  $tags
      * @return list<string>
      */

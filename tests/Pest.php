@@ -579,13 +579,19 @@ function ticketFixture(string $status = 'new', array $attributes = []): array
  * a baffling `assignee_out_of_scope` or `MissingTenantContext` far from the cause. Any
  * test needing several conversations for ONE tenant uses this instead.
  */
-function anotherConversation(string $tenantId, string $label = ''): App\Models\Conversation
+function anotherConversation(string $tenantId, string $label = '', ?string $customerId = null): App\Models\Conversation
 {
-    $customer = App\Models\Customer::query()->create([
-        'display_name' => 'Fixture Player',
-        'username' => '@fixture_extra_'.Str::random(6),
-        'is_shell' => true,
-    ]);
+    // $customerId: SEC-06's merge tests need several conversations for ONE customer
+    // (a fresh customer per call is the default, and is exactly what the
+    // cross-customer refusal tests rely on).
+    if ($customerId === null) {
+        $customer = App\Models\Customer::query()->create([
+            'display_name' => 'Fixture Player',
+            'username' => '@fixture_extra_'.Str::random(6),
+            'is_shell' => true,
+        ]);
+        $customerId = $customer->identifier();
+    }
 
     $id = (string) Str::uuid7();
     DB::table('conversations')->insert([
@@ -594,7 +600,7 @@ function anotherConversation(string $tenantId, string $label = ''): App\Models\C
         'channel' => 'fakechan',
         'channel_ref_id' => 'bot-1',
         'external_chat_id' => 'chat-'.$label.Str::random(10),
-        'customer_id' => $customer->identifier(),
+        'customer_id' => $customerId,
         'state' => 'active',
     ]);
 
@@ -706,10 +712,12 @@ function machineClosedTicket(App\Models\Conversation $conversation, string $fina
     app(App\Domain\Conversations\Storage\ConversationRepository::class)->claimOpenTicket($conversation, $ticketId);
 
     $service = app(App\Domain\Tickets\Transitions\TicketTransitionService::class);
-    $walk = ['open', 'resolved'];
-    if ($finalStatus === 'closed') {
-        $walk[] = 'closed';
-    }
+    $walk = match ($finalStatus) {
+        'open' => ['open'],
+        'resolved' => ['open', 'resolved'],
+        'closed' => ['open', 'resolved', 'closed'],
+        default => throw new InvalidArgumentException("machineClosedTicket walks to open|resolved|closed, not {$finalStatus}"),
+    };
 
     foreach ($walk as $status) {
         $service->transition(

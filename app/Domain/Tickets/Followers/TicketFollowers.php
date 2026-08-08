@@ -101,6 +101,48 @@ final class TicketFollowers
         return true;
     }
 
+    /**
+     * AC-04's restore: reset the follower set to exactly the snapshot's ids
+     * (FR-20/A-13 — the unmerge writes the pre-merge set back verbatim). Removals emit
+     * the standard follower_removed events so Doc 16 stops notifying people the merge
+     * attached. No permission check: UnmergeTicket's tickets.merge governs, and no
+     * scope re-check either — everyone in the kept set already passed it when they
+     * first followed.
+     *
+     * @param  list<string>  $keepUserIds
+     */
+    public function resetForUnmerge(Ticket $ticket, array $keepUserIds): void
+    {
+        $current = $this->followerIds($ticket);
+        $remove = array_values(array_diff($current, $keepUserIds));
+
+        if ($remove === []) {
+            return;
+        }
+
+        DB::table('ticket_followers')
+            ->where('ticket_id', $ticket->identifier())
+            ->whereIn('user_id', $remove)
+            ->delete();
+
+        foreach ($remove as $userId) {
+            $this->events->publish('ticket.follower_removed', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'user_id' => $userId,
+                'by' => null,
+            ]);
+
+            $this->audit->record(
+                actionKey: 'ticket.follower_removed',
+                entity: 'ticket',
+                entityId: $ticket->identifier(),
+                actorType: AuditActor::System,
+                payload: ['ticket_id' => $ticket->identifier(), 'user_id' => $userId, 'reason' => 'unmerge_restore'],
+            );
+        }
+    }
+
     /** @return list<string> the user ids Doc 16's notification fan-out reads */
     public function followerIds(Ticket $ticket): array
     {

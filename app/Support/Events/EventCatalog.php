@@ -571,6 +571,23 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
             'description' => 'FR-08: a resolved or closed ticket returned to `open` — a customer message within the window (actor_type=system) or a staff reopen with reason (actor_type=staff). reopened_count has already been incremented.',
         ],
+        'ticket.merged' => [
+            'schema_version' => 1,
+            // One event PER LINK carrying both sides — FR-20's "events on both":
+            // Doc 07 renders it on either timeline; Doc 12 closes the source's SLA
+            // instances superseded off exactly this signal.
+            'payload' => ['tenant_id', 'source_ticket_id', 'target_ticket_id', 'source_conversation_id', 'target_conversation_id', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/MergeTickets'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-20: a source ticket was merged into a target (same customer, hard rule SEC-06). The source is closed with merged_into set and frozen (A-14); anchors moved, followers+tags unioned; reversible 24 h via unmerge.',
+        ],
+        'ticket.unmerged' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'source_ticket_id', 'target_ticket_id', 'restored_status', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/UnmergeTicket'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-20/AC-04: a merge link was reversed within its 24 h window — the source restored byte-identically from the snapshot (status, assignee, timer, anchors; target sets reset).',
+        ],
     ];
 
     /**
