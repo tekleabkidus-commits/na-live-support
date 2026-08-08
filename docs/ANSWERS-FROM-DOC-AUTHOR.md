@@ -859,3 +859,21 @@ A-12). **RIDER, advisor-ruled**: the per-tenant bulk concurrency cap of 1 is the
 DEFAULT — the smallest honest reading of T-06; raising it is a later tuning decision,
 not a design change, and needs no ruling when it comes. bulk.progress frames being
 ephemeral-by-design is accepted and stands.
+
+### A-18. A ticket's transcript RANGE: its anchor rows where present, else its lifetime window (FILED INTERPRETATION)
+
+**Filed at S22 step 8; needs advisor countersign.** Doc 04 FR-24: "rendered PDF/text
+of a conversation **or ticket range**" — the ticket half was inherited row 1, and the
+document never defines what a ticket's "range" is. BR-02 decides the primary reading:
+"tickets reference ranges" and ticket_message_anchors is, per its own migration, THE
+boundary table — so where a ticket HAS anchor rows (a handoff's transcript_anchor, a
+split's split_selection), its transcript is exactly the messages those ranges resolve
+to, in (created_at, id) order. But most tickets have no anchors (agent-manual,
+automation, offline-form creations write none), and "no anchors → empty transcript"
+would make the feature vanish for the common case; for those the range is the
+ticket's LIFETIME WINDOW — messages from the ticket's own DB-stamped created_at up
+to its closed_at (unbounded while it lives). Both bases are named in the audit entry
+(`range_basis: anchors|lifetime`), the event payload is UNCHANGED (v1 — the export
+signal; the ticket detail is the audit's, the Q7 posture), and the gate, watermark,
+notes double-confirm and SEC-05 posture are Doc 04's, byte for byte — SEC-05 keeps
+tickets.export (property/timeline) a separate future gate.

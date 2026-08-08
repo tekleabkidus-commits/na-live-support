@@ -1,0 +1,27 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step8-doc04-export-regression
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Conversations/EditDeleteTranscriptTest.php
+# started:    2026-08-08T20:49:36Z
+# git:        fe90ce9 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\EditDeleteTranscriptTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-06: customer edit + delete round-trip preserves originals; the f[39m[90m…[39m [90m5.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a channel redelivery carrying a KNOWN external id becomes a[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: staff edit rides the capability interface, revises, audits,[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: staff delete requires the telegram.message.delete permission[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a channel whose capability is off has NO staff edit path[39m[90m     [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: AI messages are never edited or deleted post-send — correcti[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24/US-04: the transcript excludes notes by default, carries the[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: including notes takes BOTH flags — the double-confirm is str[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 PDF (ADR 0009): renders with the embedded Ethiopic font — Amh[39m[90m…[39m [90m0.33s[39m  
+
+  [90mTests:[39m    [32;1m9 passed[39;22m[90m (41 assertions)[39m
+  [90mDuration:[39m [39m6.57s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:49:43Z
+# duration:   7s
+# EXIT:       0

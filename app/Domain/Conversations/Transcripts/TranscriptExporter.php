@@ -18,8 +18,12 @@ use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
 
 /**
- * FR-24/SEC-05/SS-03: the conversation-range transcript export. (The
- * ticket-range half waits for Doc 06's ticket windows — pre-agreed bucket.)
+ * FR-24/SEC-05/SS-03: the transcript export — conversation range, and since S22
+ * step 8 the TICKET range (inherited row 1 closed): a ticket's transcript is its
+ * anchor rows where present, else its lifetime window (interpretation A-18). Same
+ * gate, same watermark, same notes double-confirm on both doors; the ticket door
+ * adds `ticket_id` and `range_basis` to the AUDIT entry while the event payload
+ * stays v1 (the export signal; detail is the audit's — the Q7 posture).
  *
  * The permission check is Doc 03 FR-06's EXPORT RE-CHECK, consumed for the
  * first time here (inherited row 1): the verdict resolves through the provider
@@ -55,6 +59,82 @@ final class TranscriptExporter
         bool $includeNotes = false,
         bool $includeNotesConfirmed = false,
     ): array {
+        $this->assertExportable($exporter, $format, $includeNotes, $includeNotesConfirmed);
+
+        $messages = Message::query()
+            ->where('conversation_id', $conversation->identifier())
+            ->when(! $includeNotes, fn ($q) => $q->where('is_internal', false))
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->get();
+
+        return $this->render($conversation, $exporter, $format, $includeNotes, $messages, []);
+    }
+
+    /**
+     * The ticket half of FR-24's "conversation or ticket range" (inherited row 1;
+     * A-18): anchored tickets export exactly what their anchor ranges resolve to;
+     * unanchored tickets export their lifetime window. Same gate, same watermark,
+     * same double-confirm — a different SLICE, never a different door.
+     *
+     * @return array{content: string, mime: string, filename: string}
+     */
+    public function exportTicketRange(
+        \App\Models\Ticket $ticket,
+        User $exporter,
+        string $format,
+        bool $includeNotes = false,
+        bool $includeNotesConfirmed = false,
+    ): array {
+        $this->assertExportable($exporter, $format, $includeNotes, $includeNotesConfirmed);
+
+        /** @var Conversation $conversation */
+        $conversation = Conversation::query()->findOrFail($ticket->conversation_id);
+
+        $hasAnchors = DB::table('ticket_message_anchors')->where('ticket_id', $ticket->identifier())->exists();
+
+        if ($hasAnchors) {
+            // A-18's anchor basis: every message inside any of the ticket's ranges,
+            // bounds resolved in (created_at, id) order — BR-02's boundary table is
+            // the authority on what belongs to the ticket.
+            $ids = DB::select(
+                'SELECT DISTINCT m.id
+                   FROM ticket_message_anchors a
+                   JOIN messages f ON f.id = a.from_message_id AND f.conversation_id = a.conversation_id
+                   JOIN messages t ON t.id = a.to_message_id AND t.conversation_id = a.conversation_id
+                   JOIN messages m ON m.conversation_id = a.conversation_id
+                    AND (m.created_at, m.id) >= (f.created_at, f.id)
+                    AND (m.created_at, m.id) <= (t.created_at, t.id)
+                  WHERE a.ticket_id = ?',
+                [$ticket->identifier()],
+            );
+
+            $messages = Message::query()
+                ->whereIn('id', array_map(static fn (object $row): string => (string) $row->id, $ids))
+                ->when(! $includeNotes, fn ($q) => $q->where('is_internal', false))
+                ->orderBy('created_at')
+                ->orderBy('id')
+                ->get();
+        } else {
+            // A-18's lifetime basis: the ticket's own DB-stamped tenure.
+            $messages = Message::query()
+                ->where('conversation_id', $conversation->identifier())
+                ->where('created_at', '>=', $ticket->created_at)
+                ->when($ticket->closed_at !== null, fn ($q) => $q->where('created_at', '<=', $ticket->closed_at))
+                ->when(! $includeNotes, fn ($q) => $q->where('is_internal', false))
+                ->orderBy('created_at')
+                ->orderBy('id')
+                ->get();
+        }
+
+        return $this->render($conversation, $exporter, $format, $includeNotes, $messages, [
+            'ticket_id' => $ticket->identifier(),
+            'range_basis' => $hasAnchors ? 'anchors' : 'lifetime',
+        ]);
+    }
+
+    private function assertExportable(User $exporter, string $format, bool $includeNotes, bool $includeNotesConfirmed): void
+    {
         if (! in_array($format, ['text', 'pdf'], true)) {
             throw new DomainException('transcript format is text or pdf (FR-24).');
         }
@@ -67,13 +147,21 @@ final class TranscriptExporter
         if ($includeNotes && ! $includeNotesConfirmed) {
             throw new DomainException('including internal notes requires the second confirmation (FR-24 double-confirm; US-04).');
         }
+    }
 
-        $messages = Message::query()
-            ->where('conversation_id', $conversation->identifier())
-            ->when(! $includeNotes, fn ($q) => $q->where('is_internal', false))
-            ->orderBy('created_at')
-            ->orderBy('id')
-            ->get();
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Message>  $messages
+     * @param  array<string, string>  $auditExtra
+     * @return array{content: string, mime: string, filename: string}
+     */
+    private function render(
+        Conversation $conversation,
+        User $exporter,
+        string $format,
+        bool $includeNotes,
+        $messages,
+        array $auditExtra,
+    ): array {
 
         $stampValue = DB::scalar('SELECT now()::text');
         $stamp = is_string($stampValue) ? $stampValue : '';
@@ -110,7 +198,9 @@ final class TranscriptExporter
             ? $this->asText($watermark, $lines)
             : $this->asPdf($watermark, $lines);
 
-        DB::transaction(function () use ($conversation, $exporter, $format, $includeNotes): void {
+        DB::transaction(function () use ($conversation, $exporter, $format, $includeNotes, $auditExtra): void {
+            // The event payload is v1 on BOTH doors (the ticket detail is the
+            // audit's — Q7's posture, A-18).
             $this->events->publish('transcript.exported', [
                 'tenant_id' => $conversation->getAttribute('tenant_id'),
                 'conversation_id' => $conversation->identifier(),
@@ -128,6 +218,7 @@ final class TranscriptExporter
                     'conversation_id' => $conversation->identifier(),
                     'format' => $format,
                     'notes_included' => $includeNotes,
+                    ...$auditExtra,
                 ],
             );
         });
