@@ -99,6 +99,69 @@ message — it failed against a CORRECT schema and was already red before its ow
 sabotage, so that sabotage proved nothing until the mechanics were fixed and both runs
 repeated.
 
+## SESSION-22 (Doc 06) — RECONSTRUCTED PLAN RECORD (advisor-authorized, 2026-08-08)
+
+**Why this exists.** The Doc 06 plan table was approved in-chat on 2026-08-08 and never
+committed — a records failure, not a scope change. The session that held it ended; this
+reconstruction was authorized by advisor ruling in the resumed session, constrained by
+the advisor's plan-approval audit anchors and by the ledger's fixed numbers. **Any
+close-out reconciliation row resting on a reconstructed number says so.**
+
+**What is anchored (not reconstructed):**
+
+- **The id count**: the plan enumerated **96 ids** — FR 26 / NFR 6 / US 7 / BR 7 / T 9 /
+  SEC 6 / EC 12 / FS 5 / SS 4 / AC 9 / R 5 — and the advisor's independent enumeration
+  matched it exactly. The close-out recount is therefore anchored to the DOCUMENT's ids,
+  not to this reconstruction.
+- **Inherited rows 0–10** and their dispositions: as BUILD-STATUS and the filed rulings
+  record them. Nothing reconstructed.
+- **The sabotage list was EXACTLY 12 items**: the session prompt's nine protocol-step-3
+  minimums PLUS three plan extras — (i) re-grant DELETE on the ticket tables → the BR-01
+  grant sweep goes red; (ii) grant UPDATE/DELETE back on `ticket_handoff_packets` →
+  AC-08 + the sweep go red; (iii) blind the FS-05 nightly auditor → its
+  seeded-violation positive control goes red.
+- **Ledger numbers 1, 2, 7, 7b, 9, 11 are FIXED as filed.**
+- **Step 5's scope** is fixed by the session prompt + owner ruling ADR 0011: T-03 timers
+  (ZSET + column truth, in-transaction sweep re-check), FR-06/07/08, EC-01 cancel-wins,
+  EC-02's fixture-pinned inclusive boundary, FS-01 rebuild delayed-never-premature,
+  FS-02's catch-up drill, SS-03 semantics, R-03 DST fixtures, and the
+  `TicketReopenConsumer` under ADR 0011.
+
+**Sabotage numbering — the mapping chosen, and why it is forced.** Plan sabotages
+**1–9 are the session prompt's nine minimums in their printed order** (protocol step 3);
+**10, 11, 12 are the three extras in the advisor's listed order** (i), (ii), (iii).
+This mapping is not a free choice — every fixed point confirms it: ledger #1 = minimum 1
+(illegal matrix cell → AC-01), #2 = minimum 2 (T-02 index → AC-02), #7 = minimum 7
+(post-hoc timestamp → AC-09), #9 = minimum 9 (status write outside the service →
+NFR-03), #11 = extra (ii) (packet grants → AC-08); and the ledger's remaining-sabotage
+note maps 3→merge/unmerge, 4→bulk, 5→spam, 6→timers, 8→cross-customer merge,
+10→DELETE re-grant, 12→nightly auditor — exactly minimums 3 (merge without snapshot →
+AC-04), 4 (batch-level permission averaging → AC-07/SEC-04), 5 (spam exclusion ignored
+→ AC-06), 6 (sweep skips in-transaction re-check → EC-01), 8 (cross-customer merge →
+SEC-06), then extras (i) and (iii). No other assignment fits the fixed rows. `7b` is a
+ledger-added advisor-checkpoint sub-row, outside the plan's 12.
+
+**Step sequence.** Steps 1–5 are anchored (1–4 by their commits, 5 by the ruling);
+steps 6–9 are RECONSTRUCTED from the ledger's landing notes and the prompt's
+dependency ordering (unmerge before merge is callable; §21):
+
+| Step | Scope | Status / basis |
+|---|---|---|
+| 1 | Schema physics: six tables, T-02 index, BR-01 grants, R-19b DB-time columns, four settings | ANCHORED — committed `11c6724` |
+| 2 | FR-04 machine as data + `TicketTransitionService` sole writer + R-20 trigger + goldens | ANCHORED — committed `00ee919` + `28d9cfd` |
+| 3 | Creation paths, numbering, handoff packet (AC-02 concurrent half, AC-08) | ANCHORED — committed `09165e7` |
+| 4 | Assignment/claim, priority, followers, tags, T-07, EC-06, T-06 re-proof | ANCHORED — committed `2c1d344` |
+| 5 | Timers + FR-06/07/08 + EC-01/02 + FS-01/02 + SS-03 + DST + `TicketReopenConsumer` (ADR 0011); sabotage #6 | ANCHORED — this ruling; in progress |
+| 6 | Operations: merge/unmerge (FR-20, AC-04, EC-03, FS-04), split (FR-21, AC-05, EC-04), transfer (FR-22), escalate/de-escalate (FR-23, EC-05); sabotages #3, #8 | RECONSTRUCTED from ledger notes "merge/unmerge (6), cross-customer merge (6)" |
+| 7 | Bulk (FR-25, AC-07, EC-12, NFR-04) + spam disposition (FR-09, AC-06, EC-09); sabotages #4, #5 | RECONSTRUCTED from ledger notes "bulk (7), spam (7)" |
+| 8 | Remainder sweep: consumer contract tests (NFR-06, T-09 fixtures for Docs 12/15/17), §13/§14 obligations, EC-07/EC-08/EC-10, FR-24 transcript-export inherited row, performance structure (§12 buckets) | RECONSTRUCTED — least-anchored step; contents are the plan ids no other step claims |
+| 9 | FS-05 nightly invariant auditor + drills; sabotage #12 | RECONSTRUCTED from ledger note "nightly auditor (9)" |
+| close-out | Full 96-id self-audit, ledger reconciliation item-by-item, #10 DELETE re-grant re-run, DESIGN-DEVIATIONS, §9 report, CI run ID | Protocol step 6 |
+
+**STANDING RULE (advisor, 2026-08-08 — goes in the next handoff kit):** every approved
+plan table is committed to the repo AT APPROVAL, before step 1's first commit. A plan
+that exists only in a chat is not approved yet.
+
 ## SESSION-20 (Doc 04) close-out — Conversations & Messaging Core (fake adapter)
 
 ### OWNER RULING R-18 — Doc 04 accepted at close-out (2026-08-06)
