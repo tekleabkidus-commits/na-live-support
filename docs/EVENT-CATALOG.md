@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-60 event(s).
+63 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -282,7 +282,7 @@ An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`, `customer_id`, `kind`
 - **Producers:** Doc04/InboundPersister
-- **Consumers:** Doc09/AiTurnDecision, Doc06/TicketRouting, Doc07/Realtime, Doc07/UnreadCounters
+- **Consumers:** Doc09/AiTurnDecision, Doc06/TicketReopenConsumer, Doc07/Realtime, Doc07/UnreadCounters
 
 ## `message.sent`
 
@@ -473,6 +473,15 @@ EC-06: an open-family ticket was handed back because its assignee was deactivate
 - **Producers:** Doc06/AssigneeDeactivated
 - **Consumers:** Doc11/Routing, Doc07/Inbox, Doc17/Audit
 
+## `ticket.closed`
+
+FR-07: a ticket entered `closed` — the auto-close sweep in the ordinary case (actor_type=system). The FR-08 reopen window runs from the closed_at this transition stamped.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TicketTransitionService
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
 ## `ticket.created`
 
 A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.
@@ -508,6 +517,24 @@ FR-17: priority moved. Doc 12 decides whether its SLA policy re-targets — that
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_priority`, `new_priority`, `actor_type`, `actor_id`
 - **Producers:** Doc06/ChangePriority
 - **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.reopened`
+
+FR-08: a resolved or closed ticket returned to `open` — a customer message within the window (actor_type=system) or a staff reopen with reason (actor_type=staff). reopened_count has already been incremented.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `from_status`, `reopened_count`, `assignee_id`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TicketTransitionService
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `ticket.resolved`
+
+FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in the same transaction), the Doc 12 CSAT flow and Doc 14's ticket_resolved SMS.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TicketTransitionService
+- **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.status_changed`
 

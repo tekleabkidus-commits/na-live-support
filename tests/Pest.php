@@ -615,6 +615,115 @@ function ticketActor(array $permissions, string $roleName = 'Fixture Ticket Role
 }
 
 /**
+ * The T-03 candidate's score, normalized: integer microseconds when the member is
+ * armed, null when it is absent. phpredis returns FALSE for a missing ZSET member
+ * (predis returns null), so a raw `zscore(...) === null` absence check is blind
+ * under this stack's client — every timer test asks through this helper instead.
+ */
+function ticketTimerScore(string $member): ?int
+{
+    $score = Illuminate\Support\Facades\Redis::connection('durable')
+        ->zscore(App\Domain\Tickets\Timers\TicketTimers::ZSET, $member);
+
+    return $score === false || $score === null ? null : (int) $score;
+}
+
+/**
+ * An inbound customer message, the shape InboundPersister writes (no delivery
+ * lifecycle) — the FR-08/EC-01 trigger signal (step 5).
+ */
+function reopenCustomerMessage(string $tenantId, string $conversationId): string
+{
+    $id = (string) Str::uuid7();
+
+    DB::table('messages')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'conversation_id' => $conversationId,
+        'direction' => 'in',
+        'author_type' => 'customer',
+        'kind' => 'text',
+        'body' => 'fixture customer follow-up',
+        'is_internal' => false,
+    ]);
+
+    return $id;
+}
+
+/** The relayed message.received event row the reopen consumer re-reads (catalog payload shape). */
+function reopenSeedEvent(App\Models\Conversation $conversation, string $messageId): string
+{
+    $eventId = (string) Str::uuid7();
+
+    DB::table('events')->insert([
+        'id' => $eventId,
+        'tenant_id' => $conversation->getAttribute('tenant_id'),
+        'name' => 'message.received',
+        'schema_version' => 1,
+        'payload' => json_encode([
+            'tenant_id' => $conversation->getAttribute('tenant_id'),
+            'message_id' => $messageId,
+            'conversation_id' => $conversation->identifier(),
+            'customer_id' => $conversation->customer_id,
+            'kind' => 'text',
+        ], JSON_THROW_ON_ERROR),
+    ]);
+
+    return $eventId;
+}
+
+/** Run the reopen consumer the way the queue worker does, tenant already bound by the harness. */
+function runReopenConsumer(string $eventId): void
+{
+    (new App\Jobs\Tickets\TicketReopenConsumer($eventId))->handle(
+        app(App\Domain\Tickets\Reopen\ReopenTicket::class),
+        app(App\Domain\Tickets\Creation\CreateTicket::class),
+    );
+}
+
+/**
+ * A ticket walked THROUGH the machine to `closed` (or `resolved`), so
+ * closed_at/resolved_at are the R-20 trigger's real stamps and the FR-10 slot
+ * bookkeeping is the service's own — never a raw status insert.
+ */
+function machineClosedTicket(App\Models\Conversation $conversation, string $finalStatus = 'closed'): App\Models\Ticket
+{
+    $ticketId = (string) Str::uuid7();
+
+    DB::table('tickets')->insert([
+        'id' => $ticketId,
+        'tenant_id' => $conversation->getAttribute('tenant_id'),
+        'conversation_id' => $conversation->identifier(),
+        'customer_id' => $conversation->customer_id,
+        'number' => random_int(1, 2_000_000_000),
+        'status' => 'new',
+        'priority' => 'normal',
+        'source' => 'agent',
+    ]);
+
+    /** @var App\Models\Ticket $ticket */
+    $ticket = App\Models\Ticket::query()->findOrFail($ticketId);
+    app(App\Domain\Conversations\Storage\ConversationRepository::class)->claimOpenTicket($conversation, $ticketId);
+
+    $service = app(App\Domain\Tickets\Transitions\TicketTransitionService::class);
+    $walk = ['open', 'resolved'];
+    if ($finalStatus === 'closed') {
+        $walk[] = 'closed';
+    }
+
+    foreach ($walk as $status) {
+        $service->transition(
+            $ticket,
+            App\Domain\Tickets\Transitions\TicketStatus::from($status),
+            App\Domain\Tickets\Transitions\TransitionContext::system('fixture walk'),
+        );
+        $ticket->refresh();
+    }
+
+    return $ticket;
+}
+
+/**
  * Assign the user a role granting every catalog key (all scopes All) —
  * the Super Admin shape. Creates the role once per tenant.
  */

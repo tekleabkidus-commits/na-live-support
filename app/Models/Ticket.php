@@ -54,6 +54,7 @@ use LogicException;
  * @property Carbon|null $agent_first_response_at
  * @property Carbon|null $resolved_at
  * @property Carbon|null $closed_at
+ * @property Carbon|null $auto_close_at
  * @property int $waiting_customer_seconds
  * @property int $waiting_staff_seconds
  * @property Carbon $last_status_changed_at
@@ -126,6 +127,7 @@ final class Ticket extends Model implements TenantScoped
             'agent_first_response_at' => 'immutable_datetime',
             'resolved_at' => 'immutable_datetime',
             'closed_at' => 'immutable_datetime',
+            'auto_close_at' => 'immutable_datetime',
             'last_status_changed_at' => 'immutable_datetime',
         ];
     }

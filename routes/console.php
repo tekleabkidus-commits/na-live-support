@@ -35,3 +35,9 @@ Schedule::command('tokens:prune')->dailyAt('03:00')->timezone('UTC');
 // never waits for this — the resolver's DB-time check already denies; the
 // cadence is bookkeeping latency only (AC-07's event within ≤15 min).
 Schedule::command('rbac:expire-overrides')->everyFifteenMinutes();
+
+// Doc 06 T-03: the 1-minute auto-close sweep. withoutOverlapping because a slow
+// pass stacking behind itself would double-visit candidates; each visit is
+// individually safe (in-transaction re-check), so overlap costs noise, not
+// correctness — but noise every minute forever is still noise.
+Schedule::command('tickets:timers-sweep')->everyMinute()->withoutOverlapping();

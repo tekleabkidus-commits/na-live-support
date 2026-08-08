@@ -1337,17 +1337,26 @@ entries:
       step 3.
 
   - ac_ref: "Doc06 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/ReopenAutoCloseTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 5 as
-      tests/Feature/Tickets/ReopenAutoCloseTest.php with the timers (T-03), EC-01/EC-02
-      fixtures and the message.received subscriber.
+    status: covered
+    notes: >-
+      Step 5. EC-01: a persisted customer reply beats the due sweep inside the sweep's
+      own transaction — no close, no flicker (asserted as "no ticket.closed event ever"),
+      the lagging consumer reopens from resolved. EC-02: the boundary is pinned to the
+      second on both sides — closed_at + 7 d exactly is IN (inclusive), one second inside
+      is IN, one second beyond mints the FR-08 successor with previous_ticket_id,
+      idempotently under redelivery. Reopen keeps an active prior assignee (ticket.reopened
+      re-notifies via Doc 16) and hands back from a deactivated one
+      (ticket.assignee_deactivated, EC-06's seam — the Doc 11 re-route). R-03 DST fixtures
+      probe both 2026 switches and prove one end-to-end across the October change. Timer
+      physics (FS-01 rebuild delayed-never-premature, SS-03 armed-timers-keep-value,
+      BR-07 hold) in TimerPhysicsTest.php; the ADR 0011 dispatch + FS-02 kill/re-drive
+      drill in ReopenConsumerDrillTest.php; FR-06 substance in ResolveRequirementsTest.php.
 
   - ac_ref: "Doc06 AC-04"
     suite_path: manual

@@ -308,7 +308,9 @@ final class EventCatalog
             // subscribers re-fetch by id under their own permission checks.
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'customer_id', 'kind'],
             'producers' => ['Doc04/InboundPersister'],
-            'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketRouting', 'Doc07/Realtime', 'Doc07/UnreadCounters'],
+            // Doc06/TicketReopenConsumer is the first DURABLE consumer (ADR 0011):
+            // the relay's dispatch map queues it with this event's id.
+            'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketReopenConsumer', 'Doc07/Realtime', 'Doc07/UnreadCounters'],
             'description' => 'An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.',
         ],
         'message.queued' => [
@@ -539,6 +541,35 @@ final class EventCatalog
             'producers' => ['Doc06/AssigneeDeactivated'],
             'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc17/Audit'],
             'description' => 'EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26\'s list does not name it.',
+        ],
+        'ticket.resolved' => [
+            'schema_version' => 1,
+            // Emitted by the transition service ALONGSIDE ticket.status_changed on
+            // every entry into `resolved`, whatever the door (resolve action, bulk,
+            // automation) — SS-04's no-drift posture. FR-06 hangs the CSAT flow
+            // (Doc 12) and the SMS notification off this; A-8 files that it DOUBLES
+            // as Doc 14's `ticket_resolved` signal — no separate event exists.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/TicketTransitionService'],
+            'consumers' => ['Doc12/CsatFlow', 'Doc14/Sms', 'Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in the same transaction), the Doc 12 CSAT flow and Doc 14\'s ticket_resolved SMS.',
+        ],
+        'ticket.closed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/TicketTransitionService'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-07: a ticket entered `closed` — the auto-close sweep in the ordinary case (actor_type=system). The FR-08 reopen window runs from the closed_at this transition stamped.',
+        ],
+        'ticket.reopened' => [
+            'schema_version' => 1,
+            // `from_status` is resolved|closed — the two FR-08 doors. `assignee_id`
+            // is the POST-reopen outcome: the retained prior assignee, or null when
+            // they were inactive and the ticket went back to Doc 11's queue.
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'from_status', 'reopened_count', 'assignee_id', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/TicketTransitionService'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'FR-08: a resolved or closed ticket returned to `open` — a customer message within the window (actor_type=system) or a staff reopen with reason (actor_type=staff). reopened_count has already been incremented.',
         ],
     ];
 

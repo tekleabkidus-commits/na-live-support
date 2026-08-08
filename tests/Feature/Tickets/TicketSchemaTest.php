@@ -84,8 +84,12 @@ test('FR-01/A-7: the tickets column inventory is exactly the filed interpretatio
     // (first_response_message_id / agent_first_response_message_id, ruling R-20's
     // note). This assertion is why the amendment had to be filed at all: the columns
     // arrived in step 2 and this list went red until the record caught up.
+    // PLUS auto_close_at, T-03's column truth for the FR-07 timer (step 5's
+    // migration; its header carries the SS-03/FS-01 reasoning) — same pattern:
+    // this list stayed red until the record named the column.
     $expected = [
         'agent_first_response_at', 'agent_first_response_message_id', 'assignee_id',
+        'auto_close_at',
         'channel_unreachable', 'closed_at', 'conversation_id', 'created_at', 'customer_id',
         'department_id', 'escalation', 'first_response_at', 'first_response_message_id',
         'form_data', 'id', 'idempotency_key', 'last_status_changed_at', 'linked_work',

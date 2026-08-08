@@ -6,6 +6,7 @@ namespace App\Domain\Tickets\Transitions;
 
 use App\Domain\Conversations\Storage\ConversationRepository;
 use App\Domain\Tickets\Storage\TicketRepository;
+use App\Domain\Tickets\Timers\TicketTimers;
 use App\Models\Conversation;
 use App\Models\Ticket;
 use App\Models\User;
@@ -50,6 +51,7 @@ final class TicketTransitionService
         private readonly CapabilityMapProvider $verdicts,
         private readonly EventPublisher $events,
         private readonly AuditLogger $audit,
+        private readonly TicketTimers $timers,
     ) {}
 
     public function transition(Ticket $ticket, TicketStatus $to, TransitionContext $context): TransitionResult
@@ -137,8 +139,81 @@ final class TicketTransitionService
                 actorId: $context->user?->identifier(),
             );
 
+            $this->applyLifecycleEffects($ticket, $from, $to, $context);
+
             return TransitionResult::changed($ticket, $from, $to);
         });
+    }
+
+    /**
+     * The lifecycle semantics that ride EVERY entry into / exit from the timer-bearing
+     * states, IN the sole writer so no door can drift (SS-04): the resolve action, the
+     * sweep, the reopen consumer, step 7's bulk — all of them pass through here and
+     * get identical events and identical timer behaviour.
+     *
+     *   into resolved            arm the FR-07 auto-close timer (T-03; deadline
+     *                            materialized per SS-03) + ticket.resolved (FR-06's
+     *                            CSAT/SMS signal — A-8: doubles as Doc 14's)
+     *   out of resolved          the armed timer is meaningless (consumed by the
+     *                            close, or cancelled by the reopen) — clear it
+     *   into closed              ticket.closed (FR-08's window runs from closed_at)
+     *   resolved|closed -> open  a REOPEN (FR-08): reopened_count++ and
+     *                            ticket.reopened. spam -> open is deliberately NOT
+     *                            here — FR-09's unmark restores, it does not reopen.
+     *
+     * reopened_count counts BOTH reopen doors (customer-message and staff): FR-08
+     * introduces the counter while describing the customer door and the field itself
+     * is "reopens of this ticket" (FR-01) — a staff reopen is one of those.
+     */
+    private function applyLifecycleEffects(Ticket $ticket, TicketStatus $from, TicketStatus $to, TransitionContext $context): void
+    {
+        $actor = [
+            'actor_type' => $context->actor->value,
+            'actor_id' => $context->user?->identifier(),
+        ];
+
+        if ($to === TicketStatus::Open && in_array($from, [TicketStatus::Resolved, TicketStatus::Closed], true)) {
+            Ticket::query()->whereKey($ticket->identifier())->update([
+                'reopened_count' => DB::raw('reopened_count + 1'),
+                'updated_at' => DB::raw('clock_timestamp()'),
+            ]);
+            $ticket->refresh();
+
+            $this->events->publish('ticket.reopened', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'conversation_id' => $ticket->conversation_id,
+                'from_status' => $from->value,
+                'reopened_count' => $ticket->reopened_count,
+                'assignee_id' => $ticket->assignee_id,
+                ...$actor,
+            ]);
+        }
+
+        if ($to === TicketStatus::Resolved) {
+            $this->timers->armAutoClose($ticket);
+
+            $this->events->publish('ticket.resolved', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'conversation_id' => $ticket->conversation_id,
+                ...$actor,
+            ]);
+        }
+
+        if ($from === TicketStatus::Resolved && $to !== TicketStatus::Resolved) {
+            $this->timers->cancelAutoClose($ticket);
+            $ticket->refresh();
+        }
+
+        if ($to === TicketStatus::Closed) {
+            $this->events->publish('ticket.closed', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'conversation_id' => $ticket->conversation_id,
+                ...$actor,
+            ]);
+        }
     }
 
     /**

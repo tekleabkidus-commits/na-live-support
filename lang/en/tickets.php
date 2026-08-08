@@ -68,5 +68,23 @@ return [
         'reason_too_short' => 'Please give at least :min characters, so the reason is useful to whoever reads it next.',
         'channel_unreachable_hold' => 'This customer is unreachable on their channel, so this ticket is not closed automatically — a person decides the outcome.',
         'open_ticket_exists' => 'This conversation already has an open ticket. Open it instead of starting another.',
+        'resolution_requires_substance' => 'The customer has not received a reply on this ticket. Send a public reply, or add a resolution note explaining the outcome.',
+        'reopen_window_passed' => 'The reopen window for this ticket has passed. Create a new ticket in the same conversation instead — it will link back to this one.',
+    ],
+
+    // State affordances and settings copy (Doc 06 §8, SS-03). Rendering lands with
+    // Doc 07 (countdowns) and the settings UI; the copy is registered here so those
+    // surfaces bind to keys that already exist in both languages.
+    'affordance' => [
+        'resolved_countdown' => 'Closes in :hours h unless the customer replies.',
+        'closed_reopen_countdown' => 'The customer can reopen this ticket for another :days day(s).',
+        'closed_reason_required' => 'Reopening now needs a reason on the record.',
+    ],
+
+    'settings' => [
+        // SS-03: "the change applies to future resolutions only (armed timers keep
+        // their value), and the settings page says exactly that."
+        'autoclose_change_note' => 'A change applies to tickets resolved from now on. Tickets already resolved keep the auto-close time they were given.',
+        'reopen_change_note' => 'The reopen window is measured against this value at the moment a customer replies.',
     ],
 ];

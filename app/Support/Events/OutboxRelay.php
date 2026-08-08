@@ -119,11 +119,12 @@ final class OutboxRelay
      * no record that it was relayed (re-appended forever, caught here only by the primary
      * key) or a row marked relayed with no event (silent loss).
      *
-     * The QUEUE push — Docs 04-17's consumers — is the genuine at-least-once boundary and
-     * does not exist yet. When it lands it goes AFTER this transaction commits, so a crash
-     * before it means a consumer never ran while the event is still durable in `events`.
-     * That is recoverable by replay, which is precisely why FR-08 requires events to be
-     * appended there "for reporting replay". Recorded as a gap in BUILD-STATUS.
+     * The QUEUE push now exists (ADR 0011): after this transaction commits, the dispatch
+     * map fans the event out to its DURABLE consumers — once per row, at relay time, with
+     * the queue providing durability from that point. A crash between the commit and the
+     * dispatch means a consumer never ran while the event is durable in `events`; that is
+     * the loss window the ADR names, recoverable by replay from the events log, and it is
+     * logged loudly below rather than absorbed.
      */
     /**
      * @param  OutboxRow  $row
@@ -172,7 +173,47 @@ final class OutboxRelay
             return false;
         }
 
+        $this->dispatchConsumers($row);
+
         return true;
+    }
+
+    /**
+     * ADR 0011: queue every mapped durable consumer for a row that just relayed.
+     *
+     * AFTER the transaction, deliberately: a dispatch failure must not un-relay the
+     * row (the ADR's rule — relaying gained no new failure mode). The consumer is
+     * handed the event id ONLY and re-reads the row under its own tenant context;
+     * tenant and correlation are stamped from the outbox row so C-14's thread runs
+     * unbroken from the originating request into the consumer.
+     *
+     * A dispatch that THROWS (queue unreachable) is logged as an error and swallowed:
+     * the row stays relayed, the event stays durable in `events`, and recovery is
+     * replay from there — the same posture as a poisoned row, visible rather than
+     * blocking. Failures AFTER a successful push (the consumer crashing) are not this
+     * method's problem: tries ×3 and the dead-letter machinery own those (FS-02).
+     *
+     * @param  OutboxRow  $row
+     */
+    private function dispatchConsumers(object $row): void
+    {
+        foreach (ConsumerRegistry::consumersFor($row->name) as $consumerClass) {
+            try {
+                $job = new $consumerClass($row->event_id);
+                $job->tenantId = $row->tenant_id;
+                $job->correlationId = $row->correlation_id;
+
+                dispatch($job);
+            } catch (Throwable $e) {
+                Log::error('outbox consumer dispatch failed after relay (ADR 0011) — recover by replay from events', [
+                    'event_id' => $row->event_id,
+                    'event_name' => $row->name,
+                    'consumer' => $consumerClass,
+                    'exception' => $e::class,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        }
     }
 
     /**

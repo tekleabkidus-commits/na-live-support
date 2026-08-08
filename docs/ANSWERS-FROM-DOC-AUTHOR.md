@@ -688,3 +688,27 @@ FR-06's resolution note → `tickets.note`; tag operations incl. T-07 rename/mer
 "assigners"; self follow/unfollow stays `tickets.follow`); `tickets.fields.edit`
 reserved for Doc 12's custom fields, no route this session; `tickets.delete`
 platform-disabled, no route (BR-01).
+
+### A-12. FR-08's beyond-window successor ticket carries source=automation (FILED INTERPRETATION)
+
+**Filed at S22 step 5; needs advisor countersign.** FR-08: a customer message beyond
+the reopen window creates "a new ticket in the same conversation carrying a
+previous_ticket_id link". FR-01's source enum — `ai_handoff | agent | automation |
+api | offline_form` — names the five creation DOORS and none of them is "a codified
+platform rule acting on a customer message". The successor has to record SOME source
+(the column is NOT NULL, CHECK-constrained, and Doc 15 counts by it), so the gap must
+be resolved before the consumer can exist.
+
+INTERPRETATION: `automation`. The door is a rule the platform executes without a
+human or an AI decision — which is what `automation` names in every other row that
+carries it — and the successor is unambiguous in the data regardless, because it is
+the only creation shape with a non-null `previous_ticket_id`. Doc 15 can therefore
+count FR-08 successors exactly even if a future ruling renames their source; nothing
+is lost while this interpretation stands.
+
+REJECTED ALTERNATIVES, for the record: `api` (no API call happened), `agent` (no
+agent acted — SEC-03 forbids misattribution), a NEW enum value (the statuses and
+sources are platform-fixed shapes; inventing one is exactly what "never invent
+requirements" forbids).
+
+Implemented in `App\Jobs\Tickets\TicketReopenConsumer`, whose comment cites this record.
