@@ -1,0 +1,87 @@
+{
+  "doc": "Doc11",
+  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "entries": [
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "new_assignee_id"
+      ]
+    },
+    {
+      "event": "ticket.assignee_deactivated",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "previous_assignee_id"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "source"
+      ]
+    },
+    {
+      "event": "ticket.reopened",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "assignee_id",
+        "from_status"
+      ]
+    },
+    {
+      "event": "ticket.split",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "origin_ticket_id",
+        "new_ticket_id",
+        "conversation_id",
+        "message_count"
+      ]
+    },
+    {
+      "event": "ticket.status_changed",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id"
+      ]
+    },
+    {
+      "event": "ticket.transferred",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_department_id",
+        "new_department_id",
+        "assignee_retained"
+      ]
+    }
+  ]
+}

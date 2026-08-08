@@ -1,0 +1,147 @@
+{
+  "doc": "Doc12",
+  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "entries": [
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id"
+      ]
+    },
+    {
+      "event": "ticket.closed",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type",
+        "source",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "ticket.deescalated",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.escalated",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.merged",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "source_ticket_id",
+        "target_ticket_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.priority_changed",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_priority",
+        "new_priority",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.reopened",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "from_status",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.resolved",
+      "consumer": "Doc12/CsatFlow",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.status_changed",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_status",
+        "new_status",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.transferred",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "assignee_retained",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.unmerged",
+      "consumer": "Doc12/SlaAutomation",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "source_ticket_id",
+        "target_ticket_id",
+        "restored_status",
+        "actor_type"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "doc": "Doc16",
+  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "entries": [
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "by",
+        "new_assignee_id",
+        "old_assignee_id"
+      ]
+    },
+    {
+      "event": "ticket.deescalated",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "previous_path"
+      ]
+    },
+    {
+      "event": "ticket.escalated",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "path",
+        "target_id",
+        "reason"
+      ]
+    },
+    {
+      "event": "ticket.escalation_rerouted",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "reason",
+        "notify_user_id",
+        "from_target_user_id"
+      ]
+    },
+    {
+      "event": "ticket.follower_added",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "user_id",
+        "by"
+      ]
+    },
+    {
+      "event": "ticket.follower_removed",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "user_id",
+        "by"
+      ]
+    },
+    {
+      "event": "ticket.reopened",
+      "consumer": "Doc16/Notifications",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "assignee_id",
+        "reopened_count",
+        "from_status"
+      ]
+    }
+  ]
+}

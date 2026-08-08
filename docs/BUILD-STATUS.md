@@ -43,8 +43,16 @@ checkpoint and the close-out recount use this and only this:**
 ./vendor/bin/pest tests/Feature/Tickets \
                   tests/Isolation/TicketGrantPhysicsTest.php \
                   tests/Isolation/TicketOpenFamilyInvariantTest.php \
-                  tests/Isolation/TicketNumberingConcurrencyTest.php
+                  tests/Isolation/TicketNumberingConcurrencyTest.php \
+                  tests/Contract/TicketEventConsumerContractsTest.php
 ```
+
+(The Contract file joined at step 8 per this section's own rule — a new Doc 06 file
+at another tier is added in the same commit. The step-8 row below is the first
+counted under the extended command; earlier rows predate the file, so their figures
+are unchanged. tests/Performance/TicketsBudgetsTest.php is deliberately NOT in this
+set: budget suites are load-sensitive and run under `make perf` / the dedicated CI
+stage, the Doc 01–04 precedent.)
 
 The three Isolation files are IN because Doc 06's physics lives there — the T-02 index,
 the R-19b grants and NFR-05's numbering are Doc 06 ids proven at the isolation tier, and

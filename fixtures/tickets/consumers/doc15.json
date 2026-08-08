@@ -1,0 +1,232 @@
+{
+  "doc": "Doc15",
+  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "entries": [
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_assignee_id",
+        "new_assignee_id",
+        "by"
+      ]
+    },
+    {
+      "event": "ticket.bulk_completed",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "bulk_job_id",
+        "action",
+        "ok",
+        "failed",
+        "requested_by"
+      ]
+    },
+    {
+      "event": "ticket.closed",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "customer_id",
+        "source",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.deescalated",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "previous_path",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.escalated",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "path",
+        "target_id",
+        "reason",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.merged",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "source_ticket_id",
+        "target_ticket_id",
+        "source_conversation_id",
+        "target_conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.priority_changed",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_priority",
+        "new_priority",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.reopened",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "from_status",
+        "reopened_count",
+        "assignee_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.resolved",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.spam_marked",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "conversation_blocked",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.spam_unmarked",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "restored_status",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.split",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "origin_ticket_id",
+        "new_ticket_id",
+        "conversation_id",
+        "message_count",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.status_changed",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_status",
+        "new_status",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.tagged",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "count"
+      ]
+    },
+    {
+      "event": "ticket.transferred",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "old_department_id",
+        "new_department_id",
+        "assignee_retained",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.unmerged",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "source_ticket_id",
+        "target_ticket_id",
+        "restored_status",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.untagged",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "count"
+      ]
+    }
+  ]
+}
