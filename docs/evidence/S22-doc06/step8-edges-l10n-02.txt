@@ -1,0 +1,26 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step8-edges-l10n
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/EdgeSemanticsTest.php tests/Feature/Tickets/LocalizationSweepTest.php
+# started:    2026-08-08T20:46:06Z
+# git:        e44b551 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\EdgeSemanticsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-07: two agents resolving at once — the second identical-target c[39m[90m…[39m [90m4.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-07, the raced half: a transition validated against a STALE statu[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-08: after automation resolves mid-composition, "send and reopen"[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-10: channel_unreachable on a pending_customer ticket changes no[39m[90m… [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\LocalizationSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§14: every refusal code the Tickets domain can raise has a fail.* k[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§14/§13: the fixed vocabularies are complete in both languages, and[39m[90m…[39m [90m0.04s[39m  
+
+  [90mTests:[39m    [32;1m6 passed[39;22m[90m (165 assertions)[39m
+  [90mDuration:[39m [39m5.51s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:46:12Z
+# duration:   6s
+# EXIT:       0

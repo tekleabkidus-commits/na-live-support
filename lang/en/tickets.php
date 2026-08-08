@@ -116,6 +116,20 @@ return [
         'merged_into' => 'This ticket was merged into #:number. Follow-ups belong there.',
     ],
 
+    // §13's status radiogroup: every legal target is announced WITH its consequence
+    // ("described consequences") — registered here so Doc 07 binds to keys that
+    // already exist in both languages; the spec's own example is `resolved`.
+    'consequence' => [
+        'new' => 'Returns the ticket to the untouched queue.',
+        'open' => 'Marks the ticket as being actively worked.',
+        'pending_customer' => 'Waits for the customer; their reply returns it to Open.',
+        'pending_internal' => 'Waits on another team or person inside the operation.',
+        'escalated' => 'Sends the ticket up with a mandatory reason; the target is notified.',
+        'resolved' => 'Notifies the customer and starts the auto-close countdown.',
+        'closed' => 'Ends the ticket; the customer can reopen it for a limited time.',
+        'spam' => 'Excludes the ticket from all metrics; reversible for 7 days.',
+    ],
+
     // State affordances and settings copy (Doc 06 §8, SS-03). Rendering lands with
     // Doc 07 (countdowns) and the settings UI; the copy is registered here so those
     // surfaces bind to keys that already exist in both languages.
