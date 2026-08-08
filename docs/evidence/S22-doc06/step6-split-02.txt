@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-split
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/SplitTest.php
+# started:    2026-08-08T18:23:46Z
+# git:        4d37bc8 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SplitTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-05: the split target carries linked_work + origin_ticket_id, tak[39m[90m…[39m [90m3.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-04: the fourth live linked-work split is refused with guidance,[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a selection containing another conversation's message is ref[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: tickets.split is required, and an empty selection is refused[39m[90m [39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (27 assertions)[39m
+  [90mDuration:[39m [39m3.31s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:23:50Z
+# duration:   4s
+# EXIT:       0

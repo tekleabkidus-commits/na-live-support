@@ -81,6 +81,16 @@ return [
         'merged_superseded' => 'This ticket was merged into another and is read-only. Work the surviving ticket, or unmerge within 24 hours.',
         'not_merged' => 'This ticket is not merged into anything — there is nothing to unmerge.',
         'unmerge_window_passed' => 'The 24-hour unmerge window has passed. This merge is now permanent.',
+
+        // FR-21 split (step 6).
+        'split_cap_reached' => 'This conversation already carries :max linked tickets. Resolve or transfer existing linked work first.',
+        'split_messages_foreign' => 'The selection includes messages that are not part of this conversation. Reselect and try again.',
+    ],
+
+    // System-note bodies (NotesWriter::addSystemNote — localized at write time,
+    // because a note is an immutable historical record).
+    'note' => [
+        'split_origin' => 'Split: :count message(s) moved to linked ticket #:new. This ticket (#:origin) keeps the original thread.',
     ],
 
     // §8's merged-source banner (rendered by Doc 07 from merged_into, resolving

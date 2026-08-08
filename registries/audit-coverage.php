@@ -478,9 +478,12 @@ return [
     [
         // FR-17: internal notes are state-mutating staff actions; the note body
         // stays in the row — the audit entry carries identifiers only.
+        // `system` joined in S22 step 6: Doc 06's operations write system notes
+        // (FR-21's split origin note, EC-05's fallback) through the same sanctioned
+        // writer — NotesWriter::addSystemNote, author_type `system`, no author id.
         'action_key' => 'conversation.note_added',
         'entity' => 'message',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['conversation_id', 'message_id'],
         'owning_doc' => 'Doc04',
     ],
@@ -691,6 +694,15 @@ return [
         'entity' => 'ticket',
         'actor_types' => ['staff'],
         'required_fields' => ['source_ticket_id', 'target_ticket_id', 'restored_status'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
+        // FR-21: one entry per split, on the NEW ticket (the origin's side is its
+        // system note; the ticket.created entry covers the row's birth).
+        'action_key' => 'ticket.split',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['origin_ticket_id', 'new_ticket_id', 'message_count'],
         'owning_doc' => 'Doc06',
     ],
     [

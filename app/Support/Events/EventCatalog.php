@@ -588,6 +588,16 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-20/AC-04: a merge link was reversed within its 24 h window — the source restored byte-identically from the snapshot (status, assignee, timer, anchors; target sets reset).',
         ],
+        'ticket.split' => [
+            'schema_version' => 1,
+            // The anchors resolving to the exact selection live in
+            // ticket_message_anchors (kind split_selection) — the event says a split
+            // happened; the rows say precisely which messages.
+            'payload' => ['tenant_id', 'origin_ticket_id', 'new_ticket_id', 'conversation_id', 'message_count', 'actor_type', 'actor_id'],
+            'producers' => ['Doc06/SplitTicket'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-21: selected messages were split into a linked-work ticket in the same conversation (origin_ticket_id set, cap 3 live per conversation — EC-04). The new ticket also emits its ordinary ticket.created.',
+        ],
     ];
 
     /**

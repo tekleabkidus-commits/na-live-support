@@ -1,0 +1,59 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-split
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/SplitTest.php
+# started:    2026-08-08T18:23:12Z
+# git:        4d37bc8 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\SplitTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-05: the split target carries linked_work + origin_ticket_id, tak[39m[90m…[39m [90m3.63s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-04: the fourth live linked-work split is refused with guidance,[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a selection containing another conversation's message is ref[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: tickets.split is required, and an empty selection is refused[39m[90m [39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SplitTest[22m [90m>[39m AC-05: the split target carries…   
+[39;1m  Expected: [39;22m[31mSplit: 2 message(s) moved to linked ticket #1. This ticket (#1952647760) keeps the original thread.[39m[39;1m
+
+  To contain: [39;22m[32mthe note must link the new ticket[39m
+
+  at [32mtests/Feature/Tickets/SplitTest.php[39m:[32m79[39m
+     75▕         ->where('author_type', 'system')
+     76▕         ->first();
+     77▕     expect($note)->not->toBeNull('AC-05: the origin system note must exist')
+     78▕         ->and($note->is_internal)->toBeTrue()
+  ➜  79▕         ->and($note->body)->toContain((string) $ticket->number, 'the note must link the new ticket');
+     80▕ 
+     81▕     expect(DB::table('outbox')->where('name', 'ticket.split')->count())->toBe(1)
+     82▕         ->and(DB::table('outbox')->where('name', 'ticket.created')->count())->toBe(1, 'the new row is born through CreateTicket, evented as ever');
+     83▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/SplitTest.php[39;22m:[39;1m79[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\SplitTest[22m [90m>[39m EC-04: the f… [41;1m IllegalTransition [49;22m  
+[39;1m  illegal_transition: new -> resolved is not an edge of the FR-04 state machine.[39;22m
+
+  at [32mapp/Domain/Tickets/Transitions/TransitionMatrix.php[39m:[32m118[39m
+    114▕     {
+    115▕         $edge = self::EDGES[$from->value][$to->value] ?? null;
+    116▕ 
+    117▕         if ($edge === null) {
+  ➜ 118▕             throw new IllegalTransition($from, $to);
+    119▕         }
+    120▕ 
+    121▕         return $edge;
+    122▕     }
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Transitions/TransitionMatrix.php[39;22m:[39;1m118[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m69[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m3.84s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:23:16Z
+# duration:   4s
+# EXIT:       2

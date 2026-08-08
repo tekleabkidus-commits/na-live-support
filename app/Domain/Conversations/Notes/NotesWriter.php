@@ -89,6 +89,56 @@ final class NotesWriter
     }
 
     /**
+     * The PLATFORM's note: author_type `system`, no author id — the voice Doc 06's
+     * operations speak in (FR-21's split origin note, EC-05's fallback note, EC-06's
+     * hand-back). Same species as every note (kind=note, is_internal=true, N-04's
+     * structural undeliverability), same event; only the author differs. The messages
+     * CHECK admits `system` as an author_type from Doc 04 — this is its first writer.
+     *
+     * The body is localized AT WRITE TIME into the app locale: a note is an immutable
+     * historical record, and re-rendering history in whatever locale a later reader
+     * uses would make two staff members remember different pasts.
+     */
+    public function addSystemNote(Conversation $conversation, string $body): Message
+    {
+        if (trim($body) === '') {
+            throw new DomainException('an empty note is not a note.');
+        }
+
+        return DB::transaction(function () use ($conversation, $body): Message {
+            $note = Message::query()->create([
+                'conversation_id' => $conversation->identifier(),
+                'direction' => 'in',
+                'author_type' => 'system',
+                'author_id' => null,
+                'kind' => 'note',
+                'body' => $body,
+                'is_internal' => true,
+            ]);
+
+            $this->events->publish('note.added', [
+                'tenant_id' => $conversation->getAttribute('tenant_id'),
+                'message_id' => $note->identifier(),
+                'conversation_id' => $conversation->identifier(),
+                'author_id' => null,
+            ]);
+
+            $this->audit->record(
+                actionKey: 'conversation.note_added',
+                entity: 'message',
+                entityId: $note->identifier(),
+                actorType: AuditActor::System,
+                payload: [
+                    'conversation_id' => $conversation->identifier(),
+                    'message_id' => $note->identifier(),
+                ],
+            );
+
+            return $note;
+        });
+    }
+
+    /**
      * '@name' tokens resolved against THIS tenant's staff (the User global
      * scope + RLS make cross-tenant mentions structurally impossible).
      *
