@@ -92,6 +92,15 @@ return [
         // FR-09 spam (step 7).
         'not_spam' => 'This ticket is not marked as spam — there is nothing to unmark.',
         'spam_terminal' => 'The 7-day unmark window has passed, so this spam mark is permanent. If the customer writes again, a fresh ticket opens automatically.',
+
+        // FR-25 per-item failure reasons the bulk progress drawer renders (step 7;
+        // already_claimed and assignee_out_of_scope date from step 4's operations and
+        // gain their copy here with their first rendering surface).
+        'already_claimed' => 'Someone else claimed this ticket first.',
+        'assignee_out_of_scope' => 'That person cannot see this ticket, so it cannot be assigned to them.',
+        'operation_refused' => 'This ticket did not accept the operation. Open it for the details.',
+        'sequence_contention' => 'The system was briefly too busy to number a new ticket. Retry the failed items.',
+        'error' => 'Something unexpected failed on this ticket. It was skipped; the rest of the batch continued.',
     ],
 
     // System-note bodies (NotesWriter::addSystemNote — localized at write time,

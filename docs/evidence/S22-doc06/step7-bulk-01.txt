@@ -1,0 +1,49 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step7-bulk
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/BulkOperationsTest.php
+# started:    2026-08-08T20:21:07Z
+# git:        c644438 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[NFR-04 indicative] 200-item tag batch: 2.07s
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\BulkOperationsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-07: a mixed batch yields EXACT per-item allow/deny — the close o[39m[90m…[39m [90m5.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a 200-item batch completes with 200 per-item progress events[39m[90m…[39m [90m2.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: submit refuses an unknown action, an over-cap batch, unknown[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\BulkOperationsTest[22m [90m>[39m AC-07: a mixed batch y…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => Array &1 [[39m[39;1m
+  [39;22m[32m+        'reason' => 'illegal_transition',[39m[39;1m
+  [39;22m[32m         'ticket_id' => '019fe309-6e0e-7257-9deb-9d6510032977',[39m[39;1m
+  [39;22m[31m-        'reason' => 'illegal_transition',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/BulkOperationsTest.php[39m:[32m88[39m
+     84▕ 
+     85▕     // FR-25's one summary: {ok, failed[]} with the stable reason.
+     86▕     $summary = json_decode((string) DB::table('outbox')->where('name', 'ticket.bulk_completed')->first()->payload, true, 512, JSON_THROW_ON_ERROR);
+     87▕     expect($summary['ok'])->toBe(2)
+  ➜  88▕         ->and($summary['failed'])->toBe([['ticket_id' => $openB->identifier(), 'reason' => 'illegal_transition']])
+     89▕         ->and($summary['action'])->toBe('close');
+     90▕ 
+     91▕     // NFR-04: per-item progress over Reverb user.{requester}, through Doc 04's door.
+     92▕     Event::assertDispatchedTimes(RealtimePush::class, 3);
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/BulkOperationsTest.php[39;22m:[39;1m88[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (21 assertions)[39m
+  [90mDuration:[39m [39m8.73s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:21:17Z
+# duration:   10s
+# EXIT:       1

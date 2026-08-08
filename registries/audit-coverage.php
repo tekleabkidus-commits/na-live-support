@@ -737,6 +737,14 @@ return [
         'owning_doc' => 'Doc06',
     ],
     [
+        // SEC-03: "bulk summaries always audited" — one entry per batch, on the job.
+        'action_key' => 'ticket.bulk_completed',
+        'entity' => 'ticket_bulk_job',
+        'actor_types' => ['staff'],
+        'required_fields' => ['bulk_job_id', 'action', 'ok', 'failed_count'],
+        'owning_doc' => 'Doc06',
+    ],
+    [
         // FR-09/SEC-03: the mark, with its reason and the separate-block flag.
         'action_key' => 'ticket.spam_marked',
         'entity' => 'ticket',

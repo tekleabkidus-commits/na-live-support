@@ -641,6 +641,18 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit'],
             'description' => 'FR-09: a spam mark was reversed within its 7-day window — the prior status (new|open, A-10) restored from the event history, metrics re-included by the same one predicate that excluded them.',
         ],
+        'ticket.bulk_completed' => [
+            'schema_version' => 1,
+            // Name per A-8(ii): FR-26's ticket.* family governs; FR-25's "tickets."
+            // prefix is descriptive. `failed` is FR-25's failed[] — {ticket_id,
+            // reason} per item, reasons from the stable C-04 code set. Per-item
+            // progress is NOT an outbox event: it rides Reverb user.{requester}
+            // (T-06), ephemeral by design.
+            'payload' => ['tenant_id', 'bulk_job_id', 'action', 'ok', 'failed', 'requested_by'],
+            'producers' => ['Doc06/TicketBulkJob'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-25: a bulk batch finished — per-item partial success, the summary carries ok count and failed[] with per-item stable reasons. SEC-03\'s bulk-summary audit entry references the same job row.',
+        ],
         'ticket.escalation_rerouted' => [
             'schema_version' => 1,
             // A-15 (the A-8(iii) mechanism): EC-05 requires this event and FR-26's

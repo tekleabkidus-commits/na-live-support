@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-72 event(s).
+73 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -472,6 +472,15 @@ EC-06: an open-family ticket was handed back because its assignee was deactivate
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_assignee_id`
 - **Producers:** Doc06/AssigneeDeactivated
 - **Consumers:** Doc11/Routing, Doc07/Inbox, Doc17/Audit
+
+## `ticket.bulk_completed`
+
+FR-25: a bulk batch finished — per-item partial success, the summary carries ok count and failed[] with per-item stable reasons. SEC-03's bulk-summary audit entry references the same job row.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bulk_job_id`, `action`, `ok`, `failed`, `requested_by`
+- **Producers:** Doc06/TicketBulkJob
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.closed`
 
