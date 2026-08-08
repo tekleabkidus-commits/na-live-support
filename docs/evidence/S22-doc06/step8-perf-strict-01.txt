@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step8-perf-strict
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T -e PERF_BUDGETS_ENFORCE=1 app ./vendor/bin/pest tests/Performance/TicketsBudgetsTest.php
+# started:    2026-08-08T20:52:55Z
+# git:        80ac99f (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+  [dev-hardware-indicative] NFR-01 transition            p50   6.436 ms   p99  12.125 ms   max  17.608 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-02 merge+unmerge round   p50  42.651 ms   p99 241.843 ms   max 241.843 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-04 bulk 200              p50 2167.537 ms   p99 2167.537 ms   max 2167.537 ms   budget(p99) 30000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep (10k armed/20 due) p50 590.497 ms   p99 590.497 ms   max 590.497 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 tag autocomplete @5k    p50  15.212 ms   p99  26.246 ms   max  29.733 ms   budget(p99) 80.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TicketsBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-01: a single transition commits within budget (p99 ≤ 25 ms)[39m[90m     [39m [90m7.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-02: a merge + unmerge ROUND completes within the single-operati[39m[90m…[39m [90m1.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-04: a 200-item bulk batch completes within budget (≤ 30 s), lin[39m[90m…[39m [90m4.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: the timer sweep is O(due), not O(armed) — 10k armed candidates[39m[90m…[39m [90m2.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: tag autocomplete answers within budget at 5k distinct tags (p9[39m[90m…[39m [90m3.89s[39m  
+
+  [90mTests:[39m    [32;1m5 passed[39;22m[90m (14 assertions)[39m
+  [90mDuration:[39m [39m20.44s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:53:17Z
+# duration:   22s
+# EXIT:       0
