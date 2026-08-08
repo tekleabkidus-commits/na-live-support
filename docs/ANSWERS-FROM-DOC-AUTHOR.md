@@ -802,3 +802,30 @@ a notification path depend on retention-governed stores. `ticket.escalation_rero
 reads `by` into its `notify_user_id`. The fallback also stamps `fallback_from` /
 `fallback_at` (DB time) into the payload so the re-route is legible in place;
 `path`, `reason`, `at` and `by` survive unchanged.
+
+### COUNTERSIGN RECORD — A-12…A-15 (advisor, 2026-08-08, step-6 acceptance)
+
+- **A-12 COUNTERSIGNED as filed.**
+- **A-13 COUNTERSIGNED WITH RIDER**: the no-`ticket.closed`-on-supersede decision must
+  be carried into the Doc 15 golden fixtures — a supersede-close scenario whose
+  expected metrics show NO close-count increment — so the metric contract owns it,
+  not a docblock. **Landing in step 7** (the golden fixtures are already open there
+  for AC-06's spam-exclusion scenarios; one edit, two riders).
+- **A-14 COUNTERSIGNED as filed.**
+- **A-15 COUNTERSIGNED as filed, including the `by`/`fallback_*` rider.**
+
+### A-16. Out-of-order chain unmerges restore per-link intermediate states — as built (ADVISOR RULING)
+
+**2026-08-08, filed at step-6 acceptance.** Each merge link's snapshot captures the
+target's follower/tag sets as of that link's own turn, so unmerging links out of
+reverse order restores the target to an intermediate state. RULING: this IS the
+per-link snapshot semantics EC-03 specifies ("unmerge only per-link within its own
+24 h") — an ordering refusal would invent a requirement the document does not state.
+As built stands; this record supersedes the MergeTickets docblock as the authority;
+UI presentation of chain unmerges is Doc 07's. The owner may override later; nothing
+blocks on it.
+
+PARKED WITH OWNERS (same acceptance): the system-note tenant-locale question goes to
+Doc 16's question list; `merged_superseded` + `unmerge_window_passed` join the R-14
+native-review queue at PRIORITY tier (to be stated in the S22 close-out per the
+standing rider).
