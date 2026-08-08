@@ -81,30 +81,19 @@ final class TicketScope
      * FR-15's pre-check: would this user hold view scope over the ticket ONCE ASSIGNED
      * to it?
      *
-     * WHY THIS IS NOT THE SAME QUESTION AS visible(), and why using visible() here was
-     * a real defect rather than a stricter reading. An `Own`-scoped role sees tickets
-     * "assigned to the user" — so an UNASSIGNED ticket sitting in a queue is, by
-     * definition, outside every Own-scoped agent's scope. Checking visible() before
-     * assigning therefore refused every claim by every Own-scoped agent, which is most
-     * agents, and made `tickets.assign_self` unusable. The check was circular: you may
-     * only take work you already have.
+     * THE READING IS FILED AS INTERPRETATION A-11 in docs/ANSWERS-FROM-DOC-AUTHOR.md,
+     * which is canonical. In short: the present-tense question is circular (an
+     * unassigned ticket is outside every Own scope, so nobody could ever claim one) and
+     * contradicts FR-16's claim race, which presupposes claiming unheld work. The
+     * constraint still bites on Team/Dept, where the ticket's department must be in the
+     * assignee's membership — and pre-Doc 11 that is the empty set, so those levels
+     * fail closed.
      *
-     * FR-15's actual requirement is that the assignee "must hold view scope over the
-     * ticket" — a statement about the state AFTER assignment, which is the only state
-     * in which the assignee has to be able to open it. So:
-     *
-     *   Own   -> always satisfied. The assignment is what makes it theirs; there is no
-     *            ticket an Own-scoped agent could be assigned and then not see.
-     *   Team  -> the ticket's team/department must be in their membership. Assignment
-     *   Dept     does NOT change the ticket's department, so this is a real constraint
-     *            and it is where FR-15 actually bites: handing a Payments ticket to a
-     *            Withdrawals-only agent leaves them unable to open it.
-     *   All   -> always satisfied.
-     *   none  -> refused (a role with no ticket scope holds no tickets).
-     *
-     * Pre-Doc 11 this means Team/Dept assignment is refused, because EmptyMembership
-     * gives those levels an empty set — fail-closed, consistent with everywhere else,
-     * and it loosens the moment Doc 11 supplies real membership.
+     *   Own   -> satisfied by the assignment itself
+     *   Team  -> the ticket's department must be in their membership
+     *   Dept  -> same
+     *   All   -> always satisfied
+     *   none  -> refused
      */
     public function visibleOnceAssignedTo(User $user, Ticket $ticket): bool
     {

@@ -1,0 +1,14 @@
+
+Running 9 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/session.spec.ts:149:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › POSITIVE CONTROL: a session established by login survives to the next request (965ms)
+  ✓  2 [chromium] › tests/Browser/session.spec.ts:172:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › SEC-04: the pre-login session id is DESTROYED and replaced at the password boundary (5.2s)
+  ✓  3 [chromium] › tests/Browser/session.spec.ts:227:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a VALIDLY SIGNED hint for a DIFFERENT tenant is refused (VerifyTenantHint itself) (2.7s)
+  ✓  4 [chromium] › tests/Browser/session.spec.ts:281:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a hint whose signature does not verify yields no session (1.3s)
+  ✓  5 [chromium] › tests/Browser/session.spec.ts:317:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-10: the 6th concurrent login evicts the OLDEST session, not the newest (10.2s)
+  ✓  6 [chromium] › tests/Browser/session.spec.ts:397:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the devices API sees both browsers, refuses to revoke the current one, and revoke-others kills the sibling (3.1s)
+  ✓  7 [chromium] › tests/Browser/session.spec.ts:481:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the /security page is served to a signed-in agent and gated from guests (1.2s)
+  ✓  8 [chromium] › tests/Browser/session.spec.ts:516:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-06/FR-07: the full 2FA journey — enrol, challenge, SEC-04 second boundary, recovery code (8.3s)
+  ✓  9 [chromium] › tests/Browser/session.spec.ts:618:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › logout ends the session for subsequent requests (1.3s)
+
+  9 passed (35.1s)

@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      r23-eviction-second
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Auth/SessionEvictionOrderTest.php
+# started:    2026-08-07T21:31:00Z
+# git:        2c1d344 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SessionEvictionOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mR-23/FR-10: six logins in ONE second evict the genuinely oldest, no[39m[90m…[39m [90m4.89s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: the score is INTEGER microseconds — exact as an IEEE double,[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: a true same-microsecond tie still yields a TOTAL order — the[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: legacy whole-second scores still sort as OLDER than post-cuto[39m[90m…[39m [90m0.07s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m5.22s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T21:31:07Z
+# duration:   7s
+# EXIT:       0

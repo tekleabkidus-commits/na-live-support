@@ -582,6 +582,66 @@ FR-26's list — enters the catalog by this filed interpretation, the A-4 preced
 Doc 06's catalog total: 23 events (FR-26's 22 + EC-06's one); `ticket.resolved`
 doubles as Doc 14's `ticket_resolved` SMS signal (FR-06), no separate event.
 
+### R-23. The session-cap eviction orders by integer microseconds (OWNER RULING, closes RISK 0e)
+
+**2026-08-08.** Doc 02 FR-10 caps concurrent sessions and evicts "the OLDEST".
+`SessionRegistry` scored its sorted set with `getTimestamp()` — whole seconds — so
+several logins inside one second carried an IDENTICAL score, and Redis then orders
+equal-score members lexicographically BY MEMBER, i.e. by random session id. "Evict the
+oldest" therefore meant "evict the lowest session id": a coin flip, latent since Doc 02
+shipped, surfaced by CI run 31216863586.
+
+RULING. (1) The score is **INTEGER MICROSECONDS** since the epoch — not fractional
+seconds: Redis scores are IEEE-754 doubles, `seconds.micros` needs ~16 significant
+digits and can round, while integer microseconds is exact below 2^53. (2) The residual
+same-microsecond tiebreak (lexicographic member order) is DOCUMENTED in the class
+comment beside the existing just-authenticated-session defence — it is arbitrary but
+TOTAL, so the cap still evicts the right count. (3) **No data migration**: every legacy
+second-score (~1.7e9) is smaller than every microsecond-score (~1.7e15), so pre-cutover
+sessions sort as older, which they are; and they re-score on their next touch, so the
+mixed state is self-clearing. (4) Proof at two levels — a deterministic registry test
+with CHOSEN microseconds (the browser test can only sample whichever microseconds real
+logins happen to land in) plus the browser assertion.
+
+**THE FAMILY PRINCIPLE, which is the durable part.** This is the fourth defect in this
+project caused by a clock too coarse to order with (R-19's `created_at`, the S1
+`occurred_at` finding, Doc 04's `updated_at` draft guard, and now this). Stated once, to
+be applied everywhere: **any ordering decision must use a clock finer than the plausible
+event rate, or carry an explicit, documented total-order tiebreak.** A tie that "cannot
+happen in practice" is a coin flip in production.
+
+### A-11. FR-15's assignee scope check is the POST-ASSIGNMENT state (FILED INTERPRETATION)
+
+**Filed at S22 step 4, advisor-endorsed.** FR-15 says the "assignee must hold view scope
+over the ticket (Doc 03 intersection) — violations rejected assignee_out_of_scope", and
+does not say at which moment that must be true. Read in the present tense the rule is
+CIRCULAR:
+
+(a) An `Own`-scoped role sees tickets "assigned to the user". An unassigned ticket
+sitting in a queue is, by definition, assigned to nobody and therefore outside EVERY
+Own-scoped agent's scope. Checking present-tense visibility before assigning would
+refuse every claim by every Own-scoped agent — which is most agents — and make
+`tickets.assign_self` unusable. The rule would read: you may only take work you already
+have.
+
+(b) FR-16's claim race presupposes the opposite: "first commit wins; loser receives
+already_claimed {by}" describes two agents racing to claim work NEITHER of them holds
+yet. A present-tense reading of FR-15 contradicts FR-16 outright.
+
+INTERPRETATION: the check asks whether the assignee would hold view scope ONCE
+ASSIGNED — the only state in which they actually need to open the ticket. So `Own` is
+satisfied by the assignment itself; `All` is satisfied always; a role with NO ticket
+scope is refused; and **`Team`/`Dept` must still match the ticket's department**, which
+is where FR-15 genuinely bites (handing a Payments ticket to a Withdrawals-only agent
+leaves them unable to open it — assignment does not change the ticket's department).
+
+Pre-Doc 11 this means Team/Dept assignment is REFUSED, because `MembershipSource` binds
+to `EmptyMembership` and those levels resolve to the empty set — fail-closed, consistent
+with the rest of the platform, and it loosens the moment Doc 11 supplies real
+membership. Implemented as `TicketScope::visibleOnceAssignedTo()`, whose docblock cites
+this record rather than carrying the argument. The same question and the same answer
+apply to FR-18's followers, which attach a person to a ticket they usually do not hold.
+
 ### A-10. §4.2's spam-unmark edge resolves to spam→new and spam→open (FILED INTERPRETATION)
 
 **Filed at the S22 step-2 checkpoint, advisor-countersigned 2026-08-07.** The doc

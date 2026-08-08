@@ -1,0 +1,85 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-r23-seconds-RED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Auth/SessionEvictionOrderTest.php
+# started:    2026-08-07T21:41:43Z
+# git:        2c1d344 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\SessionEvictionOrderTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mR-23/FR-10: six logins in ONE second evict the genuinely oldest, no[39m[90m…[39m [90m4.56s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mR-23: the score is INTEGER microseconds — exact as an IEEE double,[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: a true same-microsecond tie still yields a TOTAL order — the[39m[90m… [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mR-23: legacy whole-second scores still sort as OLDER than post-cuto[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\SessionEvictionOrderTest[22m [90m>[39m R-23/FR-10: six log…   
+[39;1m  SEV-1: the cap evicted sess-95-0004 but the oldest session was sess-99-0000 — ordering fell back to member sort (RISK 0e), so "evict the oldest" is a coin flip.
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'sess-99-0000',[39m[39;1m
+  [39;22m[32m+    0 => 'sess-95-0004',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Auth/SessionEvictionOrderTest.php[39m:[32m72[39m
+     68▕ 
+     69▕     // The 6th login is the one that just authenticated and is protected explicitly.
+     70▕     $evicted = $registry->enforceCap($tenantId, $userId, max: 5, keepSessionId: $ids[5]);
+     71▕ 
+  ➜  72▕     expect($evicted)->toBe([$ids[0]], sprintf(
+     73▕         'SEV-1: the cap evicted %s but the oldest session was %s — ordering fell back to member sort '
+     74▕         .'(RISK 0e), so "evict the oldest" is a coin flip.',
+     75▕         implode(', ', $evicted), $ids[0],
+     76▕     ));
+
+  [33m1   [39m[39;1mtests/Feature/Auth/SessionEvictionOrderTest.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\SessionEvictionOrderTest[22m [90m>[39m R-23: the score is…    
+[39;1m  Failed asserting that 1786190400 is identical to 1786190400123456.[39;22m
+
+  at [32mtests/Feature/Auth/SessionEvictionOrderTest.php[39m:[32m85[39m
+     81▕ 
+     82▕     $score = SessionRegistry::scoreFor($at);
+     83▕ 
+     84▕     expect($score)->toBeInt()
+  ➜  85▕         ->and($score)->toBe($at->getTimestamp() * 1_000_000 + 123456)
+     86▕         // The property that matters: it survives a double round-trip unchanged. A
+     87▕         // `seconds.micros` float would not — that is why R-23 specified integers.
+     88▕         ->and((int) (float) $score)->toBe($score)
+     89▕         ->and($score)->toBeLessThan(2 ** 53);
+
+  [33m1   [39m[39;1mtests/Feature/Auth/SessionEvictionOrderTest.php[39;22m:[39;1m85[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\SessionEvictionOrderTest[22m [90m>[39m R-23: legacy whole-…   
+[39;1m  a mixed index did not order correctly — the no-migration claim in R-23 does not hold
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'sess-legacy',[39m[39;1m
+  [39;22m[32m+    0 => 'sess-96-0003',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Auth/SessionEvictionOrderTest.php[39m:[32m133[39m
+    129▕ 
+    130▕     $evicted = $registry->enforceCap($tenantId, $userId, max: 5, keepSessionId: $fresh[4]);
+    131▕ 
+    132▕     // ~1.7e9 vs ~1.7e15: the legacy row sorts oldest, which it genuinely is.
+  ➜ 133▕     expect($evicted)->toBe([$legacy],
+    134▕         'a mixed index did not order correctly — the no-migration claim in R-23 does not hold');
+    135▕ 
+    136▕     // And the display path reads both without multiplying a legacy score into the future.
+    137▕     expect(SessionRegistry::secondsFromScore((float) $now->getTimestamp()))->toBe($now->getTimestamp())
+
+  [33m1   [39m[39;1mtests/Feature/Auth/SessionEvictionOrderTest.php[39;22m:[39;1m133[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m4.75s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T21:41:48Z
+# duration:   5s
+# EXIT:       1

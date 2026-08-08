@@ -1,0 +1,297 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      r23-restored
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Auth
+# started:    2026-08-07T21:57:04Z
+# git:        2c1d344 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\ActionTokenTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a 256-bit token, stores only its SHA-256, and resolves it[39m[90m…[39m [90m5.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses cross-purpose redemption both ways (bound to purpose)[39m[90m    [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is single-use: consume() wins exactly once, and a consumed token[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dies when the account email changes after issuance (bound to ema[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dies at expiry, two-sided at the DB-time boundary[39m[90m                [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit supersedes the previous live token on reissue — EC-04 as physics[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses garbage shapes without touching the door[39m[90m                 [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a token whose owner was disabled after issuance[39m[90m          [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\ApiTokenLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mints a personal token that AUTHENTICATES the bearer surface (FR[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores only the SHA-256 — the plaintext exists in exactly one re[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit surfaces last_used_at after a bearer request (FR-18 "last-used d[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revokes a token individually, after proving it worked (FR-18 "in[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses expiry choices outside FR-18's fixed set, and "none" onc[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses abilities that are not registered permission keys (FR-18[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a never-issued token with 401 invalid_token (FR-20)[39m[90m      [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a missing Authorization header with the same 401 invalid[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers an EXPIRED token with 401 token_expired — the one distin[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders revoked-token and disabled-owner refusals BYTE-IDENTICAL[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a session cookie satisfy the bearer surface (T-02; sa[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a bearer token satisfy the staff session surface (T-0[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits and publishes creation and revocation (§4.8: auth.token.c[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' tokens fully apart — each resolves only its o[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\BreachCheckTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit sends exactly the 5-char SHA-1 prefix — never the password, its[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flags a breached password on a suffix hit and lets the policy re[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not flag a clean password, and treats a padded zero-count d[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN on timeout, with the named metric — an outage never b[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN on a non-2xx, with the failure class in the metric[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN when no endpoint is configured, without dialling anyt[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit makes zero calls when the tenant has turned the check off (FR-15[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never logs anything password-derived on any path (SEC-08)[39m[90m        [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\DeviceRegistrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit records a device on first login: fingerprint, parsed label, IP,[39m[90m… [39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a repeat login from the same machine UPDATES the row instead of[39m[90m… [39m [90m1.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a different browser is a different device (T-03: family is a fin[39m[90m…[39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a browser UPGRADE is NOT a new device (family, not version, is h[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an address outside the database stores IP only — the row-level h[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: a CORRUPT GeoIP database never blocks a login[39m[90m            [39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\GeoIpTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit positive control: the official MaxMind reader resolves the stub'[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a city with per-locale names and English fallback (§14)[39m[90m [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a country-only location for the city-less network[39m[90m        [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns null for an address the database does not know[39m[90m           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: a CORRUPT database degrades to null with the named metric[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: a MISSING database file degrades the same way[39m[90m             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an UNCONFIGURED database is a quiet null — no metric spam from u[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit heals without a restart when a corrupt file is replaced (the un-[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\InvitationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit walks FR-17 end to end: invited cannot log in, sets a password o[39m[90m…[39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit honours the 7-day validity, two-sided (FR-17)[39m[90m                    [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit invalidates the old link on self-service resend and answers unif[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no structural path for anyone to choose a password for so[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit completes the profile on accept: name and language persist with[39m[90m… [39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a locale outside {en, am} loudly, spends nothing, and le[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves the profile untouched when the PASSWORD is refused — no u[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit prefills the profile fields from what the admin already entered[39m[90m… [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\IpAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit matches exact IPs and CIDR ranges, v4 and v6, and fails closed o[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a CORRECT credential from an off-list IP with the GENERI[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit admits the same credential from an on-list IP, and leaves NULL-a[39m[90m…[39m [90m0.87s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\LockoutTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives the generic message for failures 1 to 4 and does not lock[39m[90m… [39m [90m1.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit locks the account on the 5th failure (AC-02)[39m[90m                     [39m [90m1.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the CORRECT password while locked, without saying it is[39m[90m… [39m [90m1.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every lockout transition (AC-02: admin unlock audited, an[39m[90m…[39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rolls the window: failures older than auth.lockout.window do not[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit expires the lock after auth.lockout.duration without anyone inte[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit counts a failed attempt against EVERY candidate account for that[39m[90m…[39m [90m1.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a victim always unlock via password reset, per account (EC-[39m[90m…[39m [90m1.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the EC-11 captcha threshold setting even though no ven[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throttles per IP independently of any account, including address[39m[90m…[39m [90m5.49s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\LoginFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit signs a staff user in with the correct password (FR-01)[39m[90m          [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the tenant discovered from the account (Doc 01 FR-03a)[39m[90m     [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the wrong password[39m[90m                                       [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when one email AND password verify in two tenants, recor[39m[90m…[39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\LoginPageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders the card for a guest with nothing account-shaped in the[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit redirects an already-authenticated user away from the card inste[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit re-enters the 2FA step on reload while a challenge is pending (§[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit shows the FR-11 expired notice exactly when the lifetime middlew[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit walks FR-11 end to end: expiry redirects to the card, flags the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the ruled return-URL shapes through the real page (owner[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the ruled return-URL shapes through the real page (owner[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the ruled return-URL shapes through the real page (owner[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the ruled return-URL shapes through the real page (owner[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: a legitimate stored return path survives the g[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries EC-01's time-sync help sentence into the challenge copy,[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\MachineTokenTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a service-account-bound machine token that authenticates[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reuses an existing service account by name instead of minting a[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a service account log in — refused at the SQL resolve[39m[90m…[39m [90m1.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: both tokens live until the expli[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit attributes a machine token's scope denial to its VISIBLE service[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not manage personal tokens through the machine surface — 40[39m[90m…[39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\PasswordMailTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit queues the reset mail on the [39m[37mmail[39m[90m family with tries=6 and the wi[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the recipient locale at dispatch: user preference first[39m[90m     [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back to the tenant default language when the user has no p[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders complete localized content in BOTH launch languages, wit[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit queues the invitation mail with the same FS-02 posture[39m[90m           [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\PasswordPolicyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses below the default 12 minimum and accepts at it, naming t[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit follows the tenant's own min_length setting (T-10)[39m[90m               [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot be weakened below BR-05's platform floor of 10 — refused[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ignores composition by default (length over composition) and enf[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses reuse of the current password and each of the last N, an[39m[90m…[39m [90m1.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit writes a history row per change with the PRE-change hash (the mi[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mutates nothing when policy refuses — no hash change, no history[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never fires at the spec default of 0, however old the password[39m[90m   [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit confines an expired password to the change surface, two-sided at[39m[90m…[39m [90m0.57s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\PasswordResetFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit runs the whole FR-16 journey: request → email → new password → o[39m[90m…[39m [90m1.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the token ALIVE through a policy failure and kills it on s[39m[90m…[39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revokes every session on completion (FR-16's "all sessions revok[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit unlocks EXACTLY the account the token was bound to — R-6, with t[39m[90m…[39m [90m2.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mints nothing for invited or disabled accounts, behind the ident[39m[90m…[39m [90m0.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit changes the password from a live session with FR-14's keep-curre[39m[90m…[39m [90m1.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\RememberRecallerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit signs the user back in from the remember cookie when the session[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIVE CONTROL: a recaller whose token no longer matches the s[39m[90m…[39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\RouteRegistrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has removed the Doc 01 deferral and keeps Fortify auto-registrat[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no self-registration route in v1[39m[90m                          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps or exempts every route in the permission registry (permissi[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit declares a registered audit action on every mutating route (audi[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SecuritySessionsApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit lists the caller's sessions with digests, metadata, and FS-04's[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revokes one of the caller's other sessions by digest (FR-12, US-[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an unknown digest with 404 — expired-meanwhile and never[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot revoke ANOTHER user's session by digest — the list is sco[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revoke-others kills every planted session, audits the bulk actio[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revoke-others with NOTHING to revoke still succeeds and still au[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 WIRING: a session past its absolute limit is refused, not[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SessionCookieFlagsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues the staff session cookie HttpOnly, Secure and SameSite=La[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: the flag assertions read the live config→cooki[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SessionDeadlineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit answers 404 with no session — C-10's indistinguishable refusal,[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rolls the idle clock by being called, and NEVER touches the abso[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reports the ABSOLUTE clock as the effective deadline when it is[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SessionEvictionOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mR-23/FR-10: six logins in ONE second evict the genuinely oldest, no[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: the score is INTEGER microseconds — exact as an IEEE double,[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: a true same-microsecond tie still yields a TOTAL order — the[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-23: legacy whole-second scores still sort as OLDER than post-cuto[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\SessionLifetimeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reads FR-11 defaults from the settings registry[39m[90m                  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit expires an idle session at the boundary and not one minute befor[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit expires a session at the absolute limit however recently it was[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kills a CONTINUOUSLY ACTIVE session at the absolute limit (the s[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a session with no recorded marks as live, not expired[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stamps an unstamped authenticated session with an absolute clock[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TenantHintOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serves the override to the request that set it (positive control[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does NOT serve a previous request's override to a new request th[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TokenPruneTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit prunes expired tokens across tenants and touches nothing else (F[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scans on the documented partial index and runs nightly (FS-05 "i[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TokenScopeIntersectionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses the write with 403 NAMING settings.edit while the SAME t[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits and publishes the denial (auth.token.scope_denied, BR-03[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a token EXCEED its owner — an ability the owner lacks[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit propagates permission loss within T-05's 10-second cache bound —[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drops the cached verdict on revocation rather than serving it ou[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TwoFactorChallengeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the login half: a correct password on a 2FA account yields 401 t[39m[90m…[39m [90m1.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: the challenge half establishes a session for a[39m[90m…[39m [90m1.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03: ±1 step accepted, ±2 rejected — exact boundaries, injecte[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a wrong code is refused and the account is NOT signed in[39m[90m         [39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: the FIFTH failure voids the attempt, counts ONE failure t[39m[90m…[39m [90m1.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03: a recovery code signs in ONCE, reports the remaining coun[39m[90m…[39m [90m2.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-4: the ≤2-codes banner flag comes from the store, after real c[39m[90m…[39m [90m1.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a user DISABLED mid-challenge is refused by the same pipe the pa[39m[90m…[39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a challenge with no pending state is told to start with the pass[39m[90m…[39m [90m0.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit demands exactly one proof: both or neither is a validation error[39m[90m…[39m [90m0.96s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TwoFactorEnrolmentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: begin → confirm with a valid code → active, with 8 single[39m[90m…[39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: stored recovery codes are argon2id digests, and no respo[39m[90m…[39m [90m0.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to activate on a wrong code — a mis-scanned QR must not[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: two tabs, one winner — the superseded tab gets its DESIGN[39m[90m…[39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit begin is REFUSED while 2FA is active — otherwise it would be a c[39m[90m…[39m [90m1.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14: enabling 2FA revokes the user's OTHER sessions, sparing t[39m[90m…[39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit disable demands a CURRENT code; a wrong one changes nothing[39m[90m      [39m [90m1.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit regeneration mints a fresh batch and the OLD batch is dead (FR-0[39m[90m…[39m [90m2.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08: admin reset — typed name enforced server-side, target ses[39m[90m…[39m [90m0.91s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\TwoFactorRoleEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stamps the grace anchor on first subject encounter and lets the[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit locks a past-grace member out of every screen EXCEPT enrolment/s[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves unlisted roles, enrolled users and empty settings untouch[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UserDisableTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit disables a user: tokens revoked, sessions gone, everything audit[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is ALL-OR-NOTHING: an injected failure between the user write an[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit backstop 1 — the bearer door refuses a disabled owner's UNREVOKE[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit backstop 2 — staff rehydration refuses a disabled user whose ses[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UserLocaleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit positive control: the en and am strings this suite compares actu[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit serves a locale-less user in English (the chain's final hop, unc[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit I-5: a user whose locale is am is served Amharic on an ordinary[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit restores the worker locale after the request (the Octane leak, D[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ignores a malformed users.locale instead of dying or traversing[39m[90m  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guest cookie hop: locale=am renders the login card in Amharic; e[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit holds the cookie to EXACT membership in {en, am} — a shape-plaus[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit users.locale ALWAYS beats the cookie for an authenticated reques[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WebhookHmacTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts a correctly signed DLR (FR-24 — the positive control)[39m[90m    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a wrong signature and a tampered body alike (FR-24)[39m[90m      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a captured signature behind a fresh nonce — the HMAC cov[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the ±300 s window at its exact boundaries, with an inje[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends a nonce exactly once: the identical request replayed is r[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets an unsigned caller burn a nonce out of the cache (spe[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses unconfigured keys and absent headers with the same byte-[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails CLOSED on replay-cache outage while the Redis-free surface[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nonce single-use survives the window boundary honestly: expiry i[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WebhookSecretTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts the probe with the correct secret header (FR-23 — the po[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a mismatched secret: 403, nothing processed, metric incr[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders mismatch, absent header and unconfigured key byte-identi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never invokes the handler on a refused request — proven by a spy[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rate-limits per KEY: one flooding bot never starves its sibling[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit establishes no session and sets no cookie on any outcome (FR-25[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetTokenTheftTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates the cookie on every /session refresh, keeping visitor an[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a bare token act as its visitor — API requests get 40[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit silently issues a FRESH identity to a token without its cookie o[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives a visitor who cleared cookies a fresh identity with no pat[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers NO store operation that accepts a caller-chosen visitor i[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a token minted under one widget when presented under a s[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to plant a staff User behind the widget guard even delib[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries a WidgetVisitor principal that fails loudly if treated a[39m[90m…[39m [90m0.02s[39m  
+
+  [90mTests:[39m    [32;1m215 passed[39;22m[90m (1444 assertions)[39m
+  [90mDuration:[39m [39m81.64s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-07T21:58:29Z
+# duration:   85s
+# EXIT:       0

@@ -1,0 +1,37 @@
+
+Running 9 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/session.spec.ts:149:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › POSITIVE CONTROL: a session established by login survives to the next request (850ms)
+  -  2 [chromium] › tests/Browser/session.spec.ts:172:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › SEC-04: the pre-login session id is DESTROYED and replaced at the password boundary
+  -  3 [chromium] › tests/Browser/session.spec.ts:227:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a VALIDLY SIGNED hint for a DIFFERENT tenant is refused (VerifyTenantHint itself)
+  -  4 [chromium] › tests/Browser/session.spec.ts:281:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a hint whose signature does not verify yields no session
+  -  5 [chromium] › tests/Browser/session.spec.ts:317:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-10: the 6th concurrent login evicts the OLDEST session, not the newest
+  -  6 [chromium] › tests/Browser/session.spec.ts:397:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the devices API sees both browsers, refuses to revoke the current one, and revoke-others kills the sibling
+  -  7 [chromium] › tests/Browser/session.spec.ts:481:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the /security page is served to a signed-in agent and gated from guests
+  -  8 [chromium] › tests/Browser/session.spec.ts:516:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-06/FR-07: the full 2FA journey — enrol, challenge, SEC-04 second boundary, recovery code
+  -  9 [chromium] › tests/Browser/session.spec.ts:618:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › logout ends the session for subsequent requests
+
+
+  1) [chromium] › tests/Browser/session.spec.ts:149:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › POSITIVE CONTROL: a session established by login survives to the next request 
+
+    Error: login itself failed
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 422
+
+      155 |
+      156 |         const loginResponse = await login(ctx);
+    > 157 |         expect(loginResponse.status(), 'login itself failed').toBe(200);
+          |                                                               ^
+      158 |
+      159 |         const authed = await ctx.get('/api/staff/settings', {
+      160 |             headers: { Accept: 'application/json' },
+        at /home/kidus/projects/na-live-support/tests/Browser/session.spec.ts:157:63
+
+    Error Context: test-results/session-session-lifecycle--fa423-urvives-to-the-next-request-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/session.spec.ts:149:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › POSITIVE CONTROL: a session established by login survives to the next request 
+  8 did not run

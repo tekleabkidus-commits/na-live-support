@@ -33,6 +33,40 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-22 (Doc 06) — "DOC 06 SUITES" IS THIS EXACT COMMAND
+
+Defined because two checkpoints reported "Doc 06 suites" for two DIFFERENT sets — step 3
+said 83 and step 4 said 78, which reads like a regression and is not one. **Every future
+checkpoint and the close-out recount use this and only this:**
+
+```
+./vendor/bin/pest tests/Feature/Tickets \
+                  tests/Isolation/TicketGrantPhysicsTest.php \
+                  tests/Isolation/TicketOpenFamilyInvariantTest.php \
+                  tests/Isolation/TicketNumberingConcurrencyTest.php
+```
+
+The three Isolation files are IN because Doc 06's physics lives there — the T-02 index,
+the R-19b grants and NFR-05's numbering are Doc 06 ids proven at the isolation tier, and
+a "Doc 06 suites" figure that omits them undercounts the module's own proofs. Anything
+Doc 06 adds under `tests/Feature/Tickets` is included automatically; a new Doc 06 file at
+another tier is added to this list in the same commit.
+
+**Restated under the definition, so the record is comparable:**
+
+| Step | Feature/Tickets | Isolation (3 files) | **Doc 06 suites** | assertions |
+|---|---|---|---|---|
+| 3 (`09165e7`) | 54 | 29 | **83** | 709 |
+| 4 (`2c1d344`) | 78 | 29 | **107** | 826 |
+
+The +24 is entirely step 4's new Feature tests (assignment/claim race, priority,
+followers, tags, T-07, EC-06, the T-06 re-proof). **Step 4's earlier "78 passed" was a
+mislabel — it counted `tests/Feature/Tickets` alone — not a loss of coverage.** The
+Isolation count is unchanged at 29 across both steps, which is what proves it.
+
+Doc 02's `SessionEvictionOrderTest` (owner ruling R-23) is deliberately NOT in this set:
+it is Doc 02's FR-10, fixed from this session, and it belongs to Doc 02's own count.
+
 ## SESSION-22 (Doc 06) — RUNNING SABOTAGE LEDGER
 
 Kept current as each step lands, keyed to the APPROVED PLAN's numbering, so the
@@ -257,7 +291,7 @@ guard asserting the denied set is exactly `['created_at']` for both privileges.
 **RISK 0a remains OPEN** (the soak corrupting the shared run) and **RISK 0d remains OPEN**
 and has worsened — see below.
 
-### 0e. OPEN DEFECT — the session-cap eviction orders by a WHOLE-SECOND clock, so "oldest" is really "lexicographically-first session id" (Doc 02 FR-10). Found in S22, ROOT-CAUSED, NOT FIXED — it is another document's code
+### 0e. CLOSED (owner ruling R-23) — the session-cap eviction ordered by a WHOLE-SECOND clock, so "oldest" was really "lexicographically-first session id" (Doc 02 FR-10). Found, root-caused AND FIXED in S22
 
 **Numbered rather than left in a CI comment, because it is a real defect and it is the
 fourth intermittent whose cause is a low-resolution timestamp.** It is the same family
@@ -297,12 +331,44 @@ chance. Nothing about Doc 06 changed it; `09165e7` adds ticket tables and creati
 paths and touches no session code. Runs 31208259700 and 31209889024 were green on the
 same test for the same reason it went red here.
 
-**NOT FIXED, and deliberately so.** This is Doc 02's FR-10 behaviour, outside Doc 06's
-scope, and the fix changes what "oldest" means at runtime. The obvious shape is a
-microsecond score (`$at->getTimestamp()` → a float carrying microseconds, with the
-member-tiebreak documented) plus a browser assertion that six same-second logins evict
-the genuine oldest — but that is an owner call about another document's shipped code,
-not a "while I was in there". **Awaiting a ruling.**
+**FIXED under owner ruling R-23** (filed in ANSWERS), as its own commit in Doc 02's
+`SessionRegistry`: the score is now **integer microseconds** since the epoch — not
+fractional seconds, because Redis scores are IEEE-754 doubles and `seconds.micros` needs
+~16 significant digits and can round, while integer microseconds is exact below 2^53.
+The residual same-microsecond tiebreak (lexicographic member order — arbitrary but
+TOTAL, so the cap still evicts the right count) is documented in the class comment
+beside the existing just-authenticated-session defence. **No data migration**: legacy
+second-scores (~1.7e9) sort below microsecond-scores (~1.7e15), so pre-cutover sessions
+read as older — which they are — and re-score on their next touch, so the mixed state
+is self-clearing.
+
+**Proven at two levels, as the ruling required.**
+- Registry level, deterministic: `tests/Feature/Auth/SessionEvictionOrderTest.php` —
+  six sessions in ONE second with CHOSEN microseconds, ids named so that id order is the
+  REVERSE of time order (a fallback to member sort picks exactly the wrong one); a
+  controlled true-tie case proving the documented tiebreak still evicts exactly one and
+  never the just-authenticated session; and a mixed legacy/new index proving the
+  no-migration claim. Evidence: `docs/evidence/S22-doc06/r23-eviction-second-01.txt`
+  (4 passed).
+- Browser: `tests/Browser/session.spec.ts:317` FR-10, green —
+  `docs/evidence/S22-doc06/r23-browser-session-spec-seeded.txt` (9 passed).
+- Falsification: reverting the score to whole seconds turns 3 of the 4 registry tests
+  red — `docs/evidence/S22-doc06/sabotage-r23-seconds-RED-01.txt`. Restored green, and
+  the whole Doc 02 auth suite re-run clean (215 passed / 1444 assertions,
+  `r23-restored-01.txt`).
+
+**THE FAMILY PRINCIPLE (R-23, and the durable part of this entry).** This is the fourth
+defect in this project caused by a clock too coarse to order with — R-19's `created_at`,
+S1's `occurred_at` finding, Doc 04's draft LWW guard, and now this.
+**Any ordering decision must use a clock finer than the plausible event rate, or carry
+an explicit, documented total-order tiebreak.** A tie that "cannot happen in practice"
+is a coin flip in production.
+
+**A trap worth keeping.** The first local browser run after the fix FAILED — at a
+POSITIVE CONTROL on line 149, before the eviction test, with "8 did not run". That was
+not the fix: `make browser` does not seed, and CI's Stage 4 runs `migrate:fresh` +
+`BrowserFixtureSeeder` first. Seeded, the suite is green. A browser failure in a
+positive control that precedes the test under change is a setup signal, not a verdict.
 
 ### RISKS carried forward
 

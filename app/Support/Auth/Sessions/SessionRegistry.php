@@ -23,9 +23,37 @@ use Illuminate\Redis\Connections\Connection;
  *   T-04   revocation, including "revoke all others"
  *
  * So each user gets a sorted set: members are session ids, scores are last
- * activity as a unix timestamp. Sorted-by-score is exactly what "evict the
- * oldest" needs, and it is O(log n) rather than a SCAN over every session in the
- * platform.
+ * activity in INTEGER MICROSECONDS since the epoch. Sorted-by-score is exactly
+ * what "evict the oldest" needs, and it is O(log n) rather than a SCAN over
+ * every session in the platform.
+ *
+ * WHY MICROSECONDS, AND NOT SECONDS (owner ruling R-23, closing RISK 0e).
+ * The score was `getTimestamp()` — whole seconds — and six logins inside one
+ * second therefore carried one identical score. Redis orders equal-score members
+ * LEXICOGRAPHICALLY BY MEMBER, and members are random session ids, so
+ * "evict the oldest" silently meant "evict the lowest session id": a coin flip
+ * that reddened CI run 31216863586 and had been latent since Doc 02 shipped.
+ *
+ * WHY NOT FRACTIONAL SECONDS. Redis scores are IEEE-754 doubles. `seconds.micros`
+ * needs ~16 significant digits and can round; integer microseconds is exact
+ * everywhere below 2^53, which is the year 287396. Exactness is the whole point
+ * of the fix, so the representation must not reintroduce ties.
+ *
+ * THE RESIDUAL TIEBREAK, stated because it still exists. Two sessions registered
+ * in the SAME microsecond still tie, and Redis then falls back to lexicographic
+ * member order — an arbitrary but TOTAL order, so the cap still evicts exactly
+ * the right NUMBER of sessions and never loops. At that resolution the choice
+ * between two sessions is not meaningfully wrong: they are the same instant.
+ * This is the same defence, one layer down, as the explicit protection of the
+ * just-authenticated session in enforceCap(), which does not rely on sort order
+ * at all.
+ *
+ * NO DATA MIGRATION IS NEEDED, and mixed scores still order correctly: every
+ * legacy second-score (~1.7e9) is smaller than every microsecond-score (~1.7e15),
+ * so pre-existing sessions sort as OLDER than anything registered after the
+ * cutover — which they are. They also re-score to microseconds on their next
+ * touch (EnforceSessionLifetime refreshes per request), so the mixed state is
+ * self-clearing rather than permanent.
  *
  * THE INDEX IS BOOKKEEPING, NOT TRUTH. Session storage remains authoritative: a
  * session exists if its key exists. The index can only ever be stale in the safe
@@ -56,11 +84,30 @@ final class SessionRegistry
     {
         $key = $this->key($tenantId, $userId);
 
-        $this->connection()->zadd($key, $at->getTimestamp(), $sessionId);
+        // INTEGER MICROSECONDS since the epoch (owner ruling R-23) — see the class
+        // comment for why not whole seconds and why not fractional seconds.
+        $this->connection()->zadd($key, self::scoreFor($at), $sessionId);
 
         // The index must not outlive the sessions it describes. Refreshed on
         // every touch, so an active user's index never expires under them.
         $this->connection()->expire($key, $this->ttlMinutes * 60);
+    }
+
+    /** R-23: integer microseconds since the epoch — exact as an IEEE double. */
+    public static function scoreFor(CarbonImmutable $at): int
+    {
+        return $at->getTimestamp() * 1_000_000 + $at->micro;
+    }
+
+    /**
+     * A score back to whole seconds for display, tolerating pre-R-23 rows.
+     *
+     * The discriminator is magnitude: a second-score for any plausible date is
+     * ~1e9, a microsecond-score ~1e15, and nothing legitimate sits between.
+     */
+    public static function secondsFromScore(float $score): int
+    {
+        return $score >= 1e12 ? (int) ($score / 1_000_000) : (int) $score;
     }
 
     /**
@@ -173,7 +220,11 @@ final class SessionRegistry
         $out = [];
         foreach ($this->liveSessionsFor($tenantId, $userId, $assumeLive) as $sessionId) {
             $score = $this->connection()->zscore($this->key($tenantId, $userId), $sessionId);
-            $out[$sessionId] = is_numeric($score) ? (int) $score : 0;
+            // Scores are microseconds (R-23) and this column shows a date, so it
+            // divides back down. A pre-R-23 second-score would be nonsense here if
+            // multiplied, so the guard is the magnitude, not the presence: anything
+            // below the microsecond floor is a legacy second-score and is used as-is.
+            $out[$sessionId] = is_numeric($score) ? self::secondsFromScore((float) $score) : 0;
         }
 
         return $out;

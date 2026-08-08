@@ -1,0 +1,73 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      r23-browser-seed
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan migrate:fresh --force --database=pgsql_migrator
+# started:    2026-08-08T08:54:53Z
+# git:        2c1d344 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  Dropping all tables .......................................... 489.34ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ...................................... 64.37ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table ......................... 139.84ms DONE
+  0001_01_01_000001_create_cache_table .......................... 75.21ms DONE
+  0001_01_01_000002_create_jobs_table .......................... 109.49ms DONE
+  2026_07_30_000100_create_reference_tables .................... 102.94ms DONE
+  2026_07_30_000200_create_tenants_table ........................ 62.79ms DONE
+  2026_07_30_000300_create_tenant_state_transition_guard ........ 15.52ms DONE
+  2026_07_30_000400_add_tenant_id_to_users_table ................ 42.85ms DONE
+  2026_07_30_000500_create_tenant_keys_table .................... 35.87ms DONE
+  2026_07_30_000600_create_tenant_settings_table ................ 39.12ms DONE
+  2026_07_30_000700_create_tenant_sequences_table ............... 39.77ms DONE
+  2026_07_30_000800_create_tenant_provisioning_steps_table ...... 33.19ms DONE
+  2026_07_30_000900_create_audit_log_table ...................... 90.71ms DONE
+  2026_07_30_001000_create_outbox_table ......................... 70.65ms DONE
+  2026_07_30_001100_create_events_table ........................ 403.64ms DONE
+  2026_07_30_001200_create_tenant_quota_usage_table ............. 51.33ms DONE
+  2026_07_30_001300_enable_row_level_security .................. 104.74ms DONE
+  2026_07_30_001400_add_version_to_tenant_settings_table ........ 23.36ms DONE
+  2026_07_30_001500_create_resolve_tenant_state_function ........ 10.14ms DONE
+  2026_07_31_000100_create_tenant_cold_summaries_table .......... 38.43ms DONE
+  2026_07_31_000200_failed_jobs_timestamptz ..................... 62.57ms DONE
+  2026_07_31_010000_add_auth_columns_to_users_table ............. 31.41ms DONE
+  2026_07_31_010100_create_auth_action_tokens_table ............. 72.07ms DONE
+  2026_07_31_010200_create_user_recovery_codes_table ............ 45.34ms DONE
+  2026_07_31_010300_create_user_password_history_table .......... 48.79ms DONE
+  2026_07_31_010400_create_devices_table ........................ 59.30ms DONE
+  2026_07_31_010500_create_personal_access_tokens_table ......... 57.95ms DONE
+  2026_07_31_010600_create_resolve_staff_login_function .......... 8.25ms DONE
+  2026_08_02_010000_add_service_account_to_users ................. 7.12ms DONE
+  2026_08_03_010000_create_widgets_table ........................ 49.26ms DONE
+  2026_08_03_020000_create_webhook_credentials_table ............ 55.13ms DONE
+  2026_08_04_010000_create_roles_table .......................... 61.24ms DONE
+  2026_08_04_010100_create_user_permission_overrides_table ...... 61.22ms DONE
+  2026_08_04_010200_create_pending_grants_table ................. 78.94ms DONE
+  2026_08_04_010300_add_role_id_to_users_table .................. 26.78ms DONE
+  2026_08_04_020000_add_two_factor_required_since_to_users ...... 19.59ms DONE
+  2026_08_04_030000_create_customers_shell_tables .............. 142.75ms DONE
+  2026_08_04_030100_create_conversations_table .................. 63.55ms DONE
+  2026_08_04_030200_create_messages_table ...................... 399.71ms DONE
+  2026_08_04_030300_create_message_revisions_table .............. 84.06ms DONE
+  2026_08_04_030400_create_message_drafts_table ................. 47.70ms DONE
+  2026_08_05_090000_add_legal_hold_and_hold_storage ............. 43.59ms DONE
+  2026_08_05_100000_create_message_dead_letters_table ........... 40.47ms DONE
+  2026_08_07_010000_messages_created_at_db_time ................. 18.55ms DONE
+  2026_08_07_100000_create_tickets_table ....................... 120.75ms DONE
+  2026_08_07_100100_create_ticket_followers_table ............... 40.25ms DONE
+  2026_08_07_100200_create_ticket_handoff_packets_table ......... 52.99ms DONE
+  2026_08_07_100300_create_ticket_merge_snapshots_table ......... 66.95ms DONE
+  2026_08_07_100400_create_ticket_bulk_jobs_tables ............. 114.77ms DONE
+  2026_08_07_100500_create_ticket_message_anchors_table ......... 73.45ms DONE
+  2026_08_07_110000_add_ticket_transition_trigger ............... 22.02ms DONE
+  2026_08_07_120000_add_ticket_idempotency_key .................. 21.68ms DONE
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T08:54:59Z
+# duration:   6s
+# EXIT:       0
