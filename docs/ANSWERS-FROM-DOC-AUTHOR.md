@@ -851,3 +851,11 @@ row is excluded traffic (N-14) — threading it into a live ticket's linked-tick
 rail (§8) would smuggle excluded history back into view. The conversation itself
 still holds the full context for a human who goes looking. Source is `automation`
 (A-12's reasoning verbatim); idempotency on the event id (C-09).
+
+### COUNTERSIGN RECORD — A-17 (advisor, 2026-08-08, step-7 acceptance)
+
+**A-17 COUNTERSIGNED as filed** (unlinked per EC-09's silence; source=automation per
+A-12). **RIDER, advisor-ruled**: the per-tenant bulk concurrency cap of 1 is the v1
+DEFAULT — the smallest honest reading of T-06; raising it is a later tuning decision,
+not a design change, and needs no ruling when it comes. bulk.progress frames being
+ephemeral-by-design is accepted and stands.
