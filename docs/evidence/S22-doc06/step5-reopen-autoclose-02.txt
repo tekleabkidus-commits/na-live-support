@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-reopen-autoclose
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/ReopenAutoCloseTest.php
+# started:    2026-08-08T15:48:51Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenAutoCloseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-07: after the auto-close window of customer silence, the sweep c[39m[90m…[39m [90m4.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-01: a persisted customer reply beats the due sweep — no close, n[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: a customer message on a resolved ticket reopens it unconditi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se[39m[90m…[39m [90m1.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen onto a DEACTIVATED assignee hands the ticket back to[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-08: staff reopen of a closed ticket needs tickets.reopen AND a r[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe consumer does nothing when the conversation already holds an op[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03: the window arithmetic is exact across DST-change dates — the[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03 end-to-end: a reopen window that spans the October DST switch[39m[90m… [39m [90m0.39s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (62 assertions)[39m
+  [90mDuration:[39m [39m7.26s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:48:59Z
+# duration:   8s
+# EXIT:       0

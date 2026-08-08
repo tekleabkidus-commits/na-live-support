@@ -1,0 +1,59 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-timer-physics
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TimerPhysicsTest.php
+# started:    2026-08-08T15:42:03Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TimerPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid[39m[90m…[39m [90m5.61s[39m  
+  [31;1m⨯[39;22m[90m [39m[90ma stale candidate — the ticket long since moved on — is dropped by[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma candidate whose score lies about dueness is DEFERRED: the column[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-03: changing tickets.autoclose.hours applies to FUTURE resolutio[39m[90m…[39m [90m0.19s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mBR-07: the sweep HOLDS an unreachable customer's due timer — refuse[39m[90m…[39m [90m0.24s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TimerPhysicsTest[22m [90m>[39m a stale candidate — the…    
+[39;1m  the stale member must be reaped
+Failed asserting that false is null.[39;22m
+
+  at [32mtests/Feature/Tickets/TimerPhysicsTest.php[39m:[32m128[39m
+    124▕     $ticket->refresh();
+    125▕     expect($result['dropped'])->toBe(1)
+    126▕         ->and($result['closed'])->toBe(0)
+    127▕         ->and($ticket->status())->toBe(TicketStatus::Open, 'a stale candidate must never close a live ticket')
+  ➜ 128▕         ->and(Redis::connection('durable')->zscore(TicketTimers::ZSET, $member))->toBeNull('the stale member must be reaped');
+    129▕ });
+    130▕ 
+    131▕ test('a candidate whose score lies about dueness is DEFERRED: the column is the truth and the member is re-scored to it', function () {
+    132▕     [$tenant, $conversation] = ticketFixture('open');
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TimerPhysicsTest.php[39;22m:[39;1m128[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TimerPhysicsTest[22m [90m>[39m BR-07: the sweep HOLDS a…   
+[39;1m  the candidate must not grind every sweep forever
+Failed asserting that false is null.[39;22m
+
+  at [32mtests/Feature/Tickets/TimerPhysicsTest.php[39m:[32m207[39m
+    203▕         expect($result['held'])->toBe(1)
+    204▕             ->and($result['closed'])->toBe(0)
+    205▕             ->and($ticket->status())->toBe(TicketStatus::Resolved, 'BR-07: unreachable never auto-closes — a human decides')
+    206▕             ->and($ticket->auto_close_at)->not->toBeNull('the armed state stays visible for Doc 12\'s pause policy (EC-10)')
+  ➜ 207▕             ->and(Redis::connection('durable')->zscore(TicketTimers::ZSET, $tenantId.'|'.$ticket->identifier()))->toBeNull('the candidate must not grind every sweep forever');
+    208▕     } finally {
+    209▕         cleanupTenants([$tenantId]);
+    210▕     }
+    211▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/TimerPhysicsTest.php[39;22m:[39;1m207[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m6.33s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:42:10Z
+# duration:   7s
+# EXIT:       1

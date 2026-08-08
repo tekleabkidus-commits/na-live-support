@@ -1,0 +1,43 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-resolve-requirements
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/ResolveRequirementsTest.php
+# started:    2026-08-08T15:42:32Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ResolveRequirementsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a bare resolve with no public reply and no note is refused ([39m[90m…[39m [90m4.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an explicit resolution note satisfies the substance requirem[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a prior public staff reply satisfies the requirement with no[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-06: an AI public reply is substance too — the definition is FR-2[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: with tickets.resolve.requires_reply off, a bare resolve is a[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-07/T-03: entering resolved arms the auto-close timer at EXACTLY[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mticket.resolved / ticket.closed / ticket.reopened ride EVERY door o[39m[90m…[39m [90m0.22s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ResolveRequirementsTest[22m…  [41;1m TransitionRefused [49;22m  
+[39;1m  resolution_requires_substance: the customer has received no public reply on this ticket; resolve with a reply or an explicit resolution note (FR-06/BR-04).[39;22m
+
+  at [32mapp/Domain/Tickets/Resolution/ResolveTicket.php[39m:[32m66[39m
+     62▕         if ($this->settings->get('tickets.resolve.requires_reply') === true
+     63▕             && $ticket->first_response_at === null
+     64▕             && $note === null
+     65▕         ) {
+  ➜  66▕             throw new TransitionRefused(
+     67▕                 'resolution_requires_substance',
+     68▕                 'the customer has received no public reply on this ticket; resolve with a reply or an explicit resolution note (FR-06/BR-04).',
+     69▕             );
+     70▕         }
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Resolution/ResolveTicket.php[39;22m:[39;1m66[39;22m
+  [33m2   [39m[39;1mtests/Feature/Tickets/ResolveRequirementsTest.php[39;22m:[39;1m117[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (21 assertions)[39m
+  [90mDuration:[39m [39m5.81s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:42:38Z
+# duration:   6s
+# EXIT:       2

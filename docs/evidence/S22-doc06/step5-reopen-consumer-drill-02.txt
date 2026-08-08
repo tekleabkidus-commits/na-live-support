@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-reopen-consumer-drill
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/ReopenConsumerDrillTest.php
+# started:    2026-08-08T15:48:59Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m4.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.45s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (21 assertions)[39m
+  [90mDuration:[39m [39m5.51s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:49:05Z
+# duration:   6s
+# EXIT:       0

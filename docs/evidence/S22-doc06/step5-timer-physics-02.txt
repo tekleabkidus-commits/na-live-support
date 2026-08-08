@@ -1,0 +1,23 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-timer-physics
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TimerPhysicsTest.php
+# started:    2026-08-08T15:48:39Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TimerPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid[39m[90m…[39m [90m5.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma stale candidate — the ticket long since moved on — is dropped by[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma candidate whose score lies about dueness is DEFERRED: the column[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-03: changing tickets.autoclose.hours applies to FUTURE resolutio[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: the sweep HOLDS an unreachable customer's due timer — refuse[39m[90m…[39m [90m0.31s[39m  
+
+  [90mTests:[39m    [32;1m5 passed[39;22m[90m (27 assertions)[39m
+  [90mDuration:[39m [39m5.84s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:48:45Z
+# duration:   6s
+# EXIT:       0

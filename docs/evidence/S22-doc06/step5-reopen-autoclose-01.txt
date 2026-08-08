@@ -1,0 +1,62 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step5-reopen-autoclose
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/ReopenAutoCloseTest.php
+# started:    2026-08-08T15:43:19Z
+# git:        703fba4 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ReopenAutoCloseTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-07: after the auto-close window of customer silence, the sweep c[39m[90m…[39m [90m4.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-01: a persisted customer reply beats the due sweep — no close, n[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-10: a customer message on a resolved ticket reopens it unconditi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se[39m[90m…[39m [90m1.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen onto a DEACTIVATED assignee hands the ticket back to[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-08: staff reopen of a closed ticket needs tickets.reopen AND a r[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe consumer does nothing when the conversation already holds an op[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03: the window arithmetic is exact across DST-change dates — the[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03 end-to-end: a reopen window that spans the October DST switch[39m[90m… [39m [90m0.42s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ReopenAutoCloseTest[22m [90m>[39m FR-07: after the auto…   
+[39;1m  Failed asserting that false is null.[39;22m
+
+  at [32mtests/Feature/Tickets/ReopenAutoCloseTest.php[39m:[32m101[39m
+     97▕         expect(DB::table('outbox')->where('name', 'ticket.closed')->count())->toBe(1);
+     98▕         $audit = DB::table('audit_log')->where('action_key', 'ticket.status_changed')->where('entity_id', $ticket->identifier())->orderByDesc('id')->first();
+     99▕         expect($audit)->not->toBeNull()->and($audit->actor_type)->toBe('system');
+    100▕ 
+  ➜ 101▕         expect(Redis::connection('durable')->zscore(TicketTimers::ZSET, $tenantId.'|'.$ticket->identifier()))->toBeNull();
+    102▕     } finally {
+    103▕         cleanupTenants([$tenantId]);
+    104▕     }
+    105▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ReopenAutoCloseTest.php[39;22m:[39;1m101[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ReopenAutoCloseTest[22m [90m>[39m FR-10: a customer mes…   
+[39;1m  Failed asserting that false is null.[39;22m
+
+  at [32mtests/Feature/Tickets/ReopenAutoCloseTest.php[39m:[32m177[39m
+    173▕     expect($ticket->status())->toBe(TicketStatus::Open)
+    174▕         ->and($ticket->reopened_count)->toBe(1)
+    175▕         ->and($ticket->auto_close_at)->toBeNull('reopening must cancel the armed auto-close')
+    176▕         ->and($ticket->resolved_at)->toBeNull('FR-24: reopen clears resolved_at until re-resolved')
+  ➜ 177▕         ->and(Redis::connection('durable')->zscore(TicketTimers::ZSET, $member))->toBeNull();
+    178▕ 
+    179▕     // FR-10's other clause: reopened, not duplicated.
+    180▕     expect(Ticket::query()->where('conversation_id', $conversation->identifier())->count())->toBe(1);
+    181▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ReopenAutoCloseTest.php[39;22m:[39;1m177[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (61 assertions)[39m
+  [90mDuration:[39m [39m7.49s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T15:43:27Z
+# duration:   8s
+# EXIT:       1
