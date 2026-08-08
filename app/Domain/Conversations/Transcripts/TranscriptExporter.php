@@ -97,6 +97,7 @@ final class TranscriptExporter
             // A-18's anchor basis: every message inside any of the ticket's ranges,
             // bounds resolved in (created_at, id) order — BR-02's boundary table is
             // the authority on what belongs to the ticket.
+            /** @var list<object{id: string}> $ids */
             $ids = DB::select(
                 'SELECT DISTINCT m.id
                    FROM ticket_message_anchors a
@@ -110,7 +111,7 @@ final class TranscriptExporter
             );
 
             $messages = Message::query()
-                ->whereIn('id', array_map(static fn (object $row): string => (string) $row->id, $ids))
+                ->whereIn('id', array_map(static fn (object $row): string => $row->id, $ids))
                 ->when(! $includeNotes, fn ($q) => $q->where('is_internal', false))
                 ->orderBy('created_at')
                 ->orderBy('id')

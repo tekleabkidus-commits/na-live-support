@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step8-ticket-export-final
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/TicketTranscriptExportTest.php
+# started:    2026-08-08T20:56:48Z
+# git:        d0eca63 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketTranscriptExportTest[39m
+  [32;1m✓[39;22m[90m [39m[90mA-18 anchors basis: an anchored ticket exports EXACTLY what its ran[39m[90m…[39m [90m5.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-18 lifetime basis: an unanchored ticket exports its tenure — pre-[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe gate is Doc 04's, re-checked at export: without conversations.t[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m3 passed[39;22m[90m (19 assertions)[39m
+  [90mDuration:[39m [39m5.96s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:56:54Z
+# duration:   6s
+# EXIT:       0

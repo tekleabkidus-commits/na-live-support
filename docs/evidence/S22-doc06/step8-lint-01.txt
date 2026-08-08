@@ -1,0 +1,16 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step8-lint
+# set:        S22-doc06
+# command:    make lint
+# started:    2026-08-08T20:54:54Z
+# git:        d0eca63 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"failed","errors":3,"error_details":{"/home/kidus/projects/na-live-support/app/Domain/Conversations/Transcripts/TranscriptExporter.php":[{"line":113,"message":"Access to an undefined property object::$id.","identifier":"property.notFound","tip":"Learn more: https://phpstan.org/blog/solving-phpstan-access-to-undefined-property"},{"line":113,"message":"Cannot cast mixed to string.","identifier":"cast.string"},{"line":113,"message":"Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(object): string given.","identifier":"argument.type","tip":"Type #1 from the union: Type object of parameter #1 $row of passed callable needs to be same or wider than parameter type mixed of accepting callable."}]},"instructions":"Each error has an associated identifier, like `argument.type` or `return.missing`. Each error identifier has documentation at URL https://phpstan.org/error-identifiers/<identifier>, which contains a code example, explanation why it is an error, and instructions on how to fix it. Before fixing the error, fetch the documentation page for its identifier. The error usually indicates a real bug or incorrect type in the code. Fix the underlying cause, do not just make the error go away. Do not add `@phpstan-ignore` comments, `@phpstan-ignore-next-line` comments, or baseline entries to suppress the error. Do not use assert() or inline @var PHPDoc tag to override PHPStan's inferred type. Do not add type casts just to silence errors. Do not widen parameter or return types just to make the error go away."}
+make: *** [Makefile:100: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T20:55:01Z
+# duration:   7s
+# EXIT:       2
