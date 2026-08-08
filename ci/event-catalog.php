@@ -41,10 +41,11 @@ $kernel->bootstrap();
 $catalogPath = $root.'/docs/EVENT-CATALOG.md';
 $write = in_array('--write', $argv, true);
 
-// No @var here: the const is already fully typed by its own declaration, and asserting a
-// looser shape over it is what PHPStan rejects.
-$events = App\Support\Events\EventCatalog::EVENTS;
-ksort($events);
+// Through the class's TYPED accessors, not the raw const: past ~70 entries PHPStan
+// generalizes a constant array's per-entry shape, and the definition() @return is the
+// precise contract this generator needs (and the one every other consumer gets).
+$names = App\Support\Events\EventCatalog::names();
+sort($names);
 
 $lines = [];
 $lines[] = '# Event catalog';
@@ -61,10 +62,11 @@ $lines[] = '**Payload keys are exhaustive and enforced.** `EventPublisher` rejec
 $lines[] = 'missing key AND one with an extra key — the second is how PII leaks into an event stream';
 $lines[] = 'that is retained for 13 months (SEC-07, NFR-07).';
 $lines[] = '';
-$lines[] = sprintf('%d event(s).', count($events));
+$lines[] = sprintf('%d event(s).', count($names));
 $lines[] = '';
 
-foreach ($events as $name => $definition) {
+foreach ($names as $name) {
+    $definition = App\Support\Events\EventCatalog::definition($name);
     $lines[] = sprintf('## `%s`', $name);
     $lines[] = '';
     $lines[] = $definition['description'];
@@ -83,7 +85,7 @@ $generated = implode("\n", $lines);
 
 if ($write) {
     file_put_contents($catalogPath, $generated);
-    printf("event-catalog: WROTE %s (%d event(s))\n", 'docs/EVENT-CATALOG.md', count($events));
+    printf("event-catalog: WROTE %s (%d event(s))\n", 'docs/EVENT-CATALOG.md', count($names));
     exit(0);
 }
 
@@ -105,5 +107,5 @@ if ($onDisk !== $generated) {
     exit(1);
 }
 
-printf("event-catalog: PASS (%d event(s) in sync)\n", count($events));
+printf("event-catalog: PASS (%d event(s) in sync)\n", count($names));
 exit(0);

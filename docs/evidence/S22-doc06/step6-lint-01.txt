@@ -1,0 +1,14 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      step6-lint
+# set:        S22-doc06
+# command:    make lint
+# started:    2026-08-08T18:32:01Z
+# git:        ed67303 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"fail","files":[{"path":"tests\/Feature\/Tickets\/SplitTest.php","fixers":["no_unused_imports"]}]}make: *** [Makefile:99: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-08T18:32:03Z
+# duration:   2s
+# EXIT:       2

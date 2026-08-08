@@ -9,7 +9,6 @@ use App\Domain\Tickets\Transitions\TransitionContext;
 use App\Domain\Tickets\Transitions\TransitionRefused;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------

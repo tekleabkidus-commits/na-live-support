@@ -73,7 +73,11 @@ final class SplitTicket
             throw new DomainException('tickets.split is required (FR-21).');
         }
 
-        if ($messageIds === []) {
+        // Deduplicated up front: a double-clicked selection must not mint two anchors
+        // for one message.
+        $selection = array_values(array_unique($messageIds));
+
+        if ($selection === []) {
             throw new DomainException('a split with no selected messages splits nothing (FR-21).');
         }
 
@@ -82,23 +86,21 @@ final class SplitTicket
 
         // AC-05's precondition: the selection must BE messages of this conversation —
         // an id from anywhere else would mint an anchor that resolves to nothing (or
-        // to another conversation's message, which is worse).
+        // to another conversation's message, which is worse). Count-compare: every
+        // selected id must exist here.
         $known = DB::table('messages')
             ->where('conversation_id', $conversation->identifier())
-            ->whereIn('id', $messageIds)
-            ->pluck('id')
-            ->all();
+            ->whereIn('id', $selection)
+            ->count();
 
-        $foreign = array_diff($messageIds, $known);
-
-        if ($foreign !== []) {
+        if ($known !== count($selection)) {
             throw new TransitionRefused(
                 'split_messages_foreign',
                 'the selection contains messages that are not part of this conversation (FR-21/AC-05).',
             );
         }
 
-        return DB::transaction(function () use ($origin, $conversation, $messageIds, $actor, $departmentId, $formData, $subject): Ticket {
+        return DB::transaction(function () use ($origin, $conversation, $selection, $actor, $departmentId, $formData, $subject): Ticket {
             // EC-04 under lock: the conversation row serializes concurrent splits.
             DB::selectOne('SELECT id FROM conversations WHERE id = ? FOR UPDATE', [$conversation->identifier()]);
 
@@ -130,7 +132,7 @@ final class SplitTicket
             ));
 
             // AC-05's anchors: one row per selected message, from = to.
-            foreach ($messageIds as $messageId) {
+            foreach ($selection as $messageId) {
                 DB::table('ticket_message_anchors')->insert([
                     'id' => (string) Str::uuid7(),
                     'tenant_id' => $ticket->getAttribute('tenant_id'),
@@ -146,7 +148,7 @@ final class SplitTicket
             $this->notes->addSystemNote($conversation, __('tickets.note.split_origin', [
                 'origin' => (string) $origin->number,
                 'new' => (string) $ticket->number,
-                'count' => count($messageIds),
+                'count' => count($selection),
             ]));
 
             $this->events->publish('ticket.split', [
@@ -154,7 +156,7 @@ final class SplitTicket
                 'origin_ticket_id' => $origin->identifier(),
                 'new_ticket_id' => $ticket->identifier(),
                 'conversation_id' => $conversation->identifier(),
-                'message_count' => count($messageIds),
+                'message_count' => count($selection),
                 'actor_type' => 'staff',
                 'actor_id' => $actor->identifier(),
             ]);
@@ -167,7 +169,7 @@ final class SplitTicket
                 payload: [
                     'origin_ticket_id' => $origin->identifier(),
                     'new_ticket_id' => $ticket->identifier(),
-                    'message_count' => count($messageIds),
+                    'message_count' => count($selection),
                 ],
                 actorId: $actor->identifier(),
             );

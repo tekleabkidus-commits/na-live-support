@@ -1359,29 +1359,43 @@ entries:
       drill in ReopenConsumerDrillTest.php; FR-06 substance in ResolveRequirementsTest.php.
 
   - ac_ref: "Doc06 AC-04"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/MergeUnmergeTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 6 as
-      tests/Feature/Tickets/MergeUnmergeTest.php; the unmerge snapshot ships before the
-      merge route is callable (§21).
+    status: covered
+    notes: >-
+      Step 6, per §21's rule: the snapshot shipped BEFORE merge was callable. The
+      byte-identical bar is MergeTickets::snapshotShape() applied twice — stored at
+      merge, recomputed after unmerge, diff = ∅ (covers status, pending_reason,
+      assignee, the armed auto_close_at column+candidate, merged_into, moved anchors,
+      target follower/tag sets). EC-03: chains resolve transitively to the final
+      survivor; a mid-chain unmerge is per-link within its own 24 h. FS-04: presence
+      is the authority (real pruner run platform-side; refusal audited under
+      ticket.unmerge_refused). SEC-06 cross-customer and SEC-01 target-scope refusals;
+      A-13 admission rules; A-14 frozen-source (ordinary doors + reopen-consumer
+      ladder); open-slot conflict; deactivated-assignee reconcile. Sabotage #3 (no
+      snapshot) reds exactly the five restoring tests; sabotage #8 (guard removed)
+      reds exactly SEC-06.
 
   - ac_ref: "Doc06 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Tickets/SplitTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
-    justification: >-
-      NOT IMPLEMENTED IN S22 STEP 1. Lands in step 6 as tests/Feature/Tickets/SplitTest.php
-      with FR-21.
+    status: covered
+    notes: >-
+      Step 6. linked_work flag + origin_ticket_id + no FR-10 slot; anchors are
+      one-row-per-selected-message (from = to) so a NON-CONTIGUOUS selection resolves
+      to exactly the selected messages — the unselected message between is asserted
+      absent; origin system note present (NotesWriter::addSystemNote, the platform
+      voice); EC-04's cap of 3 LIVE linked-work counted under conversation row lock,
+      fourth refused with guidance, and resolving one demonstrably frees the slot;
+      foreign-message selections refused before creation.
 
   - ac_ref: "Doc06 AC-06"
     suite_path: manual

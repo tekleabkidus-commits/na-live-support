@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-63 event(s).
+70 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -464,69 +464,6 @@ FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS
 - **Producers:** Doc06/AssignTicket
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
 
-## `ticket.merged`
-
-FR-20: a source ticket was merged into a target (same customer, hard rule SEC-06). One event PER LINK carrying both sides — FR-20's "events on both": Doc 07 renders it on either timeline; Doc 12 closes the source's SLA instances superseded off exactly this signal. The source is closed with merged_into set and frozen (A-14); reversible 24 h via unmerge.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `source_conversation_id`, `target_conversation_id`, `actor_type`, `actor_id`
-- **Producers:** Doc06/MergeTickets
-- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
-
-## `ticket.unmerged`
-
-FR-20/AC-04: a merge link was reversed within its 24 h window — the source restored byte-identically from the snapshot (status, assignee, timer, anchors; target follower/tag sets reset).
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `restored_status`, `actor_type`, `actor_id`
-- **Producers:** Doc06/UnmergeTicket
-- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
-
-## `ticket.split`
-
-FR-21: selected messages were split into a linked-work ticket in the same conversation (origin_ticket_id set, cap 3 live per conversation — EC-04). The anchors resolving to the exact selection live in ticket_message_anchors (kind split_selection); the new ticket also emits its ordinary ticket.created.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `origin_ticket_id`, `new_ticket_id`, `conversation_id`, `message_count`, `actor_type`, `actor_id`
-- **Producers:** Doc06/SplitTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
-
-## `ticket.transferred`
-
-FR-22: a ticket changed department. `assignee_retained` is the outcome Doc 11 routes on (false = back to the queue with its department change); Doc 12 decides SLA re-targeting off this — the instance keeps original targets unless policy says otherwise. Status untouched.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_department_id`, `new_department_id`, `assignee_retained`, `actor_type`, `actor_id`
-- **Producers:** Doc06/TransferTicket
-- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
-
-## `ticket.escalated`
-
-FR-23: a ticket entered `escalated` with its mandatory ≥10-char reason. `target_id` is null for supervisor_review; Doc 16 notifies the target off path + target. The escalation SLA clock (Doc 12) starts here; the original assignee has auto-followed.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `path`, `target_id`, `reason`, `actor_type`, `actor_id`
-- **Producers:** Doc06/EscalateTicket
-- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
-
-## `ticket.deescalated`
-
-FR-23: an escalated ticket returned to `open` with its de-escalation note. The current escalation payload cleared; history lives in the event stream.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_path`, `actor_type`, `actor_id`
-- **Producers:** Doc06/EscalateTicket
-- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
-
-## `ticket.escalation_rerouted`
-
-EC-05: a named escalation target was deactivated after the fact — the escalation fell back to supervisor_review with a system note, and the escalator (`notify_user_id`, recorded as `by` in the escalation payload precisely so this event can name them) is to be notified. Name filed as interpretation A-15, the A-8(iii) mechanism: EC-05 requires this event and FR-26's list does not name it.
-
-- **Schema version:** 1
-- **Payload:** `tenant_id`, `ticket_id`, `from_target_user_id`, `notify_user_id`, `reason`
-- **Producers:** Doc06/EscalateTicket
-- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc17/Audit
-
 ## `ticket.assignee_deactivated`
 
 EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26's list does not name it.
@@ -554,6 +491,33 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Producers:** Doc06/CreateTicket
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
 
+## `ticket.deescalated`
+
+FR-23: an escalated ticket returned to `open` with its de-escalation note. The current escalation payload cleared; history lives in the event stream.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_path`, `actor_type`, `actor_id`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.escalated`
+
+FR-23: a ticket entered `escalated` with its mandatory ≥10-char reason. The escalation SLA clock (Doc 12) starts here; the original assignee has auto-followed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `path`, `target_id`, `reason`, `actor_type`, `actor_id`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.escalation_rerouted`
+
+EC-05: a named escalation target was deactivated after the fact — the escalation fell back to supervisor_review with a system note, and the escalator is to be notified.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `from_target_user_id`, `notify_user_id`, `reason`
+- **Producers:** Doc06/EscalateTicket
+- **Consumers:** Doc16/Notifications, Doc07/Inbox, Doc17/Audit
+
 ## `ticket.follower_added`
 
 FR-18: someone follows this ticket — themselves (tickets.follow), added by an assigner, or auto-followed as the escalating assignee (FR-23).
@@ -571,6 +535,15 @@ FR-18: someone stopped following. Doc 16 stops notifying them; the history stays
 - **Payload:** `tenant_id`, `ticket_id`, `user_id`, `by`
 - **Producers:** Doc06/TicketFollowers
 - **Consumers:** Doc07/Inbox, Doc16/Notifications, Doc17/Audit
+
+## `ticket.merged`
+
+FR-20: a source ticket was merged into a target (same customer, hard rule SEC-06). The source is closed with merged_into set and frozen (A-14); anchors moved, followers+tags unioned; reversible 24 h via unmerge.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `source_conversation_id`, `target_conversation_id`, `actor_type`, `actor_id`
+- **Producers:** Doc06/MergeTickets
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.priority_changed`
 
@@ -599,6 +572,15 @@ FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in 
 - **Producers:** Doc06/TicketTransitionService
 - **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
+## `ticket.split`
+
+FR-21: selected messages were split into a linked-work ticket in the same conversation (origin_ticket_id set, cap 3 live per conversation — EC-04). The new ticket also emits its ordinary ticket.created.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `origin_ticket_id`, `new_ticket_id`, `conversation_id`, `message_count`, `actor_type`, `actor_id`
+- **Producers:** Doc06/SplitTicket
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
 ## `ticket.status_changed`
 
 FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.
@@ -625,6 +607,24 @@ FR-19: tags were added. The tags themselves are in the audit entry — free text
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `count`, `actor_id`
 - **Producers:** Doc06/TicketTags
 - **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `ticket.transferred`
+
+FR-22: a ticket changed department. Doc 11 re-routes off this; Doc 12 decides SLA re-targeting off this (the instance keeps original targets unless policy says otherwise); status untouched.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_department_id`, `new_department_id`, `assignee_retained`, `actor_type`, `actor_id`
+- **Producers:** Doc06/TransferTicket
+- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+
+## `ticket.unmerged`
+
+FR-20/AC-04: a merge link was reversed within its 24 h window — the source restored byte-identically from the snapshot (status, assignee, timer, anchors; target sets reset).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `source_ticket_id`, `target_ticket_id`, `restored_status`, `actor_type`, `actor_id`
+- **Producers:** Doc06/UnmergeTicket
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.untagged`
 
