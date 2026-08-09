@@ -357,6 +357,27 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
+        'telegram.window.reopened' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'expires_at', 'assignee_id'],
+            'producers' => ['Doc05/WindowReopenConsumer'],
+            'consumers' => ['Doc07/Inbox'],
+            'description' => 'FR-24: a customer message reopened an expired window — recomputed expiry, badges cleared; assignee_id is the open ticket\'s assignee to notify (null if none). Doc 07 delivers the notification.',
+        ],
+        'telegram.window.closing' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'expires_at'],
+            'producers' => ['Doc05/WindowSweep'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/Automation'],
+            'description' => 'FR-22: the reply window entered the closing band (≤2 h). Doc 12 automations may act (queue-priority boost); Doc 07 shows the countdown chip.',
+        ],
+        'telegram.window.expired' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'expires_at'],
+            'producers' => ['Doc05/WindowSweep'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/Automation'],
+            'description' => 'FR-22: the reply window closed. The composer disables (Doc 07); a customer message reopens it (FR-24).',
+        ],
         'telegram.connection.active' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'bot_id', 'connection_id', 'account_user_id'],

@@ -34,7 +34,7 @@ final class ConsumerRegistry
     private const MAP = [
         // Doc 06 FR-08 / EC-01 / ADR 0011's first entry: a customer message may
         // reopen its ticket, cancel an auto-close, or open a windowed successor.
-        'message.received' => [TicketReopenConsumer::class],
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class],
     ];
 
     /** @return list<class-string<OutboxConsumer>> */

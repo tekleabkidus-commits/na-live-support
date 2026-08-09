@@ -42,7 +42,13 @@ beforeEach(function (): void {
 });
 
 test('ADR 0011: the dispatch map is a registry, and message.received maps to exactly the reopen consumer', function () {
-    expect(ConsumerRegistry::consumersFor('message.received'))->toBe([TicketReopenConsumer::class])
+    // S23 step 8: WindowReopenConsumer joined message.received DELIBERATELY
+    // (Doc 05 FR-24 reopen). This guard catches SILENT additions — a deliberate
+    // one updates it, and the exact-list assertion still fails a stray consumer.
+    expect(ConsumerRegistry::consumersFor('message.received'))->toBe([
+        TicketReopenConsumer::class,
+        App\Jobs\Telegram\WindowReopenConsumer::class,
+    ])
         ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([], 'no other event has grown a consumer silently');
 });
 

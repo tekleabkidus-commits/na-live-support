@@ -1,0 +1,22 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WindowCalibrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (plan row 4): the window computes from the message DB-time[39m[90m…[39m [90m5.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04: the ZSET score is INTEGER microseconds (R-23 family princi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: a window_expired error BEFORE the computed expiry TIGHTEN[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05: tightening is allowed but EXTENDING beyond the observed w[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WindowSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 (BEFORE trust): the sweep does NOT expire a window while t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: when health RECOVERS, the next sweep expires it (recomput[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: the sweep emits closing (≤2h) and expired (past) on TRANS[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-05: after the ZSET is lost, the rebuilder repopulates it from[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WindowReopenConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: WindowReopenConsumer is registered for message.receive[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: a customer message on an EXPIRED window reopens it (→ ope[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23: an OWNER-PHONE (agent) message does NOT reopen the window[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09 + FS-02 catch-up: re-driving the SAME event reopens EXACTLY[39m[90m…[39m [90m0.08s[39m  
+
+  [90mTests:[39m    [32;1m12 passed[39;22m[90m (38 assertions)[39m
+  [90mDuration:[39m [39m5.96s[39m
+

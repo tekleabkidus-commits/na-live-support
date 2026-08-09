@@ -1536,13 +1536,8 @@ entries:
       bot was found connected to a LIVE production account (now disconnected); a live
       walk there would disrupt real customer service. See the S23 step-6 close-out note.
   - ac_ref: "Doc05 AC-04"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 8 in the file tests/Feature/Telegram/WindowMechanicsTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Feature/Telegram/WindowCalibrationTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci

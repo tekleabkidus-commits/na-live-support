@@ -1,0 +1,24 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\WindowSweepTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01 (BEFORE trust): the sweep does NOT expire a window while t[39m[90m…[39m [90m5.74s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WindowSweepTest[22m [90m>[39m it FS-01 (BEFORE trust):…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Telegram/WindowSweepTest.php[39m:[32m66[39m
+     62▕     setHealthDown($c['tenant'], $c['bot']);
+     63▕ 
+     64▕     $counts = app(WindowSweep::class)->run(nowMicros());
+     65▕ 
+  ➜  66▕     expect($counts['paused'])->toBe(1)->and($counts['expired'])->toBe(0);
+     67▕     expect(DB::table('conversations')->where('id', $c['conversation'])->value('reply_window_state'))
+     68▕         ->toBe('open', 'FS-01: no false expired under outage — state unchanged');
+     69▕     expect(DB::table('outbox')->where('name', 'telegram.window.expired')->count())->toBe(0);
+     70▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/WindowSweepTest.php[39;22m:[39;1m66[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m5.82s[39m
+

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-79 event(s).
+82 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -463,6 +463,33 @@ FR-09/FR-10: the owner disconnected; open tickets flag channel_unreachable and t
 - **Payload:** `tenant_id`, `bot_id`, `connection_id`, `account_user_id`
 - **Producers:** Doc05/ConnectionLifecycle
 - **Consumers:** Doc06/Routing, Doc07/Inbox, Doc15/Reporting
+
+## `telegram.window.closing`
+
+FR-22: the reply window entered the closing band (≤2 h). Doc 12 automations may act (queue-priority boost); Doc 07 shows the countdown chip.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `expires_at`
+- **Producers:** Doc05/WindowSweep
+- **Consumers:** Doc07/Inbox, Doc12/Automation
+
+## `telegram.window.expired`
+
+FR-22: the reply window closed. The composer disables (Doc 07); a customer message reopens it (FR-24).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `expires_at`
+- **Producers:** Doc05/WindowSweep
+- **Consumers:** Doc07/Inbox, Doc12/Automation
+
+## `telegram.window.reopened`
+
+FR-24: a customer message reopened an expired window — recomputed expiry, badges cleared; assignee_id is the open ticket's assignee to notify (null if none). Doc 07 delivers the notification.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `expires_at`, `assignee_id`
+- **Producers:** Doc05/WindowReopenConsumer
+- **Consumers:** Doc07/Inbox
 
 ## `tenant.provisioned`
 
