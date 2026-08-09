@@ -1527,10 +1527,14 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      Owner-assisted live walk on the real staging Business account (A-24 capture-replay
-      strategy: BotFather + phone procedure, states/events/alerts/rescue verified at
-      each step). Scheduled S23 step 6; evidence lands in docs/evidence/S23-step6/.
-    gap: Not yet executed.
+      Owner-assisted live walk. The connection-lifecycle machinery is proven against
+      fixtures + the REAL captured connection updates (ConnectionLifecycleTest, EC-11);
+      the LIVE staged walk is owner-assisted-BLOCKED (S23 step 6 ruling).
+    gap: >-
+      Owner-assisted-BLOCKED. Unblocker: a dedicated staging Business account (Premium,
+      spare device) that can be freely paused and revoked — per Doc 05 §21. The staging
+      bot was found connected to a LIVE production account (now disconnected); a live
+      walk there would disrupt real customer service. See the S23 step-6 close-out note.
   - ac_ref: "Doc05 AC-04"
     suite_path: manual
     type: manual

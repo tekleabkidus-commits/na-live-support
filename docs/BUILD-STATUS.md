@@ -156,6 +156,41 @@ activated. Close-out RISKS carries verbatim: "staging bot token was exposed in a
 chat; owner declined rotation for the test environment; rotation is REQUIRED before
 production traffic" and A-24 rider 1's no-public-ingress statement (Doc 18 handoff row).
 
+## SESSION-23 (Doc 05) — STEP-6 CLOSE-OUT NOTE + RISKS (owner-ruled 2026-08-09)
+
+**Step 6 closes PARTIAL-pending-AC-03.** The connection-lifecycle machinery
+(FR-07…10, SEC-04, EC-01/02/03/05/11, FS-04, FR-10 channel_unreachable) is
+built and proven against fixtures and the REAL captured connection updates
+(EC-11); sabotages #8/#18 fail+restored; Doc 06 orthogonality re-run cited;
+NFR-04 measured. The one remaining half is the LIVE staged lifecycle walk.
+
+- **AC-03 — owner-assisted-BLOCKED.** Unblocker (verbatim): "a dedicated
+  staging Business account (Premium, spare device) that can be freely paused
+  and revoked — per Doc 05 §21." The live walk cannot honestly run against a
+  production account (see RISKS below).
+- **AC-08 live-render half — same unblocker** (the staging bot's real renders
+  need the same dedicated account); the business-text-preview half states its
+  evidence honestly when step 11 builds it.
+
+**RISKS carried to the Doc 05 close-out (owner facts, recorded exactly):**
+
+- **Token exposure (updated):** "staging bot token was exposed in an owner
+  chat and remains unrotated by owner decision; the live-account connection
+  that made it critical has been severed; rotation is MANDATORY before any
+  Business account is reconnected to this bot and before any production
+  traffic — whichever comes first."
+- **Live-account incident (S23 step 6):** the staging bot was found connected
+  to a LIVE production Business account (KemerBet) actively serving real
+  customers. Discovered during the AC-03 baseline drain; the owner has since
+  DISCONNECTED the live account (PII exposure closed). Side effect, bounded
+  and recorded: a single `getUpdates` offset-drain consumed/acknowledged the
+  then-pending real updates on Telegram's side — the phone Business app is
+  unaffected, no customer impact, no account changes were made. Real PII
+  captured in two evidence files was DELETED immediately and never committed
+  (verified: tree clean, the EC-11 fixture holds only account-owner
+  connection metadata). A dedicated staging Business account is MANDATORY
+  before any future live walk.
+
 ## SESSION-22 (Doc 06) — "DOC 06 SUITES" IS THIS EXACT COMMAND
 
 Defined because two checkpoints reported "Doc 06 suites" for two DIFFERENT sets — step 3
