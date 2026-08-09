@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      closeout-ss02-drill
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Tickets/ConsolidationDrillTest.php
+# started:    2026-08-09T03:22:18Z
+# git:        3bd0b8d (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+[SS-02 indicative] 39-source consolidation: 0.96s
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ConsolidationDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-02: forty near-identical tickets consolidate to one master in on[39m[90m…[39m [90m6.16s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (85 assertions)[39m
+  [90mDuration:[39m [39m6.30s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-09T03:22:25Z
+# duration:   7s
+# EXIT:       0

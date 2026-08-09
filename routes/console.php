@@ -45,3 +45,8 @@ Schedule::command('tickets:timers-sweep')->everyMinute()->withoutOverlapping();
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();
+
+// Doc 06 FS-05: the nightly invariant auditor — exists precisely because it should
+// never fire. A non-zero exit IS the page (the PartitionsCheck idiom); the critical
+// log entry carries the row ids.
+Schedule::command('tickets:invariant-audit')->dailyAt('02:30');

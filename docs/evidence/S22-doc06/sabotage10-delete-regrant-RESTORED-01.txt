@@ -1,0 +1,40 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage10-delete-regrant-RESTORED
+# set:        S22-doc06
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/TicketGrantPhysicsTest.php
+# started:    2026-08-09T03:21:29Z
+# git:        3bd0b8d (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m4.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fills every DB-time column from clock_timestamp() and never from[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.cre[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR[39m[90m…[39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m22 passed[39;22m[90m (56 assertions)[39m
+  [90mDuration:[39m [39m5.56s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-09T03:21:36Z
+# duration:   7s
+# EXIT:       0
