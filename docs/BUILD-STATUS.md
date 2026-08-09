@@ -259,7 +259,7 @@ the traceability registry or the step evidence.
 | NFR-03 | DONE | one writer, two guards, three sabotages across the session |
 | NFR-04 | DONE | bulk 200 in 918 ms vs 30 s STRICT + linearity tripwire + per-item progress (steps 7/8) |
 | NFR-05 | DONE | 100 parallel creates, 100 unique numbers (step 3) |
-| NFR-06 | DONE | consumer contracts for ALL SEVEN consuming docs with versioning teeth (step 8); fields_changed excepted with FR-26 |
+| NFR-06 | DONE | consumer contracts for ALL SEVEN consuming docs with versioning teeth (step 8). DONE, not PARTIAL: NFR-06 quantifies over "every FR-26 event SCHEMA", and a schema must EXIST to be versioned or contracted — all 23 existing schemas are; the missing thing is fields_changed's PRODUCER, which is FR-26's row carrying the gap ONCE, and the completeness test forces its contracts automatically the moment Doc 12 mints it |
 | US-01 | DONE | one-keystroke claim + instant loser answer (step 4) |
 | US-02 | DONE | pending_internal named-wait + return-on-answer edges (steps 2/4; the view filter renders in Doc 07) |
 | US-03 | DONE | mid-conversation split without losing either thread (step 6) |
