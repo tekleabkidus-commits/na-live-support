@@ -11,3 +11,7 @@
 ^mock-sms$
 ^mock-ai$
 ^minio$
+# Doc 05 (Telegram Channel): the first REAL channel API. Added by config per
+# ADR 0008 — all Bot API traffic (getMe, setWebhook, sendMessage, getFile)
+# goes through this proxy; a direct call to api.telegram.org is a violation.
+^api\.telegram\.org$
