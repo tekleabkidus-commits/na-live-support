@@ -958,12 +958,16 @@ throttle key survives between tests.
 > `{"status":"accepted"}` — the per-IP `auth-ip` throttle (20/min, keyed by IP, and
 > every in-process test shares 127.0.0.1) leaking across tests exactly as the S22
 > disposition predicted. Full CI log captured FIRST
-> (docs/evidence/S23-step4/ci-31306177472-stage3-full.log). The disposition's
-> pre-authorized fix is applied: the file's beforeEach clears its own ip bucket;
-> the throttle's BEHAVIOUR stays proven in-file (the R-6 attacker-ip attempts
-> assertion) and in the FR-03 suites. File green post-fix (6 passed / 72
-> assertions, risk0b-fix-01.txt). 0b is RESOLVED pending one clean recurrence-free
-> stretch; the re-run of 31306177472 was triggered per the record-keeping rule.
+> (docs/evidence/S23-step4/ci-31306177472-stage3-full.log). RECORD CORRECTION
+> (advisor, S23 step-4 checkpoint): the S22 disposition authorized capture and the
+> throttle-key check ONLY — it did not pre-authorize a fix ("no action taken").
+> The fix applied in S23 (the file's beforeEach clears its own ip bucket) is
+> **advisor-ratified at the S23 step-4 checkpoint**: harness-isolation only,
+> product proofs untouched (the R-6 attacker-ip attempts assertion and the FR-03
+> suites stand unmodified), root cause named with the confirming capture. File
+> green post-fix (6 passed / 72 assertions, risk0b-fix-01.txt). Any recurrence in
+> ANY shape reopens 0b fresh. The re-run of 31306177472 was triggered per the
+> record-keeping rule.
 Carried forward with its fix already chosen so the next session does not re-derive it:
 **if the throttle-leak hypothesis confirms on the next recurrence, the fix is clearing
 the throttle key in that file's own setup — test hygiene — and the throttle's BEHAVIOUR

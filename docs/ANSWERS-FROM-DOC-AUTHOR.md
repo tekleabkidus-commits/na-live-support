@@ -973,3 +973,18 @@ applies; Doc 13 files its own equivalent if ever needed).
 - Advisor's own record: the session prompt's "catalog at 24" was the advisor's
   wording error (24 was Doc 06's family count; the platform catalog at 73 governs
   per Q9).
+
+### A-25. The webhook-edge quota check fails OPEN on metering outage (ADVISOR RULING, S23 step-4 checkpoint)
+
+Doc 01's QuotaMeter fails CLOSED for inbound surfaces on metering outage
+(FS-01's bounded-queue backpressure reading); the S15 FS ruling proved the
+telegram secret_header surface stays 202 against the same dead volatile
+instance, reasoning "capacity protection, not authentication — fails OPEN
+with its own metric… capacity protection must not convert a cache outage
+into a channel outage." RULING: at the WEBHOOK EDGE the quota check is
+capacity protection on that same surface and degrades OPEN with the
+`quota.check_degraded` metric; the bounded-queue backpressure the exception
+asks for is the queue itself. A 500 would tell the channel to hammer a
+degraded platform. Applies to channel webhook edges; staff and API surfaces
+keep their existing postures. Proven by WebhookHmacTest's FS case driving
+the real edge against a dead volatile port.
