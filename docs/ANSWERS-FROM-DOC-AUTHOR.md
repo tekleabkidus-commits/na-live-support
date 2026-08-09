@@ -1011,7 +1011,7 @@ resolver deregistered → the telegram media fixture goes red on the hold
 path. The Doc 04 docblock records WHY the seam exists. The close-out ledger
 reconciles against 19 items.
 
-### A-27 (RAISED, awaiting ruling). Owner-phone attribution needs an inbound author_type=agent path the Doc 04 persister does not expose
+### A-27 (RULED, advisor at S23 step-5 checkpoint; owner-approved). Owner-phone attribution: the Doc 04 inbound persister gains an explicit author override
 
 Doc 05 T-03/FR-11/BR-03: a business_message whose `from = owner` maps to
 `author_type=agent` under a lazily-created reserved staff identity
@@ -1032,5 +1032,19 @@ the reserved-identity author_id (T-03), reported as `owner_phone`. This is
 Doc 08 identity-seam adjacent (the reserved staff identity is a Doc 08
 pattern) — the ruling decides whether the persister gains the override in
 Doc 05 or whether owner-phone attribution defers to Doc 08 with the
-detection + channel_meta flag shipped here. Raised at the step-5 checkpoint;
-no core edit made pending the ruling.
+detection + channel_meta flag shipped here. Raised at the step-5 checkpoint.
+
+**RULING (advisor, owner-approved): the persister gains the override — the
+FOURTH ruled core edit.** T-03/BR-03 are DOCUMENT-REQUIRED verbatim and
+Doc 08 owns CUSTOMER identity, not staff authorship, so the defer alternative
+is rejected. BINDING CONDITIONS: (1) enumerated per-file in the
+zero-core-edits diff assertion; (2) the override is reachable ONLY when the
+update's from.id matches the connection's registered account_user_id by
+SERVER-SIDE comparison — a negative spoof control proves arbitrary inbound
+content can never claim agent authorship; (3) the reserved staff identity is
+lazily created per T-03 ("{account_name} (phone)"), linked as author, with
+EC-05's forward-rename semantics; (4) sabotage list AMENDED 19→20 — item 20:
+the override gate removed (any inbound can claim agent) → the spoof control
+goes red; (5) non-owner inbound proven byte-identical (regression). The
+reserved identity reports as agent-type `owner_phone` (A-8/T-03 precedent),
+distinct from the message `author_type='agent'`.

@@ -131,7 +131,9 @@ redirect template without link→BR-06 red; (15) split resumes from part 1→EC-
 re-register without rotation→SEC-02 red; (17) planted channel conditional→gate red;
 (18) unreachable-writer emits transition→Doc 06 orthogonality red; (19) [AMENDED at the
 A-26 ruling, S23 step 5] SourceUrlResolver deregistered→the telegram media fixture red on
-the hold path. THE LEDGER RECONCILES AGAINST 19 ITEMS. Fail AND restored-pass
+the hold path; (20) [AMENDED at the A-27 ruling, S23 step 6] the owner-phone author-override
+gate removed (any inbound can claim agent authorship)→the spoof control goes red. THE LEDGER
+RECONCILES AGAINST 20 ITEMS. Fail AND restored-pass
 pasted; backup before sabotage; tree proven clean; captures unfiltered to `docs/evidence/S23-*/`
 first; every evidence file scrub-checked (a real token in evidence is a Sev-1).
 
