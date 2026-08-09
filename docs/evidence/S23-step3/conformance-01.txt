@@ -1,0 +1,70 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\FakeAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m3.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the second adapter implements ONLY the base contract — the m[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole inbound pipeline works on the second adapter uncha[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole outbound pipeline works on the second adapter unch[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the capability envelope binds the core, not conditionals — a[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConformanceTest[22m…    
+[39;1m  channel timestamps normalize to UTC (C-03)
+Failed asserting that two strings are identical.
+  [39;22m[31m-'UTC'[39m[39;1m
+  [39;22m[32m+'+00:00'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39m:[32m92[39m
+     88▕         $this->assertNotSame('', $normalized->externalMessageId);
+     89▕         $this->assertNotSame('', $normalized->sender->externalUserId);
+     90▕         $this->assertNotSame('', $normalized->sender->display);
+     91▕         $this->assertNotSame('', $normalized->dedupeKey);
+  ➜  92▕         $this->assertSame('UTC', $normalized->occurredAt->timezoneName, 'channel timestamps normalize to UTC (C-03)');
+     93▕         $this->assertInstanceOf(NormalizedInbound::class, $normalized);
+     94▕     }
+     95▕ 
+     96▕     public function test_dedupe_key_is_stable_for_identical_payloads(): void
+
+  [33m1   [39m[39;1mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39;22m:[39;1m92[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m36 passed[39;22m[90m (411 assertions)[39m
+  [90mDuration:[39m [39m4.43s[39m
+

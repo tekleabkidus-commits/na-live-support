@@ -1587,13 +1587,8 @@ entries:
       Planned (S23 step 7): bucket conformance under synthetic load, 429 adaptive
       slowdown observable, per-chat FIFO preserved. Not yet executed.
   - ac_ref: "Doc05 AC-07"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 3 in the file tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci

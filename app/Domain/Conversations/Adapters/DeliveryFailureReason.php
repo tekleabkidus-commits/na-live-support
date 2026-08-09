@@ -14,6 +14,14 @@ namespace App\Domain\Conversations\Adapters;
  * codes enter the ×5 backoff (1s, 5s, 30s, 2m, 10m) before failed(final) (FR-13).
  * The classification lives HERE, on the enum, so an adapter cannot ship an
  * inconsistent {code, retryable} pair — the conformance suite asserts this table.
+ *
+ * SERIES-REVIEW RECORD (ruling A-20, S23 plan approval): `connection_paused`
+ * and `credentials_unavailable` entered by advisor ruling because both are
+ * DOCUMENT-REQUIRED verbatim — Doc 05 FR-18 names connection_paused
+ * non-retryable; Doc 05 FS-03 names credentials_unavailable retryable with
+ * no fallback storage. The conformance expected-table gained both rows in
+ * the same commit; the overload alternative was rejected as
+ * requirement-simplification.
  */
 enum DeliveryFailureReason: string
 {
@@ -21,17 +29,19 @@ enum DeliveryFailureReason: string
     case BlockedByUser = 'blocked_by_user';
     case WindowExpired = 'window_expired';
     case InvalidContent = 'invalid_content';
+    case ConnectionPaused = 'connection_paused';
 
     // Retryable (transient channel conditions).
     case RateLimited = 'rate_limited';
     case NetworkError = 'network_error';
     case ChannelUnavailable = 'channel_unavailable';
+    case CredentialsUnavailable = 'credentials_unavailable';
 
     public function retryable(): bool
     {
         return match ($this) {
-            self::BlockedByUser, self::WindowExpired, self::InvalidContent => false,
-            self::RateLimited, self::NetworkError, self::ChannelUnavailable => true,
+            self::BlockedByUser, self::WindowExpired, self::InvalidContent, self::ConnectionPaused => false,
+            self::RateLimited, self::NetworkError, self::ChannelUnavailable, self::CredentialsUnavailable => true,
         };
     }
 }

@@ -1,0 +1,45 @@
+=== SS-04 / inherited row 1: ZERO-CORE-EDITS DIFF ASSERTION (S23 step 3, corrected classification) ===
+The first run (zero-core-edits-diff-assertion.txt) FLAGGED TelegramServiceProvider.php:
+that was the CHECKER being too narrow — the provider is a Doc 05-OWNED file created at
+S23 step 2 (commit 1cdb7d3), not Doc 04 core. The flag is kept on record as the checker's
+own liveness proof: it bites on anything outside its enumeration.
+
+Classes: (a) Doc 05-owned files (created this session: app/Domain/Telegram/*,
+app/Providers/TelegramServiceProvider.php, app/Models/TelegramBot.php, tests/*Telegram*,
+tests/Support/Adapters/ScriptedTelegramApi.php); (b) A-20/A-22 ruled exceptions;
+(c) evidence/registry bookkeeping.
+
+--- Files staged:
+M	app/Domain/Conversations/Adapters/DeliveryFailureReason.php
+M	app/Domain/Conversations/Outbound/ChannelHealthTracker.php
+A	app/Domain/Telegram/Api/TelegramApi.php
+M	app/Domain/Telegram/Api/TelegramBotApi.php
+A	app/Domain/Telegram/ErrorClassifier.php
+A	app/Domain/Telegram/TelegramAdapter.php
+M	app/Providers/TelegramServiceProvider.php
+M	app/Support/Events/EventCatalog.php
+M	docs/EVENT-CATALOG.md
+A	docs/evidence/S23-step3/conformance-01.txt
+A	docs/evidence/S23-step3/conformance-02.txt
+A	docs/evidence/S23-step3/sabotage-1-capability-lie-fail.txt
+A	docs/evidence/S23-step3/sabotage-1-capability-lie-restored-pass.txt
+A	docs/evidence/S23-step3/zero-core-edits-diff-assertion.txt
+M	lang/am/messaging.php
+M	lang/en/messaging.php
+M	registries/traceability.yaml
+M	tests/Contract/AdapterConformance/AdapterConformanceCase.php
+A	tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php
+M	tests/Feature/Conversations/FailureScenariosTest.php
+A	tests/Support/Adapters/ScriptedTelegramApi.php
+
+--- VERDICT: PASS
+
+--- Doc 04 CORE files touched, each against its ruling:
+  DeliveryFailureReason.php    -> A-20 (two document-required cases)
+  AdapterConformanceCase.php   -> A-20 (the two expected-table rows; the ONLY suite edit)
+  ChannelHealthTracker.php     -> A-22 (v2 vocabulary: up->healthy)
+  EventCatalog.php             -> A-22 (schema_version 2, tri-state)
+  EVENT-CATALOG.md             -> A-22 (generated)
+  FailureScenariosTest.php     -> A-22 (payload pin follows the ruled vocabulary)
+  lang/{en,am}/messaging.php   -> A-20 (fail.* mirror, additive only)
+  NOTHING ELSE in app/Domain/Conversations, app/Support, or the suite is touched.

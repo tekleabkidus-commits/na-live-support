@@ -178,9 +178,14 @@ abstract class AdapterConformanceCase extends TestCase
             DeliveryFailureReason::BlockedByUser->value => false,
             DeliveryFailureReason::WindowExpired->value => false,
             DeliveryFailureReason::InvalidContent->value => false,
+            // A-20 (S23 plan approval): the two Doc 05 document-required rows,
+            // added in the same commit as their enum cases — the ONLY sanctioned
+            // edit to this suite since it froze.
+            DeliveryFailureReason::ConnectionPaused->value => false,
             DeliveryFailureReason::RateLimited->value => true,
             DeliveryFailureReason::NetworkError->value => true,
             DeliveryFailureReason::ChannelUnavailable->value => true,
+            DeliveryFailureReason::CredentialsUnavailable->value => true,
         ];
 
         $induced = 0;

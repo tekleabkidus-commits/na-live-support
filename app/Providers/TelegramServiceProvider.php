@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Domain\Telegram\Api\TelegramApi;
 use App\Domain\Telegram\Api\TelegramBotApi;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -37,5 +38,7 @@ final class TelegramServiceProvider extends ServiceProvider
                 apiBase: $apiBase,
             );
         });
+
+        $this->app->alias(TelegramBotApi::class, TelegramApi::class);
     }
 }

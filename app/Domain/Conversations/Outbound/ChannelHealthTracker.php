@@ -13,10 +13,15 @@ use Illuminate\Contracts\Redis\Factory as RedisFactory;
 use Illuminate\Support\Facades\DB;
 
 /**
- * FS-01's health signal (Doc 04; event name filed as interpretation A-4):
- * `channel.health.changed` fires on TRANSITION, never per failure — a total
- * channel outage produces one `down` event when the streak crosses the
- * threshold and one `up` event on the first successful send after it.
+ * FS-01's health signal (Doc 04; event name filed as interpretation A-4;
+ * schema_version 2 and the transition-only canonical home are ruling A-22,
+ * S23 plan approval): `channel.health.changed` fires on TRANSITION, never
+ * per failure — a total channel outage produces one `down` event when the
+ * streak crosses the threshold and one `healthy` event on the first
+ * successful send after it. v2's status vocabulary is healthy|degraded|down
+ * (Doc 05 FR-29); this tracker's binary view maps up->healthy, down->down —
+ * `degraded` belongs to Doc 05's threshold rollup (its producer registers at
+ * S23 step 11).
  *
  * Only CHANNEL-CLASS failures count (network_error, channel_unavailable):
  * blocked-by-user is a conversation fact and invalid content a payload fact —
@@ -56,7 +61,7 @@ final class ChannelHealthTracker
         $connection->command('expire', [$key, self::TTL_SECONDS]);
 
         if ($state === 'down') {
-            $this->announce($channel, $channelRefId, 'up');
+            $this->announce($channel, $channelRefId, 'healthy'); // A-22: v2 vocabulary
         }
     }
 

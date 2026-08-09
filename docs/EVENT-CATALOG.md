@@ -142,9 +142,9 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 
 ## `channel.health.changed`
 
-FS-01's health signal, fired on TRANSITION only: a channel endpoint crossed the consecutive-failure threshold (down) or recovered on the first successful send (up). Event name filed as interpretation A-4.
+FS-01's health signal, fired on TRANSITION only (A-22 is the canonical home of transition-only): a channel endpoint crossed a health threshold or recovered. Status vocabulary healthy|degraded|down (v2, ruling A-22). Event name filed as interpretation A-4.
 
-- **Schema version:** 1
+- **Schema version:** 2
 - **Payload:** `tenant_id`, `channel`, `channel_ref_id`, `status`
 - **Producers:** Doc04/ChannelHealthTracker
 - **Consumers:** Doc05/ChannelSurfaces, Doc13/ChannelSurfaces, Doc18/Alerting

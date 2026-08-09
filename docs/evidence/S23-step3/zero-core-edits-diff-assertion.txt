@@ -1,0 +1,40 @@
+=== SS-04 / inherited row 1: ZERO-CORE-EDITS DIFF ASSERTION (S23 step 3) ===
+Rule: every file this commit touches must be (a) a NEW Doc 05 file, or
+(b) on the RULED-EXCEPTION list (A-20/A-22, S23 plan approval), or
+(c) evidence/registry bookkeeping. Any file outside these classes is an
+architecture escalation per inherited row 1 — never a quiet patch.
+
+--- Ruled exceptions (A-20: enum + conformance expected-table + fail-key i18n; A-22: tracker + catalog + regen + pinned Doc 04 test):
+  app/Domain/Conversations/Adapters/DeliveryFailureReason.php   [A-20]
+  tests/Contract/AdapterConformance/AdapterConformanceCase.php  [A-20]
+  lang/en/messaging.php                                         [A-20 blast radius: messaging.fail.* mirror, additive]
+  lang/am/messaging.php                                         [A-20 blast radius: additive; R-14 queue]
+  app/Domain/Conversations/Outbound/ChannelHealthTracker.php    [A-22]
+  app/Support/Events/EventCatalog.php                           [A-22]
+  docs/EVENT-CATALOG.md                                         [A-22 regen]
+  tests/Feature/Conversations/FailureScenariosTest.php          [A-22 vocabulary pin]
+
+--- Files staged in this commit:
+M	app/Domain/Conversations/Adapters/DeliveryFailureReason.php
+M	app/Domain/Conversations/Outbound/ChannelHealthTracker.php
+A	app/Domain/Telegram/Api/TelegramApi.php
+M	app/Domain/Telegram/Api/TelegramBotApi.php
+A	app/Domain/Telegram/ErrorClassifier.php
+A	app/Domain/Telegram/TelegramAdapter.php
+M	app/Providers/TelegramServiceProvider.php
+M	app/Support/Events/EventCatalog.php
+M	docs/EVENT-CATALOG.md
+A	docs/evidence/S23-step3/conformance-01.txt
+A	docs/evidence/S23-step3/conformance-02.txt
+A	docs/evidence/S23-step3/sabotage-1-capability-lie-fail.txt
+A	docs/evidence/S23-step3/sabotage-1-capability-lie-restored-pass.txt
+M	lang/am/messaging.php
+M	lang/en/messaging.php
+M	registries/traceability.yaml
+M	tests/Contract/AdapterConformance/AdapterConformanceCase.php
+A	tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php
+M	tests/Feature/Conversations/FailureScenariosTest.php
+A	tests/Support/Adapters/ScriptedTelegramApi.php
+
+VIOLATION: app/Providers/TelegramServiceProvider.php is outside the enumeration
+--- VERDICT: FAIL — every touched file is a new Doc 05 file, a ruled exception, or bookkeeping

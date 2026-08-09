@@ -136,7 +136,7 @@ test('FS-01: outage accumulates in queued with the lane intact, health goes down
         // Ordered by UUIDv7 id, NOT occurred_at: `now()` is transaction-start
         // time in Postgres, so every row written inside one transaction shares
         // an occurred_at and cannot order itself (C-11, the S1 finding).
-        ->and(DB::table('outbox')->where('name', 'channel.health.changed')->orderByDesc('id')->value('payload'))->toContain('"status": "up"');
+        ->and(DB::table('outbox')->where('name', 'channel.health.changed')->orderByDesc('id')->value('payload'))->toContain('"status": "healthy"'); // A-22: v2 vocabulary
 });
 
 test('FS-01: the health signal is transition-only — a second outage failure does not re-announce, and non-channel failures never count', function () {

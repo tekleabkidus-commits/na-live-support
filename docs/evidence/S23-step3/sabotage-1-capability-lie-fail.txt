@@ -1,0 +1,36 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m3.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConformanceTest[22m…    
+[39;1m  [telegram-direct] supports_typing declared but extension missing
+Failed asserting that an instance of class App\Domain\Telegram\TelegramAdapter is an instance of interface App\Domain\Conversations\Adapters\SupportsTyping.[39;22m
+
+  at [32mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39m:[32m252[39m
+    248▕         }
+    249▕ 
+    250▕         // supports_typing (FR-18): declared ⇒ implemented and callable; not declared ⇒ refuses.
+    251▕         if ($capabilities->supportsTyping) {
+  ➜ 252▕             $this->assertInstanceOf(SupportsTyping::class, $adapter, "[$label] supports_typing declared but extension missing");
+    253▕             $adapter->sendTyping('fixture-chat-3');
+    254▕         } elseif ($adapter instanceof SupportsTyping) {
+    255▕             try {
+    256▕                 $adapter->sendTyping('fixture-chat-3');
+
+  [33m1   [39m[39;1mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39;22m:[39;1m252[39;22m
+  [33m2   [39m[39;1mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39;22m:[39;1m223[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (60 assertions)[39m
+  [90mDuration:[39m [39m4.25s[39m
+

@@ -30,7 +30,7 @@ use SensitiveParameter;
  *      BOTH into the frozen DeliveryFailureReason table — this class never
  *      classifies, it only reports faithfully.
  */
-final class TelegramBotApi
+final class TelegramBotApi implements TelegramApi
 {
     public function __construct(
         private readonly Client $http,

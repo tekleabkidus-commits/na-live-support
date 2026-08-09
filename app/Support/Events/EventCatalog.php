@@ -358,12 +358,15 @@ final class EventCatalog
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
         'channel.health.changed' => [
-            'schema_version' => 1,
-            // `status` is up|down — an enum, not free text (Q7's posture).
+            'schema_version' => 2,
+            // `status` is healthy|degraded|down — an enum, not free text (Q7's
+            // posture). v2 per ruling A-22 (S23 plan approval): Doc 05 FR-29's
+            // tri-state vocabulary; the Doc 04 tracker emits healthy|down and
+            // `degraded` arrives with Doc 05's threshold rollup producer.
             'payload' => ['tenant_id', 'channel', 'channel_ref_id', 'status'],
             'producers' => ['Doc04/ChannelHealthTracker'],
             'consumers' => ['Doc05/ChannelSurfaces', 'Doc13/ChannelSurfaces', 'Doc18/Alerting'],
-            'description' => 'FS-01\'s health signal, fired on TRANSITION only: a channel endpoint crossed the consecutive-failure threshold (down) or recovered on the first successful send (up). Event name filed as interpretation A-4.',
+            'description' => 'FS-01\'s health signal, fired on TRANSITION only (A-22 is the canonical home of transition-only): a channel endpoint crossed a health threshold or recovered. Status vocabulary healthy|degraded|down (v2, ruling A-22). Event name filed as interpretation A-4.',
         ],
         'media.stored' => [
             'schema_version' => 1,
