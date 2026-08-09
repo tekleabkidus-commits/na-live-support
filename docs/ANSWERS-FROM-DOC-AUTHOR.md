@@ -883,3 +883,93 @@ tickets.export (property/timeline) a separate future gate.
 **A-18 COUNTERSIGNED as filed** (anchors where present, else lifetime window; the
 audit carries ticket_id + range_basis; the event stays v1). The shared-render-path
 closure of inherited row 1 endorsed as the strongest form of "cannot drift".
+
+---
+
+## S23 (Doc 05) plan-approval rulings — advisor-ruled, owner-approved, 2026-08-09
+
+### A-19. Bot-token storage: the hmac_secret precedent, pending the Doc 18 vault (ADVISOR RULING)
+
+Doc 05 SEC-01 says vault-only per Doc 01 SEC-04, but no vault exists (Doc 18 owns it;
+BUILD-STATUS is explicit). RULING: `telegram_bots.bot_token` stores as a Laravel
+`encrypted` cast (the `webhook_credentials.hmac_secret` / TOTP posture, ruling D-5),
+in `$hidden`, pinned by the secrets-never-serialize suite; NFR-06 extends the SEC-08
+scrubber with the Telegram bot-token shape (`\d+:[A-Za-z0-9_-]{30,}`) and the
+`api.telegram.org/file` URL shape (T-07: file URLs CONTAIN the token), each with a
+plant→detect→remove positive control; the UI never displays a stored token (re-entry
+to change, SEC-01); FS-03's vault-unavailable maps to retryable
+`credentials_unavailable` (see A-20) with NO fallback storage by design. The C-13
+vault-migration handoff is FILED for Doc 18: on vault arrival, `bot_token` becomes a
+vault reference by expand-contract migration.
+
+### A-20. Two document-required additions to the frozen DeliveryFailureReason enum (ADVISOR RULING)
+
+`connection_paused` (non-retryable; Doc 05 FR-18 verbatim) and
+`credentials_unavailable` (retryable; FS-03 verbatim) enter the enum — both are
+DOCUMENT-REQUIRED, which is what the enum's series-review bar exists to check. The
+conformance suite's expected classification table updates in the same commit; both
+edits are enumerated file-by-file in SS-04's zero-core-edits diff assertion. The
+overload alternative (window_expired / channel_unavailable doubling up) is REJECTED
+as requirement-simplification.
+
+### A-21. T-02 met by a thin in-house TelegramBotApi client; Nutgram declined (ADVISOR RULING + ADR 0012)
+
+The ADR 0008 clamd precedent: ~300 auditable lines over a framework dependency.
+Proxy pinning stays explicit (every request carries the egress-proxy option from
+config — the broken-proxy sabotage proves no direct fallback), and the per-bot token
+binds at call time from the bot registry, which satisfies T-02's no-per-bot-deploys
+requirement. The doc's Nutgram mention reads as a stack-context minimum (standing
+reading); the deviation is ADR 0012's subject. Owner approved as stack growth with
+the S23 plan.
+
+### A-22. channel.health.changed schema_version 2, tri-state, TRANSITION-ONLY (ADVISOR RULING)
+
+Payload `{tenant_id, channel, channel_ref_id, status}` with
+`status: healthy|degraded|down` (FR-29), TRANSITION-ONLY — **this filing is the
+canonical home of the transition-only semantics**: A-4's text never carried it (the
+S23 session verified this); it binds from this ruling forward, not retroactively
+"from A-4". Doc 04's ChannelHealthTracker is reconciled to emit v2 (up→healthy,
+down→down); that edit joins A-20's in the zero-core-edits diff assertion. No
+consumer contracts exist for the event yet, so the bump breaks nothing; the S22
+completeness machinery demands contracts the moment a consumer ships.
+
+### A-23. FR-05's mode is per-bot entity configuration, not a tenant-singleton settings key (ADVISOR RULING)
+
+"Setting per Telegram channel" (Doc 05 §1) and "Per bot" (FR-05) read together:
+`telegram_bots.mode` enum column (`direct|business|hybrid`), rendered on the
+Connection tab (frame B01) wearing the per-key settings-row contract exactly as
+B6-X01 draws it (J03–J06, J08 consequence-before-save). The genuine tenant
+singletons (window, rate, health thresholds) register in `registries/settings.php`
+normally.
+
+### A-24. Dev-inbound strategy: capture-replay; no public ingress; /human event named (ADVISOR RULING, two riders)
+
+Real captured updates (getUpdates via the egress proxy) replay as authenticated
+POSTs through the full S15 middleware stack; AC-03's lifecycle walk is owner-assisted
+live capture; setWebhook/getWebhookInfo register/rotate/verify prove against the real
+API; AC-08's render comparison uses owner-supplied screenshots. RIDER 1 — the S23
+close-out carries verbatim: "true Telegram→endpoint webhook delivery was never
+exercised in dev (no public ingress); the first publicly-reachable deployment must
+verify real delivery" — filed as a Doc 18 handoff row. RIDER 2 — the staging bot's
+webhook stays UNSET except during register/rotate proofs; any tunnel is a new
+explicit decision. The /human event name `telegram.handoff_requested` is APPROVED as
+filed (neither Doc 09 FR-12 nor Doc 06 names the trigger event; the A-4 pattern
+applies; Doc 13 files its own equivalent if ever needed).
+
+### CORRECTIONS bound at S23 plan approval (advisor, binding)
+
+- **C1**: `telegram.window.closing_hours` registers `tenant_editable: false`,
+  default 2 — FR-22 DEFINES closing as ≤2 h; operators get the notification option
+  (`telegram.window.closing_notify`, tenant-editable), not the threshold.
+- **C2**: every remaining new settings key's `tenant_editable` is set by what the
+  frozen B6 frames actually draw (drawn operator editing ⇒ true, else false), with
+  the frame cited in the registry entry.
+- **C3**: step 1 adds the notifications registry entries — every admin notification
+  Doc 05 mints (paused/revoked, misconfiguration, SEC-04 pending-too-long, FS-04
+  digest, closing-notify) gets a registered category with the 3-layer opt model,
+  same-commit as its producer.
+- **C4**: the step-12 §14 sweep explicitly covers numbered-menu locale digits and
+  RTL-ready composition — both cited in the sweep's evidence.
+- Advisor's own record: the session prompt's "catalog at 24" was the advisor's
+  wording error (24 was Doc 06's family count; the platform catalog at 73 governs
+  per Q9).
