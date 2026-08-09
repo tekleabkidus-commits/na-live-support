@@ -129,7 +129,9 @@ port; direct fallback would stay green)→must fail; (12) R-19b grant dropped→
 red at MIGRATION level (S22 row-7/10 precedent); (13) FS-05 rebuild disabled→red; (14)
 redirect template without link→BR-06 red; (15) split resumes from part 1→EC-09 red; (16)
 re-register without rotation→SEC-02 red; (17) planted channel conditional→gate red;
-(18) unreachable-writer emits transition→Doc 06 orthogonality red. Fail AND restored-pass
+(18) unreachable-writer emits transition→Doc 06 orthogonality red; (19) [AMENDED at the
+A-26 ruling, S23 step 5] SourceUrlResolver deregistered→the telegram media fixture red on
+the hold path. THE LEDGER RECONCILES AGAINST 19 ITEMS. Fail AND restored-pass
 pasted; backup before sabotage; tree proven clean; captures unfiltered to `docs/evidence/S23-*/`
 first; every evidence file scrub-checked (a real token in evidence is a Sev-1).
 

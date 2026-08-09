@@ -988,3 +988,25 @@ asks for is the queue itself. A 500 would tell the channel to hammer a
 degraded platform. Applies to channel webhook edges; staff and API surfaces
 keep their existing postures. Proven by WebhookHmacTest's FS case driving
 the real edge against a dead volatile port.
+
+### A-26. The media chain's just-in-time SourceUrlResolver seam (ADVISOR RULING, owner-approved, S23 step-5)
+
+Doc 05 T-07 (Telegram file URLs contain the token: never persisted, never
+logged, never serialized) collided with the Doc 04 chain's persisted
+`source_url` contract — the first real channel exposed the chain's
+stable-URL assumption. RULING: the chain gains a scheme-keyed resolver
+registry consulted PER FETCH ATTEMPT — the media item persists an OPAQUE
+`telegram-file:{bot_id}/{file_id}` reference; the tokened URL exists only as
+a local variable inside the fetch; job payloads unchanged; unknown schemes
+behave exactly as today. BINDING CONDITIONS: (1) the edit is the third ruled
+exception in the zero-core-edits diff assertion, per-file; (2) per-attempt
+resolution proven by an expired-then-refreshed-URL test on the EC-11
+hold/retry path; (3) resolver failure classifies through the existing
+machinery — Telegram's "file is too big" → MediaTooLarge (the chain's
+terminal reject, EC-07's door), transient errors → the hold/retry path,
+never a silent skip — with a test; (4) the T-07 scrubber positive control
+proves the resolved URL reaches no log, no job payload, no row
+(plant-detect-remove); (5) sabotage list AMENDED to 19 items — item 19:
+resolver deregistered → the telegram media fixture goes red on the hold
+path. The Doc 04 docblock records WHY the seam exists. The close-out ledger
+reconciles against 19 items.
