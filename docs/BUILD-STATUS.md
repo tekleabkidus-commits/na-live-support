@@ -156,6 +156,62 @@ activated. Close-out RISKS carries verbatim: "staging bot token was exposed in a
 chat; owner declined rotation for the test environment; rotation is REQUIRED before
 production traffic" and A-24 rider 1's no-public-ingress statement (Doc 18 handoff row).
 
+## SESSION-23 (Doc 05) — EVENT-FAMILY RECONCILIATION (ordered at step-8 checkpoint)
+
+The plan enumerated **8 new events + 1 versioned bump** (expected catalog
+73→81). Actual at step 8: **9 new + the bump** = 82. Silent growth is the
+failure mode this reconciliation prevents, so each event is mapped to the
+plan's list and every ADDITION beyond it is filed as an enumeration amendment
+citing its document requirement (the sabotage-list 18→20 discipline, applied
+to events). The enumeration is AMENDED 8→10 new (final catalog after step 9's
+handoff event = 83).
+
+| Event | v | Step | In plan's 8? | Document requirement |
+|---|---|---|---|---|
+| channel.health.changed | 2 (bump) | 3 | YES (the bump) | A-22 / FR-29 |
+| telegram.bot_blocked | 1 | 5 | YES | FR-15 |
+| telegram.bot_unblocked | 1 | 5 | YES | FR-15 |
+| telegram.connection.active | 1 | 6 | YES | FR-09 |
+| telegram.connection.paused | 1 | 6 | YES | FR-09 |
+| telegram.connection.revoked | 1 | 6 | YES | FR-09 |
+| **telegram.connection.notified** | 1 | 6 | **NO — AMENDMENT** | **FS-04**: ">3 transitions/hour collapse notifications into one digest" needs a notification event carrying delivery=immediate\|digest; the paused/revoked events are TRANSITIONS, this is the (damped) NOTIFICATION Doc 07 delivers. |
+| telegram.window.closing | 1 | 8 | YES | FR-22 |
+| telegram.window.expired | 1 | 8 | YES | FR-22 |
+| **telegram.window.reopened** | 1 | 8 | **NO — AMENDMENT** | **FR-24**: "a customer message ... notifies the assignee" needs an event carrying the assignee to notify; the closing/expired events do not cover reopen. |
+| telegram.handoff_requested | 1 | 9 (pending) | YES | FR-25 / A-24 |
+
+**Step-6 count explained:** 79 at step 6 = 73 baseline + 2 (step-5 FR-15) + 4
+(step 6: 3 connection states + connection.notified). The +1 over the plan's
+step-6 expectation (3) is telegram.connection.notified, filed above.
+
+**Enumeration AMENDED: 8→10 new events.** The two amendments
+(connection.notified/FS-04, window.reopened/FR-24) each cite a verbatim
+document requirement; neither is discretionary. Final catalog after step 9 = 83.
+
+## SESSION-23 (Doc 05) — SABOTAGE LEDGER STATUS (20 items; close-out reconciles item-by-item)
+
+Executed with fail+restored evidence (15): #1 capability-lie (s3), #2 dedupe
+(s5), #4 media-bypass (s5), #6 webhook-secret (s4), #7 nonce-reuse (s5), #8
+unconfirmed-routes (s6), #10 sweep-outage (s8), #11 broken-proxy (s2), #12
+R-19b-grant (s1), #13 FS-05-rebuild (s8), #15 split-resume (s7), #16
+no-rotation (s4), #18 unreachable-transition (s6), #19 resolver-deregistered
+(s5), #20 owner-phone-gate (s6).
+
+REMAINING (5), each with its planned step — so close-out is arithmetic:
+- #3 inline-ACK → latency/never-inline red — **step 9**.
+- #5 ordering-on-telegram_date → the DB-time-receipt window pin red — **step 9**.
+- #9 seeded token in a log path → NFR-06 scrubber gate red — **step 9**.
+- #14 redirect template without a tappable link → BR-06 red — **step 9** (needs
+  the FR-05 business-mode redirect, built at step 9).
+- #17 planted `if ($channel === 'telegram')` → no-channel-conditionals gate red
+  — **step 9**.
+
+**GAP surfaced by this reconciliation:** FR-05/FR-06 MODE HANDLING (direct
+stores stray business flagged unconfigured_source; business auto-replies
+direct with the BR-06 redirect; hybrid both) and AC-02's mode matrix are NOT
+yet built — the mode is a column (A-23) but its handling is not. Planned into
+**step 9** (it is the direct-surface's sibling). AC-02 stays manual until then.
+
 ## SESSION-23 (Doc 05) — STEP-6 CLOSE-OUT NOTE + RISKS (owner-ruled 2026-08-09)
 
 **Step 6 closes PARTIAL-pending-AC-03.** The connection-lifecycle machinery
