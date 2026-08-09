@@ -877,3 +877,9 @@ to its closed_at (unbounded while it lives). Both bases are named in the audit e
 signal; the ticket detail is the audit's, the Q7 posture), and the gate, watermark,
 notes double-confirm and SEC-05 posture are Doc 04's, byte for byte — SEC-05 keeps
 tickets.export (property/timeline) a separate future gate.
+
+### COUNTERSIGN RECORD — A-18 (advisor, 2026-08-09, step-8 acceptance)
+
+**A-18 COUNTERSIGNED as filed** (anchors where present, else lifetime window; the
+audit carries ticket_id + range_basis; the event stays v1). The shared-render-path
+closure of inherited row 1 endorsed as the strongest form of "cannot drift".
