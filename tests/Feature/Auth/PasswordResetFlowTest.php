@@ -100,7 +100,7 @@ beforeEach(function (): void {
     // hygiene, not weakened proof: the throttle's BEHAVIOUR stays proven
     // in-file (the R-6 attacker-ip test below asserts real attempt counts)
     // and in the FR-03 suites.
-    app(Illuminate\Cache\RateLimiter::class)->clear(md5('auth-ip'.'127.0.0.1'));
+    app(RateLimiter::class)->clear(md5('auth-ip'.'127.0.0.1'));
 });
 
 it('runs the whole FR-16 journey: request → email → new password → old dead, new works', function (): void {
