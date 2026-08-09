@@ -1491,13 +1491,8 @@ entries:
   #    names its planned suite and step and says so in `gap`. A row flips to
   #    covered only with executed output on record.
   - ac_ref: "Doc05 AC-01"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 5 in the file tests/Feature/Telegram/InboundMappingTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Feature/Telegram/InboundMappingTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci

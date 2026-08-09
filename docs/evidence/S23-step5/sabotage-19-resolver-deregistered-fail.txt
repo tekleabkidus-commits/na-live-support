@@ -1,0 +1,24 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit A-26 condition 2: resolution happens PER FETCH ATTEMPT — an expi[39m[90m…[39m [90m4.81s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\InboundPipelineTest[22m [90m>[39m it A-26 condition 2:…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Telegram/InboundPipelineTest.php[39m:[32m213[39m
+    209▕ 
+    210▕     // Attempt 1: the expired reference re-resolves, getFile refuses → HOLD.
+    211▕     $out1 = app(MediaPipeline::class)->process($message->refresh(), 0, CarbonImmutable::now('UTC'));
+    212▕     expect($out1)->toBe(MediaOutcome::Held)
+  ➜ 213▕         ->and($flipping->getFileCalls)->toBe(1);
+    214▕     /** @var list<array<string, mixed>> $mediaHeld */
+    215▕     $mediaHeld = $message->refresh()->getAttribute('media');
+    216▕     expect($mediaHeld[0]['scan_status'])->toBe('scanning', 'the expired reference must HOLD (EC-11 path), never fail terminal');
+    217▕
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m213[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m4.93s[39m
+

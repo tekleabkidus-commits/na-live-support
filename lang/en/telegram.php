@@ -22,6 +22,10 @@ return [
         'revoked' => 'Revoked',
     ],
 
+    'callback' => [
+        'neutral_toast' => 'This button has expired — send the message again or type /menu.',
+    ],
+
     'mode' => [
         'direct' => 'Direct bot',
         'business' => 'Business account',

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-73 event(s).
+75 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -409,6 +409,24 @@ A retention run finished (T-08/AC-09): counts per tenant; held rows moved to hol
 - **Payload:** `tenant_id`, `partitions_dropped`, `messages_held`, `messages_removed`
 - **Producers:** Doc04/MessagesRetention
 - **Consumers:** Doc15/Reporting, Doc17/Audit, Doc18/Alerting
+
+## `telegram.bot_blocked`
+
+FR-15: the customer blocked the bot in direct mode (my_chat_member → kicked); future sends classify blocked_by_user. Two events, not one — the A-8 follower precedent (S23 plan resolution ii).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bot_id`, `external_chat_id`
+- **Producers:** Doc05/RouteTelegramUpdate
+- **Consumers:** Doc07/Inbox, Doc15/Reporting
+
+## `telegram.bot_unblocked`
+
+FR-15: the customer unblocked the bot (my_chat_member → member).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bot_id`, `external_chat_id`
+- **Producers:** Doc05/RouteTelegramUpdate
+- **Consumers:** Doc07/Inbox, Doc15/Reporting
 
 ## `tenant.provisioned`
 

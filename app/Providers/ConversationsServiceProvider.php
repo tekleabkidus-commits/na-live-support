@@ -48,9 +48,12 @@ final class ConversationsServiceProvider extends ServiceProvider
             return new MediaFetcher(is_string($proxy) ? $proxy : '');
         });
 
+        $this->app->singleton(\App\Domain\Conversations\Media\SourceUrlResolvers::class);
+
         $this->app->bind(MediaPipeline::class, function (Application $app): MediaPipeline {
             return new MediaPipeline(
                 $app->make(MediaFetcher::class),
+                $app->make(\App\Domain\Conversations\Media\SourceUrlResolvers::class),
                 $app->make(ClamdClient::class),
                 $app->make(MediaStore::class),
                 $app->make(MessageRepository::class),

@@ -56,6 +56,17 @@ createServer(async (req, res) => {
         }
     }
 
+    // File download surface: GET /file/bot<token>/<path> (Doc 05 A-26 chain
+    // fixtures). Only ok.bin exists; everything else 404s deterministically.
+    const f = url.pathname.match(/^\/file\/bot([^/]+)\/(.+)$/);
+    if (req.method === 'GET' && f) {
+        if (f[2] === 'ok.bin') {
+            res.writeHead(200, { 'content-type': 'application/octet-stream' });
+            return res.end('fixture-file-bytes');
+        }
+        return json(res, 404, { ok: false, description: 'mock-telegram: file not found' });
+    }
+
     // Bot API surface: POST /bot<token>/<method>
     const m = url.pathname.match(/^\/bot([^/]+)\/(\w+)$/);
     if (req.method === 'POST' && m) {
@@ -82,6 +93,14 @@ createServer(async (req, res) => {
         if (method === 'getWebhookInfo') {
             const hook = webhooks.get(token);
             return json(res, 200, { ok: true, result: { url: hook?.url ?? '', has_custom_certificate: false, pending_update_count: 0, allowed_updates: hook?.allowed_updates ?? [] } });
+        }
+        if (method === 'getFile') {
+            // Doc 05 S23 step 5: deterministic getFile — ok.bin is servable
+            // below; 'gone-*' file_ids answer a path the file route 404s
+            // (the A-26 condition-2 expired-URL shape).
+            const fid = params.file_id ?? 'unknown';
+            const path = String(fid).startsWith('gone-') ? `expired/${fid}.bin` : 'ok.bin';
+            return json(res, 200, { ok: true, result: { file_id: fid, file_path: path, file_size: 17 } });
         }
         if (method === 'getMe') {
             return json(res, 200, { ok: true, result: { id: 8144038606, is_bot: true, first_name: 'Mock Staging Bot', username: 'mockstagingbot', can_connect_to_business: true } });

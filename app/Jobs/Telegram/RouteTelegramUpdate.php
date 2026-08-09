@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 namespace App\Jobs\Telegram;
 
+use App\Domain\Conversations\Adapters\AdapterRegistry;
+use App\Domain\Conversations\Revisions\MessageEditing;
+use App\Domain\Telegram\Api\TelegramApi;
+use App\Domain\Telegram\Api\TelegramApiError;
+use App\Domain\Telegram\Api\TelegramTransportError;
+use App\Domain\Telegram\Direct\CallbackNonce;
+use App\Jobs\Conversations\NormalizeInbound;
+use App\Models\Message;
+use App\Models\TelegramBot;
+use App\Support\Events\EventPublisher;
 use App\Support\Tenancy\TenantAware;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,29 +22,37 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * The adapter-side update router (S23 plan, inherited row 3): one queued hop
- * on `telegram-in` that fans each accepted update to its door — message-
- * bearing updates to Doc 04's NormalizeInbound, lifecycle updates
- * (business_connection, my_chat_member) to the connection machinery,
- * callback_query to the callback path. Non-message updates CANNOT produce a
- * NormalizedInbound, which is why this hop exists adapter-side instead of a
- * core edit.
+ * on `telegram-in` fanning each accepted update to its DOOR. Non-message
+ * updates cannot produce a NormalizedInbound — that is WHY this hop exists
+ * adapter-side instead of as a core edit.
  *
- * STEP-4 BOUNDARY, stated: routing destinations land with their steps —
- * messages/edits/deletions at step 5, lifecycle at step 6, callbacks at
- * step 5. Until then every update is counted and logged by TYPE ONLY (no
- * payload content — T-07/SEC-03 discipline) and dropped; Telegram redelivers
- * nothing here because dev has no public ingress (A-24), so no real update
- * can reach this gap.
+ * Doors, per flow (the plan's row-3 table made code):
+ *  - message / business_message / edited_*  → NormalizeInbound (the Doc 04
+ *    inbound discipline: dedupe, identity seam, one-transaction persist;
+ *    edits land on the FR-21 revision path via the persister's
+ *    existing-external-id detection — the redelivery-vs-edit guard is Doc
+ *    04's and is re-proven, not rebuilt).
+ *  - deleted_business_messages → MessageEditing::customerDeleted per id
+ *    (FR-12 tombstones through the existing revision door).
+ *  - callback_query → SEC-06 first: nonce validated single-use, ACK via
+ *    answerCallbackQuery within its 1 s budget (FR-14) — first act of this
+ *    job; invalid/replayed answers the neutral toast and logs. Flow-target
+ *    EXECUTION is Docs 09/10/12's (pre-agreed bucket); the designer arrives
+ *    at step 9.
+ *  - my_chat_member → FR-15: telegram.bot_blocked|unblocked through the
+ *    outbox (closed payloads).
+ *  - business_connection → the FR-07…10 lifecycle machinery (S23 step 6);
+ *    logged-and-held until that step lands. Dev has no public ingress
+ *    (A-24), so no real update can reach the gap.
+ *
+ * OWNER-PHONE DETECTION (T-03/FR-11): a business_message whose from.id
+ * equals the connection's account_user_id is the owner replying from the
+ * phone — marked on the envelope; the persist-side attribution contract gap
+ * is escalated at the step-5 checkpoint.
  */
 final class RouteTelegramUpdate implements ShouldQueue
 {
     use Dispatchable, Queueable, TenantAware;
-
-    private const KNOWN_TYPES = [
-        'message', 'edited_message', 'callback_query', 'my_chat_member',
-        'business_connection', 'business_message', 'edited_business_message',
-        'deleted_business_messages',
-    ];
 
     /** @param array<string, mixed> $update */
     public function __construct(
@@ -45,20 +63,157 @@ final class RouteTelegramUpdate implements ShouldQueue
         $this->onQueue('telegram-in');
     }
 
-    public function handle(): void
+    public function handle(
+        AdapterRegistry $registry,
+        MessageEditing $editing,
+        CallbackNonce $nonces,
+        TelegramApi $api,
+        EventPublisher $events,
+    ): void {
+        $update = $this->update;
+
+        if (isset($update['message']) || isset($update['business_message'])
+            || isset($update['edited_message']) || isset($update['edited_business_message'])) {
+            NormalizeInbound::dispatch('telegram', $this->botId, [
+                'bot' => $this->botId,
+                'update' => $update,
+                'owner_phone' => $this->isOwnerPhone($update),
+            ])->onQueue($registry->inboundFamily('telegram'));
+
+            return;
+        }
+
+        if (is_array($update['deleted_business_messages'] ?? null)) {
+            $this->tombstone($update['deleted_business_messages'], $editing);
+
+            return;
+        }
+
+        if (is_array($update['callback_query'] ?? null)) {
+            $this->callback($update['callback_query'], $nonces, $api);
+
+            return;
+        }
+
+        if (is_array($update['my_chat_member'] ?? null)) {
+            $this->chatMember($update['my_chat_member'], $events);
+
+            return;
+        }
+
+        // business_connection (step 6) and anything else: counted, never
+        // silently invisible. Type only — no payload content (SEC-03/T-07).
+        Log::info('telegram update held for its owning step', [
+            'bot_id' => $this->botId,
+            'update_type' => isset($update['business_connection']) ? 'business_connection' : 'unknown',
+            'update_id' => $update['update_id'] ?? null,
+        ]);
+    }
+
+    /** @param array<string, mixed> $update */
+    private function isOwnerPhone(array $update): bool
     {
-        $type = 'unknown';
-        foreach (self::KNOWN_TYPES as $candidate) {
-            if (array_key_exists($candidate, $this->update)) {
-                $type = $candidate;
-                break;
+        $message = is_array($update['business_message'] ?? null) ? $update['business_message']
+            : (is_array($update['edited_business_message'] ?? null) ? $update['edited_business_message'] : null);
+
+        if ($message === null) {
+            return false;
+        }
+
+        $connectionId = $message['business_connection_id'] ?? null;
+        $fromId = is_array($message['from'] ?? null) ? ($message['from']['id'] ?? null) : null;
+
+        if (! is_string($connectionId) || ! is_int($fromId)) {
+            return false;
+        }
+
+        return \Illuminate\Support\Facades\DB::table('telegram_business_connections')
+            ->where('bot_id', $this->botId)
+            ->where('connection_id', $connectionId)
+            ->where('account_user_id', $fromId)
+            ->exists();
+    }
+
+    /** @param array<array-key, mixed> $payload */
+    private function tombstone(array $payload, MessageEditing $editing): void
+    {
+        $ids = is_array($payload['message_ids'] ?? null) ? $payload['message_ids'] : [];
+
+        foreach ($ids as $externalId) {
+            if (! is_scalar($externalId)) {
+                continue;
+            }
+            $message = Message::query()
+                ->where('external_message_id', (string) $externalId)
+                ->where('direction', 'in')
+                ->first();
+
+            if ($message !== null && $message->getAttribute('deleted_at') === null) {
+                $editing->customerDeleted($message); // FR-12: the existing door
+            }
+        }
+    }
+
+    /** @param array<array-key, mixed> $callback */
+    private function callback(array $callback, CallbackNonce $nonces, TelegramApi $api): void
+    {
+        $callbackId = is_string($callback['id'] ?? null) ? $callback['id'] : '';
+        $data = is_string($callback['data'] ?? null) ? $callback['data'] : '';
+
+        $verdict = $nonces->validate($this->botId, $data, time());
+
+        // FR-14: the ACK is this job's FIRST outward act either way; an
+        // invalid/replayed callback gets the NEUTRAL toast (SEC-06 — the
+        // answer leaks nothing about why).
+        $bot = TelegramBot::query()->find($this->botId);
+        $token = $bot?->bot_token;
+        if (is_string($token) && $callbackId !== '') {
+            try {
+                $api->call($token, 'answerCallbackQuery', $verdict['valid']
+                    ? ['callback_query_id' => $callbackId]
+                    : ['callback_query_id' => $callbackId, 'text' => __('telegram.callback.neutral_toast')]);
+            } catch (TelegramApiError|TelegramTransportError) {
+                // Best-effort ACK: the 1 s budget means we never retry-loop here.
             }
         }
 
-        Log::info('telegram update accepted', [
+        if (! $verdict['valid']) {
+            Log::info('telegram callback refused', [
+                'metric' => 'telegram.callback.rejected',
+                'reason' => $verdict['reason'],
+                'bot_id' => $this->botId,
+            ]);
+
+            return;
+        }
+
+        // Valid: the flow target resolves through the indirection table when
+        // the designer lands (step 9); until then the acceptance is logged.
+        Log::info('telegram callback accepted', [
             'bot_id' => $this->botId,
-            'update_type' => $type,
-            'update_id' => $this->update['update_id'] ?? null,
+            'flow_key' => $verdict['flow_key'],
         ]);
+    }
+
+    /** @param array<array-key, mixed> $member */
+    private function chatMember(array $member, EventPublisher $events): void
+    {
+        $status = is_array($member['new_chat_member'] ?? null)
+            ? ($member['new_chat_member']['status'] ?? null)
+            : null;
+        $chat = is_array($member['chat'] ?? null) ? $member['chat'] : [];
+
+        if (! in_array($status, ['kicked', 'member'], true)) {
+            return; // administrator/left etc. — not FR-15's blocked/unblocked pair
+        }
+
+        $events->publish(
+            $status === 'kicked' ? 'telegram.bot_blocked' : 'telegram.bot_unblocked',
+            [
+                'tenant_id' => $this->tenantId,
+                'bot_id' => $this->botId,
+                'external_chat_id' => is_scalar($chat['id'] ?? null) ? (string) $chat['id'] : '',
+            ],
+        );
     }
 }

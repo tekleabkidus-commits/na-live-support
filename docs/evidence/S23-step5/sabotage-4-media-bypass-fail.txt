@@ -1,0 +1,27 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-13/A-26: a document rides the FULL chain — opaque ref persist[39m[90m…[39m [90m4.55s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\InboundPipelineTest[22m [90m>[39m it FR-13/A-26: a doc…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'clean'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/InboundPipelineTest.php[39m:[32m142[39m
+    138▕     /** @var list<array<string, mixed>> $media */
+    139▕     $media = $message->getAttribute('media');
+    140▕ 
+    141▕     // The chain ran inline (sync queues): clean + stored.
+  ➜ 142▕     expect($media[0]['scan_status'])->toBe('clean')
+    143▕         ->and($media[0]['storage_key'] ?? null)->not->toBeNull()
+    144▕         // T-07: the ROW keeps the opaque reference — resolution never persists.
+    145▕         ->and($media[0]['source_url'])->toBe('telegram-file:'.$ctx['bot']->id.'/doc-1');
+    146▕
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m142[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m4.60s[39m
+

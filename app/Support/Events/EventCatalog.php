@@ -357,6 +357,20 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
+        'telegram.bot_blocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'bot_id', 'external_chat_id'],
+            'producers' => ['Doc05/RouteTelegramUpdate'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting'],
+            'description' => 'FR-15: the customer blocked the bot in direct mode (my_chat_member → kicked); future sends classify blocked_by_user. Two events, not one — the A-8 follower precedent (S23 plan resolution ii).',
+        ],
+        'telegram.bot_unblocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'bot_id', 'external_chat_id'],
+            'producers' => ['Doc05/RouteTelegramUpdate'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting'],
+            'description' => 'FR-15: the customer unblocked the bot (my_chat_member → member).',
+        ],
         'channel.health.changed' => [
             'schema_version' => 2,
             // `status` is healthy|degraded|down — an enum, not free text (Q7's

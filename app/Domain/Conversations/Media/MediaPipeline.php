@@ -50,6 +50,7 @@ final class MediaPipeline
 
     public function __construct(
         private readonly MediaFetcher $fetcher,
+        private readonly SourceUrlResolvers $resolvers,
         private readonly ClamdClient $clamd,
         private readonly MediaStore $store,
         private readonly MessageRepository $messages,
@@ -76,8 +77,14 @@ final class MediaPipeline
             : $now;
 
         try {
+            // A-26: opaque scheme-keyed references resolve PER FETCH ATTEMPT
+            // (the first real channel's URLs are short-lived secrets — see
+            // SourceUrlResolvers); the resolved URL lives only in this call.
+            // Resolver failures classify through the SAME two doors as the
+            // fetch itself: MediaTooLarge → terminal reject, RuntimeException
+            // → hold/retry (A-26 condition 3).
             $stream = $this->fetcher->fetch(
-                is_string($item['source_url'] ?? null) ? $item['source_url'] : '',
+                $this->resolvers->resolve(is_string($item['source_url'] ?? null) ? $item['source_url'] : ''),
                 $this->capBytes(),
             );
         } catch (MediaTooLarge) {

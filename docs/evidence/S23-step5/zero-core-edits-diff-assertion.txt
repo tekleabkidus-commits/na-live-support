@@ -1,0 +1,22 @@
+=== SS-04 zero-core-edits DIFF ASSERTION (S23 step 5) ===
+Doc 05-owned (new/this-session): app/Domain/Telegram/*, app/Jobs/Telegram/*,
+  app/Http/Controllers/Telegram/*, app/Providers/TelegramServiceProvider.php,
+  tests/Feature/Telegram/*, fixtures/telegram/*, docker/mocks/telegram/*
+RULED core exceptions this step: A-26 (SourceUrlResolvers seam) — the THIRD
+  ruled exception, per-file below. A-20/A-22 already ruled at step 3.
+
+--- Core (non-Doc-05) files touched:
+M	app/Domain/Conversations/Media/MediaPipeline.php
+A	app/Domain/Conversations/Media/SourceUrlResolvers.php
+M	app/Providers/ConversationsServiceProvider.php
+M	app/Support/Events/EventCatalog.php
+M	tests/Feature/Conversations/MediaPipelineTest.php
+
+--- Each core file, against its ruling:
+  app/Domain/Conversations/Media/MediaPipeline.php   -> A-26 (per-attempt resolve seam; docblock records WHY)
+  app/Domain/Conversations/Media/SourceUrlResolvers.php -> A-26 (NEW seam class)
+  app/Providers/ConversationsServiceProvider.php     -> A-26 (registry singleton + pipeline ctor)
+  app/Support/Events/EventCatalog.php                -> FR-15 events (additive, A-8 precedent — Doc 05 owns them)
+  tests/Feature/Conversations/MediaPipelineTest.php  -> A-26 (ctor gains the seam arg)
+  NOTHING in the conformance suite, the state machine, the dedupe store,
+  the persister, or the delivery machinery is touched.

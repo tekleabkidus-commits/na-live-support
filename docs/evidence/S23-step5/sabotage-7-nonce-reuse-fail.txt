@@ -1,0 +1,24 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-06/T-05: the nonce is single-use — a REPLAY answers the neut[39m[90m…[39m [90m4.95s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\InboundPipelineTest[22m [90m>[39m it SEC-06/T-05: the…    
+[39;1m  Failed asserting that true is false.[39;22m
+
+  at [32mtests/Feature/Telegram/InboundPipelineTest.php[39m:[32m276[39m
+    272▕     expect(strlen($data))->toBeLessThanOrEqual(64, 'T-05: callback data must fit Telegram\'s 64-byte cap');
+    273▕ 
+    274▕     expect($nonces->validate($ctx['bot']->id, $data, $now)['valid'])->toBeTrue();
+    275▕     $replay = $nonces->validate($ctx['bot']->id, $data, $now);
+  ➜ 276▕     expect($replay['valid'])->toBeFalse()->and($replay['reason'])->toBe('replayed');
+    277▕ 
+    278▕     $stale = $nonces->make($ctx['bot']->id, 'menu_main', $now - 901);
+    279▕     expect($nonces->validate($ctx['bot']->id, $stale, $now)['reason'])->toBe('expired');
+    280▕
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m276[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m5.01s[39m
+

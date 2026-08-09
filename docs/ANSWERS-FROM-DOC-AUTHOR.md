@@ -1010,3 +1010,27 @@ proves the resolved URL reaches no log, no job payload, no row
 resolver deregistered → the telegram media fixture goes red on the hold
 path. The Doc 04 docblock records WHY the seam exists. The close-out ledger
 reconciles against 19 items.
+
+### A-27 (RAISED, awaiting ruling). Owner-phone attribution needs an inbound author_type=agent path the Doc 04 persister does not expose
+
+Doc 05 T-03/FR-11/BR-03: a business_message whose `from = owner` maps to
+`author_type=agent` under a lazily-created reserved staff identity
+"{account_name} (phone)", reported as agent type `owner_phone`. The DETECTION
+is built and proven at step 5 (RouteTelegramUpdate flags `owner_phone` on the
+envelope when from.id == the connection's account_user_id; the flag rides
+channel_meta, InboundMappingTest + InboundPipelineTest green). But
+`InboundPersister`/`MessageRepository::persistInbound` HARD-CODE
+`author_type='customer'` — the Doc 04 inbound door cannot express an agent
+author, and the `messages.author_type` CHECK has no `owner_phone` value (it
+is 'customer'|'agent'|'ai'|'system'; `owner_phone` is a REPORTING agent-type,
+A-8/T-03 precedent, not a message author_type). CURRENT PROVEN BEHAVIOR
+(documented in the test): the message persists as `author_type='customer'`
+with `channel_meta.owner_phone=true`. PROPOSED (smallest core touch, a
+step-6 ruled exception if approved): the persister accepts an optional
+author override so an owner-phone inbound writes `author_type='agent'` +
+the reserved-identity author_id (T-03), reported as `owner_phone`. This is
+Doc 08 identity-seam adjacent (the reserved staff identity is a Doc 08
+pattern) — the ruling decides whether the persister gains the override in
+Doc 05 or whether owner-phone attribution defers to Doc 08 with the
+detection + channel_meta flag shipped here. Raised at the step-5 checkpoint;
+no core edit made pending the ruling.

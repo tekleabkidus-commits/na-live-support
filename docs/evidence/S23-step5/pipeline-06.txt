@@ -1,0 +1,35 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11: a text message rides route → router → dedupe → identity →[39m[90m…[39m [90m5.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: an edit lands on the FR-21 revision path; deleted_busines[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/A-26: a document rides the FULL chain — opaque ref persist[39m[90m…[39m [90m0.28s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit A-26 condition 2: resolution happens PER FETCH ATTEMPT — an expi[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-26 condition 3: Telegram's "file is too big" classifies throug[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06/T-05: the nonce is single-use — a REPLAY answers the neut[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14: a callback ACKs via answerCallbackQuery — valid silently,[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15: my_chat_member kicked/member publish telegram.bot_blocked[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03 detection half: a business message FROM the connection owne[39m[90m…[39m [90m0.13s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\InboundPipelineTest[22m [90m>[39m it A-26 condition 2:…   
+[39;1m  Failed asserting that two variables reference the same object.
+  [39;22m[31m-App\Domain\Conversations\Media\MediaOutcome Enum #2968 (Held)[39m[39;1m
+  [39;22m[32m+App\Domain\Conversations\Media\MediaOutcome Enum #3780 (Done)[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/InboundPipelineTest.php[39m:[32m202[39m
+    198▕     $message = Message::query()->where('external_message_id', '50006')->firstOrFail();
+    199▕ 
+    200▕     // Attempt 1: the expired reference re-resolves, getFile refuses → HOLD.
+    201▕     $out1 = app(MediaPipeline::class)->process($message->refresh(), 0, CarbonImmutable::now('UTC'));
+  ➜ 202▕     expect($out1)->toBe(MediaOutcome::Held)
+    203▕         ->and($flipping->getFileCalls)->toBe(1);
+    204▕     /** @var list<array<string, mixed>> $mediaHeld */
+    205▕     $mediaHeld = $message->refresh()->getAttribute('media');
+    206▕     expect($mediaHeld[0]['scan_status'])->toBe('scanning', 'the expired reference must HOLD (EC-11 path), never fail terminal');
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m202[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (48 assertions)[39m
+  [90mDuration:[39m [39m6.82s[39m
+

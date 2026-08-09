@@ -63,8 +63,16 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
 
     public function handleWebhook(array $raw): NormalizedInbound
     {
-        $message = $raw['message'] ?? $raw['business_message'] ?? null;
-        $updateId = $raw['update_id'] ?? null;
+        // S23 step 5: production traffic arrives as the router's ENVELOPE
+        // {bot, update, owner_phone?}; the conformance suite drives flat
+        // updates (constructor botKey). Same door, one code path.
+        $update = is_array($raw['update'] ?? null) ? $raw['update'] : $raw;
+        $botKey = is_string($raw['bot'] ?? null) && $raw['bot'] !== '' ? $raw['bot'] : $this->botKey;
+        $ownerPhone = ($raw['owner_phone'] ?? null) === true;
+
+        $message = $update['message'] ?? $update['business_message']
+            ?? $update['edited_message'] ?? $update['edited_business_message'] ?? null;
+        $updateId = $update['update_id'] ?? null;
 
         if (! is_array($message) || ! is_int($updateId)) {
             throw new InvalidArgumentException(
@@ -72,12 +80,7 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
             );
         }
 
-        if (! isset($message['text']) || ! is_string($message['text'])) {
-            // Telegram cannot express an internal note (BR-01/N-04); a message
-            // with no mappable customer content refuses here. Media kinds gain
-            // their mapping with the FR-13 chain (step 5).
-            throw new InvalidArgumentException('unmappable message content: no customer-content field this adapter maps yet.');
-        }
+        [$kind, $body, $media] = $this->mapContent($message, $botKey);
 
         $from = is_array($message['from'] ?? null) ? $message['from'] : [];
         $chat = is_array($message['chat'] ?? null) ? $message['chat'] : [];
@@ -106,9 +109,9 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
                 display: $display !== '' ? $display : ('telegram:'.(is_scalar($fromId) ? (string) $fromId : 'unknown')),
                 username: is_string($from['username'] ?? null) ? $from['username'] : null,
             ),
-            kind: MessageKind::Text,
-            body: $message['text'],
-            media: [],
+            kind: $kind,
+            body: $body,
+            media: $media,
             replyToExternalMessageId: $replyTo,
             channelMeta: [
                 'telegram_date' => $date,
@@ -117,9 +120,13 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
                 'connection_id' => is_string($message['business_connection_id'] ?? null)
                     ? $message['business_connection_id']
                     : null,
+                // T-03/FR-11: router-detected owner-phone marker — the
+                // attribution CONTRACT gap is escalated at the step-5
+                // checkpoint; the detection is proven here regardless.
+                'owner_phone' => $ownerPhone,
             ],
             occurredAt: CarbonImmutable::createFromTimestamp($date, 'UTC'),
-            dedupeKey: sprintf('%s:%d', $this->botKey, $updateId), // FR-11
+            dedupeKey: sprintf('%s:%d', $botKey, $updateId), // FR-11
         );
     }
 
@@ -225,6 +232,75 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
         } catch (TelegramApiError|TelegramTransportError $e) {
             return SendResult::failed(ErrorClassifier::classify($e));
         }
+    }
+
+    /**
+     * FR-13's inbound content mapping. Media items carry the OPAQUE A-26
+     * reference `telegram-file:{bot}/{file_id}` — the tokened URL never
+     * exists here (T-07); the chain resolves per fetch attempt.
+     *
+     * @param  array<array-key, mixed>  $message
+     * @return array{0: MessageKind, 1: ?string, 2: list<\App\Domain\Conversations\Adapters\InboundMedia>}
+     */
+    private function mapContent(array $message, string $botKey): array
+    {
+        if (isset($message['text']) && is_string($message['text'])) {
+            return [MessageKind::Text, $message['text'], []];
+        }
+
+        $caption = is_string($message['caption'] ?? null) ? $message['caption'] : null;
+        $ref = fn (mixed $fileId): string => sprintf('telegram-file:%s/%s', $botKey, is_string($fileId) ? $fileId : '');
+        $int = fn (mixed $v): ?int => is_int($v) ? $v : null;
+
+        if (is_array($message['photo'] ?? null) && $message['photo'] !== []) {
+            // FR-13: the LARGEST size (Telegram orders small→large).
+            $sizes = array_values(array_filter($message['photo'], 'is_array'));
+            $largest = $sizes[count($sizes) - 1];
+
+            return [MessageKind::Photo, $caption, [new \App\Domain\Conversations\Adapters\InboundMedia(
+                MessageKind::Photo, $ref($largest['file_id'] ?? ''), 'image/jpeg',
+                $int($largest['file_size'] ?? null), $int($largest['width'] ?? null), $int($largest['height'] ?? null),
+            )]];
+        }
+
+        foreach ([
+            ['voice', MessageKind::Voice, 'audio/ogg'],
+            ['video', MessageKind::Video, 'video/mp4'],
+            ['video_note', MessageKind::Video, 'video/mp4'],
+            ['audio', MessageKind::Audio, 'audio/mpeg'],
+            ['document', MessageKind::Document, 'application/octet-stream'],
+        ] as [$field, $mediaKind, $fallbackMime]) {
+            $part = $message[$field] ?? null;
+            if (! is_array($part)) {
+                continue;
+            }
+
+            $mime = is_string($part['mime_type'] ?? null) ? $part['mime_type'] : $fallbackMime;
+
+            return [$mediaKind, $caption, [new \App\Domain\Conversations\Adapters\InboundMedia(
+                $mediaKind, $ref($part['file_id'] ?? ''), $mime,
+                $int($part['file_size'] ?? null), $int($part['width'] ?? null), $int($part['height'] ?? null),
+                $int($part['duration'] ?? null),
+            )]];
+        }
+
+        if (is_array($message['sticker'] ?? null)) {
+            $sticker = $message['sticker'];
+            $animated = ($sticker['is_animated'] ?? false) === true || ($sticker['is_video'] ?? false) === true;
+
+            // EC-10/FR-13: animated stickers store as-is; the static-thumb-v1
+            // rendering (and its placeholder fallback) is the thumbnail
+            // chain's job — a thumbnail failure never blocks the message.
+            return [MessageKind::Sticker, $caption, [new \App\Domain\Conversations\Adapters\InboundMedia(
+                MessageKind::Sticker, $ref($sticker['file_id'] ?? ''),
+                $animated ? 'application/x-tgsticker' : 'image/webp',
+                $int($sticker['file_size'] ?? null), $int($sticker['width'] ?? null), $int($sticker['height'] ?? null),
+            )]];
+        }
+
+        // Telegram cannot express an internal note (BR-01/N-04); a message
+        // with no mappable customer content refuses here.
+        throw new InvalidArgumentException('unmappable message content: no customer-content field this adapter maps.');
     }
 
     /** @return array{0: string, 1: array<string, mixed>} [method, params] by payload kind (FR-16's mapping grows at step 7). */

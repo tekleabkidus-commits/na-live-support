@@ -21,6 +21,10 @@ return [
         'revoked' => 'የተሰረዘ',
     ],
 
+    'callback' => [
+        'neutral_toast' => 'ይህ አዝራር ጊዜው አልፎበታል — መልእክቱን እንደገና ይላኩ ወይም /menu ይተይቡ።',
+    ],
+
     'mode' => [
         'direct' => 'ቀጥታ ቦት',
         'business' => 'የቢዝነስ መለያ',

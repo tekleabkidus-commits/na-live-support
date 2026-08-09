@@ -213,6 +213,7 @@ function deadClamdPipeline(): MediaPipeline
 {
     return new MediaPipeline(
         app(MediaFetcher::class),
+        app(App\Domain\Conversations\Media\SourceUrlResolvers::class), // A-26 seam
         new ClamdClient('clamav', 9999, 1), // real closed port — nothing listens
         app(MediaStore::class),
         app(MessageRepository::class),

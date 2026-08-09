@@ -1,0 +1,24 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-11: a text message rides route → router → dedupe → identity →[39m[90m…[39m [90m4.73s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\InboundPipelineTest[22m [90m>[39m it FR-11: a text mes…   
+[39;1m  Failed asserting that an array contains 'messaging.inbound.duplicate_dropped'.[39;22m
+
+  at [32mtests/Feature/Telegram/InboundPipelineTest.php[39m:[32m110[39m
+    106▕     postUpdate($ctx, updateFixture('message'))->assertStatus(202);
+    107▕ 
+    108▕     $metrics = array_map(fn (array $r): mixed => $r['context']['metric'] ?? null, $records);
+    109▕     // FR-11: the {bot}:{update_id} dedupe must DROP the redelivery (sabotage #2).
+  ➜ 110▕     expect($metrics)->toContain('messaging.inbound.duplicate_dropped');
+    111▕     expect(Message::query()->where('direction', 'in')->count())->toBe(1, 'FR-11: a redelivered update_id must never produce a second row');
+    112▕ });
+    113▕ 
+    114▕ it('FR-12: an edit lands on the FR-21 revision path; deleted_business_messages tombstone through the existing door', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m110[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (7 assertions)[39m
+  [90mDuration:[39m [39m4.85s[39m
+
