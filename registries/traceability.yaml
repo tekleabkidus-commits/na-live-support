@@ -1553,13 +1553,8 @@ entries:
       on phone presence, reopen-on-inbound, calibration tightening (EC-14). Not yet
       executed.
   - ac_ref: "Doc05 AC-05"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 7 in the file tests/Feature/Telegram/ErrorClassificationTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Feature/Telegram/ErrorClassificationTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
@@ -1570,13 +1565,8 @@ entries:
       reason specified, incl. EC-08 doomed-retry avoidance and the A-20 enum additions.
       Not yet executed.
   - ac_ref: "Doc05 AC-06"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 7 in the file tests/Feature/Telegram/RateLimiterTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Feature/Telegram/RateLimiterTest.php
+    type: automated
     tier: property
     cadence: every-push
     environment: ci

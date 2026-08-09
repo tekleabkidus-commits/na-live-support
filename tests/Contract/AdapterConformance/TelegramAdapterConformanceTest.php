@@ -58,7 +58,7 @@ final class TelegramAdapterConformanceTest extends AdapterConformanceCase
             api: $this->lastApi,
             capabilities: $capabilities,
             botKey: 'conf-bot-8144038606',
-            tokenResolver: static function () use ($box): string {
+            tokenResolver: static function (array $channelMeta) use ($box): string {
                 if ($box->fail) {
                     throw new RuntimeException('scripted credentials failure (FS-03)');
                 }

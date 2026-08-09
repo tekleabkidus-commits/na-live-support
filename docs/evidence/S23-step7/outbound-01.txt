@@ -1,0 +1,100 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\ErrorClassificationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: every recorded Telegram error maps to the exact frozen re[39m[90m…[39m [90m4.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a transport failure (no HTTP answer) is network_error, re[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: a 429 whose retry_after fits the window RETRIES; one that[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08 retryAfter is carried on a within-window rate-limit so the[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\OutboundSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: send maps kind → method and carries business_connection_i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: terminal success is "Sent" with the channel message id —[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19: typing is best-effort — a send-action failure is silently[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: text over max_text splits at WORD boundaries into part i/[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: a single word longer than the budget is hard-split, never[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09 (sabotage #15): a resume recomputes the SAME segments and[39m[90m… [39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\RateLimiterTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20/AC-06: the per-chat bucket allows the burst then paces at[39m[90m… [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20: the per-bot bucket (25/s) caps across chats — a bot canno[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit R-05: a 429 penalty slows the per-bot refill for 60 s (adaptive[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-08: the check-and-consume is atomic — concurrent-shaped calls[39m[90m… [39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it F… [41;1m ArgumentCountError [49;22m  
+[39;1m  Redis::eval() expects at most 3 arguments, 9 given[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php[39m:[32m124[39m
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m112[39;22m
+  [33m4   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it F… [41;1m ArgumentCountError [49;22m  
+[39;1m  Redis::eval() expects at most 3 arguments, 9 given[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php[39m:[32m124[39m
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m112[39;22m
+  [33m4   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it R… [41;1m ArgumentCountError [49;22m  
+[39;1m  Redis::eval() expects at most 3 arguments, 9 given[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php[39m:[32m124[39m
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m112[39;22m
+  [33m4   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it T… [41;1m ArgumentCountError [49;22m  
+[39;1m  Redis::eval() expects at most 3 arguments, 9 given[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php[39m:[32m124[39m
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m112[39;22m
+  [33m4   [39m[39;1mapp/Domain/Telegram/Outbound/TelegramRateLimiter.php[39;22m:[39;1m89[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (53 assertions)[39m
+  [90mDuration:[39m [39m5.09s[39m
+

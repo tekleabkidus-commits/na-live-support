@@ -1,0 +1,55 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\WebhookHmacTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts a correctly signed DLR (FR-24 — the positive control)[39m[90m    [39m [90m5.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a wrong signature and a tampered body alike (FR-24)[39m[90m      [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a captured signature behind a fresh nonce — the HMAC cov[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the ±300 s window at its exact boundaries, with an inje[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends a nonce exactly once: the identical request replayed is r[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets an unsigned caller burn a nonce out of the cache (spe[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses unconfigured keys and absent headers with the same byte-[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit fails CLOSED on replay-cache outage while the Redis-free surface[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nonce single-use survives the window boundary honestly: expiry i[39m[90m…[39m [90m0.11s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.72s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it fails CLOSED on replay-ca…   
+[39;1m  Expected response status code [403] but received 202.
+Failed asserting that 202 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Auth/WebhookHmacTest.php[39m:[32m222[39m
+    218▕         // The HMAC surface: signature VALID, replay unverifiable → refused,
+    219▕         // with the named metric — never waved through (filed interpretation,
+    220▕         // ruling decision 3).
+    221▕         signedDlr($dlrPlaintext)
+  ➜ 222▕             ->assertForbidden()
+    223▕             ->assertJsonPath('code', 'webhook_rejected');
+    224▕ 
+    225▕         $metrics = array_map(
+    226▕             fn (array $r) => $r['context']['security_metric'] ?? null,
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it fails OPEN for staff and…    
+[39;1m  Exception "App\Support\Quota\QuotaCheckUnavailable" not thrown.[39;22m
+
+  at [32mtests/Feature/Foundation/QuotaTest.php[39m:[32m184[39m
+    180▕ 
+    181▕     // Public ingestion: refused until metering returns — and NOT as quota_exceeded,
+    182▕     // because "we cannot count" must never masquerade as "you are over".
+    183▕     expect(fn () => $meter->allow(Quota::AiTokensPerDay, 1, QuotaSurface::PublicIngestion))
+  ➜ 184▕         ->toThrow(QuotaCheckUnavailable::class);
+    185▕ });
+    186▕
+
+  [33m1   [39m[39;1mtests/Feature/Foundation/QuotaTest.php[39;22m:[39;1m184[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m14 passed[39;22m[90m (42 assertions)[39m
+  [90mDuration:[39m [39m8.02s[39m
+

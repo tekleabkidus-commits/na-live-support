@@ -1,0 +1,632 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\WebhookHmacTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit accepts a correctly signed DLR (FR-24 — the positive control)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a wrong signature and a tampered body alike (FR-24)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a captured signature behind a fresh nonce — the HMAC covers timestamp and nonce, not just the body[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enforces the ±300 s window at its exact boundaries, with an injected clock (FR-24)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit spends a nonce exactly once: the identical request replayed is refused with the metric (FR-24, AC-07)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit never lets an unsigned caller burn a nonce out of the cache (spend-after-verify)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses unconfigured keys and absent headers with the same byte-identical body (no-oracle ruling)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit fails CLOSED on replay-cache outage while the Redis-free surface stays up (FS posture, rulings 1 and 3)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit nonce single-use survives the window boundary honestly: expiry is Redis TTL, not test sleep[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the quota (NFR-06)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m
+  [31;1m⨯[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-06)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops below current usage (EC-09)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, in bytes against a GB limit[39m
+  [31;1m⨯[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter from it (FS-05)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when metering is unreachable (FS-01)[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\RateLimiterTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20/AC-06: the per-chat bucket allows the burst then paces at 1/s; refill restores capacity[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20: the per-bot bucket (25/s) caps across chats — a bot cannot exceed its global rate[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-05: a 429 penalty slows the per-bot refill for 60 s (adaptive slowdown, observable)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit T-08: the check-and-consume is atomic — concurrent-shaped calls never both take the last token[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mnormalization maps every contract field[39m
+  [31;1m⨯[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m
+  [31;1m⨯[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m
+  [31;1m⨯[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m
+  [31;1m⨯[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m
+  [31;1m⨯[39;22m[90m [39m[90man adapter cannot emit an internal note[39m
+  [31;1m⨯[39;22m[90m [39m[90msend success reports state sent[39m
+  [31;1m⨯[39;22m[90m [39m[90merror classification matches the frozen table[39m
+  [31;1m⨯[39;22m[90m [39m[90mcapability matrix gates every operation[39m
+  [31;1m⨯[39;22m[90m [39m[90mhealth answers with the contract shape[39m
+  [31;1m⨯[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it accepts a correctl… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it refuses a wrong si… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it refuses a captured… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it enforces the ±300…  [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it spends a nonce exa… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it never lets an unsi… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it refuses unconfigur… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it fails CLOSED on re… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it nonce single-use s… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it admits under the l… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it does not let a ref… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it raises the interna… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it blocks forward wri… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it enforces the cumul… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it persists counters…  [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\QuotaTest[22m [90m>[39m it fails OPEN for sta… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it FR-20/AC-06: t… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it FR-20: the per… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it R-05: a 429 pe… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\RateLimiterTest[22m [90m>[39m it T-08: the chec… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\TelegramAdapterConforman[22m… [41;1m Error [49;22m  
+[39;1m  Unknown named parameter $rateLimiterResolver[39;22m
+
+  at [32mapp/Providers/TelegramServiceProvider.php[39m:[32m85[39m
+     81▕                     }
+     82▕ 
+     83▕                     return $token;
+     84▕                 },
+  ➜  85▕                 rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
+     86▕             ),
+     87▕             'telegram-in',
+     88▕             'telegram-out',
+     89▕         );
+
+  [33m1   [39m[39;1mapp/Providers/TelegramServiceProvider.php[39;22m:[39;1m85[39;22m
+      [2m+11 vendor frames [22m
+  [33m13  [39m[39;1mtests/TestCase.php[39;22m:[39;1m44[39;22m
+
+
+  [90mTests:[39m    [31;1m31 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m0.94s[39m
+

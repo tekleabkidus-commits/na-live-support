@@ -1,0 +1,20 @@
+{
+  "_note": "AC-05: real-shaped Telegram error responses hardening the FR-18 classifier against recorded reality. Each maps to a frozen DeliveryFailureReason. Descriptions are the actual Bot API strings (public, no PII/token).",
+  "cases": [
+    { "name": "blocked", "http": 403, "description": "Forbidden: bot was blocked by the user", "expected": "blocked_by_user", "retryable": false },
+    { "name": "user_deactivated", "http": 403, "description": "Forbidden: user is deactivated", "expected": "blocked_by_user", "retryable": false },
+    { "name": "window_expired", "http": 400, "description": "Bad Request: BUSINESS_REPLY_WINDOW_EXPIRED", "expected": "window_expired", "retryable": false },
+    { "name": "connection_paused", "http": 400, "description": "Bad Request: BUSINESS_CONNECTION_PAUSED", "expected": "connection_paused", "retryable": false },
+    { "name": "bad_entities", "http": 400, "description": "Bad Request: can't parse entities: Unmatched end tag at byte offset 10", "expected": "invalid_content", "retryable": false },
+    { "name": "chat_not_found", "http": 400, "description": "Bad Request: chat not found", "expected": "invalid_content", "retryable": false },
+    { "name": "message_too_long", "http": 400, "description": "Bad Request: message is too long", "expected": "invalid_content", "retryable": false },
+    { "name": "rate_limited", "http": 429, "description": "Too Many Requests: retry after 7", "retry_after": 7, "expected": "rate_limited", "retryable": true },
+    { "name": "flood_wait", "http": 429, "description": "Too Many Requests: retry after 30", "retry_after": 30, "expected": "rate_limited", "retryable": true },
+    { "name": "bad_gateway", "http": 502, "description": "Bad Gateway", "expected": "channel_unavailable", "retryable": true },
+    { "name": "gateway_timeout", "http": 504, "description": "Gateway Timeout", "expected": "channel_unavailable", "retryable": true }
+  ],
+  "ec08_cases": [
+    { "name": "retry_within_window_proceeds", "http": 429, "retry_after": 300, "remaining_window": 1200, "expected": "rate_limited", "note": "20 min window, 5 min wait -> retry proceeds" },
+    { "name": "retry_beyond_window_doomed", "http": 429, "retry_after": 300, "remaining_window": 120, "expected": "window_expired", "note": "2 min window, 5 min wait -> immediate window_expired, no doomed retry" }
+  ]
+}

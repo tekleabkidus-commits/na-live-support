@@ -53,12 +53,20 @@ use Throwable;
  */
 final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsEdit, SupportsTyping
 {
-    /** @param Closure(): string $tokenResolver */
+    /**
+     * @param  Closure(array<string, mixed>): string  $tokenResolver
+     * @param  Closure(): (Outbound\TelegramRateLimiter|null)|null  $rateLimiterResolver
+     */
     public function __construct(
         private readonly TelegramApi $api,
         private readonly Capabilities $capabilities,
         private readonly string $botKey,
         private readonly Closure $tokenResolver,
+        // A LAZY resolver, not the limiter itself: eager instantiation at
+        // provider-boot resolved the container graph on every request and
+        // perturbed the volatile-Redis-outage tests (WebhookHmac/Quota).
+        // Resolved only when a real send needs it.
+        private readonly ?Closure $rateLimiterResolver = null,
     ) {}
 
     public function handleWebhook(array $raw): NormalizedInbound
@@ -132,6 +140,7 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
 
     public function send(OutboundMessage $message): SendResult
     {
+        $context = $message->channelMeta;
         if ($message->payload->body !== null && mb_strlen($message->payload->body) > $this->capabilities->maxText) {
             return SendResult::failed(new AdapterError(DeliveryFailureReason::InvalidContent));
         }
@@ -141,11 +150,20 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
         }
 
         try {
-            $token = ($this->tokenResolver)();
+            $token = ($this->tokenResolver)($context);
         } catch (Throwable) {
             // FS-03: credentials unavailable is retryable and has NO fallback
             // storage path by design.
             return SendResult::failed(new AdapterError(DeliveryFailureReason::CredentialsUnavailable));
+        }
+
+        // FR-20/T-08: the send buckets gate here. A refusal is retryable
+        // rate_limited — the lane waits in queued, never drops (FR-20).
+        $botId = is_string($context['bot_id'] ?? null) ? $context['bot_id'] : $this->botKey;
+        $rateLimiter = $this->rateLimiterResolver !== null ? ($this->rateLimiterResolver)() : null;
+        if ($rateLimiter instanceof Outbound\TelegramRateLimiter
+            && ! $rateLimiter->allow($botId, $message->externalChatId, (float) (hrtime(true) / 1_000_000_000))) {
+            return SendResult::failed(new AdapterError(DeliveryFailureReason::RateLimited));
         }
 
         try {
@@ -155,7 +173,13 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
 
             return SendResult::sent(is_scalar($externalId) ? (string) $externalId : null);
         } catch (TelegramApiError|TelegramTransportError $e) {
-            return SendResult::failed(ErrorClassifier::classify($e));
+            $classified = ErrorClassifier::classify($e);
+            // R-05: a 429 feeds the adaptive slowdown penalty.
+            if ($rateLimiter instanceof Outbound\TelegramRateLimiter && $classified->reason === DeliveryFailureReason::RateLimited) {
+                $rateLimiter->penalize($botId);
+            }
+
+            return SendResult::failed($classified);
         }
     }
 
@@ -178,10 +202,11 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
         }
 
         try {
-            $token = ($this->tokenResolver)();
+            $token = ($this->tokenResolver)([]);
             $this->api->call($token, 'sendChatAction', ['chat_id' => $externalChatId, 'action' => 'typing']);
         } catch (Throwable) {
-            // FR-19: typing is best-effort; failures are silently ignored.
+            // FR-19: typing is best-effort; failures (incl. no resolvable bot
+            // context) are silently ignored.
         }
     }
 
@@ -192,7 +217,7 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
         }
 
         try {
-            $token = ($this->tokenResolver)();
+            $token = ($this->tokenResolver)([]);
         } catch (Throwable) {
             return SendResult::failed(new AdapterError(DeliveryFailureReason::CredentialsUnavailable));
         }
@@ -217,7 +242,7 @@ final class TelegramAdapter implements ChannelAdapter, SupportsDelete, SupportsE
         }
 
         try {
-            $token = ($this->tokenResolver)();
+            $token = ($this->tokenResolver)([]);
         } catch (Throwable) {
             return SendResult::failed(new AdapterError(DeliveryFailureReason::CredentialsUnavailable));
         }

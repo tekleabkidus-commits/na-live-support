@@ -30,8 +30,10 @@ use App\Domain\Telegram\Api\TelegramTransportError;
  */
 final class ErrorClassifier
 {
-    public static function classify(TelegramApiError|TelegramTransportError $error): AdapterError
-    {
+    public static function classify(
+        TelegramApiError|TelegramTransportError $error,
+        ?int $remainingWindowSeconds = null,
+    ): AdapterError {
         if ($error instanceof TelegramTransportError) {
             return new AdapterError(DeliveryFailureReason::NetworkError);
         }
@@ -41,6 +43,15 @@ final class ErrorClassifier
         }
 
         if ($error->httpStatus === 429) {
+            // EC-08: a doomed retry is no retry. If honoring retry_after would
+            // land us at/after the window's close, classify window_expired NOW
+            // instead of scheduling a retry that can only fail.
+            if ($remainingWindowSeconds !== null
+                && $error->retryAfter !== null
+                && $error->retryAfter >= $remainingWindowSeconds) {
+                return new AdapterError(DeliveryFailureReason::WindowExpired);
+            }
+
             return new AdapterError(DeliveryFailureReason::RateLimited, $error->retryAfter);
         }
 

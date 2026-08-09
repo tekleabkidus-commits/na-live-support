@@ -31,7 +31,7 @@ function mappingAdapter(): TelegramAdapter
             replyWindow: ReplyWindow::duration(86_400),
         ),
         botKey: 'fixture-bot-uuid',
-        tokenResolver: static fn (): string => '8144038606:FAKECREDgggggggggggggggggggggggggg',
+        tokenResolver: static fn (array $channelMeta): string => '8144038606:FAKECREDgggggggggggggggggggggggggg',
     );
 }
 

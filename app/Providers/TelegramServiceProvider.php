@@ -65,9 +65,24 @@ final class TelegramServiceProvider extends ServiceProvider
                     replyWindow: \App\Domain\Conversations\Adapters\ReplyWindow::duration(86_400),
                 ),
                 botKey: '',
-                tokenResolver: static function (): string {
-                    throw new \RuntimeException('outbound token resolution wires at S23 step 7 (FS-03 posture until then).');
+                // S23 step 7: outbound token resolves PER SEND from the
+                // message's bot_id (the outbound lane carries channel_ref_id
+                // into channelMeta — the Doc 04 seam). No bot context → FS-03
+                // credentials_unavailable (retryable), never a wrong-bot token.
+                tokenResolver: function (array $channelMeta): string {
+                    $botId = $channelMeta['bot_id'] ?? null;
+                    if (! is_string($botId) || $botId === '') {
+                        throw new \RuntimeException('no bot_id in outbound context (FS-03 posture).');
+                    }
+                    $bot = \App\Models\TelegramBot::query()->find($botId);
+                    $token = $bot?->bot_token;
+                    if (! is_string($token)) {
+                        throw new \RuntimeException('bot has no stored token (FS-03 posture: retryable).');
+                    }
+
+                    return $token;
                 },
+                rateLimiterResolver: fn (): \App\Domain\Telegram\Outbound\TelegramRateLimiter => $this->app->make(\App\Domain\Telegram\Outbound\TelegramRateLimiter::class),
             ),
             'telegram-in',
             'telegram-out',
