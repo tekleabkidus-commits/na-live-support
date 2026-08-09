@@ -156,6 +156,40 @@ activated. Close-out RISKS carries verbatim: "staging bot token was exposed in a
 chat; owner declined rotation for the test environment; rotation is REQUIRED before
 production traffic" and A-24 rider 1's no-public-ingress statement (Doc 18 handoff row).
 
+## SESSION-23 (Doc 05) — STEP 10 UI SURFACES + DESIGN-DEVIATIONS (B6-S01/S02/S03)
+
+Built the three frozen Batch-6 admin surfaces at token fidelity: **B6-S01**
+(bots registry + wizard + mode selector), **B6-S02** (connection lifecycle:
+checklist, confirm gate, registry, loss states), **B6-S03** (reply-window
+settings). TOKENS-FIRST verified: the existing `resources/css/design-tokens.css`
+encoding of the Doc 05 fixed tokens (connection pills, reply-window chip,
+health rollup) was checked **hex-for-hex against B1-DS-design-system-v2 §2**
+both colourways (extraction confirmed identical) before the first screen — no
+literal styling outside the token layer (string-lint + the token audit).
+
+Shared components (tokens only, §13 a11y): `ConnectionStatePill`, `WindowChip`
+(THE shared countdown chip Doc 07 will consume — mm:ss under 10 min / h:mm
+above, periodic minute-resolution SR live region, reduced-motion static
+colour), `HealthRollupPill`, `StepChecklist` (role="status" per-step
+announcements). Every pill is icon+text, never colour alone.
+
+Proof (functional-state + a11y, NOT pixel): `tests/Browser/telegram-screens.spec.ts`
+— 13 passed: each screen in BOTH themes and BOTH viewports (1440/375), en AND
+am, axe-clean (wcag2a/2aa). C2 visible on S03 (window_hours editable at 1440,
+read-only notice at 375). NO pixel baselines are exported for Batch 6 — the
+traceability rows claim functional-state coverage only (the Doc 03 precedent).
+
+### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — Doc 05 step 10, every one filed)
+
+| # | File / frame | What differs | Class |
+|---|---|---|---|
+| 1 | B6-S01 §D, the mode segmented control's "recommended" tag | The drawn green (`--ds-success-text`, connection/status green) fails AA (2.6:1) on the SELECTED button's dark `--ds-accent` background; N-18's contrast validator has no override, so on the selected option the tag takes `--ds-accent-contrast` (green stays on the unselected option as drawn) | **1 (technical/a11y necessity)** |
+| 2 | B6-S01/S02/S03 pixel baselines | Not attached — Batch 6 export not fired (the Doc 03 precedent); traceability claims functional-state coverage only, not visual | — (pre-agreed bucket) |
+| 3 | S02 "Pending" connection pill | The frozen S02 delivery note flags a proposed Pending pill as an owner-ruling deviation; shipped here as a neutral (slate) pill reusing `--ds-window-open` tokens — icon `…` + word, contrast-safe, filed pending the owner ruling the design note requested | **2 (gap fill, design-system tokens)** |
+
+The label-token contrast deviation (`--ds-text-label`) is the STANDING S19
+filing already in DESIGN-DEVIATIONS; these screens inherit it, not re-file it.
+
 ## SESSION-23 (Doc 05) — EVENT-FAMILY RECONCILIATION (ordered at step-8 checkpoint)
 
 The plan enumerated **8 new events + 1 versioned bump** (expected catalog

@@ -1,0 +1,365 @@
+
+Running 13 tests using 1 worker
+
+
+  ✘   1 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean (6.4s)
+
+  ✘   2 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-1440 (6.4s)
+
+  ✘   3 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 (6.2s)
+
+  ✘   4 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean (6.3s)
+
+  ✘   5 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-375 (6.3s)
+
+  ✘   6 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 (6.2s)
+
+  ✘   7 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean (6.7s)
+
+  ✘   8 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 (6.4s)
+
+  ✘   9 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 (6.8s)
+
+  ✘  10 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean (6.4s)
+
+  ✘  11 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-375 (6.5s)
+
+  ✘  12 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 (6.3s)
+
+  ✘  13 [chromium] › tests/Browser/telegram-screens.spec.ts:124:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) (30.0s)
+
+
+  1) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="A01"], [data-frame="A07"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="A01"], [data-frame="A07"]').first()
+
+
+      82 |             await expect(
+      83 |                 page.locator('[data-frame="A01"], [data-frame="A07"]').first(),
+    > 84 |             ).toBeVisible();
+         |               ^
+      85 |             await expect(page.locator('[data-frame="A02"]')).toBeVisible(); // wizard
+      86 |             await expect(page.locator('[data-frame="B01"]')).toBeVisible(); // mode selector
+      87 |             await expect(page.locator('[data-mode-option="business"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:84:15
+
+    Error Context: test-results/telegram-screens-S01-bots--396b7-ight-1440-tokens-a11y-clean-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="C01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="C01"]')
+
+
+       96 |             await setTheme(page, theme);
+       97 |             await page.goto('/admin/telegram/connections');
+    >  98 |             await expect(page.locator('[data-frame="C01"]')).toBeVisible(); // checklist
+          |                                                              ^
+       99 |             await expect(page.locator('[data-frame="C02"]')).toBeVisible(); // pending confirm gate (fixture)
+      100 |             await expect(page.locator('[data-connection]').first()).toBeVisible();
+      101 |             // §13: the state pill carries an icon + word, never colour alone.
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:98:62
+
+    Error Context: test-results/telegram-screens-S02-conne-38e19--confirm-gate-in-light-1440-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="D01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="D01"]')
+
+
+      113 |             await setTheme(page, theme);
+      114 |             await page.goto('/admin/telegram/reply-window');
+    > 115 |             await expect(page.locator('[data-frame="D01"]')).toBeVisible();
+          |                                                              ^
+      116 |             // C2: window_hours is a real control; the shared chip (D03) renders.
+      117 |             await expect(page.locator('[data-setting="window_hours"]')).toBeVisible();
+      118 |             await expect(page.locator('[data-frame="D03"] [data-window-state]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:115:62
+
+    Error Context: test-results/telegram-screens-S03-windo-0a9c7-d-only-at-375-in-light-1440-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="A01"], [data-frame="A07"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="A01"], [data-frame="A07"]').first()
+
+
+      82 |             await expect(
+      83 |                 page.locator('[data-frame="A01"], [data-frame="A07"]').first(),
+    > 84 |             ).toBeVisible();
+         |               ^
+      85 |             await expect(page.locator('[data-frame="A02"]')).toBeVisible(); // wizard
+      86 |             await expect(page.locator('[data-frame="B01"]')).toBeVisible(); // mode selector
+      87 |             await expect(page.locator('[data-mode-option="business"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:84:15
+
+    Error Context: test-results/telegram-screens-S01-bots--53556-light-375-tokens-a11y-clean-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="C01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="C01"]')
+
+
+       96 |             await setTheme(page, theme);
+       97 |             await page.goto('/admin/telegram/connections');
+    >  98 |             await expect(page.locator('[data-frame="C01"]')).toBeVisible(); // checklist
+          |                                                              ^
+       99 |             await expect(page.locator('[data-frame="C02"]')).toBeVisible(); // pending confirm gate (fixture)
+      100 |             await expect(page.locator('[data-connection]').first()).toBeVisible();
+      101 |             // §13: the state pill carries an icon + word, never colour alone.
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:98:62
+
+    Error Context: test-results/telegram-screens-S02-conne-6a50e-t-confirm-gate-in-light-375-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="D01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="D01"]')
+
+
+      113 |             await setTheme(page, theme);
+      114 |             await page.goto('/admin/telegram/reply-window');
+    > 115 |             await expect(page.locator('[data-frame="D01"]')).toBeVisible();
+          |                                                              ^
+      116 |             // C2: window_hours is a real control; the shared chip (D03) renders.
+      117 |             await expect(page.locator('[data-setting="window_hours"]')).toBeVisible();
+      118 |             await expect(page.locator('[data-frame="D03"] [data-window-state]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:115:62
+
+    Error Context: test-results/telegram-screens-S03-windo-dfaf6-ad-only-at-375-in-light-375-chromium/error-context.md
+
+  7) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="A01"], [data-frame="A07"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="A01"], [data-frame="A07"]').first()
+
+
+      82 |             await expect(
+      83 |                 page.locator('[data-frame="A01"], [data-frame="A07"]').first(),
+    > 84 |             ).toBeVisible();
+         |               ^
+      85 |             await expect(page.locator('[data-frame="A02"]')).toBeVisible(); // wizard
+      86 |             await expect(page.locator('[data-frame="B01"]')).toBeVisible(); // mode selector
+      87 |             await expect(page.locator('[data-mode-option="business"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:84:15
+
+    Error Context: test-results/telegram-screens-S01-bots--48d4e-dark-1440-tokens-a11y-clean-chromium/error-context.md
+
+  8) [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="C01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="C01"]')
+
+
+       96 |             await setTheme(page, theme);
+       97 |             await page.goto('/admin/telegram/connections');
+    >  98 |             await expect(page.locator('[data-frame="C01"]')).toBeVisible(); // checklist
+          |                                                              ^
+       99 |             await expect(page.locator('[data-frame="C02"]')).toBeVisible(); // pending confirm gate (fixture)
+      100 |             await expect(page.locator('[data-connection]').first()).toBeVisible();
+      101 |             // §13: the state pill carries an icon + word, never colour alone.
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:98:62
+
+    Error Context: test-results/telegram-screens-S02-conne-f0dd3-t-confirm-gate-in-dark-1440-chromium/error-context.md
+
+  9) [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="D01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="D01"]')
+
+
+      113 |             await setTheme(page, theme);
+      114 |             await page.goto('/admin/telegram/reply-window');
+    > 115 |             await expect(page.locator('[data-frame="D01"]')).toBeVisible();
+          |                                                              ^
+      116 |             // C2: window_hours is a real control; the shared chip (D03) renders.
+      117 |             await expect(page.locator('[data-setting="window_hours"]')).toBeVisible();
+      118 |             await expect(page.locator('[data-frame="D03"] [data-window-state]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:115:62
+
+    Error Context: test-results/telegram-screens-S03-windo-9943f-ad-only-at-375-in-dark-1440-chromium/error-context.md
+
+  10) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="A01"], [data-frame="A07"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="A01"], [data-frame="A07"]').first()
+
+
+      82 |             await expect(
+      83 |                 page.locator('[data-frame="A01"], [data-frame="A07"]').first(),
+    > 84 |             ).toBeVisible();
+         |               ^
+      85 |             await expect(page.locator('[data-frame="A02"]')).toBeVisible(); // wizard
+      86 |             await expect(page.locator('[data-frame="B01"]')).toBeVisible(); // mode selector
+      87 |             await expect(page.locator('[data-mode-option="business"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:84:15
+
+    Error Context: test-results/telegram-screens-S01-bots--0f5c3--dark-375-tokens-a11y-clean-chromium/error-context.md
+
+  11) [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="C01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="C01"]')
+
+
+       96 |             await setTheme(page, theme);
+       97 |             await page.goto('/admin/telegram/connections');
+    >  98 |             await expect(page.locator('[data-frame="C01"]')).toBeVisible(); // checklist
+          |                                                              ^
+       99 |             await expect(page.locator('[data-frame="C02"]')).toBeVisible(); // pending confirm gate (fixture)
+      100 |             await expect(page.locator('[data-connection]').first()).toBeVisible();
+      101 |             // §13: the state pill carries an icon + word, never colour alone.
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:98:62
+
+    Error Context: test-results/telegram-screens-S02-conne-7b326-st-confirm-gate-in-dark-375-chromium/error-context.md
+
+  12) [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="D01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="D01"]')
+
+
+      113 |             await setTheme(page, theme);
+      114 |             await page.goto('/admin/telegram/reply-window');
+    > 115 |             await expect(page.locator('[data-frame="D01"]')).toBeVisible();
+          |                                                              ^
+      116 |             // C2: window_hours is a real control; the shared chip (D03) renders.
+      117 |             await expect(page.locator('[data-setting="window_hours"]')).toBeVisible();
+      118 |             await expect(page.locator('[data-frame="D03"] [data-window-state]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:115:62
+
+    Error Context: test-results/telegram-screens-S03-windo-68ed6-ead-only-at-375-in-dark-375-chromium/error-context.md
+
+  13) [chromium] › tests/Browser/telegram-screens.spec.ts:124:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.textContent: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('h1').first()
+
+
+      129 |     await page.goto('/admin/telegram/bots');
+      130 |     // A real Amharic title, not an i18n key like "telegram.ui.bots.title".
+    > 131 |     const heading = await page.locator('h1').first().textContent();
+          |                                                      ^
+      132 |     expect(heading ?? '').not.toContain('telegram.ui');
+      133 | });
+      134 |
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:131:54
+
+    Error Context: test-results/telegram-screens-§14-the-s-547e0-localized-copy-no-raw-keys--chromium/error-context.md
+
+  13 failed
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:124:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) 

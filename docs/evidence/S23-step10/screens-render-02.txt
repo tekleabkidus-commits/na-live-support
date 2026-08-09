@@ -1,0 +1,70 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ScreensRenderTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit S01: the bots screen renders via Inertia with server-localized c[39m[90m…[39m [90m5.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit S02: the connections screen renders the checklist and the pendin[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit S03: the reply-window screen renders editable settings and the s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: a staff user WITHOUT telegram.bots.view cannot open the[39m[90m… [39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  Inertia page component file [Admin/Telegram/Bots] does not exist.[39;22m
+
+  at [32mvendor/inertiajs/inertia-laravel/src/Testing/AssertableInertia.php[39m:[32m110[39m
+    106▕         if ($shouldExist || (is_null($shouldExist) && config('inertia.testing.ensure_pages_exist', true))) {
+    107▕             try {
+    108▕                 app('inertia.view-finder')->find($value);
+    109▕             } catch (InvalidArgumentException $exception) {
+  ➜ 110▕                 PHPUnit::fail(sprintf('Inertia page component file [%s] does not exist.', $value));
+    111▕             }
+    112▕         }
+    113▕ 
+    114▕         return $this;
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m42[39;22m
+      [2m+2 vendor frames [22m
+  [33m5   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m41[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  Inertia page component file [Admin/Telegram/Connections] does not exist.[39;22m
+
+  at [32mvendor/inertiajs/inertia-laravel/src/Testing/AssertableInertia.php[39m:[32m110[39m
+    106▕         if ($shouldExist || (is_null($shouldExist) && config('inertia.testing.ensure_pages_exist', true))) {
+    107▕             try {
+    108▕                 app('inertia.view-finder')->find($value);
+    109▕             } catch (InvalidArgumentException $exception) {
+  ➜ 110▕                 PHPUnit::fail(sprintf('Inertia page component file [%s] does not exist.', $value));
+    111▕             }
+    112▕         }
+    113▕ 
+    114▕         return $this;
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m63[39;22m
+      [2m+2 vendor frames [22m
+  [33m5   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  Inertia page component file [Admin/Telegram/WindowSettings] does not exist.[39;22m
+
+  at [32mvendor/inertiajs/inertia-laravel/src/Testing/AssertableInertia.php[39m:[32m110[39m
+    106▕         if ($shouldExist || (is_null($shouldExist) && config('inertia.testing.ensure_pages_exist', true))) {
+    107▕             try {
+    108▕                 app('inertia.view-finder')->find($value);
+    109▕             } catch (InvalidArgumentException $exception) {
+  ➜ 110▕                 PHPUnit::fail(sprintf('Inertia page component file [%s] does not exist.', $value));
+    111▕             }
+    112▕         }
+    113▕ 
+    114▕         return $this;
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m76[39;22m
+      [2m+2 vendor frames [22m
+  [33m5   [39m[39;1mtests/Feature/Telegram/ScreensRenderTest.php[39;22m:[39;1m75[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (28 assertions)[39m
+  [90mDuration:[39m [39m5.39s[39m
+

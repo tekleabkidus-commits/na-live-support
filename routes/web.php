@@ -42,6 +42,22 @@ Route::middleware([
         ->name('rbac.screens.pending');
 });
 
+// Doc 05 §8/§9 — the Telegram admin surfaces (B6-S01/S02/S03). Same staff
+// chain as the RBAC screens; permission-gated with the seeded telegram.* keys.
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('admin/telegram')->group(function (): void {
+    Route::get('bots', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'bots'])
+        ->middleware('permission:telegram.bots.view')->name('telegram.screens.bots');
+    Route::get('connections', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'connections'])
+        ->middleware('permission:telegram.connections.manage')->name('telegram.screens.connections');
+    Route::get('reply-window', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'window'])
+        ->middleware('permission:telegram.bots.manage')->name('telegram.screens.window');
+});
+
 // ── Doc 04 FS-05 — the dead-letter ops view (ruling R-17's class-2 fill).
 // Same staff chain as the admin screens; parked payloads are conversation
 // content, so the page is gated by the seeded conversations.view key (A-6).

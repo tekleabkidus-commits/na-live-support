@@ -1,0 +1,58 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ScreensRenderTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit S01: the bots screen renders via Inertia with server-localized c[39m[90m…[39m [90m4.97s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit S02: the connections screen renders the checklist and the pendin[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit S03: the reply-window screen renders editable settings and the s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: a staff user WITHOUT telegram.bots.view cannot open the[39m[90m… [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m it S01: the bots scree…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Telegram/ScreensRenderTest.php[39m:[32m41[39m
+     37▕     ]);
+     38▕ 
+     39▕     $this->actingAs($a['user'], 'staff')
+     40▕         ->get('/admin/telegram/bots')
+  ➜  41▕         ->assertOk()
+     42▕         ->assertInertia(fn ($page) => $page
+     43▕             ->component('Admin/Telegram/Bots')
+     44▕             ->where('t.title', __('telegram.ui.bots.title'))
+     45▕             ->has('bots', 1)
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m it S02: the connection…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Telegram/ScreensRenderTest.php[39m:[32m62[39m
+     58▕     ]);
+     59▕ 
+     60▕     $this->actingAs($a['user'], 'staff')
+     61▕         ->get('/admin/telegram/connections')
+  ➜  62▕         ->assertOk()
+     63▕         ->assertInertia(fn ($page) => $page
+     64▕             ->component('Admin/Telegram/Connections')
+     65▕             ->has('checklist', 3)
+     66▕             ->where('pending.account_name', 'Pending Acct')
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ScreensRenderTest[22m [90m>[39m it S03: the reply-wind…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Telegram/ScreensRenderTest.php[39m:[32m75[39m
+     71▕     $a = screenAdmin();
+     72▕ 
+     73▕     $this->actingAs($a['user'], 'staff')
+     74▕         ->get('/admin/telegram/reply-window')
+  ➜  75▕         ->assertOk()
+     76▕         ->assertInertia(fn ($page) => $page
+     77▕             ->component('Admin/Telegram/WindowSettings')
+     78▕             ->where('windowHours', 24)
+     79▕             ->where('readonly', false)
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m5.22s[39m
+

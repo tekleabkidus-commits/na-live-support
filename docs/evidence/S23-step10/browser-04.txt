@@ -1,0 +1,361 @@
+
+Running 13 tests using 1 worker
+
+
+  ✘   1 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean (2.4s)
+
+  ✓   2 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-1440 (1.8s)
+
+  ✓   3 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 (1.6s)
+
+  ✘   4 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean (1.8s)
+
+  ✓   5 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-375 (2.0s)
+
+  ✓   6 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 (1.9s)
+
+  ✘   7 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean (1.7s)
+
+  ✓   8 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 (1.8s)
+
+  ✓   9 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 (1.6s)
+
+  ✘  10 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean (1.7s)
+
+  ✓  11 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-375 (1.8s)
+
+  ✓  12 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 (1.6s)
+
+  ✓  13 [chromium] › tests/Browser/telegram-screens.spec.ts:124:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) (1.3s)
+
+
+  1) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean 
+
+    Error: S01 light-1440: ["color-contrast"]
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 58
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#22211d",
+    +               "contrastRatio": 2.6,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#156f45",
+    +               "fontSize": "7.5pt (10px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button type=\"button\" role=\"radio\" aria-checked=\"true\" data-mode-option=\"business\" class=\"rounded-md px-3 py-1.5 text-xs font-medium\" style=\"background: var(--ds-accent); color: var(--ds-accent-contrast);\">",
+    +                 "target": Array [
+    +                   "button[data-mode-option=\"business\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"ml-1 text-[10px]\" style=\"color: var(--ds-success-text);\">recommended</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".ml-1",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      67 | async function axeClean(page: Page, ctx: string): Promise<void> {
+      68 |     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    > 69 |     expect(r.violations, `${ctx}: ${JSON.stringify(r.violations.map((v) => v.id))}`).toEqual([]);
+         |                                                                                      ^
+      70 | }
+      71 |
+      72 | for (const theme of ['light', 'dark'] as const) {
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:69:86)
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:88:13
+
+    Error Context: test-results/telegram-screens-S01-bots--396b7-ight-1440-tokens-a11y-clean-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean 
+
+    Error: S01 light-375: ["color-contrast"]
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 58
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#22211d",
+    +               "contrastRatio": 2.6,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#156f45",
+    +               "fontSize": "7.5pt (10px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button type=\"button\" role=\"radio\" aria-checked=\"true\" data-mode-option=\"business\" class=\"rounded-md px-3 py-1.5 text-xs font-medium\" style=\"background: var(--ds-accent); color: var(--ds-accent-contrast);\">",
+    +                 "target": Array [
+    +                   "button[data-mode-option=\"business\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"ml-1 text-[10px]\" style=\"color: var(--ds-success-text);\">recommended</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".ml-1",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      67 | async function axeClean(page: Page, ctx: string): Promise<void> {
+      68 |     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    > 69 |     expect(r.violations, `${ctx}: ${JSON.stringify(r.violations.map((v) => v.id))}`).toEqual([]);
+         |                                                                                      ^
+      70 | }
+      71 |
+      72 | for (const theme of ['light', 'dark'] as const) {
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:69:86)
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:88:13
+
+    Error Context: test-results/telegram-screens-S01-bots--53556-light-375-tokens-a11y-clean-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean 
+
+    Error: S01 dark-1440: ["color-contrast"]
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 58
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#22211d",
+    +               "contrastRatio": 2.6,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#156f45",
+    +               "fontSize": "7.5pt (10px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button type=\"button\" role=\"radio\" aria-checked=\"true\" data-mode-option=\"business\" class=\"rounded-md px-3 py-1.5 text-xs font-medium\" style=\"background: var(--ds-accent); color: var(--ds-accent-contrast);\">",
+    +                 "target": Array [
+    +                   "button[data-mode-option=\"business\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"ml-1 text-[10px]\" style=\"color: var(--ds-success-text);\">recommended</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".ml-1",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      67 | async function axeClean(page: Page, ctx: string): Promise<void> {
+      68 |     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    > 69 |     expect(r.violations, `${ctx}: ${JSON.stringify(r.violations.map((v) => v.id))}`).toEqual([]);
+         |                                                                                      ^
+      70 | }
+      71 |
+      72 | for (const theme of ['light', 'dark'] as const) {
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:69:86)
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:88:13
+
+    Error Context: test-results/telegram-screens-S01-bots--48d4e-dark-1440-tokens-a11y-clean-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean 
+
+    Error: S01 dark-375: ["color-contrast"]
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 58
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#22211d",
+    +               "contrastRatio": 2.6,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#156f45",
+    +               "fontSize": "7.5pt (10px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button type=\"button\" role=\"radio\" aria-checked=\"true\" data-mode-option=\"business\" class=\"rounded-md px-3 py-1.5 text-xs font-medium\" style=\"background: var(--ds-accent); color: var(--ds-accent-contrast);\">",
+    +                 "target": Array [
+    +                   "button[data-mode-option=\"business\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 2.6 (foreground color: #156f45, background color: #22211d, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"ml-1 text-[10px]\" style=\"color: var(--ds-success-text);\">recommended</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".ml-1",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      67 | async function axeClean(page: Page, ctx: string): Promise<void> {
+      68 |     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    > 69 |     expect(r.violations, `${ctx}: ${JSON.stringify(r.violations.map((v) => v.id))}`).toEqual([]);
+         |                                                                                      ^
+      70 | }
+      71 |
+      72 | for (const theme of ['light', 'dark'] as const) {
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:69:86)
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:88:13
+
+    Error Context: test-results/telegram-screens-S01-bots--0f5c3--dark-375-tokens-a11y-clean-chromium/error-context.md
+
+  4 failed
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean 
+  9 passed (29.9s)
