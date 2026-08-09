@@ -952,6 +952,18 @@ behave exactly like this. Next recurrence: capture (automatic now) and check whe
 throttle key survives between tests.
 
 **ADVISOR DISPOSITION (S22): stays UNRESOLVED as filed; no action taken this session.**
+> **S23 UPDATE — HYPOTHESIS CONFIRMED AND THE PRE-CHOSEN FIX APPLIED.** CI run
+> 31306177472 (S23 step-3 tree) reddened on this file with the DECISIVE shape: one of
+> the three uniform-refusal responses answered `429 rate_limited` instead of
+> `{"status":"accepted"}` — the per-IP `auth-ip` throttle (20/min, keyed by IP, and
+> every in-process test shares 127.0.0.1) leaking across tests exactly as the S22
+> disposition predicted. Full CI log captured FIRST
+> (docs/evidence/S23-step4/ci-31306177472-stage3-full.log). The disposition's
+> pre-authorized fix is applied: the file's beforeEach clears its own ip bucket;
+> the throttle's BEHAVIOUR stays proven in-file (the R-6 attacker-ip attempts
+> assertion) and in the FR-03 suites. File green post-fix (6 passed / 72
+> assertions, risk0b-fix-01.txt). 0b is RESOLVED pending one clean recurrence-free
+> stretch; the re-run of 31306177472 was triggered per the record-keeping rule.
 Carried forward with its fix already chosen so the next session does not re-derive it:
 **if the throttle-leak hypothesis confirms on the next recurrence, the fix is clearing
 the throttle key in that file's own setup — test hygiene — and the throttle's BEHAVIOUR

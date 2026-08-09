@@ -90,6 +90,17 @@ function submitReset(string $token, string $password): Illuminate\Testing\TestRe
 beforeEach(function (): void {
     Mail::fake();
     Http::fake(['*' => Http::response('', 200)]); // breach bucket: empty
+
+    // RISK 0b RESOLVED (S23; the S22 advisor disposition's pre-chosen fix,
+    // applied on the recurrence that CONFIRMED the throttle-leak hypothesis:
+    // CI run 31306177472 — one refusal answered 429 rate_limited instead of
+    // the uniform accepted shape). The auth-ip limiter keys by IP and every
+    // in-process test shares 127.0.0.1, so OTHER files' auth traffic leaks
+    // into this one as suite order drifts. Clearing OUR ip's bucket is test
+    // hygiene, not weakened proof: the throttle's BEHAVIOUR stays proven
+    // in-file (the R-6 attacker-ip test below asserts real attempt counts)
+    // and in the FR-03 suites.
+    app(Illuminate\Cache\RateLimiter::class)->clear(md5('auth-ip'.'127.0.0.1'));
 });
 
 it('runs the whole FR-16 journey: request → email → new password → old dead, new works', function (): void {
