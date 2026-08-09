@@ -1,0 +1,151 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TelegramGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b: the app role cannot NAME any DB-time column on a Doc 05 table, INSERT or UPDATE — derived from the schema[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-04: bots and menus are archived, never dropped — DELETE denied; the three DELETE exceptions are DECISIONS, asserted[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 posture: menu versions are INSERT-only for the app — no UPDATE privilege on any column[39m
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-04: the transition trigger exists, is BEFORE UPDATE, and its function is plain (never SECURITY DEFINER)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit every Doc 05 table carries FORCED row-level security with the tenant_isolation policy[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it R-1… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42723]: Duplicate function: 7 ERROR:  function "telegram_connections_stamp_transition" already exists with same argument types (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE FUNCTION telegram_connections_stamp_transition() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.state IS DISTINCT FROM OLD.state THEN
+        NEW.last_state_changed_at := clock_timestamp();
+    END IF;
+    RETURN NEW;
+END
+$$)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mdatabase/migrations/2026_08_09_100100_create_telegram_business_connections_table.php[39;22m:[39;1m90[39;22m
+      [2m+39 vendor frames [22m
+  [33m47  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it FR-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42723]: Duplicate function: 7 ERROR:  function "telegram_connections_stamp_transition" already exists with same argument types (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE FUNCTION telegram_connections_stamp_transition() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.state IS DISTINCT FROM OLD.state THEN
+        NEW.last_state_changed_at := clock_timestamp();
+    END IF;
+    RETURN NEW;
+END
+$$)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mdatabase/migrations/2026_08_09_100100_create_telegram_business_connections_table.php[39;22m:[39;1m90[39;22m
+      [2m+39 vendor frames [22m
+  [33m47  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it SEC… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42723]: Duplicate function: 7 ERROR:  function "telegram_connections_stamp_transition" already exists with same argument types (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE FUNCTION telegram_connections_stamp_transition() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.state IS DISTINCT FROM OLD.state THEN
+        NEW.last_state_changed_at := clock_timestamp();
+    END IF;
+    RETURN NEW;
+END
+$$)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mdatabase/migrations/2026_08_09_100100_create_telegram_business_connections_table.php[39;22m:[39;1m90[39;22m
+      [2m+39 vendor frames [22m
+  [33m47  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it NFR… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42723]: Duplicate function: 7 ERROR:  function "telegram_connections_stamp_transition" already exists with same argument types (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE FUNCTION telegram_connections_stamp_transition() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.state IS DISTINCT FROM OLD.state THEN
+        NEW.last_state_changed_at := clock_timestamp();
+    END IF;
+    RETURN NEW;
+END
+$$)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mdatabase/migrations/2026_08_09_100100_create_telegram_business_connections_table.php[39;22m:[39;1m90[39;22m
+      [2m+39 vendor frames [22m
+  [33m47  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it eve… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42723]: Duplicate function: 7 ERROR:  function "telegram_connections_stamp_transition" already exists with same argument types (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE FUNCTION telegram_connections_stamp_transition() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.state IS DISTINCT FROM OLD.state THEN
+        NEW.last_state_changed_at := clock_timestamp();
+    END IF;
+    RETURN NEW;
+END
+$$)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mdatabase/migrations/2026_08_09_100100_create_telegram_business_connections_table.php[39;22m:[39;1m90[39;22m
+      [2m+39 vendor frames [22m
+  [33m47  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m14.12s[39m
+

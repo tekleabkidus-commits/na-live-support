@@ -1,0 +1,34 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TelegramGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b: the app role cannot NAME any DB-time column on a Doc 05 t[39m[90m…[39m [90m5.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: bots and menus are archived, never dropped — DELETE denie[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 posture: menu versions are INSERT-only for the app — no U[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: the transition trigger exists, is BEFORE UPDATE, and its[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 05 table carries FORCED row-level security with the te[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it R-19b: the app role…   
+[39;1m  telegram_bots INSERT: app-denied columns are [], the filed R-19b analysis says [created_at] — a column moved without the plan moving
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'created_at',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/TelegramGrantPhysicsTest.php[39m:[32m107[39m
+    103▕             }
+    104▕ 
+    105▕             [, $denied] = telegramAppColumnSplit($table, $privilege);
+    106▕ 
+  ➜ 107▕             expect($denied)->toBe($expected, sprintf(
+    108▕                 '%s %s: app-denied columns are [%s], the filed R-19b analysis says [%s] — a column moved without the plan moving',
+    109▕                 $table, $privilege, implode(', ', $denied), implode(', ', $expected),
+    110▕             ));
+    111▕         }
+
+  [33m1   [39m[39;1mtests/Isolation/TelegramGrantPhysicsTest.php[39;22m:[39;1m107[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (38 assertions)[39m
+  [90mDuration:[39m [39m5.54s[39m
+

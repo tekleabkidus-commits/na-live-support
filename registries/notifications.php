@@ -21,6 +21,51 @@ declare(strict_types=1);
 */
 
 return [
-    // Intentionally empty in Session 0. First entries arrive with Doc 14
-    // (categories referenced earlier are registered by their owning docs).
+    // ── Doc 05 (Telegram) — the registry's first entries, per S23 correction
+    //    C3: every admin notification Doc 05 mints is a registered category,
+    //    same-commit as its producer (producers land steps 4–11; categories
+    //    registered at step 1 so no producer can ship uncategorised).
+    [
+        // FR-09/US-04: connection paused or revoked — the operational alert.
+        'category_key' => 'notify.telegram.connection_state',
+        'label_i18n_key' => 'telegram.notify.connection_state',
+        'default_channels' => ['in_app', 'email'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-05 direct mode: business updates arriving on a direct-mode bot —
+        // the misconfiguration signal.
+        'category_key' => 'notify.telegram.misconfigured_source',
+        'label_i18n_key' => 'telegram.notify.misconfigured_source',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // SEC-04: a connection pending unconfirmed for 10 minutes — a
+        // security control's alert, not a courtesy.
+        'category_key' => 'notify.telegram.connection_pending',
+        'label_i18n_key' => 'telegram.notify.connection_pending',
+        'default_channels' => ['in_app', 'email'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FS-04: flap damping — >3 transitions/hour collapse into one digest.
+        'category_key' => 'notify.telegram.connection_flap_digest',
+        'label_i18n_key' => 'telegram.notify.connection_flap_digest',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-22: the optional closing-window agent notification (gated by
+        // telegram.window.closing_notify).
+        'category_key' => 'notify.telegram.window_closing',
+        'label_i18n_key' => 'telegram.notify.window_closing',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
 ];

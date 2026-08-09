@@ -525,4 +525,101 @@ return [
         'tenant_editable' => true,
         'owning_doc' => 'Doc06',
     ],
+
+    // ── Doc 05 (Telegram) — S23 plan §3; editability per correction C2: set by
+    //    what the frozen B6 frames draw, frame cited per entry. A-5's
+    //    messaging.rate.* names are the precedent; telegram.* never collides.
+    [
+        // FR-21: the ~24 h on-behalf reply window. max:24 IS the platform
+        // maximum (Telegram's own behavior); BR-05's never-extend-beyond-
+        // observed is the calibration code's job, not this clamp's. Drawn
+        // operator-editable at B6-S03 D01/D02 (C2 ⇒ true).
+        'key' => 'telegram.business.window_hours',
+        'type' => 'int',
+        'default' => 24,
+        'validation' => 'required|integer|min:1|max:24',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-22 DEFINES closing as ≤2 h — the threshold is the document's,
+        // not the operator's (correction C1: tenant_editable FALSE). Platform
+        // dial retained for a future doc-author ruling only.
+        'key' => 'telegram.window.closing_hours',
+        'type' => 'int',
+        'default' => 2,
+        'validation' => 'required|integer|min:1|max:12',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-22's "optional agent notification" — the option the document
+        // gives operators (C1). Drawn at B6-S03 D03 (C2 ⇒ true).
+        'key' => 'telegram.window.closing_notify',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-20: per-bot token bucket. Telegram's global ~30 msg/s ceiling is
+        // the platform maximum (J07 locked floor). Drawn at B6-S06 F08 with
+        // the J03–J06 per-key row contract (C2 ⇒ true).
+        'key' => 'telegram.rate.bot_per_second',
+        'type' => 'int',
+        'default' => 25,
+        'validation' => 'required|integer|min:1|max:30',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-20: per-chat sustained rate — Telegram guidance is 1 msg/s and
+        // that IS the platform maximum. Drawn at B6-S06 F08 (C2 ⇒ true).
+        'key' => 'telegram.rate.chat_per_second',
+        'type' => 'int',
+        'default' => 1,
+        'validation' => 'required|integer|min:1|max:1',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-20: per-chat burst capacity. Drawn at B6-S06 F08 (C2 ⇒ true).
+        'key' => 'telegram.rate.chat_burst',
+        'type' => 'int',
+        'default' => 3,
+        'validation' => 'required|integer|min:1|max:5',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-29: failure-rate %% at which a bot's rollup reads degraded.
+        // Drawn at B6-S06 F04 with the per-key row contract (C2 ⇒ true).
+        'key' => 'telegram.health.degraded_failure_pct',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:1|max:100',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-29: failure-rate %% at which the rollup reads down. Drawn at
+        // B6-S06 F04 (C2 ⇒ true).
+        'key' => 'telegram.health.down_failure_pct',
+        'type' => 'int',
+        'default' => 50,
+        'validation' => 'required|integer|min:1|max:100',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FS-02: a normally-active bot silent longer than this raises the
+        // no-inbound heartbeat alert. Drawn at B6-S06 F04 (C2 ⇒ true).
+        'key' => 'telegram.health.silent_inbound_minutes',
+        'type' => 'int',
+        'default' => 60,
+        'validation' => 'required|integer|min:5|max:1440',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc05',
+    ],
 ];

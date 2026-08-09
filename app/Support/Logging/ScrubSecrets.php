@@ -35,8 +35,17 @@ use Monolog\Processor\ProcessorInterface;
  *
  * Arrays recurse (access-log shapes are nested); anything deeper than the
  * depth cap is redacted wholesale — the safe direction again. The MESSAGE
- * string is deliberately untouched: free text has no keys to match, so
- * message-level leaks are the seeded sweep's to catch, and it does.
+ * string is deliberately untouched by KEY matching: free text has no keys to
+ * match, so message-level leaks are the seeded sweep's to catch, and it does.
+ *
+ * NFR-06 AMENDMENT (Doc 05, ruling A-19): two VALUE-shape patterns join the
+ * key-shape rule — the Telegram bot-token format and the api.telegram.org
+ * file-URL format (T-07: file URLs CONTAIN the token). These are the only
+ * value patterns because they are the only formats precise enough to carry
+ * near-zero false-positive risk; they apply to string values at every depth
+ * AND to the message string, since a token is a token wherever it lands.
+ * tests/Security/TelegramScrubberPatternsTest.php proves both with planted
+ * positive controls on the rendered sink.
  */
 final class ScrubSecrets implements ProcessorInterface
 {
@@ -66,11 +75,23 @@ final class ScrubSecrets implements ProcessorInterface
     /** Identifier/counter suffixes that always pass (they are not secrets). */
     private const EXEMPT_SUFFIXES = ['_id', '_count'];
 
+    /**
+     * NFR-06 value-shape patterns (Doc 05): the bot-token format BotFather
+     * issues, and the file-download URL that embeds it (T-07). File-URL first:
+     * scrubbing the whole URL beats leaving `api.telegram.org/file/[scrubbed]`
+     * fragments behind.
+     */
+    private const VALUE_PATTERNS = [
+        '~https?://api\.telegram\.org/file/\S+~i',
+        '/\b\d{6,12}:[A-Za-z0-9_-]{30,}(?![A-Za-z0-9_-])/',
+    ];
+
     public function __invoke(LogRecord $record): LogRecord
     {
         // `extra` is scrubbed too: AttachLogContext only adds `_id`-suffixed
         // keys, but a future processor must not become an unscrubbed side door.
         return $record->with(
+            message: $this->scrubValue($record->message),
             context: $this->scrub($record->context, 0),
             extra: $this->scrub($record->extra, 0),
         );
@@ -95,10 +116,22 @@ final class ScrubSecrets implements ProcessorInterface
 
             if (is_array($value)) {
                 $values[$key] = $this->scrub($value, $depth + 1);
+
+                continue;
+            }
+
+            if (is_string($value)) {
+                $values[$key] = $this->scrubValue($value);
             }
         }
 
         return $values;
+    }
+
+    /** NFR-06: redact Telegram token/file-URL shapes wherever they appear. */
+    private function scrubValue(string $value): string
+    {
+        return (string) preg_replace(self::VALUE_PATTERNS, self::REDACTED, $value);
     }
 
     private function isSecretShaped(string $key): bool

@@ -1,0 +1,27 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\TelegramGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app role cannot NAME any DB-time column on a Doc 05 t[39m[90m…[39m [90m3.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: bots and menus are archived, never dropped — DELETE denie[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 posture: menu versions are INSERT-only for the app — no U[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: the transition trigger exists, is BEFORE UPDATE, and its[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit every Doc 05 table carries FORCED row-level security with the te[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\TelegramGrantPhysicsTest[22m [90m>[39m it every Doc 05 table…    
+[39;1m  Failed asserting that an array contains 'telegram_bots: the tenant_isolation policy is missing'.[39;22m
+
+  at [32mtests/Isolation/TelegramGrantPhysicsTest.php[39m:[32m168[39m
+    164▕             'SELECT polname FROM pg_policy WHERE polrelid = ?::regclass',
+    165▕             [$table],
+    166▕         );
+    167▕         expect(array_map(static fn (object $p): string => $p->polname, $policies))
+  ➜ 168▕             ->toContain('tenant_isolation', "{$table}: the tenant_isolation policy is missing");
+    169▕     }
+    170▕ });
+    171▕
+
+  [33m1   [39m[39;1mtests/Isolation/TelegramGrantPhysicsTest.php[39;22m:[39;1m168[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (39 assertions)[39m
+  [90mDuration:[39m [39m3.50s[39m
+

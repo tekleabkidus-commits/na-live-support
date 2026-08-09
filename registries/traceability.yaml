@@ -1484,3 +1484,150 @@ entries:
       consuming assertions are the pre-agreed Doc 15 deferral. R-03's DST-dated fixtures
       arrive with the timers in step 5, where a date boundary can actually affect a
       comparison.
+
+  # ── Doc 05 (Telegram Channel) — S23. Mapped at step 1 per ADR 0004 (the row
+  #    left NOT STARTED at plan approval). Rows are HONEST about what has
+  #    executed: only NFR-06's scrubber suite exists today; every other row
+  #    names its planned suite and step and says so in `gap`. A row flips to
+  #    covered only with executed output on record.
+  - ac_ref: "Doc05 AC-01"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 5 in the file tests/Feature/Telegram/InboundMappingTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Planned (S23 step 5): fixture suite covering every FR-01 allowed update type to
+      exact NormalizedInbound, incl. owner-phone attribution and deletion tombstones.
+      Not yet executed; this row is a commitment, not a claim.
+  - ac_ref: "Doc05 AC-02"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 6 in the file tests/Feature/Telegram/ModeMatrixTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Planned (S23 step 6): direct/business/hybrid x (direct inbound, business inbound)
+      incl. misconfiguration alert and redirect template. Not yet executed.
+  - ac_ref: "Doc05 AC-03"
+    suite_path: manual
+    type: drill
+    tier: integration
+    cadence: release
+    environment: staging
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      Owner-assisted live walk on the real staging Business account (A-24 capture-replay
+      strategy: BotFather + phone procedure, states/events/alerts/rescue verified at
+      each step). Scheduled S23 step 6; evidence lands in docs/evidence/S23-step6/.
+    gap: Not yet executed.
+  - ac_ref: "Doc05 AC-04"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 8 in the file tests/Feature/Telegram/WindowMechanicsTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Planned (S23 step 8): open→closing→expired, composer contract states, SMS gating
+      on phone presence, reopen-on-inbound, calibration tightening (EC-14). Not yet
+      executed.
+  - ac_ref: "Doc05 AC-05"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 7 in the file tests/Feature/Telegram/ErrorClassificationTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Planned (S23 step 7): every Telegram error fixture lands in the Doc 04 state and
+      reason specified, incl. EC-08 doomed-retry avoidance and the A-20 enum additions.
+      Not yet executed.
+  - ac_ref: "Doc05 AC-06"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 7 in the file tests/Feature/Telegram/RateLimiterTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: property
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Planned (S23 step 7): bucket conformance under synthetic load, 429 adaptive
+      slowdown observable, per-chat FIFO preserved. Not yet executed.
+  - ac_ref: "Doc05 AC-07"
+    suite_path: manual
+    type: manual
+    justification: >-
+      Coverage is COMMITTED as automated at S23 step 3 in the file tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php;
+      this row converts to that path in the same commit that creates it. A
+      manual row here is the gate-sanctioned shape for planned-not-yet-written
+      automation — never a claim that testing happened.
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      Capability-truth half planned S23 step 3 (delivered UNSUPPORTED in the declared
+      set + state-mapping tests). The DOM half (no delivered state ever renders) is the
+      pre-agreed Doc 07 bucket. Not yet executed.
+  - ac_ref: "Doc05 AC-08"
+    suite_path: manual
+    type: drill
+    tier: browser
+    cadence: release
+    environment: staging
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      Real-Telegram design proof (A-24 rider): publish/rollback round-trip with dual
+      previews compared against actual staging-bot renders via owner-supplied
+      screenshots; ≤10 s propagation measured by automated test
+      (tests/Feature/Telegram/MenuDesignerTest.php, step 9/11).
+    gap: Not yet executed.
+  - ac_ref: "Doc05 AC-09"
+    suite_path: tests/Security/TelegramScrubberPatternsTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    gap: >-
+      EXECUTED so far: the NFR-06 scrubber halves (token/file-URL value shapes, planted
+      positive controls — docs/evidence/S23-step1/scrubber-patterns-01.txt). Remaining
+      halves (token absent from UI, unconfirmed-connection routing block, callback
+      replay rejection, viewer masking) land in tests/Security/TelegramSecurityTest.php
+      at steps 5/6/11.
