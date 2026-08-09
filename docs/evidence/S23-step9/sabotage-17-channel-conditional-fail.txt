@@ -1,0 +1,2 @@
+no-channel-conditionals: app/Domain/Telegram/ModePolicy.php:32:        if ($channel === 'telegram') { /* SABOTAGE #17: planted channel conditional */ }
+no-channel-conditionals: FAIL (1 violation(s)). Channel behavior belongs behind the Channel Adapter contract (Doc 04 T-09, invariant N-20).

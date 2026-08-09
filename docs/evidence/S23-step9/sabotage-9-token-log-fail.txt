@@ -1,0 +1,61 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\TelegramScrubberPatternsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-06: a bot-token-shaped VALUE under an innocent key never rea[39m[90m…[39m [90m4.97s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-06: a token inside the MESSAGE string is scrubbed — free tex[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\TelegramScrubberPatternsTest[22m [90m>[39m it NFR-06: a bot-to…   
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Security/TelegramScrubberPatternsTest.php[39m:[32m72[39m
+     68▕     expect(telegramSinkContains($path, 'telegram token value probe'))->toBeTrue('the probe never reached the sink — the scan below would be vacuous');
+     69▕     // Positive control: the near-miss proves the scanner AND the boundary.
+     70▕     expect(telegramSinkContains($path, NEAR_MISS_TOKEN))->toBeTrue('the near-miss control was eaten — the pattern is wider than filed, or the scanner is dead');
+     71▕     expect(telegramSinkContains($path, 'benign-reason-survives'))->toBeTrue('benign context was eaten — over-scrubbing breaks the logs SEC-08 wants kept useful');
+  ➜  72▕     expect(telegramSinkContains($path, ScrubSecrets::REDACTED))->toBeTrue();
+     73▕     expect(telegramSinkContains($path, FAKE_BOT_TOKEN))->toBeFalse('a bot-token-shaped value reached the rendered sink (NFR-06)');
+     74▕ });
+     75▕ 
+     76▕ it('NFR-06: a token inside the MESSAGE string is scrubbed — free text is a log too', function (): void {
+
+  [33m1   [39m[39;1mtests/Security/TelegramScrubberPatternsTest.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\TelegramScrubberPatternsTest[22m [90m>[39m it NFR-06: a token…    
+[39;1m  a bot token in the message string reached the rendered sink (NFR-06)
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/TelegramScrubberPatternsTest.php[39m:[32m83[39m
+     79▕     Log::warning('getFile failed for '.FAKE_BOT_TOKEN.' — retrying');
+     80▕ 
+     81▕     expect(telegramSinkContains($path, 'getFile failed'))->toBeTrue('the probe never reached the sink');
+     82▕     expect(telegramSinkContains($path, 'retrying'))->toBeTrue('message tail was eaten — the pattern must replace only the token');
+  ➜  83▕     expect(telegramSinkContains($path, FAKE_BOT_TOKEN))->toBeFalse('a bot token in the message string reached the rendered sink (NFR-06)');
+     84▕ });
+     85▕ 
+     86▕ it('T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.org/file fragment survives; benign URLs pass', function (): void {
+     87▕     $path = telegramScrubSink();
+
+  [33m1   [39m[39;1mtests/Security/TelegramScrubberPatternsTest.php[39;22m:[39;1m83[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\TelegramScrubberPatternsTest[22m [90m>[39m it T-07: a Telegram…   
+[39;1m  the token inside the file URL reached the sink (T-07)
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/TelegramScrubberPatternsTest.php[39m:[32m96[39m
+     92▕     ]);
+     93▕ 
+     94▕     expect(telegramSinkContains($path, 'media fetch probe'))->toBeTrue('the probe never reached the sink');
+     95▕     expect(telegramSinkContains($path, 'https://example.com/keep-me-visible'))->toBeTrue('a benign URL was eaten — the file-URL pattern must stay host-anchored');
+  ➜  96▕     expect(telegramSinkContains($path, FAKE_BOT_TOKEN))->toBeFalse('the token inside the file URL reached the sink (T-07)');
+     97▕     expect(telegramSinkContains($path, 'api.telegram.org/file'))->toBeFalse('a file-URL fragment survived — the URL must be scrubbed whole');
+     98▕ });
+     99▕
+
+  [33m1   [39m[39;1mtests/Security/TelegramScrubberPatternsTest.php[39;22m:[39;1m96[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m5.09s[39m
+

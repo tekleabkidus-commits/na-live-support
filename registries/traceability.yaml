@@ -1503,13 +1503,8 @@ entries:
       exact NormalizedInbound, incl. owner-phone attribution and deletion tombstones.
       Not yet executed; this row is a commitment, not a claim.
   - ac_ref: "Doc05 AC-02"
-    suite_path: manual
-    type: manual
-    justification: >-
-      Coverage is COMMITTED as automated at S23 step 6 in the file tests/Feature/Telegram/ModeMatrixTest.php;
-      this row converts to that path in the same commit that creates it. A
-      manual row here is the gate-sanctioned shape for planned-not-yet-written
-      automation — never a claim that testing happened.
+    suite_path: tests/Feature/Telegram/DirectSurfaceTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci

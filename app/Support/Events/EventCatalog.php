@@ -357,6 +357,13 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc18/Alerting'],
             'description' => 'FR-15\'s 10-minute head-block cap fired: the stuck head was demoted and the lane drains past it (event name filed as interpretation A-4).',
         ],
+        'telegram.handoff_requested' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'external_chat_id'],
+            'producers' => ['Doc05/CommandHandler'],
+            'consumers' => ['Doc09/AI', 'Doc06/Routing'],
+            'description' => 'FR-25: /human — the customer asked for a human. The Doc 09/06 handoff seam acts on it. Name filed as A-24 (the trigger event is unnamed by Doc 09 FR-12 / Doc 06).',
+        ],
         'telegram.window.reopened' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'conversation_id', 'expires_at', 'assignee_id'],

@@ -1,0 +1,24 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\DirectSurfaceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin[39m[90m…[39m [90m5.47s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\DirectSurfaceTest[22m [90m>[39m it BR-06 (sabotage #14…   
+[39;1m  Exception "DomainException" not thrown.[39;22m
+
+  at [32mtests/Feature/Telegram/DirectSurfaceTest.php[39m:[32m127[39m
+    123▕     $policy->assertRedirectHasLink('Contact @BrandSupport'); // no throw
+    124▕ 
+    125▕     // Without any tappable link: refused.
+    126▕     expect(fn () => $policy->assertRedirectHasLink('Please go away, we cannot help here.'))
+  ➜ 127▕         ->toThrow(DomainException::class, 'tappable account link');
+    128▕ });
+    129▕ 
+    130▕ it('FR-05 direct mode: a business update is flagged unconfigured_source (misconfiguration signal), not routed as normal', function (): void {
+    131▕     expect(app(ModePolicy::class)->classifyInbound('direct', 'business'))->toBe('unconfigured_source');
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/DirectSurfaceTest.php[39;22m:[39;1m127[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m5.53s[39m
+

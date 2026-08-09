@@ -1,0 +1,53 @@
+
+[dev-hardware-indicative] NFR-05 menu publish propagation: 10.65 ms (budget 10000 ms) WITHIN
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\DirectSurfaceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-25 /status: reads REAL Doc 06 ticket data through the tickets[39m[90m…[39m [90m5.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-25 /human: emits telegram.handoff_requested (the Doc 09/06 se[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-25/§14 /language completeness gate: a COMPLETE language is li[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-28: a template renders variables; an UNBUILT source ({{queue_[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05 business mode: a direct message gets the redirect reply, w[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05 direct mode: a business update is flagged unconfigured_sou[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: leaving business mode with active connections needs typed[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-27/T-06/NFR-05: publish is versioned with instant rollback, a[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced[39m[90m       [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\Direct[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "tickets_one_open_family" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "status", "priority", "source") values (019fe854-f8f9-71c3-83c7-caa8727c77ce, 019fe854-f8aa-73e0-99d7-fa8d321f18e5, 019fe854-f8f0-7161-b3e4-66173d556f9a, 019fe854-f8ee-72cd-9d4f-b72e801fa099, 102, pending_customer, normal, agent))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Telegram/DirectSurfaceTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\DirectSurfaceTest[22m [90m>[39m it FR-25/§14 /language…   
+[39;1m  Failed asserting that an array contains '§14: a complete template set is offered'.[39;22m
+
+  at [32mtests/Feature/Telegram/DirectSurfaceTest.php[39m:[32m88[39m
+     84▕     seedTemplate($f['bot'], 'am', 'greeting', 'am greeting');
+     85▕ 
+     86▕     $languages = app(CommandHandler::class)->availableLanguages($f['bot']);
+     87▕ 
+  ➜  88▕     expect($languages)->toContain('en', '§14: a complete template set is offered');
+     89▕     expect($languages)->not->toContain('am', '§14: an incomplete set is NOT offered');
+     90▕ });
+     91▕ 
+     92▕ it('FR-28: a template renders variables; an UNBUILT source ({{queue_wait}}) resolves through a STATED seam fixture, never blank', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/DirectSurfaceTest.php[39;22m:[39;1m88[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m6.85s[39m
+

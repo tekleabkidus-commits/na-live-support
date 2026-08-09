@@ -1,0 +1,26 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\WindowCalibrationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-21 (plan row 4): the window computes from the message DB-time[39m[90m…[39m [90m4.55s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WindowCalibrationTest[22m [90m>[39m it FR-… [41;1m ParseError [49;22m  
+[39;1m  syntax error, unexpected token ",", expecting "]"[39;22m
+
+  at [32mapp/Domain/Telegram/Window/WindowTracker.php[39m:[32m53[39m
+     49▕                     reply_window_state = \'open\'
+     50▕                FROM messages m
+     51▕               WHERE m.id = ? AND c.id = ?
+     52▕           RETURNING c.reply_window_expires_at AS expiry', -- SABOTAGE #5: telegram_date not DB receipt
+  ➜  53▕             [$windowHours, $messageId, $conversationId],
+     54▕         );
+     55▕ 
+     56▕         $expiry = is_object($row) ? ($row->expiry ?? null) : null;
+     57▕         if (! is_string($expiry)) {
+
+  [33m1   [39m[39;1mapp/Domain/Telegram/Window/WindowTracker.php[39;22m:[39;1m53[39;22m
+      [2m+7 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/Telegram/WindowCalibrationTest.php[39;22m:[39;1m56[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m4.63s[39m
+

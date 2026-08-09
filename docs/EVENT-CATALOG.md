@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-82 event(s).
+83 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -463,6 +463,15 @@ FR-09/FR-10: the owner disconnected; open tickets flag channel_unreachable and t
 - **Payload:** `tenant_id`, `bot_id`, `connection_id`, `account_user_id`
 - **Producers:** Doc05/ConnectionLifecycle
 - **Consumers:** Doc06/Routing, Doc07/Inbox, Doc15/Reporting
+
+## `telegram.handoff_requested`
+
+FR-25: /human — the customer asked for a human. The Doc 09/06 handoff seam acts on it. Name filed as A-24 (the trigger event is unnamed by Doc 09 FR-12 / Doc 06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `external_chat_id`
+- **Producers:** Doc05/CommandHandler
+- **Consumers:** Doc09/AI, Doc06/Routing
 
 ## `telegram.window.closing`
 
