@@ -444,6 +444,21 @@ function webhookFixture(string $kind, ?array $credential): array
             App\Models\WebhookCredential::query()->create(['key_id' => $keyId] + $credential);
         }
 
+        // Doc 05 S23 step 4: the real webhook handler resolves the BOT behind
+        // the key (a key with no bot is 404 by design — the hand-seeded probe
+        // era ended when registration became the write path, the S15 standing
+        // note's own forecast). Hand-seeded telegram fixtures therefore carry
+        // the bot row the wizard would have written.
+        if ($kind === 'telegram_bot') {
+            App\Models\TelegramBot::query()->create([
+                'telegram_bot_id' => random_int(1_000_000_000, 9_999_999_999),
+                'username' => 'fixture_seeded_bot',
+                'display_name' => 'Fixture Seeded Bot',
+                'mode' => 'direct',
+                'key_id' => $keyId,
+            ]);
+        }
+
         return [$issued['plaintext'], $keyId];
     });
 

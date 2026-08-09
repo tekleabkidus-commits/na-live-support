@@ -97,7 +97,7 @@ return [
 
     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
-    'foundation.webhook.telegram' => 'Channel-key-authenticated ingress (Doc 01 FR-03c); staff permissions do not apply. Doc 05 revisits.',
+    'foundation.webhook.telegram' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03c; Doc 05 S23 step 4 revisited): Telegram authenticates with the URL key + secret_token header, staff permissions structurally do not apply. Admin surfaces are separate routes mapped to telegram.* keys.',
     'foundation.webhook.sms_dlr' => 'Channel-key-authenticated ingress (Doc 01 FR-03e); staff permissions do not apply. Doc 14 revisits.',
 
     /*

@@ -40,10 +40,13 @@ it('accepts the probe with the correct secret header (FR-23 — the positive con
         'header_secret_hash' => hash('sha256', TELEGRAM_FIXTURE_SECRET),
     ]);
 
+    // Doc 05 S23 step 4: the probe's echo body died with the probe — the
+    // REAL handler ACKs {'accepted': true} (FR-02) and echoes nothing. The
+    // auth mechanics this file proves are unchanged: 202 here vs the
+    // byte-identical 403s below.
     telegramWebhook($plaintext, TELEGRAM_FIXTURE_SECRET)
         ->assertStatus(202)
-        ->assertJsonPath('resolved_tenant_id', $tenant->id)
-        ->assertJsonPath('resolution_source', 'telegram_bot_key');
+        ->assertExactJson(['accepted' => true]);
 });
 
 it('refuses a mismatched secret: 403, nothing processed, metric incremented (AC-07)', function (): void {
@@ -147,6 +150,16 @@ it('rate-limits per KEY: one flooding bot never starves its sibling (FR-25)', fu
         App\Models\WebhookCredential::query()->create([
             'key_id' => $issued['key']->getKey(),
             'header_secret_hash' => hash('sha256', TELEGRAM_FIXTURE_SECRET),
+        ]);
+
+        // Doc 05 S23 step 4: the real handler resolves the bot behind the
+        // key — hand-issued keys carry the row the wizard writes.
+        App\Models\TelegramBot::query()->create([
+            'telegram_bot_id' => random_int(1_000_000_000, 9_999_999_999),
+            'username' => 'fixture_ratelimit_bot',
+            'display_name' => 'Fixture Ratelimit Bot',
+            'mode' => 'direct',
+            'key_id' => $issued['key']->getKey(),
         ]);
 
         return [$issued['plaintext']];

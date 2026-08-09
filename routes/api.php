@@ -175,6 +175,18 @@ Route::group([], function (): void {
                 ->middleware(['permission:apikeys.machine.manage', 'audit:auth.token.revoked'])
                 ->name('auth.machine_tokens.revoke');
 
+            // Doc 05 FR-01/FR-03/FR-04: bot registry lifecycle (B6-S01's
+            // server side; the wizard screens land at S23 step 10).
+            Route::post('admin/telegram/bots', [App\Http\Controllers\Telegram\BotAdminController::class, 'store'])
+                ->middleware(['permission:telegram.bots.manage', 'audit:telegram.bot_registered'])
+                ->name('telegram.bots.store');
+            Route::post('admin/telegram/bots/{botId}/re-register', [App\Http\Controllers\Telegram\BotAdminController::class, 'reRegister'])
+                ->middleware(['permission:telegram.bots.manage', 'audit:telegram.bot_webhook_reregistered'])
+                ->name('telegram.bots.re_register');
+            Route::delete('admin/telegram/bots/{botId}', [App\Http\Controllers\Telegram\BotAdminController::class, 'destroy'])
+                ->middleware(['permission:telegram.bots.manage', 'audit:telegram.bot_archived'])
+                ->name('telegram.bots.archive');
+
             // FR-08: the admin reset — permission DECLARED from Doc 03's
             // catalog (admin.2fa.reset, high risk), enforced when its resolver
             // lands.
@@ -309,13 +321,24 @@ Route::group([], function (): void {
      | A key with no seeded webhook credential refuses 403 BY DESIGN —
      | staging included (step-11 ruling, decision 6).
      */
+    /*
+     | Doc 05 S23 step 4: the REAL handler replaces the probe on the SAME
+     | middleware contract. The bot key rides the URL path (Telegram sends
+     | only the registered URL + secret_token header); the path shim copies
+     | it into the header the binder already reads, so the S15 order —
+     | binder -> throttle -> secret -> state — is EXECUTED, not re-built
+     | (T-02: bot resolution BEFORE secret verification; the 404-vs-403 pair
+     | in WebhookRouteTest is the order proof). {bot_key?} is optional so the
+     | Doc 02 header-borne proof suites keep driving the same stack.
+     */
     Route::middleware([
+        'telegram.webhook-key',
         'tenant:telegram_bot_key',
         'webhook.throttle',
         'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',
         'tenant.state:inbound',
     ])
-        ->post('webhooks/telegram', [IngressProbeController::class, 'ingest'])
+        ->post('webhooks/telegram/{bot_key?}', [App\Http\Controllers\Telegram\TelegramWebhookController::class, 'ingest'])
         ->name('foundation.webhook.telegram');
 
     /*

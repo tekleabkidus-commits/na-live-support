@@ -768,4 +768,27 @@ return [
         'required_fields' => ['ticket_id', 'from_target_user_id'],
         'owning_doc' => 'Doc06',
     ],
+
+    // ── Doc 05 (Telegram) — S23 step 4: bot registry lifecycle.
+    [
+        'action_key' => 'telegram.bot_registered',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        'action_key' => 'telegram.bot_webhook_reregistered',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        'action_key' => 'telegram.bot_archived',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
 ];

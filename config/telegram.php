@@ -15,6 +15,12 @@ return [
     // are the only real-API callers in dev.
     'api_base' => env('TELEGRAM_API_BASE', 'https://api.telegram.org'),
 
+    // The public base the webhook URL is built on (FR-01). Dev has no public
+    // ingress (A-24): registration proofs run against real Telegram with an
+    // unreachable URL, which Telegram accepts; the first publicly-reachable
+    // deployment must verify real delivery (A-24 rider 1, Doc 18 handoff).
+    'webhook_base' => env('TELEGRAM_WEBHOOK_BASE', null),
+
     'timeout_seconds' => 30,
     'connect_timeout_seconds' => 10,
 ];

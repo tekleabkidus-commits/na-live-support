@@ -13,6 +13,7 @@ import { createServer } from 'node:http';
 const PORT = Number(process.env.PORT ?? 8081);
 let recorded = [];
 let nextMessageId = 1000;
+const webhooks = new Map();
 
 const json = (res, status, body) => {
     res.writeHead(status, { 'content-type': 'application/json' });
@@ -38,6 +39,7 @@ createServer(async (req, res) => {
     if (req.method === 'DELETE' && url.pathname === '/_recorded') {
         recorded = [];
         nextMessageId = 1000;
+        webhooks.clear();
         return json(res, 200, { ok: true });
     }
     if (req.method === 'POST' && url.pathname === '/_replay') {
@@ -66,6 +68,24 @@ createServer(async (req, res) => {
             params = { _raw: raw };
         }
         recorded.push({ token, method, params });
+        // Doc 05 S23 step 4: deterministic Bot API surfaces the provisioner
+        // exercises (getMe/setWebhook/getWebhookInfo/deleteWebhook). Stateful
+        // only in-memory per token; reset with DELETE /_recorded.
+        if (method === 'setWebhook') {
+            webhooks.set(token, { url: params.url ?? '', secret: params.secret_token ?? '', allowed_updates: params.allowed_updates ?? [] });
+            return json(res, 200, { ok: true, result: true });
+        }
+        if (method === 'deleteWebhook') {
+            webhooks.delete(token);
+            return json(res, 200, { ok: true, result: true });
+        }
+        if (method === 'getWebhookInfo') {
+            const hook = webhooks.get(token);
+            return json(res, 200, { ok: true, result: { url: hook?.url ?? '', has_custom_certificate: false, pending_update_count: 0, allowed_updates: hook?.allowed_updates ?? [] } });
+        }
+        if (method === 'getMe') {
+            return json(res, 200, { ok: true, result: { id: 8144038606, is_bot: true, first_name: 'Mock Staging Bot', username: 'mockstagingbot', can_connect_to_business: true } });
+        }
         const result =
             method === 'sendMessage'
                 ? {

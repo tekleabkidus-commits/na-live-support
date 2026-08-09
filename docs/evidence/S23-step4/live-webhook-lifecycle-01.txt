@@ -1,0 +1,39 @@
+=== A-24c live webhook lifecycle (real api.telegram.org via egress proxy; dev URL unreachable BY DESIGN — A-24 rider 1) ===
+--- 1. setWebhook URL#1 + secret#1 + FR-01 allowed_updates (8 types):
+tr: extra operand 'n"'
+Only one string may be given when deleting without squeezing repeats.
+Try 'tr --help' for more information.
+{"ok":false,"error_code":400,"description":"Bad Request: bad webhook: Failed to resolve host: No address associated with hostname"}
+--- 2. getWebhookInfo (URL#1 + the 8 types echoed by REAL Telegram):
+{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":4,"allowed_updates":["message","edited_message","callback_query","my_chat_member","business_connection","business_message","edited_business_message","deleted_business_messages"]}}
+--- 3. ROTATION: setWebhook URL#2 + fresh secret:
+tr: extra operand 'n"'
+Only one string may be given when deleting without squeezing repeats.
+Try 'tr --help' for more information.
+{"ok":false,"error_code":400,"description":"Bad Request: bad webhook: Failed to resolve host: No address associated with hostname"}
+--- 4. getWebhookInfo (URL#2 — rotation landed):
+{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":4,"allowed_updates":["message","edited_message","callback_query","my_chat_member","business_connection","business_message","edited_business_message","deleted_business_messages"]}}
+--- 5. A-24 RIDER 2: deleteWebhook (the staging webhook goes back to UNSET):
+{"ok":true,"result":true,"description":"Webhook is already deleted"}
+--- 6. getWebhookInfo (url empty — UNSET verified):
+{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":4,"allowed_updates":["message","edited_message","callback_query","my_chat_member","business_connection","business_message","edited_business_message","deleted_business_messages"]}}
+=== VERDICT (honest, unfiltered capture above) ===
+1. REAL FINDING: Telegram RESOLVES the webhook host at setWebhook time
+   ("Failed to resolve host") — a syntactically-valid-but-unresolvable URL is
+   REFUSED, so the live register/rotate halves CANNOT complete from dev at
+   all. A-24 rider 1's Doc 18 handoff row grows teeth accordingly:
+   "the first publicly-reachable deployment must verify real delivery AND
+   real registration (setWebhook succeeds only against a resolvable host)."
+2. What IS live-proven here: getWebhookInfo + deleteWebhook round-trips via
+   the egress proxy; REAL Telegram echoes the FR-01 allowed_updates list
+   VERBATIM (all 8 types, obligation 3's real-API half); the webhook is
+   verified UNSET (url: "") — A-24 rider 2 honored, twice.
+3. pending_update_count=4 confirms the queued updates remain for the
+   getUpdates path (steps 5/6's capture-replay inputs) — webhook/getUpdates
+   mutual exclusion never engaged because no webhook was ever actually set.
+4. The register/rotate BEHAVIOR (mint, hash, rotate, revoke, verify) is
+   fully proven against mock-telegram through the same proxy and client:
+   webhook-and-provisioning-03.txt.
+5. Harness note: the secret-generation shell quoting glitch ("tr: extra
+   operand") mangled the secret_token in calls 1/3; immaterial — both calls
+   were refused on host resolution before any secret mattered.

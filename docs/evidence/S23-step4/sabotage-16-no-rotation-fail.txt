@@ -1,0 +1,49 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m4.62s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\BotProvisioningTest[22m [90m>[39m it FR-03/SEC-02: re-…   
+[39;1m  Expecting '019fe5ee-3c2e-72c7-814d-094a701c34c7' not to be '019fe5ee-3c2e-72c7-814d-094a701c34c7' 'FR-03: re-register must mint …sible)'.[39;22m
+
+  at [32mtests/Feature/Telegram/BotProvisioningTest.php[39m:[32m108[39m
+    104▕     $result = $provisioner->reRegister($bot);
+    105▕ 
+    106▕     expect($result['verified'])->toBeTrue();
+    107▕     $bot->refresh();
+  ➜ 108▕     expect($bot->key_id)->not->toBe($oldKeyId, 'FR-03: re-register must mint a FRESH key (shown-once makes URL reuse impossible)');
+    109▕ 
+    110▕     $newHash = DB::table('webhook_credentials')->where('key_id', $bot->key_id)->value('header_secret_hash');
+    111▕     expect($newHash)->not->toBeNull();
+    112▕     expect($newHash)->not->toBe($oldHash, 'SEC-02: the webhook secret must ROTATE on every re-register');
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/BotProvisioningTest.php[39;22m:[39;1m108[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it SEC-02 rotation cons…   
+[39;1m  Expected response status code [404] but received 202.
+Failed asserting that 202 is identical to 404.[39;22m
+
+  at [32mtests/Feature/Telegram/WebhookRouteTest.php[39m:[32m135[39m
+    131▕     Queue::fake();
+    132▕ 
+    133▕     $response = $this->postJson('/api/webhooks/telegram/'.$oldKey, ['update_id' => 1], ['X-Telegram-Bot-Api-Secret-Token' => $oldSecret]);
+    134▕ 
+  ➜ 135▕     $response->assertStatus(404);
+    136▕     Queue::assertNothingPushed();
+    137▕ });
+    138▕
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (45 assertions)[39m
+  [90mDuration:[39m [39m5.19s[39m
+

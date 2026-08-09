@@ -1,0 +1,85 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m5.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it FR-02: a valid path-…   
+[39;1m  Expected response status code [202] but received 403.
+Failed asserting that 403 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Telegram/WebhookRouteTest.php[39m:[32m76[39m
+     72▕         'update_id' => 920840999,
+     73▕         'message' => ['message_id' => 1, 'date' => 1754700000, 'chat' => ['id' => 5], 'from' => ['id' => 5], 'text' => 'hi'],
+     74▕     ], ['X-Telegram-Bot-Api-Secret-Token' => $secret]);
+     75▕ 
+  ➜  76▕     $response->assertStatus(202)->assertJson(['accepted' => true]);
+     77▕     Queue::assertPushed(RouteTelegramUpdate::class, 1);
+     78▕     Queue::assertPushed(fn (RouteTelegramUpdate $job): bool => $job->queue === 'telegram-in');
+     79▕ });
+     80▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it SEC-02: a wrong secr…   
+[39;1m  the 403 must be byte-identical across causes (S15 ruling)
+Failed asserting that two strings are identical.
+  [39;22m[31m-'{"type":"\/problems\/webhook_rejected","title":"Webhook request rejected","status":403,"code":"webhook_rejected","detail":"This webhook request could not be verified.","errors":[],"trace_id":"019fe5eb-6be5-7266-93f0-8af2eafcb81b"}'[39m[39;1m
+  [39;22m[32m+'{"type":"\/problems\/webhook_rejected","title":"Webhook request rejected","status":403,"code":"webhook_rejected","detail":"This webhook request could not be verified.","errors":[],"trace_id":"019fe5eb-6bcc-717e-a88e-db9d8ba054f3"}'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/WebhookRouteTest.php[39m:[32m90[39m
+     86▕     $missing = $this->postJson('/api/webhooks/telegram/'.$key, ['update_id' => 1]);
+     87▕ 
+     88▕     $wrong->assertStatus(403);
+     89▕     $missing->assertStatus(403);
+  ➜  90▕     expect($wrong->getContent())->toBe($missing->getContent(), 'the 403 must be byte-identical across causes (S15 ruling)');
+     91▕     Queue::assertNothingPushed();
+     92▕ });
+     93▕ 
+     94▕ it('T-02 ORDER PROOF: an unknown key answers 404 even with a well-formed secret — resolution precedes verification (C-10)', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/WebhookRouteTest.php[39;22m:[39;1m90[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it T-02: the declared m…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'telegram.webhook-key',[39m[39;1m
+  [39;22m[31m-    1 => 'tenant:telegram_bot_key',[39m[39;1m
+  [39;22m[31m-    2 => 'webhook.throttle',[39m[39;1m
+  [39;22m[31m-    3 => 'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',[39m[39;1m
+  [39;22m[31m-    4 => 'tenant.state:inbound',[39m[39;1m
+  [39;22m[32m+    0 => 'api',[39m[39;1m
+  [39;22m[32m+    1 => 'telegram.webhook-key',[39m[39;1m
+  [39;22m[32m+    2 => 'tenant:telegram_bot_key',[39m[39;1m
+  [39;22m[32m+    3 => 'webhook.throttle',[39m[39;1m
+  [39;22m[32m+    4 => 'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',[39m[39;1m
+  [39;22m[32m+    5 => 'tenant.state:inbound',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/WebhookRouteTest.php[39m:[32m112[39m
+    108▕ it('T-02: the declared middleware order is exactly the S15 contract with the path shim first', function (): void {
+    109▕     $route = app('router')->getRoutes()->getByName('foundation.webhook.telegram');
+    110▕ 
+    111▕     expect($route)->not->toBeNull();
+  ➜ 112▕     expect($route->middleware())->toBe([
+    113▕         'telegram.webhook-key',
+    114▕         'tenant:telegram_bot_key',
+    115▕         'webhook.throttle',
+    116▕         'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/WebhookRouteTest.php[39;22m:[39;1m112[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (45 assertions)[39m
+  [90mDuration:[39m [39m6.01s[39m
+

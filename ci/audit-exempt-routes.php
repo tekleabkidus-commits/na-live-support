@@ -32,7 +32,7 @@ return [
      | delete its line here and register real audit coverage; noted in
      | docs/BUILD-STATUS.md as an inherited task rather than left to be noticed.
      */
-    'foundation.webhook.telegram' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 05 must remove this line when it adds a real handler.',
+    'foundation.webhook.telegram' => 'Doc 05 real webhook edge (S23 step 4): ACK-only by design — FR-02/NFR-02 forbid inline processing, so the route itself mutates nothing; every mutation happens in the queued pipeline behind it, each carrying its own audit entry (quarantine, revisions, connection lifecycle). The Doc 01 probe justification this line replaces is deleted per the S15 ruling.',
     'foundation.webhook.sms_dlr' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 14 must remove this line when it adds a real handler.',
 
     /*

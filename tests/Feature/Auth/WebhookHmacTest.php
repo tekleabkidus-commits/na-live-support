@@ -239,7 +239,8 @@ it('fails CLOSED on replay-cache outage while the Redis-free surface stays up (F
             'X-Telegram-Bot-Api-Secret-Token' => 'fixture-telegram-outage-secret',
         ])
             ->assertStatus(202)
-            ->assertJsonPath('resolved_tenant_id', $telegramTenant->id);
+            // Doc 05 S23 step 4: the real handler's ACK body (the probe echo died).
+            ->assertExactJson(['accepted' => true]);
 
         expect($metrics = array_map(
             fn (array $r) => $r['context']['security_metric'] ?? null,

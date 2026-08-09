@@ -1,0 +1,43 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\SuspendedTenantMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit behaves exactly per FR-05 on every entry surface, in every tenan[39m[90m…[39m [90m4.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit shows a non-dismissable banner key when a surface is refused for[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revokes every key when a tenant is archived (FR-05)[39m[90m              [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\LogScrubberTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08: every configured channel carries SecurityLogTap — null a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs secret-shaped keys on the rendered sink and passes benign[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs the webhook auth headers in nested access-log shapes (ste[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never scrubs identifier suffixes — token_id and key_id stay trac[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08/C-14: every rendered record carries trace_id and tenant_i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a real refused request logs WITH a trace_id and WITHOUT the pres[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: seeded credentials from every real flow are absent from t[39m[90m…[39m [90m3.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecretsNeverSerializeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08/C-13: seeded credentials never serialize into jobs, outbox[39m[90m…[39m [90m3.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: the events sink, after a real committed relay run, carrie[39m[90m…[39m [90m4.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-13 model pins: no Doc 02-minted credential column serializes o[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.09s[39m  
+
+  [90mTests:[39m    [32;1m27 passed[39;22m[90m (369 assertions)[39m
+  [90mDuration:[39m [39m16.76s[39m
+

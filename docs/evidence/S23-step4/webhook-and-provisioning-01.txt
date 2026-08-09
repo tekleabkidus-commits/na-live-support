@@ -1,0 +1,181 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m4.64s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\BotProvisioningTest[22m [90m>[39m it F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, inznppuzueg6, cc48f8b9c5eb0a43e52418ba379aa8685578023da7e2e56bd0a6bfeced4aefa5, telegram bot @mockstagingbot, 019fe5ea-e10e-718e-bb6a-cf882280be4f, 019fe5ea-e0e6-715e-a738-0db11b4bbf57, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\BotProvisioningTest[22m [90m>[39m it F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, p9802gpjk8nw, 6f96b9d141ccf2760e2ee962f63b46eb169efcef5925ed6cfc179923314b063f, telegram bot @mockstagingbot, 019fe5ea-e145-7134-be59-f8a25086a4db, 019fe5ea-e138-7339-9557-674d38ddd961, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\BotProvisioningTest[22m [90m>[39m it F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, n5jm5gyzlapa, bee7eb56d2880ed525129d1fed4b1731059fc0bcbd959636d833621ec893ee6c, telegram bot @mockstagingbot, 019fe5ea-e16f-73c0-9870-bdafe4498d3b, 019fe5ea-e15e-70d3-b916-78ce90f6cae5, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it FR-0… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, 6ymazdrbjer7, ab674e52fea206bbd71b46b9b16a379634820e399c4d7257c5c23886e4341d21, telegram bot @mockstagingbot, 019fe5ea-e1b3-73ec-a3cc-da06e60d905d, 019fe5ea-e1aa-701b-890f-451b8c07f881, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it SEC-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, doo68ehncs2b, 8a048b8ae9168bb86750af900d3314d7ffec008b981ac25615e2961b29f79f7f, telegram bot @mockstagingbot, 019fe5ea-e1d7-73df-826d-838970484ffb, 019fe5ea-e1ca-736d-83ba-30417d165dd2, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it T-02… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, ss07byo1xhaz, f48408151bd2512d895055e137551420cc3293293174a9ec8e7a2e58ba401992, telegram bot @mockstagingbot, 019fe5ea-e209-73fb-813d-0ee57089e450, 019fe5ea-e1f1-703e-aef0-8aa7409a1552, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it T-02: the declared m…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'telegram.webhook-key',[39m[39;1m
+  [39;22m[31m-    1 => 'tenant:telegram_bot_key',[39m[39;1m
+  [39;22m[31m-    2 => 'webhook.throttle',[39m[39;1m
+  [39;22m[31m-    3 => 'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',[39m[39;1m
+  [39;22m[31m-    4 => 'tenant.state:inbound',[39m[39;1m
+  [39;22m[32m+    0 => 'api',[39m[39;1m
+  [39;22m[32m+    1 => 'telegram.webhook-key',[39m[39;1m
+  [39;22m[32m+    2 => 'tenant:telegram_bot_key',[39m[39;1m
+  [39;22m[32m+    3 => 'webhook.throttle',[39m[39;1m
+  [39;22m[32m+    4 => 'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',[39m[39;1m
+  [39;22m[32m+    5 => 'tenant.state:inbound',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/WebhookRouteTest.php[39m:[32m112[39m
+    108▕ it('T-02: the declared middleware order is exactly the S15 contract with the path shim first', function (): void {
+    109▕     $route = app('router')->getRoutes()->getByName('foundation.webhook.telegram');
+    110▕ 
+    111▕     expect($route)->not->toBeNull();
+  ➜ 112▕     expect($route->middleware())->toBe([
+    113▕         'telegram.webhook-key',
+    114▕         'tenant:telegram_bot_key',
+    115▕         'webhook.throttle',
+    116▕         'webhook.auth:secret_header,X-Telegram-Bot-Api-Secret-Token',
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/WebhookRouteTest.php[39;22m:[39;1m112[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\WebhookRouteTest[22m [90m>[39m it SEC-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "tenant_keys" violates check constraint "tenant_keys_kind_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenant_keys" ("kind", "prefix", "hash", "label", "id", "tenant_id", "updated_at", "created_at") values (telegram_bot_key, ql5j3ebsqod9, f88294ceb1b6d18aa274e5dea73b9e73909f278ea8ac7043188f40db3f6bfd13, telegram bot @mockstagingbot, 019fe5ea-e256-7090-9e10-b7db48ba6dbe, 019fe5ea-e249-73b5-877a-f2fff058f41f, 2026-08-09 09:46:43, 2026-08-09 09:46:43))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+9 vendor frames [22m
+  [33m10  [39m[39;1mapp/Support/Tenancy/TenantKeyIssuer.php[39;22m:[39;1m59[39;22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Bots/BotProvisioner.php[39;22m:[39;1m155[39;22m
+
+
+  [90mTests:[39m    [31;1m8 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m5.00s[39m
+

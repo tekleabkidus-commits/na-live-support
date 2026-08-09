@@ -1,0 +1,258 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WebhookSecretTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts the probe with the correct secret header (FR-23 — the po[39m[90m…[39m [90m5.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a mismatched secret: 403, nothing processed, metric incr[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders mismatch, absent header and unconfigured key byte-identi[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never invokes the handler on a refused request — proven by a spy[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rate-limits per KEY: one flooding bot never starves its sibling[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit establishes no session and sets no cookie on any outcome (FR-25[39m[90m… [39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\WebhookHmacTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts a correctly signed DLR (FR-24 — the positive control)[39m[90m    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a wrong signature and a tampered body alike (FR-24)[39m[90m      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a captured signature behind a fresh nonce — the HMAC cov[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the ±300 s window at its exact boundaries, with an inje[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends a nonce exactly once: the identical request replayed is r[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets an unsigned caller burn a nonce out of the cache (spe[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses unconfigured keys and absent headers with the same byte-[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit fails CLOSED on replay-cache outage while the Redis-free surface[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nonce single-use survives the window boundary honestly: expiry i[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RouteCoverageSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses EVERY permission-declared staff route to an under-privil[39m[90m…[39m [90m0.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: a holder passes the same middleware on the sam[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit masks object existence on out-of-scope reads — 404, never 403, f[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WebhookHmacTest[22m [90m>[39m it fails CLOSED on replay-ca…   
+[39;1m  Expected response status code [202] but received 500.
+Failed asserting that 500 is identical to 202.
+
+The following exception occurred during the last request:
+
+RedisException: Connection refused in /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php:185
+Stack trace:
+#0 /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php(185): Redis->connect('127.0.0.1', 1, 0.0, NULL, 0, 0.0)
+#1 /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php(89): Illuminate\Redis\Connectors\PhpRedisConnector->establishConnection(Object(Redis), Array)
+#2 /app/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate\Redis\Connectors\PhpRedisConnector->{closure:Illuminate\Redis\Connectors\PhpRedisConnector::createClient():80}(Object(Redis))
+#3 /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php(80): tap(Object(Redis), Object(Closure))
+#4 /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php(34): Illuminate\Redis\Connectors\PhpRedisConnector->createClient(Array)
+#5 /app/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php(39): Illuminate\Redis\Connectors\PhpRedisConnector->{closure:Illuminate\Redis\Connectors\PhpRedisConnector::connect():33}()
+#6 /app/vendor/laravel/framework/src/Illuminate/Redis/RedisManager.php(112): Illuminate\Redis\Connectors\PhpRedisConnector->connect(Array, Array)
+#7 /app/vendor/laravel/framework/src/Illuminate/Redis/RedisManager.php(93): Illuminate\Redis\RedisManager->resolve('volatile')
+#8 /app/vendor/laravel/framework/src/Illuminate/Cache/RedisStore.php(409): Illuminate\Redis\RedisManager->connection('volatile')
+#9 /app/vendor/laravel/framework/src/Illuminate/Cache/RedisStore.php(190): Illuminate\Cache\RedisStore->connection()
+#10 /app/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(484): Illuminate\Cache\RedisStore->add('t:019fe5fa-0a7d...', 0, 120)
+#11 /app/vendor/laravel/framework/src/Illuminate/Cache/CacheManager.php(600): Illuminate\Cache\Repository->add('t:019fe5fa-0a7d...', 0, 120)
+#12 /app/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(364): Illuminate\Cache\CacheManager->__call('add', Array)
+#13 /app/app/Support/Cache/TenantCache.php(105): Illuminate\Support\Facades\Facade::__callStatic('add', Array)
+#14 /app/app/Support/Quota/QuotaMeter.php(76): App\Support\Cache\TenantCache->increment('quota:messages_...', 1, 120, 'quota.window_ex...')
+#15 /app/app/Http/Controllers/Telegram/TelegramWebhookController.php(47): App\Support\Quota\QuotaMeter->allow(App\Support\Quota\Quota::MessagesPerMinute)
+#16 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Telegram\TelegramWebhookController->ingest(Object(Illuminate\Http\Request))
+#17 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Telegram\TelegramWebhookController), 'ingest')
+#18 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#19 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#21 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'inbound')
+#23 /app/app/Http/Middleware/VerifyWebhookSecret.php(83): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyWebhookSecret->handle(Object(Illuminate\Http\Request), Object(Closure), 'secret_header', 'X-Telegram-Bot-...')
+#25 /app/app/Http/Middleware/ThrottleWebhookKey.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ThrottleWebhookKey->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#28 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'telegram_bot_ke...')
+#29 /app/app/Http/Middleware/TelegramWebhookKeyFromPath.php(34): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\TelegramWebhookKeyFromPath->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#32 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#33 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#34 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#35 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#36 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#38 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#39 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#40 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#41 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#42 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#43 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#44 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#45 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#46 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#47 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#48 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#49 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#50 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#51 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#53 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#54 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#55 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#56 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#57 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#58 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#59 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#60 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#61 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#62 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#63 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#64 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#65 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#66 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#67 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#68 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#69 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#70 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', 'https://localho...', Array, Array, Array, Array, '{"ping":"fixtur...')
+#71 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', 'https://localho...', Array, Array, 0)
+#72 [internal function]: Illuminate\Foundation\Testing\TestCase->postJson('https://localho...', Array, Array)
+#73 /app/vendor/pestphp/pest/src/Support/Reflection.php(38): ReflectionMethod->invoke(Object(P\Tests\Feature\Auth\WebhookHmacTest), 'https://localho...', Array, Array)
+#74 /app/vendor/pestphp/pest/src/Support/HigherOrderMessage.php(58): Pest\Support\Reflection::call(Object(P\Tests\Feature\Auth\WebhookHmacTest), 'postJson', Array)
+#75 /app/vendor/pestphp/pest/src/Support/HigherOrderTapProxy.php(64): Pest\Support\HigherOrderMessage->call(Object(P\Tests\Feature\Auth\WebhookHmacTest))
+#76 /app/tests/Feature/Auth/WebhookHmacTest.php(237): Pest\Support\HigherOrderTapProxy->__call('postJson', Array)
+#77 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Feature\Auth\WebhookHmacTest->{closure:/app/tests/Feature/Auth/WebhookHmacTest.php:202}()
+#78 [internal function]: P\Tests\Feature\Auth\WebhookHmacTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#79 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#80 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Feature\Auth\WebhookHmacTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#81 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#82 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Feature\Auth\WebhookHmacTest->__callClosure(Object(Closure), Array)
+#83 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(80): P\Tests\Feature\Auth\WebhookHmacTest->__runTest(Object(Closure))
+#84 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Feature\Auth\WebhookHmacTest->__pest_evaluable_it_fails_CLOSED_on_replay_cache_outage_while_the_Redis_free_surface_stays_up__FS_posture__rulings_1_and_3_()
+#85 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#86 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#87 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#88 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Feature\Auth\WebhookHmacTest))
+#89 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#90 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+#91 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#92 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#93 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#94 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#95 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#96 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#97 {main}
+
+Next App\Support\Quota\QuotaCheckUnavailable: Quota "messages_per_minute" cannot be checked (metering unreachable) and this surface fails closed (FS-01). Ingestion should apply its bounded-queue backpressure. in /app/app/Support/Quota/QuotaMeter.php:176
+Stack trace:
+#0 /app/app/Support/Quota/QuotaMeter.php(88): App\Support\Quota\QuotaMeter->degrade(App\Support\Quota\Quota::MessagesPerMinute, App\Support\Quota\QuotaSurface::PublicIngestion, Object(RedisException))
+#1 /app/app/Http/Controllers/Telegram/TelegramWebhookController.php(47): App\Support\Quota\QuotaMeter->allow(App\Support\Quota\Quota::MessagesPerMinute)
+#2 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Telegram\TelegramWebhookController->ingest(Object(Illuminate\Http\Request))
+#3 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Telegram\TelegramWebhookController), 'ingest')
+#4 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#5 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#6 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#7 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#8 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'inbound')
+#9 /app/app/Http/Middleware/VerifyWebhookSecret.php(83): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#10 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyWebhookSecret->handle(Object(Illuminate\Http\Request), Object(Closure), 'secret_header', 'X-Telegram-Bot-...')
+#11 /app/app/Http/Middleware/ThrottleWebhookKey.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#12 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ThrottleWebhookKey->handle(Object(Illuminate\Http\Request), Object(Closure))
+#13 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#14 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'telegram_bot_ke...')
+#15 /app/app/Http/Middleware/TelegramWebhookKeyFromPath.php(34): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\TelegramWebhookKeyFromPath->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#18 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#19 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#23 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#25 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#27 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#28 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#29 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#30 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#31 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#32 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#33 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#34 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#35 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#36 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#38 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#39 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#40 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#41 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#42 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#43 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#44 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#45 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#46 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#47 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#48 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#49 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#50 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#51 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#53 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#54 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#55 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#56 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', 'https://localho...', Array, Array, Array, Array, '{"ping":"fixtur...')
+#57 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', 'https://localho...', Array, Array, 0)
+#58 [internal function]: Illuminate\Foundation\Testing\TestCase->postJson('https://localho...', Array, Array)
+#59 /app/vendor/pestphp/pest/src/Support/Reflection.php(38): ReflectionMethod->invoke(Object(P\Tests\Feature\Auth\WebhookHmacTest), 'https://localho...', Array, Array)
+#60 /app/vendor/pestphp/pest/src/Support/HigherOrderMessage.php(58): Pest\Support\Reflection::call(Object(P\Tests\Feature\Auth\WebhookHmacTest), 'postJson', Array)
+#61 /app/vendor/pestphp/pest/src/Support/HigherOrderTapProxy.php(64): Pest\Support\HigherOrderMessage->call(Object(P\Tests\Feature\Auth\WebhookHmacTest))
+#62 /app/tests/Feature/Auth/WebhookHmacTest.php(237): Pest\Support\HigherOrderTapProxy->__call('postJson', Array)
+#63 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Feature\Auth\WebhookHmacTest->{closure:/app/tests/Feature/Auth/WebhookHmacTest.php:202}()
+#64 [internal function]: P\Tests\Feature\Auth\WebhookHmacTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#65 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#66 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Feature\Auth\WebhookHmacTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#67 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#68 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Feature\Auth\WebhookHmacTest->__callClosure(Object(Closure), Array)
+#69 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(80): P\Tests\Feature\Auth\WebhookHmacTest->__runTest(Object(Closure))
+#70 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Feature\Auth\WebhookHmacTest->__pest_evaluable_it_fails_CLOSED_on_replay_cache_outage_while_the_Redis_free_surface_stays_up__FS_posture__rulings_1_and_3_()
+#71 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#72 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#73 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#74 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Feature\Auth\WebhookHmacTest))
+#75 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#76 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+#77 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#78 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#79 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#80 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#81 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#82 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#83 {main}
+
+----------------------------------------------------------------------------------
+
+Quota "messages_per_minute" cannot be checked (metering unreachable) and this surface fails closed (FS-01). Ingestion should apply its bounded-queue backpressure.[39;22m
+
+  at [32mtests/Feature/Auth/WebhookHmacTest.php[39m:[32m241[39m
+    237▕         test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'fixture'], [
+    238▕             'Authorization' => 'Bearer '.$telegramPlaintext,
+    239▕             'X-Telegram-Bot-Api-Secret-Token' => 'fixture-telegram-outage-secret',
+    240▕         ])
+  ➜ 241▕             ->assertStatus(202)
+    242▕             // Doc 05 S23 step 4: the real handler's ACK body (the probe echo died).
+    243▕             ->assertExactJson(['accepted' => true]);
+    244▕ 
+    245▕         expect($metrics = array_map(
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m31 passed[39;22m[90m (221 assertions)[39m
+  [90mDuration:[39m [39m8.98s[39m
+

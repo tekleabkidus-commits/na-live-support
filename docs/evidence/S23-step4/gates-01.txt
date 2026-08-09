@@ -1,0 +1,454 @@
+bash ci/run-gates.sh
+Running 13 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           FAIL
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\ConcurrentProvisioningTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit provisions a tenant through every step and ends active exactly o[39m[90m…[39m [90m5.44s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit is idempotent when run twice sequentially (EC-05 retry case)[39m[90m     [39m [90m0.27s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit is idempotent when the job is dispatched twice (double-click / q[39m[90m…[39m [90m0.21s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses to run a job that carries no tenant context (FR-03f)[39m[90m     [39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit halts cleanly between steps when the tenant is suspended mid-fli[39m[90m…[39m [90m0.13s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit lets exactly one of two concurrent workers claim a step (AC-05)[39m[90m  [39m [90m0.19s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\CrossTenantAccessTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit discovers every tenant-scoped table from the schema rather than[39m[90m… [39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit returns zero rows for direct SQL against another tenant, on ever[39m[90m…[39m [90m0.38s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses to write a row stamped with another tenant, on every wri[39m[90m…[39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit returns 404 rather than 403 for another tenant's row (SEC-06)[39m[90m    [39m [90m0.08s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\ForgedTenantIdFuzzTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit ignores forged tenant_id in body, query and header across 500 re[39m[90m…[39m [90m2.44s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit resolves the same tenant with and without a forged tenant_id[39m[90m     [39m [90m0.08s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\GrantPhysicsTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every tenant-scoped table (BR-02/N[39m[90m…[39m [90m0.07s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE on audit_log (N-13: append-only by gr[39m[90m…[39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role SELECT on the tenant_keys hash column (SEC-0[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit ships no timestamp column without a timezone (NFR-08/C-03: every[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit keeps after_commit TRUE on the durable queue connection (C-06/EC[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit stores no recovery code in a readable form (SEC-03/BR-02/Q6: has[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit keeps every credential column out of reach of a plaintext read ([39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on messages.created_at, an[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on messages.created_at, an[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit keeps the platform role able to write historical rows (retention[39m[90m…[39m [90m0.06s[39m  
+      
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit leaves app.tenant_id unset on a fresh connection[39m[90m                 [39m [90m0.07s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit clears the variable when the context is cleared, so a reused con[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit makes an unscoped query fail loudly rather than return rows once[39m[90m…[39m [90m0.06s[39m  
+        [33;1m-[39;22m[90m [39m[90mit re-applies the variable when a bound connection is re-establishe[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit does not touch the database from the connection hook when no ten[39m[90m…[39m [90m0.02s[39m  
+      
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit never publishes an event for a write that rolled back (T-03)[39m[90m     [39m [90m0.04s[39m  
+        [33;1m-[39;22m[90m [39m[90mit refuses to publish outside a transaction (T-03)[39m[90m [39m[33m→ The test harne[39m[90m…[39m [90m0.02s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit delivers a committed event even though the relay crashed before[39m[90m… [39m [90m0.13s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit produces one event, not two, when a crashed relay re-processes t[39m[90m…[39m [90m0.18s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit relays in UUIDv7 order, which is causal order without a wall clo[39m[90m…[39m [90m0.22s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit reports lag from the OLDEST unrelayed row, so a stuck row is vis[39m[90m…[39m [90m0.21s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\PreTenantLookupTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit resolves the same email in TWO tenants with no tenant bound (Q1:[39m[90m…[39m [90m0.31s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit is the ONLY pre-tenant path: a direct read of users with no tena[39m[90m…[39m [90m0.25s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit grants no lasting cross-tenant visibility after it is used[39m[90m       [39m [90m0.30s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit matches an exact address only — it cannot be walked to enumerate[39m[90m…[39m [90m0.30s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit returns no 2FA secret and no recovery material to the login path[39m[90m [39m [90m0.30s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit resolves a bearer token with no tenant bound, and refuses a dire[39m[90m…[39m [90m0.26s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit reports a revoked, expired or disabled-owner token as such rathe[39m[90m…[39m [90m0.30s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit answers an unknown token with zero rows, indistinguishable from[39m[90m… [39m [90m0.26s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit keeps both doors owned by the NOLOGIN key_resolver role (ADR 000[39m[90m…[39m [90m0.03s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\RlsCoverageTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit finds every existing events partition enabled, forced, and polic[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit protects partitions the MAINTENANCE COMMAND creates, not only th[39m[90m…[39m [90m0.13s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\SequenceAllocatorTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit allocates 1, 2, 3 … per (tenant, name), and tenants never share[39m[90m… [39m [90m0.09s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit rolls the counter back with the owning transaction, so the seque[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit allocates in a single atomic statement — no app-side read exists[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses to allocate outside a transaction (C-01: the owning tran[39m[90m…[39m [90m0.18s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound[39m[90m              [39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit serialises two concurrent allocators on the row lock: no duplica[39m[90m…[39m [90m1.24s[39m  
+      
+        [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\SuspendedTenantMatrixTest[39m
+        [31;1m⨯[39;22m[90m [39m[90mit behaves exactly per FR-05 on every entry surface, in every tenan[39m[90m…[39m [90m0.29s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit shows a non-dismissable banner key when a surface is refused for[39m[90m…[39m [90m0.07s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit revokes every key when a tenant is archived (FR-05)[39m[90m              [39m [90m0.07s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TelegramGrantPhysicsTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit R-19b: the app role cannot NAME any DB-time column on a Doc 05 t[39m[90m…[39m [90m0.20s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit FR-04: bots and menus are archived, never dropped — DELETE denie[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit SEC-02 posture: menu versions are INSERT-only for the app — no U[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit NFR-04: the transition trigger exists, is BEFORE UPDATE, and its[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit every Doc 05 table carries FORCED row-level security with the te[39m[90m…[39m [90m0.07s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TenantBindingSurfacesTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit binds the console to exactly the tenant named by --tenant (T-05)[39m[90m [39m [90m0.08s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses a console run with no --tenant BEFORE any model is touch[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit gives an unknown --tenant the same TenantNotResolved as every ot[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit resumes a stuck provisioning via tenant:provision-retry, idempot[39m[90m…[39m [90m0.21s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit authorizes a socket channel from the USER record and binds both[39m[90m… [39m [90m0.08s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses a channel addressed to another tenant, identically to on[39m[90m…[39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses sockets for a suspended tenant — realtime is a staff sur[39m[90m…[39m [90m0.07s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TenantScopeTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit filters reads to the bound tenant[39m[90m                                [39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit auto-fills tenant_id on create from the context, never from the[39m[90m… [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit throws when a tenant-scoped model is read with no bound context[39m[90m  [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit throws when a tenant-scoped model is created with no bound conte[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit throws when a model loaded under one tenant is saved under anoth[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit scopes the tenants table to the bound tenant so one tenant canno[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses to rebind a context that is already bound[39m[90m                [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses a platform operation while a tenant is bound (SEC-02)[39m[90m    [39m [90m0.03s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TicketGrantPhysicsTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role DELETE on every Doc 06 table except ticket_f[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit keeps DELETE on ticket_followers as the one deliberate exception[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role UPDATE entirely on the immutable stores (SEC[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.09s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT and UPDATE on exactly the tickets DB-[39m[90m…[39m [90m0.09s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit fills every DB-time column from clock_timestamp() and never from[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit denies the app role INSERT on exactly ticket_merge_snapshots.cre[39m[90m…[39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.06s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit enables and FORCEs RLS with a policy on every Doc 06 table with[39m[90m… [39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses an app insert that NAMES created_at, and an app update t[39m[90m…[39m [90m0.04s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit refuses an app DELETE behaviourally, not only in the catalog (BR[39m[90m…[39m [90m0.04s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TicketNumberingConcurrencyTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit gives 100 concurrent creates 100 unique numbers, with zero dupli[39m[90m…[39m [90m2.69s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit answers a contention spike with backpressure and NEVER a duplica[39m[90m…[39m [90m2.20s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit lets a rolled-back create take its number with it — gaps are acc[39m[90m…[39m [90m0.17s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TicketOpenFamilyInvariantTest[39m
+        [32;1m✓[39;22m[90m [39m[90mT-02: every open-family pair on one conversation is refused by the[39m[90m… [39m [90m0.11s[39m  
+        [32;1m✓[39;22m[90m [39m[90mFR-10: resolved, closed and spam are NOT open-family — they coexist[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mFR-21: linked_work rows are exempt from the index — the one sanctio[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mAC-02: the direct-SQL bypass fails on the index even for the RLS-by[39m[90m…[39m [90m0.10s[39m  
+      
+        [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TwoLayerIndependenceTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit contains cross-tenant reads with the Eloquent scope REMOVED (RLS[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit contains cross-tenant reads with RLS PERMITTING the other tenant[39m[90m…[39m [90m0.07s[39m  
+        [31m────────────────────────────────────────────────────────────────────────────[39m  
+        [41;1m FAILED [49;22m [1mTests\Isolation\SuspendedTenantMatrixTest[22m [90m>[39m it behaves exactly pe…   
+      [39;1m  FR-05 violated: a active tenant on the webhook_telegram surface returned 404, expected 202. 
+      Failed asserting that 404 is identical to 202.[39;22m
+      
+        at [32mtests/Isolation/SuspendedTenantMatrixTest.php[39m:[32m236[39m
+          232▕                 ))->json($spec['method'], $spec['uri']);
+          233▕ 
+          234▕             $results[$stateName][$surface] = $response->status();
+          235▕ 
+        ➜ 236▕             expect($response->status())->toBe(
+          237▕                 $expectations[$surface],
+          238▕                 sprintf(
+          239▕                     'FR-05 violated: a %s tenant on the %s surface returned %d, expected %d. %s',
+          240▕                     $stateName,
+      
+        [33m1   [39m[39;1mtests/Isolation/SuspendedTenantMatrixTest.php[39;22m:[39;1m236[39;22m
+      
+      
+        [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m2 skipped[39;22m[90m,[39m[39m [39m[32;1m113 passed[39;22m[90m (1477 assertions)[39m
+        [90mDuration:[39m [39m23.87s[39m
+  log-scrubber              FAIL
+      
+        [39;41;1m FAIL [39;49;22m[39m Tests\Security\LogScrubberTest[39m
+        [32;1m✓[39;22m[90m [39m[90mit SEC-08: every configured channel carries SecurityLogTap — null a[39m[90m…[39m [90m4.96s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit scrubs secret-shaped keys on the rendered sink and passes benign[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit scrubs the webhook auth headers in nested access-log shapes (ste[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit never scrubs identifier suffixes — token_id and key_id stay trac[39m[90m…[39m [90m0.03s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit SEC-08/C-14: every rendered record carries trace_id and tenant_i[39m[90m…[39m [90m0.05s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit a real refused request logs WITH a trace_id and WITHOUT the pres[39m[90m…[39m [90m0.12s[39m  
+        [31;1m⨯[39;22m[90m [39m[90mit AC-08: seeded credentials from every real flow are absent from t[39m[90m…[39m [90m3.77s[39m  
+      
+        [39;41;1m FAIL [39;49;22m[39m Tests\Security\SecretsNeverSerializeTest[39m
+        [31;1m⨯[39;22m[90m [39m[90mit AC-08/C-13: seeded credentials never serialize into jobs, outbox[39m[90m…[39m [90m3.43s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit AC-08: the events sink, after a real committed relay run, carrie[39m[90m…[39m [90m3.59s[39m  
+        [32;1m✓[39;22m[90m [39m[90mit C-13 model pins: no Doc 02-minted credential column serializes o[39m[90m…[39m [90m0.02s[39m  
+        [31m────────────────────────────────────────────────────────────────────────────[39m  
+        [41;1m FAILED [49;22m [1mTests\Security\LogScrubberTest[22m [90m>[39m it AC-08: seeded credentials fro…   
+      [39;1m  Expected response status code [202] but received 404.
+      Failed asserting that 404 is identical to 202.
+      
+      The following exception occurred during the last request:
+      
+      App\Domain\Auth\Login\LoginRefused: Login refused: bad_credentials in /app/app/Http/Controllers/Auth/StaffSessionController.php:214
+      Stack trace:
+      #0 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Auth\StaffSessionController->store(Object(Illuminate\Http\Request))
+      #1 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Auth\StaffSessionController), 'store')
+      #2 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+      #3 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+      #4 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+      #5 /app/app/Http/Middleware/DeclareAuditAction.php(51): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+      #6 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\DeclareAuditAction->handle(Object(Illuminate\Http\Request), Object(Closure), 'auth.login.succ...')
+      #7 /app/vendor/laravel/framework/src/Illuminate/Auth/Middleware/RedirectIfAuthenticated.php(47): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #8 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Auth\Middleware\RedirectIfAuthenticated->handle(Object(Illuminate\Http\Request), Object(Closure), 'staff')
+      #9 /app/app/Http/Middleware/EnforceTwoFactorForRole.php(49): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #10 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTwoFactorForRole->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #11 /app/app/Http/Middleware/EnforcePasswordExpiry.php(70): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #12 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforcePasswordExpiry->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #13 /app/app/Http/Middleware/ApplyUserLocale.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #14 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ApplyUserLocale->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #15 /app/app/Http/Middleware/EnforceSessionLifetime.php(45): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceSessionLifetime->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #17 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #18 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #19 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #21 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #23 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(168): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #24 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(129): Illuminate\Routing\Middleware\ThrottleRequests->handleRequest(Object(Illuminate\Http\Request), Object(Closure), Array)
+      #25 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(90): Illuminate\Routing\Middleware\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\Http\Request), Object(Closure), 'auth-ip', Object(Closure))
+      #26 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\ThrottleRequests->handle(Object(Illuminate\Http\Request), Object(Closure), 'auth-ip')
+      #27 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #28 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #29 /app/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #31 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #32 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+      #33 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #34 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #35 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #36 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #37 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #38 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #39 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+      #40 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+      #41 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+      #42 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+      #43 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+      #44 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+      #45 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+      #46 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #47 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #48 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #49 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #50 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #51 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #52 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #53 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #54 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #55 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #56 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #57 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #58 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #59 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #60 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #61 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #62 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #63 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #64 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #65 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #66 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #67 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #68 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+      #69 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+      #70 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+      #71 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', 'https://localho...', Array, Array, Array, Array, '{"email":"seede...')
+      #72 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', 'https://localho...', Array, Array, 0)
+      #73 /app/tests/Pest.php(982): Illuminate\Foundation\Testing\TestCase->postJson('https://localho...', Array)
+      #74 /app/tests/Security/LogScrubberTest.php(176): driveSeededCredentialFlows(false)
+      #75 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Security\LogScrubberTest->{closure:/app/tests/Security/LogScrubberTest.php:173}()
+      #76 [internal function]: P\Tests\Security\LogScrubberTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+      #77 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+      #78 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Security\LogScrubberTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+      #79 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+      #80 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Security\LogScrubberTest->__callClosure(Object(Closure), Array)
+      #81 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(71): P\Tests\Security\LogScrubberTest->__runTest(Object(Closure))
+      #82 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Security\LogScrubberTest->__pest_evaluable_it_AC_08__seeded_credentials_from_every_real_flow_are_absent_from_the_rendered_log_sink()
+      #83 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+      #84 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+      #85 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+      #86 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Security\LogScrubberTest))
+      #87 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+      #88 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+      #89 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+      #90 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+      #91 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+      #92 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+      #93 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+      #94 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+      #95 {main}
+      
+      ----------------------------------------------------------------------------------
+      
+      Login refused: bad_credentials[39;22m
+      
+        at [32mtests/Pest.php[39m:[32m1115[39m
+          1111▕ 
+          1112▕     test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+          1113▕         'Authorization' => 'Bearer '.$telegramKey,
+          1114▕         'X-Telegram-Bot-Api-Secret-Token' => SEEDED_TELEGRAM_HEADER_SECRET,
+        ➜ 1115▕     ])->assertStatus(202);
+          1116▕     test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+          1117▕         'Authorization' => 'Bearer '.$telegramKey,
+          1118▕         'X-Telegram-Bot-Api-Secret-Token' => SEEDED_WRONG_TELEGRAM_SECRET,
+          1119▕     ])->assertStatus(403);
+      
+        [33m1   [39m[39;1mtests/Security/LogScrubberTest.php[39;22m:[39;1m176[39;22m
+      
+        [31m────────────────────────────────────────────────────────────────────────────[39m  
+        [41;1m FAILED [49;22m [1mTests\Security\SecretsNeverSerializeTest[22m [90m>[39m it AC-08/C-13: seeded…    
+      [39;1m  Expected response status code [202] but received 404.
+      Failed asserting that 404 is identical to 202.
+      
+      The following exception occurred during the last request:
+      
+      App\Domain\Auth\Login\LoginRefused: Login refused: bad_credentials in /app/app/Http/Controllers/Auth/StaffSessionController.php:214
+      Stack trace:
+      #0 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Auth\StaffSessionController->store(Object(Illuminate\Http\Request))
+      #1 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Auth\StaffSessionController), 'store')
+      #2 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+      #3 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+      #4 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+      #5 /app/app/Http/Middleware/DeclareAuditAction.php(51): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+      #6 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\DeclareAuditAction->handle(Object(Illuminate\Http\Request), Object(Closure), 'auth.login.succ...')
+      #7 /app/vendor/laravel/framework/src/Illuminate/Auth/Middleware/RedirectIfAuthenticated.php(47): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #8 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Auth\Middleware\RedirectIfAuthenticated->handle(Object(Illuminate\Http\Request), Object(Closure), 'staff')
+      #9 /app/app/Http/Middleware/EnforceTwoFactorForRole.php(49): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #10 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTwoFactorForRole->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #11 /app/app/Http/Middleware/EnforcePasswordExpiry.php(70): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #12 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforcePasswordExpiry->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #13 /app/app/Http/Middleware/ApplyUserLocale.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #14 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ApplyUserLocale->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #15 /app/app/Http/Middleware/EnforceSessionLifetime.php(45): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceSessionLifetime->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #17 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #18 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #19 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #21 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #23 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(168): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #24 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(129): Illuminate\Routing\Middleware\ThrottleRequests->handleRequest(Object(Illuminate\Http\Request), Object(Closure), Array)
+      #25 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(90): Illuminate\Routing\Middleware\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\Http\Request), Object(Closure), 'auth-ip', Object(Closure))
+      #26 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\ThrottleRequests->handle(Object(Illuminate\Http\Request), Object(Closure), 'auth-ip')
+      #27 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #28 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #29 /app/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #31 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #32 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+      #33 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #34 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #35 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #36 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #37 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #38 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #39 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+      #40 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+      #41 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+      #42 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+      #43 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+      #44 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+      #45 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+      #46 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #47 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #48 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #49 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #50 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #51 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #52 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #53 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #54 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #55 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #56 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #57 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #58 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #59 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #60 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #61 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #62 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #63 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #64 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #65 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #66 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+      #67 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+      #68 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+      #69 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+      #70 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+      #71 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', 'https://localho...', Array, Array, Array, Array, '{"email":"seede...')
+      #72 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', 'https://localho...', Array, Array, 0)
+      #73 /app/tests/Pest.php(982): Illuminate\Foundation\Testing\TestCase->postJson('https://localho...', Array)
+      #74 /app/tests/Security/SecretsNeverSerializeTest.php(77): driveSeededCredentialFlows(true)
+      #75 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Security\SecretsNeverSerializeTest->{closure:/app/tests/Security/SecretsNeverSerializeTest.php:76}()
+      #76 [internal function]: P\Tests\Security\SecretsNeverSerializeTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+      #77 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+      #78 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Security\SecretsNeverSerializeTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+      #79 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+      #80 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Security\SecretsNeverSerializeTest->__callClosure(Object(Closure), Array)
+      #81 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(17): P\Tests\Security\SecretsNeverSerializeTest->__runTest(Object(Closure))
+      #82 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Security\SecretsNeverSerializeTest->__pest_evaluable_it_AC_08_C_13__seeded_credentials_never_serialize_into_jobs__outbox__or_audit_payloads()
+      #83 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+      #84 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+      #85 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+      #86 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Security\SecretsNeverSerializeTest))
+      #87 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+      #88 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+      #89 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+      #90 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+      #91 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+      #92 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+      #93 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+      #94 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+      #95 {main}
+      
+      ----------------------------------------------------------------------------------
+      
+      Login refused: bad_credentials[39;22m
+      
+        at [32mtests/Pest.php[39m:[32m1115[39m
+          1111▕ 
+          1112▕     test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+          1113▕         'Authorization' => 'Bearer '.$telegramKey,
+          1114▕         'X-Telegram-Bot-Api-Secret-Token' => SEEDED_TELEGRAM_HEADER_SECRET,
+        ➜ 1115▕     ])->assertStatus(202);
+          1116▕     test()->postJson('https://localhost/api/webhooks/telegram', ['ping' => 'seeded'], [
+          1117▕         'Authorization' => 'Bearer '.$telegramKey,
+          1118▕         'X-Telegram-Bot-Api-Secret-Token' => SEEDED_WRONG_TELEGRAM_SECRET,
+          1119▕     ])->assertStatus(403);
+      
+        [33m1   [39m[39;1mtests/Security/SecretsNeverSerializeTest.php[39;22m:[39;1m77[39;22m
+      
+      
+        [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (125 assertions)[39m
+        [90mDuration:[39m [39m16.10s[39m
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+-----------------------------------------------------------------
+Gate summary: 11 passed, 2 failed, 0 skipped.
+FAILED: isolation-suite log-scrubber
+make: *** [Makefile:95: gates] Error 1

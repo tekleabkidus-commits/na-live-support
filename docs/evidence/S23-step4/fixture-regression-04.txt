@@ -1,0 +1,48 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WebhookHmacTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts a correctly signed DLR (FR-24 — the positive control)[39m[90m    [39m [90m5.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a wrong signature and a tampered body alike (FR-24)[39m[90m      [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a captured signature behind a fresh nonce — the HMAC cov[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the ±300 s window at its exact boundaries, with an inje[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends a nonce exactly once: the identical request replayed is r[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets an unsigned caller burn a nonce out of the cache (spe[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses unconfigured keys and absent headers with the same byte-[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails CLOSED on replay-cache outage while the Redis-free surface[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nonce single-use survives the window boundary honestly: expiry i[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WebhookSecretTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit accepts the probe with the correct secret header (FR-23 — the po[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a mismatched secret: 403, nothing processed, metric incr[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders mismatch, absent header and unconfigured key byte-identi[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never invokes the handler on a refused request — proven by a spy[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rate-limits per KEY: one flooding bot never starves its sibling[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit establishes no session and sets no cookie on any outcome (FR-25[39m[90m… [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RouteCoverageSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses EVERY permission-declared staff route to an under-privil[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: a holder passes the same middleware on the sam[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit masks object existence on out-of-scope reads — 404, never 403, f[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m32 passed[39;22m[90m (223 assertions)[39m
+  [90mDuration:[39m [39m9.14s[39m
+

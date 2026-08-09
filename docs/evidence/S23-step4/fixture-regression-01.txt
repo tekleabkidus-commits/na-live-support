@@ -1,0 +1,41 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\SuspendedTenantMatrixTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit behaves exactly per FR-05 on every entry surface, in every tenan[39m[90m…[39m [90m4.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit shows a non-dismissable banner key when a surface is refused for[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revokes every key when a tenant is archived (FR-05)[39m[90m              [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\LogScrubberTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08: every configured channel carries SecurityLogTap — null a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs secret-shaped keys on the rendered sink and passes benign[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs the webhook auth headers in nested access-log shapes (ste[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never scrubs identifier suffixes — token_id and key_id stay trac[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08/C-14: every rendered record carries trace_id and tenant_i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a real refused request logs WITH a trace_id and WITHOUT the pres[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: seeded credentials from every real flow are absent from t[39m[90m…[39m [90m3.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecretsNeverSerializeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08/C-13: seeded credentials never serialize into jobs, outbox[39m[90m…[39m [90m3.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: the events sink, after a real committed relay run, carrie[39m[90m…[39m [90m3.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-13 model pins: no Doc 02-minted credential column serializes o[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SuspendedTenantMatrixTest[22m [90m>[39m it behaves exactly pe…   
+[39;1m  FR-05 violated: a active tenant on the webhook_telegram surface returned 404, expected 202. 
+Failed asserting that 404 is identical to 202.[39;22m
+
+  at [32mtests/Isolation/SuspendedTenantMatrixTest.php[39m:[32m236[39m
+    232▕                 ))->json($spec['method'], $spec['uri']);
+    233▕ 
+    234▕             $results[$stateName][$surface] = $response->status();
+    235▕ 
+  ➜ 236▕             expect($response->status())->toBe(
+    237▕                 $expectations[$surface],
+    238▕                 sprintf(
+    239▕                     'FR-05 violated: a %s tenant on the %s surface returned %d, expected %d. %s',
+    240▕                     $stateName,
+
+  [33m1   [39m[39;1mtests/Isolation/SuspendedTenantMatrixTest.php[39;22m:[39;1m236[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m12 passed[39;22m[90m (294 assertions)[39m
+  [90mDuration:[39m [39m15.27s[39m
+

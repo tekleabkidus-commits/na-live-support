@@ -178,6 +178,18 @@ it('behaves exactly per FR-05 on every entry surface, in every tenant state', fu
                         'key_id' => $issued['key']->getKey(),
                         'header_secret_hash' => hash('sha256', 'fixture-telegram-webhook-secret'),
                     ]);
+
+                    // Doc 05 S23 step 4: the real telegram handler refuses a
+                    // key with no BOT record (fail-closed, same posture as the
+                    // widget branch above) — registration became the write
+                    // path, so the matrix seeds the row the wizard writes.
+                    App\Models\TelegramBot::query()->create([
+                        'telegram_bot_id' => 8_144_038_606,
+                        'username' => 'fixture_matrix_bot',
+                        'display_name' => 'Fixture Matrix Bot',
+                        'mode' => 'direct',
+                        'key_id' => $issued['key']->getKey(),
+                    ]);
                 }
 
                 if ($kind === 'sms_gateway') {

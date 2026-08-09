@@ -1,0 +1,49 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\BotProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: register validates via getMe, mints key + credential + bo[39m[90m…[39m [90m4.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/SEC-02: re-register ROTATES both credentials — new key, ne[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: archiving refuses while non-revoked connections exist wit[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a token whose getMe answers without id/username is reject[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Telegram\WebhookRouteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a valid path-key + secret rides the S15 stack to a 202 AC[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a wrong secret and a missing secret answer the byte-iden[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the declared middleware order is exactly the S15 contract[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 rotation consequence: after re-register, the OLD key answ[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TelegramGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app role cannot NAME any DB-time column on a Doc 05 t[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: bots and menus are archived, never dropped — DELETE denie[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 posture: menu versions are INSERT-only for the app — no U[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: the transition trigger exists, is BEFORE UPDATE, and its[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 05 table carries FORCED row-level security with the te[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\TelegramScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: a bot-token-shaped VALUE under an innocent key never rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: a token inside the MESSAGE string is scrubbed — free tex[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or[39m[90m…[39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m33 passed[39;22m[90m (205 assertions)[39m
+  [90mDuration:[39m [39m6.42s[39m
+
