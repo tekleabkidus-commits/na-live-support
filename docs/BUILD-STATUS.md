@@ -115,7 +115,7 @@ stamped: `last_state_changed_at`; pinned-provenance copies: `last_inbound_at`,
 filed). 6 checked: NO Doc 05 work orders a read over `events` — the deferral does NOT fire.
 7 route→permission same-commit from the six existing `telegram.*` keys. 8 standing PARTIALs
 untouched; Doc 04 AC-01's bucket narrows to Doc 13 when row 1 lands. 9 RISK 0a/0b/0d
-acknowledged (0d: re-run once + record; 0b: capture-first). 10 no durable `ticket.*`
+acknowledged (0d: re-run once + record; 0b: capture-first). EnumerationTest TIMING SIGHTING (S23 step 6): `tests/Security/EnumerationTest.php` (the FR-02 0/1/N candidate-path equalization) failed a single full-suite run at 54.6 ms spread vs the 50 ms budget (0/1/N = 201/226/256 ms, host-load-inflated); passed GREEN alone twice and on the 0d re-run. Capture: docs/evidence/S23-step6/make-test-02.txt (fail) + timing-intermittents-alone-01.txt (green alone). SINGLE sighting, host-load class; it becomes a lettered risk (0e-style) on recurrence. 10 no durable `ticket.*`
 consumption — the tightening note does not bind; stated deliberately.
 
 ### Sabotage list (the ledger reconciles against THIS enumeration, item by item)
