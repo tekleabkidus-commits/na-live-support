@@ -382,6 +382,12 @@ Gates 13/13 (`closeout-gates-01`). Perf strict green (`step8-perf-strict-01`).
 Evidence set `docs/evidence/S22-doc06/` — 80+ captured runs, every diagnostic
 capture-first.
 
+**CI record:** run [31292481214](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31292481214)
+on `333c4cb` (the close-out tree itself) — **SUCCESS, all stages** incl. Stage 3b's
+10k soak and Stage 4's browser suite; run 31292103093 on `3bd0b8d` (steps 8–9 code)
+also SUCCESS. Real work scheduled and ran on clean runners — not infrastructure
+passes.
+
 ## SESSION-20 (Doc 04) close-out — Conversations & Messaging Core (fake adapter)
 
 ### OWNER RULING R-18 — Doc 04 accepted at close-out (2026-08-06)
