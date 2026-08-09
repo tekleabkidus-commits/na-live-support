@@ -56,8 +56,9 @@ final class InboundPersister
         string $channelRefId,
         NormalizedInbound $inbound,
         string $customerId,
+        ?InboundAuthor $author = null,
     ): Message {
-        return DB::transaction(function () use ($channel, $channelRefId, $inbound, $customerId): Message {
+        return DB::transaction(function () use ($channel, $channelRefId, $inbound, $customerId, $author): Message {
             $conversation = $this->conversations->findOrCreateForInbound(
                 $channel,
                 $channelRefId,
@@ -76,7 +77,7 @@ final class InboundPersister
 
             $quarantined = $conversation->state === 'blocked';
 
-            $message = $this->messages->persistInbound($conversation, $inbound, $customerId, $quarantined);
+            $message = $this->messages->persistInbound($conversation, $inbound, $customerId, $quarantined, $author);
 
             $this->conversations->touchCustomerActivity($conversation);
 

@@ -49,6 +49,7 @@ final class ConversationsServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(\App\Domain\Conversations\Media\SourceUrlResolvers::class);
+        $this->app->singleton(\App\Domain\Conversations\Inbound\InboundAuthorResolvers::class);
 
         $this->app->bind(MediaPipeline::class, function (Application $app): MediaPipeline {
             return new MediaPipeline(

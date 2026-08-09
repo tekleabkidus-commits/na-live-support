@@ -32,12 +32,16 @@ final class MessageRepository
         NormalizedInbound $inbound,
         string $customerId,
         bool $quarantined = false,
+        ?\App\Domain\Conversations\Inbound\InboundAuthor $author = null,
     ): Message {
         return Message::query()->create([
             'conversation_id' => $conversation->identifier(),
             'direction' => 'in',
-            'author_type' => 'customer',
-            'author_id' => $customerId,
+            // A-27: an inbound is the CUSTOMER's unless a channel resolver
+            // proved otherwise server-side (owner-phone, T-03). The default
+            // is unchanged, so non-owner inbound is byte-identical.
+            'author_type' => $author !== null ? $author->authorType : 'customer',
+            'author_id' => $author !== null ? $author->authorId : $customerId,
             'kind' => $inbound->kind->value,
             'body' => $inbound->body,
             'media' => array_map(
@@ -66,7 +70,14 @@ final class MessageRepository
             'language' => app(LanguageDetector::class)->detect($inbound->body),
             'external_message_id' => $inbound->externalMessageId,
             'quarantined' => $quarantined,
-            'channel_meta' => $inbound->channelMeta,
+            // A-27/EC-05: when a resolver claimed authorship, SNAPSHOT the
+            // reported type and the display-as-of-now, so historical
+            // attribution keeps the old display even as the identity renames
+            // forward.
+            'channel_meta' => $author === null ? $inbound->channelMeta : ($inbound->channelMeta + [
+                'reported_agent_type' => $author->reportedAgentType,
+                'owner_phone_display' => $author->display,
+            ]),
             'channel_occurred_at' => $inbound->occurredAt,
         ]);
     }

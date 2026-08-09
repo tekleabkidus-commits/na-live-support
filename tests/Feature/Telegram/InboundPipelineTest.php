@@ -312,7 +312,7 @@ it('FR-15: my_chat_member kicked/member publish telegram.bot_blocked|unblocked t
     expect((string) $row->payload)->toContain('"external_chat_id"')->toContain($ctx['bot']->id);
 });
 
-it('T-03 detection half: a business message FROM the connection owner carries owner_phone=true in channel_meta (attribution contract gap: escalated)', function (): void {
+it('T-03: a business message FROM the connection owner carries owner_phone=true AND attributes as agent (A-27)', function (): void {
     $ctx = pipelineBot();
 
     DB::table('telegram_business_connections')->insert([
@@ -330,8 +330,8 @@ it('T-03 detection half: a business message FROM the connection owner carries ow
     postUpdate($ctx, updateFixture('business_message'))->assertStatus(202);
 
     $message = Message::query()->where('external_message_id', '50002')->firstOrFail();
+    // A-27 landed: owner-phone now attributes as agent (proven fully in
+    // OwnerPhoneAttributionTest); here we pin the detection flag rode through.
     expect($message->getAttribute('channel_meta')['owner_phone'] ?? null)->toBeTrue()
-        // The DOCUMENTED current behavior pending the A-27 ruling: author_type
-        // still 'customer' because persistInbound cannot express an agent.
-        ->and($message->getAttribute('author_type'))->toBe('customer');
+        ->and($message->getAttribute('author_type'))->toBe('agent');
 });

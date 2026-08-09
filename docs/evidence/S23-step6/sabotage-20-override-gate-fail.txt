@@ -1,0 +1,28 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\OwnerPhoneAttributionTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SPOOF CONTROL (sabotage #20): a business_message whose from.id i[39m[90m…[39m [90m5.14s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\OwnerPhoneAttributionTest[22m [90m>[39m it SPOOF CONTR…   
+[39;1m  the server-side owner check is the authority — a spoofed sender stays a customer
+Failed asserting that two strings are identical.
+  [39;22m[31m-'customer'[39m[39;1m
+  [39;22m[32m+'agent'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/OwnerPhoneAttributionTest.php[39m:[32m111[39m
+    107▕     // attacker crafting a business_message. Must NOT become an agent.
+    108▕     routeAsTenant($ctx['bot'], ownerPhoneUpdate(999999999, 'i am definitely the owner, honest', 940002));
+    109▕ 
+    110▕     $message = Message::query()->where('external_message_id', '940002')->firstOrFail();
+  ➜ 111▕     expect($message->getAttribute('author_type'))->toBe('customer', 'the server-side owner check is the authority — a spoofed sender stays a customer')
+    112▕         ->and($message->getAttribute('channel_meta')['reported_agent_type'] ?? null)->toBeNull();
+    113▕ 
+    114▕     expect(DB::table('telegram_owner_phone_identities')->count())->toBe(0, 'no reserved identity is minted for a non-owner');
+    115▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/OwnerPhoneAttributionTest.php[39;22m:[39;1m111[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m5.22s[39m
+

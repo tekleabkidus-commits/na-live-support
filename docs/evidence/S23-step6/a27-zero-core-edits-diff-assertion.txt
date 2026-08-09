@@ -1,0 +1,37 @@
+=== A-27 zero-core-edits DIFF ASSERTION (fourth ruled core edit) ===
+Core (non-Doc-05) files touched, each under the A-27 ruling:
+  app/Domain/Conversations/Inbound/InboundAuthor.php           -> A-27 (NEW value object)
+  app/Domain/Conversations/Inbound/InboundAuthorResolvers.php  -> A-27 (NEW seam, channel-keyed, N-20)
+  app/Jobs/Conversations/NormalizeInbound.php                  -> A-27 (resolves author after identity)
+  app/Domain/Conversations/Inbound/InboundPersister.php        -> A-27 (threads override)
+  app/Domain/Conversations/Storage/MessageRepository.php       -> A-27 (author override + EC-05 snapshot)
+  app/Providers/ConversationsServiceProvider.php               -> A-27 (registry singleton)
+
+Doc 05-owned: OwnerPhoneAuthor.php, the identities migration, the resolver
+  registration in TelegramServiceProvider, OwnerPhoneAttributionTest.
+
+Condition 5 (byte-identical non-owner): the default author is null → the
+exact prior insert (author_type=customer, author_id=customerId,
+channel_meta unchanged). Proven: a27-core-noregression 48 passed / 466.
+
+--- All staged files:
+A	app/Domain/Conversations/Inbound/InboundAuthor.php
+A	app/Domain/Conversations/Inbound/InboundAuthorResolvers.php
+M	app/Domain/Conversations/Inbound/InboundPersister.php
+M	app/Domain/Conversations/Storage/MessageRepository.php
+A	app/Domain/Telegram/OwnerPhoneAuthor.php
+M	app/Jobs/Conversations/NormalizeInbound.php
+M	app/Providers/ConversationsServiceProvider.php
+M	app/Providers/TelegramServiceProvider.php
+A	database/migrations/2026_08_09_100500_create_telegram_owner_phone_identities_table.php
+A	docs/evidence/S23-step5/owner-phone-a27-01.txt
+A	docs/evidence/S23-step6/a27-core-noregression-01.txt
+A	docs/evidence/S23-step6/gates-a27-01.txt
+A	docs/evidence/S23-step6/lint-a27-01.txt
+A	docs/evidence/S23-step6/lint-a27-02.txt
+A	docs/evidence/S23-step6/make-test-a27-01.txt
+A	docs/evidence/S23-step6/sabotage-20-override-gate-fail.txt
+A	docs/evidence/S23-step6/sabotage-20-override-gate-restored-pass.txt
+M	tests/Feature/Telegram/InboundPipelineTest.php
+A	tests/Feature/Telegram/OwnerPhoneAttributionTest.php
+M	tests/Isolation/TelegramGrantPhysicsTest.php

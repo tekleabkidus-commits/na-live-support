@@ -8,6 +8,7 @@ use App\Domain\Conversations\Adapters\AdapterRegistry;
 use App\Domain\Conversations\Identity\CustomerResolver;
 use App\Domain\Conversations\Inbound\BatchTailHint;
 use App\Domain\Conversations\Inbound\DeadLetters;
+use App\Domain\Conversations\Inbound\InboundAuthorResolvers;
 use App\Domain\Conversations\Inbound\InboundDedupeStore;
 use App\Domain\Conversations\Inbound\InboundPersister;
 use App\Domain\Foundation\Retention\ColdSummaryStore;
@@ -70,6 +71,7 @@ final class NormalizeInbound implements ShouldQueue
         InboundAccrualPolicy $accrual,
         ColdSummaryStore $coldSummaries,
         CustomerResolver $identity,
+        InboundAuthorResolvers $authors,
         InboundPersister $persister,
         BatchTailHint $batchTail,
     ): void {
@@ -123,8 +125,13 @@ final class NormalizeInbound implements ShouldQueue
         // Step 3: identity (the Doc 08 seam — match or create shell).
         $customerId = $identity->resolve($this->channel, $inbound->sender);
 
+        // Step 3b (A-27): is this inbound authored by staff, not the customer?
+        // The resolver does its OWN server-side authority check; a null answer
+        // (every channel but owner-phone) leaves attribution unchanged.
+        $author = $authors->resolve($this->channel, $inbound);
+
         // Step 4: one transaction — row + outbox event (or FR-11 quarantine+audit).
-        $message = $persister->persist($this->channel, $this->channelRefId, $inbound, $customerId);
+        $message = $persister->persist($this->channel, $this->channelRefId, $inbound, $customerId, $author);
 
         // EC-01: the batch-tail debounce — fan-out territory, so quarantined rows
         // (FR-11: no fan-out except audit) never reach it.

@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\DB;
 const DOC05_TABLES = [
     'telegram_bots', 'telegram_business_connections', 'telegram_menus',
     'telegram_menu_versions', 'telegram_templates', 'telegram_flow_targets',
+    'telegram_owner_phone_identities',
 ];
 
 /** The R-19b denied set per table — the plan's filed per-column analysis. */
@@ -44,6 +45,7 @@ const DOC05_DB_TIME_COLUMNS = [
     'telegram_menu_versions' => ['created_at'],
     'telegram_templates' => [],
     'telegram_flow_targets' => [],
+    'telegram_owner_phone_identities' => [],
 ];
 
 function telegramAppHasPrivilege(string $table, string $privilege): bool

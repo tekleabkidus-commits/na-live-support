@@ -73,6 +73,13 @@ final class TelegramServiceProvider extends ServiceProvider
             'telegram-out',
         );
 
+        // A-27: the owner-phone author resolver (T-03) — server-side
+        // authority check inside; null (customer) for everything else.
+        $this->app->make(\App\Domain\Conversations\Inbound\InboundAuthorResolvers::class)
+            ->register('telegram', function (\App\Domain\Conversations\Adapters\NormalizedInbound $inbound): ?\App\Domain\Conversations\Inbound\InboundAuthor {
+                return $this->app->make(\App\Domain\Telegram\OwnerPhoneAuthor::class)->resolve($inbound);
+            });
+
         // A-26: the telegram-file resolver — the opaque persisted reference
         // becomes a fetchable URL PER FETCH ATTEMPT, inside the chain's own
         // try. The tokened URL is a LOCAL here and nowhere else (T-07).
