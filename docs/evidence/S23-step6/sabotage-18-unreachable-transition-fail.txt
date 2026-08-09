@@ -1,0 +1,28 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ConnectionLifecycleTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-10 + inherited row 2: a revoke flags open tickets channel_unr[39m[90m…[39m [90m4.59s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m it FR-10 + inher…   
+[39;1m  the ticket status is unchanged by the flag
+Failed asserting that two strings are identical.
+  [39;22m[31m-'open'[39m[39;1m
+  [39;22m[32m+'closed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/ConnectionLifecycleTest.php[39m:[32m211[39m
+    207▕     expect(DB::table('tickets')->where('id', $ticket)->value('channel_unreachable'))->toBeTrue();
+    208▕     // Orthogonality (sabotage #18): the flag flip emits NO transition.
+    209▕     expect(DB::table('outbox')->where('name', 'ticket.status_changed')->count())
+    210▕         ->toBe($eventsBefore, 'FR-10/EC-10: flagging channel_unreachable must NOT emit a ticket transition');
+  ➜ 211▕     expect(DB::table('tickets')->where('id', $ticket)->value('status'))->toBe('open', 'the ticket status is unchanged by the flag');
+    212▕ });
+    213▕ 
+    214▕ it('FS-04: >3 transitions/hour collapse notifications into a digest while states stay truthful', function (): void {
+    215▕     $bot = lifecycleBot();
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/ConnectionLifecycleTest.php[39;22m:[39;1m211[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m4.65s[39m
+

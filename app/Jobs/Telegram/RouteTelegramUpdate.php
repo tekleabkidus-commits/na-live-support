@@ -9,6 +9,7 @@ use App\Domain\Conversations\Revisions\MessageEditing;
 use App\Domain\Telegram\Api\TelegramApi;
 use App\Domain\Telegram\Api\TelegramApiError;
 use App\Domain\Telegram\Api\TelegramTransportError;
+use App\Domain\Telegram\Connections\ConnectionLifecycle;
 use App\Domain\Telegram\Direct\CallbackNonce;
 use App\Jobs\Conversations\NormalizeInbound;
 use App\Models\Message;
@@ -69,11 +70,36 @@ final class RouteTelegramUpdate implements ShouldQueue
         CallbackNonce $nonces,
         TelegramApi $api,
         EventPublisher $events,
+        ConnectionLifecycle $connections,
     ): void {
         $update = $this->update;
 
+        // business_connection is the lifecycle's input (FR-07…10) — handled
+        // BEFORE messages so a same-batch connect is applied first.
+        if (is_array($update['business_connection'] ?? null)) {
+            /** @var array<string, mixed> $connection */
+            $connection = $update['business_connection'];
+            $connections->applyUpdate($this->botId, $connection);
+
+            return;
+        }
+
         if (isset($update['message']) || isset($update['business_message'])
             || isset($update['edited_message']) || isset($update['edited_business_message'])) {
+            // SEC-04 NEVER-ROUTES: a business message on a connection that is
+            // not ACTIVE (pending/unconfirmed, or gone) is NOT routed — the
+            // attacker-connects-their-account defence. Direct messages (no
+            // connection id) are unaffected.
+            if (! $this->connectionRoutable($update)) {
+                Log::info('telegram business message held: connection not active', [
+                    'metric' => 'telegram.connection.unrouted_hold',
+                    'bot_id' => $this->botId,
+                    'update_id' => $update['update_id'] ?? null,
+                ]);
+
+                return;
+            }
+
             NormalizeInbound::dispatch('telegram', $this->botId, [
                 'bot' => $this->botId,
                 'update' => $update,
@@ -101,13 +127,40 @@ final class RouteTelegramUpdate implements ShouldQueue
             return;
         }
 
-        // business_connection (step 6) and anything else: counted, never
-        // silently invisible. Type only — no payload content (SEC-03/T-07).
-        Log::info('telegram update held for its owning step', [
+        // Anything else: counted, never silently invisible. Type only — no
+        // payload content (SEC-03/T-07).
+        Log::info('telegram update type not handled', [
             'bot_id' => $this->botId,
-            'update_type' => isset($update['business_connection']) ? 'business_connection' : 'unknown',
+            'update_type' => 'unknown',
             'update_id' => $update['update_id'] ?? null,
         ]);
+    }
+
+    /**
+     * SEC-04: a business message routes ONLY when its connection is active.
+     * A direct message (no business_connection_id) always routes.
+     *
+     * @param  array<string, mixed>  $update
+     */
+    private function connectionRoutable(array $update): bool
+    {
+        $message = is_array($update['business_message'] ?? null) ? $update['business_message']
+            : (is_array($update['edited_business_message'] ?? null) ? $update['edited_business_message'] : null);
+
+        if ($message === null) {
+            return true; // direct message — no connection gate
+        }
+
+        $connectionId = $message['business_connection_id'] ?? null;
+        if (! is_string($connectionId) || $connectionId === '') {
+            return true;
+        }
+
+        return \Illuminate\Support\Facades\DB::table('telegram_business_connections')
+            ->where('bot_id', $this->botId)
+            ->where('connection_id', $connectionId)
+            ->where('state', 'active')
+            ->exists();
     }
 
     /** @param array<string, mixed> $update */

@@ -187,6 +187,15 @@ Route::group([], function (): void {
                 ->middleware(['permission:telegram.bots.manage', 'audit:telegram.bot_archived'])
                 ->name('telegram.bots.archive');
 
+            // Doc 05 FR-07/SEC-04/EC-01: connection confirm/reject
+            // (telegram.connections.manage; B6-S02's server side).
+            Route::post('admin/telegram/connections/{connectionId}/confirm', [App\Http\Controllers\Telegram\ConnectionAdminController::class, 'confirm'])
+                ->middleware(['permission:telegram.connections.manage', 'audit:telegram.connection_confirmed'])
+                ->name('telegram.connections.confirm');
+            Route::post('admin/telegram/connections/{connectionId}/reject', [App\Http\Controllers\Telegram\ConnectionAdminController::class, 'reject'])
+                ->middleware(['permission:telegram.connections.manage', 'audit:telegram.connection_rejected'])
+                ->name('telegram.connections.reject');
+
             // FR-08: the admin reset — permission DECLARED from Doc 03's
             // catalog (admin.2fa.reset, high risk), enforced when its resolver
             // lands.

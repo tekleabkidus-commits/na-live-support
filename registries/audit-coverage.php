@@ -791,4 +791,19 @@ return [
         'required_fields' => ['route'],
         'owning_doc' => 'Doc05',
     ],
+
+    [
+        'action_key' => 'telegram.connection_confirmed',
+        'entity' => 'telegram_business_connection',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        'action_key' => 'telegram.connection_rejected',
+        'entity' => 'telegram_business_connection',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
 ];

@@ -1,0 +1,33 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\InboundPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11: a text message rides route → router → dedupe → identity →[39m[90m…[39m [90m4.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: an edit lands on the FR-21 revision path; deleted_busines[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/A-26: a document rides the FULL chain — opaque ref persist[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-26 condition 2: resolution happens PER FETCH ATTEMPT — an expi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-26 condition 3: Telegram's "file is too big" classifies throug[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06/T-05: the nonce is single-use — a REPLAY answers the neut[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14: a callback ACKs via answerCallbackQuery — valid silently,[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15: my_chat_member kicked/member publish telegram.bot_blocked[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-03: a business message FROM the connection owner carries owner[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\Inboun[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "telegram_business_connections_tenant_id_connection_id_unique" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "telegram_business_connections" ("id", "tenant_id", "bot_id", "connection_id", "account_user_id", "account_name", "user_chat_id", "state", "can_reply") values (019fe781-c2cb-7071-9f25-56d4b9024aae, 019fe781-c2a3-721b-931d-299ff987de35, 019fe781-c2bb-7003-b58f-f7bbc7df856e, fixture-conn-ec11, 900000100, Fixture Account, 900000100, active, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Telegram/InboundPipelineTest.php[39;22m:[39;1m329[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (51 assertions)[39m
+  [90mDuration:[39m [39m5.34s[39m
+

@@ -1,0 +1,38 @@
+
+[dev-hardware-indicative] NFR-04 connection-state reflection: 6.94 ms (budget 5000 ms) WITHIN
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ConnectionLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 NEVER-ROUTES (sabotage #8): a business message on an UNCO[39m[90m…[39m [90m4.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: once the admin CONFIRMS, the same connection routes — ac[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: the THREE REAL captured updates upsert to ONE row, idempo[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: two admins racing the connect converge on ONE registry ro[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: can_reply=false saves as PAUSED with inbound still flowin[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: a wrong-account rejection deletes the pending row so the[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: the account renames; the connection row updates forward f[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-10 + inherited row 2: a revoke flags open tickets channel_unr[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-04: >3 transitions/hour collapse notifications into a digest[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: connection state reflects an update in ≤5 s (indicative,[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m it FS-04: >3 tra…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'active'[39m[39;1m
+  [39;22m[32m+'pending'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Telegram/ConnectionLifecycleTest.php[39m:[32m235[39m
+    231▕     expect(in_array('digest', $deliveries, true))->toBeTrue('FS-04: past the threshold, notifications digest');
+    232▕     expect(in_array('immediate', $deliveries, true))->toBeTrue('the early transitions still notify immediately');
+    233▕ 
+    234▕     // States stay truthful: the connection ends ACTIVE (its true last state).
+  ➜ 235▕     expect(DB::table('telegram_business_connections')->where('connection_id', 'conn-life-1')->value('state'))->toBe('active');
+    236▕ });
+    237▕ 
+    238▕ it('NFR-04: connection state reflects an update in ≤5 s (indicative, measured)', function (): void {
+    239▕     $bot = lifecycleBot();
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/ConnectionLifecycleTest.php[39;22m:[39;1m235[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m9 passed[39;22m[90m (22 assertions)[39m
+  [90mDuration:[39m [39m5.21s[39m
+

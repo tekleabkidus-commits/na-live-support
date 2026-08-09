@@ -1,0 +1,36 @@
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Security\EnumerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body for an existing and a non-existing[39m[90m…[39m [90m5.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body regardless of which TENANT the add[39m[90m…[39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends the same work across 0, 1 and N candidate paths (AC-01 ti[39m[90m…[39m [90m9.31s[39m  
+  [33;1m-[39;22m[90m [39m[90mit does the password-verification work even when no account matches[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never reveals which of several tenants the address belongs to, e[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical reset-request body across 0, 1 and N ca[39m[90m…[39m [90m0.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers reset requests at the fixed floor whatever matched — and[39m[90m…[39m [90m2.23s[39m  
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.418 ms   p99   1.749 ms   max   6.331 ms   budget(p99) 0.3 ms   OVER
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Performance\RbacBudgetsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil[39m[90m…[39m [90m0.36s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\RbacBudgetsTest[22m [90m>[39m it meets NFR-01 indicatively:…   
+[39;1m  NFR-01 cached map + checks: p99 1.749 ms exceeds the asserted 5x regression ceiling of 1.500 ms (spec budget 0.3 ms; p50 0.418 ms, max 6.331 ms). This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a machine under heavy load — compare p50 against the spec budget to tell which.
+Failed asserting that 1.74921 is equal to 1.5 or is less than 1.5.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m857[39m
+    853▕ {
+    854▕     $ceiling = assertedBudget($specBudgetMs);
+    855▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+    856▕ 
+  ➜ 857▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+    858▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+    859▕         .'%s',
+    860▕         $name,
+    861▕         $stats['p99'],
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m857[39;22m
+  [33m2   [39m[39;1mtests/Performance/RbacBudgetsTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (27 assertions)[39m
+  [90mDuration:[39m [39m19.40s[39m
+

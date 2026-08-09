@@ -1,0 +1,25 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ConnectionLifecycleTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-04 NEVER-ROUTES (sabotage #8): a business message on an UNCO[39m[90m…[39m [90m5.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m it SEC-04 NEVER-…   
+[39;1m  SEC-04: an unconfirmed connection must NEVER route a message
+Failed asserting that 1 is identical to 0.[39;22m
+
+  at [32mtests/Feature/Telegram/ConnectionLifecycleTest.php[39m:[32m94[39m
+     90▕ 
+     91▕     // A player message arrives on the still-unconfirmed connection.
+     92▕     routeLife($bot, businessMessage('conn-life-1', 555, 'hello while pending'));
+     93▕ 
+  ➜  94▕     expect(Message::query()->count())->toBe(0, 'SEC-04: an unconfirmed connection must NEVER route a message');
+     95▕     expect(DB::table('conversations')->count())->toBe(0);
+     96▕ });
+     97▕ 
+     98▕ it('SEC-04: once the admin CONFIRMS, the same connection routes — active is the gate', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/ConnectionLifecycleTest.php[39;22m:[39;1m94[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m5.08s[39m
+

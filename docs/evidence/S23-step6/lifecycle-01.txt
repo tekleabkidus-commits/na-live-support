@@ -1,0 +1,81 @@
+
+[dev-hardware-indicative] NFR-04 connection-state reflection: 8.68 ms (budget 5000 ms) WITHIN
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\ConnectionLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 NEVER-ROUTES (sabotage #8): a business message on an UNCO[39m[90m…[39m [90m4.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-04: once the admin CONFIRMS, the same connection routes — ac[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: the THREE REAL captured updates upsert to ONE row, idempo[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: two admins racing the connect converge on ONE registry ro[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: can_reply=false saves as PAUSED with inbound still flowin[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: a wrong-account rejection deletes the pending row so the[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: the account renames; the connection row updates forward f[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-10 + inherited row 2: a revoke flags open tickets channel_unr[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-04: >3 transitions/hour collapse notifications into a digest[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: connection state reflects an update in ≤5 s (indicative,[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "telegram_business_connections" violates foreign key constraint "telegram_business_connections_confirmed_by_foreign"
+DETAIL:  Key is not present in table "users". (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "telegram_business_connections" set "state" = active, "confirmed_by" = 019fe776-be7d-721c-9a43-eefbedde5141, "confirmed_at" = clock_timestamp(), "updated_at" = clock_timestamp() where "id" = 019fe776-be79-7375-a8ac-e627bd137943)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m126[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m125[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "telegram_business_connections" violates foreign key constraint "telegram_business_connections_confirmed_by_foreign"
+DETAIL:  Key is not present in table "users". (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "telegram_business_connections" set "state" = active, "confirmed_by" = 019fe776-c01e-70d1-898c-b128428d25b3, "confirmed_at" = clock_timestamp(), "updated_at" = clock_timestamp() where "id" = 019fe776-c01d-712b-870c-b0491fb34d25)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m126[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m125[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\ConnectionLifecycleTest[22m [90m>[39m…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "telegram_business_connections" violates foreign key constraint "telegram_business_connections_confirmed_by_foreign"
+DETAIL:  Key is not present in table "users". (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "telegram_business_connections" set "state" = active, "confirmed_by" = 019fe776-c06c-73bf-9867-8378f7b6605e, "confirmed_at" = clock_timestamp(), "updated_at" = clock_timestamp() where "id" = 019fe776-c06a-7249-b7e9-f7b564b1dd4f)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m126[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Telegram/Connections/ConnectionLifecycle.php[39;22m:[39;1m125[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (14 assertions)[39m
+  [90mDuration:[39m [39m5.13s[39m
+

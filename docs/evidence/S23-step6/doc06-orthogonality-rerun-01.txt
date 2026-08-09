@@ -1,0 +1,36 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\EdgeSemanticsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-07: two agents resolving at once — the second identical-target c[39m[90m…[39m [90m4.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-07, the raced half: a transition validated against a STALE statu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-08: after automation resolves mid-composition, "send and reopen"[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-10: channel_unreachable on a pending_customer ticket changes no[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TimerPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma stale candidate — the ticket long since moved on — is dropped by[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma candidate whose score lies about dueness is DEFERRED: the column[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-03: changing tickets.autoclose.hours applies to FUTURE resolutio[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: the sweep HOLDS an unreachable customer's due timer — refuse[39m[90m…[39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m24 passed[39;22m[90m (439 assertions)[39m
+  [90mDuration:[39m [39m7.77s[39m
+

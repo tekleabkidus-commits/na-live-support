@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-75 event(s).
+79 event(s).
 
 ## `auth.2fa.challenge_failed`
 
@@ -427,6 +427,42 @@ FR-15: the customer unblocked the bot (my_chat_member → member).
 - **Payload:** `tenant_id`, `bot_id`, `external_chat_id`
 - **Producers:** Doc05/RouteTelegramUpdate
 - **Consumers:** Doc07/Inbox, Doc15/Reporting
+
+## `telegram.connection.active`
+
+FR-09: a business connection became active (admin-confirmed, SEC-04, or resumed from paused). Three connection events, not one — the S23 plan resolution (i).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bot_id`, `connection_id`, `account_user_id`
+- **Producers:** Doc05/ConnectionLifecycle
+- **Consumers:** Doc06/Routing, Doc07/Inbox, Doc15/Reporting
+
+## `telegram.connection.notified`
+
+FR-09/FS-04: an admin notification for a paused|revoked transition; delivery is immediate or digest (flap damping >3/hour), the STATE stays truthful either way.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `connection_id`, `state`, `delivery`
+- **Producers:** Doc05/ConnectionLifecycle
+- **Consumers:** Doc07/Inbox
+
+## `telegram.connection.paused`
+
+FR-09/EC-03: a connection paused (can_reply=false or owner-side pause); inbound still flows, outbound frozen.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bot_id`, `connection_id`, `account_user_id`
+- **Producers:** Doc05/ConnectionLifecycle
+- **Consumers:** Doc06/Routing, Doc07/Inbox, Doc15/Reporting
+
+## `telegram.connection.revoked`
+
+FR-09/FR-10: the owner disconnected; open tickets flag channel_unreachable and the outbound lane freezes.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `bot_id`, `connection_id`, `account_user_id`
+- **Producers:** Doc05/ConnectionLifecycle
+- **Consumers:** Doc06/Routing, Doc07/Inbox, Doc15/Reporting
 
 ## `tenant.provisioned`
 

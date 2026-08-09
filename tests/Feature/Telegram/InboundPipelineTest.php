@@ -50,6 +50,17 @@ function pipelineBot(): array
     $result = app(BotProvisioner::class)->register('8144038606:FAKECREDhhhhhhhhhhhhhhhhhhhhhhhhhh', 'hybrid');
     $bot = $result['bot'];
 
+    // The fixtures' business messages ride connection 'fixture-conn-ec11' —
+    // seed it ACTIVE (business messages only arrive on live connections; the
+    // never-routes guard, S23 step 6, blocks otherwise).
+    DB::table('telegram_business_connections')->insert([
+        'id' => (string) Illuminate\Support\Str::uuid7(),
+        'tenant_id' => $bot->tenant_id, 'bot_id' => $bot->id,
+        'connection_id' => 'fixture-conn-ec11', 'account_user_id' => 900000100,
+        'account_name' => 'Fixture Account', 'user_chat_id' => 900000100,
+        'state' => 'active', 'can_reply' => true,
+    ]);
+
     $path = (string) parse_url($result['webhook_url'], PHP_URL_PATH);
     $key = substr($path, strrpos($path, '/') + 1);
 
@@ -313,19 +324,9 @@ it('FR-15: my_chat_member kicked/member publish telegram.bot_blocked|unblocked t
 });
 
 it('T-03: a business message FROM the connection owner carries owner_phone=true AND attributes as agent (A-27)', function (): void {
+    // pipelineBot already seeds fixture-conn-ec11 active with account_user_id
+    // 900000100 (== the fixture's from.id) — this business_message IS the owner.
     $ctx = pipelineBot();
-
-    DB::table('telegram_business_connections')->insert([
-        'id' => (string) Illuminate\Support\Str::uuid7(),
-        'tenant_id' => $ctx['bot']->tenant_id,
-        'bot_id' => $ctx['bot']->id,
-        'connection_id' => 'fixture-conn-ec11',
-        'account_user_id' => 900000100, // == the fixture's from.id
-        'account_name' => 'Fixture Account',
-        'user_chat_id' => 900000100,
-        'state' => 'active',
-        'can_reply' => true,
-    ]);
 
     postUpdate($ctx, updateFixture('business_message'))->assertStatus(202);
 
