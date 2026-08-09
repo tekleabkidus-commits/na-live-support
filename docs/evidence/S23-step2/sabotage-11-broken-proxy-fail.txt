@@ -1,0 +1,28 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m4.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\TelegramBotApiTest[22m [90m>[39m… [41;1m AssertionFailedError [49;22m  
+[39;1m  the call SUCCEEDED with a dead proxy — a direct-egress fallback exists (SEC-07 violation)[39;22m
+
+  at [32mtests/Feature/Telegram/TelegramBotApiTest.php[39m:[32m68[39m
+     64▕     $api = telegramClientVia('http://127.0.0.1:59999');
+     65▕ 
+     66▕     try {
+     67▕         $api->call(FAKE_STEP2_TOKEN, 'sendMessage', ['chat_id' => 1, 'text' => 'must never arrive']);
+  ➜  68▕         $this->fail('the call SUCCEEDED with a dead proxy — a direct-egress fallback exists (SEC-07 violation)');
+     69▕     } catch (TelegramTransportError $e) {
+     70▕         expect($e->getMessage())->not->toContain(FAKE_STEP2_TOKEN);
+     71▕         expect($e->getMessage())->toContain('[token]');
+     72▕     }
+
+  [33m1   [39m[39;1mtests/Feature/Telegram/TelegramBotApiTest.php[39;22m:[39;1m68[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (11 assertions)[39m
+  [90mDuration:[39m [39m4.30s[39m
+

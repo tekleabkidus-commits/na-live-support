@@ -1,0 +1,34 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Telegram\TelegramBotApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02/SEC-07: a call rides the egress proxy to the Bot API and re[39m[90m…[39m [90m5.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maps an ok:false answer to TelegramApiError carrying status and[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: fileUrl embeds the token by design and is documented a sec[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit A-19: bot_token is ciphertext at rest, decrypts through the mode[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecretsNeverSerializeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08/C-13: seeded credentials never serialize into jobs, outbox[39m[90m…[39m [90m4.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: the events sink, after a real committed relay run, carrie[39m[90m…[39m [90m4.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-13 model pins: no Doc 02-minted credential column serializes o[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Telegram\TelegramBotApiTest[22m [90m>[39m it A-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table telegram_bots (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "telegram_bots" ("telegram_bot_id", "username", "display_name", "bot_token", "mode", "id", "tenant_id", "updated_at", "created_at") values (8144038606, fixturebot, Fixture Bot, eyJpdiI6IkpKUTc2L0MxdjMrREFEek5KSVU1ekE9PSIsInZhbHVlIjoibSttMVVUOWlaaWZWUDZRRWhKbG5lU1ZlZTNwRUs5UkdMeU5kRS9YOFVpODVVT3IrK09Tay9pUnlQSXVyU21DaSIsIm1hYyI6IjY1OTQ0NTNhOWJmMDQ3OGJmOWIxMmY5NTNjNjYyODBiM2RiZGEzODQzMWQyY2NmY2QwZTRmNDJkODM1MTI5MTciLCJ0YWciOiIifQ==, direct, 019fe5bd-d90e-7212-b433-8b4e05c43023, 019fe5bd-d8ff-722c-9a68-0f947d224d8d, 2026-08-09 08:57:32, 2026-08-09 08:57:32))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Feature/Telegram/TelegramBotApiTest.php[39;22m:[39;1m90[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (165 assertions)[39m
+  [90mDuration:[39m [39m13.60s[39m
+

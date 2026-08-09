@@ -216,6 +216,7 @@ it('C-13 model pins: no Doc 02-minted credential column serializes out of its mo
     $roster = [
         [User::class, ['password' => 'FAKECRED-pin-password', 'remember_token' => 'FAKECRED-pin-remember', 'two_factor_secret' => 'FAKECRED-pin-totp'], ['email' => 'pin-visible@fixture.example']],
         [WebhookCredential::class, ['header_secret_hash' => 'FAKECRED-pin-header', 'hmac_secret' => 'FAKECRED-pin-hmac'], ['key_id' => '01890000-0000-7000-8000-0000pinvisib']],
+        [App\Models\TelegramBot::class, ['bot_token' => 'FAKECRED-pin-bottoken'], ['username' => 'pin_visible_bot']],
         [AuthActionToken::class, ['token_hash' => 'FAKECRED-pin-action'], ['sent_to_email' => 'pin-visible-2@fixture.example']],
         [UserRecoveryCode::class, ['code_hash' => 'FAKECRED-pin-recovery'], ['batch_id' => '01890000-0000-7000-8000-0000pinvisib']],
         [PersonalAccessToken::class, ['token' => 'FAKECRED-pin-sanctum'], ['name' => 'pin-visible-token-name']],
