@@ -724,7 +724,11 @@ RISKS:        (verbatim, per the step-6 owner ruling) "staging bot token was
               the live-account connection that made it critical has been
               severed; rotation is MANDATORY before any Business account is
               reconnected to this bot and before any production traffic —
-              whichever comes first." A-24 rider 1 stands: dev has no public
+              whichever comes first." "the staging bot was temporarily
+              connected to the live production Business account; real customer
+              PII entered and was purged from uncommitted evidence; the
+              dedicated staging account requirement is mandatory before any
+              future live walk." A-24 rider 1 stands: dev has no public
               ingress; real-webhook behaviour is proven by capture-replay, and
               Doc 18 owns the staging-ingress handoff row. The Stage-4
               first-attempt seeder failure turned out to be a REAL FK defect
