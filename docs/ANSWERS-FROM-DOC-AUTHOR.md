@@ -1103,3 +1103,23 @@ table satisfies "stored on the conversation", on three conditions:
 
 The AI-first-turn half ("passed to the AI first turn") remains Doc 09's
 pre-agreed bucket; `forConversation()` is the seam it consumes.
+
+### R-22 RESOLVED / R-24 / R-25 — three owner rulings of record (2026-08-10, filed at the S23 close-out per the owner's final-docs order)
+
+**R-22 RESOLVED.** The tag rename/merge surface is an implementation-side
+class-2 fill using existing design-system components (settings-row +
+confirmation patterns); **no design-track reopen**. Built and frame-mapped
+when Doc 07 reaches it. (Closes the design half left open by R-22's
+headless ruling in S22 — the T-07 chunked resumable rewrite stands as
+built.)
+
+**R-24.** Untranslated menu buttons render FALLBACK-LANGUAGE TEXT per the
+Doc 01 fallback chain — never a blank and never a raw key — with the §14
+completeness indicator surfacing the gap in Backoffice. (This also answers
+the B6-S04 delivery note's carried question, DESIGN-DEVIATIONS row 7: the
+fallback is the ruled rendering.)
+
+**R-25.** Health outage bars use the NEUTRAL INK RAMP; status hues stay
+reserved to their semantic components per design-system law R-07/R-08.
+(This also answers the B6-S06 delivery note's carried SLA-token question,
+DESIGN-DEVIATIONS row 8: the as-drawn ink ramp is the ruled rendering.)
