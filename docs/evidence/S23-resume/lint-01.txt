@@ -1,0 +1,36 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Telegram/Bots.vue
+  239:38  warning  Replace `·color:·selectedMode·===·m·?·'var(--ds-accent-contrast)'·:·'var(--ds-success-text)'` with `⏎································color:⏎····································selectedMode·===·m⏎········································?·'var(--ds-accent-contrast)'⏎········································:·'var(--ds-success-text)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts
+  23:18  warning  Replace `⏎········'docker',⏎·······` with `'docker',`  prettier/prettier
+  26:1   warning  Replace `············` with `········`                 prettier/prettier
+  27:9   warning  Delete `····`                                          prettier/prettier
+  28:1   warning  Replace `············` with `········`                 prettier/prettier
+  29:9   warning  Delete `····`                                          prettier/prettier
+  30:1   warning  Replace `············` with `········`                 prettier/prettier
+  31:9   warning  Delete `····`                                          prettier/prettier
+  32:1   warning  Delete `····`                                          prettier/prettier
+  33:9   warning  Delete `····`                                          prettier/prettier
+  34:1   warning  Replace `············` with `········`                 prettier/prettier
+  35:1   warning  Replace `············` with `········`                 prettier/prettier
+  36:9   warning  Delete `····`                                          prettier/prettier
+  37:1   warning  Replace `········],⏎····` with `····]`                 prettier/prettier
+
+✖ 17 problems (0 errors, 17 warnings)
+  0 errors and 14 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit

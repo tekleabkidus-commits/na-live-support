@@ -23,4 +23,20 @@ return [
         // The boot-status pill text comes from a Vue interpolation, which the
         // linter correctly does not treat as a literal text node.
     ],
+
+    // B6-S06 (Doc 05 step 11): the frozen frames draw the PERMISSION KEY as
+    // a mono machine-identifier chip ("Permission gating shown", checklist
+    // §Q) — it is a registry key, not copy, and must render verbatim in
+    // every locale. The §K key-cap labels (Space/Esc/Enter/Home/End) are
+    // PHYSICAL KEY NAMES drawn as keycaps — a translated keycap would lie
+    // about the keyboard.
+    'resources/js/Pages/Admin/Telegram/Health.vue' => [
+        'telegram.health.view',
+        'Enter',
+        'Home / End',
+    ],
+    'resources/js/Pages/Admin/Telegram/MenuDesigner.vue' => [
+        'Space',
+        'Esc',
+    ],
 ];

@@ -806,4 +806,40 @@ return [
         'required_fields' => ['route'],
         'owning_doc' => 'Doc05',
     ],
+
+    // ── Doc 05 (Telegram) — S23 step 11: health rollup + FR-30 test tools.
+    [
+        // FR-29/A-22: the rollup transition (system actor; old/new statuses).
+        'action_key' => 'telegram.health_rollup_changed',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['system'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // SEC-03: viewer ACCESS is audited (the HistoryReader precedent —
+        // the viewer shows customer payload shapes, masked).
+        'action_key' => 'telegram.raw_updates_viewed',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-30: send-test to the sandbox chat.
+        'action_key' => 'telegram.test_message_sent',
+        'entity' => 'telegram_bot',
+        'actor_types' => ['staff'],
+        'required_fields' => ['chat_id'],
+        'owning_doc' => 'Doc05',
+    ],
+    [
+        // FR-30: simulate-window-expiry (staging only — the production
+        // refusal never reaches this entry; only executed simulations audit).
+        'action_key' => 'telegram.window_expiry_simulated',
+        'entity' => 'conversation',
+        'actor_types' => ['staff'],
+        'required_fields' => ['environment'],
+        'owning_doc' => 'Doc05',
+    ],
 ];

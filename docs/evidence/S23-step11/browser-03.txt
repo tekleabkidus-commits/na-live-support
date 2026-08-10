@@ -1,0 +1,214 @@
+
+Running 28 tests using 1 worker
+
+
+  ✓   1 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-1440, tokens + a11y clean (2.3s)
+
+  ✓   2 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-1440 (1.9s)
+
+  ✓   3 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 (1.8s)
+
+  ✓   4 [chromium] › tests/Browser/telegram-screens.spec.ts:122:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in light-1440 (2.1s)
+
+  ✓   5 [chromium] › tests/Browser/telegram-screens.spec.ts:148:9 › S05 templates: list + shipped wording + commands + /language gate, in light-1440 (2.0s)
+
+  ✘   6 [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-1440 (6.7s)
+
+  ✓   7 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in light-375, tokens + a11y clean (1.7s)
+
+  ✓   8 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in light-375 (1.6s)
+
+  ✓   9 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 (1.7s)
+
+  ✓  10 [chromium] › tests/Browser/telegram-screens.spec.ts:122:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in light-375 (1.7s)
+
+  ✓  11 [chromium] › tests/Browser/telegram-screens.spec.ts:148:9 › S05 templates: list + shipped wording + commands + /language gate, in light-375 (1.8s)
+
+  ✘  12 [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-375 (6.5s)
+
+  ✓  13 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-1440, tokens + a11y clean (1.7s)
+
+  ✓  14 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 (2.0s)
+
+  ✓  15 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 (2.0s)
+
+  ✓  16 [chromium] › tests/Browser/telegram-screens.spec.ts:122:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in dark-1440 (2.2s)
+
+  ✓  17 [chromium] › tests/Browser/telegram-screens.spec.ts:148:9 › S05 templates: list + shipped wording + commands + /language gate, in dark-1440 (2.5s)
+
+  ✘  18 [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-1440 (7.2s)
+
+  ✓  19 [chromium] › tests/Browser/telegram-screens.spec.ts:76:9 › S01 bots screen renders in dark-375, tokens + a11y clean (2.4s)
+
+  ✓  20 [chromium] › tests/Browser/telegram-screens.spec.ts:91:9 › S02 connections screen renders the checklist + confirm gate in dark-375 (2.1s)
+
+  ✓  21 [chromium] › tests/Browser/telegram-screens.spec.ts:108:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 (1.9s)
+
+  ✓  22 [chromium] › tests/Browser/telegram-screens.spec.ts:122:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in dark-375 (2.0s)
+
+  ✓  23 [chromium] › tests/Browser/telegram-screens.spec.ts:148:9 › S05 templates: list + shipped wording + commands + /language gate, in dark-375 (2.5s)
+
+  ✘  24 [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-375 (7.0s)
+
+  ✓  25 [chromium] › tests/Browser/telegram-screens.spec.ts:192:1 › S04 §K: the menu reorders end to end with no pointer, position announced (1.6s)
+
+  ✘  26 [chromium] › tests/Browser/telegram-screens.spec.ts:208:1 › S06 §K: the update viewer traverses by keyboard; masking holds on every entry (30.2s)
+
+  ✘  27 [chromium] › tests/Browser/telegram-screens.spec.ts:227:1 › S06: simulate-window-expiry is enabled on staging at 1440 and labelled staging-only (6.7s)
+
+  ✓  28 [chromium] › tests/Browser/telegram-screens.spec.ts:238:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) (1.9s)
+
+
+  1) [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="F01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="F01"]')
+
+
+      171 |             await setTheme(page, theme);
+      172 |             await page.goto('/admin/telegram/health'); // defaults to the DOWN fixture bot
+    > 173 |             await expect(page.locator('[data-frame="F01"]')).toBeVisible();
+          |                                                              ^
+      174 |             await expect(page.locator('[data-frame="F01-down"]')).toBeVisible(); // down banner
+      175 |             await expect(page.locator('[data-frame="F09"]')).toBeVisible(); // frozen-windows note
+      176 |             await expect(page.locator('[data-frame="F02"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:173:62
+
+    Error Context: test-results/telegram-screens-S06-healt-54d05--viewer-tools-in-light-1440-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="F01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="F01"]')
+
+
+      171 |             await setTheme(page, theme);
+      172 |             await page.goto('/admin/telegram/health'); // defaults to the DOWN fixture bot
+    > 173 |             await expect(page.locator('[data-frame="F01"]')).toBeVisible();
+          |                                                              ^
+      174 |             await expect(page.locator('[data-frame="F01-down"]')).toBeVisible(); // down banner
+      175 |             await expect(page.locator('[data-frame="F09"]')).toBeVisible(); // frozen-windows note
+      176 |             await expect(page.locator('[data-frame="F02"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:173:62
+
+    Error Context: test-results/telegram-screens-S06-healt-5f40e-d-viewer-tools-in-light-375-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="F01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="F01"]')
+
+
+      171 |             await setTheme(page, theme);
+      172 |             await page.goto('/admin/telegram/health'); // defaults to the DOWN fixture bot
+    > 173 |             await expect(page.locator('[data-frame="F01"]')).toBeVisible();
+          |                                                              ^
+      174 |             await expect(page.locator('[data-frame="F01-down"]')).toBeVisible(); // down banner
+      175 |             await expect(page.locator('[data-frame="F09"]')).toBeVisible(); // frozen-windows note
+      176 |             await expect(page.locator('[data-frame="F02"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:173:62
+
+    Error Context: test-results/telegram-screens-S06-healt-9e912-d-viewer-tools-in-dark-1440-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-375 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="F01"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="F01"]')
+
+
+      171 |             await setTheme(page, theme);
+      172 |             await page.goto('/admin/telegram/health'); // defaults to the DOWN fixture bot
+    > 173 |             await expect(page.locator('[data-frame="F01"]')).toBeVisible();
+          |                                                              ^
+      174 |             await expect(page.locator('[data-frame="F01-down"]')).toBeVisible(); // down banner
+      175 |             await expect(page.locator('[data-frame="F09"]')).toBeVisible(); // frozen-windows note
+      176 |             await expect(page.locator('[data-frame="F02"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:173:62
+
+    Error Context: test-results/telegram-screens-S06-healt-b273a-ed-viewer-tools-in-dark-375-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/telegram-screens.spec.ts:208:1 › S06 §K: the update viewer traverses by keyboard; masking holds on every entry 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.focus: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[role="listbox"]')
+
+
+      213 |     await page.goto('/admin/telegram/health');
+      214 |     const list = page.locator('[role="listbox"]');
+    > 215 |     await list.focus();
+          |                ^
+      216 |     await page.keyboard.press('Enter'); // expand entry 1 (the masked business_message)
+      217 |     await expect(page.getByTestId('viewer-live')).toContainText('1 of');
+      218 |     // The expanded payload keeps its shape but never a masked value.
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:215:16
+
+    Error Context: test-results/telegram-screens-S06-§K-th-49f58-asking-holds-on-every-entry-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/telegram-screens.spec.ts:227:1 › S06: simulate-window-expiry is enabled on staging at 1440 and labelled staging-only 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-frame="F05"] [data-action="simulate-expiry"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-frame="F05"] [data-action="simulate-expiry"]')
+
+
+      232 |     await page.goto('/admin/telegram/health');
+      233 |     const simulate = page.locator('[data-frame="F05"] [data-action="simulate-expiry"]');
+    > 234 |     await expect(simulate).toBeVisible();
+          |                            ^
+      235 |     await expect(simulate).toBeEnabled(); // local/ci is the staging case; production disables
+      236 | });
+      237 |
+        at /home/kidus/projects/na-live-support/tests/Browser/telegram-screens.spec.ts:234:28
+
+    Error Context: test-results/telegram-screens-S06-simul-65e2f-0-and-labelled-staging-only-chromium/error-context.md
+
+  6 failed
+    [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in light-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-1440 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:168:9 › S06 health: down banner, masked viewer, tools, in dark-375 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:208:1 › S06 §K: the update viewer traverses by keyboard; masking holds on every entry 
+    [chromium] › tests/Browser/telegram-screens.spec.ts:227:1 › S06: simulate-window-expiry is enabled on staging at 1440 and labelled staging-only 
+  22 passed (2.0m)

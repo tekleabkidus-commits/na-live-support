@@ -68,4 +68,14 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc05',
     ],
+    [
+        // FS-02: the silently-broken-webhook alert (pending growth + no
+        // inbound past threshold on a normally-active bot) — producer is
+        // TelegramHealthPoll (S23 step 11, C3 same-commit).
+        'category_key' => 'notify.telegram.webhook_silent',
+        'label_i18n_key' => 'telegram.notify.webhook_silent',
+        'default_channels' => ['in_app', 'email'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc05',
+    ],
 ];

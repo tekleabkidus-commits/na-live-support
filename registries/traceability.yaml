@@ -1497,11 +1497,12 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      Planned (S23 step 5): fixture suite covering every FR-01 allowed update type to
-      exact NormalizedInbound, incl. owner-phone attribution and deletion tombstones.
-      Not yet executed; this row is a commitment, not a claim.
+      EXECUTED (S23 step 5): the AC-01 fixture suite covers every FR-01 allowed update
+      type to exact NormalizedInbound, incl. owner-phone attribution
+      (OwnerPhoneAttributionTest) and deletion tombstones (InboundPipelineTest).
+      Swept to current truth at step 11 (advisor ruling 4).
   - ac_ref: "Doc05 AC-02"
     suite_path: tests/Feature/Telegram/DirectSurfaceTest.php
     type: automated
@@ -1509,10 +1510,11 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      Planned (S23 step 6): direct/business/hybrid x (direct inbound, business inbound)
-      incl. misconfiguration alert and redirect template. Not yet executed.
+      EXECUTED (S23 step 9, with the FR-05/06 mode handling): direct/business/hybrid
+      handling incl. the unconfigured_source flag and the BR-06 redirect (DirectSurfaceTest;
+      ModePolicy). Swept to current truth at step 11 (advisor ruling 4).
   - ac_ref: "Doc05 AC-03"
     suite_path: manual
     type: drill
@@ -1539,9 +1541,10 @@ entries:
     owner: platform-engineering
     status: partial
     gap: >-
-      Planned (S23 step 8): open→closing→expired, composer contract states, SMS gating
-      on phone presence, reopen-on-inbound, calibration tightening (EC-14). Not yet
-      executed.
+      EXECUTED (S23 step 8): open→closing→expired (WindowSweepTest), calibration
+      tightening EC-14 (WindowCalibrationTest), reopen-on-inbound (WindowReopenConsumerTest),
+      SMS gating on phone presence (seam). REMAINING (pre-agreed buckets): composer-state
+      RENDERING → Doc 07; window automations → Doc 12; the SMS send → Doc 14.
   - ac_ref: "Doc05 AC-05"
     suite_path: tests/Feature/Telegram/ErrorClassificationTest.php
     type: automated
@@ -1549,11 +1552,11 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      Planned (S23 step 7): every Telegram error fixture lands in the Doc 04 state and
-      reason specified, incl. EC-08 doomed-retry avoidance and the A-20 enum additions.
-      Not yet executed.
+      EXECUTED (S23 step 7): the AC-05 corpus (fixtures/telegram/errors) lands every
+      fixture in the Doc 04 state and reason specified, incl. EC-08 doomed-retry
+      avoidance and the A-20 enum additions (ErrorClassificationTest). Swept at step 11.
   - ac_ref: "Doc05 AC-06"
     suite_path: tests/Feature/Telegram/RateLimiterTest.php
     type: automated
@@ -1561,10 +1564,11 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      Planned (S23 step 7): bucket conformance under synthetic load, 429 adaptive
-      slowdown observable, per-chat FIFO preserved. Not yet executed.
+      EXECUTED (S23 step 7): bucket conformance under synthetic load, 429 adaptive
+      slowdown observed, per-chat FIFO preserved under the buckets (RateLimiterTest,
+      Redis-Lua). Swept to current truth at step 11 (advisor ruling 4).
   - ac_ref: "Doc05 AC-07"
     suite_path: tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php
     type: automated
@@ -1574,9 +1578,9 @@ entries:
     owner: platform-engineering
     status: partial
     gap: >-
-      Capability-truth half planned S23 step 3 (delivered UNSUPPORTED in the declared
-      set + state-mapping tests). The DOM half (no delivered state ever renders) is the
-      pre-agreed Doc 07 bucket. Not yet executed.
+      Capability-truth half EXECUTED (S23 step 3): delivered UNSUPPORTED in the declared
+      set, conformance green on the REAL adapter, zero-core-edits diff asserted. The DOM
+      half (no delivered state ever renders) stays the pre-agreed Doc 07 bucket.
   - ac_ref: "Doc05 AC-08"
     suite_path: manual
     type: drill
@@ -1588,9 +1592,12 @@ entries:
     justification: >-
       Real-Telegram design proof (A-24 rider): publish/rollback round-trip with dual
       previews compared against actual staging-bot renders via owner-supplied
-      screenshots; ≤10 s propagation measured by automated test
-      (tests/Feature/Telegram/MenuDesignerTest.php, step 9/11).
-    gap: Not yet executed.
+      screenshots. The automated halves are EXECUTED: publish/rollback + ≤10 s
+      propagation MEASURED (DirectSurfaceTest FR-27/T-06/NFR-05, step 9); the dual
+      previews render (telegram-screens.spec.ts S04, step 11).
+    gap: >-
+      The LIVE render comparison is owner-assisted-BLOCKED on the same unblocker as
+      AC-03 (a dedicated staging Business account, Doc 05 §21 / S23 step-6 ruling).
   - ac_ref: "Doc05 AC-09"
     suite_path: tests/Security/TelegramScrubberPatternsTest.php
     type: automated
@@ -1598,10 +1605,31 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     gap: >-
-      EXECUTED so far: the NFR-06 scrubber halves (token/file-URL value shapes, planted
-      positive controls — docs/evidence/S23-step1/scrubber-patterns-01.txt). Remaining
-      halves (token absent from UI, unconfirmed-connection routing block, callback
-      replay rejection, viewer masking) land in tests/Security/TelegramSecurityTest.php
-      at steps 5/6/11.
+      ALL FOUR AC-09 halves EXECUTED: token absent from logs (TelegramScrubberPatternsTest,
+      step 1) and from UI props (TelegramSecurityTest SEC-01, step 11);
+      unconfirmed-connection routing block (ConnectionLifecycleTest SEC-04, step 6);
+      callback replay rejection (InboundPipelineTest SEC-06, step 5); viewer masking
+      with positive controls and the no-unmask-door reflection proof
+      (TelegramSecurityTest SEC-03/EC-12, step 11).
+  - ac_ref: "Doc05 AC-08"
+    suite_path: tests/Browser/telegram-screens.spec.ts
+    type: automated
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      SECOND AC-08 entry — the design-fidelity screens row (advisor ruling 3; the
+      registry schema requires an AC-shaped ref, and AC-08 is the design-proof AC).
+      Functional-state + a11y coverage of the six frozen Batch-6 surfaces
+      (B6-S01/S02/S03 at step 10; B6-S04/S05/S06 at step 11): every asserted frame in
+      BOTH themes and BOTH viewports, en AND am, axe-clean (wcag2a/2aa), plus the two
+      SS4-K/S06-K keyboard proofs (menu reorder end-to-end with no pointer; viewer
+      traversal with masking held). Added at step 11 on the advisor's ruling 3 — the
+      step-10 BUILD-STATUS claim now has its registry row.
+    gap: >-
+      The PIXEL half is NOT claimed: Batch 6 pixel baselines are not exported
+      (DESIGN-DEVIATIONS row 2, the Doc 03 precedent). Functional-state coverage only.

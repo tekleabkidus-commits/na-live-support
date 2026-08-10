@@ -146,7 +146,7 @@ FS-01's health signal, fired on TRANSITION only (A-22 is the canonical home of t
 
 - **Schema version:** 2
 - **Payload:** `tenant_id`, `channel`, `channel_ref_id`, `status`
-- **Producers:** Doc04/ChannelHealthTracker
+- **Producers:** Doc04/ChannelHealthTracker, Doc05/HealthRollup
 - **Consumers:** Doc05/ChannelSurfaces, Doc13/ChannelSurfaces, Doc18/Alerting
 
 ## `conversation.blocked`

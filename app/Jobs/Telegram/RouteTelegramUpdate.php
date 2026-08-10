@@ -74,6 +74,15 @@ final class RouteTelegramUpdate implements ShouldQueue
     ): void {
         $update = $this->update;
 
+        // FS-02's no-inbound heartbeat: ANY accepted update proves Telegram
+        // can reach us. Pinned provenance (clock_timestamp() in the UPDATE —
+        // the plan's last_inbound_at ruling); job latency is seconds against
+        // a minutes-scale threshold, stated in the migration docblock.
+        \Illuminate\Support\Facades\DB::update(
+            'UPDATE telegram_bots SET last_inbound_at = clock_timestamp() WHERE id = ?',
+            [$this->botId],
+        );
+
         // business_connection is the lifecycle's input (FR-07…10) — handled
         // BEFORE messages so a same-batch connect is applied first.
         if (is_array($update['business_connection'] ?? null)) {

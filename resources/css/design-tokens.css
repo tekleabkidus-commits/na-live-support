@@ -43,7 +43,14 @@
     --ds-danger-text: #b32b2b;
     --ds-danger-strong: #8e2222;
     --ds-danger-bg: #fbe5e5;
-    --ds-danger-border: #e7c4c4;
+    /* CORRECTED (S23 step 11, the ruling-2 hex extraction): the S19 encoding
+       held #e7c4c4, which appears in NO frozen file — an eye-mix between the
+       two drawn danger-border roles. Re-encoded to the destructive-control
+       border the B6-S07..S10 frames draw (#E3B6B6, 6×); the danger SURFACE
+       border (banners, B6-S06) is its own drawn value below. Filed in
+       DESIGN-DEVIATIONS. */
+    --ds-danger-border: #e3b6b6;
+    --ds-danger-surface-border: #efc7c7;
     --ds-success-text: #156f45;
     --ds-success-bg: #e4f4ea;
     --ds-warn-text: #8f5f08;
@@ -115,11 +122,17 @@
     --ds-danger-strong: #e06b6b;
     --ds-danger-bg: #3d1b1b;
     --ds-danger-border: #6b3838;
+    /* Dark column: the frames draw ONE dark danger border (#6B3838) for both
+       roles — surface alias kept so light/dark usage stays symmetrical. */
+    --ds-danger-surface-border: #6b3838;
     --ds-success-text: #5ad190;
     --ds-success-bg: #123322;
     --ds-warn-text: #e8c25a;
     --ds-warn-bg: #332b12;
-    --ds-warn-border: #5a4a1e;
+    /* CORRECTED (S23 step 11, ruling-2 extraction): #5a4a1e appears in NO
+       frozen file; the only drawn dark warn border is #6B551A (the S04
+       untranslated-label treatment). Filed in DESIGN-DEVIATIONS. */
+    --ds-warn-border: #6b551a;
     --ds-focus-ring: #8fb6ff;
 
     /* ── FIXED: status pills — dark column ── */

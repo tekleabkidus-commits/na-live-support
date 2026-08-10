@@ -65,6 +65,11 @@ final class TelegramWebhookController
         /** @var array<string, mixed> $update */
         $update = $request->json()->all();
 
+        // FR-30: the last-50 raw-update capture (best-effort inside the class;
+        // a redis blip never costs the ACK). Stored raw, read masked-only
+        // (SEC-03/EC-12 — the read path applies UpdateMasker, always).
+        app(\App\Domain\Telegram\Health\RawUpdateLog::class)->push($bot->id, $update);
+
         RouteTelegramUpdate::dispatch($bot->id, $update);
 
         return new JsonResponse(['accepted' => true], 202);

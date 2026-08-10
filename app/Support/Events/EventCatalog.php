@@ -434,7 +434,7 @@ final class EventCatalog
             // tri-state vocabulary; the Doc 04 tracker emits healthy|down and
             // `degraded` arrives with Doc 05's threshold rollup producer.
             'payload' => ['tenant_id', 'channel', 'channel_ref_id', 'status'],
-            'producers' => ['Doc04/ChannelHealthTracker'],
+            'producers' => ['Doc04/ChannelHealthTracker', 'Doc05/HealthRollup'],
             'consumers' => ['Doc05/ChannelSurfaces', 'Doc13/ChannelSurfaces', 'Doc18/Alerting'],
             'description' => 'FS-01\'s health signal, fired on TRANSITION only (A-22 is the canonical home of transition-only): a channel endpoint crossed a health threshold or recovered. Status vocabulary healthy|degraded|down (v2, ruling A-22). Event name filed as interpretation A-4.',
         ],

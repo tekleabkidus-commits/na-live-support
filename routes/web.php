@@ -56,6 +56,31 @@ Route::middleware([
         ->middleware('permission:telegram.connections.manage')->name('telegram.screens.connections');
     Route::get('reply-window', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'window'])
         ->middleware('permission:telegram.bots.manage')->name('telegram.screens.window');
+
+    // Step 11 — B6-S04/S05/S06 (menu designer, templates & commands, health).
+    Route::get('menu', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'menu'])
+        ->middleware('permission:telegram.bots.manage')->name('telegram.screens.menu');
+    Route::get('templates', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'templates'])
+        ->middleware('permission:telegram.bots.manage')->name('telegram.screens.templates');
+    Route::get('health/{botId?}', [App\Http\Controllers\Telegram\TelegramScreensController::class, 'health'])
+        ->middleware('permission:telegram.health.view')->name('telegram.screens.health');
+
+    // FR-30 test tools + the SEC-03-masked viewer (plan mapping: telegram.health.view).
+    Route::get('bots/{botId}/raw-updates', [App\Http\Controllers\Telegram\HealthAdminController::class, 'rawUpdates'])
+        ->middleware('permission:telegram.health.view')->name('telegram.health.raw-updates');
+    // FILED INTERPRETATION (step 11): the plan's one-line mapping put "test
+    // tools" under telegram.health.view, but the ReadOnlySweep doctrine
+    // (Read Only accepts ZERO writes; view-tier keys are Read-Only-held)
+    // caught simulate-expiry ACCEPTING a Read Only write. The WRITE tools
+    // therefore ride telegram.bots.manage — the established precedent of
+    // their sibling write tool, re-register (api.php). Viewing (panel,
+    // raw viewer) stays on telegram.health.view as planned.
+    Route::post('bots/{botId}/send-test', [App\Http\Controllers\Telegram\HealthAdminController::class, 'sendTest'])
+        ->middleware(['permission:telegram.bots.manage', 'audit:telegram.test_message_sent'])
+        ->name('telegram.health.send-test');
+    Route::post('tools/simulate-window-expiry', [App\Http\Controllers\Telegram\HealthAdminController::class, 'simulateExpiry'])
+        ->middleware(['permission:telegram.bots.manage', 'audit:telegram.window_expiry_simulated'])
+        ->name('telegram.health.simulate-expiry');
 });
 
 // ── Doc 04 FS-05 — the dead-letter ops view (ruling R-17's class-2 fill).

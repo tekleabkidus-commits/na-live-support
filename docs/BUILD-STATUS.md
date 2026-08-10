@@ -49,6 +49,11 @@ Performance suites are deliberately NOT in the set (they run under `make perf` /
 CI stage — the Doc 01–04/06 precedent); browser proofs run under `make browser`; any new
 Doc 05 file at another tier joins this command in the same commit that creates it.
 
+**RECORD NOTE (advisor ruling 5, step 11):** the command was defined at plan time already
+naming `tests/Security/TelegramSecurityTest.php`, which step 11 creates — so every figure
+cited through step 10 came from the FOUR extant paths (95 passed / 500 assertions at
+steps 9–10). From step 11 the command runs verbatim, all five paths.
+
 ## SESSION-23 (Doc 05) — APPROVED PLAN RECORD (committed at approval per governance #9 / standing rule 12)
 
 **Approved by the owner's advisor 2026-08-09 against an independent count: 101/101,
@@ -190,6 +195,123 @@ traceability rows claim functional-state coverage only (the Doc 03 precedent).
 The label-token contrast deviation (`--ds-text-label`) is the STANDING S19
 filing already in DESIGN-DEVIATIONS; these screens inherit it, not re-file it.
 
+## SESSION-23 (Doc 05) — STEP 11: ADMIN UI II (B6-S04/S05/S06) + FR-29/30 HEALTH + FS-02 + SEC-03 VIEWER + THE SEVEN RESUME RULINGS
+
+**Backend (FR-29/30, FS-02, T-04 cadence):** `HealthRollup` (sole writer of
+`telegram_bots.health_status`; thresholds from the registered `telegram.health.*`
+settings; TRANSITION-ONLY per A-22 — apply-twice proven to emit exactly one
+`channel.health.changed` v2 with the closed payload; FS-01 redis convergence in the
+tracker's own binary vocabulary, recovery-is-a-transition proven); `TelegramHealthPoll`
+(5-min getWebhookInfo snapshot through the pinned proxy client + FS-02
+`SilentWebhookVerdict` — pending-growth × no-inbound-heartbeat × normally-active, with
+POSITIVE AND NEGATIVE controls; the alert rides the NEW registered category
+`notify.telegram.webhook_silent`, the ModePolicy log-signal precedent); the FR-29
+event-driven half is Doc 04's ChannelHealthTracker, untouched. `RawUpdateLog`
+(last-50 capped volatile list, 72 h TTL, best-effort at the edge, READ MASKED-ONLY)
++ `UpdateMasker` (SEC-03/EC-12: phone fields, phone-shaped free-text substrings,
+contact payloads wholesale, forwarded-origin fields — keys survive so the payload
+keeps its shape; strengthened mid-step when the free-text control caught the
+field-only masker). FR-30 tools: send-test (thin client, audited), one-click
+re-register (existing), simulate-window-expiry STAGING-ONLY (refuses in production
+with a stable code, no bypass — proven BOTH WAYS) driving the REAL sweep door.
+`telegram:health-poll` + `telegram:window-sweep` scheduled everyFiveMinutes —
+**GAP DISCLOSURE: step 8 built and proved WindowSweep but never scheduled it; the
+cadence existed only in tests. Closed here with a command-level test.**
+
+**R-19b AMENDMENT (7 new columns on `telegram_bots`, filed per inherited row 4):**
+`health_status` (state word, CHECK-constrained), `health_changed_at` /
+`last_inbound_at` / `last_polled_at` (PINNED-PROVENANCE — clock_timestamp() in the
+UPDATE statement, the connections.last_inbound_at ruling applied),
+`webhook_pending_updates` / `webhook_last_error` / `webhook_last_error_at`
+(Telegram-reported channel metadata, EC-13 posture — displayed, never ordering).
+UPDATE-granted, INSERT-denied (defaults fill) — TelegramGrantPhysicsTest's filed
+analysis restructured PER-PRIVILEGE and the denied INSERT set asserted by name.
+Migration expand-only; migrate on dev requires `--database=pgsql_migrator` (the app
+connection cannot ALTER — a plain `migrate` fails loudly on ownership, noted).
+
+**UI (token fidelity, DESIGN-FIDELITY-MANDATE):** `MenuDesigner.vue` (E01–E06,
+E12–E13 + §K: Space/arrows/Esc reorder with live-region position announcements,
+44 px move buttons, FR-27 limits as drawn states, dual preview with the
+numbered-text business fallback, untranslated-label dashed treatment, publish
+dialog naming affected bots, version history, <1024 read-only per the owner
+ruling); `Templates.vue` (E07–E11: six job-named templates with shipped-wording
+comparison + reset, two-variable set with unknown-variable role=alert error,
+real-bubble preview with sample values, five fixed commands + "fixed in v1"
+statement, /language readiness gate from the REAL CommandHandler door, E11
+missing-translation state from the seeded gap); `Health.vue` (F01–F12 + §K:
+down banner with the idempotent-effect-first re-register confirmation, ink-ramp
+throughput bars with the collapse stated in words, F04 threshold line, failures
+by kind, parked-work card (component 07: count → nothing dropped → resume),
+per-connection table, tools with the staging-only simulate, F08 read-only speeds
+with platform ceilings, F09 frozen-windows note, F11 vault state, F12 empty
+viewer with the test shortcut inside it, masked viewer as a keyboard list —
+arrows/Enter/Home/End with position announced, masking held on every path).
+The step-10 `health()` stub replaced by the real rollup column.
+
+**Proof:** canonical suites (five paths, verbatim, FIRST verbatim run): **108
+passed / 566 assertions** (`docs/evidence/S23-step11/canonical-suites-02.txt`).
+Browser: **28/28** — S01…S06 × both themes × 1440/375, §K reorder end-to-end
+with no pointer, §K viewer traversal with masking held, staging-simulate
+enabled-on-staging, §14 Amharic sweep across all screens
+(`browser-08-final.txt`; iteration trail browser-01…07 committed: an Octane
+stale-code round, the anon-volume asset-bake round — assets reach the container
+only via image rebuild or `compose cp` + `octane:reload` — and a REAL §13 find:
+scrollable regions at 375 needed tabindex/role/label, the S18 lesson replayed
+on the accounts table and the viewer payloads). Full suite: first run 4 failed
+(ReadOnlySweep = a REAL defect, below; 3 host-load intermittents recorded:
+RbacBudgets p99 with p50 within spec, PasswordResetFlow throttle off-by-one,
+TicketsBudgets linearity tripwire) → **re-run once per the standing rule: 959
+passed / 12,692 assertions / 11 skipped, 0 failed**
+(`make-test-02-rerun.txt`). Gates **13/13** (`gates-03-final.txt`; the red
+round `gates-01-red.txt` is the honest trail: the R-19b guard fired on the new
+columns exactly as designed, audit-coverage demanded the `audit:` middleware on
+both new POST routes, string-lint demanded allowlist entries for keycap labels
+and the drawn permission-key chips). Lint clean (`lint-07.txt`; lint-01…06 =
+the iteration trail incl. 11 PHPStan max findings fixed properly).
+
+**REAL DEFECT (found by ReadOnlySweepTest, fixed + filed):** the plan's one-line
+mapping put "test tools" under `telegram.health.view` — a VIEW-tier key Read
+Only holds — so `simulate-window-expiry` ACCEPTED a Read Only write (302).
+FILED INTERPRETATION: the WRITE tools (send-test, simulate-expiry) ride
+`telegram.bots.manage`, the established precedent of their sibling write tool
+re-register; viewing (panel, raw viewer) stays `telegram.health.view` as
+planned. Sweep re-run green. **For the advisor's countersign.**
+
+**The seven resume rulings, closed:** (1) `docs/evidence/S23-resume/` committed,
+failed host-side attempts honestly named. (2) tokens-first hex extraction
+EXECUTED and committed (`tokens-hex-extraction-01…03.txt`) — and it REFUTED the
+step-10 prose claim for two values: `--ds-danger-border` light `#e7c4c4` and
+`--ds-warn-border` dark `#5a4a1e` appear in NO frozen file (an S19 eye-mix).
+CORRECTED to drawn values (`#e3b6b6` destructive-control border per B6-S07..S10;
+`#6b551a` the only drawn dark warn border) + a new `--ds-danger-surface-border`
+(`#efc7c7`/`#6b3838`, the B6-S06 banner border) so one token no longer serves
+two drawn roles. Extraction now PASSES (144 declarations, 1 filed deviation).
+Filed in DESIGN-DEVIATIONS below. (3) the screens' functional-state coverage
+row added (second "Doc05 AC-08" entry — the registry schema requires AC-shaped
+refs — citing deviation #2 for the pixel half). (4) ALL Doc 05 traceability
+rows swept to current truth (AC-01/02/05/06/09 → covered with executed
+evidence; AC-03/04/07/08 partial with honest buckets; the dead
+MenuDesignerTest.php reference fixed). (5) the four-paths note above. (6)
+`docs/evidence/S23-step10/README-screens-render-captures.md` — the scaffold
+captures annotated iteration-not-sabotage. (7) Prettier warnings fixed in this
+commit (0 errors, 3 pre-existing prop-casing warnings on non-Telegram files
+remain warn-level).
+
+### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — step 11, every one filed)
+
+| # | File / frame | What differs | Class |
+|---|---|---|---|
+| 4 | `design-tokens.css` danger/warn borders | The ruling-2 extraction found two S19-encoded values in NO frozen source (`#e7c4c4`, `#5a4a1e`) — an eye-mix. Re-encoded to drawn values (`#e3b6b6`, `#6b551a`) + `--ds-danger-surface-border` (`#efc7c7`/`#6b3838`) so the destructive-control and danger-surface roles each carry their own drawn value | **1 (encoding correction to the frozen source)** |
+| 5 | B6-S04/S05 375 variants | Read-only behind the explicit notice — NOT a new deviation: the owner ruling the frozen deliveries record (E13; "the 375 variants are read-only behind the explicit notice, per your ruling") | — (inherited ruling, cited) |
+| 6 | B6-S06 375 | Configuration read-only; re-register stays operable behind the idempotent-effect confirmation — the owner ruling of 3 Aug recorded in the frozen v2 delivery note | — (inherited ruling, cited) |
+| 7 | B6-S04 dark Amharic untranslated buttons | Implemented AS DRAWN (English label in dashed amber with the "shown in English" subtext) — the delivery note's open question ("if you would rather see the gap than the fallback, say so") stays with the owner; flagged in the close-out | — (as drawn; question carried) |
+| 8 | B6-S06 throughput bars | Implemented AS DRAWN (ink ramp, collapse stated in words) — the delivery note's SLA-token question stays with the owner | — (as drawn; question carried) |
+
+**Deviation #3 (S02 Pending pill) is OWNER-APPROVED** — the frozen design
+note's requested ruling arrived via the advisor's step-11 confirmation paste
+("APPROVED BY THE OWNER via this paste"); recorded here as the ruling of
+record. Deviations #1 and #2 stand as filed at step 10.
+
 ## SESSION-23 (Doc 05) — EVENT-FAMILY RECONCILIATION (ordered at step-8 checkpoint)
 
 The plan enumerated **8 new events + 1 versioned bump** (expected catalog
@@ -231,14 +353,14 @@ R-19b-grant (s1), #13 FS-05-rebuild (s8), #15 split-resume (s7), #16
 no-rotation (s4), #18 unreachable-transition (s6), #19 resolver-deregistered
 (s5), #20 owner-phone-gate (s6).
 
-REMAINING (5), each with its planned step — so close-out is arithmetic:
-- #3 inline-ACK → latency/never-inline red — **step 9**.
-- #5 ordering-on-telegram_date → the DB-time-receipt window pin red — **step 9**.
-- #9 seeded token in a log path → NFR-06 scrubber gate red — **step 9**.
-- #14 redirect template without a tappable link → BR-06 red — **step 9** (needs
-  the FR-05 business-mode redirect, built at step 9).
-- #17 planted `if ($channel === 'telegram')` → no-channel-conditionals gate red
-  — **step 9**.
+**COMPLETE 20/20 at step 9** — the five remaining items executed with
+fail+restored evidence in `docs/evidence/S23-step9/`: #3 inline-ACK
+(sabotage-3-inline-ack-*), #5 ordering-on-telegram_date (sabotage-5-telegram-date-*),
+#9 seeded token in a log path (sabotage-9-token-log-*), #14 redirect without a
+tappable link (sabotage-14-redirect-no-link-*), #17 planted channel conditional
+(sabotage-17-channel-conditional-*). RECORD CORRECTION (step 11): the c1ab398
+commit message declared 20/20 but this section was not updated in that commit —
+corrected here; the close-out reconciles item-by-item against the list above.
 
 **GAP surfaced by this reconciliation:** FR-05/FR-06 MODE HANDLING (direct
 stores stray business flagged unconfigured_source; business auto-replies

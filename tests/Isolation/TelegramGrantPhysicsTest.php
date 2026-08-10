@@ -37,15 +37,34 @@ const DOC05_TABLES = [
     'telegram_owner_phone_identities',
 ];
 
-/** The R-19b denied set per table — the plan's filed per-column analysis. */
+/**
+ * The R-19b denied set per table AND PER PRIVILEGE — the plan's filed
+ * per-column analysis, amended at step 11 for the health columns (the
+ * migration docblock carries the same analysis):
+ * - the seven health columns are UPDATE-granted (the poll and the router
+ *   write them; the pinned-provenance ones only via clock_timestamp() in the
+ *   UPDATE statement — the connections.last_inbound_at ruling applied);
+ * - NONE of them is INSERT-granted: defaults fill on insert, so the denied
+ *   INSERT set GROWS by exactly those seven, asserted by name.
+ */
 const DOC05_DB_TIME_COLUMNS = [
-    'telegram_bots' => ['created_at'],
-    'telegram_business_connections' => ['created_at', 'last_state_changed_at'],
-    'telegram_menus' => [],
-    'telegram_menu_versions' => ['created_at'],
-    'telegram_templates' => [],
-    'telegram_flow_targets' => [],
-    'telegram_owner_phone_identities' => [],
+    'telegram_bots' => [
+        'INSERT' => [
+            'created_at', 'health_changed_at', 'health_status', 'last_inbound_at',
+            'last_polled_at', 'webhook_last_error', 'webhook_last_error_at',
+            'webhook_pending_updates',
+        ],
+        'UPDATE' => ['created_at'],
+    ],
+    'telegram_business_connections' => [
+        'INSERT' => ['created_at', 'last_state_changed_at'],
+        'UPDATE' => ['created_at', 'last_state_changed_at'],
+    ],
+    'telegram_menus' => ['INSERT' => [], 'UPDATE' => []],
+    'telegram_menu_versions' => ['INSERT' => ['created_at'], 'UPDATE' => ['created_at']],
+    'telegram_templates' => ['INSERT' => [], 'UPDATE' => []],
+    'telegram_flow_targets' => ['INSERT' => [], 'UPDATE' => []],
+    'telegram_owner_phone_identities' => ['INSERT' => [], 'UPDATE' => []],
 ];
 
 function telegramAppHasPrivilege(string $table, string $privilege): bool
@@ -96,13 +115,13 @@ function telegramAppColumnSplit(string $table, string $privilege): array
 
 it('R-19b: the app role cannot NAME any DB-time column on a Doc 05 table, INSERT or UPDATE — derived from the schema', function (): void {
     foreach (DOC05_TABLES as $table) {
-        $expected = DOC05_DB_TIME_COLUMNS[$table];
-        sort($expected);
-
         foreach (['INSERT', 'UPDATE'] as $privilege) {
             if ($privilege === 'UPDATE' && $table === 'telegram_menu_versions') {
                 continue; // no UPDATE privilege at all — asserted separately below
             }
+
+            $expected = DOC05_DB_TIME_COLUMNS[$table][$privilege];
+            sort($expected);
 
             [, $denied] = telegramAppColumnSplit($table, $privilege);
 

@@ -236,7 +236,12 @@ const isEmpty = computed(() => props.bots.length === 0);
                         <span
                             v-if="m === 'business'"
                             class="ml-1 text-[10px]"
-                            :style="{ color: selectedMode === m ? 'var(--ds-accent-contrast)' : 'var(--ds-success-text)' }"
+                            :style="{
+                                color:
+                                    selectedMode === m
+                                        ? 'var(--ds-accent-contrast)'
+                                        : 'var(--ds-success-text)',
+                            }"
                             >{{ t.mode_recommended }}</span
                         >
                     </button>

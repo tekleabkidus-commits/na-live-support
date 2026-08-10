@@ -50,3 +50,11 @@ Schedule::command('tickets:merge-snapshots-prune')->hourly();
 // never fire. A non-zero exit IS the page (the PartitionsCheck idiom); the critical
 // log entry carries the row ids.
 Schedule::command('tickets:invariant-audit')->dailyAt('02:30');
+
+// Doc 05 FR-22: the reply-window sweep's 5-minute drift bound (event-driven
+// updates bypass the cadence). Step-8 gap closed at step 11 — see BUILD-STATUS.
+Schedule::command('telegram:window-sweep')->everyFiveMinutes()->withoutOverlapping();
+
+// Doc 05 FR-29/FS-02: getWebhookInfo poll + silent-broken detection, 5-minute
+// cadence per the document; event-driven health rides Doc 04's tracker.
+Schedule::command('telegram:health-poll')->everyFiveMinutes()->withoutOverlapping();
