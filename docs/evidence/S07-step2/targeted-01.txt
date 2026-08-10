@@ -1,0 +1,113 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.22s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.09s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.08s  
+  ✓ it the app role writes events only through the default: naming occu… 0.03s  
+
+   FAIL  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.09s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.07s  
+  ⨯ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.23s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.08s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.07s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.08s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.09s  
+  ⨯ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.05s  
+  ⨯ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   FAIL  Tests\Feature\Inbox\ReplayCountingTest
+  ⨯ it replay-counting: a recorded stream into a COLD projector lands e… 0.23s  
+
+   FAIL  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.12s  
+  ⨯ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.09s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.16s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR-05 my_open: assignm…   
+  Expecting […] not to contain '019fec6d-b5cf-7182-a5d3-cd76f6dd11c7'.
+
+  at tests/Feature/Inbox/ListProjectorTest.php:114
+    110▕         'conversation_id' => $conversation->identifier(),
+    111▕         'old_status' => 'open', 'new_status' => 'resolved',
+    112▕         'actor_type' => 'agent', 'actor_id' => $u2->identifier(),
+    113▕     ]));
+  ➜ 114▕     expect($zsets->allIds(SystemViews::userView('my_open', $u2->identifier())))->not->toContain($ticket->identifier());
+    115▕ });
+    116▕ 
+    117▕ it('C-09 by construction: the SAME event delivered twice recomputes identical state — row values, memberships, no duplicate effects', function (): void {
+    118▕     [$tenant, $conversation, $ticket] = ticketFixture('new');
+
+  1   tests/Feature/Inbox/ListProjectorTest.php:114
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FS-02/ADR 0011 drill:…    
+  the killed attempt left a row behind
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/ListProjectorTest.php:268
+    264▕         $armed = false;
+    265▕     }
+    266▕ 
+    267▕     expect(DB::table('ticket_list_items')->where('ticket_id', $ticket->identifier())->exists())
+  ➜ 268▕         ->toBeFalse('the killed attempt left a row behind')
+    269▕         ->and($zsets->allIds('unassigned'))->not->toContain($ticket->identifier(), 'the killed attempt patched a ZSET it never rowed');
+    270▕ 
+    271▕     // ── RE-DRIVE: same job, same event id — converges exactly.
+    272▕     runListProjector($eventId);
+
+  1   tests/Feature/Inbox/ListProjectorTest.php:268
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it registers the projecto…   
+  Failed asserting that an array contains 'message.received lost its projector registration'.
+
+  at tests/Feature/Inbox/ListProjectorTest.php:296
+    292▕     ];
+    293▕ 
+    294▕     expect(count($expected))->toBe(29);
+    295▕     foreach ($expected as $event) {
+  ➜ 296▕         expect(App\Support\Events\ConsumerRegistry::consumersFor($event))->toContain(ListProjectorConsumer::class, "{$event} lost its projector registration");
+    297▕     }
+    298▕ });
+    299▕
+
+  1   tests/Feature/Inbox/ListProjectorTest.php:296
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ReplayCountingTest > it replay-counting: a re…   
+  Failed asserting that 4 is identical to 2.
+
+  at tests/Feature/Inbox/ReplayCountingTest.php:128
+    124▕     $assertView(SystemViews::userView('following', $u1->identifier()), 'following', $u1->identifier());
+    125▕     $assertView(SystemViews::userView('mentions', $u2->identifier()), 'mentions', $u2->identifier());
+    126▕ 
+    127▕     // Spot the shape too, not only the equality: 2 unassigned, 2 for u1, 1 SLA.
+  ➜ 128▕     expect($zsets->count('unassigned'))->toBe(2)
+    129▕         ->and($zsets->count(SystemViews::userView('my_open', $u1->identifier())))->toBe(2)
+    130▕         ->and($zsets->count('sla_at_risk'))->toBe(1)
+    131▕         ->and($zsets->count('expiring_windows'))->toBe(1)
+    132▕         ->and($zsets->count('rescue'))->toBe(1);
+
+  1   tests/Feature/Inbox/ReplayCountingTest.php:128
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it N-01: a FOREIGN TENANT's id…   
+  this assertion is vacuous unless the other tenant's rows actually exist — check the fixture
+Failed asserting that 0 is greater than 0.
+
+  at tests/Security/InboxSecurityTest.php:114
+    110▕ 
+    111▕     $page = app(ListReadModel::class)->page('unassigned', 'unassigned', $all);
+    112▕     $hydratedForeign = count(array_filter($page, fn (object $row): bool => $row->ticket_id === $ticketB->identifier()));
+    113▕ 
+  ➜ 114▕     expect($hydratedForeign)->toBeInvisibleGiven($rowsThatExist);
+    115▕ });
+    116▕ 
+    117▕ it('SEC posture: the hydration order is the ZSET\'s and out-of-scope ids leave NO gap artifacts (count residue would leak existence)', function (): void {
+    118▕     [$tenant] = ticketFixture('open');
+
+
+  Tests:    5 failed, 12 passed (78 assertions)
+  Duration: 6.91s
+

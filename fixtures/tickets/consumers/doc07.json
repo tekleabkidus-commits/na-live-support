@@ -1,7 +1,7 @@
 {
   "doc": "Doc07",
   "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
-  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "note": "TIGHTENED at S07 step 2 (the fixture's own rule: the consuming session tightens when it builds). The ListProjector is RECOMPUTE-FROM-TRUTH: an event is a TRIGGER naming which tickets to recompute; every VALUE is re-read from canonical rows, so the read-slice per ticket.* event is the id set only. Two entries stay at Doc 06's curated slice pending their consumer: ticket.bulk_completed and ticket.escalation_rerouted (the FR-26 bell fanout, S07 step 12 \u2014 they tighten in that commit). A producer removing or renaming any `reads` key still breaks this document; a schema_version bump here must be reconciled deliberately.",
   "entries": [
     {
       "event": "ticket.assigned",
@@ -9,11 +9,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "old_assignee_id",
-        "new_assignee_id",
-        "by"
+        "ticket_id"
       ]
     },
     {
@@ -22,9 +18,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "previous_assignee_id"
+        "ticket_id"
       ]
     },
     {
@@ -46,10 +40,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -58,12 +49,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "customer_id",
-        "source",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -72,11 +58,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "previous_path",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -85,13 +67,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "path",
-        "target_id",
-        "reason",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -112,9 +88,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "user_id",
-        "by"
+        "ticket_id"
       ]
     },
     {
@@ -124,8 +98,7 @@
       "reads": [
         "tenant_id",
         "ticket_id",
-        "user_id",
-        "by"
+        "user_id"
       ]
     },
     {
@@ -135,11 +108,7 @@
       "reads": [
         "tenant_id",
         "source_ticket_id",
-        "target_ticket_id",
-        "source_conversation_id",
-        "target_conversation_id",
-        "actor_type",
-        "actor_id"
+        "target_ticket_id"
       ]
     },
     {
@@ -148,12 +117,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "old_priority",
-        "new_priority",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -162,13 +126,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "from_status",
-        "reopened_count",
-        "assignee_id",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -177,10 +135,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -189,11 +144,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "conversation_blocked",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -202,11 +153,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "restored_status",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -216,11 +163,7 @@
       "reads": [
         "tenant_id",
         "origin_ticket_id",
-        "new_ticket_id",
-        "conversation_id",
-        "message_count",
-        "actor_type",
-        "actor_id"
+        "new_ticket_id"
       ]
     },
     {
@@ -229,12 +172,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "old_status",
-        "new_status",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -243,11 +181,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "subject_source",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -256,10 +190,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "count",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -268,13 +199,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "old_department_id",
-        "new_department_id",
-        "assignee_retained",
-        "actor_type",
-        "actor_id"
+        "ticket_id"
       ]
     },
     {
@@ -284,10 +209,7 @@
       "reads": [
         "tenant_id",
         "source_ticket_id",
-        "target_ticket_id",
-        "restored_status",
-        "actor_type",
-        "actor_id"
+        "target_ticket_id"
       ]
     },
     {
@@ -296,10 +218,7 @@
       "schema_version": 1,
       "reads": [
         "tenant_id",
-        "ticket_id",
-        "conversation_id",
-        "count",
-        "actor_id"
+        "ticket_id"
       ]
     }
   ]

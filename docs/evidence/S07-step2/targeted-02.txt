@@ -1,0 +1,29 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.61s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.12s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.11s  
+  ✓ it the app role writes events only through the default: naming occu… 0.05s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.11s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.13s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.27s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.07s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.06s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.10s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.09s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.08s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 0.53s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.13s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.14s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.30s  
+
+  Tests:    17 passed (117 assertions)
+  Duration: 7.99s
+

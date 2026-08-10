@@ -41,15 +41,21 @@ beforeEach(function (): void {
     Redis::connection('durable')->del(TicketTimers::ZSET);
 });
 
-test('ADR 0011: the dispatch map is a registry, and message.received maps to exactly the reopen consumer', function () {
+test('ADR 0011: the dispatch map is a registry, and message.received maps to exactly its three deliberate consumers', function () {
     // S23 step 8: WindowReopenConsumer joined message.received DELIBERATELY
-    // (Doc 05 FR-24 reopen). This guard catches SILENT additions — a deliberate
-    // one updates it, and the exact-list assertion still fails a stray consumer.
+    // (Doc 05 FR-24 reopen). S07 step 2: ListProjectorConsumer joined
+    // DELIBERATELY (Doc 07 T-01 — activity/snippet/unread recompute). This
+    // guard catches SILENT additions — a deliberate one updates it, and the
+    // exact-list assertion still fails a stray consumer.
     expect(ConsumerRegistry::consumersFor('message.received'))->toBe([
         TicketReopenConsumer::class,
         App\Jobs\Telegram\WindowReopenConsumer::class,
+        App\Jobs\Inbox\ListProjectorConsumer::class,
     ])
-        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([], 'no other event has grown a consumer silently');
+        // S07: ticket.created now carries exactly the projector — the "no
+        // silent growth" posture continues with the new baseline pinned.
+        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class], 'ticket.created must map to exactly the list projector (S07 step 2)')
+        ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([], 'no other event has grown a consumer silently');
 });
 
 test('ADR 0011: relaying a mapped event queues the consumer once — event id, tenant and correlation stamped — and a relay re-run re-dispatches nothing', function () {

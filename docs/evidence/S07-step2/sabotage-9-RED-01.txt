@@ -1,0 +1,33 @@
+
+   FAIL  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 5.75s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.11s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.25s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.07s  
+  ⨯ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.07s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.08s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.09s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.06s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it A-32 mentions: note.me…   
+  a redelivered note.mentioned minted a SECOND bell row — the C-09 dedupe is gone
+Failed asserting that actual size 2 matches expected size 1.
+
+  at tests/Feature/Inbox/ListProjectorTest.php:163
+    159▕     $rows = DB::table('inbox_notifications')
+    160▕         ->where('user_id', $mentioned->identifier())
+    161▕         ->where('category', 'notify.inbox.mention')
+    162▕         ->get();
+  ➜ 163▕     expect($rows)->toHaveCount(1, 'a redelivered note.mentioned minted a SECOND bell row — the C-09 dedupe is gone');
+    164▕ 
+    165▕     $mentionsView = SystemViews::userView('mentions', $mentioned->identifier());
+    166▕     expect($zsets->allIds($mentionsView))->toContain($ticket->identifier());
+    167▕
+
+  1   tests/Feature/Inbox/ListProjectorTest.php:163
+
+
+  Tests:    1 failed, 8 passed (62 assertions)
+  Duration: 6.58s
+

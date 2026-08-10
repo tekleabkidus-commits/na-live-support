@@ -81,6 +81,56 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 2: THE LIST PROJECTOR (T-01), REPLAY-COUNTING PROOF (T-03), SCOPED-LIST PROOF, NFR-07 CHECKER
+
+**Built:** `ListProjector` as a ConsumerRegistry durable consumer over **29
+events** (21 ticket.* + message.received/sent + note.mentioned +
+telegram.window.closing/expired/reopened + telegram.connection.revoked/active
+— registry entries, never relay edits; `automation` family per ADR 0007's
+precedent). Architecture: **RECOMPUTE-FROM-TRUTH** — an event names tickets,
+every value re-reads canonical rows (`CanonicalTicketReader` →
+`TicketListItems::recompute` upsert under the column grants), membership
+re-evaluated against `SystemViews`' seven FR-05 definitions (each defined
+ONCE in two executable forms: the per-ticket evaluation the projector runs
+and the direct query the checker/replay/rebuild run — their agreement IS
+NFR-07). View ZSETs per R-23 (integer-µs scores, tenant-prefixed keys,
+C-07 TTL, documented tiebreak); `ListReadModel` hydration through Doc 03's
+`ScopeSets` (the R-03 single implementation) on the new `TicketListItem`
+read-only model — BR-03's absence-not-locks proven; A-32 mentions ride
+`inbox_notifications` with the event-dedupe expression index (C-09 as
+physics; step-2 migration also fixed step 1's `snippet_kind` CHECK missing
+'audio'). `inbox:consistency-check` (NFR-07's deliverable) ships with a
+seeded-drift positive control. **doc07.json TIGHTENED in this first consumer
+commit** (21 read-slices to the id sets the recompute actually uses; the two
+bell entries tighten at step 12 — noted in the fixture). The
+`ticket-status-writer` gate's design constraint was FOLLOWED, not argued
+with: the reader/writer split keeps the `status` COPY assignment out of any
+file touching the ticket context; the gate + StatusWriterEncapsulationTest
+stay untouched and green. The message.received consumer pin updated for the
+DELIBERATE addition (its own rule), with ticket.created's new baseline pinned.
+
+**Proven (evidence `docs/evidence/S07-step2/`):** canonical suites (extant
+paths, stated) **22 passed / 193 assertions** (`canonical-suites-02.txt`);
+full suite **993 passed / 0 failed / 13,241 assertions** (`make-test-03.txt`;
+the honest trail: `make-test-01.txt` — the ticketRow name collision;
+`make-test-02.txt` — the two deliberate-addition guards firing exactly as
+designed on the projector's arrival); gates **13/13** (`gates-01.txt`); lint
+clean (`lint-04.txt`; lint-01…03 the iteration trail incl. 36 PHPStan-max
+findings fixed properly with the OutboxRelay row-shape idiom). **The
+inherited-row-6 proofs executed:** C-09 redelivery (identical state,
+byte-for-byte row equality) + the FS-02 kill/re-drive drill (killed
+mid-apply → partial state honestly asserted → re-drive CONVERGES → third
+delivery no-op) + **the T-03 replay-counting proof** (recorded 12-event
+stream into a COLD projector → every view's ZCARD == direct scoped query,
+member-for-member, then the NFR-07 checker green + seeded-drift red-detects).
+Sabotages fail+restored: **#1** (hydration scope filter dropped → red on
+exactly the two ScopeSets proofs; the N-01 cross-tenant test GREEN BY DESIGN
+— the tenant layer holds independently, the two-layer demonstration;
+`sabotage-1-RED-01/-RESTORED-01.txt`) and **#9** (both dedupe layers removed
+at the migration level → the duplicate effect OBSERVED: a second bell row;
+the recompute C-09 test green BY DESIGN — recompute-from-truth is
+independently idempotent; `sabotage-9-RED-01/-RESTORED-01.txt`).
+
 ## SESSION-07 (Doc 07) — STEP 1: SCHEMA PHYSICS + REGISTRIES + THE ROW-9 DISCHARGE (A-33)
 
 **Built:** the SEVEN Doc 07 tables (`ticket_list_items`, `inbox_saved_views`,

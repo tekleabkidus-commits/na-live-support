@@ -1191,3 +1191,72 @@ expect()->extend('toBeInvisibleGiven', function (int $rowsThatExist) {
 
     return $this->toBe(0);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Doc 07 (S07) inbox read-model helpers
+|--------------------------------------------------------------------------
+*/
+
+/** An events row in the catalog's payload shape; the projector consumer re-reads it (C-09 posture). */
+function inboxSeedEvent(string $name, array $payload): string
+{
+    $eventId = (string) Str::uuid7();
+
+    DB::table('events')->insert([
+        'id' => $eventId,
+        'tenant_id' => $payload['tenant_id'],
+        'name' => $name,
+        'schema_version' => 1,
+        'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
+    ]);
+
+    return $eventId;
+}
+
+function runListProjector(string $eventId): void
+{
+    (new App\Jobs\Inbox\ListProjectorConsumer($eventId))->handle(
+        app(App\Domain\Inbox\ReadModels\ListProjector::class),
+    );
+}
+
+/** The list-item row minus volatile maintenance metadata, for equality asserts. */
+function listItemState(string $ticketId): array
+{
+    $row = (array) DB::table('ticket_list_items')->where('ticket_id', $ticketId)->first();
+    unset($row['updated_at'], $row['created_at']);
+
+    return $row;
+}
+
+/**
+ * A ticket row inside the CURRENTLY BOUND tenant (the anotherConversation
+ * discipline — ticketFixture would mint and rebind a fresh tenant).
+ *
+ * @return array{0: App\Models\Ticket}
+ */
+function inboxTicketRow(string $tenantId, App\Models\Conversation $conversation, string $status = 'open', array $attributes = []): array
+{
+    $ticketId = (string) Str::uuid7();
+    DB::table('tickets')->insert(array_merge([
+        'id' => $ticketId,
+        'tenant_id' => $tenantId,
+        'conversation_id' => $conversation->identifier(),
+        'customer_id' => $conversation->customer_id,
+        'number' => random_int(1, 2_000_000_000),
+        'status' => $status,
+        'priority' => 'normal',
+        'source' => 'agent',
+    ], $attributes));
+
+    /** @var App\Models\Ticket $ticket */
+    $ticket = App\Models\Ticket::query()->findOrFail($ticketId);
+
+    if (in_array($status, ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'], true)) {
+        app(App\Domain\Conversations\Storage\ConversationRepository::class)
+            ->claimOpenTicket($conversation, $ticketId);
+    }
+
+    return [$ticket];
+}
