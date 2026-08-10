@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\DB;
  *     conversation: object{channel: string, reply_window_expires_at: string|null}|null,
  *     customer: object{display_name: string|null}|null,
  *     lastPublic: object{kind: string, body: string|null, created_at: string}|null,
- *     lastActivityAt: string
+ *     lastActivityAt: string,
+ *     tagsJson: string
  * }
  */
 final class CanonicalTicketReader
@@ -31,8 +32,10 @@ final class CanonicalTicketReader
     /** @return TicketTruth|null */
     public function read(string $ticketId): ?object
     {
-        /** @var object{id: string, tenant_id: string, conversation_id: string, customer_id: string|null, number: int|string, status: string, priority: string, pending_reason: string|null, source: string, assignee_id: string|null, department_id: string|null, channel_unreachable: bool, subject: string|null, created_at: string}|null $ticket */
-        $ticket = DB::table('tickets')->where('id', $ticketId)->first();
+        /** @var object{id: string, tenant_id: string, conversation_id: string, customer_id: string|null, number: int|string, status: string, priority: string, pending_reason: string|null, source: string, assignee_id: string|null, department_id: string|null, channel_unreachable: bool, subject: string|null, created_at: string, tags_json: string|null}|null $ticket */
+        $ticket = DB::table('tickets')->where('id', $ticketId)
+            ->selectRaw('*, array_to_json(tags) AS tags_json')
+            ->first();
         if ($ticket === null) {
             return null;
         }
@@ -69,6 +72,7 @@ final class CanonicalTicketReader
             'customer' => $customer,
             'lastPublic' => $lastPublic,
             'lastActivityAt' => $activity->last_activity ?? $ticket->created_at,
+            'tagsJson' => $ticket->tags_json ?? '[]',
         ];
     }
 }

@@ -133,6 +133,15 @@ enum ErrorCode: string
      */
     case DeadLetterNotParked = 'dead_letter_not_parked';
 
+    // ── Doc 07 (S07 step 4): the saved-view surface's stable refusals ──
+    case ViewFiltersInvalid = 'view_filters_invalid';
+
+    // AC-02: shared views are read-only to consumers — duplicate to edit.
+    case ReadOnlyView = 'read_only_view';
+
+    // C-10: "not yours" and "does not exist" answer identically.
+    case ViewNotFound = 'view_not_found';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

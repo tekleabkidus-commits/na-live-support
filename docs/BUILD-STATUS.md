@@ -81,6 +81,55 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 4: THE VIEWS SYSTEM (AC-02), A-30 VARIANTS/EC-04, FS-01/FS-02 DRILLS + THE R-26/A-34 RULING
+
+**Built:** the seven FR-05 system-view membership fixtures (include AND
+exclude cases per view, each == its direct query member-for-member; A-32's
+mention resolution executed both ways); saved views (FR-06): CRUD + share +
+duplicate-to-edit round-trips, the CLOSED filter-key set with type checks,
+materialization (T-01 full recompute on create/update) + INCREMENTAL
+projector patching via the saved-view index, the two executable filter forms
+(sql()/matches()) with their agreement PROVEN row-for-row; **A-30's lazy
+per-scope variants** (ViewVariants — one code path for lazy build, eviction
+recovery and rebuild) with the EC-04 two-scope fixture under all four
+countersign conditions; FR-08 view-order persistence (prefs door, merged per
+key); FS-01 (freeze-correct-as-of + the 30 s staleness signal
+[ProjectorStatus] + writes-never-blocked + backlog recovery, the real
+consumer left dead) and FS-02 (real keys FLUSHED → rebuild-on-miss with the
+degraded signal + `inbox:views-rebuild`, system views first) — both drills
+executed. **THE R-26/A-34 RULING** (the step's mandatory STOP, ruled):
+ReadOnlySweep caught `POST inbox/views` accepting a Read Only write —
+FR-06's literal wording vs Doc 03's zero-writes bar. Ruled: FR-06 names the
+AUDIENCE; **`views.manage` registered as the THIRD addition of record
+(catalog 113)**, seeded into every template but Read Only (whose computed
+.view-only list excludes it BY CONSTRUCTION); the three ruling proofs
+executed — the SEV-1 flipped by the MAPPING alone (sweep untouched), the
+real Read Only template refused, the real Junior Agent template creating
+(the audience proof), Read Only still reading system views. The R-26
+principle was ALSO applied to the sibling workspace-config write
+(`PATCH inbox/prefs` → views.manage — the sweep flagged it the same way;
+**flagged in the 4+5 report for countersign**). Doc 04's RealtimePush
+docblock amendment landed (comment-only, advisor-approved; the close-out's
+edits-to-other-documents section lists it). Audit: share/unshare write real
+entries behind the `audit:` tripwire; the five personal-config routes carry
+JUSTIFIED exemptions in ci/audit-exempt-routes.php. AC-02's traceability row
+flipped to automated/covered.
+
+**Proven (evidence `docs/evidence/S07-step4/`):** the ruling battery — inbox
+suites + CatalogSnapshot + RoleSeeder + ReadOnlySweep — **62 passed / 1,462
+assertions** (`r26-proofs-02.txt`); canonical suites (4 of 5 extant paths)
+**48 passed / 383** pre-ruling (`canonical-suites-01.txt`); full suite
+**1020 passed / 0 failed / 13,588 assertions** (`make-test-rerun-01.txt` —
+the once-re-run 0d record: `make-test-02.txt` red on RbacBudgets p99 1.628
+vs 1.5 with p50 0.107 WITHIN spec, the documented host-load discriminator;
+`make-test-01.txt` = the pre-ruling trail incl. the SEV-1 and ONE
+SuspendedTenantMatrix postgres-connection timeout, first sighting, green on
+every later run); gates **13/13**; lint clean. **Sabotage #18** executed:
+staleness signal suppressed → FS-01 red on exactly the is-stale assertion →
+restored (`sabotage-18-RED-01/-RESTORED-01.txt`). Session lesson banked: the
+consistency/rebuild commands now CAPTURE-AND-RESTORE the caller's RLS
+binding (the in-test artisan foot-gun the FS-02 drill exposed).
+
 ## SESSION-07 (Doc 07) — STEP 3: T-02 VIEW-DELTA PROTOCOL v:1, T-03 COUNT PUSHES, SEC-01 SUBSCRIBE RE-AUTH, HEALTH-v2'S FIRST CONSUMER
 
 **Built:** the T-02 protocol door (`ViewDeltaPusher` — Doc 07's OWN protocol,

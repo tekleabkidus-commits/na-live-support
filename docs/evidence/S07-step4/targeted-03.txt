@@ -1,0 +1,119 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 3.76s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.08s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.07s  
+  ✓ it the app role writes events only through the default: naming occu… 0.03s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.06s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.04s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 0.08s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  0.24s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.06s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.05s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.08s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.06s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.04s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.06s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.14s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.07s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 0.12s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.05s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 0.25s  
+
+   FAIL  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 0.11s  
+  ⨯ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.09s  
+  ⨯ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.05s  
+  ⨯ it FR-08: view order persists per user through the prefs door, merg… 0.04s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 0.09s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 0.09s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.06s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 0.09s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 0.13s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 0.13s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 0.08s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.06s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.05s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 0.07s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.10s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.04s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.09s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.07s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.11s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.02s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it AC-02 round-trip: share r…   
+  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:98
+     94▕     expect($denied->status())->toBeIn([403, 404], 'a non-holder reached the share door');
+     95▕ 
+     96▕     // …and the OWNER (holder) shares — audited via the route middleware.
+     97▕     $shared = $this->actingAs($owner, 'staff')->postJson("https://localhost/inbox/views/{$viewId}/share", ['to_type' => 'team', 'to_id' => (string) Str::uuid7()]);
+  ➜  98▕     $shared->assertOk();
+     99▕ 
+    100▕     // READ-ONLY to consumers: edit refused with the stable code…
+    101▕     $edit = $this->actingAs($consumer, 'staff')->patchJson("https://localhost/inbox/views/{$viewId}", ['name' => 'hijack', 'filters' => ['status' => ['open']]]);
+    102▕     $edit->assertStatus(403);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it FR-06: the filter key set…   
+  Expected response status code [422] but received 403.
+Failed asserting that 403 is identical to 422.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:131
+    127▕     $owner = inboxScopedActor('All', 'S07 SV Closer');
+    128▕     $savedViews = app(SavedViews::class);
+    129▕ 
+    130▕     $refused = $this->actingAs($owner, 'staff')->postJson('https://localhost/inbox/views', ['name' => 'bad', 'filters' => ['sql_injection' => '1']]);
+  ➜ 131▕     $refused->assertStatus(422);
+    132▕     expect($refused->json('code'))->toBe('view_filters_invalid');
+    133▕ 
+    134▕     $viewId = $savedViews->create($owner, 'Doomed', ['status' => ['open']]);
+    135▕     expect($savedViews->materializedIds())->toContain($viewId);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it FR-08: view order persist…   
+  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:148
+    144▕     [$tenant] = ticketFixture('open');
+    145▕     $user = inboxScopedActor('All', 'S07 Prefs User');
+    146▕ 
+    147▕     $order = ['system:my_open', 'system:unassigned', 'saved:abc'];
+  ➜ 148▕     $this->actingAs($user, 'staff')->patchJson('https://localhost/inbox/prefs', ['prefs' => ['view_order' => $order]])->assertOk();
+    149▕     $this->actingAs($user, 'staff')->patchJson('https://localhost/inbox/prefs', ['prefs' => ['density' => 'compact']])->assertOk();
+    150▕ 
+    151▕     $show = $this->actingAs($user, 'staff')->getJson('https://localhost/inbox/prefs');
+    152▕     $show->assertOk();
+
+
+  Tests:    3 failed, 40 passed (283 assertions)
+  Duration: 7.08s
+

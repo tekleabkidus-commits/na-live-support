@@ -56,6 +56,9 @@ return [
         // Doc 02 FR-23/FR-24/AC-07: webhook second-credential refusal.
         'webhook_rejected' => 'የዌብሁክ ጥያቄ ውድቅ ተደርጓል',
         // Doc 04 FS-05: re-drive attempted on an item that is no longer parked.
+        'view_filters_invalid' => 'የእይታ ማጣሪያዎች አልታወቁም',
+        'read_only_view' => 'የተጋሩ እይታዎች ለንባብ ብቻ ናቸው',
+        'view_not_found' => 'እይታው አልተገኘም',
         'dead_letter_not_parked' => 'አስቀድሞ እንደገና ተልኳል',
     ],
 

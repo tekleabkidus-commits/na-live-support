@@ -1218,6 +1218,7 @@ function runListProjector(string $eventId): void
 {
     (new App\Jobs\Inbox\ListProjectorConsumer($eventId))->handle(
         app(App\Domain\Inbox\ReadModels\ListProjector::class),
+        app(App\Domain\Inbox\ReadModels\ProjectorStatus::class),
     );
 }
 
@@ -1268,7 +1269,9 @@ function inboxScopedActor(string $level, string $roleName): User
         ['name' => $roleName],
         [
             'color' => 'role-agent',
-            'permissions' => ['tickets.view', 'conversations.view'],
+            // views.manage per R-26: these are WORKSPACE actors (the ruling's
+            // audience/refusal proofs use the REAL seeded templates instead).
+            'permissions' => ['tickets.view', 'conversations.view', 'views.manage'],
             'scopes' => ['tickets' => $level, 'conversations' => $level, 'customers' => $level, 'reports' => $level],
         ],
     );

@@ -1,0 +1,98 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.46s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.08s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.07s  
+  ✓ it the app role writes events only through the default: naming occu… 0.03s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.05s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.03s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 0.09s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  0.21s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.05s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.05s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.07s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.06s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.05s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.05s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.09s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.08s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 0.12s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.06s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 0.21s  
+
+   PASS  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 0.09s  
+  ✓ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.12s  
+  ✓ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.07s  
+  ✓ it FR-08: view order persists per user through the prefs door, merg… 0.07s  
+  ✓ it R-26/A-34: Read Only cannot WRITE views (the SEV-1, flipped by t… 0.12s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 0.10s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 0.09s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.07s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 0.11s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 0.12s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 0.15s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 0.08s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.06s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.05s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 0.07s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.08s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.04s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.12s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.06s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.11s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.02s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.02s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.10s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.03s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.03s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.03s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.04s  
+
+   PASS  Tests\Feature\Rbac\CatalogSnapshotTest
+  ✓ it registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the v… 0.02s  
+  ✓ it marks high-risk exactly where §4.1 writes "(high)" — all 38, no…  0.02s  
+  ✓ it pins the scope dimension of every key: 47 scoped (46 per the §4.… 0.03s  
+  ✓ it keeps the four Doc 02-era entries under their exact registered n… 0.02s  
+  ✓ it resolves every label and description i18n key in BOTH launch lan… 0.03s  
+  ✓ it groups every key under one of the fourteen §4.1 modules, each wi… 0.02s  
+  ✓ it treats an unknown key as a programming error, never a verdict (B… 0.02s  
+
+   PASS  Tests\Feature\Rbac\RoleSeederTest
+  ✓ it seeds the nine Appendix B templates through REAL provisioning, f… 0.08s  
+  ✓ it pins the ratified grant constraints: SA=all keys (113 since S07…  0.05s  
+  ✓ it is idempotent: provisioning-style double seed yields ONE consist… 0.05s  
+  ✓ it NEVER overwrites an edited template, updates an untouched one on… 0.11s  
+  ✓ it emits rbac.role.created through the outbox and writes the audit…  0.05s  
+
+   PASS  Tests\Feature\Rbac\ReadOnlySweepTest
+  ✓ it lets the seeded Read Only template accept ZERO writes across eve… 0.29s  
+
+  Tests:    62 passed (1462 assertions)
+  Duration: 9.88s
+

@@ -31,7 +31,7 @@ final class ListProjectorConsumer extends OutboxConsumer
         return 'automation';
     }
 
-    public function handle(ListProjector $projector): void
+    public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
     {
         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
         $event = DB::table('events')->where('id', $this->eventId)->first();
@@ -44,5 +44,7 @@ final class ListProjectorConsumer extends OutboxConsumer
         }
 
         $projector->applyEvent($event);
+        $status->beat(); // FS-01's staleness signal — after the APPLY, so a
+        // crashed apply never advances freshness it did not earn.
     }
 }

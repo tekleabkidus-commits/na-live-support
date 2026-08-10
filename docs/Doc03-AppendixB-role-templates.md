@@ -96,3 +96,16 @@ Doc 11 supplies membership sources (T-03 seam, fail-closed).
 above are descriptive (the registry-is-normative rule applies to this appendix too). The
 seeder test pins Super Admin at 111, Read Only at the literal 18, and zero-high on the
 agent tier + QA + Read Only.
+
+---
+
+## Amendment — R-26 (S07 step 4, 2026-08-10, owner-signed; under the R-10 ratification)
+
+`views.manage` (the third addition of record; interpretation A-34) seeds into
+ALL templates EXCEPT Read Only: Super Admin and Admin receive it by their
+computed rules; Manager, Team Leader, Senior Agent, Agent, Junior Agent and
+QA gain it explicitly (personal saved views are workspace configuration, not
+data writes). Read Only's exclusion is automatic — its grant list is computed
+as non-high `.view`-suffix keys, which `views.manage` fails — so BR-05's
+zero-accepted-writes bar stays physics. The zero-high-risk constraints are
+unaffected (normal risk). `views.share` remains seeded into NO template.

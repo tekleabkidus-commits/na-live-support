@@ -1,0 +1,587 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 4.10s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.10s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.09s  
+  ✓ it the app role writes events only through the default: naming occu… 0.03s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.05s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.04s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   FAIL  Tests\Feature\Inbox\InboxResilienceTest
+  ⨯ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 0.04s  
+  ⨯ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  0.16s  
+
+   FAIL  Tests\Feature\Inbox\ListProjectorTest
+  ⨯ it T-01: recomputes the row from truth — status, number, snippet, p… 0.03s  
+  ⨯ it EC-11: a media-only last message stores the KIND as the placehol… 0.04s  
+  ⨯ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.03s  
+  ⨯ it C-09 by construction: the SAME event delivered twice recomputes…  0.03s  
+  ⨯ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.03s  
+  ⨯ it FR-05 following: membership from ticket_followers truth; removal… 0.03s  
+  ⨯ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.03s  
+  ⨯ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.03s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   FAIL  Tests\Feature\Inbox\PerViewerCountsTest
+  ⨯ it EC-04: a shared saved view shows each viewer THEIR count — the v… 0.05s  
+  ⨯ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.05s  
+
+   FAIL  Tests\Feature\Inbox\ReplayCountingTest
+  ⨯ it replay-counting: a recorded stream into a COLD projector lands e… 0.08s  
+
+   FAIL  Tests\Feature\Inbox\SavedViewsTest
+  ⨯ it FR-06: create materializes the definition; update RECOMPUTES it;… 0.04s  
+  ⨯ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.08s  
+  ⨯ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.05s  
+  ⨯ it FR-08: view order persists per user through the prefs door, merg… 0.05s  
+
+   FAIL  Tests\Feature\Inbox\SystemViewMembershipTest
+  ⨯ it My Open: assignee=me AND open-family — a resolved assignment and… 0.03s  
+  ⨯ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 0.03s  
+  ⨯ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.03s  
+  ⨯ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 0.04s  
+  ⨯ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 0.04s  
+  ⨯ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 0.05s  
+  ⨯ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 0.03s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.06s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.06s  
+
+   FAIL  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ⨯ it T-02: membership changes publish v:1 deltas — add with integer-µ… 0.04s  
+  ⨯ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.03s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.03s  
+
+   FAIL  Tests\Security\InboxSecurityTest
+  ⨯ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.05s  
+  ⨯ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.03s  
+  ⨯ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.04s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.02s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.03s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\InboxResilienceTest > it…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\InboxResilienceTest > it…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it T-…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it EC…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it C-…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it A-…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FS…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\PerViewerCountsTest > it…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\PerViewerCountsTest > it…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ReplayCountingTest > it r…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it FR-06…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it AC-02 round-trip: share r…   
+  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:98
+     94▕     expect($denied->status())->toBeIn([403, 404], 'a non-holder reached the share door');
+     95▕ 
+     96▕     // …and the OWNER (holder) shares — audited via the route middleware.
+     97▕     $shared = $this->actingAs($owner)->postJson("/inbox/views/{$viewId}/share", ['to_type' => 'team', 'to_id' => (string) Str::uuid7()]);
+  ➜  98▕     $shared->assertOk();
+     99▕ 
+    100▕     // READ-ONLY to consumers: edit refused with the stable code…
+    101▕     $edit = $this->actingAs($consumer)->patchJson("/inbox/views/{$viewId}", ['name' => 'hijack', 'filters' => ['status' => ['open']]]);
+    102▕     $edit->assertStatus(403);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it FR-06: the filter key set…   
+  Expected response status code [422] but received 403.
+Failed asserting that 403 is identical to 422.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:131
+    127▕     $owner = inboxScopedActor('All', 'S07 SV Closer');
+    128▕     $savedViews = app(SavedViews::class);
+    129▕ 
+    130▕     $refused = $this->actingAs($owner)->postJson('/inbox/views', ['name' => 'bad', 'filters' => ['sql_injection' => '1']]);
+  ➜ 131▕     $refused->assertStatus(422);
+    132▕     expect($refused->json('code'))->toBe('view_filters_invalid');
+    133▕ 
+    134▕     $viewId = $savedViews->create($owner, 'Doomed', ['status' => ['open']]);
+    135▕     expect($savedViews->materializedIds())->toContain($viewId);
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SavedViewsTest > it FR-08: view order persist…   
+  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.
+
+  at tests/Feature/Inbox/SavedViewsTest.php:148
+    144▕     [$tenant] = ticketFixture('open');
+    145▕     $user = inboxScopedActor('All', 'S07 Prefs User');
+    146▕ 
+    147▕     $order = ['system:my_open', 'system:unassigned', 'saved:abc'];
+  ➜ 148▕     $this->actingAs($user)->patchJson('/inbox/prefs', ['prefs' => ['view_order' => $order]])->assertOk();
+    149▕     $this->actingAs($user)->patchJson('/inbox/prefs', ['prefs' => ['density' => 'compact']])->assertOk();
+    150▕ 
+    151▕     $show = $this->actingAs($user)->getJson('/inbox/prefs');
+    152▕     $show->assertOk();
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SystemViewMembershipTest…   ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewDeltaProtocolTest > i…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewDeltaProtocolTest > i…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it BR-03/s…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it N-01: a…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it SEC pos…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Inbox\ListProjectorConsumer::handle(), 1 passed in /app/tests/Pest.php on line 1219 and exactly 2 expected
+
+  at app/Jobs/Inbox/ListProjectorConsumer.php:34
+     30▕     {
+     31▕         return 'automation';
+     32▕     }
+     33▕ 
+  ➜  34▕     public function handle(ListProjector $projector, \App\Domain\Inbox\ReadModels\ProjectorStatus $status): void
+     35▕     {
+     36▕         /** @var object{id: string, tenant_id: string, name: string, payload: string}|null $event */
+     37▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     38▕
+
+  1   app/Jobs/Inbox/ListProjectorConsumer.php:34
+  2   tests/Pest.php:1219
+
+
+  Tests:    29 failed, 14 passed (126 assertions)
+  Duration: 6.07s
+

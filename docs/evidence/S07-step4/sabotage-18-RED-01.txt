@@ -1,0 +1,25 @@
+
+   FAIL  Tests\Feature\Inbox\InboxResilienceTest
+  ⨯ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 6.40s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  0.38s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\InboxResilienceTest > it FS-01: projector dow…   
+  Failed asserting that 0 is greater than 30.
+
+  at tests/Feature/Inbox/InboxResilienceTest.php:62
+     58▕     // THE STALENESS SIGNAL: drive the STORED heartbeat past the 30 s
+     59▕     // threshold (the value is driven, never slept on) — sabotage #18 kills
+     60▕     // this signal and THIS assertion goes red.
+     61▕     Redis::connection('volatile')->set($status->key(), (string) (time() - 45));
+  ➜  62▕     expect($status->staleSeconds())->toBeGreaterThan(ProjectorStatus::STALE_AFTER_SECONDS)
+     63▕         ->and($status->isStale())->toBeTrue('the staleness signal is dead — agents would trust a frozen list (FS-01)');
+     64▕ 
+     65▕     // NO AGENT ACTION BLOCKED: a real write door works mid-outage — the
+     66▕     // priority write on the ALREADY-PROJECTED ticket succeeds (its event
+
+  1   tests/Feature/Inbox/InboxResilienceTest.php:62
+
+
+  Tests:    1 failed, 1 passed (11 assertions)
+  Duration: 6.88s
+

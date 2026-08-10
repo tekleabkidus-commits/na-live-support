@@ -55,6 +55,13 @@ final class InboxConsistencyCheck extends Command
 
         foreach ($tenantIds as $tenantId) {
             $driftCount += $context->runFor($tenantId, ResolutionSource::Console, function () use ($tenantId, $zsets): int {
+                // Capture-and-RESTORE (not clear): an in-process caller — the
+                // test harness, a future scheduler chain — shares this DB
+                // session; clearing would strip ITS binding (found by the
+                // FS-02 drill, kept as the lesson).
+                /** @var object{v: string|null}|null $previousRow */
+                $previousRow = DB::selectOne("SELECT current_setting('app.tenant_id', true) AS v");
+                $previous = $previousRow->v ?? '';
                 app(RlsSession::class)->set($tenantId);
 
                 try {
@@ -72,7 +79,7 @@ final class InboxConsistencyCheck extends Command
 
                     return $drift;
                 } finally {
-                    app(RlsSession::class)->clear();
+                    $previous !== '' ? app(RlsSession::class)->set($previous) : app(RlsSession::class)->clear();
                 }
             });
         }

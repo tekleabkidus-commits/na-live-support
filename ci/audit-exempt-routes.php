@@ -65,4 +65,22 @@ return [
      */
     'auth.password.forgot' => 'Uniform SEC-01 response: 200 regardless of matches; per-candidate audit (auth.password.reset_requested) is written by the recorder whenever a token is minted.',
     'auth.invitation.resend' => 'Uniform SEC-01 response: 200 regardless of matches; per-candidate audit (auth.invite.resent) is written by the recorder whenever a token is minted.',
+
+    /*
+     | Doc 07 (S07 step 4): personal-configuration mutations, deliberately
+     | outside audit coverage. The plan's audit enumeration (protocol step 2)
+     | names the ADMIN-RELEVANT inbox mutations — view share/unshare (covered,
+     | audit: middleware), selection execution (step 7), supervisor
+     | force-status (step 12), tag rename/merge (step 14). A user's OWN saved
+     | views (create/edit/tombstone/duplicate of their private definitions)
+     | and their OWN UI preferences change nothing another person sees and
+     | carry no customer data — auditing them would be keystroke surveillance,
+     | not accountability (the Doc 04 drafts precedent). The moment a
+     | definition becomes VISIBLE to others (sharing), it IS audited.
+     */
+    'inbox.views.store' => 'Doc 07 FR-06: a private view definition — owner-only until shared; sharing is the audited act (inbox.view_shared).',
+    'inbox.views.update' => 'Doc 07 FR-06: owner-only edit of a private definition; consumers of a shared view cannot reach this door (read_only_view).',
+    'inbox.views.destroy' => 'Doc 07 FR-06: tombstone of the caller\'s own definition (deleted_at; DELETE is grant-revoked).',
+    'inbox.views.duplicate' => 'Doc 07 AC-02: creates the caller\'s own private copy; no shared state changes.',
+    'inbox.prefs.update' => 'Doc 07 FR-08/BR-05: the user\'s own UI preferences (view order, density, sounds) — per-user choices by document design, no admin relevance.',
 ];

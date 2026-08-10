@@ -261,5 +261,6 @@ return [
     ],
     'views' => [
         'share' => 'Share a saved inbox view with a team or department.',
+        'manage' => 'Create, edit, duplicate and delete your own saved inbox views.',
     ],
 ];

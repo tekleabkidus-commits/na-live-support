@@ -261,5 +261,6 @@ return [
     ],
     'views' => [
         'share' => 'Share saved views',
+        'manage' => 'Create and edit saved views',
     ],
 ];

@@ -46,7 +46,7 @@ it('seeds the nine Appendix B templates through REAL provisioning, filling the d
     });
 });
 
-it('pins the ratified grant constraints: SA=all keys (112 since S07)/all-All, RO=the literal 18, zero high on agent tier + QA + RO, RG nowhere but SA (T-05c, BR-05, BR-06, R-10)', function () {
+it('pins the ratified grant constraints: SA=all keys (113 since S07 step 4, R-26)/all-All, RO=the literal 18, zero high on agent tier + QA + RO, RG nowhere but SA (T-05c, BR-05, BR-06, R-10)', function () {
     $tenant = createTenant();
 
     asTenant($tenant, function (): void {
@@ -55,10 +55,11 @@ it('pins the ratified grant constraints: SA=all keys (112 since S07)/all-All, RO
         $roles = Role::query()->get()->keyBy('name');
 
         // Super Admin: everything, all scopes All (FR-10's fixed clause).
-        // 112 since S07: views.share (the addition of record) rides SA by the
-        // all-keys clause, never by a template edit (R-10 untouched).
+        // 113 since S07 step 4: views.share + views.manage (the additions of
+        // record) ride SA by the all-keys clause; views.manage additionally
+        // seeds the explicit templates per R-26.
         $sa = $roles[RoleTemplates::SUPER_ADMIN];
-        expect($sa->permissions)->toHaveCount(112)
+        expect($sa->permissions)->toHaveCount(113)
             ->and(array_diff(array_keys($catalog->all()), $sa->permissions))->toBe([])
             ->and($sa->scopes)->toEqual(['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All']);
 

@@ -78,6 +78,8 @@ final class RoleTemplates
                 'description' => 'Runs a department end to end: full ticket operations, supervision, reports.',
                 'color' => 'role-manager',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'tickets.create', 'tickets.edit', 'tickets.reply', 'tickets.note',
                     'tickets.assign', 'tickets.assign_self', 'tickets.status.change', 'tickets.priority.change',
                     'tickets.department.change', 'tickets.close', 'tickets.reopen', 'tickets.merge',
@@ -108,6 +110,8 @@ final class RoleTemplates
                 'description' => 'Reassigns and monitors within the department; no settings access.',
                 'color' => 'role-team-leader',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'tickets.create', 'tickets.edit', 'tickets.reply', 'tickets.note',
                     'tickets.assign', 'tickets.assign_self', 'tickets.status.change', 'tickets.priority.change',
                     'tickets.department.change', 'tickets.close', 'tickets.reopen', 'tickets.merge',
@@ -133,6 +137,8 @@ final class RoleTemplates
                 'description' => 'Full ticket handling across the team, knowledge base authoring.',
                 'color' => 'role-senior-agent',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'tickets.create', 'tickets.edit', 'tickets.reply', 'tickets.note',
                     'tickets.assign', 'tickets.assign_self', 'tickets.status.change', 'tickets.priority.change',
                     'tickets.close', 'tickets.reopen', 'tickets.merge', 'tickets.split', 'tickets.escalate',
@@ -154,6 +160,8 @@ final class RoleTemplates
                 'description' => 'Handles own tickets and customers day to day.',
                 'color' => 'role-agent',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'tickets.create', 'tickets.edit', 'tickets.reply', 'tickets.note',
                     'tickets.assign_self', 'tickets.status.change', 'tickets.close', 'tickets.reopen',
                     'tickets.escalate', 'tickets.follow', 'tickets.fields.edit', 'tickets.spam.mark',
@@ -170,6 +178,8 @@ final class RoleTemplates
                 'description' => 'Replies on own tickets under supervision; no state changes beyond self-assign.',
                 'color' => 'role-junior-agent',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'tickets.create', 'tickets.reply', 'tickets.note',
                     'tickets.assign_self', 'tickets.follow',
                     'conversations.view',
@@ -185,6 +195,8 @@ final class RoleTemplates
                 'description' => 'Reads everything to score quality; every reply and edit control is absent.',
                 'color' => 'role-qa',
                 'permissions' => [
+                    // R-26 (S07 step 4): the saved-view write key — every template but Read Only.
+                    'views.manage',
                     'tickets.view', 'conversations.view', 'conversations.history.full',
                     'customers.view', 'customers.notes.view',
                     'ai.decisions.view', 'kb.view_internal', 'kb.feedback.view',

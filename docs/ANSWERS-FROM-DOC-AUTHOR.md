@@ -1293,3 +1293,33 @@ relay copies it; BUILD-STATUS row 9's "relay's APP clock" premise was wrong.
   UUIDv7 is documented as within-stamp tiebreak ONLY (R-19's narrowing);
   the freshness trade-off is documented in the endpoint contract —
   reconnect sync serves settled events, the live path is Reverb's.
+
+### A-34 (FILED INTERPRETATION, the A-28 shape; advisor-ruled at the S07 step-4 STOP). FR-06's "any user with tickets.view" names the AUDIENCE, not the write-tier grant
+
+ReadOnlySweepTest caught `POST inbox/views` accepting a Read Only write —
+Doc 07 FR-06's literal wording ("any user with tickets.view creates personal
+views") collided with Doc 03 BR-05/AC-06's zero-accepted-writes bar for Read
+Only, which holds tickets.view. INTERPRETATION: FR-06's sentence names WHO
+may have personal views (the workspace audience), not which key grants the
+WRITE; saved-view create/update/tombstone/duplicate ride `views.manage`
+(R-26); `views.share` is unchanged, share-only, per FR-06's own separation.
+DECISIVE EVIDENCE: the tickets.edit alternative would deny Junior Agents
+personal views (their template lacks tickets.edit), contradicting FR-06's
+audience sentence — this interpretation preserves BOTH documents' intent.
+The sweep stays ABSOLUTE (option (b) was rejected as gate-weakening).
+Proofs: the SEV-1 flips green via the MAPPING change only; an explicit Read
+Only refusal; the Junior Agent audience proof; Read Only reads system views.
+
+### R-26 (OWNER-SIGNED, 2026-08-10). `views.manage` — the THIRD addition of record
+
+Registered via the views.share mechanism (doc-owner sign-off in the ruling
+paste): normal-risk, unscoped, owning_doc Doc07; catalog 112→113;
+CatalogSnapshotTest/RoleSeederTest pins moved in the same commit (NFR-03
+satisfied — the key now exists, nothing invented). TEMPLATE SEEDING, one
+coherent change under the R-10 ratification: views.manage seeds into ALL
+templates EXCEPT Read Only — Super Admin (all-keys rule), Admin, Manager,
+Team Leader, Senior Agent, Agent, Junior Agent, QA (personal views are
+workspace config; config for a read-and-score role is consistent). Read
+Only's exclusion is AUTOMATIC PHYSICS: its grant list is computed
+(non-high + `.view` suffix), which views.manage fails — the exclusion needs
+no hand-maintained list. Appendix B amended citing this ruling.

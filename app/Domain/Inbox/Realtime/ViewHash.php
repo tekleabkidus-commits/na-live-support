@@ -65,11 +65,32 @@ final class ViewHash
 
     /**
      * The hash the PROJECTOR pushes to for a materialized ZSET key — a pure
-     * function of the key's own shape (base keys are the 'all' variant;
-     * per-user keys embed their user).
+     * function of the key's own shape. Grammar (S07 step 4 extends step 3's):
+     *   {view}                      → the 'all' variant
+     *   {view}:scope:{signature}    → that scope's lazy variant (A-30)
+     *   saved:{id}                  → a saved view's 'all' set
+     *   saved:{id}:scope:{sig}      → a saved view's scoped variant
+     *   {view}:{userId}             → a per-user view
      */
     public function forZsetKey(string $viewKey): string
     {
+        if (str_starts_with($viewKey, 'saved:')) {
+            $rest = substr($viewKey, 6);
+            if (str_contains($rest, ':scope:')) {
+                [$id, $sig] = explode(':scope:', $rest, 2);
+
+                return $this->hash('saved:'.$id, $sig);
+            }
+
+            return $this->hash('saved:'.$rest, 'all');
+        }
+
+        if (str_contains($viewKey, ':scope:')) {
+            [$view, $sig] = explode(':scope:', $viewKey, 2);
+
+            return $this->hash($view, $sig);
+        }
+
         if (str_contains($viewKey, ':')) {
             [$view, $userId] = explode(':', $viewKey, 2);
 
@@ -77,6 +98,30 @@ final class ViewHash
         }
 
         return $this->hash($viewKey, 'all');
+    }
+
+    /**
+     * The ZSET key a viewer's channel READS for a shared view — the A-30
+     * lazy-variant mapping: 'all' reads the base set, any narrower signature
+     * reads (and lazily materializes) its own variant.
+     */
+    public function zsetKeyForViewer(string $view, User $user): string
+    {
+        if (in_array($view, self::PER_USER_VIEWS, true)) {
+            return $view.':'.$user->identifier();
+        }
+
+        $signature = $this->scopeSignature($user);
+
+        return $signature === 'all' ? $view : $view.':scope:'.$signature;
+    }
+
+    /** The saved-view equivalent (shared saved views, EC-04). */
+    public function savedZsetKeyForViewer(string $savedViewId, User $user): string
+    {
+        $signature = $this->scopeSignature($user);
+
+        return $signature === 'all' ? 'saved:'.$savedViewId : 'saved:'.$savedViewId.':scope:'.$signature;
     }
 
     private function hash(string $view, string $signature): string

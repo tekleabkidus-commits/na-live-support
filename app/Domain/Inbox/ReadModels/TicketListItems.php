@@ -62,7 +62,8 @@ use Illuminate\Support\Facades\DB;
  *     window_expires_at: string|null,
  *     sla_due_at: string|null,
  *     created_at: string,
- *     updated_at: string|null
+ *     updated_at: string|null,
+ *     tags: string
  * }
  */
 final class TicketListItems
@@ -73,7 +74,7 @@ final class TicketListItems
         'assignee_id', 'department_id', 'customer_id', 'customer_display_name',
         'channel', 'channel_unreachable', 'subject', 'snippet', 'snippet_kind',
         'language', 'ticket_created_at', 'last_activity_at', 'last_message_created_at',
-        'window_expires_at', 'updated_at',
+        'window_expires_at', 'updated_at', 'tags',
     ];
 
     public function __construct(private readonly CanonicalTicketReader $reader) {}
@@ -98,6 +99,7 @@ final class TicketListItems
             'snippet_kind' => $row->snippet_kind,
             'number' => $row->number,
             'last_activity_at' => $row->last_activity_at,
+            'tags' => json_decode($row->tags, true, 8, JSON_THROW_ON_ERROR),
         ];
     }
 
@@ -141,6 +143,7 @@ final class TicketListItems
             'last_activity_at' => $truth->lastActivityAt,
             'last_message_created_at' => $truth->lastPublic->created_at ?? null,
             'window_expires_at' => $truth->conversation->reply_window_expires_at ?? null,
+            'tags' => $truth->tagsJson,
             'updated_at' => DB::raw('clock_timestamp()'),
         ];
 

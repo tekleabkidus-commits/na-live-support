@@ -58,6 +58,10 @@ return [
         'webhook_rejected' => 'Webhook request rejected',
         // Doc 04 FS-05: re-drive attempted on an item that is no longer parked.
         'dead_letter_not_parked' => 'Already re-driven',
+        // Doc 07 FR-06/AC-02: the saved-view surface (S07 step 4).
+        'view_filters_invalid' => 'View filters not recognised',
+        'read_only_view' => 'Shared views are read-only',
+        'view_not_found' => 'View not found',
     ],
 
     'provisioning' => [

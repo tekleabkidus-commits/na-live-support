@@ -1649,16 +1649,20 @@ entries:
       NOT IMPLEMENTED AT S07 STEP 1. Layout matrix: four breakpoints, persisted sizes/collapse restore. Lands at approved-plan step 8 as
       tests/Browser/inbox-layout.spec.ts; this row flips to automated in that step's commit.
   - ac_ref: "Doc07 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Inbox/SystemViewMembershipTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Views: system-view membership fixtures == direct queries; saved-view CRUD/share/duplicate round-trips; EC-04 per-viewer counts (A-30/A-32). Lands at approved-plan step 4 as
-      tests/Feature/Inbox/SystemViewMembershipTest.php + SavedViewsTest.php + PerViewerCountsTest.php; this row flips to automated in that step's commit.
+      EXECUTED (S07 step 4): the seven FR-05 membership fixtures with include AND
+      exclude cases, each == its direct query member-for-member (A-32's mention
+      definition as ruled); saved-view CRUD + share + duplicate-to-edit round-trips
+      incl. the R-26/A-34 write-tier proofs (SavedViewsTest.php); EC-04 per-viewer
+      counts under A-30's four conditions (PerViewerCountsTest.php). Functional
+      coverage only — no pixel claim (inherited row 12).
   - ac_ref: "Doc07 AC-03"
     suite_path: manual
     type: manual

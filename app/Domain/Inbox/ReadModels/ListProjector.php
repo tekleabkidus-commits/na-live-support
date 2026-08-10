@@ -6,6 +6,9 @@ namespace App\Domain\Inbox\ReadModels;
 
 use App\Domain\Inbox\Realtime\CountPusher;
 use App\Domain\Inbox\Realtime\ViewDeltaPusher;
+use App\Domain\Inbox\Views\SavedViewFilters;
+use App\Domain\Inbox\Views\SavedViews;
+use App\Domain\Inbox\Views\ViewVariants;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -42,6 +45,8 @@ final class ListProjector
         private readonly ViewZsets $zsets,
         private readonly ViewDeltaPusher $pusher,
         private readonly CountPusher $counts,
+        private readonly ViewVariants $variants,
+        private readonly SavedViews $savedViews,
     ) {}
 
     /**
@@ -122,6 +127,49 @@ final class ListProjector
         $row->channel_unreachable
             ? $this->syncIn('rescue', $ticketId, $activityMicros, $row)
             : $this->syncOut('rescue', $ticketId);
+
+        // ── A-30 variants of the shared views: every MATERIALIZED signature
+        //    is patched with the same membership decision ∩ its scope
+        //    predicate (lazy sets that were never built get nothing — they
+        //    build correct on first read).
+        $sharedMemberships = [
+            'unassigned' => [$open && $row->assignee_id === null, ViewZsets::toMicros((string) $row->ticket_created_at)],
+            'sla_at_risk' => [$open && in_array($row->sla_state, ['warned', 'breached'], true) && $row->sla_due_at !== null, $row->sla_due_at !== null ? ViewZsets::toMicros((string) $row->sla_due_at) : 0],
+            'expiring_windows' => [$open && in_array($windowState, ['closing', 'expired'], true) && $row->window_expires_at !== null, $row->window_expires_at !== null ? ViewZsets::toMicros((string) $row->window_expires_at) : 0],
+            'rescue' => [(bool) $row->channel_unreachable, $activityMicros],
+        ];
+        foreach ($sharedMemberships as $view => [$inView, $score]) {
+            foreach ($this->variants->signatures($view) as $signature) {
+                $variantKey = $view.':scope:'.$signature;
+                ($inView && ViewVariants::signatureMatches($signature, $row))
+                    ? $this->syncIn($variantKey, $ticketId, $score, $row)
+                    : $this->syncOut($variantKey, $ticketId);
+            }
+        }
+
+        // ── Materialized saved views (T-01's incremental patch) + their variants.
+        foreach ($this->savedViews->materializedIds() as $savedId) {
+            /** @var string|null $filtersJson */
+            $filtersJson = DB::table('inbox_saved_views')->where('id', $savedId)->whereNull('deleted_at')->value('filters');
+            if ($filtersJson === null) {
+                continue; // deleted definition — de-materialization races are benign
+            }
+            /** @var array<string, mixed> $filters */
+            $filters = json_decode($filtersJson, true, 16, JSON_THROW_ON_ERROR);
+
+            $inView = SavedViewFilters::matches($filters, $row);
+            $savedKey = 'saved:'.$savedId;
+            $inView
+                ? $this->syncIn($savedKey, $ticketId, $activityMicros, $row)
+                : $this->syncOut($savedKey, $ticketId);
+
+            foreach ($this->variants->signatures($savedKey) as $signature) {
+                $variantKey = $savedKey.':scope:'.$signature;
+                ($inView && ViewVariants::signatureMatches($signature, $row))
+                    ? $this->syncIn($variantKey, $ticketId, $activityMicros, $row)
+                    : $this->syncOut($variantKey, $ticketId);
+            }
+        }
 
         // following — membership from truth; activity rescores every follower.
         /** @var list<string> $followers */

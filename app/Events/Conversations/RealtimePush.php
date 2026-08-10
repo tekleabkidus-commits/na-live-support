@@ -10,8 +10,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 
 /**
- * The one broadcast event class (FR-25) — RealtimePusher is its only
- * constructor site, which is where the v:1 / 32 KB / SEC-06 guards ran.
+ * The one broadcast event class (FR-25). Its constructor sites are the two
+ * PROTOCOL DOORS — Doc 04's RealtimePusher (conversation/user channels) and
+ * Doc 07's ViewDeltaPusher (view/inbox channels, S07 step 3) — each of which
+ * runs the v:1 / 32 KB / SEC-06 guards before dispatching. [Comment-only
+ * amendment, advisor-approved at the S07 step-3 acceptance: the previous
+ * "only constructor site" line predated Doc 07's door. Zero behavior change.]
  * Conversation channels are PRESENCE channels (FR-19: "who is viewing
  * conversation X" powers Doc 07's collision UX); user channels are private.
  */

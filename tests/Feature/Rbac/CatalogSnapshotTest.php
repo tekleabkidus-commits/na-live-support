@@ -17,9 +17,11 @@ use App\Support\Rbac\PermissionCatalog;
  * Counts on the record (R-12): 111 keys, 38 marked "(high)", 46 scoped.
  * S07 UPDATE (owner-approved plan, 2026-08-10): `views.share` — the Doc 03
  * change-log addition of record (Q9/R-12 named it; Doc 07 FR-06 is its
- * document) — REGISTERED with Doc 07 landing. Catalog 112, scoped 47; the
- * high set is unchanged at 38. This edit and the registry edit are the same
- * commit, per this file's own contract.
+ * document) — REGISTERED with Doc 07 landing. S07 STEP-4 UPDATE (R-26,
+ * owner-signed): `views.manage`, the write-tier key A-34 ruled. Catalog 113,
+ * scoped 47 (views.manage is unscoped); the high set is unchanged at 38.
+ * Each edit and its registry edit are the same commit, per this file's own
+ * contract.
  */
 
 /** Doc 03 §4.1, all fourteen modules, catalog order. */
@@ -73,6 +75,8 @@ const DOC03_CATALOG_KEYS = [
     'languages.manage', 'audit.view', 'audit.export', 'apikeys.machine.manage',
     // The Doc 03 change-log addition of record, registered at S07 (Doc 07 FR-06)
     'views.share',
+    // R-26 (S07 step 4): the write-tier saved-view key, owner-signed.
+    'views.manage',
 ];
 
 /** Every key §4.1 marks "(high)" — counted from the text, twice (R-12). */
@@ -120,11 +124,11 @@ const DOC03_SCOPED_KEYS = [
     'views.share',
 ];
 
-it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the views.share addition of record — verbatim, nothing else (Q9, R-12, S07)', function () {
+it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the views.share/views.manage additions of record — verbatim, nothing else (Q9, R-12, S07, R-26)', function () {
     $registered = array_keys(app(PermissionCatalog::class)->all());
 
     expect($registered)->toBe(DOC03_CATALOG_KEYS)
-        ->and(count($registered))->toBe(112);
+        ->and(count($registered))->toBe(113);
 });
 
 it('marks high-risk exactly where §4.1 writes "(high)" — all 38, no more, no fewer (R-12)', function () {

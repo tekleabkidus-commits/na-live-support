@@ -96,3 +96,45 @@ Route::middleware([
         ->middleware('permission:conversations.view')
         ->name('conversations.dead_letters.index');
 });
+
+/*
+|------------------------------------------------------------------------------
+| Inbox — saved views + prefs (Doc 07 FR-06/FR-08, S07 step 4)
+|------------------------------------------------------------------------------
+|
+| Route → permission SAME-COMMIT from the closed catalog: CRUD + duplicate on
+| tickets.view (FR-06's own words); share/unshare on views.share (the
+| addition of record) with the audit: middleware (SEC-03 — actor + target).
+*/
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('inbox')->group(function (): void {
+    Route::get('views', [App\Http\Controllers\Inbox\SavedViewController::class, 'index'])
+        ->middleware('permission:tickets.view')->name('inbox.views.index');
+    // WRITES ride views.manage (R-26/A-34 — FR-06's tickets.view names the
+    // AUDIENCE; Read Only's computed template can never hold this key).
+    Route::post('views', [App\Http\Controllers\Inbox\SavedViewController::class, 'store'])
+        ->middleware('permission:views.manage')->name('inbox.views.store');
+    Route::patch('views/{viewId}', [App\Http\Controllers\Inbox\SavedViewController::class, 'update'])
+        ->middleware('permission:views.manage')->name('inbox.views.update');
+    Route::delete('views/{viewId}', [App\Http\Controllers\Inbox\SavedViewController::class, 'destroy'])
+        ->middleware('permission:views.manage')->name('inbox.views.destroy');
+    Route::post('views/{viewId}/duplicate', [App\Http\Controllers\Inbox\SavedViewController::class, 'duplicate'])
+        ->middleware('permission:views.manage')->name('inbox.views.duplicate');
+
+    Route::post('views/{viewId}/share', [App\Http\Controllers\Inbox\SavedViewController::class, 'share'])
+        ->middleware(['permission:views.share', 'audit:inbox.view_shared'])->name('inbox.views.share');
+    Route::delete('views/{viewId}/share', [App\Http\Controllers\Inbox\SavedViewController::class, 'unshare'])
+        ->middleware(['permission:views.share', 'audit:inbox.view_unshared'])->name('inbox.views.unshare');
+
+    Route::get('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'show'])
+        ->middleware('permission:tickets.view')->name('inbox.prefs.show');
+    // The R-26 principle applied to the sibling workspace-config WRITE
+    // (flagged in the 4+5 report for countersign): Read Only persists no
+    // server-side prefs; reading them stays tickets.view.
+    Route::patch('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'update'])
+        ->middleware('permission:views.manage')->name('inbox.prefs.update');
+});

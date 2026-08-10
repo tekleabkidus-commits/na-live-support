@@ -842,4 +842,20 @@ return [
         'required_fields' => ['environment'],
         'owning_doc' => 'Doc05',
     ],
+    [
+        // Doc 07 FR-06/SEC-03 (S07 step 4): sharing a saved view changes what
+        // a whole team/department SEES — audited with actor + target.
+        'action_key' => 'inbox.view_shared',
+        'entity' => 'inbox_saved_view',
+        'actor_types' => ['staff'],
+        'required_fields' => ['to_type', 'to_id'],
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        'action_key' => 'inbox.view_unshared',
+        'entity' => 'inbox_saved_view',
+        'actor_types' => ['staff'],
+        'required_fields' => [],
+        'owning_doc' => 'Doc07',
+    ],
 ];

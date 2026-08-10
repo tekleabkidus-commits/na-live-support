@@ -1288,4 +1288,21 @@ return [
         'risk' => 'normal',
         'owning_doc' => 'Doc07',
     ],
+    [
+        // THE THIRD ADDITION OF RECORD (R-26, owner-signed at the S07 step-4
+        // ruling; interpretation A-34): saved-view WRITES — create, update,
+        // tombstone, duplicate. FR-06's "any user with tickets.view" names
+        // the AUDIENCE; this key is the write-tier grant, seeded into every
+        // template except Read Only (whose computed .view-only list excludes
+        // it by construction — the zero-writes bar stays physics).
+        'key' => 'views.manage',
+        'label_i18n_key' => 'perm.views.manage',
+        'description_i18n_key' => 'perm_desc.views.manage',
+        'group' => 'tickets',
+        'module' => 'tickets',
+        'scopes' => ['All'],
+        'scope_dimension' => 'unscoped',
+        'risk' => 'normal',
+        'owning_doc' => 'Doc07',
+    ],
 ];
