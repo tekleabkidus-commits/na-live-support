@@ -1048,3 +1048,58 @@ the override gate removed (any inbound can claim agent) → the spoof control
 goes red; (5) non-owner inbound proven byte-identical (regression). The
 reserved identity reports as agent-type `owner_phone` (A-8/T-03 precedent),
 distinct from the message `author_type='agent'`.
+
+### A-28 (COUNTERSIGNED at the owner's step-11 confirmation; filed at the step-12 close-out review). FR-30's WRITE test tools ride `telegram.bots.manage`
+
+The step-11 plan's one-line mapping put "test tools" under
+`telegram.health.view` — a VIEW-tier key Read Only holds — and
+ReadOnlySweepTest caught `simulate-window-expiry` ACCEPTING a Read Only
+write (302; the SEV-1 the sweep exists for, fixed in the flow at step 11).
+FILED INTERPRETATION (step 11): the WRITE tools (send-test,
+simulate-window-expiry) ride `telegram.bots.manage` — the established
+precedent of their sibling write tool, one-click re-register; viewing (the
+health panel, the masked raw viewer) stays `telegram.health.view` as
+planned. **COUNTERSIGNED: the owner's close-out review message confirms the
+advisor countersign given at the step-11 confirmation.** Record note: this
+filing was ordered at the close-out review because the countersign had not
+yet been written into this register — the interpretation itself, its
+defect, and its fix have been in the step-11 BUILD-STATUS section since
+`a01833b`.
+
+### A-29 (RULED at the owner's step-12 close-out review). FR-26 "stored on the conversation" is satisfied adapter-side — APPROVED on three conditions, each discharged
+
+FR-26, verbatim (Doc 05 §4.7): "FR-26 Deep links: t.me/{bot}?start={payload};
+payload schema src-{source}[_ctx-{context}] (e.g., src-app_ctx-deposit) →
+**stored on the conversation as acquisition metadata** and passed to the AI
+first turn (Doc 09) for context-aware greeting; unknown payloads ignored
+gracefully."
+
+A column on `conversations` would be a Doc 04 core edit (the zero-core-edits
+assertion, inherited row 1). RULING: the adapter-side `telegram_acquisitions`
+table satisfies "stored on the conversation", on three conditions:
+
+1. **The acquisition row is deterministically reachable from its
+   conversation, proven by test.** DISCHARGED: the row is keyed by the
+   conversation's own channel identity under
+   `UNIQUE (tenant_id, bot_id, external_chat_id)` (one row can ever match),
+   and `DeepLinkResolver::forConversation()` resolves conversation →
+   (channel_ref_id, external_chat_id) → row. Proven in
+   `tests/Feature/Telegram/DirectSurfaceTest.php` — "FR-26: record is
+   FIRST-WINS and redelivery-idempotent (C-09); the seam reads it back per
+   conversation" (the join asserted with the original acquisition returned
+   and an unknown conversation answering null).
+2. **Write-once-by-grant proven at the migration level.** DISCHARGED: the
+   REVOKE lives in the migration itself
+   (`2026_08_10_110000_create_telegram_acquisitions_table.php` — `REVOKE
+   INSERT, UPDATE, DELETE … GRANT INSERT (…columns, created_at excluded)`),
+   and `tests/Isolation/TelegramGrantPhysicsTest.php` asserts the resulting
+   physics from `information_schema`/`has_column_privilege` — "FR-26:
+   acquisitions are WRITE-ONCE for the app — no UPDATE, no DELETE, on any
+   column", plus the table's entry in the R-19b denied-set loop
+   (`created_at` insert-denied, defaults fill) and the FORCED-RLS sweep.
+3. **The interpretation filed citing FR-26's verbatim text.** DISCHARGED:
+   quoted in full above; the BUILD-STATUS step-12 section and the
+   `telegram_acquisitions` migration docblock carry the same filing.
+
+The AI-first-turn half ("passed to the AI first turn") remains Doc 09's
+pre-agreed bucket; `forConversation()` is the seam it consumes.
