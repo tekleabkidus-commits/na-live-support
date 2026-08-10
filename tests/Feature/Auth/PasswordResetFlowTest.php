@@ -87,6 +87,24 @@ function submitReset(string $token, string $password): Illuminate\Testing\TestRe
         ]);
 }
 
+// RISK 0f LADDER, RUNG 1 (executed at the S07 step-5 recurrence, 2026-08-11;
+// the ratified disposition's own words: "add a failure-time snapshot of every
+// limiter:*/throttle key in redis-volatile to the file's failure output"):
+// any failure in THIS FILE now dumps the live limiter keyspace to STDERR, so
+// the next recurrence arrives with the cross-test-bleed-vs-product-write
+// discriminator attached. Diagnostics only — no proof or budget changed.
+afterEach(function (): void {
+    if (! $this->status()->isSuccess()) {
+        /** @var list<string> $keys */
+        $keys = Illuminate\Support\Facades\Redis::connection('volatile')->keys('*limiter*');
+        $snapshot = [];
+        foreach ($keys as $key) {
+            $snapshot[$key] = Illuminate\Support\Facades\Redis::connection('volatile')->get($key);
+        }
+        fwrite(STDERR, "\n0f RUNG-1 LIMITER SNAPSHOT (failure-time): ".json_encode($snapshot, JSON_PRETTY_PRINT)."\n");
+    }
+});
+
 beforeEach(function (): void {
     Mail::fake();
     Http::fake(['*' => Http::response('', 200)]); // breach bucket: empty

@@ -81,6 +81,52 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 5: T-07 /v1/sync (THE A-33/B-4 DISCHARGE), NFR-06 GOLDENS, EC-07/EC-08, FR-30
+
+**Built:** `SyncReader` + `GET /inbox/sync` (T-07's single reconciliation
+path) with the **A-33 B-4 owed items discharged by name**: (1) ordering
+`(occurred_at, id)` with **UUIDv7 as the WITHIN-STAMP tiebreak only** (R-19's
+narrowing — the golden drives a shared-stamp pair and three distinct stamps
+in scrambled insert order); (2) **the watermark, value + derivation**:
+W = 10 s ≥ the §12 relay-lag budget (≤2 s p95, Doc 01) + the platform's
+longest expected write transaction (lock_timeout 5 s; sub-second request
+budgets) with margin — the commit-skew bound it protects against is stated
+in the class docblock, WITH the honest residual (a publish transaction held
+open past W that commits after a cursor passed its stamp is an operational
+incident beyond the 60 s relay alert, recovered by overflow/full-refetch +
+NFR-07 — never silently absorbed); (3) **the long-transaction no-miss
+golden**: a laggard stamped inside the zone is invisible until settled, the
+cursor never passes its stamp, and it replays IN ORDER once settled (stamps
+chosen via the platform escape hatch; zero sleeps); (4) **the freshness
+trade-off in the endpoint contract**: reconnect sync serves SETTLED events —
+the live path is Reverb's (the controller docblock carries it). **A-31's
+countersign condition executed**: the scope-excluded event never reaches the
+narrower client (same ScopeSets predicate as hydration, joined through
+ticket_list_items); tenant-wide workspace events pass. T-07 overflow →
+full-refetch instruction (bounded, driven at max=3). EC-07: `server_now`
+(DB clock) in the envelope. EC-08: the `inbox-sync` limiter (30/min per
+user) — 429-on-connect executed (the client jitter half is step 13). FR-30:
+`build_id` in the envelope (`app.build_id`, env APP_BUILD_ID).
+
+**Proven (evidence `docs/evidence/S07-step5/`):** sync goldens **5 passed /
+18 assertions** (`targeted-03.txt`); canonical suites (5 of 5 named paths
+minus InboxSearchScopeTest, stated) **54 passed / 405**
+(`canonical-suites-01.txt`); full suite **1025 passed / 0 failed / 13,618
+assertions** (`make-test-rerun-01.txt`); gates **13/13**; lint clean.
+**Sabotage #10** executed: id-primary ordering → the B-4 ordering golden red
+by name → restored (`sabotage-10-RED-01/-RESTORED-01.txt`). **RISK 0f FIRED
+in this step's first battery** (`make-test-02.txt`: PasswordResetFlowTest
+429-where-accepted, the exact filed shape) — **the ladder's RUNG 1 executed
+and nothing more**: the file now dumps a failure-time `*limiter*` keyspace
+snapshot to its own failure output (the ratified disposition's literal
+instruction); re-run once per the standing rule → green. ONE REAL DEFECT
+found and fixed in-flight: registering the `inbox-sync` limiter via the
+RateLimiter FACADE in AppServiceProvider::boot resolved the limiter early
+and orphaned Fortify's afterResolving registrations (auth-ip et al. → 500s
+platform-wide, caught by DeviceRegistrationTest in the first battery) —
+re-registered via callAfterResolving, the trap Fortify's own docblock warns
+about, now warned about in BOTH places.
+
 ## SESSION-07 (Doc 07) — STEP 4: THE VIEWS SYSTEM (AC-02), A-30 VARIANTS/EC-04, FS-01/FS-02 DRILLS + THE R-26/A-34 RULING
 
 **Built:** the seven FR-05 system-view membership fixtures (include AND

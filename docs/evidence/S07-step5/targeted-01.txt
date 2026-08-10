@@ -1,0 +1,95 @@
+
+   FAIL  Tests\Feature\Inbox\SyncGoldenTest
+  ⨯ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  5.46s  
+  ⨯ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.06s  
+  ⨯ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 0.16s  
+  ⨯ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.07s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.50s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it B-4 order…  QueryException   
+  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "events_2026_08" violates foreign key constraint "events_tenant_id_foreign"
+DETAIL:  Key (tenant_id)=(019fed86-db23-7050-892c-795d2afdfc45) is not present in table "tenants". (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: INSERT INTO events (id, tenant_id, name, schema_version, payload, occurred_at)
+             VALUES (019fed86-dbef-73bb-86d4-468eec3dad52, 019fed86-db23-7050-892c-795d2afdfc45, tenant.setting_changed, 1, {"tenant_id":"019fed86-db23-7050-892c-795d2afdfc45","key":"s5.late"}, clock_timestamp() - interval '20 seconds'))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+5 vendor frames [22m
+  6   tests/Feature/Inbox/SyncGoldenTest.php:23
+  7   tests/Pest.php:177
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it B-4 water…  QueryException   
+  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "events_2026_08" violates foreign key constraint "events_tenant_id_foreign"
+DETAIL:  Key (tenant_id)=(019fed86-dc1c-72e0-b769-83ee515ba30e) is not present in table "tenants". (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: INSERT INTO events (id, tenant_id, name, schema_version, payload, occurred_at)
+             VALUES (019fed86-dc37-713f-90fc-2c3cbe398d67, 019fed86-dc1c-72e0-b769-83ee515ba30e, tenant.setting_changed, 1, {"tenant_id":"019fed86-dc1c-72e0-b769-83ee515ba30e","key":"s5.settled"}, clock_timestamp() - interval '30 seconds'))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+5 vendor frames [22m
+  6   tests/Feature/Inbox/SyncGoldenTest.php:23
+  7   tests/Pest.php:177
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it A-31 scop…  QueryException   
+  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "events_2026_08" violates foreign key constraint "events_tenant_id_foreign"
+DETAIL:  Key (tenant_id)=(019fed86-dc5a-71a6-9703-478577a1c855) is not present in table "tenants". (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: INSERT INTO events (id, tenant_id, name, schema_version, payload, occurred_at)
+             VALUES (019fed86-dcd4-73aa-96be-553b1b572d36, 019fed86-dc5a-71a6-9703-478577a1c855, ticket.priority_changed, 1, {"tenant_id":"019fed86-dc5a-71a6-9703-478577a1c855","ticket_id":"019fed86-dc81-7239-9963-494fe83380c3","conversation_id":"019fed86-dc80-7044-b427-ffc266fdf816","old_priority":"normal","new_priority":"high","actor_type":"agent","actor_id":null}, clock_timestamp() - interval '30 seconds'))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+5 vendor frames [22m
+  6   tests/Feature/Inbox/SyncGoldenTest.php:23
+  7   tests/Pest.php:177
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it T-07 over…  QueryException   
+  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "events_2026_08" violates foreign key constraint "events_tenant_id_foreign"
+DETAIL:  Key (tenant_id)=(019fed86-dcf7-70ba-9d0c-f587ebe8b496) is not present in table "tenants". (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: INSERT INTO events (id, tenant_id, name, schema_version, payload, occurred_at)
+             VALUES (019fed86-dd13-72b4-bf34-fab5d012491b, 019fed86-dcf7-70ba-9d0c-f587ebe8b496, tenant.setting_changed, 1, {"tenant_id":"019fed86-dcf7-70ba-9d0c-f587ebe8b496","key":"s5.of1"}, clock_timestamp() - interval '21 seconds'))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+5 vendor frames [22m
+  6   tests/Feature/Inbox/SyncGoldenTest.php:23
+  7   tests/Pest.php:177
+
+
+  Tests:    4 failed, 1 passed (7 assertions)
+  Duration: 6.32s
+

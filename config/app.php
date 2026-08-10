@@ -5,6 +5,12 @@ declare(strict_types=1);
 return [
 
     /*
+    | FR-30 (Doc 07): the build identifier every sync/handshake payload
+    | carries; a client mismatch shows the passive refresh toast.
+    */
+    'build_id' => env('APP_BUILD_ID', 'dev'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------

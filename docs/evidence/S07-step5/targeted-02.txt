@@ -1,0 +1,87 @@
+
+   FAIL  Tests\Feature\Inbox\SyncGoldenTest
+  ⨯ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  5.30s  
+  ⨯ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.09s  
+  ⨯ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 0.19s  
+  ⨯ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.10s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.46s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it B-4 order…  QueryException   
+  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "id", "name", "schema_version", "payload", "occurred_at" from "events" where "occurred_at" <= 2026-08-10 21:15:26.753915+00 order by "occurred_at" asc, "id" asc limit 5001)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+6 vendor frames [22m
+  7   app/Domain/Inbox/Sync/SyncReader.php:90
+  8   tests/Feature/Inbox/SyncGoldenTest.php:67
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it B-4 water…  QueryException   
+  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "id", "name", "schema_version", "payload", "occurred_at" from "events" where "occurred_at" <= 2026-08-10 21:15:26.86963+00 order by "occurred_at" asc, "id" asc limit 5001)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+6 vendor frames [22m
+  7   app/Domain/Inbox/Sync/SyncReader.php:90
+  8   tests/Feature/Inbox/SyncGoldenTest.php:94
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it A-31 scop…  QueryException   
+  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "id", "name", "schema_version", "payload", "occurred_at" from "events" where "occurred_at" <= 2026-08-10 21:15:27.061584+00 order by "occurred_at" asc, "id" asc limit 5001)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+6 vendor frames [22m
+  7   app/Domain/Inbox/Sync/SyncReader.php:90
+  8   tests/Feature/Inbox/SyncGoldenTest.php:134
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it T-07 over…  QueryException   
+  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "id", "name", "schema_version", "payload", "occurred_at" from "events" where "occurred_at" <= 2026-08-10 21:15:27.16028+00 order by "occurred_at" asc, "id" asc limit 4)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+6 vendor frames [22m
+  7   app/Domain/Inbox/Sync/SyncReader.php:90
+  8   tests/Feature/Inbox/SyncGoldenTest.php:156
+
+
+  Tests:    4 failed, 1 passed (7 assertions)
+  Duration: 6.26s
+

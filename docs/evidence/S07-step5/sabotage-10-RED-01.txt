@@ -1,0 +1,38 @@
+
+   FAIL  Tests\Feature\Inbox\SyncGoldenTest
+  ⨯ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  5.80s  
+  ✓ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.12s  
+  ✓ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 0.20s  
+  ✓ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.11s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.50s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SyncGoldenTest > it B-4 ordering: events repl…   
+  the replay is not (occurred_at, id): stamps must order first; the UUIDv7 id breaks ONLY the shared-stamp tie (A-33 B-4 / R-19's narrowing)
+Failed asserting that two arrays are identical.
+   Array &0 [
+  -    0 => '019fed89-d6d0-73df-8e45-6a5ae0ca8554',
+  +    0 => '019fed89-d6c4-73d9-8086-9f1e3ce0a876',
+       1 => '019fed89-d6cb-70fb-81b9-8f3e81f9e9c5',
+       2 => '019fed89-d6cb-70fb-81b9-8f3e823171e8',
+  -    3 => '019fed89-d6c4-73d9-8086-9f1e3ce0a876',
+  +    3 => '019fed89-d6d0-73df-8e45-6a5ae0ca8554',
+   ]
+  
+
+  at tests/Feature/Inbox/SyncGoldenTest.php:70
+     66▕ 
+     67▕     $result = asTenant($tenant, fn (): array => syncReader()->since(null, $viewer));
+     68▕     $ids = array_column($result['events'], 'id');
+     69▕ 
+  ➜  70▕     expect($ids)->toBe([$early, $tieFirst, $tieSecond, $late],
+     71▕         'the replay is not (occurred_at, id): stamps must order first; the UUIDv7 id breaks ONLY the shared-stamp tie (A-33 B-4 / R-19\'s narrowing)');
+     72▕     expect($result['overflow'])->toBeFalse()
+     73▕         ->and($result['server_now'])->not->toBeNull();
+     74▕     } finally {
+
+  1   tests/Feature/Inbox/SyncGoldenTest.php:70
+
+
+  Tests:    1 failed, 4 passed (16 assertions)
+  Duration: 6.82s
+

@@ -132,6 +132,11 @@ Route::middleware([
 
     Route::get('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'show'])
         ->middleware('permission:tickets.view')->name('inbox.prefs.show');
+
+    // T-07: the single reconciliation path (GET — read-only replay; EC-08's
+    // 429-on-connect rides the inbox-sync limiter).
+    Route::get('sync', App\Http\Controllers\Inbox\SyncController::class)
+        ->middleware(['permission:tickets.view', 'throttle:inbox-sync'])->name('inbox.sync');
     // The R-26 principle applied to the sibling workspace-config WRITE
     // (flagged in the 4+5 report for countersign): Read Only persists no
     // server-side prefs; reading them stays tickets.view.

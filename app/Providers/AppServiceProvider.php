@@ -67,6 +67,27 @@ class AppServiceProvider extends ServiceProvider
         // definition resolving its registered default (FR-11, ADR 0005).
         $this->app->make(FeatureRegistry::class)->defineAll();
 
+        // Doc 07 EC-08 (S07 step 5): reconnect storms — the sync endpoint's
+        // per-user limiter; 30/min is generous for one client's reconnect
+        // loop and mean for a stampede. The client honors 429 with 0-10 s
+        // jittered backoff (FR-29/EC-08; the client half is step 13).
+        // afterResolving, NEVER RateLimiter::for() here — a facade call in
+        // boot() resolves the limiter early and silently orphans
+        // FortifyServiceProvider's own afterResolving registrations (auth-ip
+        // et al.) — found by DeviceRegistrationTest going 500 on exactly
+        // that, the trap Fortify's docblock warns about.
+        $this->callAfterResolving(
+            \Illuminate\Cache\RateLimiter::class,
+            function (\Illuminate\Cache\RateLimiter $limiter): void {
+                $limiter->for('inbox-sync', function (\Illuminate\Http\Request $request): \Illuminate\Cache\RateLimiting\Limit {
+                    $by = $request->user()?->getAuthIdentifier();
+
+                    return \Illuminate\Cache\RateLimiting\Limit::perMinute(30)
+                        ->by(is_scalar($by) ? (string) $by : (string) $request->ip());
+                });
+            },
+        );
+
         // Doc 03 EC-08: rbac.four_eyes refuses to ENABLE without ≥2
         // approval-rights holders — the deadlock guard, on the write path.
         \App\Support\Settings\SettingsRepository::registerWriteGuard(
