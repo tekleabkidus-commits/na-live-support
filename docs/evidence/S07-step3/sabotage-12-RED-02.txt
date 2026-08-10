@@ -1,0 +1,44 @@
+
+   FAIL  Tests\Feature\Inbox\ViewChannelAuthTest
+  ⨯ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 5.51s  
+  ⨯ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.06s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewChannelAuthTest > it SEC-01: a viewer is…    
+  a viewer subscribed to a colleague's my_open channel
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/ViewChannelAuthTest.php:33
+     29▕         ->and($gate->authorize($all, $hashes->forViewer('unassigned', $all)))->toBeTrue()
+     30▕         ->and($gate->authorize($own, $hashes->forViewer('my_open', $own)))->toBeTrue();
+     31▕ 
+     32▕     // ANOTHER user's per-user channel: refused (the hash embeds THEIR id).
+  ➜  33▕     expect($gate->authorize($own, $hashes->forViewer('my_open', $all)))->toBeFalse('a viewer subscribed to a colleague\'s my_open channel');
+     34▕ 
+     35▕     // The Own-scoped viewer presenting the ALL-scope shared hash: refused —
+     36▕     // their own derivation is own:{id}, never all (BR-03 at the socket).
+     37▕     expect($gate->authorize($own, $hashes->forViewer('unassigned', $all)))->toBeFalse('an Own-scoped viewer authorized onto the All-scope variant channel');
+
+  1   tests/Feature/Inbox/ViewChannelAuthTest.php:33
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewChannelAuthTest > it SEC-01: a SCOPE CHAN…   
+  a stale pre-scope-change hash still authorizes — sabotage #12's shape
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/ViewChannelAuthTest.php:72
+     68▕ 
+     69▕     // …and the OLD hash stops authorizing while the NEW derivation works:
+     70▕     // the client MUST resubscribe under its pruned variant. That is SEC-01's
+     71▕     // "force resubscribe with pruned membership pushed", as physics.
+  ➜  72▕     expect($gate->authorize($user, $staleHash))->toBeFalse('a stale pre-scope-change hash still authorizes — sabotage #12\'s shape')
+     73▕         // The NEW derivation is the own:{id} variant — the pruned-membership
+     74▕         // channel the client resubscribes to (its ZSET materializes lazily at
+     75▕         // step 4 per A-30; the CHANNEL authorizes from birth)…
+     76▕         ->and($hashes->forViewer('unassigned', $user))->not->toBe($staleHash)
+
+  1   tests/Feature/Inbox/ViewChannelAuthTest.php:72
+
+
+  Tests:    2 failed (6 assertions)
+  Duration: 5.66s
+

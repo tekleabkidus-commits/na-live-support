@@ -1,0 +1,55 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.33s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.10s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.09s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.06s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.04s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.03s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.07s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.06s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.24s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.09s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.07s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.09s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.12s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.10s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.03s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 0.27s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.08s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.06s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 0.09s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.13s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.03s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.13s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.09s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.14s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.02s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.02s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.16s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.04s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.04s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.04s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.05s  
+
+  Tests:    33 passed (289 assertions)
+  Duration: 8.04s
+

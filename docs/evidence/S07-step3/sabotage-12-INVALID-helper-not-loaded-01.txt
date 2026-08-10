@@ -1,0 +1,42 @@
+
+   FAIL  Tests\Feature\Inbox\ViewChannelAuthTest
+  ⨯ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 6.53s  
+  ⨯ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewChannelAuthTest > it SEC-01: a vie…  Error   
+  Call to undefined function inboxScopedActor()
+
+  at tests/Feature/Inbox/ViewChannelAuthTest.php:20
+     16▕ */
+     17▕ 
+     18▕ it('SEC-01: a viewer is admitted to exactly the channels their CURRENT capabilities derive — their own per-user views and their scope\'s shared variant; everything else is the same silent false', function (): void {
+     19▕     [$tenant] = ticketFixture('open');
+  ➜  20▕     $all = inboxScopedActor('All', 'S07 CH All');
+     21▕     $own = inboxScopedActor('Own', 'S07 CH Own');
+     22▕     $stranger = User::factory()->create(); // no role at all → no tickets.view
+     23▕ 
+     24▕     $gate = app(ViewChannelGate::class);
+
+  1   tests/Feature/Inbox/ViewChannelAuthTest.php:20
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewChannelAuthTest > it SEC-01: a SCO…  Error   
+  Call to undefined function inboxScopedActor()
+
+  at tests/Feature/Inbox/ViewChannelAuthTest.php:49
+     45▕ });
+     46▕ 
+     47▕ it('SEC-01: a SCOPE CHANGE breaks the previously valid hash — the forced-resubscribe mechanism, executed', function (): void {
+     48▕     [$tenant] = ticketFixture('open');
+  ➜  49▕     $user = inboxScopedActor('All', 'S07 CH Mutable');
+     50▕     $gate = app(ViewChannelGate::class);
+     51▕     $hashes = app(ViewHash::class);
+     52▕ 
+     53▕     // Valid under All scope…
+
+  1   tests/Feature/Inbox/ViewChannelAuthTest.php:49
+
+
+  Tests:    2 failed (0 assertions)
+  Duration: 6.67s
+

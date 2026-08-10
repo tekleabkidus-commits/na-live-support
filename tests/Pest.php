@@ -1260,3 +1260,21 @@ function inboxTicketRow(string $tenantId, App\Models\Conversation $conversation,
 
     return [$ticket];
 }
+
+/** A user whose role scopes tickets at the given level, holding tickets.view (S07). */
+function inboxScopedActor(string $level, string $roleName): User
+{
+    $role = App\Models\Role::query()->firstOrCreate(
+        ['name' => $roleName],
+        [
+            'color' => 'role-agent',
+            'permissions' => ['tickets.view', 'conversations.view'],
+            'scopes' => ['tickets' => $level, 'conversations' => $level, 'customers' => $level, 'reports' => $level],
+        ],
+    );
+    $user = User::factory()->create();
+    $user->forceFill(['role_id' => $role->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
+
+    return $user;
+}

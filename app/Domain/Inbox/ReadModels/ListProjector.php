@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Inbox\ReadModels;
 
+use App\Domain\Inbox\Realtime\CountPusher;
+use App\Domain\Inbox\Realtime\ViewDeltaPusher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -14,8 +16,10 @@ use Illuminate\Support\Str;
  * (TicketListItems::recompute), and view membership is re-evaluated from the
  * fresh row against SystemViews' definitions. Redelivery recomputes the same
  * state — C-09 BY CONSTRUCTION (proven, and sabotaged, in
- * ListProjectorTest). Step 3 adds the Reverb delta/count publication; this
- * class deliberately pushes nothing.
+ * ListProjectorTest). Since step 3 every membership change ALSO publishes a
+ * T-02 view delta (add|patch|remove with the integer-µs sort_key and a row
+ * patch) plus the debounced T-03 count push — ephemeral protocol v:1 through
+ * ViewDeltaPusher, never the outbox (the RealtimePusher distinction).
  *
  * Membership sync per apply:
  *  - my_open:{user}: the OLD row's assignee (read before recompute) loses
@@ -36,6 +40,8 @@ final class ListProjector
     public function __construct(
         private readonly TicketListItems $items,
         private readonly ViewZsets $zsets,
+        private readonly ViewDeltaPusher $pusher,
+        private readonly CountPusher $counts,
     ) {}
 
     /**
@@ -85,47 +91,84 @@ final class ListProjector
         // my_open — the old assignee's set first (a reassignment must REMOVE).
         $oldAssignee = $before->assignee_id ?? null;
         if ($oldAssignee !== null && $oldAssignee !== $row->assignee_id) {
-            $this->zsets->remove(SystemViews::userView('my_open', $oldAssignee), $ticketId);
+            $this->syncOut(SystemViews::userView('my_open', $oldAssignee), $ticketId);
         }
         if ($row->assignee_id !== null) {
             $view = SystemViews::userView('my_open', $row->assignee_id);
             $open
-                ? $this->zsets->add($view, $ticketId, $activityMicros)
-                : $this->zsets->remove($view, $ticketId);
+                ? $this->syncIn($view, $ticketId, $activityMicros, $row)
+                : $this->syncOut($view, $ticketId);
         }
 
         // unassigned — first-come: score is the TICKET's birth stamp (BR-04).
         ($open && $row->assignee_id === null)
-            ? $this->zsets->add('unassigned', $ticketId, ViewZsets::toMicros((string) $row->ticket_created_at))
-            : $this->zsets->remove('unassigned', $ticketId);
+            ? $this->syncIn('unassigned', $ticketId, ViewZsets::toMicros((string) $row->ticket_created_at), $row)
+            : $this->syncOut('unassigned', $ticketId);
 
         // sla_at_risk — seam columns (fixture-fed until Doc 12; Amendment rider (ii)).
         ($open && in_array($row->sla_state, ['warned', 'breached'], true) && $row->sla_due_at !== null)
-            ? $this->zsets->add('sla_at_risk', $ticketId, ViewZsets::toMicros((string) $row->sla_due_at))
-            : $this->zsets->remove('sla_at_risk', $ticketId);
+            ? $this->syncIn('sla_at_risk', $ticketId, ViewZsets::toMicros((string) $row->sla_due_at), $row)
+            : $this->syncOut('sla_at_risk', $ticketId);
 
         // expiring_windows — Doc 05 FR-22's closing/expired with open tickets.
         /** @var string|null $windowStateRaw */
         $windowStateRaw = DB::table('conversations')->where('id', $row->conversation_id)->value('reply_window_state');
         $windowState = $windowStateRaw ?? '';
         ($open && in_array($windowState, ['closing', 'expired'], true) && $row->window_expires_at !== null)
-            ? $this->zsets->add('expiring_windows', $ticketId, ViewZsets::toMicros((string) $row->window_expires_at))
-            : $this->zsets->remove('expiring_windows', $ticketId);
+            ? $this->syncIn('expiring_windows', $ticketId, ViewZsets::toMicros((string) $row->window_expires_at), $row)
+            : $this->syncOut('expiring_windows', $ticketId);
 
         // rescue — channel_unreachable, any status (BR-07 keeps them open in practice).
         $row->channel_unreachable
-            ? $this->zsets->add('rescue', $ticketId, $activityMicros)
-            : $this->zsets->remove('rescue', $ticketId);
+            ? $this->syncIn('rescue', $ticketId, $activityMicros, $row)
+            : $this->syncOut('rescue', $ticketId);
 
         // following — membership from truth; activity rescores every follower.
         /** @var list<string> $followers */
         $followers = DB::table('ticket_followers')->where('ticket_id', $ticketId)->pluck('user_id')->all();
         foreach ($followers as $followerId) {
-            $this->zsets->add(SystemViews::userView('following', $followerId), $ticketId, $activityMicros);
+            $this->syncIn(SystemViews::userView('following', $followerId), $ticketId, $activityMicros, $row);
         }
         // A follower REMOVAL is synced when its event names the user (below);
         // recompute alone cannot know who left, and scanning every user's set
         // would be the stampede T-01 forbids.
+    }
+
+    /**
+     * Membership add/rescore + the T-02 delta + the T-03 count, in one place.
+     *
+     * @param  ListItemRow  $row
+     */
+    private function syncIn(string $viewKey, string $ticketId, int $scoreMicros, object $row): void
+    {
+        $isNew = $this->zsets->add($viewKey, $ticketId, $scoreMicros);
+
+        $this->pusher->toViewKey($viewKey, 'inbox.view_delta', [
+            'type' => 'view_delta',
+            'view_key' => $viewKey,
+            'op' => $isNew ? 'add' : 'patch',
+            'id' => $ticketId,
+            'sort_key' => $scoreMicros,
+            // Assembled in the context-free file (the status-writer gate's
+            // design constraint — see TicketListItems::patchFor).
+            'patch' => TicketListItems::patchFor($row),
+        ]);
+        $this->counts->onDelta($viewKey);
+    }
+
+    private function syncOut(string $viewKey, string $ticketId): void
+    {
+        if (! $this->zsets->remove($viewKey, $ticketId)) {
+            return; // was never a member — no delta, no count churn (T-02 precision)
+        }
+
+        $this->pusher->toViewKey($viewKey, 'inbox.view_delta', [
+            'type' => 'view_delta',
+            'view_key' => $viewKey,
+            'op' => 'remove',
+            'id' => $ticketId,
+        ]);
+        $this->counts->onDelta($viewKey);
     }
 
     /** @param array<string, mixed> $payload */
@@ -154,11 +197,16 @@ final class ListProjector
             ->select('created_at')->first();
 
         if ($rowStamp !== null) {
-            $this->zsets->add(
-                SystemViews::userView('mentions', self::str($payload, 'mentioned_user_id')),
-                $ticketId,
-                ViewZsets::toMicros($rowStamp->created_at),
-            );
+            $view = SystemViews::userView('mentions', self::str($payload, 'mentioned_user_id'));
+            $isNew = $this->zsets->add($view, $ticketId, ViewZsets::toMicros($rowStamp->created_at));
+            $this->pusher->toViewKey($view, 'inbox.view_delta', [
+                'type' => 'view_delta',
+                'view_key' => $view,
+                'op' => $isNew ? 'add' : 'patch',
+                'id' => $ticketId,
+                'sort_key' => ViewZsets::toMicros($rowStamp->created_at),
+            ]);
+            $this->counts->onDelta($view);
         }
     }
 
@@ -176,7 +224,7 @@ final class ListProjector
             ->whereNull('read_at')
             ->update(['read_at' => DB::raw('clock_timestamp()')]);
 
-        $this->zsets->remove(SystemViews::userView('mentions', $userId), $ticketId);
+        $this->syncOut(SystemViews::userView('mentions', $userId), $ticketId);
     }
 
     /**
@@ -190,7 +238,7 @@ final class ListProjector
         // Follower removal must sync the named user's set (recompute cannot
         // know who left).
         if ($name === 'ticket.follower_removed') {
-            $this->zsets->remove(
+            $this->syncOut(
                 SystemViews::userView('following', self::str($payload, 'user_id')),
                 self::str($payload, 'ticket_id'),
             );

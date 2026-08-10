@@ -1,0 +1,349 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 4.77s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.09s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.09s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   FAIL  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.06s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.05s  
+  ⨯ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   FAIL  Tests\Feature\Inbox\ListProjectorTest
+  ⨯ it T-01: recomputes the row from truth — status, number, snippet, p… 0.09s  
+  ⨯ it EC-11: a media-only last message stores the KIND as the placehol… 0.07s  
+  ⨯ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 0.21s  
+  ⨯ it C-09 by construction: the SAME event delivered twice recomputes…  0.05s  
+  ⨯ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.05s  
+  ⨯ it FR-05 following: membership from ticket_followers truth; removal… 0.05s  
+  ⨯ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.06s  
+  ⨯ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.07s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.02s  
+
+   FAIL  Tests\Feature\Inbox\ReplayCountingTest
+  ⨯ it replay-counting: a recorded stream into a COLD projector lands e… 0.15s  
+
+   FAIL  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.09s  
+  ⨯ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.07s  
+
+   FAIL  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ⨯ it T-02: membership changes publish v:1 deltas — add with integer-µ… 0.06s  
+  ⨯ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.07s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.04s  
+
+   FAIL  Tests\Security\InboxSecurityTest
+  ⨯ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 0.11s  
+  ⨯ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.07s  
+  ⨯ it SEC posture: the hydration order is the ZSET's and out-of-scope…  0.06s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.02s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\HealthConsumerTest > it is structurally trans…   
+  the health consumer references 'heartbeat' — transitions are CONSUMED (A-22), never re-derived from liveness signals
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/HealthConsumerTest.php:121
+    117▕     // Positive control: the file consumes the event it claims to.
+    118▕     expect(str_contains($source, 'channel.health.changed'))->toBeTrue();
+    119▕ 
+    120▕     foreach (['getWebhookInfo', 'heartbeat', 'everyFiveMinutes', 'poll('] as $forbidden) {
+  ➜ 121▕         expect(str_contains($source, $forbidden))->toBeFalse(
+    122▕             "the health consumer references '{$forbidden}' — transitions are CONSUMED (A-22), never re-derived from liveness signals",
+    123▕         );
+    124▕     }
+    125▕ });
+
+  1   tests/Feature/Inbox/HealthConsumerTest.php:121
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it T-…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it EC…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it C-…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it A-…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:216
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FR…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ListProjectorTest > it FS…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ReplayCountingTest > it r…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewChannelAuthTest > it SEC-01: a SCOPE CHAN…   
+  Own scope must derive own:{id}, not the all variant
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/ViewChannelAuthTest.php:73
+     69▕     // …and the OLD hash stops authorizing while the NEW derivation works:
+     70▕     // the client MUST resubscribe under its pruned variant. That is SEC-01's
+     71▕     // "force resubscribe with pruned membership pushed", as physics.
+     72▕     expect($gate->authorize($user, $staleHash))->toBeFalse('a stale pre-scope-change hash still authorizes — sabotage #12\'s shape')
+  ➜  73▕         ->and($gate->authorize($user, $hashes->forViewer('unassigned', $user)))->toBeFalse('Own scope must derive own:{id}, not the all variant')
+     74▕         ->and($gate->authorize($user, $hashes->forViewer('my_open', $user)))->toBeTrue('the per-user channel must survive the narrowing');
+     75▕ });
+     76▕
+
+  1   tests/Feature/Inbox/ViewChannelAuthTest.php:73
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewDeltaProtocolTest > i…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewDeltaProtocolTest > i…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it BR-03/s…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it N-01: a…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSecurityTest > it SEC pos…  ArgumentCountError   
+  Redis::set() expects at most 3 arguments, 5 given
+
+  at vendor/laravel/framework/src/Illuminate/Redis/Connections/Connection.php:124
+    120▕     {
+    121▕         $start = microtime(true);
+    122▕ 
+    123▕         try {
+  ➜ 124▕             $result = $this->client->{$method}(...$parameters);
+    125▕         } catch (Throwable $e) {
+    126▕             $this->events?->dispatch(new CommandFailed(
+    127▕                 $method, $this->parseParametersForEvent($parameters), $e, $this
+    128▕             ));
+
+      [2m+2 vendor frames [22m
+  3   app/Domain/Inbox/Realtime/CountPusher.php:51
+  4   app/Domain/Inbox/ReadModels/ListProjector.php:163
+
+
+  Tests:    16 failed, 12 passed (118 assertions)
+  Duration: 6.67s
+

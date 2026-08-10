@@ -1,0 +1,27 @@
+
+   FAIL  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 6.43s  
+  ⨯ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  0.13s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.06s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ViewDeltaProtocolTest > it T-03: the pushed c…   
+  the pushed count is not the server ZCARD — T-03's contract (client never derives from a partial window) is broken at the source
+Failed asserting that 1 is identical to 4.
+
+  at tests/Feature/Inbox/ViewDeltaProtocolTest.php:124
+    120▕     runListProjector($seed($t4, $c4));
+    121▕ 
+    122▕     $counts = viewFrames('unassigned', 'inbox.view_count');
+    123▕     expect($counts)->toHaveCount(2)
+  ➜ 124▕         ->and($counts[1]['count'])->toBe(4, 'the pushed count is not the server ZCARD — T-03\'s contract (client never derives from a partial window) is broken at the source')
+    125▕         ->and($counts[1]['count'])->toBe($zsets->count('unassigned'))
+    126▕         ->and($counts[1]['count'])->toBe(SystemViews::directQuery('unassigned')->count());
+    127▕ });
+    128▕
+
+  1   tests/Feature/Inbox/ViewDeltaProtocolTest.php:124
+
+
+  Tests:    1 failed, 2 passed (26 assertions)
+  Duration: 6.68s
+

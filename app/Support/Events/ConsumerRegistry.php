@@ -73,6 +73,11 @@ final class ConsumerRegistry
         'telegram.window.reopened' => [ListProjectorConsumer::class],
         'telegram.connection.revoked' => [ListProjectorConsumer::class],
         'telegram.connection.active' => [ListProjectorConsumer::class],
+
+        // Doc 07 FR-03 (S07 step 3): channel.health.changed v2's FIRST
+        // consumer — the header indicator's feed (inherited row 5; A-22's
+        // transition-only semantics consumed, never re-derived).
+        'channel.health.changed' => [\App\Jobs\Inbox\HealthIndicatorConsumer::class],
     ];
 
     /** @return list<class-string<OutboxConsumer>> */

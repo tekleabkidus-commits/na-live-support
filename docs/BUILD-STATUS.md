@@ -81,6 +81,57 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 3: T-02 VIEW-DELTA PROTOCOL v:1, T-03 COUNT PUSHES, SEC-01 SUBSCRIBE RE-AUTH, HEALTH-v2'S FIRST CONSUMER
+
+**Built:** the T-02 protocol door (`ViewDeltaPusher` — Doc 07's OWN protocol,
+the RealtimePusher distinction stated: view deltas/count pushes are realtime
+v:1, never catalog events; transport = Doc 04's public RealtimePush event
+CONSUMED; the platform rules every door carries — v:1, 32 KB ceiling, SEC-06
+fence — enforced for view channels). The projector now publishes precise
+deltas: op=add on new membership, patch on rescore (ZADD's own return is the
+discriminator), remove ONLY on a real removal (ZREM=1). `CountPusher` (T-03
+server half): the pushed count IS the ZCARD, debounced once/2 s per view via
+a redis NX+EX throttle — deterministic tests clear the key, never sleep; a
+coalesced window's next push carries the FULL current ZCARD. SEC-01:
+`ViewHash` embeds scope context server-side (per-user views user:{id};
+shared views all|own|team|dept signatures from Doc 03's OWN resolution);
+`ViewChannelGate` re-authorizes by RE-DERIVATION on subscribe — a scope
+change breaks the stale hash (forced resubscribe onto the pruned variant,
+executed in ViewChannelAuthTest), refusals all the same silent false (C-10);
+channels `tenant.{id}.view.{hash}` + `tenant.{id}.inbox` registered on the
+staff guard. **`channel.health.changed` v2's FIRST consumer** (inherited
+row 5): `HealthIndicatorConsumer` (ConsumerRegistry entry; `Doc07/Inbox`
+added to the catalog's consumers — regen'd), storing transition payloads
+verbatim per endpoint (`ChannelHealthState`) and pushing the FR-03 signal;
+transition-only CONSUMED — proven behaviourally AND structurally
+(comment-stripped source scan with positive control). **The event's first
+consumer-contract fixture anywhere**: `fixtures/inbox/consumers/
+doc07-events.json` (v2 pinned + 8 more non-ticket read-slices) under the NEW
+`tests/Contract/InboxEventConsumerContractsTest.php` (a canonical-suite
+path): fidelity (bump→red until reconciled deliberately; reads ⊆ payload) +
+completeness (durable consumption ⇒ contract — an App\Jobs\Inbox consumer
+cannot ship uncontracted; the 'Doc07/Realtime' catalog labels are
+socket-client curation, stated in the file).
+
+**Proven (evidence `docs/evidence/S07-step3/`):** canonical suites (4 of 5
+paths extant, stated) **33 passed / 289 assertions**
+(`canonical-suites-01.txt`); full suite **1004 passed / 0 failed / 13,343
+assertions** (`make-test-02.txt`); gates **13/13** (`gates-02.txt`;
+`gates-01.txt`/`make-test-01.txt` = the honest trail: the status-writer gate
+fired AGAIN on step 3's delta patch and was again FOLLOWED, not touched —
+patch assembly moved to the context-free file, `TicketListItems::patchFor`);
+lint clean. Health consumer: C-09 redelivery + the FS-02 kill/re-drive drill
++ v2 seeded at its real schema_version. Sabotages fail+restored: **#12**
+(gate accepts any hash → both SEC-01 tests red on the assertions;
+FIRST ATTEMPT FILED INVALID under its honest name —
+`sabotage-12-INVALID-helper-not-loaded-01.txt`, a missing test helper red,
+not the guard; helper moved to Pest.php and the sabotage REDONE validly) and
+**#13** (count = batch size instead of ZCARD → the T-03 coalesce test red on
+exactly the ZCARD assertion). STALE-COMMENT NOTE for the advisor: Doc 04's
+RealtimePush docblock says "RealtimePusher is its only constructor site" —
+ViewDeltaPusher is now a second sanctioned site; a comment-only amendment to
+that Doc 04 file awaits a nod (no behavior change; no test pins the claim).
+
 ## SESSION-07 (Doc 07) — STEP 2: THE LIST PROJECTOR (T-01), REPLAY-COUNTING PROOF (T-03), SCOPED-LIST PROOF, NFR-07 CHECKER
 
 **Built:** `ListProjector` as a ConsumerRegistry durable consumer over **29

@@ -38,16 +38,24 @@ final class ViewZsets
         return sprintf('t:%s:view:%s', $this->context->tenantId(), $viewKey);
     }
 
-    public function add(string $viewKey, string $ticketId, int $scoreMicros): void
+    /** @return bool TRUE when the member was NEW (T-02 op=add), false on a rescore (op=patch). */
+    public function add(string $viewKey, string $ticketId, int $scoreMicros): bool
     {
         $key = $this->key($viewKey);
-        $this->redis->connection(self::CONNECTION)->command('zadd', [$key, $scoreMicros, $ticketId]);
+        /** @var int|string $added ZADD's return: number of NEW members */
+        $added = $this->redis->connection(self::CONNECTION)->command('zadd', [$key, $scoreMicros, $ticketId]);
         $this->redis->connection(self::CONNECTION)->command('expire', [$key, self::TTL_SECONDS]);
+
+        return (int) $added === 1;
     }
 
-    public function remove(string $viewKey, string $ticketId): void
+    /** @return bool TRUE when a member was actually removed (T-02 op=remove pushes only then). */
+    public function remove(string $viewKey, string $ticketId): bool
     {
-        $this->redis->connection(self::CONNECTION)->command('zrem', [$this->key($viewKey), $ticketId]);
+        /** @var int|string $removed */
+        $removed = $this->redis->connection(self::CONNECTION)->command('zrem', [$this->key($viewKey), $ticketId]);
+
+        return (int) $removed === 1;
     }
 
     public function count(string $viewKey): int

@@ -79,6 +79,29 @@ final class TicketListItems
     public function __construct(private readonly CanonicalTicketReader $reader) {}
 
     /**
+     * The T-02 delta's row patch — assembled HERE (the context-free file) so
+     * the projector, which touches the ticket tables, never assigns a
+     * status-shaped key (the ticket-status-writer gate's design constraint,
+     * the same split as recompute itself).
+     *
+     * @param  ListItemRow  $row
+     * @return array<string, mixed>
+     */
+    public static function patchFor(object $row): array
+    {
+        return [
+            'status' => $row->status,
+            'priority' => $row->priority,
+            'assignee_id' => $row->assignee_id,
+            'subject' => $row->subject,
+            'snippet' => $row->snippet,
+            'snippet_kind' => $row->snippet_kind,
+            'number' => $row->number,
+            'last_activity_at' => $row->last_activity_at,
+        ];
+    }
+
+    /**
      * Recompute one ticket's row from truth and upsert it. Returns the fresh
      * row (reread after write) or null when the ticket does not exist.
      *

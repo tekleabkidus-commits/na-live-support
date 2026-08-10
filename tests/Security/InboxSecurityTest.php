@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Domain\Inbox\ReadModels\ListReadModel;
 use App\Domain\Inbox\ReadModels\SystemViews;
 use App\Domain\Inbox\ReadModels\ViewZsets;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -24,23 +23,7 @@ use Illuminate\Support\Facades\DB;
 | ListReadModel::page and the Own-scope assertions here go red.
 */
 
-/** A user whose role scopes tickets at the given level, holding tickets.view. */
-function inboxScopedActor(string $level, string $roleName): User
-{
-    $role = Role::query()->firstOrCreate(
-        ['name' => $roleName],
-        [
-            'color' => 'role-agent',
-            'permissions' => ['tickets.view', 'conversations.view'],
-            'scopes' => ['tickets' => $level, 'conversations' => $level, 'customers' => $level, 'reports' => $level],
-        ],
-    );
-    $user = User::factory()->create();
-    $user->forceFill(['role_id' => $role->getKey()])->save();
-    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
-
-    return $user;
-}
+// inboxScopedActor lives in tests/Pest.php (shared with ViewChannelAuthTest).
 
 it('BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows — absence, not locks; All-scope is the positive control (sabotage #1 goes red here)', function (): void {
     [$tenant, $conversation, $ticket] = ticketFixture('new'); // unassigned, open family

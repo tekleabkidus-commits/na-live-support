@@ -115,3 +115,33 @@ Broadcast::channel('tenant.{tenantId}.user.{userId}', function (
     return app(ChannelTenantBinding::class)->authorize($user, $tenantId)
         && hash_equals($user->identifier(), $userId);
 }, ['guards' => ['staff']]);
+
+/*
+|------------------------------------------------------------------------------
+| Inbox view channels (Doc 07 T-02/SEC-01 — S07 step 3)
+|------------------------------------------------------------------------------
+|
+| The view hash EMBEDS scope context server-side (ViewHash), so subscribing
+| RE-AUTHORIZES by re-derivation: the gate recomputes what this viewer's hash
+| would be NOW and compares — a scope change (Doc 03 FR-07) breaks the match
+| and forces the resubscribe with pruned membership (the new hash's variant).
+| Refusals are the same silent false as everywhere (C-10).
+*/
+Broadcast::channel('tenant.{tenantId}.view.{viewHash}', function (
+    User $user,
+    string $tenantId,
+    string $viewHash,
+): bool {
+    return app(ChannelTenantBinding::class)->authorize($user, $tenantId)
+        && app(App\Domain\Inbox\Realtime\ViewChannelGate::class)->authorize($user, $viewHash);
+}, ['guards' => ['staff']]);
+
+// The workspace topbar channel (FR-03 health indicator, FR-26 bell signals):
+// any tickets.view holder of the tenant — the workspace's entry permission.
+Broadcast::channel('tenant.{tenantId}.inbox', function (
+    User $user,
+    string $tenantId,
+): bool {
+    return app(ChannelTenantBinding::class)->authorize($user, $tenantId)
+        && app(App\Domain\Inbox\Realtime\ViewChannelGate::class)->authorizeInbox($user);
+}, ['guards' => ['staff']]);
