@@ -20,19 +20,34 @@ const V1440 = { width: 1440, height: 900 };
 const V375 = { width: 375, height: 812 };
 
 function artisan(...args: string[]): void {
-    execFileSync('docker', [
-        'compose',
-        '-f',
-        'docker/compose.yaml',
-        '-f',
-        'docker/compose.dev.yaml',
-        'exec',
-        '-T',
-        'app',
-        'php',
-        'artisan',
-        ...args,
-    ]);
+    // CAPTURE-FIRST (governance #6): a bare execFileSync throw says only
+    // "Command failed" — CI run 31371398339 red-flaked twice on this seeder
+    // with the actual stderr swallowed. Pipe and rethrow with both streams
+    // so a first-attempt failure arrives with its own diagnosis.
+    try {
+        execFileSync(
+            'docker',
+            [
+                'compose',
+                '-f',
+                'docker/compose.yaml',
+                '-f',
+                'docker/compose.dev.yaml',
+                'exec',
+                '-T',
+                'app',
+                'php',
+                'artisan',
+                ...args,
+            ],
+            { stdio: 'pipe' },
+        );
+    } catch (e) {
+        const err = e as { message: string; stdout?: unknown; stderr?: unknown };
+        throw new Error(
+            `${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`,
+        );
+    }
 }
 
 test.beforeAll(() => {

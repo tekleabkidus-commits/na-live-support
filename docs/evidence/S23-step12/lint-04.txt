@@ -1,0 +1,33 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      lint
+# set:        S23-step12
+# command:    make lint
+# started:    2026-08-10T10:38:40Z
+# git:        a01833b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+✖ 3 problems (0 errors, 3 warnings)
+
+npx vue-tsc --noEmit
+tests/Browser/telegram-screens.spec.ts(43,15): error TS2353: Object literal may only specify known properties, and 'stdio' does not exist in type '{ encoding?: string | undefined; cwd?: string | undefined; }'.
+tests/Browser/telegram-screens.spec.ts(46,54): error TS2591: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/Browser/telegram-screens.spec.ts(46,80): error TS2591: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+make: *** [Makefile:102: lint] Error 2
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-10T10:38:51Z
+# duration:   11s
+# EXIT:       2

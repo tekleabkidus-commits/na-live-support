@@ -1,0 +1,16 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      lint
+# set:        S23-step12
+# command:    make lint
+# started:    2026-08-10T10:37:37Z
+# git:        a01833b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"failed","errors":5,"error_details":{"/home/kidus/projects/na-live-support/app/Domain/Telegram/Bots/BotProvisioner.php":[{"line":218,"message":"Parameter #1 $callback of function array_map expects (callable(int|string, mixed): mixed)|null, Closure(string, string): array{command: string, description: string} given.","identifier":"argument.type","tip":"Type #1 from the union: Type string of parameter #2 $description of passed callable needs to be same or wider than parameter type mixed of accepting callable."}],"/home/kidus/projects/na-live-support/app/Domain/Telegram/Direct/DeepLinkResolver.php":[{"line":68,"message":"Strict comparison using !== between non-falsy-string and '' will always evaluate to true.","identifier":"notIdentical.alwaysTrue"},{"line":106,"message":"Cannot cast mixed to string.","identifier":"cast.string"},{"line":107,"message":"Cannot cast mixed to string.","identifier":"cast.string"},{"line":115,"message":"Cannot cast mixed to string.","identifier":"cast.string"}]},"instructions":"Each error has an associated identifier, like `argument.type` or `return.missing`. Each error identifier has documentation at URL https://phpstan.org/error-identifiers/<identifier>, which contains a code example, explanation why it is an error, and instructions on how to fix it. Before fixing the error, fetch the documentation page for its identifier. The error usually indicates a real bug or incorrect type in the code. Fix the underlying cause, do not just make the error go away. Do not add `@phpstan-ignore` comments, `@phpstan-ignore-next-line` comments, or baseline entries to suppress the error. Do not use assert() or inline @var PHPDoc tag to override PHPStan's inferred type. Do not add type casts just to silence errors. Do not widen parameter or return types just to make the error go away."}
+make: *** [Makefile:100: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-10T10:37:43Z
+# duration:   6s
+# EXIT:       2

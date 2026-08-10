@@ -125,7 +125,7 @@ const confirmName = ref('');
                 class="mt-8 overflow-hidden rounded-xl border"
                 :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-panel-bg)' }"
             >
-                <table class="w-full text-left text-sm">
+                <table class="w-full text-start text-sm">
                     <thead>
                         <tr
                             :style="{

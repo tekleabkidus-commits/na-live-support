@@ -73,6 +73,13 @@ const selectedButton = computed(() =>
 
 const flatButtons = computed(() => rows.value.flatMap((r) => r.buttons.map((b) => label(b))));
 
+// §14/C4: numbered menus respect locale digits — the number formats through
+// the MENU language's own locale (am-ET renders Western digits by Ethiopian
+// standard usage; a future locale with native digits inherits them here
+// without a code change).
+const localeDigit = (n: number): string =>
+    new Intl.NumberFormat(lang.value === 'am' ? 'am-ET' : 'en').format(n);
+
 // ── §K keyboard reorder (row E12) ─────────────────────────────────────────
 const grabbed = ref<{ row: number; idx: number } | null>(null);
 
@@ -270,7 +277,7 @@ function moveRow(index: number, delta: number): void {
                 >
                     {{ l === 'en' ? 'English' : 'አማርኛ' }}
                     <span
-                        class="ml-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                        class="ms-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
                         :style="
                             (l === 'am' ? amComplete < amTotal : false)
                                 ? { background: 'var(--ds-warn-bg)', color: 'var(--ds-warn-text)' }
@@ -654,7 +661,7 @@ function moveRow(index: number, delta: number): void {
                             }"
                         >
                             <p v-for="(l, i) in flatButtons" :key="`line-${i}`">
-                                {{ i + 1 }}. {{ l }}
+                                {{ localeDigit(i + 1) }}. {{ l }}
                             </p>
                             <p class="mt-1" :style="{ color: 'var(--ds-text-secondary)' }">
                                 {{ t.preview_text_footer }}

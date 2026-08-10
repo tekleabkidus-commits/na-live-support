@@ -11,7 +11,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 03 | RBAC, Roles, Permissions, Overrides | **BUILT — S19 close-out below. Final 75-id audit: 59 DONE / 15 PARTIAL / 1 NOT DONE (owner-recounted at acceptance).** Catalog 111 keys / 38 high seeded verbatim (rulings Q9+R-12); resolver + scopes + cache + seeder + THE ENFORCE FLIP live; Doc 02 FR-09 + SEC-05 CLOSED this session; four B6 screens shipped with first token encoding | S19 | 6/8 covered + AC-03 partial (Doc 11 re-proof bucket) + AC-08 partial (pixel half design-export bucket) | See the S19 section for the full audit, sabotage record, filed interpretations (R-9..R-14) and DESIGN-DEVIATIONS. **FR-06 UPGRADED in S20 (Doc 04): both halves now have real consumers — the EXPORT re-check through TranscriptExporter and the REVERB subscribe-scope check through T-06, each with an executed test. The row's "mechanism-ready, consumers arrive Docs 04+" caveat is discharged; the queue pull-in grants remain Doc 11's.** |
 | 04 | Conversations & Messaging Core (fake adapter) | **BUILT — S20 close-out below. Final 96-id audit at S20 close-out: 79 DONE / 17 PARTIAL / 0 NOT DONE (corrected at S22 close-out — the top table said 80/16 while the close-out's own PARTIAL list always enumerated 17; the prose was right). FR-24's ticket half closed at S22 step 8, so the STANDING figure is 80 DONE / 16 PARTIAL / 0 NOT DONE.** All 10 steps shipped; the 12th gate (adapter-conformance) runs two adapters; Doc 01 AC-03 and both halves of Doc 03 FR-06 CLOSED here | S20 | **AC-02/04/05/06/09 covered; AC-01/03/07/08 PARTIAL with stated reasons (AC-03's soak is flaky — RISK 0)** | Step 1: adapter contract + DeliverablePayload physics + fake adapter + conformance suite (12th gate); rulings R-15..R-17, A-4/A-5 filed; traceability flipped (ADR 0004). Step 2 (`a6c68e0`): storage layer — 5 migrations (partitioned messages + per-partition RLS + REVOKE DELETE), repositories, composite (created_at,id) cursor (T-08's first consumer), messages half of partitions:check/maintain + FS-04 pager test; step-9 discovery recorded: partition DROP blocked by revisions FK, detach-time FK verification is RLS-policed — retention must purge revisions cross-tenant BEFORE detach (MessagePartitions docblock). Step 3 (`c1211c3`): inbound pipeline — webhook edge (quota-gated, never inline), claimant-aware SETNX dedupe, Doc 08 identity seam, one-transaction persist+outbox, FR-11 quarantine (audit-only, no retro-fan-out), BR-05 ACK-but-summarize PROVEN through the pipeline, EC-01 batch-tail debounce; dedupe + quarantine sabotaged red→green. Step 4 (`0a9c1eb`): outbound pipeline — FR-13 machine as frozen contract (AC-02: 9 legal edges + all 33 illegal pairs enumerated; no sent→failed edge, EC-05 annotation instead), ComposeOutbound (T-03 idempotency, BR-02 refusal), redis-durable FIFO lanes + LaneWorker (§12 fairness structural, EC-04, 10-min head cap → lane_skipped event+audit per A-4), FR-16 rate gate on A-5 settings; messaging.* i18n en+am; sent→failed edge + head-block both sabotaged red→green. Step 5 (`466e74d`): media chain per ADR 0008 — egress-proxy service (tinyproxy allowlist = the SEC-03 control, mailpit as the deny fixture), streamed fetch with mid-stream cap (EC-02 → rejected + staff marker + customer notice), hand-rolled clamd INSTREAM client (real EICAR detection), EXIF strip via GD re-encode proven byte-level (BR-06), tenant-prefixed MinIO store + 10-min signed URLs with SEC-04 as an absence (no URL path for non-clean), ≤3 queued thumbnails, T-05 needs_transcript/needs_ocr hooks, EC-11 held→x3/15-min→quarantined_pending with data-resident clock; media.max_mb + 4 events registered; proxy-bypass sabotaged red→green. Step 6 (`3944334`): notes (one sanctioned writer, note.added+audit+note.mentioned per A-4; AC-04 runtime half proven through the real send door — sabotage showed guard red AND the row CHECK still refusing, two independent layers), typing (1-per-4s adapter signal capability-gated; EC-12 auto-expiry as TTL physics), drafts (LWW updated_at guard in DB time, EC-06 conflict signal + en/am toast, tombstone clear, draft.saved catalog-absent). Step 7 (`6f8f6e9`): revisions (customer edits via external-id match — one row ever; staff edit/delete capability+telegram.message.delete-gated; FR-23 AI refusal absolute; originals append-only), HistoryReader (conversations.history.full verdict + access AUDITED, AC-06; gate sabotaged red→green), TranscriptExporter (Doc 03 FR-06 export re-check FIRST CONSUMER — inherited row 1 closed at export time; notes excluded/double-confirm; watermark; dompdf + embedded Noto Sans Ethiopic per ADR 0009 — Amharic proven surviving the render). Step 8: blocking actions (events+audited reason), RealtimePusher (v:1, 32KB ceiling, SEC-06 emit fence), presence/user channels with T-06 scope-on-subscribe closing Doc 03 FR-06's Reverb half (inherited row 2; pre-Doc 06 scope FAIL-CLOSED — All only until assignment columns exist, Doc 06 re-proves), FR-26 catalog completeness proven by test; scope-check sabotaged red→green. Step 9a (`615446e`): retention with legal hold — hold storage carries revision history; cross-tenant revision purge BEFORE detach (step-2 discovery applied); AC-09 proven with real detach+drop, boundary partition surviving, held/unheld media split. **CI-proven on `1cfd0be`: run [30992317520](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30992317520), Stages 1-6 green** — after two REAL parity defects the push+verify rule caught: the egress-proxy healthcheck resolved localhost to ::1 (IPv4-only tinyproxy → always unhealthy, masked locally by passing SEC-03 tests), and the media bucket existed only by local hand-creation (CI's ephemeral MinIO failed every media/retention write) — bucket provisioning is now the object store's migrate step in make fresh + CI. Step 9b (`b7ec21a`): FS-05 dead-letter parking + ops re-drive view (R-17 class-2 fill, A-6 filed). Step 9c (`b9fb15a` SS-02 + `d7ee65b` drills): FS-01 channel health + outage drain, FS-02/FS-03, SS-04 node-kill drill claiming Doc 01 AC-03, the AC-03 10k soak (green twice, later flaky — see RISK 0), SS-01 indicative budgets, SS-02 second adapter (zero-core-edits diff = tests/ only). Step 10: §13/§14 sweep (language detector + alt-text slot), the full 96-id audit, sabotage ledger reconciled (the checkpoint's eight were NOT the plan's first eight — two missing sabotages run here). **Two REAL defects found by the new drills: media silently lost on any storage blip, and an at-least-once redelivery treated as a customer edit (78 spurious revisions).** See the S20 close-out section for the audit, ledger, DESIGN-DEVIATIONS and risks |
 | 06 | Ticketing System | **CLOSED — advisor recount at `e49f5e2` (2026-08-09). Final 96-id self-audit: 84 DONE / 12 PARTIAL / 0 NOT DONE; all 12 plan sabotages executed and reconciled; CI run 31292481214 green on the close-out tree. Rulings R-20…R-22 + advisor ruling A-16; interpretations A-7…A-18 (+ two A-7 amendments); A-12…A-18 countersigned.** **Step 8 landed the remainder sweep** (commits `e44b551`…`d0eca63`): NFR-06/T-09 consumer contracts — per-consuming-document fixtures for ALL SEVEN consumers (07/11/12/14/15/16/17; 12/15/17 are T-09's named minimum) pinning schema_version + the read-slice per ticket.* event, with completeness (no uncontracted consumer can ship) and versioning teeth (a catalog bump goes red per document until reconciled deliberately); EC-07 both halves (identical-target no-op, raced-guard re-evaluation), EC-08 decomposed onto proven doors (send-and-reopen = the staff resolved→open door; customer branch = step 5's consumer; drafts untouched), EC-10 orthogonality (the unreachable flag changes ANSWERS, never state); the §14 sweep (every source-scanned refusal code has en+am copy; vocabularies complete; en/am structurally identical) + §13's consequence copy for all 8 statuses (interactive obligations → Doc 07's browser suite, recorded); **inherited row 1 CLOSED** — the ticket-range transcript export on Doc 04's exact gate/watermark/double-confirm, one shared render path, A-18 (anchors else lifetime window; audit carries ticket_id+range_basis, event stays v1), Doc 04's suite green on the refactor; §12 structure — NFR-01/02/04 as enforced budgets GREEN IN STRICT MODE on dev hardware (transition p99 12.4 ms/25; merge+unmerge round 37.7 ms/2000; bulk 200 at 918 ms/30 000 with a linearity tripwire; sweep 10k-armed/20-due 554 ms/5000 — O(due) demonstrated; autocomplete @5k real tags p99 24.1 ms/80), the 100k sweep + 50/s fleet + merge-preview read staying Doc 19/Doc 07 buckets. **Step 7 landed bulk + spam** (commits `c644438`…`8b32147`): FR-09 spam both doors (mark through the machine edge with the separately-confirmed Doc 04 block as a genuinely separate act; unmark ≤ 7 d restores the PRIOR status from event history — outbox-then-events so relay lag cannot block — and re-includes metrics; day 8+ spam_terminal, EC-09), N-14's exclusion as ONE predicate (MetricExclusion, status = spam, row and SQL forms from one constant — sabotage #5 proven red on exactly the three excluded-assertions), A-17's terminal-spam fresh-ticket rung in the reopen consumer (unlinked, automation, idempotent; while unmarkable a message takes no ticket action — filed, needs countersign), the A-13-rider golden landed as announced (merge-supersede-no-close: closed_at set, ticket.closed count 0) plus the AC-06 exclusion golden, driver extended (step reasons, a merge op, metrics_excluded + per-ticket event-count expectations); FR-25 bulk with SEC-04 STRUCTURAL (TicketBulkJob holds no verdicts — every item calls the owning operation's live check; sabotage #4's cached-verdict averaging red on exactly the EC-12 mid-batch-revocation test), per-item partial success with stable C-04 reasons, per-item Reverb user.{requester} progress, ONE ticket.bulk_completed {ok, failed[]} (A-8(ii)) + SEC-03 summary audit, crashed-job resume at pending items and completed-job re-drive publishing nothing (C-09), per-tenant WithoutOverlapping (T-06's cap, smallest honest reading), 200-item batch proven at 2.29 s dev-indicative (NFR-04's ≤30 s enforced with §12's perf structure, step 8); bulk-table state moved to BulkJobStore (the NFR-03 constraint its own gate names). **Step 6 landed the operations** (commits `2163a2a`…`042a226`): FR-20 merge under the SEC-06 same-customer hard rule (checked first, sabotage #8 proven) with SEC-01 target re-check, snapshot-first reversibility (T-04; sabotage #3 proven — the five restoring tests red without it, FS-04 green BY DESIGN via presence-is-authority), BR-02's link rewrite (anchors move, message rows never), followers/tags union, A-13's operation doors on the sole writer (closeForMerge / reopenFromUnmerge — the countersigned 15-edge matrix untouched, no ticket.closed on supersede, resolved sources' timers cancelled and restored byte-identically), A-14's frozen merged sources (merged_superseded + reopen-ladder exclusion), EC-03 transitive survivor resolution with per-link 24 h unmerge, FS-04 presence-is-authority with audited refusals, the platform pruner; FR-21 split with per-message anchors resolving a NON-CONTIGUOUS selection exactly (AC-05), EC-04's cap of 3 LIVE linked-work under conversation lock with demonstrated slot-freeing, the system-note voice (NotesWriter::addSystemNote, Doc 04's `system` author's first writer); FR-22 transfer with fail-closed pre-Doc 11 scope answers (destination + retention both; reset emits FR-15's ticket.assigned); FR-23 escalation ({path, reason, target, at, by} jsonb stamped in the statement's own clock_timestamp(), BR-06's ≥10 chars on the edge, auto-follow, named-target validation) + de-escalation with note, and EC-05's later-disabled fallback (supervisor_review in place, system note, ticket.escalation_rerouted → the escalator via the recorded `by` — A-15 + rider). Owner-ordered pin test executed (ReopenTicket's LogicException wall). Nine events catalogued (70 total; the md generator moved to the catalog's typed accessors when PHPStan's const inference degraded past 70). **Step 5 landed the clock-driven lifecycle** (committed `23da552`, proven across a machine restart — see the step-5 restart note): T-03's timer physics (auto_close_at column truth + redis-durable ZSET candidates at integer-microsecond scores; the 1-minute sweep closes ONLY after its in-transaction re-check — EC-01's cancel-wins proven with a persisted reply beating a due sweep, no ticket.closed ever emitted — drops stale candidates, defers lying scores to the column deadline, HOLDS BR-07 unreachable), FS-01's rebuild (delayed-never-premature, exact column deadlines), SS-03 (armed timers keep their value under a settings change, copy registered en+am), FR-06 ResolveTicket (substance: reply-or-note; AI reply counts per FR-24's definition), FR-07 arm/cancel riding EVERY door of the sole writer (SS-04), FR-08 ReopenTicket both doors (EC-02's inclusive boundary pinned to the second on both sides against the MESSAGE's created_at; beyond-window successor with previous_ticket_id, source=automation per A-12; active assignee retained, deactivated assignee handed back via ticket.assignee_deactivated), R-03 DST fixtures (168 h across both 2026 switches, one proven end-to-end), and ADR 0011's consumer path (OutboxConsumer type + ConsumerRegistry map + the relay dispatching TicketReopenConsumer with event id only; FS-02's kill/re-drive drill: mid-transaction death leaves no trace, re-drive reopens EXACTLY once, duplicate delivery changes nothing). Sabotage #6 red→green. **Step 4 landed the property surface**: FR-15 assignment with the as-if-assigned scope check, FR-16's claim race (`already_claimed {by}`), FR-05/BR-03's implicit claim on the R-04 toggle, FR-17 priority, FR-18 followers, FR-19 tags + T-07's chunked resumable rewrite (headless per R-22), EC-06's hand-back batch, and **Doc 04 T-06 RE-PROVEN in both directions against real assignment columns** (inherited row 2 — admit when assigned, refuse when not, Team/Dept still fail-closed pre-Doc 11). Step 3 landed the creation paths: FR-02 numbering (NFR-05 100-unique proven on ten real sessions; FS-03 backpressure bounded), the ONE validation path behind FR-12/13/14, FR-11's `createFromHandoff` + immutable packet (**AC-08**), FR-03's subject seam + EC-11, and **AC-02's concurrent half — the layer order was corrected so the service refuses with `open_ticket_exists` and the T-02 index is the backstop §21 intended**. Steps 1–2 landed: the six ticket tables with T-02's open-family index, BR-01 REVOKE DELETE, SEC-02 insert-only stores, R-19b DB-time physics, and **the FR-04 machine as data with `TicketTransitionService` as its sole writer** | S22 | **AC-01 COVERED** (all 64 cells of the 8x8 machine); **AC-02 COVERED** (BOTH halves — the direct-SQL/T-02-index half from step 1 and the concurrent-creates half from step 3, six real sessions racing one conversation; step 3 also corrected the LAYER ORDER so the service refuses with `open_ticket_exists` and the index is the backstop §21 intended, rather than the thing callers hit first); **AC-08 PARTIAL** (packet contract enforced pre-insert, immutability proven at the DB by grant, createFromHandoff seam driven from the Doc 09 fixture; the RENDERING half lands with Doc 07 — pre-agreed bucket); AC-09 PARTIAL (goldens proven; Doc 15's consuming assertions deferred); **AC-03 COVERED** (step 5 — EC-01 cancel-wins in the sweep's own transaction, EC-02's inclusive boundary fixture-pinned to the second on both sides, reopen re-notifies an active prior assignee via ticket.reopened and hands back from a deactivated one via ticket.assignee_deactivated); **AC-04 COVERED** (step 6 — snapshotShape applied twice, stored vs recomputed, diff = ∅ over status/pending_reason/assignee/armed-timer-column-and-candidate/merged_into/anchors/target-sets; chains transitive; per-link windows; both sabotages red→green); **AC-05 COVERED** (step 6 — linked_work + origin link + no slot, non-contiguous selection resolved exactly, live cap under lock, origin system note); **AC-06 COVERED** (step 7 — exclusion via the one predicate, operationally and as golden values; restoration on unmark ≤ 7 d with both prior statuses; terminality after, with the A-17 fresh-ticket path; Doc 15's consuming assertions stay the pre-agreed deferral — the goldens are the shared contract); **AC-07 COVERED** (step 7 — mixed batch exact per-item allow/deny in submission order, EC-12 mid-batch revocation live-checked, 200 items with 200 progress events observed at 2.29 s dev-indicative; the ≤30 s p95 enforcement lands with §12's perf structure in step 8) | Step 1 (`11c6724`): migrations `2026_08_07_1000*` (tickets, followers, handoff_packets, merge_snapshots, bulk_jobs+items, message_anchors), 4 `tickets.*` settings (R-21 tenant-editable), traceability flipped (ADR 0004). Step 2: the R-20 trigger (advisor-confirmed note + both strengthenings), `TransitionMatrix` (15 edges read off §4.2), `TicketTransitionService`, `TicketRepository` as the one status writer, the 13th gate `ticket-status-writer`, `ticket.status_changed` in the catalog, the shared Doc 15 golden fixtures, `tickets.*` i18n en+am, **Doc 03 EC-02 CLOSED on a real transition** (inherited row 7). Three sabotages red→green; one invalid sabotage attempt caught and redone — see the S22 section |
-| 05 | Telegram Channel (Business + Direct) | **IN PROGRESS — S23 plan APPROVED with rulings A-19…A-24 + corrections C1–C4 (see the S23 section + ANSWERS). Step 0 credentials gate DISCHARGED: bot live via egress proxy (`0a99831`), Business connection live (`aab022d`), advisor-confirmed. Credential-blocked bucket NOT activated** | S23 | — | staging bot @nasupportstagingbot + Business account @Kemerbetagent proven live; token interim storage per A-19; dev has no public ingress — A-24 capture-replay strategy with Doc 18 handoff row |
+| 05 | Telegram Channel (Business + Direct) | **BUILT — S23 close-out at step 12 (2026-08-10). Final 101-id self-audit: 84 DONE / 17 PARTIAL (every PARTIAL a pre-agreed bucket or an owner-assisted blocker) / 0 NOT DONE; sabotage ledger 20/20 reconciled item-by-item. The step-12 recount caught and CLOSED two silent drops and one untested edge (FR-26 deep links never built despite the step-5 plan row; FR-25's setMyCommands registration half; EC-06's compound convergence). Two interpretations await the advisor's countersign: FR-30 write-tool permissions (step 11) and the FR-26 acquisitions table (step 12). Canonical suites 116/675; full suite 971/12,965; gates 13/13; browser 63/63; perf strict PASS ×2 — see the S23 step-12 section** | S23 | AC-01/02/05/06/09 covered; AC-03 + AC-08's live halves owner-assisted-BLOCKED (dedicated staging Business account, §21); AC-04/07 partial (pre-agreed Doc 07/12/14 buckets) | staging bot @nasupportstagingbot + Business account proven live (step 0); token interim storage per A-19; **token rotation MANDATORY before any reconnection or production traffic (owner ruling, verbatim in the close-out RISKS)**; dev has no public ingress — A-24 capture-replay strategy with the Doc 18 handoff row; Stage-4 first-attempt seeder flake twice-sighted on a01833b, harness now self-diagnosing (step-12 fix) |
 | 07 | Unified Inbox & Agent Workspace | NOT STARTED | S7 | — | needs approved Claude Design screens |
 | 08 | Customer Profiles & Identity | NOT STARTED | — | — | |
 | 09 | AI System (Chatbot, Copilot, Supervisor) | NOT STARTED | — | — | needs AI provider staging keys |
@@ -311,6 +311,344 @@ remain warn-level).
 note's requested ruling arrived via the advisor's step-11 confirmation paste
 ("APPROVED BY THE OWNER via this paste"); recorded here as the ruling of
 record. Deviations #1 and #2 stand as filed at step 10.
+
+## SESSION-23 (Doc 05) — STEP 12: §12/NFR BUDGETS + §13/§14 SWEEP + THE 101-ID SELF-AUDIT + CLOSE-OUT
+
+**§12/NFR budgets (the Doc 06 pattern; honest Doc 19 buckets):**
+`tests/Performance/TelegramBudgetsTest.php` — NFR-01's two adapter overheads
+(normalization p99 0.021 ms / 30 ms budget; send-our-half p99 0.007 ms / 80 ms
+— the ScriptedTelegramApi excludes Telegram RTT by construction, exactly as
+the budget is written), the §12 ACK budget on the REAL webhook route (p99
+10.58 ms / 250 ms), and the sweep at 10k armed / 20 due in 33 ms against the
+pro-rated 2 s budget with **O(due) proven structurally** (the 10k armed
+members asserted untouched). The §12 health-rollup ≤1 s line was already
+measured at step 11 (HealthRollupTest); NFR-05's ≤10 s at step 9; NFR-04's
+≤5 s at step 6 — every §12 line now has an executed measurement or a named
+bucket. **Strict mode (`make perf`, PERF_BUDGETS_ENFORCE=1): TelegramBudgetsTest
+PASS on BOTH runs** (`perf-strict-01/02.txt`); the 2 strict reds both runs are
+the PRE-EXISTING Doc 01/03 marginal budgets on host load (tenant resolution
+p99 1.15–1.23 vs 1.0 ms; RBAC cached-map 0.385–0.587 vs 0.3 ms — the Doc01
+AC-07 row records exactly this MARGINAL class; not Doc 05 work, not engineered
+away here). HONEST Doc 19 buckets, stated: NFR-02/SS-02's sustained 100/s ×
+5 min burst (queue metrics as evidence) needs the L1 harness; the full
+50k-window sweep needs the L1 data profile; Telegram RTT monitoring is
+Doc 15/18 dashboard work.
+
+**§13/§14 sweep (correction C4 discharged):** the numbered-menu business
+fallback now formats its digits through the MENU language's own locale
+(`localeDigit` via `Intl.NumberFormat` — am-ET renders Western digits by
+Ethiopian standard usage; a future locale with native digits inherits them
+with no code change), and the RTL-readiness sweep found and fixed the LAST
+six physical direction utilities in the Doc 05 surfaces (`text-left`→
+`text-start`, `ml-`→`ms-`, `text-right`→`text-end`); the grep across all ten
+Doc 05 admin files + shared components now matches ZERO physical properties
+(C-15). Evidence: `c4-locale-rtl-evidence.txt`. Browser re-proof over the
+edited surfaces: **63/63 passed, no flakes** (`browser-01.txt`). No new
+design deviations — the C4 edits are logical-property and locale-formatting
+fixes inside the token layer.
+
+**THE SELF-AUDIT'S THREE FINDS — all three closed in this step, not filed
+away.** The 101-id recount found two silent drops and one untested edge that
+every earlier checkpoint had missed (the plan put FR-26 in step 5's row, but
+step 5's commit shipped FR-11…15 only; nobody noticed until the id-by-id
+recount):
+
+1. **FR-26 deep links — NOT BUILT → built.** `DeepLinkResolver` (parse →
+   record → read seam) + the `telegram_acquisitions` table + the router
+   wiring. SEC-05 enforced as written: 64-char cap asserted BEFORE the
+   grammar runs; closed `src-…[_ctx-…]` token grammar; payloads are inert
+   strings with NO code path to the flow-target indirection surface — proven
+   behaviourally (recording a flow-shaped payload leaves flow targets
+   untouched) and structurally (a source-scan proves the resolver never
+   names that table). Unknown payloads parse to null and the message
+   proceeds untouched (FR-26's "ignored gracefully"). Storage is FIRST-WINS
+   and WRITE-ONCE BY GRANT (UPDATE and DELETE revoked; `created_at`
+   DB-default per R-19b) — a later /start cannot rewrite where the player
+   came from, and redelivery is a no-op (C-09). End-to-end proven through
+   the REAL RouteTelegramUpdate. **FILED INTERPRETATION (for the advisor's
+   countersign):** FR-26 says "stored on the conversation"; a column on
+   `conversations` would be a Doc 04 core edit, so the adapter-side table is
+   keyed by the conversation's own (bot, external chat) identity and read
+   per conversation through `forConversation()` — the Doc 09 first-turn
+   seam. The context-aware greeting itself is Doc 09's (pre-agreed bucket).
+2. **FR-25's registration half — MISSING → built.** The five commands were
+   proven as behaviours at step 9, but "registered via setMyCommands per
+   language" existed only in a comment. `BotProvisioner::registerCommands`
+   now registers the fixed set on every (re-)registration: the C-08
+   unscoped fallback + `en` + `am`, descriptions from the SAME i18n keys
+   the B6-S05 E10 table renders (one source, no drift — and zero new
+   Amharic strings). Proven against the mock's recorded calls, including
+   localization (`am` ≠ `en`) and FR-03 rotation re-registering all three
+   scopes.
+3. **EC-06's compound case — UNDRIVEN → driven.** Business removal AND
+   token revocation in the same minute: the revoke update through the real
+   lifecycle, the dead-token side through the REAL `telegram:health-poll`
+   against a dead endpoint (the sabotage-#11 idiom). Proven: both causes
+   recorded side by side (state `revoked` + `webhook_last_error` — the
+   compound cause is visible because health never collapses one cause into
+   the other), and a redelivered revoke changes nothing: the rescue list
+   carries the ticket ONCE.
+
+**CI record (a01833b / step 11) — an infrastructure red, now self-diagnosing:**
+run [31371398339](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31371398339)
+went red in Stage 4 TWICE (original + the 0d re-run) with the IDENTICAL
+shape: the FIRST telegram-screens test's `beforeAll` seeder exec failed once
+and passed on Playwright's retry — 62 passed + 1 flaky both times, red
+solely under S18's `failOnFlakyTests`; Stages 1–3b green both runs. NOT
+host-load-random (same test, same first-attempt, twice) and NOT reproducible
+locally (63/63 twice today, no flake). Diagnosis was IMPOSSIBLE from the
+logs because the spec's `artisan()` helper let `execFileSync` throw bare
+"Command failed" with the seeder's stderr discarded — a CAPTURE-FIRST
+violation in the harness itself. FIXED in this step: the helper pipes and
+rethrows with both streams, so any recurrence arrives with its own
+diagnosis. The step-12 push carries the fix; its CI run is the arbiter.
+a01833b itself never went green — its content ships inside this step's tree.
+
+**R-14 (standing rider) — step 12 adds ZERO new Amharic strings.** The
+setMyCommands descriptions reuse the E10 keys already in the queue. The
+Doc 05 roster stands as at step 11: all 280 `telegram.*` Amharic strings are
+machine-authored and queued for native review. PRIORITY TIER
+(customer-facing or consequence-stating): `callback.neutral_toast` (the one
+customer-visible lang-file string — the SEC-06 stale-callback toast),
+the five `ui.templates.cmd_*` command descriptions (customer-visible in the
+Telegram client via setMyCommands, as of this step), the six `notify.*`
+alert strings, the four `state.*` connection words agents act on, and the
+consequence-stating dialogs (`ui.connections.confirm_*`,
+`ui.menu.publish_*`, `ui.templates.publish_*`, `ui.health.reregister_*`).
+Standard tier: the remaining `ui.*` copy. Customer-facing TEMPLATE content
+(greeting, redirect, window guidance…) is operator DB content seeded per
+bot — flagged at its seeding sites, not in the lang roster.
+
+### Sabotage ledger — reconciled ITEM BY ITEM against the plan's 20 (COMPLETE)
+
+| # | Sabotage | Step run | Evidence |
+|---|---|---|---|
+| 1 | capability lie → conformance red | 3 | S23-step3 captures |
+| 2 | dedupe dropped → duplicate fixture red | 5 | S23-step5 captures |
+| 3 | inline ACK → latency red | 9 | `S23-step9/sabotage-3-inline-ack-*` |
+| 4 | media chain bypass → SEC-03/EICAR red | 5 | S23-step5 captures |
+| 5 | ordering on telegram_date → R-19 controls red | 9 | `S23-step9/sabotage-5-telegram-date-*` |
+| 6 | webhook secret removed → webhook tests red | 4 | S23-step4 captures |
+| 7 | nonce reusable → SEC-06 red | 5 | S23-step5 captures |
+| 8 | unconfirmed routes → SEC-04 red | 6 | S23-step6 captures |
+| 9 | seeded fake token in log path → NFR-06 gate red | 9 | `S23-step9/sabotage-9-token-log-*` |
+| 10 | sweep expires while health=down → FS-01 red | 8 | S23-step8 captures |
+| 11 | broken proxy (dead port) → must fail | 2 | S23-step2 captures |
+| 12 | R-19b grant dropped → schema guard red at MIGRATION level | 1 | S23-step1 captures |
+| 13 | FS-05 rebuild disabled → red | 8 | S23-step8 captures |
+| 14 | redirect template without link → BR-06 red | 9 | `S23-step9/sabotage-14-redirect-no-link-*` |
+| 15 | split resumes from part 1 → EC-09 red | 7 | S23-step7 captures |
+| 16 | re-register without rotation → SEC-02 red | 4 | S23-step4 captures |
+| 17 | planted channel conditional → gate red | 9 | `S23-step9/sabotage-17-channel-conditional-*` |
+| 18 | unreachable-writer emits transition → orthogonality red | 6 | S23-step6 captures |
+| 19 | SourceUrlResolver deregistered → media fixture red (A-26 amendment) | 5 | S23-step5 captures |
+| 20 | owner-phone author-override gate removed → spoof control red (A-27 amendment) | 6 | S23-step6 captures |
+
+All 20 executed with fail+restored evidence; the enumeration was amended
+twice in-flight (19→20 at A-26/A-27), each amendment filed before its
+sabotage ran. No item was reinterpreted at reconciliation time.
+
+### The full 101-id self-audit (id count anchored: FR 30 / NFR 6 / US 6 / BR 6 / T 9 / SEC 7 / EC 14 / FS 5 / SS 4 / AC 9 / R 5)
+
+**Final tally: 84 DONE / 17 PARTIAL (every PARTIAL a pre-agreed bucket or an
+owner-assisted blocker) / 0 NOT-IMPLEMENTED.** The recount ran BEFORE the
+step-12 gap closures and found FR-26/US-05 NOT-IMPLEMENTED, FR-25/SEC-05
+partial and EC-06 undriven — those five rows below carry their s12 closure.
+
+| id | what it requires (short) | proof (test path / evidence) | status |
+|---|---|---|---|
+| FR-01 | Wizard: getMe, vault token, route key, setWebhook, verbatim allowed_updates | tests/Feature/Telegram/BotProvisioningTest.php | DONE (s4) |
+| FR-02 | Webhook per Doc 04 FR-10; secret mismatch per Doc 02 FR-23 | tests/Feature/Telegram/WebhookRouteTest.php | DONE (s4) |
+| FR-03 | Idempotent re-register, drops nothing | tests/Feature/Telegram/BotProvisioningTest.php | DONE (s4; commands re-registration added s12) |
+| FR-04 | Delete needs zero connections OR cascade ack; archive, not destroy | tests/Feature/Telegram/BotProvisioningTest.php | DONE (s4) |
+| FR-05 | Mode semantics: direct flags, business redirects, hybrid both | tests/Feature/Telegram/DirectSurfaceTest.php (ModePolicy) | DONE (s9) |
+| FR-06 | Immediate effect; typed confirm leaving business; no disconnect | tests/Feature/Telegram/DirectSurfaceTest.php | DONE (s9) |
+| FR-07 | Connect checklist; live wait; admin identity confirm | tests/Feature/Telegram/ConnectionLifecycleTest.php + browser S02 | DONE (s6/s10; live walk rides AC-03) |
+| FR-08 | Connection registry: one bot ↔ many accounts, independent dimensions | schema + tests/Isolation/TelegramGrantPhysicsTest.php | DONE (s1/s6) |
+| FR-09 | State machine from updates; three transition events; admin notify | tests/Feature/Telegram/ConnectionLifecycleTest.php | DONE (s6) |
+| FR-10 | Revoked → channel_unreachable flags, rescue list, lane freeze | tests/Feature/Telegram/ConnectionLifecycleTest.php | DONE (s6; rescue-view render → Doc 07) |
+| FR-11 | message/business_message → NormalizedInbound; owner-phone as agent | InboundMappingTest + OwnerPhoneAttributionTest | DONE (s5, A-27) |
+| FR-12 | Edits → revision path; deletions → tombstones | tests/Feature/Telegram/InboundPipelineTest.php | DONE (s5) |
+| FR-13 | Media mapping, 20 MB cap, SSRF-safe getFile | InboundMappingTest + Conversations/MediaPipelineTest (A-26 seam) | DONE (s5) |
+| FR-14 | Callback ACK ≤1 s, nonce replay protection, flow routing | tests/Feature/Telegram/InboundPipelineTest.php (SEC-06/T-05) | DONE (s5/s9; flow execution → Docs 09/12, pre-agreed) |
+| FR-15 | my_chat_member → blocked/unblocked events + annotation | tests/Feature/Telegram/InboundPipelineTest.php | DONE (s5) |
+| FR-16 | Kind → method; business_connection_id; word-boundary split part i/n | tests/Feature/Telegram/OutboundSendTest.php | DONE (s7) |
+| FR-17 | Delivered unsupported; single-check "Sent"; never fabricated | OutboundSendTest + conformance | DONE (s7; DOM half = AC-07 → Doc 07) |
+| FR-18 | Error classification incl. retry_after override | tests/Feature/Telegram/ErrorClassificationTest.php | DONE (s7) |
+| FR-19 | Typing every 4 s, best-effort, failures swallowed | tests/Feature/Telegram/OutboundSendTest.php | DONE (s7) |
+| FR-20 | Token buckets per bot/chat; adaptive slowdown | tests/Feature/Telegram/RateLimiterTest.php (Redis-Lua) | DONE (s7) |
+| FR-21 | Window expiry from DB-time inbound; calibration tightens | tests/Feature/Telegram/WindowCalibrationTest.php | DONE (s8) |
+| FR-22 | open/closing/expired states; 5-min sweep; two events | WindowSweepTest + HealthRollupTest (cadence, s11) | DONE (s8/s11; automation consumption → Doc 12) |
+| FR-23 | Expired composer contract: disabled, SMS/phone/wait options | WindowSweepTest (states) + SMS-gate seam | PARTIAL — rendering → Doc 07, SMS send → Doc 14 (pre-agreed buckets) |
+| FR-24 | Inbound on expired → reopen, recompute, notify assignee | tests/Feature/Telegram/WindowReopenConsumerTest.php (C-09) | DONE (s8) |
+| FR-25 | Five fixed commands, localized, per-language registration | DirectSurfaceTest (behaviours, s9) + BotProvisioningTest (setMyCommands ×3 scopes, s12) | **DONE (s9 + s12 — the registration half was the audit's find #2)** |
+| FR-26 | Deep links: payload schema → acquisition metadata, graceful unknowns | DirectSurfaceTest FR-26/SEC-05 block + TelegramGrantPhysicsTest write-once | **DONE (s12 — the audit's find #1; was never built despite the step-5 plan row; AI first-turn use → Doc 09, pre-agreed)** |
+| FR-27 | Menu designer: ≤12/rows≤3, versioned publish, rollback, dual preview | DirectSurfaceTest + browser S04 (§K) | DONE (s9/s11) |
+| FR-28 | Templates per language, variables, operator-editable | DirectSurfaceTest ({{queue_wait}} stated seam) + browser S05 | DONE (s9/s11) |
+| FR-29 | Health metrics + healthy/degraded/down rollup, thresholds from settings | tests/Feature/Telegram/HealthRollupTest.php (A-22) | DONE (s11) |
+| FR-30 | Test tools: send-test, simulate-expiry (staging), re-register, masked viewer | HealthRollupTest + TelegramSecurityTest + browser S06 | DONE (s11) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| NFR-01 | Adapter ≤30 ms normalization / ≤80 ms send overhead | tests/Performance/TelegramBudgetsTest.php (strict PASS ×2, s12) | DONE (dev-hardware-indicative; L1 → Doc 19) |
+| NFR-02 | 100 updates/s burst sustained, ACK budget intact | ACK p99 measured (TelegramBudgetsTest) | PARTIAL — sustained L1 burst → Doc 19 (pre-agreed) |
+| NFR-03 | Sweep drift ≤5 min + event-driven immediates | HealthRollupTest (cadence) + WindowSweepTest + TelegramBudgetsTest (O(due)) | DONE (s8/s11/s12; 50k profile → Doc 19) |
+| NFR-04 | Connection state reflects owner change ≤5 s | ConnectionLifecycleTest (6.66 ms measured) | DONE (s6) |
+| NFR-05 | Publish propagation ≤10 s | DirectSurfaceTest (10.65 ms measured) | DONE (s9) |
+| NFR-06 | Zero tokens/file URLs in logs | TelegramScrubberPatternsTest + log-scrubber gate | DONE (s1/s9) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| US-01 | Admin connects account via 3-step checklist, sees green | ConnectionLifecycleTest + browser S02 | PARTIAL — live connect walk rides AC-03 (owner-assisted-BLOCKED) |
+| US-02 | Agent sees countdown; lapse explains options | Window suites + WindowChip (browser) | PARTIAL — composer rendering → Doc 07 (pre-agreed) |
+| US-03 | Midnight phone reply appears in-thread, marked | OwnerPhoneAttributionTest | PARTIAL — "phone" badge render → Doc 07 (pre-agreed) |
+| US-04 | Disconnect alert within seconds; affected tickets listed | ConnectionLifecycleTest (FR-10, FS-04, NFR-04) | PARTIAL — rescue-view render → Doc 07 (pre-agreed) |
+| US-05 | Deep-linked player greeted with context | DirectSurfaceTest FR-26 end-to-end (acquisition recorded + seam reads) | **PARTIAL — recording + seam DONE (s12, the audit's find); the context-aware greeting is Doc 09's first turn (pre-agreed)** |
+| US-06 | Owner redesigns menu, previews both, publishes | DirectSurfaceTest + browser S04 dual preview | DONE (s9/s11) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| BR-01 | One account ↔ one bot; topology in registry | schema + ConnectionLifecycleTest (EC-02 single row) | DONE (s1/s6) |
+| BR-02 | Never initiate first contact | structural — sends only ride Doc 04 lanes on existing conversations | DONE (structural; outreach is Doc 14's) |
+| BR-03 | Owner replies first-class, attributed, reported | OwnerPhoneAttributionTest (A-27 gate = sabotage #20) | DONE (s5/s6) |
+| BR-04 | Single-check truth non-negotiable | conformance delivered-unsupported + FR-17 test | DONE (s3/s7; DOM half → Doc 07 via AC-07) |
+| BR-05 | Windows tighten, never extend past observed behavior | WindowCalibrationTest (extend REFUSED both ways) | DONE (s8) |
+| BR-06 | Redirect always carries tappable link | DirectSurfaceTest (refusal test = sabotage #14) | DONE (s9) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| T-01 | Doc 04 FR-08 adapter, exact capabilities | tests/Contract/AdapterConformance/TelegramAdapterConformanceTest.php | DONE (s3/s5) |
+| T-02 | Per-bot runtime binding; key resolve before secret verify | WebhookRouteTest (order proof) + TelegramBotApiTest; ADR 0012 | DONE (s2/s4) |
+| T-03 | Reserved owner-phone staff identity, lazy, reported | OwnerPhoneAttributionTest | DONE (s5) |
+| T-04 | Column truth + ZSET index; sweep; event-driven bypass | WindowSweepTest + TelegramGrantPhysicsTest + cadence (s11) | DONE (s8/s11) |
+| T-05 | HMAC nonce ≤64 bytes, single-use via Redis | InboundPipelineTest (SEC-06/T-05) | DONE (s5) |
+| T-06 | Menu/template config caches, invalidated on publish | DirectSurfaceTest (FR-27/T-06/NFR-05) | DONE (s9) |
+| T-07 | File URLs are secrets — never persisted or logged | InboundPipelineTest + TelegramBotApiTest + TelegramScrubberPatternsTest | DONE (s2/s5) |
+| T-08 | retry_after honored; adaptive bucket in Lua | RateLimiterTest + ErrorClassificationTest | DONE (s7) |
+| T-09 | Recorded-fixture suites; conformance unmodified | fixtures/telegram/* corpora; TelegramAdapterConformanceTest | DONE (s5/s7) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| SEC-01 | Tokens vault-only; UI never displays | TelegramBotApiTest (A-19 ciphertext) + TelegramSecurityTest (props sweep) | DONE (s2/s11, per A-19 interim ruling) |
+| SEC-02 | 256-bit secret, rotated on re-register, constant-time check | BotProvisioningTest + WebhookRouteTest + WebhookComparatorPinTest | DONE (s4, sabotage #16) |
+| SEC-03 | Viewer masks phones/contacts/forward-origin; permission-gated | tests/Security/TelegramSecurityTest.php (no-unmask-door proof) | DONE (s11) |
+| SEC-04 | Unconfirmed connections never route; 10-min alert | ConnectionLifecycleTest (never-routes FIRST; sabotage #8) | DONE (s6) |
+| SEC-05 | Deep-link payloads untrusted: validated, capped, indirection table | DirectSurfaceTest (cap-before-grammar; inert-string proof, structural + behavioural) | **DONE (s12 — closed with FR-26; was the audit's find)** |
+| SEC-06 | Callback replay → neutral toast, logged | InboundPipelineTest (sabotage #7) | DONE (s5) |
+| SEC-07 | All egress via allowlisted proxy, api.telegram.org only | TelegramBotApiTest (dead-proxy pin = sabotage #11) | DONE (s2) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| EC-01 | Wrong account → reject deletes pending, checklist restarts | ConnectionLifecycleTest | DONE (s6) |
+| EC-02 | Two admins converge on one registry row | ConnectionLifecycleTest | DONE (s6) |
+| EC-03 | can_reply=false → paused with explainer, inbound flows | ConnectionLifecycleTest | DONE (s6) |
+| EC-04 | Hybrid: one customer, two conversations, grouped, warned | DirectSurfaceTest (hybrid mode handling) | PARTIAL — identity resolution → Doc 08, grouping/badge/warning → Doc 07 (pre-agreed) |
+| EC-05 | Account rename updates forward, history kept | ConnectionLifecycleTest | DONE (s6) |
+| EC-06 | Same-minute revoke + token loss converge; compound cause; rescue once | ConnectionLifecycleTest EC-06 compound test (real poll against a dead endpoint) | **DONE (s12 — the audit's find #3; each path was proven separately, the compound convergence was undriven)** |
+| EC-07 | 20 MB limit → media_rejected note, caption survives | InboundPipelineTest + TelegramBotApiTest | DONE (s5) |
+| EC-08 | retry_after vs remaining window: no doomed retries | ErrorClassificationTest | DONE (s7) |
+| EC-09 | Split partial failure resumes at failed part | OutboundSendTest (sabotage #15) | DONE (s7) |
+| EC-10 | Unthumbnailable sticker never blocks | InboundMappingTest | DONE (s5; placeholder render → Doc 07) |
+| EC-11 | Duplicate connection updates idempotent by connection_id | ConnectionLifecycleTest (THREE REAL captured updates) | DONE (s6) |
+| EC-12 | Forwarded-origin stored but masked; annotation shown | TelegramSecurityTest (UpdateMasker) | DONE (s11) |
+| EC-13 | Receipt order wins; telegram_date preserved in channel_meta | WindowCalibrationTest (2020-date control) + InboundMappingTest | DONE (s5/s8) |
+| EC-14 | Calibration tightens on early failure; telemetry | WindowCalibrationTest | DONE (s8) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| FS-01 | Outage: lanes queue, sweep pauses expiry, drain on recovery | WindowSweepTest (sabotage #10) + HealthRollup convergence | DONE (s8/s11; inbox banner → Doc 07) |
+| FS-02 | Silent webhook detected; alert; one-click re-register | HealthRollupTest (positive AND negative controls) | DONE (s11) |
+| FS-03 | Vault down → retryable credentials_unavailable, no fallback | TelegramAdapterConformanceTest (scripted credentials failure) | DONE (s7; ops alert wiring → Doc 18) |
+| FS-04 | Flap damping: digest over 3/hr, states truthful | ConnectionLifecycleTest | DONE (s6) |
+| FS-05 | ZSET loss → rebuild from column | WindowSweepTest (WindowIndexRebuilder; sabotage #13) | DONE (s8) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| SS-01 | Two accounts, routing by connection, per-account reports | FR-08 registry dimension + routing tag | PARTIAL — report lines → Doc 15 (pre-agreed) |
+| SS-02 | Match-night 100/s × 5 min, zero drops | ACK budget held (TelegramBudgetsTest) | PARTIAL — sustained L1 burst → Doc 19 (pre-agreed) |
+| SS-03 | Expire → SMS → reply → reopen → notify, on timeline | WindowReopenConsumerTest (reopen + notify) | PARTIAL — SMS send → Doc 14 (pre-agreed) |
+| SS-04 | Conformance suite passes unmodified | TelegramAdapterConformanceTest + zero-core-edits diff assertion | DONE (s3/s5) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| AC-01 | Every allowed update type → exact NormalizedInbound | InboundMappingTest + fixture suite | DONE (s5) |
+| AC-02 | Mode matrix incl. misconfiguration alert + redirect | DirectSurfaceTest (ModePolicy) | DONE (s9) |
+| AC-03 | Live staged lifecycle walk | machinery proven (ConnectionLifecycleTest, EC-11 real captures) | PARTIAL — owner-assisted-BLOCKED (staging Business account, §21) |
+| AC-04 | Window timelines, composer contract, SMS gating, reopen, calibration | Window suites (s8) | PARTIAL — composer render → Doc 07, automations → Doc 12, SMS → Doc 14 |
+| AC-05 | Error fixture corpus lands specified states | ErrorClassificationTest | DONE (s7) |
+| AC-06 | Bucket conformance, adaptive slowdown, FIFO | RateLimiterTest | DONE (s7) |
+| AC-07 | UI never renders delivered for Telegram | capability-truth half (conformance) | PARTIAL — DOM half → Doc 07 (pre-agreed) |
+| AC-08 | Designer round-trip; previews match staging renders; ≤10 s | automated halves (DirectSurfaceTest, browser S04) | PARTIAL — live render comparison owner-assisted-BLOCKED (same unblocker as AC-03); pixel half not claimed |
+| AC-09 | Token absent logs/UI; routing block; replay; masking | TelegramScrubberPatternsTest + TelegramSecurityTest + ConnectionLifecycleTest + InboundPipelineTest | DONE (s1–s11, all four halves) |
+
+| id | what it requires (short) | proof | status |
+|---|---|---|---|
+| R-01 | Business-API drift: isolation, calibration, changelog review | SS-04 + EC-14 proofs | DONE — quarterly changelog task → Doc 18 runbook handoff |
+| R-02 | Phones as infrastructure: dedicated devices, documented | step-6 incident + close-out risks record | DONE (recorded; device policy → owner/Doc 18 onboarding) |
+| R-03 | Missed SLAs from expiry: notifications, hooks, SMS, pause | FR-22 events proven | PARTIAL — SLA pause flag → Doc 12, SMS → Doc 14 (pre-agreed) |
+| R-04 | Hybrid confusion: grouping, warning, training | EC-04 mode handling | PARTIAL — grouping/warning → Doc 07 (pre-agreed); training copy → owner |
+| R-05 | Viral bursts: buckets degrade gracefully, queue not fail | RateLimiterTest | DONE (s7) |
+
+Count check: 30+6+6+6+9+7+14+5+4+9+5 = 101. Tally: 84 DONE / 17 PARTIAL / 0 NOT-IMPLEMENTED.
+
+### Evidence and figures (step 12, final tree)
+
+Canonical Doc 05 suites (five paths, verbatim): **116 passed / 675
+assertions** (`canonical-suites-02.txt`; the pre-gap-closure run at 108/566
+is `canonical-suites-01.txt` — the honest trail). Full suite:
+first final-tree run 1 failed / 970 passed (`make-test-02.txt` — PasswordResetFlowTest, the step-11-recorded throttle-carryover intermittent, a 429 on the reset request) → re-run once per the standing rule: **971 passed / 12,965 assertions / 11 skipped, 0 failed** (`make-test-rerun-01.txt`; the pre-gap-closure run at 963/12,853 is `make-test-01.txt`). Gates **13/13**. Lint clean (`lint-05.txt`; lint-01…04 are the honest trail — a pint single-quote fix, five PHPStan-max findings in the new code fixed properly, the TS shim extended one option for the harness fix). Perf strict ×2
+(`perf-strict-01/02.txt`) — TelegramBudgetsTest PASS both. Browser 63/63
+(`browser-01.txt`). Evidence set `docs/evidence/S23-step12/`.
+
+### Close-out report (Doc 05 / SESSION-23)
+
+```
+BUILT:        Steps 1–12 of the approved plan — the Telegram channel end to end
+              (Doc05 FR-01…FR-30 with FR-23 partial-by-bucket; NFR-01…06; T-01…09;
+              SEC-01…07; BR-01…06; EC-01…14; FS-01…05; the B6-S01…S06 admin
+              surfaces at token fidelity; 10 events + 1 versioned bump;
+              8 tables with R-19b physics). Step 12 added: TelegramBudgetsTest,
+              the C4 locale/RTL fixes, FR-26 deep links (DeepLinkResolver +
+              telegram_acquisitions + router wiring), FR-25's setMyCommands
+              registration, the EC-06 compound test, and the browser-harness
+              stderr fix.
+PROVEN:       Canonical suites 116/675 (canonical-suites-02.txt); full suite
+              971 passed / 12,965 assertions / 0 failed (re-run once, recorded) (make-test-02.txt); gates **13/13**
+              (gates-01.txt); browser 63/63 (browser-01.txt); perf strict
+              TelegramBudgetsTest PASS ×2 (perf-strict-01/02.txt); lint clean
+              (lint-01.txt). Sabotage ledger 20/20 reconciled above. The full
+              101-id self-audit above: 84 DONE / 17 PARTIAL / 0 NOT-IMPLEMENTED.
+NOT DONE:     The pre-agreed buckets only — §8 composer rendering, AC-07 DOM
+              half, rescue/banner renders → Doc 07; hybrid identity → Doc 08;
+              AI first-turn use of acquisition metadata → Doc 09; window
+              automations → Doc 12; SMS send → Doc 14; per-connection report
+              lines → Doc 15; NFR-02/SS-02 sustained burst + 50k sweep +
+              §12 L2/p-value closure → Doc 19.
+BLOCKERS:     (1) AC-03 live lifecycle walk + AC-08 live render comparison —
+              owner-assisted-BLOCKED on the same unblocker: a dedicated staging
+              Business account (Premium, spare device) that can be freely
+              paused and revoked (Doc 05 §21; the S23 step-6 ruling). (2) Two
+              advisor countersigns requested: the FR-30 write-tools permission
+              interpretation (step 11) and the FR-26 acquisitions-table
+              interpretation (step 12).
+RISKS:        (verbatim, per the step-6 owner ruling) "staging bot token was
+              exposed in an owner chat and remains unrotated by owner decision;
+              the live-account connection that made it critical has been
+              severed; rotation is MANDATORY before any Business account is
+              reconnected to this bot and before any production traffic —
+              whichever comes first." A-24 rider 1 stands: dev has no public
+              ingress; real-webhook behaviour is proven by capture-replay, and
+              Doc 18 owns the staging-ingress handoff row. The Stage-4
+              first-attempt seeder flake is TWICE-SIGHTED and now
+              self-diagnosing (harness fix in this step); recurrence WITH the
+              diagnostic escalates to a lettered risk. The two Doc 01/03
+              strict perf budgets stay MARGINAL on dev hardware (recorded at
+              their own rows; Doc 19's L1 profile is the honest closure).
+NEXT SESSION: Doc 07 (Unified Inbox & Agent Workspace) per the build order —
+              it consumes the WindowChip contract, the rescue-view data, the
+              FS-01 banner signal and the composer states this session left
+              as seams.
+```
 
 ## SESSION-23 (Doc 05) — EVENT-FAMILY RECONCILIATION (ordered at step-8 checkpoint)
 

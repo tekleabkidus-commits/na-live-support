@@ -77,7 +77,7 @@ const isEmpty = computed(() => props.bots.length === 0);
                 class="mt-6 overflow-hidden rounded-xl border"
                 :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-panel-bg)' }"
             >
-                <table class="w-full text-left text-sm">
+                <table class="w-full text-start text-sm">
                     <thead>
                         <tr
                             :style="{
@@ -235,7 +235,7 @@ const isEmpty = computed(() => props.bots.length === 0);
                              green shows on the unselected option as drawn. -->
                         <span
                             v-if="m === 'business'"
-                            class="ml-1 text-[10px]"
+                            class="ms-1 text-[10px]"
                             :style="{
                                 color:
                                     selectedMode === m

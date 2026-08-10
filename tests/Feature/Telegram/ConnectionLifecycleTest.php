@@ -247,3 +247,66 @@ it('NFR-04: connection state reflects an update in ≤5 s (indicative, measured)
     expect($elapsedMs)->toBeLessThan(5000.0, sprintf('NFR-04: state reflection took %.1f ms, budget 5000 ms', $elapsedMs));
     fwrite(STDERR, sprintf("\n[dev-hardware-indicative] NFR-04 connection-state reflection: %.2f ms (budget 5000 ms) WITHIN\n", $elapsedMs));
 });
+
+it('EC-06: bot removed from Business AND token revoked in the same minute — both paths converge on revoked + webhook failure, the compound cause is visible, the rescue list carries each ticket ONCE', function (): void {
+    $bot = lifecycleBot();
+    $lifecycle = app(ConnectionLifecycle::class);
+    $lifecycle->applyUpdate($bot->id, connectionUpdate(ownerId: 800800)['business_connection']);
+    $lifecycle->confirm('conn-life-1', lifecycleAdmin());
+    bindTenant($bot->tenant_id);
+
+    // One conversation on the connection, one open ticket (the rescue set).
+    $customerId = (string) App\Models\Customer::query()->create([
+        'display_name' => 'Fixture Player', 'username' => '@fixture_ec6_'.Str::random(6), 'is_shell' => true,
+    ])->getKey();
+    $conversationId = (string) Str::uuid7();
+    DB::table('conversations')->insert([
+        'id' => $conversationId, 'tenant_id' => $bot->tenant_id, 'channel' => 'telegram',
+        'channel_ref_id' => $bot->id, 'business_connection_id' => 'conn-life-1',
+        'external_chat_id' => '556', 'customer_id' => $customerId, 'state' => 'active',
+    ]);
+    $ticket = (string) Str::uuid7();
+    DB::table('tickets')->insert([
+        'id' => $ticket, 'tenant_id' => $bot->tenant_id, 'conversation_id' => $conversationId,
+        'customer_id' => $customerId, 'number' => random_int(1, 2_000_000_000),
+        'status' => 'open', 'priority' => 'normal', 'source' => 'agent',
+    ]);
+
+    // Path A — the Business-side removal: the revoke update arrives.
+    $lifecycle->applyUpdate($bot->id, connectionUpdate(ownerId: 800800, enabled: false)['business_connection']);
+    bindTenant($bot->tenant_id);
+
+    // Path B — the token revocation, SAME MINUTE: the poll cannot reach
+    // getWebhookInfo any more. Driven through the REAL poll command against
+    // a dead endpoint (the sabotage-#11 idiom), which records the failure
+    // as a snapshot fact instead of crashing.
+    config(['telegram.api_base' => 'http://127.0.0.1:1']);
+    app()->forgetInstance(App\Domain\Telegram\Api\TelegramBotApi::class);
+    app()->forgetInstance(App\Domain\Telegram\Api\TelegramApi::class);
+    Illuminate\Support\Facades\Artisan::call('telegram:health-poll');
+    bindTenant($bot->tenant_id);
+
+    // Convergence: revoked + webhook failure, both recorded truthfully.
+    expect(DB::table('telegram_business_connections')->where('connection_id', 'conn-life-1')->value('state'))->toBe('revoked');
+    $webhookError = DB::table('telegram_bots')->where('id', $bot->id)->value('webhook_last_error');
+    expect($webhookError)->not->toBeNull('the poll recorded the webhook failure as a snapshot fact');
+
+    // The COMPOUND cause is visible: the panel's data carries BOTH the
+    // revoked connection state and the webhook error side by side (F05/F06
+    // read exactly these columns — health never collapses one cause into
+    // the other).
+    expect((string) $webhookError)->toContain('poll:');
+
+    // Redelivery of the revoke (EC-11) while the token is also dead — the
+    // second arrival changes nothing and prepares no second rescue row.
+    $lifecycle->applyUpdate($bot->id, connectionUpdate(ownerId: 800800, enabled: false)['business_connection']);
+    bindTenant($bot->tenant_id);
+
+    $rescue = DB::table('tickets')
+        ->join('conversations', 'conversations.id', '=', 'tickets.conversation_id')
+        ->where('conversations.business_connection_id', 'conn-life-1')
+        ->where('tickets.channel_unreachable', true)
+        ->pluck('tickets.id');
+    expect($rescue->count())->toBe(1, 'EC-06: the rescue view lists the ticket ONCE — both paths converged on one flag, not two rows');
+    expect((string) $rescue->first())->toBe($ticket);
+});

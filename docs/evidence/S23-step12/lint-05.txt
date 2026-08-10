@@ -1,0 +1,29 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      lint
+# set:        S23-step12
+# command:    make lint
+# started:    2026-08-10T10:39:44Z
+# git:        a01833b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+✖ 3 problems (0 errors, 3 warnings)
+
+npx vue-tsc --noEmit
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-10T10:39:54Z
+# duration:   10s
+# EXIT:       0

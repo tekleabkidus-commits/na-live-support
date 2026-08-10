@@ -157,3 +157,36 @@ it('FR-01: a token whose getMe answers without id/username is rejected — no ro
         ->toThrow(DomainException::class, 'not a usable bot token');
     expect(TelegramBot::query()->count())->toBe(0);
 });
+
+it('FR-25: registration registers the five fixed commands via setMyCommands PER LANGUAGE — fallback + en + am, localized descriptions, and re-register keeps them', function (): void {
+    $provisioner = provisioningFixture();
+    $result = $provisioner->register(FAKE_PROV_TOKEN, 'direct');
+
+    $calls = recordedCalls('setMyCommands');
+    expect(count($calls))->toBe(3, 'one C-08 fallback call (no language_code) + one per launch language');
+
+    $byScope = [];
+    foreach ($calls as $call) {
+        $scope = is_string($call['params']['language_code'] ?? null) ? $call['params']['language_code'] : 'default';
+        $byScope[$scope] = $call['params']['commands'];
+    }
+    expect(array_keys($byScope))->toEqualCanonicalizing(['default', 'en', 'am']);
+
+    $five = ['start', 'menu', 'status', 'human', 'language'];
+    foreach ($byScope as $scope => $commands) {
+        expect(array_column($commands, 'command'))->toBe($five, "the {$scope} scope registers the FIXED v1 set, in order");
+        foreach ($commands as $command) {
+            expect($command['description'])->toBeString()->not->toBe('');
+            expect(strlen($command['description']))->toBeLessThanOrEqual(256, 'Telegram caps descriptions at 256');
+        }
+    }
+
+    // Localized: the am descriptions are the Amharic strings, not English.
+    expect($byScope['am'])->not->toBe($byScope['en'], 'the am scope must carry the AMHARIC descriptions');
+    expect((string) $byScope['am'][0]['description'])->toBe(trans('telegram.ui.templates.cmd_start', [], 'am'));
+    expect($byScope['default'])->toBe($byScope['en'], 'the unscoped call is the C-08 English fallback');
+
+    // FR-03: rotation re-registers the commands too — nothing drops.
+    $provisioner->reRegister($result['bot']);
+    expect(count(recordedCalls('setMyCommands')))->toBe(6, 're-register repeats all three scopes (idempotent, safe anytime)');
+});

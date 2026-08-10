@@ -187,9 +187,55 @@ final class BotProvisioner
             'allowed_updates' => self::ALLOWED_UPDATES,
         ]);
 
+        $this->registerCommands($token);
+
         $info = $this->api->call($token, 'getWebhookInfo');
         $verified = ($info['url'] ?? null) === $webhookUrl;
 
         return [$webhookUrl, $verified];
+    }
+
+    /**
+     * FR-25's registration half (S23 step 12 — the self-audit found the
+     * behaviours proven but this call missing): the five fixed v1 commands
+     * registered via setMyCommands PER LANGUAGE. Descriptions come from the
+     * SAME i18n keys the B6-S05 E10 table renders — one source, no drift.
+     * The unscoped call is the C-08 fallback (English) for every other
+     * client language. Idempotent; rides both register and re-register.
+     */
+    private function registerCommands(#[SensitiveParameter] string $token): void
+    {
+        $commands = ['start', 'menu', 'status', 'human', 'language'];
+        $descriptions = [];
+        foreach (['en', 'am'] as $language) {
+            foreach ($commands as $command) {
+                $description = __('telegram.ui.templates.cmd_'.$command, [], $language);
+                $descriptions[$language][$command] = is_string($description) ? $description : $command;
+            }
+        }
+
+        /**
+         * @param  array<string, string>  $set
+         * @return list<array{command: string, description: string}>
+         */
+        $commandSet = static function (array $set): array {
+            $out = [];
+            foreach ($set as $command => $description) {
+                $out[] = ['command' => $command, 'description' => $description];
+            }
+
+            return $out;
+        };
+
+        // C-08 fallback first (no language_code), then each launch language.
+        $this->api->call($token, 'setMyCommands', [
+            'commands' => $commandSet($descriptions['en']),
+        ]);
+        foreach ($descriptions as $language => $set) {
+            $this->api->call($token, 'setMyCommands', [
+                'commands' => $commandSet($set),
+                'language_code' => $language,
+            ]);
+        }
     }
 }

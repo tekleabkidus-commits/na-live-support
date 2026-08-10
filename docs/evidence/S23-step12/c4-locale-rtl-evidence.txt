@@ -1,0 +1,28 @@
+C4 EVIDENCE (S23 step 12) — numbered-menu locale digits + RTL-ready composition
+
+1. LOCALE DIGITS (§14/C4): the numbered business-fallback preview formats its
+   digits through the MENU language's own locale:
+80:const localeDigit = (n: number): string =>
+81:    new Intl.NumberFormat(lang.value === 'am' ? 'am-ET' : 'en').format(n);
+664:                                {{ localeDigit(i + 1) }}. {{ l }}
+
+2. RTL-READY COMPOSITION (C-15): zero physical direction properties in the
+   Doc 05 admin surfaces + shared components — logical only:
+   grep -rn '\bml-|\bmr-|\bpl-|\bpr-|text-left|text-right|border-l\b|border-r\b' over:
+     resources/js/Components/Telegram/ConnectionStatePill.vue
+     resources/js/Components/Telegram/HealthRollupPill.vue
+     resources/js/Components/Telegram/StepChecklist.vue
+     resources/js/Components/Telegram/WindowChip.vue
+     resources/js/Pages/Admin/Telegram/Bots.vue
+     resources/js/Pages/Admin/Telegram/Connections.vue
+     resources/js/Pages/Admin/Telegram/Health.vue
+     resources/js/Pages/Admin/Telegram/MenuDesigner.vue
+     resources/js/Pages/Admin/Telegram/Templates.vue
+     resources/js/Pages/Admin/Telegram/WindowSettings.vue
+   matches: 0 (logical utilities in use: ms-/me-/text-start/text-end/border-s/borderInlineStartColor)
+resources/js/Pages/Admin/Telegram/Bots.vue:80:                <table class="w-full text-start text-sm">
+resources/js/Pages/Admin/Telegram/Bots.vue:238:                            class="ms-1 text-[10px]"
+resources/js/Pages/Admin/Telegram/Connections.vue:128:                <table class="w-full text-start text-sm">
+resources/js/Pages/Admin/Telegram/Templates.vue:170:                        class="ms-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
+resources/js/Pages/Admin/Telegram/Templates.vue:205:                                class="w-full rounded-lg border px-3 py-2 text-start"
+resources/js/Pages/Admin/Telegram/Templates.vue:318:                        <span class="ms-auto" :style="{ color: 'var(--ds-text-faint)' }">{{

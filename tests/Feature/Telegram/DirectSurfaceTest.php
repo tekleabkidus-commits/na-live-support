@@ -192,3 +192,103 @@ it('FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced', function ()
     expect(fn () => $designer->publish($menuId, $admin, [['row' => 1, 'buttons' => array_fill(0, 4, ['label' => 'x', 'target_key' => 'x'])]]))
         ->toThrow(DomainException::class, 'row');
 });
+
+/*
+|--------------------------------------------------------------------------
+| FR-26 / SEC-05 — deep links (S23 step 12: the self-audit found FR-26
+| planned into step 5 but never built; closed here)
+|--------------------------------------------------------------------------
+*/
+
+it('FR-26: the payload grammar — src-{source}[_ctx-{context}] parses, everything else is ignored GRACEFULLY (null, never an error)', function (): void {
+    $resolver = app(App\Domain\Telegram\Direct\DeepLinkResolver::class);
+
+    expect($resolver->parse('/start src-app_ctx-deposit'))->toBe(['source' => 'app', 'context' => 'deposit']);
+    expect($resolver->parse('/start src-sms-campaign'))->toBe(['source' => 'sms-campaign', 'context' => null]);
+    expect($resolver->parse('/start@directbot src-app'))->toBe(['source' => 'app', 'context' => null], 'the @mention form Telegram sends in groups still parses');
+
+    // Unknown/malformed → null, the message proceeds as a plain /start.
+    expect($resolver->parse('/start'))->toBeNull('a bare /start carries no acquisition');
+    expect($resolver->parse('/start hello'))->toBeNull('outside the schema');
+    expect($resolver->parse('/start SRC-APP'))->toBeNull('the grammar is lowercase — case is not normalized for an untrusted token');
+    expect($resolver->parse('/start src-'))->toBeNull('empty source');
+    expect($resolver->parse('/menu src-app'))->toBeNull('only /start carries deep links');
+    expect($resolver->parse('hello there'))->toBeNull();
+});
+
+it('SEC-05: the length cap fires BEFORE the grammar — a 65-char payload is refused even when schema-shaped', function (): void {
+    $resolver = app(App\Domain\Telegram\Direct\DeepLinkResolver::class);
+
+    $inside = 'src-'.str_repeat('a', 28).'_ctx-'.str_repeat('b', 27); // 64 chars exactly
+    expect(strlen($inside))->toBe(64);
+    expect($resolver->parse('/start '.$inside))->not->toBeNull('64 chars is Telegram\'s own cap — allowed');
+
+    $over = 'src-'.str_repeat('a', 29).'_ctx-'.str_repeat('b', 27); // 65 chars
+    expect(strlen($over))->toBe(65);
+    expect($resolver->parse('/start '.$over))->toBeNull('SEC-05: over the cap, refused before the regex runs');
+});
+
+it('FR-26: record is FIRST-WINS and redelivery-idempotent (C-09); the seam reads it back per conversation', function (): void {
+    $f = directFixture();
+    $resolver = app(App\Domain\Telegram\Direct\DeepLinkResolver::class);
+
+    $resolver->record($f['bot'], 'chat-d', 'app', 'deposit');
+    $resolver->record($f['bot'], 'chat-d', 'app', 'deposit');   // redelivery — no-op
+    $resolver->record($f['bot'], 'chat-d', 'promo', 'banner');  // a LATER /start — must not rewrite
+
+    expect(DB::table('telegram_acquisitions')->where('bot_id', $f['bot'])->count())->toBe(1, 'one row per (bot, chat) — first wins');
+    expect($resolver->forConversation($f['conversation']))->toBe(['source' => 'app', 'context' => 'deposit'], 'the Doc 09 seam answers the ORIGINAL acquisition');
+    expect($resolver->forConversation((string) Str::uuid7()))->toBeNull('an unknown conversation answers null');
+});
+
+it('SEC-05: a payload is NEVER executed as a flow id — the tokens are inert strings and the resolver has no path to flow targets', function (): void {
+    $f = directFixture();
+    $resolver = app(App\Domain\Telegram\Direct\DeepLinkResolver::class);
+
+    // A payload crafted to LOOK like a flow reference records as an inert
+    // string; the indirection table is untouched.
+    $before = DB::table('telegram_flow_targets')->count();
+    $resolver->record($f['bot'], 'chat-d', 'kb-flow-42', 'deposit-form');
+    expect(DB::table('telegram_flow_targets')->count())->toBe($before, 'recording an acquisition never writes a flow target');
+
+    // Structural half (the TelegramSecurityTest reflection-proof pattern):
+    // the resolver's source never references the flow-target surface at all.
+    $source = (string) file_get_contents((string) (new ReflectionClass(App\Domain\Telegram\Direct\DeepLinkResolver::class))->getFileName());
+    expect(str_contains($source, 'flow_targets'))->toBeFalse('DeepLinkResolver gained a flow-target reference — SEC-05\'s "never executed as flow ids" lost its structural guarantee');
+    expect(str_contains($source, 'FlowTarget'))->toBeFalse();
+});
+
+it('FR-26 end to end: a direct /start deep link through the REAL router records acquisition AND still routes to NormalizeInbound', function (): void {
+    $f = directFixture();
+    Illuminate\Support\Facades\Queue::fake([App\Jobs\Conversations\NormalizeInbound::class]);
+
+    $update = [
+        'update_id' => 424243,
+        'message' => [
+            'message_id' => 1, 'date' => 1754700000,
+            'chat' => ['id' => 900000779, 'type' => 'private'],
+            'from' => ['id' => 900000779, 'first_name' => 'Deep', 'username' => 'fixture_deep'],
+            'text' => '/start src-app_ctx-deposit',
+        ],
+    ];
+    App\Jobs\Telegram\RouteTelegramUpdate::dispatch($f['bot'], $update);
+    bindTenant($f['tenant']);
+
+    $row = DB::table('telegram_acquisitions')->where('bot_id', $f['bot'])->where('external_chat_id', '900000779')->first();
+    expect($row)->not->toBeNull('the router recorded the acquisition');
+    expect((string) $row->source)->toBe('app');
+    expect((string) $row->context)->toBe('deposit');
+    Illuminate\Support\Facades\Queue::assertPushed(App\Jobs\Conversations\NormalizeInbound::class);
+
+    // The graceful path: an unknown payload records nothing and routes anyway.
+    $unknown = $update;
+    $unknown['update_id'] = 424244;
+    $unknown['message']['chat']['id'] = 900000780;
+    $unknown['message']['from']['id'] = 900000780;
+    $unknown['message']['text'] = '/start not!a!payload';
+    App\Jobs\Telegram\RouteTelegramUpdate::dispatch($f['bot'], $unknown);
+    bindTenant($f['tenant']);
+
+    expect(DB::table('telegram_acquisitions')->where('external_chat_id', '900000780')->exists())->toBeFalse('unknown payloads are ignored gracefully');
+    Illuminate\Support\Facades\Queue::assertPushed(App\Jobs\Conversations\NormalizeInbound::class, 2);
+});

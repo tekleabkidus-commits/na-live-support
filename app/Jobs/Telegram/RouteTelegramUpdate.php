@@ -11,6 +11,7 @@ use App\Domain\Telegram\Api\TelegramApiError;
 use App\Domain\Telegram\Api\TelegramTransportError;
 use App\Domain\Telegram\Connections\ConnectionLifecycle;
 use App\Domain\Telegram\Direct\CallbackNonce;
+use App\Domain\Telegram\Direct\DeepLinkResolver;
 use App\Jobs\Conversations\NormalizeInbound;
 use App\Models\Message;
 use App\Models\TelegramBot;
@@ -29,7 +30,8 @@ use Illuminate\Support\Facades\Log;
  *
  * Doors, per flow (the plan's row-3 table made code):
  *  - message / business_message / edited_*  → NormalizeInbound (the Doc 04
- *    inbound discipline: dedupe, identity seam, one-transaction persist;
+ *    inbound discipline; a direct /start with a deep-link payload FIRST
+ *    records FR-26 acquisition metadata via DeepLinkResolver (S23 step 12);
  *    edits land on the FR-21 revision path via the persister's
  *    existing-external-id detection — the redelivery-vs-edit guard is Doc
  *    04's and is re-proven, not rebuilt).
@@ -71,6 +73,7 @@ final class RouteTelegramUpdate implements ShouldQueue
         TelegramApi $api,
         EventPublisher $events,
         ConnectionLifecycle $connections,
+        DeepLinkResolver $deepLinks,
     ): void {
         $update = $this->update;
 
@@ -109,6 +112,13 @@ final class RouteTelegramUpdate implements ShouldQueue
                 return;
             }
 
+            // FR-26: a DIRECT /start with a deep-link payload records
+            // acquisition metadata (first-wins, write-once). Adapter-side —
+            // keyed by the conversation's own (bot, chat) identity, so it
+            // needs no ordering against the Doc 04 persist. Unknown payloads
+            // parse to null and the message proceeds untouched.
+            $this->recordDeepLink($update, $deepLinks);
+
             NormalizeInbound::dispatch('telegram', $this->botId, [
                 'bot' => $this->botId,
                 'update' => $update,
@@ -143,6 +153,35 @@ final class RouteTelegramUpdate implements ShouldQueue
             'update_type' => 'unknown',
             'update_id' => $update['update_id'] ?? null,
         ]);
+    }
+
+    /**
+     * FR-26: parse a direct message's text as a deep-linked /start and
+     * record the acquisition. Business messages never carry deep links
+     * (t.me/{bot}?start targets the bot chat), so only the plain `message`
+     * line is inspected.
+     *
+     * @param  array<string, mixed>  $update
+     */
+    private function recordDeepLink(array $update, DeepLinkResolver $deepLinks): void
+    {
+        $message = is_array($update['message'] ?? null) ? $update['message'] : null;
+        if ($message === null) {
+            return;
+        }
+
+        $text = $message['text'] ?? null;
+        $chatId = is_array($message['chat'] ?? null) ? ($message['chat']['id'] ?? null) : null;
+        if (! is_string($text) || ! is_scalar($chatId)) {
+            return;
+        }
+
+        $acquisition = $deepLinks->parse($text);
+        if ($acquisition === null) {
+            return;
+        }
+
+        $deepLinks->record($this->botId, (string) $chatId, $acquisition['source'], $acquisition['context']);
     }
 
     /**

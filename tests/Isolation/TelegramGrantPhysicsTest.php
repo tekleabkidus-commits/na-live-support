@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\DB;
 const DOC05_TABLES = [
     'telegram_bots', 'telegram_business_connections', 'telegram_menus',
     'telegram_menu_versions', 'telegram_templates', 'telegram_flow_targets',
-    'telegram_owner_phone_identities',
+    'telegram_owner_phone_identities', 'telegram_acquisitions',
 ];
 
 /**
@@ -65,6 +65,11 @@ const DOC05_DB_TIME_COLUMNS = [
     'telegram_templates' => ['INSERT' => [], 'UPDATE' => []],
     'telegram_flow_targets' => ['INSERT' => [], 'UPDATE' => []],
     'telegram_owner_phone_identities' => ['INSERT' => [], 'UPDATE' => []],
+    // FR-26 (step 12): created_at is provenance — DB-default fills, never
+    // insertable; UPDATE has no privilege at all (write-once, asserted
+    // separately below), so it is skipped in the R-19b loop like
+    // telegram_menu_versions.
+    'telegram_acquisitions' => ['INSERT' => ['created_at'], 'UPDATE' => []],
 ];
 
 function telegramAppHasPrivilege(string $table, string $privilege): bool
@@ -116,7 +121,7 @@ function telegramAppColumnSplit(string $table, string $privilege): array
 it('R-19b: the app role cannot NAME any DB-time column on a Doc 05 table, INSERT or UPDATE — derived from the schema', function (): void {
     foreach (DOC05_TABLES as $table) {
         foreach (['INSERT', 'UPDATE'] as $privilege) {
-            if ($privilege === 'UPDATE' && $table === 'telegram_menu_versions') {
+            if ($privilege === 'UPDATE' && in_array($table, ['telegram_menu_versions', 'telegram_acquisitions'], true)) {
                 continue; // no UPDATE privilege at all — asserted separately below
             }
 
@@ -150,6 +155,14 @@ it('SEC-02 posture: menu versions are INSERT-only for the app — no UPDATE priv
 
     [$granted] = telegramAppColumnSplit('telegram_menu_versions', 'UPDATE');
     expect($granted)->toBe([], 'column-level UPDATE grants exist on telegram_menu_versions — the insert-only store leaks');
+});
+
+it('FR-26: acquisitions are WRITE-ONCE for the app — no UPDATE, no DELETE, on any column (first-wins is physics, not code)', function (): void {
+    expect(telegramAppHasPrivilege('telegram_acquisitions', 'UPDATE'))->toBeFalse('an acquisition became editable — a later /start could rewrite where the player came from');
+    expect(telegramAppHasPrivilege('telegram_acquisitions', 'DELETE'))->toBeFalse('acquisition DELETE crept back — attribution history became erasable');
+
+    [$granted] = telegramAppColumnSplit('telegram_acquisitions', 'UPDATE');
+    expect($granted)->toBe([], 'column-level UPDATE grants exist on telegram_acquisitions — the write-once store leaks');
 });
 
 it('NFR-04: the transition trigger exists, is BEFORE UPDATE, and its function is plain (never SECURITY DEFINER)', function (): void {

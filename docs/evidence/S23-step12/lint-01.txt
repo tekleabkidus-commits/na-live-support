@@ -1,0 +1,14 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      lint
+# set:        S23-step12
+# command:    make lint
+# started:    2026-08-10T10:37:29Z
+# git:        a01833b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"fail","files":[{"path":"tests\/Performance\/TelegramBudgetsTest.php","fixers":["single_quote"]}]}make: *** [Makefile:99: lint] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-10T10:37:29Z
+# duration:   0s
+# EXIT:       2

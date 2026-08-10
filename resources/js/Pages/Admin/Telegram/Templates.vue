@@ -167,7 +167,7 @@ const languageName = (l: string): string => (l === 'am' ? 'አማርኛ' : 'Engl
                 >
                     {{ languageName(l) }}
                     <span
-                        class="ml-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                        class="ms-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
                         :style="
                             missingCount(l) > 0
                                 ? { background: 'var(--ds-warn-bg)', color: 'var(--ds-warn-text)' }

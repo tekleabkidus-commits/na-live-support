@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
  * content (FR-28) where applicable.
  *
  * - /start [payload]  — greeting; the deep-link payload (FR-26) is acquisition
- *   metadata for the Doc 09 first turn (resolved in step 5's DeepLinkResolver).
+ *   metadata for the Doc 09 first turn (DeepLinkResolver, S23 step 12).
  * - /menu             — renders the published main menu (FR-27).
  * - /status           — the customer's OPEN + recent tickets, read from REAL
  *   Doc 06 data through the Ticket model (this door), never a stub.

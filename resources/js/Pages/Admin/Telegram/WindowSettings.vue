@@ -71,7 +71,7 @@ const hours = ref(props.windowHours);
                         :disabled="readonly"
                         :aria-readonly="readonly"
                         data-setting="window_hours"
-                        class="w-20 rounded-lg border px-3 py-2 text-right text-sm"
+                        class="w-20 rounded-lg border px-3 py-2 text-end text-sm"
                         :style="{
                             borderColor: 'var(--ds-border-strong)',
                             background: readonly ? 'var(--ds-inset-bg)' : 'var(--ds-panel-soft)',

@@ -1,0 +1,14 @@
+  [dev-hardware-indicative] NFR-01 normalization         p50   0.004 ms   p99   0.021 ms   max   0.064 ms   budget(p99) 30.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 send (our half)       p50   0.001 ms   p99   0.007 ms   max   0.008 ms   budget(p99) 80.0 ms   WITHIN
+  [dev-hardware-indicative] §12 webhook ACK             p50   6.182 ms   p99  10.580 ms   max  10.580 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep 10k-armed/20-due: 33 ms (pro-rated budget 2000 ms from 50k ≤ 10 s) WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TelegramBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: adapter normalization overhead ≤30 ms (dev-hardware-indi[39m[90m…[39m [90m3.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: adapter send overhead (our half) ≤80 ms (dev-hardware-in[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12: webhook ACK single-request cost p99 ≤250 ms on the REAL rou[39m[90m…[39m [90m1.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-03/§12: sweep at 10k armed / 20 due inside the pro-rated bud[39m[90m…[39m [90m0.11s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (161 assertions)[39m
+  [90mDuration:[39m [39m4.70s[39m
+
