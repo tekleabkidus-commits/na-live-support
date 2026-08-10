@@ -1,0 +1,79 @@
+
+  Dropping all tables .......................................... 198.48ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ...................................... 21.98ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table .......................... 90.66ms DONE
+  0001_01_01_000001_create_cache_table .......................... 68.44ms DONE
+  0001_01_01_000002_create_jobs_table .......................... 113.15ms DONE
+  2026_07_30_000100_create_reference_tables .................... 128.20ms DONE
+  2026_07_30_000200_create_tenants_table ........................ 73.11ms DONE
+  2026_07_30_000300_create_tenant_state_transition_guard ........ 12.23ms DONE
+  2026_07_30_000400_add_tenant_id_to_users_table ................ 33.15ms DONE
+  2026_07_30_000500_create_tenant_keys_table .................... 51.35ms DONE
+  2026_07_30_000600_create_tenant_settings_table ................ 56.04ms DONE
+  2026_07_30_000700_create_tenant_sequences_table ............... 47.16ms DONE
+  2026_07_30_000800_create_tenant_provisioning_steps_table ...... 41.46ms DONE
+  2026_07_30_000900_create_audit_log_table ...................... 77.64ms DONE
+  2026_07_30_001000_create_outbox_table ......................... 70.19ms DONE
+  2026_07_30_001100_create_events_table ........................ 344.59ms DONE
+  2026_07_30_001200_create_tenant_quota_usage_table ............. 49.32ms DONE
+  2026_07_30_001300_enable_row_level_security ................... 50.60ms DONE
+  2026_07_30_001400_add_version_to_tenant_settings_table ........ 16.61ms DONE
+  2026_07_30_001500_create_resolve_tenant_state_function ......... 6.60ms DONE
+  2026_07_31_000100_create_tenant_cold_summaries_table .......... 36.48ms DONE
+  2026_07_31_000200_failed_jobs_timestamptz ..................... 47.31ms DONE
+  2026_07_31_010000_add_auth_columns_to_users_table ............. 30.26ms DONE
+  2026_07_31_010100_create_auth_action_tokens_table ............. 63.32ms DONE
+  2026_07_31_010200_create_user_recovery_codes_table ............ 36.61ms DONE
+  2026_07_31_010300_create_user_password_history_table .......... 37.25ms DONE
+  2026_07_31_010400_create_devices_table ........................ 66.23ms DONE
+  2026_07_31_010500_create_personal_access_tokens_table ......... 76.89ms DONE
+  2026_07_31_010600_create_resolve_staff_login_function ......... 19.32ms DONE
+  2026_08_02_010000_add_service_account_to_users ................ 10.29ms DONE
+  2026_08_03_010000_create_widgets_table ........................ 53.84ms DONE
+  2026_08_03_020000_create_webhook_credentials_table ............ 53.07ms DONE
+  2026_08_04_010000_create_roles_table .......................... 73.93ms DONE
+  2026_08_04_010100_create_user_permission_overrides_table ...... 62.80ms DONE
+  2026_08_04_010200_create_pending_grants_table ................. 55.24ms DONE
+  2026_08_04_010300_add_role_id_to_users_table .................. 14.86ms DONE
+  2026_08_04_020000_add_two_factor_required_since_to_users ....... 7.31ms DONE
+  2026_08_04_030000_create_customers_shell_tables ............... 96.28ms DONE
+  2026_08_04_030100_create_conversations_table .................. 81.16ms DONE
+  2026_08_04_030200_create_messages_table ...................... 415.42ms DONE
+  2026_08_04_030300_create_message_revisions_table .............. 58.39ms DONE
+  2026_08_04_030400_create_message_drafts_table ................. 46.52ms DONE
+  2026_08_05_090000_add_legal_hold_and_hold_storage ............. 44.08ms DONE
+  2026_08_05_100000_create_message_dead_letters_table ........... 38.08ms DONE
+  2026_08_07_010000_messages_created_at_db_time ................. 18.08ms DONE
+  2026_08_07_100000_create_tickets_table ....................... 106.89ms DONE
+  2026_08_07_100100_create_ticket_followers_table ............... 34.94ms DONE
+  2026_08_07_100200_create_ticket_handoff_packets_table ......... 38.93ms DONE
+  2026_08_07_100300_create_ticket_merge_snapshots_table ......... 43.15ms DONE
+  2026_08_07_100400_create_ticket_bulk_jobs_tables .............. 90.63ms DONE
+  2026_08_07_100500_create_ticket_message_anchors_table ......... 49.41ms DONE
+  2026_08_07_110000_add_ticket_transition_trigger ............... 17.18ms DONE
+  2026_08_07_120000_add_ticket_idempotency_key .................. 16.39ms DONE
+  2026_08_08_100000_add_ticket_auto_close_timer ................. 17.68ms DONE
+  2026_08_09_100000_create_telegram_bots_table .................. 62.46ms DONE
+  2026_08_09_100100_create_telegram_business_connections_table .. 63.35ms DONE
+  2026_08_09_100200_create_telegram_menus_tables ............... 103.82ms DONE
+  2026_08_09_100300_create_telegram_templates_table ............. 57.51ms DONE
+  2026_08_09_100400_create_telegram_flow_targets_table .......... 47.18ms DONE
+  2026_08_09_100500_create_telegram_owner_phone_identities_table  47.11ms DONE
+  2026_08_09_110000_add_reply_window_to_conversations ............ 8.88ms DONE
+  2026_08_10_100000_add_health_columns_to_telegram_bots ......... 14.04ms DONE
+  2026_08_10_110000_create_telegram_acquisitions_table .......... 32.39ms DONE
+  2026_08_10_120000_create_ticket_list_items_table .............. 60.80ms DONE
+  2026_08_10_120100_create_inbox_saved_views_table .............. 50.28ms DONE
+  2026_08_10_120200_create_inbox_selection_tokens_table ......... 41.52ms DONE
+  2026_08_10_120300_create_inbox_notifications_table ............ 40.92ms DONE
+  2026_08_10_120400_create_inbox_user_prefs_table ............... 50.36ms DONE
+  2026_08_10_120500_create_agent_statuses_table ................. 52.42ms DONE
+  2026_08_10_120600_create_inbox_read_markers_table ............. 38.18ms DONE
+  2026_08_10_121000_events_occurred_at_db_time ................... 7.46ms DONE
+

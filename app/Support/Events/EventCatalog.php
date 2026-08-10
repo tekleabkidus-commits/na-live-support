@@ -736,6 +736,21 @@ final class EventCatalog
             'consumers' => ['Doc16/Notifications', 'Doc07/Inbox', 'Doc17/Audit'],
             'description' => 'EC-05: a named escalation target was deactivated after the fact — the escalation fell back to supervisor_review with a system note, and the escalator is to be notified.',
         ],
+
+        // ── Doc 07 (Unified Inbox) — the S07 plan's enumeration: ONE new
+        //    event (rule 16; view deltas and count pushes are realtime
+        //    protocol v:1, NOT catalog events — the RealtimePusher line).
+        'agent.status_changed' => [
+            'schema_version' => 1,
+            // FR-28's routing contract: Online = routable; Away keeps
+            // assignments, not routable; Offline = manual/logout. Identifiers
+            // and state words only (Q7) — `since` and display attribution live
+            // on the agent_statuses row; audit carries actor + old/new.
+            'payload' => ['tenant_id', 'user_id', 'status', 'reason', 'set_by_user_id'],
+            'producers' => ['Doc07/AgentStatus'],
+            'consumers' => ['Doc11/Routing', 'Doc15/Reporting'],
+            'description' => 'FR-28: an agent\'s availability changed (online|away|offline; reason manual|auto_idle|heartbeat_lost|forced|logout). Doc 11 consumes it for routability; Doc 15 counts transitions — active-time metrics derive from activity events, never from this state (BR-06).',
+        ],
     ];
 
     /**

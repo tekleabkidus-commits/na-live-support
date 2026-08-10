@@ -12,8 +12,9 @@ declare(strict_types=1);
 | anywhere ("118", "~130", "20 high") are descriptive; this file is normative.
 | 38 keys carry §4.1's "(high)" mark. Keys are NEVER renamed or repurposed
 | (NFR-03); deprecation = new key + two-release migration. Additions require
-| doc-owner sign-off (Doc 01 R-03) — `views.share` (Doc 07) and
-| `ai.providers.manage` (Doc 09) register when their documents land.
+| doc-owner sign-off (Doc 01 R-03) — `views.share` REGISTERED at S07 (Doc 07
+| FR-06 landing, the addition of record; owner-approved plan 2026-08-10);
+| `ai.providers.manage` (Doc 09) registers when its document lands.
 |
 | Every route/action must map to a key registered here; an unmapped route
 | fails the `permission-mapping` CI gate. CatalogSnapshotTest (T-05b) pins the
@@ -1270,5 +1271,21 @@ return [
         'scope_dimension' => 'unscoped',
         'risk' => 'high',
         'owning_doc' => 'Doc03',
+    ],
+    [
+        // THE ADDITION OF RECORD (Doc 03 §4.1 change log via ruling Q9; Doc 07
+        // FR-06): sharing a saved view to a team/department. Registered at S07
+        // when its owning document landed — the reports.dashboards.share
+        // analog FR-06 itself names. Joins NO seeded template (R-10's
+        // conservatism); Super Admin holds it by FR-10's all-keys clause.
+        'key' => 'views.share',
+        'label_i18n_key' => 'perm.views.share',
+        'description_i18n_key' => 'perm_desc.views.share',
+        'group' => 'tickets',
+        'module' => 'tickets',
+        'scopes' => ['Own', 'Team', 'Dept', 'All'],
+        'scope_dimension' => 'scoped',
+        'risk' => 'normal',
+        'owning_doc' => 'Doc07',
     ],
 ];

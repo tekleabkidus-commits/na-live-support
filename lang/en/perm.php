@@ -259,4 +259,7 @@ return [
             'manage' => 'Manage machine API keys',
         ],
     ],
+    'views' => [
+        'share' => 'Share saved views',
+    ],
 ];

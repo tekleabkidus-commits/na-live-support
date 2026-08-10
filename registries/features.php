@@ -36,4 +36,15 @@ return [
         'tenant_toggleable' => false,
         'owning_doc' => 'Doc01',
     ],
+    [
+        // Doc 07 FR-18: "voice recording behind flag". The flag gates the
+        // composer affordance's RENDERING only (N-19 — flags hide, never
+        // destroy); the recording rides the existing Doc 04 attachment chain
+        // when on. Default OFF; tenant-toggleable so an operator can opt in.
+        'key' => 'inbox.voice_recording',
+        'label_i18n_key' => 'inbox.feature.voice_recording',
+        'default' => false,
+        'tenant_toggleable' => true,
+        'owning_doc' => 'Doc07',
+    ],
 ];

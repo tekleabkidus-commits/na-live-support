@@ -361,11 +361,16 @@ stores `resources/js/stores/inbox/`; browser specs `tests/Browser/inbox-*.spec.t
 13. Client derives count from partial window → T-03 contract red
 14. Note payload routed toward an adapter path → Doc 04 AC-04 integration red
 15. EC-01 deep link confirms existence → 404-pattern red
-16. `events.occurred_at` guard dropped (relay re-supplies app clock) → R-19 schema guard red at MIGRATION level (C2)
+16. `events.occurred_at` guard dropped (the app column grant removed) → R-19 schema guard red at MIGRATION level (C2)
 17. FS-05 recovery drops composer text → drafts-last red
 18. Staleness pill suppressed in projector outage → FS-01 red
 19. Desktop notification includes message content → SEC-04 red
 20. Print path ignores note gate → SEC-05 red
+21. [AMENDED 20→21 by ruling A-33 at the step-1 checkpoint, filed before the
+    sabotage ran] the relay's stamp-copy broken (a fresh clock supplied
+    instead of the outbox byte-copy) → the A-33 byte-identical proof in
+    EventsOccurredAtTreatmentTest goes red. THE LEDGER RECONCILES AGAINST
+    21 ITEMS.
 
 Backup before sabotage; fail AND restored-pass pasted; tree proven clean before commit;
 captures unfiltered first; verdicts from unfiltered capture summaries + exit codes only.

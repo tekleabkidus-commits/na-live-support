@@ -1,0 +1,57 @@
+
+   FAIL  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 6.13s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.04s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.08s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.06s  
+  ⨯ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.09s  
+
+   FAIL  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (C2, row 9): the relay no longer supplies occurre… 0.06s  
+  ✓ it two events published in ONE transaction relay with DISTINCT asce… 0.20s  
+  ⨯ it the app role writes events only through the default: naming occu… 0.06s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\InboxGrantPhysicsTest > it row 9 discharged (C2):…   
+  events INSERT: app-denied columns are [], the row-9 treatment says exactly [occurred_at]
+Failed asserting that two arrays are identical.
+  -Array &0 [
+  -    0 => 'occurred_at',
+  -]
+  +Array &0 []
+  
+
+  at tests/Isolation/InboxGrantPhysicsTest.php:195
+    191▕ });
+    192▕ 
+    193▕ it('row 9 discharged (C2): events is append-only for app — INSERT denied on exactly [occurred_at], UPDATE revoked outright', function (): void {
+    194▕     [, $deniedInsert] = inboxAppColumnSplit('events', 'INSERT');
+  ➜ 195▕     expect($deniedInsert)->toBe(['occurred_at'], sprintf(
+    196▕         'events INSERT: app-denied columns are [%s], the row-9 treatment says exactly [occurred_at]',
+    197▕         implode(', ', $deniedInsert),
+    198▕     ));
+    199▕
+
+  1   tests/Isolation/InboxGrantPhysicsTest.php:195
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest > it the app ro…   
+  Exception "Illuminate\Database\QueryException" not thrown.
+
+  at tests/Feature/Inbox/EventsOccurredAtTreatmentTest.php:113
+    109▕             'name' => 'tenant.setting_changed',
+    110▕             'schema_version' => 1,
+    111▕             'payload' => json_encode(['tenant_id' => $tenantId, 'key' => 's07.denied'], JSON_THROW_ON_ERROR),
+    112▕             'occurred_at' => now(),
+  ➜ 113▕         ])))->toThrow(Illuminate\Database\QueryException::class);
+    114▕ 
+    115▕         // Default half — two inserts in ONE transaction get DISTINCT stamps,
+    116▕         // which only clock_timestamp() can produce here.
+    117▕         $ids = [(string) Str::uuid7(), (string) Str::uuid7()];
+
+  1   tests/Feature/Inbox/EventsOccurredAtTreatmentTest.php:113
+  2   tests/Pest.php:115
+
+
+  Tests:    2 failed, 6 passed (82 assertions)
+  Duration: 6.83s
+

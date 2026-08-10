@@ -15,6 +15,11 @@ use App\Support\Rbac\PermissionCatalog;
  * doc-owner sign-off (Doc 01 R-03).
  *
  * Counts on the record (R-12): 111 keys, 38 marked "(high)", 46 scoped.
+ * S07 UPDATE (owner-approved plan, 2026-08-10): `views.share` — the Doc 03
+ * change-log addition of record (Q9/R-12 named it; Doc 07 FR-06 is its
+ * document) — REGISTERED with Doc 07 landing. Catalog 112, scoped 47; the
+ * high set is unchanged at 38. This edit and the registry edit are the same
+ * commit, per this file's own contract.
  */
 
 /** Doc 03 §4.1, all fourteen modules, catalog order. */
@@ -66,6 +71,8 @@ const DOC03_CATALOG_KEYS = [
     // Platform settings
     'settings.view', 'settings.edit', 'branding.edit', 'features.toggle',
     'languages.manage', 'audit.view', 'audit.export', 'apikeys.machine.manage',
+    // The Doc 03 change-log addition of record, registered at S07 (Doc 07 FR-06)
+    'views.share',
 ];
 
 /** Every key §4.1 marks "(high)" — counted from the text, twice (R-12). */
@@ -108,13 +115,16 @@ const DOC03_SCOPED_KEYS = [
     'telegram.send', 'webchat.respond',
     'reports.view', 'reports.dashboards.create', 'reports.dashboards.share', 'reports.export',
     'reports.schedule', 'reports.supervisor.live', 'reports.agents.individual',
+    // S07: views.share is scoped — sharing reaches team/department audiences,
+    // the reports.dashboards.share analog FR-06 itself names.
+    'views.share',
 ];
 
-it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates — verbatim, nothing else (Q9, R-12)', function () {
+it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the views.share addition of record — verbatim, nothing else (Q9, R-12, S07)', function () {
     $registered = array_keys(app(PermissionCatalog::class)->all());
 
     expect($registered)->toBe(DOC03_CATALOG_KEYS)
-        ->and(count($registered))->toBe(111);
+        ->and(count($registered))->toBe(112);
 });
 
 it('marks high-risk exactly where §4.1 writes "(high)" — all 38, no more, no fewer (R-12)', function () {
@@ -122,7 +132,7 @@ it('marks high-risk exactly where §4.1 writes "(high)" — all 38, no more, no 
         ->and(count(DOC03_HIGH_KEYS))->toBe(38);
 });
 
-it('pins the scope dimension of every key: 46 scoped per the §4.1 module headers, the rest unscoped', function () {
+it('pins the scope dimension of every key: 47 scoped (46 per the §4.1 module headers + views.share, S07), the rest unscoped', function () {
     $catalog = app(PermissionCatalog::class);
 
     $scoped = array_values(array_keys(array_filter(
@@ -131,7 +141,7 @@ it('pins the scope dimension of every key: 46 scoped per the §4.1 module header
     )));
 
     expect($scoped)->toBe(DOC03_SCOPED_KEYS)
-        ->and(count(DOC03_SCOPED_KEYS))->toBe(46);
+        ->and(count(DOC03_SCOPED_KEYS))->toBe(47);
 });
 
 it('keeps the four Doc 02-era entries under their exact registered names (NFR-03 — never renamed)', function () {

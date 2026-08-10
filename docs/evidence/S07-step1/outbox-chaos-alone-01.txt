@@ -1,0 +1,31 @@
+
+   FAIL  Tests\Isolation\OutboxChaosTest
+  ✓ it never publishes an event for a write that rolled back (T-03)      5.05s  
+  - it refuses to publish outside a transaction (T-03) → The test harne… 0.03s  
+  ✓ it delivers a committed event even though the relay crashed before…  0.14s  
+  ⨯ it produces one event, not two, when a crashed relay re-processes t… 0.14s  
+  ✓ it relays in UUIDv7 order, which is causal order without a wall clo… 0.15s  
+  ✓ it reports lag from the OLDEST unrelayed row, so a stuck row is vis… 0.13s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\OutboxChaosTest > it produces one event, not two,…   
+  the same outbox row produced two events: duplicate delivery became duplicate effect
+Failed asserting that 2 is identical to 1.
+
+  at tests/Isolation/OutboxChaosTest.php:164
+    160▕             // ONE event. The primary key on events (id, occurred_at) — where id IS the
+    161▕             // event_id — is what makes re-processing idempotent at the DATABASE rather than
+    162▕             // relying on the relay being careful. So duplicate DELIVERY cannot become
+    163▕             // duplicate EFFECT in the reporting log.
+  ➜ 164▕             expect(DB::table('events')->where('id', $row->event_id)->count())->toBe(
+    165▕                 1,
+    166▕                 'the same outbox row produced two events: duplicate delivery became duplicate effect',
+    167▕             );
+    168▕         });
+
+  1   tests/Isolation/OutboxChaosTest.php:164
+  2   tests/Pest.php:115
+
+
+  Tests:    1 failed, 1 skipped, 4 passed (15 assertions)
+  Duration: 5.70s
+

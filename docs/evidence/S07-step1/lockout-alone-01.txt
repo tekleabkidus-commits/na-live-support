@@ -1,0 +1,16 @@
+
+   PASS  Tests\Feature\Auth\LockoutTest
+  ✓ it gives the generic message for failures 1 to 4 and does not lock…  7.16s  
+  ✓ it locks the account on the 5th failure (AC-02)                      1.44s  
+  ✓ it refuses the CORRECT password while locked, without saying it is…  1.65s  
+  ✓ it audits every lockout transition (AC-02: admin unlock audited, an… 1.54s  
+  ✓ it rolls the window: failures older than auth.lockout.window do not… 0.15s  
+  ✓ it expires the lock after auth.lockout.duration without anyone inte… 0.03s  
+  ✓ it counts a failed attempt against EVERY candidate account for that… 1.63s  
+  ✓ it lets a victim always unlock via password reset, per account (EC-… 1.68s  
+  ✓ it registers the EC-11 captcha threshold setting even though no ven… 0.02s  
+  ✓ it throttles per IP independently of any account, including address… 4.65s  
+
+  Tests:    10 passed (59 assertions)
+  Duration: 20.01s
+

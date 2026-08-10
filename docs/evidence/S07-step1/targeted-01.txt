@@ -1,0 +1,33 @@
+
+   FAIL  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 6.90s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.07s  
+  ⨯ it every Doc 07 table carries FORCED row-level security with the te… 0.12s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.08s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.15s  
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (C2, row 9): the relay no longer supplies occurre… 0.06s  
+  ✓ it two events published in ONE transaction relay with DISTINCT asce… 0.22s  
+  ✓ it the app role writes events only through the default: naming occu… 0.08s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\InboxGrantPhysicsTest > it every Doc 07 table car…   
+  Failed asserting that an array contains 'ticket_list_items: the tenant_isolation policy is missing'.
+
+  at tests/Isolation/InboxGrantPhysicsTest.php:167
+    163▕         $policies = DB::connection('pgsql_migrator')->select(
+    164▕             'SELECT polname FROM pg_policy WHERE polrelid = ?::regclass',
+    165▕             [$table],
+    166▕         );
+  ➜ 167▕         expect(array_column($policies, 'polname'))->toContain('tenant_isolation', "{$table}: the tenant_isolation policy is missing");
+    168▕     }
+    169▕ });
+    170▕ 
+    171▕ it('the db-time defaults are clock_timestamp(), never now() — pg_attrdef facts (R-19/R-23 family; sabotage #16\'s guard for events)', function (): void {
+
+  1   tests/Isolation/InboxGrantPhysicsTest.php:167
+
+
+  Tests:    1 failed, 7 passed (64 assertions)
+  Duration: 7.82s
+

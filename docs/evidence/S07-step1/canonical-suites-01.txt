@@ -1,0 +1,17 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 6.20s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.23s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.18s  
+  ✓ it the app role writes events only through the default: naming occu… 0.06s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.23s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.04s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.06s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.07s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.10s  
+
+  Tests:    9 passed (95 assertions)
+  Duration: 7.22s
+

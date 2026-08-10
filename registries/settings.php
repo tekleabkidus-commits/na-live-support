@@ -622,4 +622,18 @@ return [
         'tenant_editable' => true,
         'owning_doc' => 'Doc05',
     ],
+    [
+        // Doc 07 FR-28: minutes of no activity before auto-Away (with the
+        // 60 s cancelable countdown toast). tenant_editable TRUE by the S07
+        // plan-approval ruling (operator policy per BR-06/§21 — "the Away
+        // timing should be tuned from dogfood data"); no Batch 1/2 frame
+        // draws the editing surface — it arrives with Doc 16's settings
+        // shell. Platform-maximum validation per the conventions.
+        'key' => 'inbox.away.idle_minutes',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:1|max:240',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc07',
+    ],
 ];

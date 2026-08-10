@@ -146,6 +146,16 @@ final class OutboxRelay
                     'payload' => $row->payload,
                     'correlation_id' => $row->correlation_id,
                     'causation_id' => $row->causation_id,
+                    // THE COPY IS THE CONTRACT (A-33, ruled at the S07 step-1 checkpoint;
+                    // BUILD-STATUS row 9 corrected there): this value is outbox.occurred_at —
+                    // DB time at publish (the outbox default now()), copied byte-identically so
+                    // a re-driven row re-produces the SAME composite key and the events PK
+                    // (id, occurred_at) refuses the duplicate — C-09 as DATABASE PHYSICS.
+                    // Supplying anything else here (a fresh clock, an app value) is sabotage
+                    // #21: the A-33 byte-identical proof in EventsOccurredAtTreatmentTest goes
+                    // red. Ordered reads over events get their guarantee from the T-07
+                    // watermark + UUIDv7 within-stamp tiebreak (A-33 B-4), not from this stamp
+                    // being relay-time.
                     'occurred_at' => $row->occurred_at,
                 ]);
 

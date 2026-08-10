@@ -259,4 +259,7 @@ return [
             'manage' => 'Create and revoke machine API tokens.',
         ],
     ],
+    'views' => [
+        'share' => 'Share a saved inbox view with a team or department.',
+    ],
 ];

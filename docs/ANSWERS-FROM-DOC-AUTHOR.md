@@ -1189,3 +1189,107 @@ feedback. AC-02's membership fixture is written against this definition.
 - **Stack growth APPROVED (R-15)**: `@tanstack/vue-virtual`, `pinia`, `@lhci/cli`
   (dev/CI only); the declined list (in-house fuzzy scorer, native
   BroadcastChannel/IndexedDB, existing Playwright/scout) accepted as stated.
+
+### S07 SCHEMA AMENDMENT 1 (filed at step 1, before the migrations shipped — the A-7-amendment-2 precedent; REWRITTEN to the advisor's completeness bar at the step-1 checkpoint ruling; needs advisor countersign)
+
+The approved plan's table list missed per-VIEWER read state, and three sort/
+boundary keys need pinned copies the plan's §6 table did not name. All are
+CORRECTIONS the document text demands, recorded here rather than slipped into
+migrations. The final Doc 07 table list is SEVEN: ticket_list_items,
+inbox_saved_views, inbox_selection_tokens, inbox_notifications,
+inbox_user_prefs, agent_statuses, inbox_read_markers (correction C1's
+`snoozed_until` stays dropped — no document line demands it).
+
+1. **`inbox_read_markers` (new table).** Doc 07 FR-09 requires "unread bold
+   state + count" on the row and FR-15 requires the thread to open "at first
+   unread" — per-viewer facts that cannot live on the shared
+   `ticket_list_items` row. One marker per (user, conversation); unread
+   state/count are computed at hydration by overlaying the viewer's markers
+   (and Doc 04 drafts) on the shared page — ZSETs and pushed counts never
+   carry per-viewer unread numbers.
+
+   **Full R-19b per-column analysis (every column):**
+   - `id` (UUIDv7, C-01), `tenant_id` (C-02), `user_id`, `conversation_id`,
+     `last_read_message_id` — identities and the provenance pointer; not
+     timestamps.
+   - `last_read_at` — **PINNED-PROVENANCE, ordering-RELEVANT**: it is
+     compared against DB-time message stamps for the first-unread/unread
+     computations, so it must live in message-stamp space — a byte-copy of
+     the last-read message's own `messages.created_at`, NEVER a fresh clock
+     read (a wall-clock write here would shift the unread boundary by clock
+     skew). App-writable by that documented discipline; the marker writer's
+     test proves byte-equality with the source message stamp when the writer
+     ships (step 9's list/thread wiring).
+   - `created_at` — row birth, hygiene default clock_timestamp(),
+     app-writable (no ordering key or cursor reads it).
+   - `updated_at` — maintenance metadata (LWW on the viewer's own marker);
+     not ordering/metric-bearing.
+   - No metric reads this table (BR-06's active-time metrics derive from
+     activity events); DELETE revoked; RLS FORCED with tenant_isolation.
+
+2. **`ticket_list_items` gains three pinned-provenance timestamp copies
+   beyond the plan's two, each with its document citation:**
+   - `ticket_created_at` — Doc 07 FR-10: "Unassigned = created asc
+     'first-come'" (BR-04 encodes the value). The sort key is the TICKET's
+     own DB-time birth; the projection row's created_at is the row's birth,
+     not the ticket's, so a copy is required.
+   - `last_message_created_at` — Doc 07 FR-09 ("unread bold state + count")
+     + FR-15 ("opens at first unread"): the unread-boundary anchor the
+     hydration overlay joins against the viewer's `last_read_at` marker,
+     in message-stamp space on both sides.
+   - `sla_due_at` — Doc 07 FR-05 ("SLA at risk (Doc 12 warned/breached,
+     open-family)") + FR-10 ("SLA at risk = time-to-breach asc"): the
+     time-to-breach sort key; the Doc 12 seam, fixture-fed until Doc 12
+     produces real policy data.
+   Same class as the plan's `last_activity_at`/`window_expires_at`:
+   app-writable copies of canonical DB-time stamps, never fresh clock reads;
+   ZSET scores derive from them as INTEGER MICROSECONDS (R-23).
+
+The InboxGrantPhysicsTest denied-set map and the migrations' docblocks carry
+this same analysis; the sabotage list is amended by A-33 below (20→21), not
+by this amendment.
+
+### A-33 (ADVISOR RULING at the S07 step-1 checkpoint, 2026-08-10). The events-stream ordering and idempotency contract — Option B
+
+**The finding (C2's battery, working as designed):** the as-filed row-9
+treatment (relay stops supplying `occurred_at`; clock_timestamp() fills at
+the relay insert) BROKE C-09's duplicate-delivery physics — the events PK
+`(id, occurred_at)` deduplicated re-driven outbox rows only because the relay
+supplied a deterministic COPY; a fresh stamp per insert let the same event
+land twice (OutboxChaosTest red, deterministic, alone and in-suite).
+**Record correction absorbed into this ruling:** the stamp was ALWAYS DB
+time — `outbox.occurred_at` defaults to Postgres now() at publish and the
+relay copies it; BUILD-STATUS row 9's "relay's APP clock" premise was wrong.
+
+**RULED: Option B, four conditions:**
+
+- **B-1.** The relay reverts to copying `outbox.occurred_at`; the
+  composite-PK dedupe physics returns byte-identical. OutboxChaosTest goes
+  green via the restored physics, never via test change — PLUS a new
+  positive control asserting the PK refusal ITSELF (error class and the
+  re-driven row-count trace through the real relay).
+- **B-2.** The role/privilege topology, stated exactly: the `app` role
+  CANNOT name `occurred_at` (column grant — physics; the migration's
+  default+grant governs DIRECT APP-SIDE writes). The relay runs as
+  `platform_admin`, which necessarily keeps table-level INSERT (it must
+  supply the copy; fixtures backdate through it), so WITHIN the platform
+  role "the supplied value is the outbox copy" is pinned by the strongest
+  STRUCTURAL mechanism available and stated honestly as such, not as grant
+  physics: the committed diff assertion pins the copy expression, and the
+  byte-identical behavioural proof (events.occurred_at === its outbox row's
+  occurred_at through the real relay) executes it. **Sabotage list AMENDED
+  20→21 by this ruling** — item 21: the relay's stamp-copy broken (a fresh
+  clock supplied instead of the outbox copy) → the A-33 byte-identical
+  proof goes red.
+- **B-3.** BUILD-STATUS row 9's text corrected in the same commit; the
+  deferral's discharge redefined there: ordered-read treatment = the T-07
+  watermark + UUIDv7 within-stamp tiebreak contract (step 5) + the
+  direct-write guard (step 1). The relay revert and the guard's final shape
+  are enumerated in the committed diff assertion citing row 9 AND this
+  ruling.
+- **B-4 (owed to step 5, recorded now):** the sync watermark value is
+  stated WITH its derivation (the commit-skew bound it protects against);
+  the reconnect golden proves no-miss under a long-transaction fixture;
+  UUIDv7 is documented as within-stamp tiebreak ONLY (R-19's narrowing);
+  the freshness trade-off is documented in the endpoint contract —
+  reconnect sync serves settled events, the live path is Reverb's.

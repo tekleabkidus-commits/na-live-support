@@ -78,4 +78,71 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc05',
     ],
+
+    // ── Doc 07 (Unified Inbox) — FR-26's enumerated bell set, registered at
+    //    S07 step 1 BEFORE any producer ships (the C3 precedent). All
+    //    layer_model `user` and in_app-only by default: BR-05 — sounds and
+    //    desktop notifications are per-user choices; the platform never
+    //    force-enables noise. Per-category preference SURFACES are Doc 16's;
+    //    the bell's quick mute is Doc 07's.
+    [
+        // FR-26: a ticket was assigned to me.
+        'category_key' => 'notify.inbox.assignment',
+        'label_i18n_key' => 'inbox.notify.assignment',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: I was @mentioned in an internal note (Doc 04 note.mentioned).
+        'category_key' => 'notify.inbox.mention',
+        'label_i18n_key' => 'inbox.notify.mention',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: activity on a ticket I follow (Doc 06 FR-18's follower events).
+        'category_key' => 'notify.inbox.follower',
+        'label_i18n_key' => 'inbox.notify.follower',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: a ticket was escalated to me.
+        'category_key' => 'notify.inbox.escalation',
+        'label_i18n_key' => 'inbox.notify.escalation',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: SLA warning on one of my tickets. The PRODUCER is Doc 12's
+        // (warned/breached evaluation); the category closes the bell's type
+        // set now, so the row type renders against fixtures until then.
+        'category_key' => 'notify.inbox.sla_warning',
+        'label_i18n_key' => 'inbox.notify.sla_warning',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: reply window closing on one of my tickets (consumes
+        // telegram.window.closing; Doc 05 FR-22's notification option —
+        // OPT-IN, hence in_app default with the user layer).
+        'category_key' => 'notify.inbox.window_closing',
+        'label_i18n_key' => 'inbox.notify.window_closing',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // FR-26: a bulk operation I requested completed (ticket.bulk_completed).
+        'category_key' => 'notify.inbox.bulk_completed',
+        'label_i18n_key' => 'inbox.notify.bulk_completed',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc07',
+    ],
 ];

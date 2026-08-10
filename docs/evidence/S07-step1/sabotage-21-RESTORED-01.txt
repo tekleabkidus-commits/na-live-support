@@ -1,0 +1,25 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.15s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.11s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.09s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.21s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.04s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.03s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.03s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.05s  
+
+   WARN  Tests\Isolation\OutboxChaosTest
+  ✓ it never publishes an event for a write that rolled back (T-03)      0.05s  
+  - it refuses to publish outside a transaction (T-03) → The test harne… 0.03s  
+  ✓ it delivers a committed event even though the relay crashed before…  0.14s  
+  ✓ it produces one event, not two, when a crashed relay re-processes t… 0.15s  
+  ✓ it relays in UUIDv7 order, which is causal order without a wall clo… 0.16s  
+  ✓ it reports lag from the OLDEST unrelayed row, so a stuck row is vis… 0.13s  
+
+  Tests:    1 skipped, 14 passed (112 assertions)
+  Duration: 6.47s
+

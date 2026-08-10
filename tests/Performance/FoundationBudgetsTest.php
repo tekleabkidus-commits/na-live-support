@@ -66,7 +66,10 @@ it('meets the §12 budgets on dev hardware: resolution ≤1ms, settings ≤0.5ms
             'tenant_id' => $tenantId,
             'name' => 'perf.fixture_event',
             'payload' => '{}',
-            'occurred_at' => now(),
+            // occurred_at deliberately absent: app lost column INSERT on it at the
+            // S07 events R-19 treatment (BUILD-STATUS row 9 discharged); the DB
+            // default fills. Harness alignment per the R-19a ConversationSchemaTest
+            // precedent — what this test measures (insert cost) is unchanged.
             'correlation_id' => (string) Str::uuid7(),
         ]);
     });

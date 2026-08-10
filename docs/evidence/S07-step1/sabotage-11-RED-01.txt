@@ -1,0 +1,53 @@
+
+   FAIL  Tests\Isolation\InboxGrantPhysicsTest
+  ⨯ it R-19b: the app-denied column set of every Doc 07 table matches t… 5.38s  
+  ⨯ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.04s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.06s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.04s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.05s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\InboxGrantPhysicsTest > it R-19b: the app-denied…    
+  inbox_notifications INSERT: app-denied columns are [], the filed R-19b analysis says [created_at, read_at] — a column moved without the plan moving
+Failed asserting that two arrays are identical.
+  -Array &0 [
+  -    0 => 'created_at',
+  -    1 => 'read_at',
+  -]
+  +Array &0 []
+  
+
+  at tests/Isolation/InboxGrantPhysicsTest.php:137
+    133▕             sort($expected);
+    134▕ 
+    135▕             [, $denied] = inboxAppColumnSplit($table, $privilege);
+    136▕ 
+  ➜ 137▕             expect($denied)->toBe($expected, sprintf(
+    138▕                 '%s %s: app-denied columns are [%s], the filed R-19b analysis says [%s] — a column moved without the plan moving',
+    139▕                 $table, $privilege, implode(', ', $denied), implode(', ', $expected),
+    140▕             ));
+    141▕         }
+
+  1   tests/Isolation/InboxGrantPhysicsTest.php:137
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\InboxGrantPhysicsTest > it nothing Doc 07 stores…    
+  inbox_notifications: DELETE crept back for app
+Failed asserting that true is false.
+
+  at tests/Isolation/InboxGrantPhysicsTest.php:147
+    143▕ });
+    144▕ 
+    145▕ it('nothing Doc 07 stores is app-deletable — DELETE denied on all seven tables (BR-02 posture; saved-view delete is the tombstone)', function (): void {
+    146▕     foreach (DOC07_TABLES as $table) {
+  ➜ 147▕         expect(inboxAppHasPrivilege($table, 'DELETE'))->toBeFalse("{$table}: DELETE crept back for app");
+    148▕     }
+    149▕ });
+    150▕ 
+    151▕ it('every Doc 07 table carries FORCED row-level security with the tenant_isolation policy', function (): void {
+
+  1   tests/Isolation/InboxGrantPhysicsTest.php:147
+
+
+  Tests:    2 failed, 3 passed (59 assertions)
+  Duration: 5.63s
+

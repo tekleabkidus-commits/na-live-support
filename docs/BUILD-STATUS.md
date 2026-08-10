@@ -81,6 +81,43 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 1: SCHEMA PHYSICS + REGISTRIES + THE ROW-9 DISCHARGE (A-33)
+
+**Built:** the SEVEN Doc 07 tables (`ticket_list_items`, `inbox_saved_views`,
+`inbox_selection_tokens`, `inbox_notifications`, `inbox_user_prefs`,
+`agent_statuses`, `inbox_read_markers` — the seventh filed as S07 SCHEMA
+AMENDMENT 1; C1's `snoozed_until` dropped) with R-19b physics from their first
+migrations; the `events.occurred_at` deferral DISCHARGED per correction C2 and
+ruling **A-33 Option B** — the C2 battery caught the as-filed treatment
+breaking C-09 (OutboxChaosTest red: a re-driven outbox row produced TWO
+events once the relay stopped copying the outbox stamp), the STOP was ruled
+correct, and the final shape is: direct-write guard (clock_timestamp default +
+app column grant, sabotage #16) + the relay's byte-copy restored (C-09 as PK
+physics, pinned structurally, sabotage #21 — list amended 20→21 by A-33) +
+the T-07 watermark contract owed to step 5 (A-33 B-4). Row 9's record
+CORRECTED above (the stamp was always DB time — the app-clock premise was
+wrong). Registered: `views.share` (catalog 112, CatalogSnapshotTest/
+RoleSeederTest pins moved same-commit), `inbox.away.idle_minutes`, the seven
+`notify.inbox.*` categories, `inbox.voice_recording`; `agent.status_changed`
+catalogued (84 events); ten honest not-implemented Doc 07 traceability rows;
+`lang/{en,am}/inbox.php` skeleton.
+
+**Proven (evidence `docs/evidence/S07-step1/`):** canonical suites (extant
+paths, stated per the record-note rule) **9 passed / 95 assertions**
+(`canonical-suites-01.txt`); full suite **980 passed / 0 failed / 13,133
+assertions** (`make-test-02.txt`; the pre-ruling red run `make-test-01.txt`
+is the honest trail — OutboxChaos = the A-33 find; LockoutTest = a
+full-suite-ordering single sighting that passes alone, `lockout-alone-01.txt`,
+lettered on recurrence per D-3); gates **13/13** (`gates-02.txt`; `gates-01.txt`
+red on exactly the A-33 find); lint clean. Sabotages executed fail+restored:
+**#11** (inbox_notifications revoke dropped, migration level —
+`sabotage-11-RED-01/-RESTORED-01.txt`), **#16** (events guard dropped,
+migration level — `sabotage-16-RED-01/-RESTORED-01.txt`), **#21** (relay
+stamp-copy broken — red on exactly the diff assertion, the byte-identical
+proof, the B-1 control AND OutboxChaos's one-event test;
+`sabotage-21-RED-01/-RESTORED-01.txt`). OutboxChaosTest returned green via
+restored physics, never via test change (B-1).
+
 ## SESSION-23 (Doc 05) — "DOC 05 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 
 **Every S23 checkpoint figure and the close-out recount use this and only this:**
@@ -1386,7 +1423,7 @@ form of the same evidence, and both fixes carry positive controls.
 | 6 | **Avatar-media seam** | **CLAIMED + docblocked.** `MediaStore::store()`/`signedUrl()` are channel-independent, so a staff avatar rides scan → store → serve; Doc 08 wires profile usage |
 | 7 | **Route→permission mapping** | Every new route mapped in the same commit, from seeded keys only. The blocking `permission-mapping` gate is green |
 | 8 | **Standing PARTIALs untouched** | Doc 03 SS-01/SS-02 and Doc 02 AC-05 were not re-claimed and not touched |
-| 9 | **`events.created_at` — DEFERRED DB-time conversion (ADR 0010, owner ruling R-19)** | Numbered so it cannot be lost in an ADR consequence list. `events` is the partition key of the append-only domain-event stream and is written from the relay's APP clock — the same C-11 defect R-19 fixed for `messages`. It is out of R-19's scope only because nothing orders it TODAY: `events` is INSERT-only (`OutboxRelay`) and the relay's own cursor is `outbox.id` (UUIDv7), not a timestamp. **UNBLOCKER: convert at the FIRST ordered read or cursor over `events`, or when Doc 14/15 begins, whichever is sooner.** Mechanically identical to the messages cutover — one `ALTER ... SET DEFAULT clock_timestamp()` plus the column grant — so deferring is cheap and forgetting costs the same debugging session twice. `conversations.created_at` is OUT of scope (no orderBy, no cursor, no metric reads it); its unblocker is Doc 06/07 sorting |
+| 9 | **`events.occurred_at` — DB-time conversion: DEFERRAL DISCHARGED at S07 step 1 (correction C2, ruled A-33), with a RECORD CORRECTION** | **CORRECTED (A-33, 2026-08-10): the original premise ("written from the relay's APP clock") was WRONG — the stamp was always DB time: `outbox.occurred_at` defaults to Postgres `now()` at publish and the relay copies it. The real weaknesses were transaction-start ties and commit-order/stamp-order skew.** DISCHARGED at S07 step 1, Doc 07 T-07 being the first ordered read: the treatment = (1) the DIRECT-WRITE guard — `clock_timestamp()` default + the R-19a column grant, app INSERT-denied on `occurred_at`, UPDATE revoked outright (migration `2026_08_10_121000`, sabotage #16 at migration level); (2) the relay KEEPS the byte-copy of `outbox.occurred_at` — the copy is what makes the events PK `(id, occurred_at)` refuse re-driven duplicates (C-09 as physics; the C2 battery caught the relay-time variant breaking OutboxChaosTest — the A-33 checkpoint record); the copy is pinned structurally (diff assertion + byte-identical proof, sabotage #21); (3) ordered reads get the T-07 watermark + UUIDv7 within-stamp tiebreak contract at step 5 (A-33 B-4). `conversations.created_at` remains OUT of scope; its unblocker is Doc 06/07 sorting |
 
 ### CI RECORD — run 31127499107 on `d1c11f4` was INFRASTRUCTURE, NOT A RED TEST
 

@@ -1633,3 +1633,117 @@ entries:
     gap: >-
       The PIXEL half is NOT claimed: Batch 6 pixel baselines are not exported
       (DESIGN-DEVIATIONS row 2, the Doc 03 precedent). Functional-state coverage only.
+
+  # ── Doc 07: flipped at S07 step 1 (ADR 0004 per-document flip; the S22 step-1
+  #    precedent — honest not-implemented rows naming the approved plan's suite and
+  #    step; each row upgrades to automated in the step that executes it) ──────────
+  - ac_ref: "Doc07 AC-01"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Layout matrix: four breakpoints, persisted sizes/collapse restore. Lands at approved-plan step 8 as
+      tests/Browser/inbox-layout.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-02"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Views: system-view membership fixtures == direct queries; saved-view CRUD/share/duplicate round-trips; EC-04 per-viewer counts (A-30/A-32). Lands at approved-plan step 4 as
+      tests/Feature/Inbox/SystemViewMembershipTest.php + SavedViewsTest.php + PerViewerCountsTest.php; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Live list: scripted delta streams produce the exact FR-11 behaviors with visual assertions. Lands at approved-plan step 9 as
+      tests/Browser/inbox-live-list.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Composer: all Doc 05/04 channel states per contract; send-and-set-status success + partial-failure. Lands at approved-plan step 11 as
+      tests/Feature/Inbox/ComposerStateResolverTest.php + SendAndSetStatusTest.php + tests/Browser/inbox-composer-states.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-05"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Mode-safety heuristic x50 + zero note payloads reach adapters (Doc 04 AC-04 integration). Lands at approved-plan step 11 as
+      tests/Feature/Inbox/ModeSafetyHeuristicTest.php + tests/Browser/inbox-composer-modes.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Collision: dual-session strip, send-race confirm, exactly one visible outcome ordering. Lands at approved-plan step 11 as
+      tests/Browser/inbox-collision.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-07"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Offline: 2-min cut -> in-order flush, drafts intact, stores converge (sync golden). Lands at approved-plan step 13 as
+      tests/Browser/inbox-offline.spec.ts + tests/Feature/Inbox/SyncGoldenTest.php; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-08"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Shortcuts: every FR-31 binding e2e; overlay matches live bindings; no browser-default conflicts. Lands at approved-plan step 13 as
+      tests/Browser/inbox-shortcuts.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-09"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Search: scope-injection fixtures (Doc 03 AC-03 reuse) prove no out-of-scope hits; anchored highlighted deep links. Lands at approved-plan step 6 as
+      tests/Security/InboxSearchScopeTest.php + tests/Browser/inbox-search-anchor.spec.ts; this row flips to automated in that step's commit.
+  - ac_ref: "Doc07 AC-10"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: not-implemented
+    justification: >-
+      NOT IMPLEMENTED AT S07 STEP 1. Perf: CI budgets (NFR-01/03/04); soak structure; projector lag SLO (L2 halves -> Doc 19 bucket, stated). Lands at approved-plan step 15 as
+      tests/Performance/InboxBudgetsTest.php + CI budget stages; this row flips to automated in that step's commit.

@@ -12,7 +12,16 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-83 event(s).
+84 event(s).
+
+## `agent.status_changed`
+
+FR-28: an agent's availability changed (online|away|offline; reason manual|auto_idle|heartbeat_lost|forced|logout). Doc 11 consumes it for routability; Doc 15 counts transitions — active-time metrics derive from activity events, never from this state (BR-06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `user_id`, `status`, `reason`, `set_by_user_id`
+- **Producers:** Doc07/AgentStatus
+- **Consumers:** Doc11/Routing, Doc15/Reporting
 
 ## `auth.2fa.challenge_failed`
 
