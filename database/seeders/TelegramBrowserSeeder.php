@@ -131,11 +131,19 @@ final class TelegramBrowserSeeder extends Seeder
                 'id' => $menuId, 'tenant_id' => $row->id, 'bot_id' => $bot->id,
                 'language' => 'en', 'draft' => json_encode($definition),
             ]);
+            // published_by must be a REAL user (FK to users) — a random uuid
+            // here failed CI's fresh-DB seed on every FIRST attempt while the
+            // retry passed off the partially-seeded menus row (the a01833b
+            // Stage-4 "flake", diagnosed via the step-12 harness fix).
+            $publisher = DB::table('users')->where('email', BrowserFixtureSeeder::PRIMARY_EMAIL)->value('id');
+            if (! is_string($publisher)) {
+                throw new RuntimeException('Run BrowserFixtureSeeder first — the fixture admin does not exist.');
+            }
             foreach ([5, 6, 7] as $v) {
                 DB::table('telegram_menu_versions')->insert([
                     'id' => (string) Str::uuid7(), 'tenant_id' => $row->id, 'menu_id' => $menuId,
                     'version' => $v, 'definition' => json_encode($definition),
-                    'published_by' => (string) Str::uuid7(),
+                    'published_by' => $publisher,
                 ]);
             }
             $liveId = DB::table('telegram_menu_versions')->where('menu_id', $menuId)->where('version', 7)->value('id');
