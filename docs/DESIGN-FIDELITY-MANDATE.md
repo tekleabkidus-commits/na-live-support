@@ -3,7 +3,9 @@ _File 4 of the handoff package. Commit to `docs/` beside PROJECT-HANDOFF.md. Thi
 every Claude Code session that builds anything a user sees. The advisor folds its rules into
 every session prompt whose scope includes a designed surface (SESSION-PROMPT-SPEC.md §B
 gains this as a mandatory block), and the owner attaches the relevant design files directly
-to the terminal session alongside it._
+to the terminal session alongside it. Carried forward UNCHANGED from the v3/v4/v5 kits (the
+owner has not amended it); v6 note: the S23 build added four filed deviations and committed
+the re-runnable hex-extraction script — see PROJECT-HANDOFF-v6 §10._
 
 ---
 
