@@ -118,6 +118,19 @@ proof, the B-1 control AND OutboxChaos's one-event test;
 `sabotage-21-RED-01/-RESTORED-01.txt`). OutboxChaosTest returned green via
 restored physics, never via test change (B-1).
 
+**CI record (step 1, checked ONCE per rule 15):** run
+[31404042962](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31404042962)
+on `b21f244` — **INFRASTRUCTURE, NOT A RED TEST** (the run-31127499107 class):
+Stage 1 was never started, annotation verbatim: "The job was not started
+because recent account payments have failed or your spending limit needs to
+be increased." Zero tests executed; it carries no information about the tree
+in either direction (capture:
+`docs/evidence/S07-step1/ci-31404042962-view-01.txt`). **OWNER ACTION: the
+Actions billing/spending limit** — the same owner-only unblocker as the S21
+precedent. The CI verdict for the step-1 tree is OWED FORWARD and will be
+taken from the first run after billing is restored (a re-trigger on the same
+tree), reported at the next checkpoint.
+
 ## SESSION-23 (Doc 05) — "DOC 05 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 
 **Every S23 checkpoint figure and the close-out recount use this and only this:**
