@@ -1123,3 +1123,69 @@ fallback is the ruled rendering.)
 reserved to their semantic components per design-system law R-07/R-08.
 (This also answers the B6-S06 delivery note's carried SLA-token question,
 DESIGN-DEVIATIONS row 8: the as-drawn ink ramp is the ruled rendering.)
+
+---
+
+## S07 (Doc 07) plan-approval rulings — advisor-ruled, owner-approved, 2026-08-10
+
+Filed at plan approval, before implementation (the committed plan is
+`docs/SESSION-07-APPROVED-PLAN.md`). A-30/A-31 are advisor-countersigned filed
+interpretations; A-32 is an advisor ruling the owner may override. The doc author has
+NOT been consulted. This record is canonical over any restatement in commits or
+BUILD-STATUS.
+
+### A-30 (COUNTERSIGNED). EC-04 per-viewer counts ride per-scope ZSET variants
+
+Doc 07 T-01 flags the per-scope-ZSET-variant-or-filtered-count decision and EC-04
+requires per-viewer counts under BR-03's no-hidden-rows-indication rule. FILED: the
+view-hash embeds the viewer's resolved Doc 03 scope signature (SEC-01 already requires
+scope context in the hash); viewers whose resolved scope differs get a materialized
+variant ZSET, patched by the same projector delta path; ZCARD per variant is the
+per-viewer count. Chosen over filtered-count-at-read because T-03 requires counts
+PUSHED on delta (debounced 2 s) — a read-time filter per push per viewer is a stampede
+by construction. COUNTERSIGN CONDITIONS, binding: (1) variants materialize LAZILY on
+first subscribe; (2) eviction/volatility documented per C-07; (3) FS-02's rebuild
+covers variant loss; (4) the EC-04 fixture proves two scopes → two counts with zero
+out-of-scope rows.
+
+### A-31 (COUNTERSIGNED). The T-07 sync endpoint's scope filter joins through ticket_list_items
+
+T-07 returns "ordered events since cursor for the user's subscribed scopes" without
+naming the scope mechanism. FILED: the sync read filters `events` by tenant + the
+consumer-relevant name set, then applies the SAME scope predicate the lists use —
+joining through `ticket_list_items` for ticket/message events — so reconnect delivery
+equals list/thread visibility exactly. COUNTERSIGN CONDITION: the reconnect golden
+asserts a scope-excluded event never reaches the narrower client.
+
+### A-32 (RULED, advisor; owner may override). A mention is "unresolved" until the mentioned agent opens the thread or dismisses the bell row
+
+Doc 07 FR-05 defines the Mentions system view as "unresolved @mentions" and defines
+"unresolved" nowhere. RULED as proposed: a mention is unresolved from `note.mentioned`
+until the mentioned agent next opens that ticket's thread or dismisses the bell row;
+Mentions-view membership = tickets with unresolved mentions for the viewer. Trade-off
+named at ruling: lower-friction than an explicit resolve action, at the cost of
+"glanced but not handled" leaving the view — acceptable for v1, revisit on dogfood
+feedback. AC-02's membership fixture is written against this definition.
+
+### Corrections bound at S07 plan approval (advisor, binding)
+
+- **C1**: `ticket_list_items.snoozed_until` DROPPED — no Doc 07 text demands it
+  (FR-31's "S" is snooze-to-pending, Doc 06's status action; the time picker is §19).
+  No invented schema.
+- **C2**: the `events.occurred_at` R-19 treatment is BUILD-STATUS row 9's filed
+  deferral discharging, not a new core-edit decision — but it edits Doc 01's relay
+  path, so the S23 ruled-edit pattern applies: relay-side change enumerated in a
+  committed diff assertion citing row 9; sabotage #16 at the migration level; the
+  step-1 battery includes the Doc 01–06 suites as the event-write regression proof.
+- **C3**: Doc 03 EC-02 reconciles at close-out against the row's CURRENT BUILD-STATUS
+  text (transition half CLOSED at S22 step 2; the S19 audit row carries the UI-state
+  half) — executed evidence only, no double-closing.
+- **C4**: the PROJECT-HANDOFF-v6 gap is RULED — the committed session prompt
+  (`90ec851`) is the binding restatement of the inherited rows; the owner filed the
+  v6 kit at `8e3c0b4` (governance #2's third recurrence, caught at the S07 reading
+  check).
+- `inbox.away.idle_minutes` registers `tenant_editable: true` — APPROVED (operator
+  policy per BR-06/§21; the editing surface arrives with Doc 16).
+- **Stack growth APPROVED (R-15)**: `@tanstack/vue-virtual`, `pinia`, `@lhci/cli`
+  (dev/CI only); the declined list (in-house fuzzy scorer, native
+  BroadcastChannel/IndexedDB, existing Playwright/scout) accepted as stated.
