@@ -867,4 +867,14 @@ return [
         'required_fields' => ['action', 'resolved', 'skipped'],
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 07 FR-28 (S07 step 12): a supervisor FORCED another agent's
+        // availability — Doc 03's supervision.agent_status.force key, with
+        // attribution ("set by …") stored on the agent_statuses row.
+        'action_key' => 'agent.status_forced',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['status'],
+        'owning_doc' => 'Doc07',
+    ],
 ];

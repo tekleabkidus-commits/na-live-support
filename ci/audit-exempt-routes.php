@@ -87,4 +87,7 @@ return [
     'inbox.read' => 'Doc 07 SCHEMA AMENDMENT 1: the viewer\'s OWN read marker — per-user unread state, invisible to everyone else (BR-06: no metric reads it); the prefs-update rationale verbatim.',
     'inbox.composer.reply' => 'Doc 04/07: an agent reply\'s trail is the EVENT stream (message.queued → the FR-13 delivery machine, every hop evented); a per-message audit row would duplicate the canonical trail. The FR-21 transition half audits through its own door.',
     'inbox.composer.draft' => 'Doc 04 FR-20/T-07: the author\'s OWN draft — private by design (never visible to another principal), tombstoned on send; the prefs-update rationale.',
+    'inbox.notifications.read_all' => 'Doc 07 FR-26: the viewer\'s OWN bell read-state (read_at is the only app-updatable column — R-19b); the read-marker rationale verbatim.',
+    'inbox.status.set' => 'Doc 07 FR-28: the agent\'s OWN availability — every transition is EVENTED (agent.status_changed, catalogued; Doc 11/15 consume); FORCED transitions audit through their own door.',
+    'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
 ];

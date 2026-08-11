@@ -139,6 +139,22 @@ Route::middleware([
         ->middleware('permission:tickets.reply')->name('inbox.composer.draft');
     Route::post('thread/{conversationId}/transition', [App\Http\Controllers\Inbox\ComposerController::class, 'transition'])
         ->middleware(['permission:tickets.status.change', 'audit:ticket.status_changed'])->name('inbox.composer.transition');
+    // ── FR-26 bell + FR-28 status (S07 step 12). Reads on the audience
+    // key; mark-all-read + set-own-status are per-user workspace-state
+    // writes on views.manage (R-26 AMENDMENT, FIFTH + SIXTH siblings —
+    // cited, flagged at the checkpoint). Force = Doc 03's key + audit.
+    Route::get('notifications', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'notifications'])
+        ->middleware('permission:tickets.view')->name('inbox.notifications');
+    Route::post('notifications/read-all', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'markAllRead'])
+        ->middleware('permission:views.manage')->name('inbox.notifications.read_all');
+    Route::get('status', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'currentStatus'])
+        ->middleware('permission:tickets.view')->name('inbox.status');
+    Route::post('status', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'setStatus'])
+        ->middleware('permission:views.manage')->name('inbox.status.set');
+    Route::post('status/heartbeat', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'heartbeat'])
+        ->middleware('permission:views.manage')->name('inbox.status.heartbeat');
+    Route::post('status/{userId}/force', [App\Http\Controllers\Inbox\StatusNotificationsController::class, 'forceStatus'])
+        ->middleware(['permission:supervision.agent_status.force', 'audit:agent.status_forced'])->name('inbox.status.force');
     // FR-15 deep links: /inbox/t/{ticket} and /inbox/c/{conversation} — the
     // workspace opens with the thread resolved; EC-01 out-of-scope → the
     // 404-pattern PAGE with "search instead", never an existence oracle.
