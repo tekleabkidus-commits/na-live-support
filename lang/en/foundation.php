@@ -63,6 +63,9 @@ return [
         'read_only_view' => 'Shared views are read-only',
         'view_not_found' => 'View not found',
         'resource_not_found' => 'Not found',
+        'reopen_confirmation_required' => 'The ticket is resolved — confirm to reopen and send',
+        'transition_rejected' => 'The status change was refused',
+        'conversation_blocked' => 'This conversation cannot receive replies',
     ],
 
     'provisioning' => [

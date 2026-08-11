@@ -85,4 +85,6 @@ return [
     'inbox.prefs.update' => 'Doc 07 FR-08/BR-05: the user\'s own UI preferences (view order, density, sounds) — per-user choices by document design, no admin relevance.',
     'inbox.selections.store' => 'Doc 07 T-05: MINTING a selection token is the act of selecting rows — ephemeral, single-use, user-bound, mutating nothing anyone else sees; the EXECUTION is the wide mutation and carries the audit (inbox.selection_executed).',
     'inbox.read' => 'Doc 07 SCHEMA AMENDMENT 1: the viewer\'s OWN read marker — per-user unread state, invisible to everyone else (BR-06: no metric reads it); the prefs-update rationale verbatim.',
+    'inbox.composer.reply' => 'Doc 04/07: an agent reply\'s trail is the EVENT stream (message.queued → the FR-13 delivery machine, every hop evented); a per-message audit row would duplicate the canonical trail. The FR-21 transition half audits through its own door.',
+    'inbox.composer.draft' => 'Doc 04 FR-20/T-07: the author\'s OWN draft — private by design (never visible to another principal), tombstoned on send; the prefs-update rationale.',
 ];

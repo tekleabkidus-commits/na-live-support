@@ -60,6 +60,9 @@ return [
         'read_only_view' => 'የተጋሩ እይታዎች ለንባብ ብቻ ናቸው',
         'view_not_found' => 'እይታው አልተገኘም',
         'resource_not_found' => 'አልተገኘም',
+        'reopen_confirmation_required' => 'ቲኬቱ ተፈትቷል — እንደገና ለመክፈትና ለመላክ ያረጋግጡ',
+        'transition_rejected' => 'የሁኔታ ለውጡ ተከልክሏል',
+        'conversation_blocked' => 'ይህ ውይይት መልሶችን መቀበል አይችልም',
         'dead_letter_not_parked' => 'አስቀድሞ እንደገና ተልኳል',
     ],
 

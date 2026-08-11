@@ -128,6 +128,17 @@ Route::middleware([
     // §9 print (SEC-05: note gate + watermark; sabotage #20's target).
     Route::get('thread/{conversationId}/print', [App\Http\Controllers\Inbox\ThreadController::class, 'print'])
         ->middleware('permission:conversations.view')->name('inbox.thread.print');
+    // ── The composer's doors (S07 step 11). MODE SAFETY IS STRUCTURAL:
+    // reply and note are SEPARATE routes to SEPARATE services — the note
+    // door has no adapter path beyond it (N-04; sabotage #14's target).
+    Route::post('thread/{conversationId}/reply', [App\Http\Controllers\Inbox\ComposerController::class, 'reply'])
+        ->middleware('permission:tickets.reply')->name('inbox.composer.reply');
+    Route::post('thread/{conversationId}/note', [App\Http\Controllers\Inbox\ComposerController::class, 'note'])
+        ->middleware(['permission:tickets.note', 'audit:conversation.note_added'])->name('inbox.composer.note');
+    Route::patch('thread/{conversationId}/draft', [App\Http\Controllers\Inbox\ComposerController::class, 'draft'])
+        ->middleware('permission:tickets.reply')->name('inbox.composer.draft');
+    Route::post('thread/{conversationId}/transition', [App\Http\Controllers\Inbox\ComposerController::class, 'transition'])
+        ->middleware(['permission:tickets.status.change', 'audit:ticket.status_changed'])->name('inbox.composer.transition');
     // FR-15 deep links: /inbox/t/{ticket} and /inbox/c/{conversation} — the
     // workspace opens with the thread resolved; EC-01 out-of-scope → the
     // 404-pattern PAGE with "search instead", never an existence oracle.

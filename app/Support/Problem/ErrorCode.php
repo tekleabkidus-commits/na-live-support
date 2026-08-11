@@ -146,6 +146,12 @@ enum ErrorCode: string
     // answer for missing AND out-of-scope (C-10: no existence oracle).
     case ResourceNotFound = 'resource_not_found';
 
+    // S07 step 11 — the composer's stable refusals (Doc 07 FR-21, Doc 06
+    // EC-08's prompt, Doc 04 BR-02's blocked conversation).
+    case ReopenConfirmationRequired = 'reopen_confirmation_required';
+    case TransitionRejected = 'transition_rejected';
+    case ConversationBlocked = 'conversation_blocked';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
