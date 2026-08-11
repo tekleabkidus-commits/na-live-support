@@ -1109,6 +1109,30 @@ absorption is REFUSED (owner order).**
   not a cleanup.
 - Both captures are committed and unfiltered; a pointer to this filing is
   appended at 0b.
+- **Sighting C (S07 step 5, in-session):** the journey 429-where-accepted
+  shape recurred locally; RUNG 1 EXECUTED per the ratified disposition —
+  the failure-time snapshot afterEach landed in the file; re-run once
+  green, recorded.
+- **Sighting D (S07 step 9's CI run — the FIRST CI-SIDE RECURRENCE; 0f
+  order (2), advisor 2026-08-11):** run
+  [31474873969](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31474873969)
+  Stage 3, the journey's first request 429. THE RUNG-1 SNAPSHOT FIRED and
+  emitted `[]` — and that emptiness exposed TWO instrumentation defects,
+  both fixed under 0f order (1): (a) the v1 pattern `*limiter*` can NEVER
+  match — Laravel's RateLimiter stores md5-hashed cache keys with no such
+  substring, so the v1 snapshot was blind from birth; (b) the step-10
+  checkpoint report called the snapshot "silent" — a REPORTING ERROR
+  (case-sensitive grep on the wrong log surface); the emission is at line
+  4512 of the Stage-3 log, and this correction supersedes that sentence.
+  **v2 instrumentation** now asks the RateLimiter for the suspect
+  auth-ip bucket's live attempt count (the bleed-vs-product-write
+  discriminator directly) and dumps the LIVE volatile keyspace with TTLs,
+  capped at 200 keys with the cap stated. PROVEN with a deliberate
+  in-isolation failure, captures kept
+  (`docs/evidence/S07-step11/0f-rung1-v2-deliberate-fail-01/-02.txt`; -01
+  also documents why the dump filters to live keys — 5091 stale entries of
+  noise). Per order (3): NO separate re-trigger; the step-10 push's run is
+  the next look, taken once at the step-11 checkpoint.
 
 **Order 3 — the TicketsBudgets linearity failure, capture cited, CLASSED
 KNOWN (host-load, single-sighting).** Capture:

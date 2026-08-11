@@ -1,0 +1,27 @@
+
+0f RUNG-1 SNAPSHOT v2 (failure-time): auth-ip suspect bucket 90c4e30366192699e3708439c0fad6db attempts=0 | live volatile keys: 0 | []
+
+   FAIL  Tests\Feature\Auth\PasswordResetFlowTest
+  ⨯ it runs the whole FR-16 journey: request → email → new password → o… 5.09s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Auth\PasswordResetFlowTest > it runs the whole FR-1…   
+  DELIBERATE FAILURE — 0f rung-1 v2 instrumentation proof
+Failed asserting that false is true.
+
+  at tests/Feature/Auth/PasswordResetFlowTest.php:143
+    139▕ });
+    140▕ 
+    141▕ it('runs the whole FR-16 journey: request → email → new password → old dead, new works', function (): void {
+    142▕     [$tenant, $user] = resetUser();
+  ➜ 143▕     expect(false)->toBeTrue('DELIBERATE FAILURE — 0f rung-1 v2 instrumentation proof'); // TEMP
+    144▕ 
+    145▕     requestReset('reset@fixture.example')->assertOk()->assertExactJson(['status' => 'accepted']);
+    146▕ 
+    147▕     $tokens = queuedResetTokens();
+
+  1   tests/Feature/Auth/PasswordResetFlowTest.php:143
+
+
+  Tests:    1 failed (1 assertions)
+  Duration: 5.15s
+

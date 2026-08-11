@@ -95,13 +95,30 @@ function submitReset(string $token, string $password): Illuminate\Testing\TestRe
 // discriminator attached. Diagnostics only — no proof or budget changed.
 afterEach(function (): void {
     if (! $this->status()->isSuccess()) {
+        // v2 (0f order (1), 2026-08-11): the v1 pattern '*limiter*' could
+        // NEVER match — Laravel's RateLimiter stores md5-hashed cache keys
+        // with no such substring, so CI run 31474873969's snapshot emitted
+        // an empty []. v2 asks the RateLimiter itself for the suspect
+        // bucket's live attempt count (the bleed-vs-product-write
+        // discriminator) and dumps the WHOLE volatile keyspace with TTLs
+        // (tiny under test), so no pattern assumption can blind it again.
+        $suspectKey = md5('auth-ip'.'127.0.0.1');
+        $attempts = app(RateLimiter::class)->attempts($suspectKey);
+        $redis = Illuminate\Support\Facades\Redis::connection('volatile');
         /** @var list<string> $keys */
-        $keys = Illuminate\Support\Facades\Redis::connection('volatile')->keys('*limiter*');
-        $snapshot = [];
+        $keys = $redis->keys('*');
+        $live = [];
         foreach ($keys as $key) {
-            $snapshot[$key] = Illuminate\Support\Facades\Redis::connection('volatile')->get($key);
+            $ttl = (int) $redis->ttl($key);
+            if ($ttl >= 0) { // live keys only — expired residue is noise, not evidence
+                $live[$key] = $ttl;
+            }
         }
-        fwrite(STDERR, "\n0f RUNG-1 LIMITER SNAPSHOT (failure-time): ".json_encode($snapshot, JSON_PRETTY_PRINT)."\n");
+        $total = count($live);
+        $shown = array_slice($live, 0, 200, true); // capped, and the cap is SAID (no silent truncation)
+        fwrite(STDERR, "\n0f RUNG-1 SNAPSHOT v2 (failure-time): auth-ip suspect bucket {$suspectKey} attempts={$attempts}"
+            .' | live volatile keys: '.$total.(count($shown) < $total ? ' (first 200 shown)' : '')
+            .' | '.json_encode($shown)."\n");
     }
 });
 
