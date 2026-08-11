@@ -133,6 +133,17 @@ Route::middleware([
     Route::get('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'show'])
         ->middleware('permission:tickets.view')->name('inbox.prefs.show');
 
+    // T-05: server-side selections — MINT rides views.manage (the R-26
+    // principle, third application, flagged for countersign at the 6+7
+    // report: a token row is an ephemeral workspace write; the sweep's
+    // zero-writes bar for Read Only is absolute, and RO could execute no
+    // bulk action regardless). Execute is audited; per-item permissions are
+    // Doc 06's live checks (SEC-04 structural).
+    Route::post('selections', [App\Http\Controllers\Inbox\SelectionController::class, 'store'])
+        ->middleware('permission:views.manage')->name('inbox.selections.store');
+    Route::post('selections/{tokenId}/execute', [App\Http\Controllers\Inbox\SelectionController::class, 'execute'])
+        ->middleware(['permission:views.manage', 'audit:inbox.selection_executed'])->name('inbox.selections.execute');
+
     // FR-23/SEC-02: the search proxy — the ONLY search path; the request
     // contract is the query string alone.
     Route::get('search', App\Http\Controllers\Inbox\SearchController::class)

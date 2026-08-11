@@ -1,0 +1,99 @@
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 5.29s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.10s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.10s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.06s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.06s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 1.25s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  1.04s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.45s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.44s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 1.13s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.80s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.08s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.78s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.93s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.88s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.03s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 1.51s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.48s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 3.75s  
+
+   PASS  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 1.81s  
+  ✓ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.31s  
+  ✓ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.17s  
+  ✓ it FR-08: view order persists per user through the prefs door, merg… 0.16s  
+  ✓ it R-26/A-34: Read Only cannot WRITE views (the SEV-1, flipped by t… 0.69s  
+
+   PASS  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 3.21s  
+  ✓ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.29s  
+  ✓ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 83.23s  
+  ✓ it the HTTP doors: both ride views.manage (the R-26 principle, thir… 1.43s  
+  ✓ it R-26 third application, the EXECUTED refusal: a Read Only-shaped… 1.27s  
+
+   PASS  Tests\Feature\Inbox\SyncGoldenTest
+  ✓ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  0.11s  
+  ✓ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.08s  
+  ✓ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 1.29s  
+  ✓ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.09s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.44s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 1.53s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 1.57s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.52s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 1.53s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 2.01s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 3.63s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 0.97s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.11s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.10s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 1.48s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  1.50s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.05s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.04s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.02s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.02s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.17s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.03s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.04s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.03s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.05s  
+
+   PASS  Tests\Security\InboxSearchScopeTest
+  ✓ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 1.14s  
+  ✓ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 2.01s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  1.19s  
+  ✓ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.67s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 1.52s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.69s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  1.85s  
+
+  Tests:    63 passed (447 assertions)
+  Duration: 139.40s
+

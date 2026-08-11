@@ -81,6 +81,60 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 7: T-05 SERVER-SIDE SELECTIONS (SEC-06/EC-02/EC-05) — THE BULK BRIDGE
+
+**Built:** `SelectionTokens` (T-05) — "select all in view" mints a SERVER-SIDE
+token (view key + filter snapshot + the TRUE ZCARD count at mint), and the
+three properties the plan ordered PROVEN BEFORE any bulk wiring all hold by
+construction: USER-BOUND (a colleague's attempt answers exactly like a
+missing token — C-10, nothing consumed), SINGLE-USE (the consumed_at latch
+claimed atomically via `UPDATE … WHERE consumed_at IS NULL`, the only UPDATE
+the column grant allows — sabotage #4's target), EXECUTION-TIME RESOLUTION
+(ids resolve from the LIVE view membership, never a mint-time list; the
+drift report — "N items left the view and were skipped" — is server truth
+for EC-02's tray). EC-05: a past-cap intent chunks per
+`BulkOperation::MAX_ITEMS` (FR-25's 200) into first-class ticket_bulk_jobs
+rows — the queued-batches drawer's data; Doc 06's per-tenant concurrency cap
+serializes them (sabotage #3's target). HTTP doors `POST /inbox/selections`
++ `/{tokenId}/execute` (RFC 9457 codes empty_selection/token_consumed→409;
+execute audited `inbox.selection_executed` with action + drift counts,
+SEC-03); i18n en+am; mint exempted from audit-coverage with justification
+(reads like a query, writes only its own token row).
+
+**THE STEP'S SEV-1, CAUGHT BY THE FULL BATTERY AND RESOLVED AS R-26's THIRD
+APPLICATION (flagged for advisor countersign in the 6+7 report):** the
+ReadOnlySweep refused the step as first mapped — `POST inbox/selections`
+rode `tickets.view`, which the seeded Read Only template holds, and minting
+inserts a row (an accepted write under the sweep's zero-writes bar); the
+execute door then failed the same bar (a 302 validation redirect counts as
+accepted). Both doors now ride `views.manage` — the exact principle the
+owner signed in R-26/A-34 and the advisor countersigned again for the prefs
+write: a selection token is a per-user workspace-state write, every working
+template holds the key by seeding, and Read Only's exclusion is COMPUTED
+physics (it could execute no bulk action regardless). The refusal is now an
+EXECUTED proof in SelectionTokensTest (403 at both doors, zero token rows
+written), and the sweep stands unchanged as the enforcing test.
+
+**SECOND SIGHTING of the sync-driver middleware trap (flagged for the 6+7
+report):** under queue=sync, `TicketBulkJob` runs INLINE inside
+`BulkOperation::submit()` and `BindTenantContextToJob` CLEARS the dispatcher's
+ambient binding in its finally instead of restoring it — the caller's own
+audit write after the loop died unbound. `SelectionTokens::execute` carries a
+guarded restore (rebinds only when the context went null); production redis
+queues never enter the branch. With step 6's indexer sighting this makes the
+clear-not-restore semantics a candidate ruled CORE EDIT — raised to the
+advisor, not self-served.
+
+**Proven (evidence `docs/evidence/S07-step7/`):** canonical command verbatim
+**63 passed / 447 assertions** (`canonical-suites-final-02.txt`); full suite
+**1034 passed / 0 failed / 13,708 assertions** (`make-test-03.txt`; the
+SEV-1 red that forced the remap is `make-test-01.txt`, unfiltered); gates
+**13/13** (`make-gates-01.txt`, permission-mapping green on the remap); lint
+clean; PHPStan max clean. **Sabotage #3** (chunking removed → Doc 06's own
+FR-25 refusal turns EC-05 red → restored: `sabotage-3-RED-01/-RESTORED-01.txt`).
+**Sabotage #4** (latch WHERE dropped at the mechanism → the reuse proof red →
+restored: `sabotage-4-RED-01/-RESTORED-01.txt`).
+
 ## SESSION-07 (Doc 07) — STEP 6: SEARCH (T-04/SEC-02/AC-09) — MEILISEARCH'S FIRST REAL CONSUMER
 
 **Built:** running substrate since S0, indexed for the FIRST time here.

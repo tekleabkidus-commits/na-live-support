@@ -1,0 +1,41 @@
+
+   FAIL  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 8.41s  
+  ⨯ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.47s  
+  ✓ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 91.69s  
+  ⨯ it the HTTP doors: mint on tickets.view; execute audited with actio… 1.38s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SelectionTokensTest > it SEC-06: the token is…   
+  Exception "DomainException" not thrown.
+
+  at tests/Feature/Inbox/SelectionTokensTest.php:93
+     89▕ 
+     90▕     // SINGLE-USE: first execute lands; the replay refuses on the latch.
+     91▕     $tokens->execute($minter, $minted['id'], 'priority', ['priority' => 'high']);
+     92▕     expect(fn () => $tokens->execute($minter, $minted['id'], 'priority', ['priority' => 'high']))
+  ➜  93▕         ->toThrow(DomainException::class, 'token_consumed');
+     94▕ });
+     95▕ 
+     96▕ it('EC-05: a selection past the Doc 06 cap executes as QUEUED BATCHES — every submitted batch ≤ BulkOperation::MAX_ITEMS (sabotage #3: chunking removed → Doc 06\'s own bulk-limit refusal turns this red)', function (): void {
+     97▕     [$tenant, $tenantId] = selectionScene(BulkOperation::MAX_ITEMS + 1); // 201
+
+  1   tests/Feature/Inbox/SelectionTokensTest.php:93
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SelectionTokensTest > it the HTTP doors: mint…   
+  Expected response status code [409] but received 200.
+Failed asserting that 200 is identical to 409.
+
+  at tests/Feature/Inbox/SelectionTokensTest.php:138
+    134▕         expect(DB::table('audit_log')->where('action_key', 'inbox.selection_executed')->count())->toBeGreaterThanOrEqual(1);
+    135▕     });
+    136▕ 
+    137▕     $replay = $this->actingAs($actor, 'staff')->postJson("https://localhost/inbox/selections/{$minted->json('id')}/execute", ['action' => 'priority', 'params' => ['priority' => 'high']]);
+  ➜ 138▕     $replay->assertStatus(409);
+    139▕ });
+    140▕
+
+
+  Tests:    2 failed, 2 passed (25 assertions)
+  Duration: 103.01s
+

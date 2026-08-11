@@ -1,0 +1,28 @@
+
+   FAIL  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 8.21s  
+  ✓ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.28s  
+  ⨯ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 84.96s  
+  ✓ it the HTTP doors: mint on tickets.view; execute audited with actio… 1.65s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\SelectionTokensTest > it EC-…  DomainException   
+  FR-25 caps a batch at 200 tickets; this one has 201. Split the selection.
+
+  at app/Domain/Tickets/Bulk/BulkOperation.php:53
+     49▕             throw new DomainException('a bulk operation with no tickets does nothing (FR-25).');
+     50▕         }
+     51▕ 
+     52▕         if (count($ids) > self::MAX_ITEMS) {
+  ➜  53▕             throw new DomainException(sprintf('FR-25 caps a batch at %d tickets; this one has %d. Split the selection.', self::MAX_ITEMS, count($ids)));
+     54▕         }
+     55▕ 
+     56▕         $known = Ticket::query()->whereIn('id', $ids)->count();
+     57▕
+
+  1   app/Domain/Tickets/Bulk/BulkOperation.php:53
+  2   app/Domain/Inbox/Selection/SelectionTokens.php:108
+
+
+  Tests:    1 failed, 3 passed (19 assertions)
+  Duration: 96.16s
+

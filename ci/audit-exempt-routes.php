@@ -83,4 +83,5 @@ return [
     'inbox.views.destroy' => 'Doc 07 FR-06: tombstone of the caller\'s own definition (deleted_at; DELETE is grant-revoked).',
     'inbox.views.duplicate' => 'Doc 07 AC-02: creates the caller\'s own private copy; no shared state changes.',
     'inbox.prefs.update' => 'Doc 07 FR-08/BR-05: the user\'s own UI preferences (view order, density, sounds) — per-user choices by document design, no admin relevance.',
+    'inbox.selections.store' => 'Doc 07 T-05: MINTING a selection token is the act of selecting rows — ephemeral, single-use, user-bound, mutating nothing anyone else sees; the EXECUTION is the wide mutation and carries the audit (inbox.selection_executed).',
 ];

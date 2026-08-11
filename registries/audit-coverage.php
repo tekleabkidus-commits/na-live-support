@@ -858,4 +858,13 @@ return [
         'required_fields' => [],
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 07 T-05/SEC-03 (S07 step 7): a selection-token execution is a
+        // WIDE mutation — audited with actor, action and the drift counts.
+        'action_key' => 'inbox.selection_executed',
+        'entity' => 'inbox_selection_token',
+        'actor_types' => ['staff'],
+        'required_fields' => ['action', 'resolved', 'skipped'],
+        'owning_doc' => 'Doc07',
+    ],
 ];

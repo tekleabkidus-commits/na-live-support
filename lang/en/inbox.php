@@ -25,4 +25,8 @@ return [
     'feature' => [
         'voice_recording' => 'Composer voice recording',
     ],
+    'selection' => [
+        'empty' => 'Nothing to select — this view is empty.',
+        'consumed' => 'This selection was already executed — reselect to run another action.',
+    ],
 ];
