@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Domain\Conversations\Adapters\AdapterRegistry;
 use App\Domain\Conversations\Adapters\Capabilities;
 use App\Domain\Conversations\Adapters\ReplyWindow;
-use Tests\Support\Adapters\FakeChannelAdapter;
 use Illuminate\Support\Facades\DB;
+use Tests\Support\Adapters\FakeChannelAdapter;
 
 /*
 |--------------------------------------------------------------------------

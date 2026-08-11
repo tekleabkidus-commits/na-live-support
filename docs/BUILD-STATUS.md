@@ -81,6 +81,69 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 11: THE COMPOSER (FR-16…FR-22, AC-05) — TWO COMMITS (`589c75b` server + the client commit)
+
+**MODE SAFETY IS STRUCTURAL (FR-17/BR-02):** reply and note are SEPARATE
+ROUTES to SEPARATE SERVICES — the note door ends at NotesWriter (no adapter
+path exists beyond it, N-04), ComposeOutbound refuses kind=note in its own
+body, and the client's two send paths never cross. Proven at the OUTBOX
+(zero outbound events for a note, delivery_state NULL) — the Doc 04 AC-04
+integration re-proof. **Sabotage #14** (note routed through
+ComposeOutbound as deliverable text) red on exactly that proof → restored
+(`sabotage-14-RED-01/-RESTORED-01.txt`). **AC-05's 50-sequence heuristic
+EXECUTED:** fifty scripted reply-intent flips into note mode, EACH
+asserting the computed surface-color delta, the dashed border, the banner,
+and the send-label flip ("Send reply" → "Add note").
+
+**FR-21:** the split button (Send / Send & Resolve / Send & Pending)
+executes reply THEN transition in order through TicketTransitionService
+ONLY; a refused edge leaves the reply SENT (asserted row-level), reports
+`transition_rejected`, renders the rollback strip with **B12-A01 AC-05's
+one-tap retry** (its own audited door) — proven against the REAL frozen
+matrix (pending_customer→resolved refused; pending_customer→open landed).
+**Doc 06 EC-08 (the closing row):** reply-on-resolved answers 409
+`reopen_confirmation_required`; confirmed → resolved→open through the sole
+writer FIRST, then the send — dialog rendered client-side.
+**FR-20:** ONE state resolver in the composer — normal / closing strip
+(rendered from the seeded closing window) / expired options card with the
+Doc 05 FR-23 SMS-by-phone-presence filter / connection_paused (red card +
+health link) / blocked_by_user / conversation_blocked. HONEST GAP: the
+paused/blocked_by_user states resolve in the same computed but their DATA
+arrives when Doc 05's connection linkage reaches the thread payload —
+seam-prop-driven until then (stated; the closing-row set for §8 render is
+otherwise executed). **FR-18** per the plan row's scope: live caps + the
+telegram downgrade hint + the voice button behind `inbox.voice_recording`
+(N-19: render-gate only); rich-lite buttons/attachments/emoji sit with
+FR-18's remainder at close-out. **FR-19:** the "/" palette (macros render
+Doc 12's honest empty seam) + the AI-ACTIONS SLOT under the violet accent
+law naming Doc 09. **FR-22:** debounced LWW draft autosave through the
+Doc 04 DraftStore, the draft chip, clear-on-send tombstone (proven), the
+>20-char beforeunload guard; EC-12 survives merges BY CONSTRUCTION (drafts
+key on the conversation — asserted in the door test's naming).
+**FR-16:** collision strip (their draft NEVER shows) + the non-blocking
+send-race confirm, driven by the same entry points the realtime feed will
+call. **Sabotage #8** (strip suppressed) red → restored
+(`sabotage-8-RED-01/-RESTORED-01.txt`).
+
+**Proven (evidence `docs/evidence/S07-step11/`):** browser **34/34** all
+eight inbox specs (`playwright-inbox-03.txt`); canonical **82/549**
+(`canonical-suites-02.txt`); full battery **1053 passed / 0 failed /
+14,519 assertions** (`make-test-02.txt`); gates **13/13**; lint clean
+(pint caught the test file once, fixed); PHPStan max clean. One flake
+hardened honestly: the AC-02 first-Tab test raced Vue hydration in
+full-suite order — the cold-load wait now precedes the press (isolated
+passes ×2 recorded before the fix).
+
+**THE 3f577af CI VERDICT (taken once): run
+[31479969772](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31479969772)
+Stage 3 RED — the 0f class again, now TWO files' requests 429-where-accepted
+(PasswordMailTest tenant-fallback + PasswordResetFlowTest revoke-sessions);
+Stages 1/2/3b green. The v1 snapshot on that tree (it predates c170c0b)
+again emitted its blind `[]`. The v2 discriminator ships from c170c0b — the
+STEP-11 push's run is the first CI look that can actually speak
+bleed-vs-product-write, taken once at the step-12 checkpoint.** The
+widening to a second file is recorded at the 0f row as sighting E.
+
 ## SESSION-07 (Doc 07) — STEP 10: THE THREAD (FR-14/FR-15, EC-01/EC-10, SEC-05) — FOUR CLOSING ROWS EXECUTED
 
 **AC-07 FIRST, AS RELEASED — THE DOC 05 CLOSING PROOF:** the spec's first
@@ -1133,6 +1196,14 @@ absorption is REFUSED (owner order).**
   also documents why the dump filters to live keys — 5091 stale entries of
   noise). Per order (3): NO separate re-trigger; the step-10 push's run is
   the next look, taken once at the step-11 checkpoint.
+- **Sighting E (the step-10 push's run, taken at the step-11 checkpoint):**
+  run 31479969772 Stage 3 — the 429-where-accepted shape WIDENED to a
+  second file (PasswordMailTest tenant-fallback) alongside the
+  PasswordResetFlow revoke-sessions journey; the v1 snapshot on that tree
+  (pre-c170c0b) again emitted its blind `[]`. Multi-file 429s on
+  request-shaped calls are CONSISTENT with per-IP bucket bleed but the
+  ladder waits for the v2 discriminator: the step-11 push carries it, and
+  its run is the first CI look that can rule bleed-vs-product-write.
 
 **Order 3 — the TicketsBudgets linearity failure, capture cited, CLASSED
 KNOWN (host-load, single-sighting).** Capture:

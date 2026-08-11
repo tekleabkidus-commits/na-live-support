@@ -130,6 +130,10 @@ final class ThreadController extends Controller
             'conversation' => [
                 'id' => $conversation->identifier(),
                 'channel' => $conversation->getAttribute('channel'),
+                'state' => $conversation->getAttribute('state'),
+                'reply_window_state' => $conversation->getAttribute('reply_window_state'),
+                'reply_window_expires_at' => $conversation->getAttribute('reply_window_expires_at'),
+                'customer_display_name' => DB::table('customers')->where('id', $conversation->getAttribute('customer_id'))->value('display_name'),
             ],
             'messages' => $messages->map(function (object $row): array {
                 /** @var array<string, mixed> $data */

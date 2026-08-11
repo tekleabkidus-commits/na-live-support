@@ -10,6 +10,7 @@
 // Only viewer's 403 is swallowed SILENTLY into session-local read state
 // (the R-26 fourth-sibling consequence, the countersign's posture).
 import { computed, nextTick, onMounted, ref } from 'vue';
+import ComposerPane from './ComposerPane.vue';
 import HandoffCard from './HandoffCard.vue';
 import MediaLightbox from './MediaLightbox.vue';
 import MessageBubble from './MessageBubble.vue';
@@ -26,6 +27,8 @@ type Ticket = {
 const props = defineProps<{
     conversationId: string;
     t: Record<string, string>;
+    composerT: Record<string, string>;
+    voiceFlag: boolean;
 }>();
 
 const messages = ref<Msg[]>([]);
@@ -34,6 +37,11 @@ const packets = ref<{ ticket_id: string; payload: Record<string, unknown> }[]>([
 const lastReadAt = ref<string | null>(null);
 const prevCursor = ref<string | null>(null);
 const channel = ref('');
+const customerName = ref('');
+const ticketStatus = ref('');
+const conversationState = ref('active');
+const windowExpiresAt = ref<string | null>(null);
+const windowState = ref<'open' | 'closing' | 'expired' | 'none'>('none');
 const lightbox = ref<Record<string, unknown> | null>(null);
 const history = ref<{
     open: boolean;
@@ -69,6 +77,23 @@ async function load(anchor?: string): Promise<void> {
     lastReadAt.value = body.last_read_at;
     prevCursor.value = body.prev_cursor;
     channel.value = body.conversation.channel;
+    const conversationMeta = body.conversation as unknown as {
+        channel: string;
+        customer_display_name?: string;
+        state?: string;
+        reply_window_state?: string;
+        reply_window_expires_at?: string | null;
+    };
+    customerName.value = conversationMeta.customer_display_name ?? '';
+    conversationState.value = conversationMeta.state ?? 'active';
+    windowExpiresAt.value = conversationMeta.reply_window_expires_at ?? null;
+    const rawWindow = conversationMeta.reply_window_state ?? 'none';
+    windowState.value =
+        rawWindow === 'open' || rawWindow === 'closing' || rawWindow === 'expired'
+            ? rawWindow
+            : 'none';
+    ticketStatus.value =
+        tickets.value.length > 0 ? (tickets.value[tickets.value.length - 1]?.status ?? '') : '';
 }
 
 // ── The RENDER STREAM: messages interleaved with boundary markers (at each
@@ -366,6 +391,23 @@ onMounted(async () => {
                 />
             </template>
         </div>
+
+        <ComposerPane
+            :conversation-id="conversationId"
+            :channel="channel"
+            :customer-name="customerName"
+            :ticket-status="ticketStatus"
+            :conversation-state="conversationState"
+            :window-state="windowState"
+            :window-expires-at="windowExpiresAt"
+            connection-state="active"
+            connection-account=""
+            :customer-has-phone="false"
+            :blocked-by-user="false"
+            :t="composerT"
+            :voice-flag="voiceFlag"
+            @sent="() => load()"
+        />
 
         <MediaLightbox v-if="lightbox" :media="lightbox" :t="t" @close="lightbox = null" />
 

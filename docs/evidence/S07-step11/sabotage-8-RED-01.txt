@@ -1,0 +1,33 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-composer.spec.ts:142:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends (6.4s)
+
+
+  1) [chromium] › tests/Browser/inbox-composer.spec.ts:142:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('collision-strip')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('collision-strip')
+
+
+      149 |     await page.evaluate(() => (window as unknown as { __inboxComposer: { typing: (n: string | null) => void } }).__inboxComposer.typing('Sara Bekele'));
+      150 |     const strip = page.getByTestId('collision-strip');
+    > 151 |     await expect(strip).toBeVisible();
+          |                         ^
+      152 |     await expect(strip).toContainText('Sara Bekele is replying…');
+      153 |     await expect(strip).not.toContainText('draft'); // their draft is never shown
+      154 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:151:25
+
+    Error Context: test-results/inbox-composer-FR-16-sabot-35ea2-e-confirm-send-anyway-sends-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-composer.spec.ts:142:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends 

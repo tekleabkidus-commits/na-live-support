@@ -46,6 +46,7 @@ const props = defineProps<{
         row: Record<string, string>;
         bulk: Record<string, string>;
         thread: Record<string, string>;
+        composer: Record<string, string>;
     };
     tenantName: string;
     views: ViewRow[];
@@ -58,6 +59,7 @@ const props = defineProps<{
     can: { views_manage: boolean; views_share: boolean; tickets_create: boolean };
     tabBadges: { customer: boolean; copilot: boolean };
     initialThread: { conversation_id: string; ticket_id: string | null } | null;
+    features: { voice_recording: boolean };
 }>();
 
 const prefsStore = useInboxPrefs();
@@ -272,6 +274,8 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                     :key="activeThread"
                     :conversation-id="activeThread"
                     :t="t.thread"
+                    :composer-t="t.composer"
+                    :voice-flag="features.voice_recording"
                 />
                 <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
@@ -438,6 +442,8 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                         :key="activeThread"
                         :conversation-id="activeThread"
                         :t="t.thread"
+                        :composer-t="t.composer"
+                        :voice-flag="features.voice_recording"
                     />
                     <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}

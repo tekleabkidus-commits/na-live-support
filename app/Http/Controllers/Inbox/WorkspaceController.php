@@ -113,6 +113,10 @@ final class WorkspaceController extends Controller
             ],
             'tabBadges' => $this->tabBadges($request),
             'initialThread' => $initialThread,
+            // N-19: the flag hides the RENDER only (FR-18's voice button).
+            'features' => [
+                'voice_recording' => app(\App\Support\Flags\FeatureRegistry::class)->active('inbox.voice_recording'),
+            ],
         ]);
     }
 

@@ -137,6 +137,9 @@ test('B12-A01 AC-02: first tab press on a cold load reveals the skip link, and i
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    // Hydration must complete before the FIRST Tab means anything — the
+    // full-suite run caught the press racing the Vue mount.
+    await expect(page.getByTestId('views-rail')).toBeVisible();
 
     await page.keyboard.press('Tab');
     const skip = page.getByTestId('skip-to-list');
