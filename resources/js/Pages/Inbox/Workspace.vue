@@ -22,6 +22,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
 import ListPane from '../../Components/Inbox/List/ListPane.vue';
+import ThreadPane from '../../Components/Inbox/Thread/ThreadPane.vue';
 import TopBar from '../../Components/Inbox/TopBar.vue';
 import ViewsRail from '../../Components/Inbox/ViewsRail.vue';
 import {
@@ -44,6 +45,7 @@ const props = defineProps<{
         list: Record<string, string>;
         row: Record<string, string>;
         bulk: Record<string, string>;
+        thread: Record<string, string>;
     };
     tenantName: string;
     views: ViewRow[];
@@ -55,6 +57,7 @@ const props = defineProps<{
     buildId: string;
     can: { views_manage: boolean; views_share: boolean; tickets_create: boolean };
     tabBadges: { customer: boolean; copilot: boolean };
+    initialThread: { conversation_id: string; ticket_id: string | null } | null;
 }>();
 
 const prefsStore = useInboxPrefs();
@@ -119,13 +122,22 @@ function onDragStart(event: PointerEvent): void {
 }
 
 // ── Mobile two-level navigation + sheets (FR-02 <768) ─────────────────────
-const mobileScreen = ref<'list' | 'thread'>('list');
+const mobileScreen = ref<'list' | 'thread'>(props.initialThread ? 'thread' : 'list');
 const viewsSheetOpen = ref(false);
 const contextSheetOpen = ref(false);
 const drawerOpen = ref(false);
 
 // The ACTIVE view (rail clicks set it; EC-09's fallback returns to My Open).
 const activeView = ref('my_open');
+
+// FR-15: the open thread — deep links arrive resolved (initialThread),
+// list rows open it in place.
+const activeThread = ref<string | null>(props.initialThread?.conversation_id ?? null);
+
+function openThread(payload: { ticketId: string; conversationId: string }): void {
+    activeThread.value = payload.conversationId;
+    mobileScreen.value = 'thread';
+}
 
 // §9 density → the row-height variable list rows (step 9) consume.
 const density = computed(() => prefsStore.density);
@@ -191,6 +203,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 <ListPane
                     :view="activeView"
                     :t="{ list: t.list, row: t.row, bulk: t.bulk }"
+                    @open-ticket="openThread"
                     @fallback-view="activeView = 'my_open'"
                 />
             </section>
@@ -254,7 +267,13 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                         <span aria-hidden="true">{{ contextCollapsed ? '◧' : '▐' }}</span>
                     </button>
                 </div>
-                <p class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
+                <ThreadPane
+                    v-if="activeThread"
+                    :key="activeThread"
+                    :conversation-id="activeThread"
+                    :t="t.thread"
+                />
+                <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
                 </p>
             </main>
@@ -319,7 +338,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                     <ListPane
                         :view="activeView"
                         :t="{ list: t.list, row: t.row, bulk: t.bulk }"
-                        @open-ticket="mobileScreen = 'thread'"
+                        @open-ticket="openThread"
                         @fallback-view="activeView = 'my_open'"
                     />
                     <!-- Row-tap opens the thread (above); this affordance stays
@@ -410,11 +429,17 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                     id="inbox-thread"
                     data-testid="thread-region"
                     :aria-label="t.shell.region_thread"
-                    class="min-h-0 flex-1 overflow-y-auto"
+                    class="flex min-h-0 flex-1 flex-col overflow-y-auto"
                     :style="{ background: 'var(--ds-canvas-bg)' }"
                     tabindex="-1"
                 >
-                    <p class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
+                    <ThreadPane
+                        v-if="activeThread"
+                        :key="activeThread"
+                        :conversation-id="activeThread"
+                        :t="t.thread"
+                    />
+                    <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}
                     </p>
                 </main>

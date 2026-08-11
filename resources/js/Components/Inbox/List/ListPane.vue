@@ -21,7 +21,10 @@ const props = defineProps<{
     t: { list: Record<string, string>; row: Record<string, string>; bulk: Record<string, string> };
 }>();
 
-const emit = defineEmits<{ (e: 'open-ticket', id: string): void; (e: 'fallback-view'): void }>();
+const emit = defineEmits<{
+    (e: 'open-ticket', payload: { ticketId: string; conversationId: string }): void;
+    (e: 'fallback-view'): void;
+}>();
 
 const list = useLiveList();
 const prefs = useInboxPrefs();
@@ -270,7 +273,13 @@ onBeforeUnmount(() => {
                 :leaving="list.leaving[row.ticket_id] === true"
                 :t="t.row"
                 @toggle-select="onToggleSelect"
-                @open="(id) => emit('open-ticket', id)"
+                @open="
+                    (id) =>
+                        emit('open-ticket', {
+                            ticketId: id,
+                            conversationId: String(list.rows[id]?.conversation_id ?? ''),
+                        })
+                "
             />
             <li
                 v-if="list.orderedRows.length === 0 && !loading"

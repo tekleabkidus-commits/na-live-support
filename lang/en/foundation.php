@@ -62,6 +62,7 @@ return [
         'view_filters_invalid' => 'View filters not recognised',
         'read_only_view' => 'Shared views are read-only',
         'view_not_found' => 'View not found',
+        'resource_not_found' => 'Not found',
     ],
 
     'provisioning' => [

@@ -1,0 +1,27 @@
+bash ci/run-gates.sh
+Running 13 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               FAIL
+      string-lint: resources/js/Components/Inbox/Thread/ThreadPane.vue:112: hardcoded text node "(lightbox = media as Record"
+      string-lint: resources/views/inbox/print.blade.php:19: hardcoded text node "($messages as $message)"
+      string-lint: FAIL (2 violation(s)). User-visible strings must be i18n keys (Doc 01 FR-09). Genuine exceptions go in ci/string-lint-allowlist.php with a reason.
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      FAIL
+      ticket-status-writer: status write outside the transition path: app/Http/Controllers/Inbox/ThreadController.php
+      ticket-status-writer: FAIL (1 file(s) writing ticket status outside app/Domain/Tickets/Storage/TicketRepository.php). Doc 06 T-01/NFR-03: TicketTransitionService is the sole status writer and reaches the column only through that repository.
+-----------------------------------------------------------------
+Gate summary: 11 passed, 2 failed, 0 skipped.
+FAILED: string-lint ticket-status-writer
+make: *** [Makefile:95: gates] Error 1

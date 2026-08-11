@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-thread.spec.ts:157:1 › FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a REAL out-of-scope id land the SAME 404-pattern page with "search instead" (EC-01, sabotage #15 red here) (1.5s)
+
+
+  1) [chromium] › tests/Browser/inbox-thread.spec.ts:157:1 › FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a REAL out-of-scope id land the SAME 404-pattern page with "search instead" (EC-01, sabotage #15 red here) 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 403
+
+      191 |     await page2.waitForURL((url) => !url.pathname.startsWith('/login'));
+      192 |     const foreign = await page2.goto(`https://localhost/inbox/t/${ticketId}`); // REAL id, OUT OF SCOPE
+    > 193 |     expect(foreign?.status()).toBe(404);
+          |                               ^
+      194 |     await expect(page2.getByTestId('notfound-pattern')).toBeVisible();
+      195 |     const foreignHtml = await page2.locator('[data-testid="notfound-pattern"]').innerHTML();
+      196 |     expect(foreignHtml).toBe(missingHtml); // no oracle, down to the DOM
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-thread.spec.ts:193:31
+
+    Error Context: test-results/inbox-thread-FR-15-deep-li-d8062-EC-01-sabotage-15-red-here--chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-thread.spec.ts:157:1 › FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a REAL out-of-scope id land the SAME 404-pattern page with "search instead" (EC-01, sabotage #15 red here) 

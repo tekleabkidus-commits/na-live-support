@@ -33,16 +33,17 @@ use Inertia\Response;
  */
 final class WorkspaceController extends Controller
 {
-    public function show(
-        Request $request,
-        TenantContext $context,
-        ViewHash $viewHash,
-        ViewVariants $variants,
-        ViewZsets $zsets,
-        ChannelHealthState $health,
-        ProjectorStatus $projector,
-        CapabilityMapProvider $capabilities,
-    ): Response {
+    /** @param array{conversation_id: string, ticket_id: string|null}|null $initialThread */
+    public function show(Request $request, ?array $initialThread = null): Response
+    {
+        $context = app(TenantContext::class);
+        $viewHash = app(ViewHash::class);
+        $variants = app(ViewVariants::class);
+        $zsets = app(ViewZsets::class);
+        $health = app(ChannelHealthState::class);
+        $projector = app(ProjectorStatus::class);
+        $capabilities = app(CapabilityMapProvider::class);
+
         /** @var User $user */
         $user = $request->user();
 
@@ -111,7 +112,66 @@ final class WorkspaceController extends Controller
                 'tickets_create' => $map->allows('tickets.create'),
             ],
             'tabBadges' => $this->tabBadges($request),
+            'initialThread' => $initialThread,
         ]);
+    }
+
+    /**
+     * FR-15 deep link /inbox/t/{ticket}: resolves THROUGH the viewer's scope;
+     * missing and out-of-scope answer the SAME 404-pattern page with "search
+     * instead" (EC-01/C-10 — sabotage #15 makes them distinguishable and the
+     * proof goes red). HTTP 404 on the page response itself: no existence
+     * oracle in the status line either.
+     */
+    public function openTicket(Request $request, string $ticketId): \Symfony\Component\HttpFoundation\Response
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $query = \App\Models\TicketListItem::query()->where('ticket_id', $ticketId);
+        app(\App\Support\Rbac\Scopes\ScopeSets::class)->apply($query, 'tickets', $user, \App\Domain\Inbox\ReadModels\ListReadModel::columns());
+        /** @var \App\Models\TicketListItem|null $row */
+        $row = $query->first();
+
+        if ($row === null) {
+            return $this->notFoundPatternPage($request);
+        }
+
+        $conversationIdRaw = $row->getAttribute('conversation_id');
+
+        return $this->show($request, [
+            'conversation_id' => is_string($conversationIdRaw) ? $conversationIdRaw : '',
+            'ticket_id' => $ticketId,
+        ])->toResponse($request);
+    }
+
+    /** FR-15 deep link /inbox/c/{conversation} — same pattern, same 404 shape. */
+    public function openConversation(Request $request, string $conversationId): \Symfony\Component\HttpFoundation\Response
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $query = \App\Models\TicketListItem::query()->where('conversation_id', $conversationId);
+        app(\App\Support\Rbac\Scopes\ScopeSets::class)->apply($query, 'tickets', $user, \App\Domain\Inbox\ReadModels\ListReadModel::columns());
+        if (! $query->exists()) {
+            return $this->notFoundPatternPage($request);
+        }
+
+        return $this->show($request, [
+            'conversation_id' => $conversationId,
+            'ticket_id' => null,
+        ])->toResponse($request);
+    }
+
+    private function notFoundPatternPage(Request $request): \Symfony\Component\HttpFoundation\Response
+    {
+        \Illuminate\Support\Facades\Log::info('inbox deep-link 404-pattern served', [
+            'metric' => 'security.cross_tenant_probe',
+        ]);
+
+        return Inertia::render('Inbox/NotFoundPattern', ['t' => __('inbox.notfound')])
+            ->toResponse($request)
+            ->setStatusCode(404);
     }
 
     /**

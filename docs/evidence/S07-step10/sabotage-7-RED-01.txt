@@ -1,0 +1,35 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-thread.spec.ts:64:1 › DOC 05 AC-07 — THE CLOSING PROOF, FIRST: the fixture thread holds a delivery_state=delivered telegram message, and the DOM renders NO delivered glyph across ALL states (sabotage #7 red here) (6.0s)
+
+
+  1) [chromium] › tests/Browser/inbox-thread.spec.ts:64:1 › DOC 05 AC-07 — THE CLOSING PROOF, FIRST: the fixture thread holds a delivery_state=delivered telegram message, and the DOM renders NO delivered glyph across ALL states (sabotage #7 red here) 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-delivery-glyph="delivered"]')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-delivery-glyph="delivered"]')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      73 |     // THE LAW: no delivered glyph exists ANYWHERE in this DOM — the
+      74 |     // delivered-state fixture drew the SENT glyph instead.
+    > 75 |     await expect(page.locator('[data-delivery-glyph="delivered"]')).toHaveCount(0);
+         |                                                                     ^
+      76 |     await expect(page.getByText('✓✓')).toHaveCount(0);
+      77 | });
+      78 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-thread.spec.ts:75:69
+
+    Error Context: test-results/inbox-thread-DOC-05-AC-07--7dce8-states-sabotage-7-red-here--chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-thread.spec.ts:64:1 › DOC 05 AC-07 — THE CLOSING PROOF, FIRST: the fixture thread holds a delivery_state=delivered telegram message, and the DOM renders NO delivered glyph across ALL states (sabotage #7 red here) 

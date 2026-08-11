@@ -81,6 +81,80 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 10: THE THREAD (FR-14/FR-15, EC-01/EC-10, SEC-05) — FOUR CLOSING ROWS EXECUTED
+
+**AC-07 FIRST, AS RELEASED — THE DOC 05 CLOSING PROOF:** the spec's first
+test drives a thread whose fixture carries an outbound telegram message
+with `delivery_state = 'delivered'` and asserts the DOM holds **no
+delivered glyph across all states** — the glyph map COLLAPSES delivered
+into sent for telegram (truthful receipts). **Sabotage #7** (delivered gets
+its own glyph) red → restored
+(`sabotage-7-RED-01/-RESTORED-01.txt`).
+
+**BUILT:** `ThreadController` (FR-14/15's data door: messages with the full
+Doc 04 §8/§9 fields — notes included for staff, QUARANTINED EXCLUDED,
+tombstones shipped EMPTY; the conversation's tickets for boundary markers;
+handoff packets; the viewer's marker; T-08-composite `before` paging; the
+Doc 04 EC-08 `?anchor` WINDOW), the B12-S02 history door (HistoryReader
+owns verdict + audit; 403 with the marker intact for non-holders), §9 print
+(server blade, SEC-05 note gate + user/DB-time watermark), FR-15 deep
+links `/inbox/t/{ticket}` + `/inbox/c/{conversation}` resolving through
+scope with EC-01's 404-PATTERN page ("search instead", C-10 metric, HTTP
+404) — one `resource_not_found` C-04 shape for missing AND out-of-scope.
+Client: ThreadPane (date separators; boundary markers "Ticket #4819 closed
+· Ticket #4820 opened"; the AC-08 handoff card — Doc 06 closing row —
+pinned at ticket start, collapsible, AI-accented, "customer already saw";
+consecutive system events bulk-collapsed "Show N events"; FR-15
+first-unread divider + open-at-first-unread-else-bottom + both jumps;
+reply-ref jump with anchor context fetch), MessageBubble (US-03 owner-phone
+MARKED render with snapshotted display — Doc 05 closing row; EC-10 40-line
+clamp; edited markers), MediaLightbox (B12-S01: photo WITH description,
+loading-then-failed, INFECTED = block notice with NO download and NO
+description — SEC-04 absence), NotFoundPattern page. i18n en+am
+throughout. **The R-26 fourth-sibling consequence VERIFIED at this step's
+surfaces (the countersign's order):** Read Only opens a thread, the
+markRead 403 is swallowed silently (`role=alert` asserted zero), server
+unread untouched — session-local, the prefs-rider posture.
+
+**Proven (evidence `docs/evidence/S07-step10/`):** browser **30/30** — all
+seven inbox specs on a `make fresh` stack (independence from zero;
+`playwright-inbox-02/-03.txt`); Pest canonical **78/524**
+(`canonical-suites-02.txt`); full battery **1049 passed / 0 failed /
+14,306 assertions** (`make-test-03.txt`); gates **13/13**
+(`make-gates-02.txt`); lint + PHPStan max + Pint clean. **Sabotage #15**
+(deep link made an existence oracle — 403 for existing-but-out-of-scope)
+red → restored. **Sabotage #20** (print note gate dropped): the FIRST
+attempt came back GREEN — the blade's text-only rendering masked the
+dropped query gate (filed `sabotage-20-INVALID-blade-masked-gate-01.txt`);
+the proof was STRENGTHENED to row-level absence (`data-kind="note"` must
+not exist in print HTML) and the redo went red → restored
+(`sabotage-20-RED-02/-RESTORED-01.txt`) — the sabotage discipline catching
+a proof that had no teeth.
+
+**Honest finds:** (1) gates caught THREE step-10 defects pre-commit —
+`'status' =>` beside a tickets query tripped the ticket-status-writer
+file-level constraint (resolved via ProblemDetails, the third honoring of
+that gate's design constraint), the route sweep refused a stacked
+two-permission thread route (single key: conversations.view, the A-6
+precedent), and string-lint's blade-directive regex is SPACE-SENSITIVE
+(`@foreach (` leaks its expression as a text node — recorded for the next
+blade); (2) the EC-01 oracle proof compares problem bodies MINUS trace_id
+(C-04 gives each response its own trace — uniform on both shapes); (3) the
+thread scene initially rode the list scene's conversation and the thread
+spec's own markRead consumed the list spec's unread fixture — the scene
+moved to its own customer and the seeder self-heals markers (NULL reset;
+the writer's LWW guard made NULL-safe).
+
+**THE 301c725 CI VERDICT (due this checkpoint, taken once): run
+[31474873969](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31474873969)
+— Stage 3 RED on `PasswordResetFlowTest` 429-where-accepted, THE KNOWN
+RISK 0f CLASS** (Doc 02's test, untouched by step 9; Stages 1/2/3b green;
+4+ skipped downstream). The rung-1 failure-time limiter snapshot did not
+surface in the failed-job log. Per the 0f ladder only rung 1 is
+authorized — ESCALATION IS FLAGGED TO THE ADVISOR at the step-10
+checkpoint, not self-served. The step-10 tree's own CI verdict lands at
+step 11.
+
 ## SESSION-07 (Doc 07) — STEP 9: THE LIST UI (FR-09…FR-13, AC-03) + THE AMENDMENT-1 RIDER (i) DISCHARGE
 
 **THE TWO NAMED RIDERS, both executed and cited:**

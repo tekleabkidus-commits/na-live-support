@@ -1,0 +1,25 @@
+
+   FAIL  Tests\Feature\Inbox\ThreadEndpointTest
+  ⨯ it §9 print (SEC-05): the note gate is ABSOLUTE — internal-note con… 3.86s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\ThreadEndpointTest > it §9 print (SEC-05): th…   
+  SEC-05 VIOLATED: a note ROW reached the print template
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/ThreadEndpointTest.php:143
+    139▕     // ROW-level absence, not just body text: the blade renders non-text
+    140▕     // kinds as placeholders, which MASKED a dropped query gate on the first
+    141▕     // sabotage attempt (filed INVALID) — a note must not reach the template
+    142▕     // AT ALL, and data-kind makes that observable.
+  ➜ 143▕     expect(str_contains($html, 'data-kind="note"'))->toBeFalse('SEC-05 VIOLATED: a note ROW reached the print template');
+    144▕     expect(str_contains($html, (string) $actor->getAttribute('email')))->toBeTrue('the watermark does not carry the printing user');
+    145▕ });
+    146▕ 
+    147▕ it('B12-S02: the history door — capability holders get the preserved revisions (audited by HistoryReader); without the key the marker stays but history answers 403', function (): void {
+
+  1   tests/Feature/Inbox/ThreadEndpointTest.php:143
+
+
+  Tests:    1 failed (4 assertions)
+  Duration: 3.89s
+

@@ -118,6 +118,23 @@ Route::middleware([
     // FR-12: the cursor list page — a pure read on the audience key.
     Route::get('list', [App\Http\Controllers\Inbox\ListController::class, 'index'])
         ->middleware('permission:tickets.view')->name('inbox.list');
+    // FR-14/15: the thread page + the Doc 04 EC-08 anchor window; EC-01's
+    // 404 pattern for missing AND out-of-scope alike (sabotage #15's target).
+    Route::get('thread/{conversationId}', [App\Http\Controllers\Inbox\ThreadController::class, 'show'])
+        ->middleware('permission:conversations.view')->name('inbox.thread');
+    // B12-S02: preserved history — HistoryReader owns verdict + audit.
+    Route::get('messages/{messageId}/history', [App\Http\Controllers\Inbox\ThreadController::class, 'messageHistory'])
+        ->middleware('permission:conversations.view')->name('inbox.message.history');
+    // §9 print (SEC-05: note gate + watermark; sabotage #20's target).
+    Route::get('thread/{conversationId}/print', [App\Http\Controllers\Inbox\ThreadController::class, 'print'])
+        ->middleware('permission:conversations.view')->name('inbox.thread.print');
+    // FR-15 deep links: /inbox/t/{ticket} and /inbox/c/{conversation} — the
+    // workspace opens with the thread resolved; EC-01 out-of-scope → the
+    // 404-pattern PAGE with "search instead", never an existence oracle.
+    Route::get('t/{ticketId}', [App\Http\Controllers\Inbox\WorkspaceController::class, 'openTicket'])
+        ->middleware('permission:tickets.view')->name('inbox.deeplink.ticket');
+    Route::get('c/{conversationId}', [App\Http\Controllers\Inbox\WorkspaceController::class, 'openConversation'])
+        ->middleware('permission:tickets.view')->name('inbox.deeplink.conversation');
     // Read markers (SCHEMA AMENDMENT 1): a per-user workspace-STATE write —
     // rides views.manage per the R-26 AMENDMENT's generalized statement (the
     // FOURTH sibling, cited not re-ruled; flagged at the step-9 checkpoint).

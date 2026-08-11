@@ -1372,3 +1372,14 @@ FILED before the sabotage runs; (4) the two local mitigations
 commented to note the middleware now also restores; (5) the full battery
 including the Doc 01–06 suites is the regression proof on the commit that
 carries it. The edit rides the step-8 commit.
+
+### R-26 AMENDMENT — sibling ledger update (advisor countersigns at the step-9 acceptance, 2026-08-11)
+
+Application (4) of record: `POST /inbox/read` (the SCHEMA AMENDMENT 1 marker
+writer's HTTP door) — cited against the generalized statement, refusal
+executed (403, zero marker rows). CONSEQUENCE RECORDED, per the countersign:
+a Read Only principal's read-position does not persist, so its unread
+indicators are SESSION-LOCAL — the same designed degrade posture as the
+prefs rider: silent, zero error spam. The UI verification of that posture
+rides the step-10 thread surfaces (thread-open is the marker's first
+caller).

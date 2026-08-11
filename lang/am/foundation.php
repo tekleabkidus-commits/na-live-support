@@ -59,6 +59,7 @@ return [
         'view_filters_invalid' => 'የእይታ ማጣሪያዎች አልታወቁም',
         'read_only_view' => 'የተጋሩ እይታዎች ለንባብ ብቻ ናቸው',
         'view_not_found' => 'እይታው አልተገኘም',
+        'resource_not_found' => 'አልተገኘም',
         'dead_letter_not_parked' => 'አስቀድሞ እንደገና ተልኳል',
     ],
 

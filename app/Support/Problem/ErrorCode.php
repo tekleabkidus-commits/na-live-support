@@ -142,6 +142,10 @@ enum ErrorCode: string
     // C-10: "not yours" and "does not exist" answer identically.
     case ViewNotFound = 'view_not_found';
 
+    // EC-01 (Doc 07, S07 step 10): the 404-PATTERN's stable code — one
+    // answer for missing AND out-of-scope (C-10: no existence oracle).
+    case ResourceNotFound = 'resource_not_found';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

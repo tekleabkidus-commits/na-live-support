@@ -46,7 +46,8 @@ final class ReadMarkers
             SET last_read_message_id = EXCLUDED.last_read_message_id,
                 last_read_at = EXCLUDED.last_read_at,
                 updated_at = clock_timestamp()
-            WHERE EXCLUDED.last_read_at >= inbox_read_markers.last_read_at
+            WHERE inbox_read_markers.last_read_at IS NULL
+               OR EXCLUDED.last_read_at >= inbox_read_markers.last_read_at
             SQL,
             [(string) Str::uuid7(), $this->context->tenantId(), $user->identifier(), $messageId, $conversationId],
         );
