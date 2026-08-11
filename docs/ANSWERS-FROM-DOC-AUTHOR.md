@@ -1323,3 +1323,52 @@ workspace config; config for a read-and-score role is consistent). Read
 Only's exclusion is AUTOMATIC PHYSICS: its grant list is computed
 (non-high + `.view` suffix), which views.manage fails — the exclusion needs
 no hand-maintained list. Appendix B amended citing this ruling.
+
+### R-26 AMENDMENT (advisor-ordered at the 6+7 acceptance, 2026-08-10; the countersign's one condition). The GENERALIZED principle, so future siblings cite one statement instead of accreting cases
+
+**Per-user workspace-state and workspace-config writes ride `views.manage`;
+Read Only's exclusion is the enforcing mechanism; the underlying action's
+own keys remain the authority at execution (Doc 06 per-item live checks
+unaffected).**
+
+Applications of record: (1) saved-view create/update/tombstone/duplicate
+(the original R-26/A-34 ruling); (2) the prefs write (PATCH /inbox/prefs —
+countersigned extension at the 4+5 acceptance); (3) BOTH selection-token
+doors (POST /inbox/selections + /{tokenId}/execute — countersigned as the
+same principle's sibling at the 6+7 acceptance; the executed 403 proofs at
+both doors verified). A fourth sibling cites THIS statement and flags at
+its checkpoint; it does not reopen the ruling.
+
+### A-35 (ADVISOR-RULED at the 6+7 acceptance, 2026-08-10). BindTenantContextToJob becomes restore-what-you-found — the FIFTH ruled core edit, under the S23 ruled-edit pattern
+
+**The two-sighting history (verbatim from the reports):**
+
+- **First sighting (S07 step 6, the indexer):** wiring the event-driven
+  `IndexSearchDocuments` job under queue=sync stripped the DISPATCHER's
+  ambient binding — `BindTenantContextToJob` CLEARS context in its finally
+  instead of restoring what it found; the whole inbox suite went
+  MissingTenantContext the moment the indexer was wired. Local mitigation:
+  the indexer rides `RunsWithinTenant` (restores the caller; skips the
+  rebind when already inside the tenant). Evidence:
+  `docs/evidence/S07-step6/` (the step-6 report's defect (1);
+  `make-test-01.txt` is the battery on the mitigated tree).
+- **Second sighting (S07 step 7, the inline bulk):** under queue=sync,
+  `TicketBulkJob` runs INLINE inside `BulkOperation::submit()` and the same
+  finally cleared the caller's binding — `SelectionTokens::execute`'s own
+  audit write after the chunk loop died unbound. Local mitigation: the
+  guarded restore (rebind only when context went null). Evidence:
+  `docs/evidence/S07-step7/` (`make-test-03.txt` is the battery on the
+  mitigated tree; the mechanism is commented at the call site).
+
+**THE RULING (GRANTED, five conditions):** change the middleware to
+restore-what-you-found — capture the prior binding, restore it in finally,
+never clear. Conditions: (1) the edit is enumerated in a committed diff
+assertion citing A-35 and both sighting evidence paths; (2) a dedicated
+regression test pins the restore semantics under the sync driver; (3)
+**sabotage #22** — middleware reverted to clear-not-restore → that
+regression test red → restored — with the 21→22 sabotage-list amendment
+FILED before the sabotage runs; (4) the two local mitigations
+(`RunsWithinTenant`, the guarded restore) REMAIN as defense in depth, each
+commented to note the middleware now also restores; (5) the full battery
+including the Doc 01–06 suites is the regression proof on the commit that
+carries it. The edit rides the step-8 commit.

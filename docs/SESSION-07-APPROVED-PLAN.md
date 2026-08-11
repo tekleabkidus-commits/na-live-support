@@ -369,8 +369,11 @@ stores `resources/js/stores/inbox/`; browser specs `tests/Browser/inbox-*.spec.t
 21. [AMENDED 20→21 by ruling A-33 at the step-1 checkpoint, filed before the
     sabotage ran] the relay's stamp-copy broken (a fresh clock supplied
     instead of the outbox byte-copy) → the A-33 byte-identical proof in
-    EventsOccurredAtTreatmentTest goes red. THE LEDGER RECONCILES AGAINST
-    21 ITEMS.
+    EventsOccurredAtTreatmentTest goes red.
+22. [AMENDED 21→22 by ruling A-35 at the 6+7 acceptance, filed before the
+    sabotage runs — A-35 condition (3)] `BindTenantContextToJob` reverted
+    to clear-not-restore → the A-35 sync-driver restore regression test
+    goes red. THE LEDGER RECONCILES AGAINST 22 ITEMS.
 
 Backup before sabotage; fail AND restored-pass pasted; tree proven clean before commit;
 captures unfiltered first; verdicts from unfiltered capture summaries + exit codes only.
