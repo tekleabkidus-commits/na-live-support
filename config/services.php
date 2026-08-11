@@ -80,4 +80,14 @@ return [
         'timeout_seconds' => 0.5, // T-09's 500 ms, not tunable per tenant
     ],
 
+    /*
+    | Doc 07 T-04 (S07 step 6): Meilisearch — running substrate since S0,
+    | FIRST indexed here. The master key lives server-side ONLY; the search
+    | proxy is the one path (SEC-02) and no client-facing key exists at all.
+    */
+    'meilisearch' => [
+        'host' => env('MEILISEARCH_HOST', 'http://meilisearch:7700'),
+        'key' => env('MEILISEARCH_KEY', 'local_master_key'),
+    ],
+
 ];

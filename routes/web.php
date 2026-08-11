@@ -133,6 +133,11 @@ Route::middleware([
     Route::get('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'show'])
         ->middleware('permission:tickets.view')->name('inbox.prefs.show');
 
+    // FR-23/SEC-02: the search proxy — the ONLY search path; the request
+    // contract is the query string alone.
+    Route::get('search', App\Http\Controllers\Inbox\SearchController::class)
+        ->middleware('permission:tickets.view')->name('inbox.search');
+
     // T-07: the single reconciliation path (GET — read-only replay; EC-08's
     // 429-on-connect rides the inbox-sync limiter).
     Route::get('sync', App\Http\Controllers\Inbox\SyncController::class)

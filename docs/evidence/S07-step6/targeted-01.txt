@@ -1,0 +1,83 @@
+
+   FAIL  Tests\Security\InboxSearchScopeTest
+  ⨯ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 7.15s  
+  ⨯ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 1.14s  
+  ⨯ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  0.94s  
+  ⨯ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.07s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it AC…  MissingTenantContext   
+  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).
+
+  at app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  1   app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+  2   app/Support/Tenancy/TenantContext.php:71
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it AC…  MissingTenantContext   
+  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).
+
+  at app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  1   app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+  2   app/Support/Tenancy/TenantContext.php:71
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it SE…  MissingTenantContext   
+  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).
+
+  at app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  1   app/Support/Tenancy/Exceptions/MissingTenantContext.php:37
+  2   app/Support/Tenancy/TenantContext.php:71
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it…   CommunicationException   
+  cURL error 7: Failed to connect to 127.0.0.1 port 59999 after 0 ms: Could not connect to server (see https://curl.se/libcurl/c/libcurl-errors.html) for http://127.0.0.1:59999/indexes
+
+  at vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php:1140
+    1136▕         }
+    1137▕ 
+    1138▕         // Create a connection exception if it was a specific error code.
+    1139▕         $error = isset($connectionErrors[$easy->errno])
+  ➜ 1140▕             ? new ConnectException($message, $easy->request, null, $ctx)
+    1141▕             : new RequestException($message, $easy->request, $easy->response, null, $ctx);
+    1142▕ 
+    1143▕         return P\Create::rejectionFor($error);
+    1144▕     }
+
+      [2m+19 vendor frames [22m
+  20  app/Domain/Inbox/Search/SearchIndex.php:58
+  21  app/Jobs/Inbox/IndexSearchDocuments.php:53
+
+
+  Tests:    4 failed (3 assertions)
+  Duration: 9.35s
+

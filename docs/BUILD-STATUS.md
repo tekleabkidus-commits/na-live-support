@@ -81,6 +81,52 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 6: SEARCH (T-04/SEC-02/AC-09) — MEILISEARCH'S FIRST REAL CONSUMER
+
+**Built:** running substrate since S0, indexed for the FIRST time here.
+Two tenancy layers, both CODE and both PROVEN (RLS does not reach an index):
+physical per-tenant indexes (`t{tenant}_tickets`/`_messages`, names derived
+from server-controlled TenantContext — sabotage #2's target) + Doc 03 scope
+filters injected server-side from the SAME ViewHash signature grammar the
+channels and lists use (one brain for BR-03). `SearchIndex` (T-04's
+filterable attributes: department_id, assignee_id), `IndexSearchDocuments`
+(the event-driven indexer as a SEPARATE queued job — FS-03 isolation from
+the list projection; upsert-idempotent; notes NEVER index), `SearchProxy`
+(SEC-02's only path — the request contract is the query string ALONE; the
+attacker-shaped HTTP test smuggles filter/scope/index/department params and
+gets the same answer because no code path reads them; per-section
+cold-index handling: an absent index answers zero hits for its section, an
+OUTAGE answers {unavailable:true} inline, never a 500), `GET /inbox/search`
+(tickets.view). FR-23's customer section v1 = customer-field matches from
+the tickets index, grouped (T-04 defines two indexes; deepens with Doc 08).
+**AC-09's scope-injection proofs ran BEFORE search served real data** (the
+plan's ordered minimum): cross-tenant isolation with the positive control,
+Own-scope injection over tickets AND messages, FS-03 dead-port degrade +
+the indexer THROWING for retry/dead-letter catch-up (a swallowed outage
+would drop documents forever). AC-09's traceability row flipped
+automated/partial (the anchor-highlight clause lands with the UI, steps
+10/12 — stated in the gap).
+
+**TWO REAL DEFECTS found by this step's own build, fixed at the mechanism:**
+(1) the TenantAware/BindTenantContextToJob middleware CLEARS context without
+restoring — correct on a worker, but a job dispatched mid-flow under the
+sync driver strips the DISPATCHER's binding (the whole inbox suite went
+MissingTenantContext the moment the indexer was wired). The indexer now
+rides RunsWithinTenant (restores the caller; skips the rebind when already
+inside the tenant) with FR-03f's fail-before-handler kept by hand — the
+finding is documented in the job's docblock for the next dispatcher.
+(2) one absent per-tenant index blacked out the WHOLE search response
+(caught by the layer-1 positive control) — per-section handling now.
+
+**Proven (evidence `docs/evidence/S07-step6/`):** THE CANONICAL COMMAND RUNS
+VERBATIM FOR THE FIRST TIME — all five named paths exist: **58 passed / 418
+assertions** (`canonical-suites-01.txt`); scope proofs 4/4
+(`targeted-04.txt`); full suite **1029 passed / 0 failed / 13,645
+assertions** (`make-test-01.txt`); gates **13/13**; lint clean. **Sabotage
+#2** executed: index names collapsed to shared → red on exactly the
+CROSS-TENANT assertion → restored green, sabotage residue indexes deleted
+(`sabotage-2-RED-01/-RESTORED-01.txt`).
+
 ## SESSION-07 (Doc 07) — STEP 5: T-07 /v1/sync (THE A-33/B-4 DISCHARGE), NFR-06 GOLDENS, EC-07/EC-08, FR-30
 
 **Built:** `SyncReader` + `GET /inbox/sync` (T-07's single reconciliation

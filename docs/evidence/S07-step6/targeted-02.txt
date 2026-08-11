@@ -1,0 +1,45 @@
+
+   FAIL  Tests\Security\InboxSearchScopeTest
+  ⨯ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 8.20s  
+  ✓ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 3.14s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  1.09s  
+  ⨯ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.69s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it AC-09 layer 1: tenant A'…   
+  tenant A's search degraded instead of answering — the isolation claim below would be vacuous
+Failed asserting that true is false.
+
+  at tests/Security/InboxSearchScopeTest.php:60
+     56▕ 
+     57▕     try {
+     58▕         $result = app(SearchProxy::class)->search('zebra-withdrawal-9911', $viewerA);
+     59▕ 
+  ➜  60▕         expect($result['unavailable'])->toBeFalse('tenant A\'s search degraded instead of answering — the isolation claim below would be vacuous');
+     61▕         expect($result['tickets'])->toBe([], 'CROSS-TENANT SEARCH HIT: tenant B\'s document surfaced in tenant A\'s results (N-01 at the index layer)');
+     62▕ 
+     63▕         // Positive control: tenant B FINDS its own document — the empty
+     64▕         // result above is isolation, not a broken index.
+
+  1   tests/Security/InboxSearchScopeTest.php:60
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it FS-03: Meilisearch down…    
+  Expected: cURL error 7: Failed to connect to 127.0.0.1 port 59999 after 0 ms: Could not connect to server (see https://curl.se/libcurl/c/libcurl-errors.html) for http://127.0.0.1:59999/indexes
+
+  To contain: Throwable
+
+  at tests/Security/InboxSearchScopeTest.php:176
+    172▕ 
+    173▕     // The indexer against the dead port THROWS (so tries ×3 → dead-letter →
+    174▕     // re-drive can catch up) — an indexer that swallowed the outage would
+    175▕     // silently drop documents forever.
+  ➜ 176▕     expect(fn () => indexTicketFor($ticket->identifier()))->toThrow(Throwable::class);
+    177▕ });
+    178▕
+
+  1   tests/Security/InboxSearchScopeTest.php:176
+
+
+  Tests:    2 failed, 2 passed (11 assertions)
+  Duration: 13.23s
+

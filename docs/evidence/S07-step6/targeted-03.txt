@@ -1,0 +1,28 @@
+
+   FAIL  Tests\Security\InboxSearchScopeTest
+  ⨯ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 8.81s  
+  ✓ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 3.69s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  1.54s  
+  ✓ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.57s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it AC-09 layer 1: tenant A'…   
+  the positive control failed — nothing was indexed at all
+Failed asserting that false is true.
+
+  at tests/Security/InboxSearchScopeTest.php:70
+     66▕             $viewerB = inboxScopedActor('All', 'S07 Search B');
+     67▕ 
+     68▕             return array_column(app(SearchProxy::class)->search('zebra-withdrawal-9911', $viewerB)['tickets'], 'id');
+     69▕         });
+  ➜  70▕         expect(in_array($ticketB->identifier(), $hitIds, true))->toBeTrue('the positive control failed — nothing was indexed at all');
+     71▕     } finally {
+     72▕         dropTenantIndexes();
+     73▕         asTenant($tenantB, fn () => dropTenantIndexes());
+     74▕     }
+
+  1   tests/Security/InboxSearchScopeTest.php:70
+
+
+  Tests:    1 failed, 3 passed (13 assertions)
+  Duration: 14.68s
+

@@ -64,6 +64,14 @@ final class ListProjector
             return;
         }
 
+        // T-04's event-driven indexer: a SEPARATE queued job per affected
+        // ticket (FS-03 isolation — a search outage must never fail the list
+        // projection riding this same event). Message events also carry
+        // their body to the messages index.
+        $messageId = in_array($name, ['message.received', 'message.sent'], true) && isset($payload['message_id']) && is_string($payload['message_id'])
+            ? $payload['message_id']
+            : null;
+
         if (in_array($name, ['telegram.connection.revoked', 'telegram.connection.active'], true)) {
             // The Doc 05 writer already flipped tickets.channel_unreachable in
             // its own transaction; re-sync every affected ticket from truth.
@@ -76,6 +84,7 @@ final class ListProjector
 
         foreach ($this->affectedTicketIds($name, $payload) as $ticketId) {
             $this->recomputeTicket($ticketId);
+            dispatch(new \App\Jobs\Inbox\IndexSearchDocuments($event->tenant_id, $ticketId, $messageId));
         }
     }
 

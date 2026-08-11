@@ -1,0 +1,44 @@
+
+   FAIL  Tests\Security\InboxSearchScopeTest
+  ⨯ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 7.22s  
+  ✓ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 2.46s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  1.09s  
+  ✓ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.57s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\InboxSearchScopeTest > it AC-09 layer 1: tenant A'…   
+  CROSS-TENANT SEARCH HIT: tenant B's document surfaced in tenant A's results (N-01 at the index layer)
+Failed asserting that two arrays are identical.
+  -Array &0 []
+  +Array &0 [
+  +    0 => Array &1 [
+  +        'id' => '019fee9c-88e6-72b3-afe1-e0d68a0b0431',
+  +        'number' => '1051791145',
+  +        'subject' => 'zebra-withdrawal-9911',
+  +        'tags' => Array &2 [],
+  +        'customer_display_name' => 'Fixture Player',
+  +        'customer_username' => '@fixture_ticket_x1aIlm',
+  +        'customer_phone' => null,
+  +        'department_id' => null,
+  +        'assignee_id' => null,
+  +        'status' => 'open',
+  +    ],
+  +]
+  
+
+  at tests/Security/InboxSearchScopeTest.php:61
+     57▕     try {
+     58▕         $result = app(SearchProxy::class)->search('zebra-withdrawal-9911', $viewerA);
+     59▕ 
+     60▕         expect($result['unavailable'])->toBeFalse('tenant A\'s search degraded instead of answering — the isolation claim below would be vacuous');
+  ➜  61▕         expect($result['tickets'])->toBe([], 'CROSS-TENANT SEARCH HIT: tenant B\'s document surfaced in tenant A\'s results (N-01 at the index layer)');
+     62▕ 
+     63▕         // Positive control: tenant B FINDS its own document — the empty
+     64▕         // result above is isolation, not a broken index.
+     65▕         $hitIds = asTenant($tenantB, function (): array {
+
+  1   tests/Security/InboxSearchScopeTest.php:61
+
+
+  Tests:    1 failed, 3 passed (12 assertions)
+  Duration: 11.42s
+
