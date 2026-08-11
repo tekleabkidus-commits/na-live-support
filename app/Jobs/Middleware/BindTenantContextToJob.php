@@ -26,6 +26,14 @@ use RuntimeException;
  * Resolution rather than blind trust: this re-reads the tenant's CURRENT state, so a job queued
  * before a suspension makes the FR-05 decision against the state as it is now, not as it was at
  * dispatch. For an outbound send that difference is the whole point of suspension.
+ *
+ * A-35 (ruled core edit, the fifth, 2026-08-10): RESTORE-WHAT-YOU-FOUND. On a worker the prior
+ * binding is nothing and the finally still ends clean — but under the sync driver a job runs
+ * INLINE in the dispatcher's process, and clearing in the finally was stripping the CALLER's
+ * binding (two sightings: the S07 step-6 indexer, docs/evidence/S07-step6/; the S07 step-7
+ * inline bulk, docs/evidence/S07-step7/). The prior binding is captured before this middleware
+ * binds its own and restored in the finally — never blind-cleared. Sabotage #22 reverts this
+ * to clear-not-restore and the A-35 regression test goes red.
  */
 final class BindTenantContextToJob
 {
@@ -50,6 +58,12 @@ final class BindTenantContextToJob
         $resolved = app(TenantResolver::class)
             ->resolveTrustedTenantId($tenantId, ResolutionSource::QueuedJob);
 
+        // A-35: capture what the dispatcher had bound (null on a worker) so the
+        // finally can put it back instead of clearing it away.
+        $priorTenantId = $context->tenantIdOrNull();
+        $priorSource = $context->source();
+        $priorCorrelationId = $priorTenantId !== null ? $context->correlationId() : null;
+
         $context->clear();
         $context->bind(
             $resolved->tenantId,
@@ -63,9 +77,15 @@ final class BindTenantContextToJob
         } finally {
             // A worker process handles job after job on one connection — the same reuse hazard
             // as Octane (R-01), so the same discipline. In a `finally` so a failing job cannot
-            // hand its tenant to the next one.
+            // hand its tenant to the next one. A-35: the caller's own binding, when one existed
+            // (the sync driver runs jobs inline in the dispatcher's process), is RESTORED, not
+            // destroyed — the job's binding is what gets cleared.
             $rls->clear();
             $context->clear();
+            if ($priorTenantId !== null && $priorSource !== null) {
+                $context->bind($priorTenantId, $priorSource, $priorCorrelationId);
+                $rls->set($priorTenantId);
+            }
         }
     }
 }

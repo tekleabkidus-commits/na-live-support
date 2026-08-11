@@ -24,12 +24,15 @@ use Illuminate\Support\Facades\DB;
  *
  * TENANCY VIA RunsWithinTenant, NOT the TenantAware middleware — a
  * DELIBERATE choice with a found defect behind it: BindTenantContextToJob
- * CLEARS context in its finally (correct on a queue worker), so a job
- * dispatched mid-flow under the sync driver strips the DISPATCHER's ambient
- * binding — the projector's own suite went MissingTenantContext the moment
- * this job was wired in. RunsWithinTenant restores the caller's binding
- * (and skips the rebind entirely when already inside the tenant). FR-03f's
- * guarantee is kept by hand: a null tenant fails before the handler works.
+ * used to CLEAR context in its finally (correct on a queue worker), so a
+ * job dispatched mid-flow under the sync driver stripped the DISPATCHER's
+ * ambient binding — the projector's own suite went MissingTenantContext the
+ * moment this job was wired in (the FIRST of the two sightings behind
+ * ruling A-35, which made the middleware restore-what-you-found).
+ * RunsWithinTenant restores the caller's binding (and skips the rebind
+ * entirely when already inside the tenant); it REMAINS here as defense in
+ * depth per A-35 condition (4). FR-03f's guarantee is kept by hand: a null
+ * tenant fails before the handler works.
  */
 final class IndexSearchDocuments implements ShouldQueue
 {

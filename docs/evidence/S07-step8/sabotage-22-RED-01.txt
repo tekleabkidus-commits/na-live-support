@@ -1,0 +1,45 @@
+
+   FAIL  Tests\Feature\Inbox\TenantBindingRestoreTest
+  ⨯ it A-35 diff assertion: the ruled edit is IN the middleware — captu… 2.87s  
+  ⨯ it A-35 restore semantics under the SYNC driver: an inline job bind… 0.04s  
+  ✓ it A-35 worker shape unchanged: with NO prior binding the finally s… 0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\TenantBindingRestoreTest > it A-35 diff asser…   
+  the prior-binding CAPTURE is gone (clear-not-restore is back)
+Failed asserting that false is true.
+
+  at tests/Feature/Inbox/TenantBindingRestoreTest.php:49
+     45▕     // str_contains + toBeTrue, never variadic toContain (the S22 7b trap).
+     46▕     expect(str_contains($source, 'A-35'))->toBeTrue('the middleware no longer cites ruling A-35');
+     47▕     expect(str_contains($source, 'docs/evidence/S07-step6/'))->toBeTrue('the first sighting evidence path is gone from the middleware');
+     48▕     expect(str_contains($source, 'docs/evidence/S07-step7/'))->toBeTrue('the second sighting evidence path is gone from the middleware');
+  ➜  49▕     expect(str_contains($source, '$priorTenantId = $context->tenantIdOrNull();'))->toBeTrue('the prior-binding CAPTURE is gone (clear-not-restore is back)');
+     50▕     expect(str_contains($source, 'if ($priorTenantId !== null && $priorSource !== null) {'))->toBeTrue('the finally\'s RESTORE branch is gone (clear-not-restore is back)');
+     51▕ });
+     52▕ 
+     53▕ it('A-35 restore semantics under the SYNC driver: an inline job binds its own tenant for the handler, and the DISPATCHER\'s binding — context AND RLS — is exactly what it was before, even across tenants', function (): void {
+
+  1   tests/Feature/Inbox/TenantBindingRestoreTest.php:49
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\TenantBindingRestoreTest > it A-35 restore se…   
+  the dispatcher's context binding was not restored (the A-35 defect is back)
+Failed asserting that null is identical to '019fef48-a45a-7248-906d-d43297dfbaae'.
+
+  at tests/Feature/Inbox/TenantBindingRestoreTest.php:76
+     72▕     expect(A35FixtureJob::$observedTenant)->toBe($jobTenant->identifier(), 'the middleware no longer binds the job tenant for the handler');
+     73▕ 
+     74▕     // … and the caller got its OWN world back: tenant, RLS session variable,
+     75▕     // and correlation id (C-14 — the caller's trace must not fork).
+  ➜  76▕     expect($context->tenantIdOrNull())->toBe($callerTenant->identifier(), 'the dispatcher\'s context binding was not restored (the A-35 defect is back)');
+     77▕     expect($rls->current())->toBe($callerTenant->identifier(), 'the dispatcher\'s RLS session variable was not restored (the A-35 defect is back)');
+     78▕     expect($context->correlationId())->toBe($callerCorrelation, 'the dispatcher\'s correlation id was not restored (C-14 trace forked)');
+     79▕ });
+     80▕
+
+  1   tests/Feature/Inbox/TenantBindingRestoreTest.php:76
+
+
+  Tests:    2 failed, 1 passed (9 assertions)
+  Duration: 2.97s
+

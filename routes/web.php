@@ -112,6 +112,9 @@ Route::middleware([
     'tenant.state:staff',
     App\Http\Middleware\ApplyUserLocale::class,
 ])->prefix('inbox')->group(function (): void {
+    // B1-S01: the workspace shell page (S07 step 8) — a pure read.
+    Route::get('/', [App\Http\Controllers\Inbox\WorkspaceController::class, 'show'])
+        ->middleware('permission:tickets.view')->name('inbox.workspace');
     Route::get('views', [App\Http\Controllers\Inbox\SavedViewController::class, 'index'])
         ->middleware('permission:tickets.view')->name('inbox.views.index');
     // WRITES ride views.manage (R-26/A-34 — FR-06's tickets.view names the

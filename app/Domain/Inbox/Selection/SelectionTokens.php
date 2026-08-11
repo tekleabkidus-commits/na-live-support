@@ -108,12 +108,14 @@ final class SelectionTokens
             $jobIds[] = $this->bulk->submit($user, $action, $chunk, $params);
 
             // GUARDED RESTORE (the sync-driver middleware semantics, the
-            // session's SECOND sighting of it — flagged to the advisor at the
-            // 6+7 report): under queue=sync, TicketBulkJob runs INLINE inside
-            // submit() and BindTenantContextToJob CLEARS the ambient binding
-            // in its finally instead of restoring the caller's. Production
-            // (redis queues) never enters this branch; without it, the
-            // caller's own audit write after this method dies unbound.
+            // session's SECOND sighting of it — the sighting that produced
+            // ruling A-35): under queue=sync, TicketBulkJob runs INLINE inside
+            // submit() and BindTenantContextToJob used to CLEAR the ambient
+            // binding in its finally instead of restoring the caller's. A-35
+            // made the middleware restore-what-you-found, so this branch is
+            // now unreachable in practice — it REMAINS as defense in depth
+            // per A-35 condition (4). Production (redis queues) never enters
+            // it either way.
             if ($this->context->tenantIdOrNull() === null) {
                 $this->context->bind($boundTenant, ResolutionSource::StaffSession);
                 app(RlsSession::class)->set($boundTenant);

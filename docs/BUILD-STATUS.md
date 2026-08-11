@@ -81,6 +81,88 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 8: TOKENS-FIRST + THE B1-S01 SHELL (FR-01/02/03, AC-01) + THE A-35 CORE EDIT
+
+**ORDERED FIRST, EXECUTED FIRST — the hex re-run:** the committed S23
+extraction script ran against B1-DS v2 + all three addenda BEFORE any screen
+code: **144 token declarations, PASS — every non-deviation hex verbatim in
+the frozen sources; only the two filed S19 label-token deviations**
+(`docs/evidence/S07-step8/tokens-hex-extraction-01.txt`).
+
+**A-35 EXECUTED (the fifth ruled core edit), all five conditions:**
+`BindTenantContextToJob` is now restore-what-you-found — prior binding
+captured before the middleware binds, restored in the finally (tenant, RLS
+session variable, AND correlation id — C-14's trace must not fork); a
+worker's no-prior-binding path still ends clean (the R-01 discipline kept).
+(1) the diff assertion pins the edit citing A-35 + both sighting evidence
+paths; (2) `tests/Feature/Inbox/TenantBindingRestoreTest.php` pins the
+restore semantics under the sync driver — cross-tenant inline dispatch, the
+strictly-harder shape; (3) **sabotage #22** (list amendment 21→22 FILED
+FIRST, commit `b727322`): middleware reverted to clear-not-restore → red on
+exactly the diff assertion + the restore proof, worker shape green as
+designed → restored 3/3
+(`sabotage-22-RED-01/-RESTORED-01.txt`); (4) both local mitigations REMAIN
+as defense in depth, re-commented to cite A-35 condition (4); (5) the full
+battery INCLUDING the Doc 01–06 suites is the regression proof on this
+commit. R-26 AMENDMENT filed same commit (the generalized workspace-write
+principle, the 6+7 countersign's condition).
+
+**BUILT — the B1-S01 shell:** `GET /inbox` (tickets.view — a pure read) →
+`WorkspaceController` (first-paint props: the seven system views with
+per-viewer channel hashes + TRUE ZCARD counts via the A-30 lazy variants,
+saved views, prefs blob, FR-03 health rollup from step 3's
+ChannelHealthState — "unknown" when empty, never a fabricated healthy —
+FR-30 build id, capability booleans, §9 tab-badge seam state).
+`Workspace.vue` + TopBar/ViewsRail/ContextPanel/HealthIndicator: FR-01 four
+regions (rail 240/56, list 300–480 persisted via drag AND §13 keyboard
+separator, thread flex, context 380/collapsed); FR-02's full ladder
+(1024–1279 R4 overlay drawer; 768–1023 rail icons PERMANENTLY — toggle
+inert; <768 two-level List↔Thread, Views modal sheet, R4 bottom sheet with
+the same three fixed-order tabs); FR-03 top bar in the frame's order with
+the health DOT (semantic `--ds-health-*` component) + BANNER-ON-OPEN on the
+NEUTRAL INK RAMP (R-25 — the ruled rendering); §13/B12-A01 AC-02 landmarks
+(nav/section/main/complementary name R1–R4) + skip links (first tab on cold
+load reveals; Enter lands in the list); §9 density toggle (64/52 via
+`--inbox-row-height`, persisted); Doc 08/09 SLOT panels stating their seams
+honestly + badge dots driven by the two SEAM FIXTURES
+(`fixtures/inbox/seams/doc0{8,9}-*.json`, local/ci `?seam_badges=1` — the
+?lang-override precedent). Pinia prefs store; ADR 0013 records the R-15
+stack growth (pinia, @tanstack/vue-virtual, @lhci/cli) at first install.
+`InboxBrowserSeeder` (real services only; self-healing prefs reset by
+UPDATE — the first DELETE attempt was REFUSED by the step-1 R-19b grant
+physics, recorded in the seeder comment). AC-01's traceability row flipped
+automated/partial (shell proven; completes when steps 9–10 fill the
+regions).
+
+**THE COUNTERSIGNED PREFS RIDER DISCHARGED (due this step, cited):** Read
+Only's PATCH answers the designed 403 → the store degrades SESSION-LOCAL
+(sessionStorage overlay), the refusal is SILENT, zero error toasts
+(`role=alert` count asserted 0); same-tab reload keeps the choice, a fresh
+session forgets it — proven end-to-end in the spec with the 403 response
+awaited.
+
+**Proven (evidence `docs/evidence/S07-step8/`):** browser shell specs
+**10/10** (`playwright-shell-01.txt` — both themes at 1440, the three
+sub-1280 rungs, AC-01 across a FRESH browser context, the rider; a11y
+axe-clean per frame); full battery **1037 passed / 0 failed / 13,899
+assertions incl. Doc 01–06** (`make-test-01.txt`); canonical **66 / 459**
+(`canonical-suites-01.txt`); gates **13/13**; PHPStan max + Pint + ESLint +
+vue-tsc clean; Workspace chunk 6 KB gz (NFR-04 headroom).
+
+**CI: ALL SEVEN OWED VERDICTS RESOLVED GREEN** — run 31455894375 on
+`f57e438`, Stages 1–6 green, verdict taken once (see the owed-forward
+paragraph above, now closed).
+
+**Two infrastructure events, recorded honestly:** (1) Docker Desktop died
+mid-step (daemon unreachable); the hard kill truncated redis-durable's AOF
+tail — repaired with the documented `redis-check-aof --fix` (3,799 bytes of
+one mid-write command trimmed; pre-fix backup kept in the volume; stack
+healthy after). NOT a code defect; no test claimed green on the dead stack.
+(2) Two dev-loop discoveries for the next screen step: the app container
+serves IMAGE-BAKED assets behind an anonymous volume (`compose cp` +
+`octane:reload` refreshes them — Octane workers also cache the Vite
+manifest in-process), recorded here so steps 9–13 don't rediscover it.
+
 ## SESSION-07 (Doc 07) — STEP 7: T-05 SERVER-SIDE SELECTIONS (SEC-06/EC-02/EC-05) — THE BULK BRIDGE
 
 **Built:** `SelectionTokens` (T-05) — "select all in view" mints a SERVER-SIDE
@@ -426,6 +508,18 @@ Actions billing/spending limit** — the same owner-only unblocker as the S21
 precedent. The CI verdict for the step-1 tree is OWED FORWARD and will be
 taken from the first run after billing is restored (a re-trigger on the same
 tree), reported at the next checkpoint.
+
+**RESOLVED AT S07 STEP 8 (2026-08-11): ALL SEVEN OWED VERDICTS DISCHARGED
+GREEN.** The owner restored Actions billing (account-level $0 spending limit
+was the blocker) and ordered a single re-run of the latest failed run on the
+current tree. Run
+[31455894375](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31455894375)
+re-ran on `f57e438` (the step-7 tree, which CONTAINS b21f244 → b87b1b6):
+Stages 1–6 ALL GREEN (lint+static 1m39s; unit 27s; integration 8m40s; AC-03
+soak 11m19s; browser 6m39s; perf placeholder; staging stub). Verdict taken
+ONCE per rule 15. One green run on the tree that contains all seven commits
+resolves the whole owed sequence: b21f244, b16692b, b853079, cf96c33,
+8229880, b87b1b6, f57e438 — each now CI-proven by containment.
 
 ## SESSION-23 (Doc 05) — "DOC 05 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 

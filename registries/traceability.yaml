@@ -1638,16 +1638,20 @@ entries:
   #    precedent — honest not-implemented rows naming the approved plan's suite and
   #    step; each row upgrades to automated in the step that executes it) ──────────
   - ac_ref: "Doc07 AC-01"
-    suite_path: manual
-    type: manual
-    tier: integration
+    suite_path: tests/Browser/inbox-layout.spec.ts
+    type: automated
+    tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: partial
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Layout matrix: four breakpoints, persisted sizes/collapse restore. Lands at approved-plan step 8 as
-      tests/Browser/inbox-layout.spec.ts; this row flips to automated in that step's commit.
+      FLIPPED AT S07 STEP 8 as the plan scheduled. COVERED: all four FR-02 breakpoints render the specified region behavior
+      (inbox-layout.spec.ts at 1440 both themes; inbox-mobile.spec.ts at 1100/900/375 — drawer, permanent icon rail, two-level nav with
+      Views modal sheet and R4 bottom sheet); persisted sizes/collapse/density restore ACROSS SESSIONS (fresh browser context + fresh
+      login); §13 keyboard resize; B12-A01 AC-02 landmarks + skip links; the countersigned Read Only prefs rider (session-local degrade,
+      silent refusal, zero toasts). PARTIAL because the list/thread REGION CONTENTS are steps 9–10 placeholders — the layout matrix is
+      proven on the shell; the row completes when the organs land. Functional-state + a11y only, NO pixel baselines (inherited row 12).
   - ac_ref: "Doc07 AC-02"
     suite_path: tests/Feature/Inbox/SystemViewMembershipTest.php
     type: automated
