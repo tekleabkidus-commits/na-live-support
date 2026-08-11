@@ -15,7 +15,7 @@ const props = defineProps<{
     t: { views: Record<string, string>; shell: Record<string, string> };
 }>();
 
-const emit = defineEmits<{ (e: 'toggle-collapse'): void }>();
+const emit = defineEmits<{ (e: 'toggle-collapse'): void; (e: 'select', view: string): void }>();
 
 const ICONS: Record<string, string> = {
     my_open: '◧',
@@ -76,6 +76,7 @@ function countLabel(viewKey: string, count: number): string {
                     :style="{ color: 'var(--ds-text-primary)' }"
                     :aria-label="countLabel(view.key, view.count)"
                     :title="collapsed ? t.views[view.key] : undefined"
+                    @click.prevent="emit('select', view.key)"
                 >
                     <span aria-hidden="true" :style="{ color: 'var(--ds-text-muted)' }">{{
                         ICONS[view.key] ?? '▤'

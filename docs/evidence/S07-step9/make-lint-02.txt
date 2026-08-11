@@ -1,0 +1,45 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/tests/Browser/inbox-live-list.spec.ts
+   65:1   warning  Delete `⏎`                                                                                                                                                                                       prettier/prettier
+  133:25  warning  Delete `⏎········`                                                                                                                                                                               prettier/prettier
+  135:1   warning  Replace `············` with `········`                                                                                                                                                           prettier/prettier
+  136:1   warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  137:13  warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  138:1   warning  Replace `················` with `············`                                                                                                                                                   prettier/prettier
+  139:13  warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  140:1   warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  141:17  warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  142:17  warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  143:1   warning  Replace `····················` with `················`                                                                                                                                           prettier/prettier
+  144:1   warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  145:1   warning  Replace `····················` with `················`                                                                                                                                           prettier/prettier
+  146:1   warning  Replace `····················` with `················`                                                                                                                                           prettier/prettier
+  147:1   warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  148:9   warning  Delete `····`                                                                                                                                                                                    prettier/prettier
+  149:1   warning  Replace `············` with `········`                                                                                                                                                           prettier/prettier
+  150:5   warning  Replace `····},⏎········leavingId,⏎····` with `},·leavingId`                                                                                                                                     prettier/prettier
+  181:25  warning  Replace `(gone)·=>·window.__inboxList.applyDelta({·op:·'remove',·id:·gone·}),·goneId` with `⏎········(gone)·=>·window.__inboxList.applyDelta({·op:·'remove',·id:·gone·}),⏎········goneId,⏎····`  prettier/prettier
+
+/home/kidus/projects/na-live-support/tests/Browser/inbox-selection.spec.ts
+  21:14  warning  Replace `'compose',·'-f',·'docker/compose.yaml',·'-f',·'docker/compose.dev.yaml',·'exec',·'-T',·'app',·'php',·'artisan',·...args` with `⏎················'compose',⏎················'-f',⏎················'docker/compose.yaml',⏎················'-f',⏎················'docker/compose.dev.yaml',⏎················'exec',⏎················'-T',⏎················'app',⏎················'php',⏎················'artisan',⏎················...args,⏎············`  prettier/prettier
+  26:25  warning  Replace ``${err.message}\n---·stdout·---\n${String(err.stdout·??·'')}\n---·stderr·---\n${String(err.stderr·??·'')}`` with `⏎············`${err.message}\n---·stdout·---\n${String(err.stdout·??·'')}\n---·stderr·---\n${String(err.stderr·??·'')}`,⏎········`                                                                                                                                                                                                    prettier/prettier
+  45:2   warning  Delete `⏎`                                                                                                                                                                                                                                                                                                                                                                                                                                                       prettier/prettier
+  89:26  warning  Replace `await·page.getByTestId('list-total').textContent().then((text)·=>·text?.match(/\d+/)?.[0]·??·'0')` with `⏎········await·page⏎············.getByTestId('list-total')⏎············.textContent()⏎············.then((text)·=>·text?.match(/\d+/)?.[0]·??·'0'),⏎····`                                                                                                                                                                                       prettier/prettier
+
+✖ 26 problems (0 errors, 26 warnings)
+  0 errors and 23 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit

@@ -89,7 +89,7 @@ final class ListProjector
     }
 
     /** Recompute one ticket's row and re-evaluate every membership it touches. */
-    public function recomputeTicket(string $ticketId): void
+    public function recomputeTicket(string $ticketId, bool $withGroup = true): void
     {
         /** @var object{assignee_id: string|null}|null $before */
         $before = DB::table('ticket_list_items')->where('ticket_id', $ticketId)->select('assignee_id')->first();
@@ -97,6 +97,25 @@ final class ListProjector
         $row = $this->items->recompute($ticketId);
         if ($row === null) {
             return;
+        }
+
+        // Doc 05 EC-04 (the closing row, step 9): the customer-group flags —
+        // dual_channel on every open-family row of a customer running TWO
+        // conversations, older_channel_activity on the rows that are NOT the
+        // customer's freshest conversation. Group first, so this ticket's own
+        // deltas below carry fresh flags; siblings whose flags flipped are
+        // re-synced WITHOUT re-grouping (the depth guard — a group of N needs
+        // exactly one group pass).
+        if ($withGroup) {
+            foreach ($this->recomputeCustomerGroup($row) as $siblingTicketId) {
+                $this->recomputeTicket($siblingTicketId, withGroup: false);
+            }
+            /** @var ListItemRow|null $reread */
+            $reread = DB::table('ticket_list_items')->where('ticket_id', $ticketId)->first();
+            if ($reread === null) {
+                return;
+            }
+            $row = $reread;
         }
 
         $open = in_array($row->status, SystemViews::OPEN_FAMILY, true);
@@ -189,6 +208,67 @@ final class ListProjector
         // A follower REMOVAL is synced when its event names the user (below);
         // recompute alone cannot know who left, and scanning every user's set
         // would be the stampede T-01 forbids.
+    }
+
+    /**
+     * Doc 05 EC-04's group truth, recomputed from the customer's OWN list
+     * rows: "one customer, two conversations … inbox groups by customer with
+     * a dual-channel badge; agents are warned when replying in the
+     * older-activity conversation." Open-family rows only carry the badge
+     * (EC-04's "if both have open tickets"); the older flag rides every
+     * badged row whose conversation is not the freshest. Returns the SIBLING
+     * ticket ids whose flags changed (the caller re-syncs their views).
+     *
+     * @param  ListItemRow  $row
+     * @return list<string>
+     */
+    private function recomputeCustomerGroup(object $row): array
+    {
+        if ($row->customer_id === null) {
+            return [];
+        }
+
+        /** @var list<object{ticket_id: string, conversation_id: string, status: string, last_activity_at: string|null, dual_channel: bool, older_channel_activity: bool}> $group */
+        $group = DB::table('ticket_list_items')
+            ->where('customer_id', $row->customer_id)
+            ->get(['ticket_id', 'conversation_id', 'status', 'last_activity_at', 'dual_channel', 'older_channel_activity'])
+            ->all();
+
+        $openRows = array_values(array_filter($group, fn (object $item): bool => in_array($item->status, SystemViews::OPEN_FAMILY, true)));
+        $openConversations = array_unique(array_map(fn (object $item): string => $item->conversation_id, $openRows));
+        $dual = count($openConversations) >= 2;
+
+        $freshestMicros = 0;
+        foreach ($openRows as $item) {
+            if ($item->last_activity_at !== null) {
+                $freshestMicros = max($freshestMicros, ViewZsets::toMicros($item->last_activity_at));
+            }
+        }
+
+        $changedSiblings = [];
+        foreach ($group as $item) {
+            $isOpen = in_array($item->status, SystemViews::OPEN_FAMILY, true);
+            $wantDual = $dual && $isOpen;
+            $wantOlder = $wantDual
+                && $item->last_activity_at !== null
+                && ViewZsets::toMicros($item->last_activity_at) < $freshestMicros;
+
+            if ((bool) $item->dual_channel === $wantDual && (bool) $item->older_channel_activity === $wantOlder) {
+                continue;
+            }
+
+            DB::table('ticket_list_items')->where('ticket_id', $item->ticket_id)->update([
+                'dual_channel' => $wantDual,
+                'older_channel_activity' => $wantOlder,
+                'updated_at' => DB::raw('clock_timestamp()'),
+            ]);
+
+            if ($item->ticket_id !== $row->ticket_id) {
+                $changedSiblings[] = $item->ticket_id;
+            }
+        }
+
+        return $changedSiblings;
     }
 
     /**

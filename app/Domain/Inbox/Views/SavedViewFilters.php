@@ -99,8 +99,12 @@ final class SavedViewFilters
                 : $query->where('li.assignee_id', self::str($filters['assignee_id']));
         }
         if (isset($filters['tags']) && is_array($filters['tags']) && $filters['tags'] !== []) {
-            // jsonb ?| — any overlap with the filter's tag list.
-            $query->whereRaw('li.tags ?| ?::text[]', ['{'.implode(',', self::strings($filters['tags'])).'}']);
+            // jsonb ?| — any overlap with the filter's tag list. WRITTEN ??|:
+            // a bare ? in Laravel raw SQL is a PDO placeholder under native
+            // prepares — CI run 31465925984 caught the binding being eaten
+            // ("li.tags {vip}| ?::text[]") while local emulated prepares
+            // masked it. ?? is the framework's documented escape.
+            $query->whereRaw('li.tags ??| ?::text[]', ['{'.implode(',', self::strings($filters['tags'])).'}']);
         }
         if (isset($filters['language'])) {
             $query->where('li.language', self::str($filters['language']));

@@ -78,6 +78,82 @@ final class ViewZsets
         return $ids;
     }
 
+    /**
+     * One CURSOR page (C-05 — FR-12's infinite scroll): members strictly
+     * AFTER the cursor position in the view's order, WITH their scores (the
+     * next cursor is the last row's own (score, id)).
+     *
+     * The cursor is (score, id). Redis orders same-score members
+     * lexicographically (the R-23 documented tiebreak), so the page fetches
+     * by score bound INCLUSIVE and drops members at the cursor score up to
+     * and including the cursor id — exact resumption without trusting
+     * offsets, which live mutation invalidates (the reason C-05 bans them).
+     *
+     * @return list<array{id: string, score: int}>
+     */
+    public function cursorPage(string $viewKey, ?int $cursorScore, ?string $cursorId, int $limit, bool $descending): array
+    {
+        $key = $this->key($viewKey);
+        $connection = $this->redis->connection(self::CONNECTION);
+
+        if ($cursorScore === null) {
+            $command = $descending ? 'zrevrange' : 'zrange';
+            /** @var array<string, string|int|float>|list<string|int|float> $flat */
+            $flat = $connection->command($command, [$key, 0, $limit - 1, true]); // phpredis: 4th arg = withscores
+        } else {
+            // Inclusive bound at the cursor score: same-score members after
+            // the cursor id must not be skipped. The over-fetch margin covers
+            // members sharing the cursor's exact microsecond (rare; R-23).
+            $fetch = $limit + 100;
+            $options = ['withscores' => true, 'limit' => [0, $fetch]];
+            /** @var array<string, string|int|float>|list<string|int|float> $flat */
+            $flat = $descending
+                ? $connection->command('zrevrangebyscore', [$key, (string) $cursorScore, '-inf', $options])
+                : $connection->command('zrangebyscore', [$key, (string) $cursorScore, '+inf', $options]);
+        }
+
+        // phpredis answers WITHSCORES as an ordered map {member: score};
+        // predis answers a flat [member, score, …] list. Normalize to pairs.
+        /** @var list<array{0: string, 1: int}> $pairs */
+        $pairs = [];
+        $flatValues = array_values((array) $flat);
+        $isMap = array_keys((array) $flat) !== range(0, count($flatValues) - 1);
+        if ($isMap) {
+            foreach ((array) $flat as $member => $score) {
+                $pairs[] = [(string) $member, (int) $score];
+            }
+        } else {
+            for ($i = 0; $i + 1 < count($flatValues); $i += 2) {
+                $pairs[] = [(string) $flatValues[$i], (int) $flatValues[$i + 1]];
+            }
+        }
+
+        /** @var list<array{id: string, score: int}> $page */
+        $page = [];
+        $pastCursor = $cursorScore === null;
+        foreach ($pairs as [$id, $score]) {
+            if (! $pastCursor) {
+                if ($score !== $cursorScore) {
+                    $pastCursor = true; // beyond the cursor's score band
+                } elseif ($cursorId === null || ($descending ? strcmp($id, $cursorId) < 0 : strcmp($id, $cursorId) > 0)) {
+                    // Same-score member PAST the cursor id in traversal order
+                    // (lexical compare, not equality — a cursor member removed
+                    // between pages must not swallow its score band).
+                    $pastCursor = true;
+                } else {
+                    continue; // at or before the cursor id within the band
+                }
+            }
+
+            $page[] = ['id' => $id, 'score' => $score];
+            if (count($page) === $limit) {
+                break;
+            }
+        }
+
+        return $page;
+    }
+
     /** @return list<string> every member (rebuild/checker use, bounded by view size) */
     public function allIds(string $viewKey): array
     {

@@ -12,6 +12,7 @@ use App\Support\Tenancy\RlsSession;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 /**
@@ -82,7 +83,121 @@ final class InboxBrowserSeeder extends Seeder
         // from real rollup state (worst = degraded).
         app(ChannelHealthState::class)->set('telegram', 'fixture_brand_bot', 'degraded');
 
+        // ── Step 9: the FR-09 list scene, projected through the REAL
+        //    ListProjector (recompute-from-truth — the browser rows are the
+        //    projector's own rows, not hand-written fixtures). Idempotent on
+        //    the marker customer. All synthetic (@fixture…, CLAUDE.md §8).
+        if (! DB::table('ticket_list_items')->where('number', 4801)->exists()) {
+            $this->seedListScene($row->id, $agent);
+        }
+
+        // CLOCK-BEARING fixture state decays between runs (a 45-minute
+        // window seeded this morning is expired by lunch — the capture run
+        // caught exactly that). Every seed refreshes it, then reprojects.
+        /** @var string|null $kidistTicket */
+        $kidistTicket = DB::table('ticket_list_items')->where('number', 4802)->value('ticket_id');
+        if (is_string($kidistTicket)) {
+            DB::table('conversations')
+                ->whereIn('id', DB::table('ticket_list_items')->where('ticket_id', $kidistTicket)->select('conversation_id'))
+                ->update([
+                    'reply_window_state' => 'closing',
+                    'reply_window_expires_at' => DB::raw("clock_timestamp() + interval '45 minutes'"),
+                ]);
+            app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($kidistTicket);
+        }
+
         app(RlsSession::class)->clear();
         app(TenantContext::class)->clear();
+    }
+
+    private function seedListScene(string $tenantId, User $agent): void
+    {
+        $projector = app(\App\Domain\Inbox\ReadModels\ListProjector::class);
+        $number = 4801;
+
+        $mk = function (string $name, string $username, array $ticket = [], array $conversation = []) use ($tenantId, &$number): array {
+            $customer = \App\Models\Customer::query()->firstOrCreate(
+                ['username' => $username],
+                ['display_name' => $name, 'is_shell' => true],
+            );
+            $conversationId = (string) Str::uuid7();
+            DB::table('conversations')->insert(array_merge([
+                'id' => $conversationId, 'tenant_id' => $tenantId, 'channel' => 'telegram',
+                'channel_ref_id' => 'fixture_brand_bot', 'external_chat_id' => 'chat-'.Str::random(10),
+                'customer_id' => $customer->identifier(), 'state' => 'active',
+            ], $conversation));
+            $ticketId = (string) Str::uuid7();
+            DB::table('tickets')->insert(array_merge([
+                'id' => $ticketId, 'tenant_id' => $tenantId, 'conversation_id' => $conversationId,
+                'customer_id' => $customer->identifier(), 'number' => $number++,
+                'status' => 'open', 'priority' => 'normal', 'source' => 'agent',
+            ], $ticket));
+
+            return [$customer, $conversationId, $ticketId];
+        };
+
+        $message = function (string $conversationId, string $body, string $kind = 'text', ?string $language = null) use ($tenantId): void {
+            DB::table('messages')->insert([
+                'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $conversationId,
+                'direction' => 'in', 'author_type' => 'customer', 'kind' => $kind,
+                'body' => $kind === 'text' ? $body : null, 'is_internal' => false, 'language' => $language,
+            ]);
+        };
+
+        // R1 — assigned (My Open), urgent, SLA breached (Doc 12 seam), 2
+        // unread Amharic inbound, tags with overflow.
+        [, $conv1, $ticket1] = $mk('አበበ ታደሰ', '@fixture_abebe_s09', [
+            'priority' => 'urgent', 'assignee_id' => $agent->identifier(),
+            'subject' => 'Withdrawal delayed', 'tags' => '{withdrawal,vip,telebirr}',
+        ]);
+        $message($conv1, 'ብር 2,500 ለማውጣት ሞክሬ ነበር ግን እስካሁን አልደረሰኝም', 'text', 'am');
+        $message($conv1, 'እባክዎ በአስቸኳይ ይመልከቱልኝ', 'text', 'am');
+        $projector->recomputeTicket($ticket1);
+        DB::table('ticket_list_items')->where('ticket_id', $ticket1)->update([
+            'sentiment' => 'negative', 'sla_state' => 'breached',
+            'sla_due_at' => DB::raw("clock_timestamp() - interval '12 minutes'"),
+        ]);
+
+        // R2 — unassigned, closing window (the WindowChip), photo-only last
+        // message (EC-11's localized placeholder), a live draft for the agent.
+        [, $conv2, $ticket2] = $mk('Kidist Haile', '@fixture_kidist_s09', [], [
+            'reply_window_state' => 'closing',
+            'reply_window_expires_at' => DB::raw("clock_timestamp() + interval '45 minutes'"),
+        ]);
+        $message($conv2, '', 'photo', 'en');
+        $projector->recomputeTicket($ticket2);
+        DB::table('message_drafts')->insert([
+            'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId,
+            'user_id' => $agent->identifier(), 'conversation_id' => $conv2,
+            'body' => 'fixture draft in progress',
+        ]);
+
+        // R3 + R4 — Doc 05 EC-04: ONE customer, TWO conversations, both open
+        // → dual-channel badges, the stale one flagged older-activity.
+        [$hybrid, $conv3, $ticket3] = $mk('Hana Girma', '@fixture_hana_s09');
+        $message($conv3, 'Thanks, the deposit arrived. One more question…', 'text', 'en');
+        $conv4 = (string) Str::uuid7();
+        DB::table('conversations')->insert([
+            'id' => $conv4, 'tenant_id' => $tenantId, 'channel' => 'telegram',
+            'channel_ref_id' => 'fixture_direct_bot', 'external_chat_id' => 'chat-'.Str::random(10),
+            'customer_id' => $hybrid->identifier(), 'state' => 'active',
+        ]);
+        $ticket4 = (string) Str::uuid7();
+        DB::table('tickets')->insert([
+            'id' => $ticket4, 'tenant_id' => $tenantId, 'conversation_id' => $conv4,
+            'customer_id' => $hybrid->identifier(), 'number' => 4899,
+            'status' => 'open', 'priority' => 'normal', 'source' => 'agent',
+        ]);
+        $message($conv4, 'Following up here from the other bot', 'text', 'en');
+        $projector->recomputeTicket($ticket3);
+        $projector->recomputeTicket($ticket4); // fresher — recomputes the group
+
+        // R5…R18 — volume for FR-12's scroll restoration (the pane must
+        // actually overflow at 900 px).
+        for ($i = 1; $i <= 14; $i++) {
+            [, $convN, $ticketN] = $mk("Fixture Filler {$i}", "@fixture_filler_s09_{$i}");
+            $message($convN, "Filler inquiry number {$i}", 'text', 'en');
+            $projector->recomputeTicket($ticketN);
+        }
     }
 }

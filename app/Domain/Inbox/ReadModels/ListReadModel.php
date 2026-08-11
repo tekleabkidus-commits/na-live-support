@@ -68,6 +68,20 @@ final class ListReadModel
         }
 
         $ids = $this->zsets->ids($viewKey, $offset, $limit, SystemViews::descending($view));
+
+        return $this->hydrate($ids, $viewer);
+    }
+
+    /**
+     * Scoped hydration of an id batch, input order preserved — layer 2 for
+     * BOTH pagination shapes (offset page above, FR-12's cursor page in the
+     * list endpoint).
+     *
+     * @param  list<string>  $ids
+     * @return list<object>
+     */
+    public function hydrate(array $ids, User $viewer): array
+    {
         if ($ids === []) {
             return [];
         }
@@ -80,7 +94,7 @@ final class ListReadModel
         /** @var array<string, TicketListItem> $rows */
         $rows = $query->get()->keyBy('ticket_id')->all();
 
-        // ZSET order preserved; out-of-scope ids vanish silently (BR-03).
+        // Input order preserved; out-of-scope ids vanish silently (BR-03).
         $page = [];
         foreach ($ids as $id) {
             if (isset($rows[$id])) {

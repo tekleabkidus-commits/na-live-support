@@ -81,6 +81,84 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 9: THE LIST UI (FR-09…FR-13, AC-03) + THE AMENDMENT-1 RIDER (i) DISCHARGE
+
+**THE TWO NAMED RIDERS, both executed and cited:**
+(i) **SCHEMA AMENDMENT 1 rider (i) DISCHARGED** — `ReadMarkers` is the real
+marker writer: `last_read_at` byte-copies the message's own DB-time
+`created_at` INSIDE SQL (INSERT…SELECT, the OutboxRelay idiom — the value
+never round-trips through PHP); the proof reads both sides back `::text`
+and compares VERBATIM (`ListEndpointTest`, the rider's exact bar), with the
+provenance pointer asserted and the never-backward LWW guard proven. The
+HTTP door `POST /inbox/read` rides views.manage per the **R-26 AMENDMENT
+(the FOURTH sibling — cited, not re-ruled; flagged at this checkpoint)**
+with the executed 403-and-no-row refusal; audit-exempt on the prefs
+rationale.
+(ii) **the d5fa7d7 CI verdict, taken once: STAGE 4 RED — A REAL DEFECT
+CAUGHT, FIXED THIS STEP.** Stages 1–3b green; the browser stage's seeder
+died materializing the tags-filtered saved view: `SavedViewFilters::sql`'s
+jsonb `?|` operator parsed as a PDO PLACEHOLDER under CI's native prepares
+("li.tags {vip}| ?::text[]" — the binding eaten) while local emulated
+prepares masked it. Fixed at the mechanism (`??|`, the framework's
+documented escape) with the CI run cited in the code comment. The S20
+push-and-verify precedent, working as designed.
+
+**BUILT:** FR-12's `GET /inbox/list` — C-05 cursor pagination on BOTH
+paths: the view ZSET's (score,id) cursor (a new `ViewZsets::cursorPage`,
+phpredis/predis WITHSCORES shapes normalized, same-score bands resumed by
+lexical id) and FR-10's sort-override keyset ((value,id), NULLS LAST block)
+over the view's membership subquery — the scope law stays ScopeSets on the
+outer query (R-03; BR-03 absence), rows carry their own zset score
+(`sort_key`) so the client's batched resort compares the server's numbers;
+per-viewer overlay (unread from the marker boundary, drafts) in two grouped
+queries; total = the viewer's ZCARD. **Doc 05 EC-04's list half (the
+closing row):** the projector's new CUSTOMER-GROUP recompute — expand
+migration `2026_08_11_100000` adds `older_channel_activity` (boolean,
+tags-precedent R-19b class, grants re-issued) — dual_channel on every
+open-family row of a two-conversation customer, older_channel_activity on
+the stale one, siblings re-synced depth-guarded, patch payload extended.
+**The client:** `liveList` store (T-02 consumer; patches in place NOW,
+resort BATCHED 5 s; pointer-inside holds order and offers the affordance;
+pointer-leave lands the held batch; enter 300 ms highlight / leave 150 ms
+collapse, reduced-motion suppressed), `List/Row.vue` (the FR-09 anatomy —
+WindowChip CONSUMED from Doc 05, EC-11 localized placeholders, §13 labels
+on every dot), `ListPane` (header total, sort select persisting per view in
+prefs.sort_overrides, §13 polite announcements, FR-12 scroll restoration
+via pagehide + per-view sessionStorage, EC-09 toast + My-Open fallback),
+`BulkBar` with **EC-02's no-longer-in-view tray** (selection is BY ID —
+survives resorts by construction; leavers stay selected in the tray until
+deselected or executed), select-all-in-view minting the T-05 token (the
+SHOWN count is the mint's server count). i18n en+am for every string.
+
+**Proven (evidence `docs/evidence/S07-step9/`):** browser **21/21** — the
+step-9 four (anatomy incl. the EC-04 two-badges-one-warning proof; AC-03's
+scripted delta streams with B12-A01 AC-04's rows-never-move-under-pointer
+bar past the 5 s batch, keyboard affordance activation, enter/leave batch
+semantics, reduced-motion keyframes asserted `none`; FR-12 scroll
+restoration; FR-13/EC-02 selection + tray) plus the step-8 six regressing
+(`playwright-list-04.txt`); Pest canonical **73/502**
+(`canonical-suites-03.txt`); full battery **1044 passed / 0 failed /
+14,098 assertions** on the final tree (`make-test-04.txt`; the first run tripped ONLY
+RbacBudgets' 5× dev-hardware ceiling with p50 0.242 ms inside the 0.3 ms
+spec budget — RISK 0d, re-run once and recorded:
+`make-test-01/-02-risk0d-rerun.txt`); gates **13/13** (string-lint caught a
+multiline template expression reading as copy — restructured into a
+computed, honest catch); PHPStan max + Pint + ESLint + vue-tsc clean.
+**Sabotage #6** (batcher bypassed → red on exactly the three
+batch-dependent proofs, EC-09 green as designed → restored 4/4:
+`sabotage-6-RED-01/-RESTORED-01.txt`).
+
+**Honest finds this step, beyond the CI one:** (1) prefs PATCHes raced —
+two in-flight writes landing out of order let the server keep the LOSER
+(AC-01's cross-session proof caught 408 px beating the shown 424) — the
+store now serializes its write chain (BR-01's reconcile-or-rollback bar);
+(2) clock-bearing fixture state decays (the seeded 45-minute window was
+expired by the capture run) — the seeder refreshes windows every run;
+(3) §13's full listbox/roving-tabindex pattern deferred to FR-31's keyboard
+step (13) BY NAME: nested interactive controls are invalid inside
+role=option, so the list ships as a semantic list until the roving focus
+model exists (axe-clean now, the pattern lands with the keyboard map).
+
 ## SESSION-07 (Doc 07) — STEP 8: TOKENS-FIRST + THE B1-S01 SHELL (FR-01/02/03, AC-01) + THE A-35 CORE EDIT
 
 **ORDERED FIRST, EXECUTED FIRST — the hex re-run:** the committed S23

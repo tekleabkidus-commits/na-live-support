@@ -21,6 +21,7 @@
 // organs arrive; the placeholders are t-keys, not lorem.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
+import ListPane from '../../Components/Inbox/List/ListPane.vue';
 import TopBar from '../../Components/Inbox/TopBar.vue';
 import ViewsRail from '../../Components/Inbox/ViewsRail.vue';
 import {
@@ -40,6 +41,9 @@ const props = defineProps<{
         views: Record<string, string>;
         tabs: Record<string, string>;
         density: Record<string, string>;
+        list: Record<string, string>;
+        row: Record<string, string>;
+        bulk: Record<string, string>;
     };
     tenantName: string;
     views: ViewRow[];
@@ -120,6 +124,9 @@ const viewsSheetOpen = ref(false);
 const contextSheetOpen = ref(false);
 const drawerOpen = ref(false);
 
+// The ACTIVE view (rail clicks set it; EC-09's fallback returns to My Open).
+const activeView = ref('my_open');
+
 // §9 density → the row-height variable list rows (step 9) consume.
 const density = computed(() => prefsStore.density);
 function setDensity(value: 'comfortable' | 'compact'): void {
@@ -165,6 +172,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 :collapsed="railCollapsed"
                 :t="{ views: t.views, shell: t.shell }"
                 @toggle-collapse="toggleRail"
+                @select="(v: string) => (activeView = v)"
             />
 
             <!-- R2: the list region (chrome + step-9 slot). -->
@@ -180,9 +188,11 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 }"
                 tabindex="-1"
             >
-                <p class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
-                    {{ t.shell.list_placeholder }}
-                </p>
+                <ListPane
+                    :view="activeView"
+                    :t="{ list: t.list, row: t.row, bulk: t.bulk }"
+                    @fallback-view="activeView = 'my_open'"
+                />
             </section>
 
             <!-- §13: the resize handle IS keyboard-operable. -->
@@ -306,10 +316,14 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                     class="min-h-0 flex-1 overflow-y-auto"
                     tabindex="-1"
                 >
-                    <p class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
-                        {{ t.shell.list_placeholder }}
-                    </p>
-                    <!-- Step 9 wires row-tap → thread; the affordance exists now. -->
+                    <ListPane
+                        :view="activeView"
+                        :t="{ list: t.list, row: t.row, bulk: t.bulk }"
+                        @open-ticket="mobileScreen = 'thread'"
+                        @fallback-view="activeView = 'my_open'"
+                    />
+                    <!-- Row-tap opens the thread (above); this affordance stays
+                         for empty fixtures until step 10 renders the thread. -->
                     <button
                         type="button"
                         data-testid="mobile-open-thread"
@@ -346,6 +360,12 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                             :saved-views="savedViews"
                             :collapsed="false"
                             :t="{ views: t.views, shell: t.shell }"
+                            @select="
+                                (v: string) => {
+                                    activeView = v;
+                                    viewsSheetOpen = false;
+                                }
+                            "
                         />
                     </div>
                 </div>

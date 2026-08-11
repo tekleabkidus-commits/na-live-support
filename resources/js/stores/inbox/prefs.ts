@@ -24,6 +24,7 @@ type PrefsBlob = {
     regions?: RegionPrefs;
     density?: 'comfortable' | 'compact';
     view_order?: string[];
+    sort_overrides?: Record<string, string>;
 };
 
 const SESSION_KEY = 'inbox-prefs-session-local';
@@ -42,6 +43,11 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
         regions: {} as RegionPrefs,
         density: 'comfortable' as 'comfortable' | 'compact',
         viewOrder: [] as string[],
+        sortOverrides: {} as Record<string, string>,
+        // Writes are SERIALIZED: two in-flight PATCHes can land out of
+        // order and the server keeps the loser (a 408-px width overtaking
+        // the 424 the UI shows — BR-01's honesty bar caught it in AC-01).
+        _writeChain: Promise.resolve() as Promise<void>,
         // Flipped on the FIRST 403 — later writes skip the network entirely
         // (silent, no retry storm) and stay session-local.
         sessionLocal: false,
@@ -56,11 +62,24 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
             this.regions = merged.regions ?? {};
             this.density = merged.density ?? 'comfortable';
             this.viewOrder = merged.view_order ?? [];
+            this.sortOverrides = merged.sort_overrides ?? {};
         },
 
         setRegions(patch: RegionPrefs): void {
             this.regions = { ...this.regions, ...patch };
             void this.persist({ regions: this.regions });
+        },
+
+        // FR-10: the per-view sort override persists in the blob.
+        setSortOverride(view: string, sort: string): void {
+            if (sort) {
+                this.sortOverrides = { ...this.sortOverrides, [view]: sort };
+            } else {
+                const next = { ...this.sortOverrides };
+                delete next[view];
+                this.sortOverrides = next;
+            }
+            void this.persist({ sort_overrides: this.sortOverrides });
         },
 
         setDensity(density: 'comfortable' | 'compact'): void {
@@ -73,6 +92,12 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
                 this.writeSessionLocal(patch);
                 return;
             }
+            const chained = this._writeChain.then(() => this.send(patch));
+            this._writeChain = chained;
+            return chained;
+        },
+
+        async send(patch: PrefsBlob): Promise<void> {
             try {
                 const response = await fetch('/inbox/prefs', {
                     method: 'PATCH',

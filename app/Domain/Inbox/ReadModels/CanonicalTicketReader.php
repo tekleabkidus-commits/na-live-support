@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  *     ticket: object{id: string, tenant_id: string, conversation_id: string, customer_id: string|null, number: int|string, status: string, priority: string, pending_reason: string|null, source: string, assignee_id: string|null, department_id: string|null, channel_unreachable: bool, subject: string|null, created_at: string},
  *     conversation: object{channel: string, reply_window_expires_at: string|null}|null,
  *     customer: object{display_name: string|null}|null,
- *     lastPublic: object{kind: string, body: string|null, created_at: string}|null,
+ *     lastPublic: object{kind: string, body: string|null, created_at: string, language: string|null}|null,
  *     lastActivityAt: string,
  *     tagsJson: string
  * }
@@ -48,12 +48,12 @@ final class CanonicalTicketReader
             ? DB::table('customers')->where('id', $ticket->customer_id)->first()
             : null;
 
-        /** @var object{kind: string, body: string|null, created_at: string}|null $lastPublic */
+        /** @var object{kind: string, body: string|null, created_at: string, language: string|null}|null $lastPublic */
         $lastPublic = DB::table('messages')
             ->where('conversation_id', $ticket->conversation_id)
             ->whereNotIn('kind', ['note', 'system'])
             ->orderByDesc('created_at')->orderByDesc('id')
-            ->select(['kind', 'body', 'created_at'])
+            ->select(['kind', 'body', 'created_at', 'language'])
             ->first();
 
         // LAST ACTIVITY, defined once (SystemViews' docblock): greatest of the

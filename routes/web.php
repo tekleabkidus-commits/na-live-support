@@ -115,6 +115,15 @@ Route::middleware([
     // B1-S01: the workspace shell page (S07 step 8) — a pure read.
     Route::get('/', [App\Http\Controllers\Inbox\WorkspaceController::class, 'show'])
         ->middleware('permission:tickets.view')->name('inbox.workspace');
+    // FR-12: the cursor list page — a pure read on the audience key.
+    Route::get('list', [App\Http\Controllers\Inbox\ListController::class, 'index'])
+        ->middleware('permission:tickets.view')->name('inbox.list');
+    // Read markers (SCHEMA AMENDMENT 1): a per-user workspace-STATE write —
+    // rides views.manage per the R-26 AMENDMENT's generalized statement (the
+    // FOURTH sibling, cited not re-ruled; flagged at the step-9 checkpoint).
+    // Read Only's unread state stays session-local, same as the prefs rider.
+    Route::post('read', [App\Http\Controllers\Inbox\ListController::class, 'markRead'])
+        ->middleware('permission:views.manage')->name('inbox.read');
     Route::get('views', [App\Http\Controllers\Inbox\SavedViewController::class, 'index'])
         ->middleware('permission:tickets.view')->name('inbox.views.index');
     // WRITES ride views.manage (R-26/A-34 — FR-06's tickets.view names the

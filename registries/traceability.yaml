@@ -1668,16 +1668,20 @@ entries:
       counts under A-30's four conditions (PerViewerCountsTest.php). Functional
       coverage only — no pixel claim (inherited row 12).
   - ac_ref: "Doc07 AC-03"
-    suite_path: manual
-    type: manual
-    tier: integration
+    suite_path: tests/Browser/inbox-live-list.spec.ts
+    type: automated
+    tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Live list: scripted delta streams produce the exact FR-11 behaviors with visual assertions. Lands at approved-plan step 9 as
-      tests/Browser/inbox-live-list.spec.ts; this row flips to automated in that step's commit.
+      FLIPPED AT S07 STEP 9 as the plan scheduled. SCRIPTED DELTA STREAMS (AC-03's wording) drive the SAME store entry points the realtime
+      consumer will call: in-place patch immediacy, the 5 s batched resort, B12-A01 AC-04's rows-never-move-under-pointer bar held PAST the
+      batch window with the "list updated — resort" affordance (keyboard-activated; pointer-leave lands the held batch), enter-at-position /
+      leave-fade batch semantics, reduced-motion keyframes asserted none, the §13 polite announcement, and EC-09's queue-removed toast +
+      My Open fallback. Sabotage #6 (batcher bypassed) turns exactly the batch-dependent proofs red. The physical Reverb feed wires into the
+      same applyDelta at its step; visual-state assertions are functional + a11y, NO pixel baselines (inherited row 12).
   - ac_ref: "Doc07 AC-04"
     suite_path: manual
     type: manual

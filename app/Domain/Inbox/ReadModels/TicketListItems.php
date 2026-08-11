@@ -63,7 +63,8 @@ use Illuminate\Support\Facades\DB;
  *     sla_due_at: string|null,
  *     created_at: string,
  *     updated_at: string|null,
- *     tags: string
+ *     tags: string,
+ *     older_channel_activity: bool
  * }
  */
 final class TicketListItems
@@ -100,6 +101,17 @@ final class TicketListItems
             'number' => $row->number,
             'last_activity_at' => $row->last_activity_at,
             'tags' => json_decode($row->tags, true, 8, JSON_THROW_ON_ERROR),
+            // FR-09 line-2 chips + the Doc 05 EC-04 group flags (step 9):
+            // the client patches badges in place, never re-derives them.
+            'language' => $row->language,
+            'sentiment' => $row->sentiment,
+            'sla_state' => $row->sla_state,
+            'sla_due_at' => $row->sla_due_at,
+            'window_expires_at' => $row->window_expires_at,
+            'customer_display_name' => $row->customer_display_name,
+            'channel' => $row->channel,
+            'dual_channel' => (bool) $row->dual_channel,
+            'older_channel_activity' => (bool) $row->older_channel_activity,
         ];
     }
 
@@ -138,7 +150,9 @@ final class TicketListItems
             // text — the kind is the localized-placeholder key downstream.
             'snippet' => $snippetKind === 'text' ? mb_substr((string) ($truth->lastPublic->body ?? ''), 0, 140) : null,
             'snippet_kind' => $snippetKind,
-            'language' => null,
+            // FR-09's language chip: the LAST PUBLIC message's detected
+            // language (Doc 04's detector wrote it); null hides the chip.
+            'language' => $truth->lastPublic->language ?? null,
             'ticket_created_at' => $t->created_at,
             'last_activity_at' => $truth->lastActivityAt,
             'last_message_created_at' => $truth->lastPublic->created_at ?? null,

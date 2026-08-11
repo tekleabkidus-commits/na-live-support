@@ -1,0 +1,99 @@
+
+Running 4 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-live-list.spec.ts:75:1 › AC-03 + B12-A01 AC-04: a rescore delta patches IN PLACE at once, but with the pointer inside the list the ORDER holds past the 5 s batch — the affordance offers, the click resorts (7.6s)
+  ✘  2 [chromium] › tests/Browser/inbox-live-list.spec.ts:123:1 › FR-11: an entering row waits for the batch (pointer OUTSIDE → applies on its own), lands IN POSITION with the entering highlight; a leaving row fades and is gone after the batch (6.7s)
+  ✘  3 [chromium] › tests/Browser/inbox-live-list.spec.ts:172:1 › reduced motion: the enter/leave keyframes are suppressed (§13/B12-A01) — the DATA state still flows, nothing animates (6.7s)
+  ✓  4 [chromium] › tests/Browser/inbox-live-list.spec.ts:189:1 › EC-09: the active queue view is removed mid-shift → toast (role=status, never an error), then the pane falls back to My Open (4.4s)
+
+
+  1) [chromium] › tests/Browser/inbox-live-list.spec.ts:75:1 › AC-03 + B12-A01 AC-04: a rescore delta patches IN PLACE at once, but with the pointer inside the list the ORDER holds past the 5 s batch — the affordance offers, the click resorts 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,6 +1,7 @@
+      Array [
+    +   "019fefb9-5fd4-734e-af3d-957c857e579a",
+        "019fefb9-5d1a-723b-ab60-1dc7490eb477",
+        "019fefb9-5d4d-73d0-b11d-d4965e25d79a",
+        "019fefb9-5d59-70d3-9f12-3df8923f3c45",
+        "019fefb9-5dca-7221-8a78-8bcf9b19d0d2",
+        "019fefb9-5df5-709a-aad2-20368eb4c6fc",
+    @@ -13,7 +14,6 @@
+        "019fefb9-5f01-72c5-8ef8-0ad94b185636",
+        "019fefb9-5f26-7168-8543-9aee604179d4",
+        "019fefb9-5f4d-73e7-ab6e-9a44227d0917",
+        "019fefb9-5f7d-737b-8861-782d2d932d68",
+        "019fefb9-5fa6-71ed-b08f-796b2345472e",
+    -   "019fefb9-5fd4-734e-af3d-957c857e579a",
+      ]
+
+      106 |     await page.waitForTimeout(5600); // past the 5 s batch deliberately
+      107 |     const orderHeld = await page.evaluate(() => window.__inboxList.state().order);
+    > 108 |     expect(orderHeld).toEqual(orderBefore);
+          |                       ^
+      109 |
+      110 |     // The affordance appeared instead of a yank. Activating it KEYBOARD-side
+      111 |     // (focus + Enter — a mouse journey to the button exits the list, and the
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-live-list.spec.ts:108:23
+
+    Error Context: test-results/inbox-live-list-AC-03-B12--d6214-ce-offers-the-click-resorts-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-live-list.spec.ts:123:1 › FR-11: an entering row waits for the batch (pointer OUTSIDE → applies on its own), lands IN POSITION with the entering highlight; a leaving row fades and is gone after the batch 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('[data-ticket="019fefb9-5d1a-723b-ab60-1dc7490eb477"]')
+    Expected: "true"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-ticket="019fefb9-5d1a-723b-ab60-1dc7490eb477"]')
+
+
+      154 |     // The leaving row fades NOW (visual state), the entering row is not yet
+      155 |     // in the order — both land with the batch.
+    > 156 |     await expect(page.locator(`[data-ticket="${leavingId}"]`)).toHaveAttribute(
+          |                                                                ^
+      157 |         'data-leaving',
+      158 |         'true',
+      159 |     );
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-live-list.spec.ts:156:64
+
+    Error Context: test-results/inbox-live-list-FR-11-an-e-25bf8-and-is-gone-after-the-batch-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-live-list.spec.ts:172:1 › reduced motion: the enter/leave keyframes are suppressed (§13/B12-A01) — the DATA state still flows, nothing animates 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('[data-ticket="019fefb9-5d1a-723b-ab60-1dc7490eb477"]')
+    Expected: "true"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-ticket="019fefb9-5d1a-723b-ab60-1dc7490eb477"]')
+
+
+      182 |
+      183 |     const row = page.locator(`[data-ticket="${goneId}"]`);
+    > 184 |     await expect(row).toHaveAttribute('data-leaving', 'true');
+          |                       ^
+      185 |     const animation = await row.evaluate((el) => getComputedStyle(el).animationName);
+      186 |     expect(animation).toBe('none'); // the media query kills the keyframes
+      187 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-live-list.spec.ts:184:23
+
+    Error Context: test-results/inbox-live-list-reduced-mo-85077-till-flows-nothing-animates-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-live-list.spec.ts:75:1 › AC-03 + B12-A01 AC-04: a rescore delta patches IN PLACE at once, but with the pointer inside the list the ORDER holds past the 5 s batch — the affordance offers, the click resorts 
+    [chromium] › tests/Browser/inbox-live-list.spec.ts:123:1 › FR-11: an entering row waits for the batch (pointer OUTSIDE → applies on its own), lands IN POSITION with the entering highlight; a leaving row fades and is gone after the batch 
+    [chromium] › tests/Browser/inbox-live-list.spec.ts:172:1 › reduced motion: the enter/leave keyframes are suppressed (§13/B12-A01) — the DATA state still flows, nothing animates 
+  1 passed (37.0s)
