@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-notify.spec.ts:90:1 › FR-04 THE DEDUP PROOF (sabotage #5 red here): two tabs, the same event scripted to BOTH — exactly ONE tab emits; the leader survives and the follower stays silent (3.4s)
+
+
+  1) [chromium] › tests/Browser/inbox-notify.spec.ts:90:1 › FR-04 THE DEDUP PROOF (sabotage #5 red here): two tabs, the same event scripted to BOTH — exactly ONE tab emits; the leader survives and the follower stays silent 
+
+    Error: exactly one leader must exist
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      129 |     const leaderB = await page2.evaluate(() => window.__inboxNotify.leader());
+      130 |
+    > 131 |     expect(leaderA.isLeader !== leaderB.isLeader, 'exactly one leader must exist').toBe(true);
+          |                                                                                    ^
+      132 |     expect(
+      133 |         emissionsA.sounds + emissionsB.sounds,
+      134 |         'the event must emit EXACTLY ONCE across tabs',
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-notify.spec.ts:131:84
+
+    Error Context: test-results/inbox-notify-FR-04-THE-DED-29b64-d-the-follower-stays-silent-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-notify.spec.ts:90:1 › FR-04 THE DEDUP PROOF (sabotage #5 red here): two tabs, the same event scripted to BOTH — exactly ONE tab emits; the leader survives and the follower stays silent 

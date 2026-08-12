@@ -1,0 +1,109 @@
+
+Running 18 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/inbox-bell.spec.ts:63:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE (1.4s)
+  ✓   2 [chromium] › tests/Browser/inbox-bell.spec.ts:101:1 › FR-26: mark-all-read stamps read_at server-side — the badge clears and STAYS cleared across a reload (1.4s)
+  ✓   3 [chromium] › tests/Browser/inbox-bell.spec.ts:115:1 › FR-26 quick mute silences REAL emissions: mute 1 h → a scripted my-open event emits NOTHING; unmute → it emits again (1.4s)
+  ✓   4 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:61:1 › FR-24: the High-priority chip composes WITHIN Unassigned — normal rows leave, the total tells the filtered truth, clear-all restores (1.8s)
+  ✓   5 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:85:1 › FR-24: on My Open the same chip KEEPS the matching rows — the urgent R1 and the high Yonas stay, the normal FR-20 fixtures leave (1.4s)
+  ✓   6 [chromium] › tests/Browser/inbox-palette.spec.ts:67:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (1.7s)
+  ✓   7 [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.8s)
+  ✓   8 [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (1.3s)
+  ✘   9 [chromium] › tests/Browser/inbox-palette.spec.ts:118:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) (6.8s)
+  ✓  10 [chromium] › tests/Browser/inbox-palette.spec.ts:136:1 › FR-23: ↑↓ move the roving selection and ↵ opens it — keyboard-only from ⌘K to a switched view (US-01 posture) (1.3s)
+  ✓  11 [chromium] › tests/Browser/inbox-palette.spec.ts:150:1 › FR-23: recent searches persist per user — the footer offers the last query on the next open (1.6s)
+  ✓  12 [chromium] › tests/Browser/inbox-status.spec.ts:73:1 › FR-28: the menu sets Away then Online through the real door — the label round-trips server truth (1.7s)
+  ✓  13 [chromium] › tests/Browser/inbox-status.spec.ts:87:1 › BR-06: the away countdown toast is CANCELABLE — it counts down, cancel keeps the agent online and the toast leaves (4.1s)
+  ✓  14 [chromium] › tests/Browser/inbox-status.spec.ts:113:1 › FR-28: a supervisor FORCE renders with attribution — "set by …" appears on the control (2.4s)
+  ✘  15 [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) (1.5s)
+  ✘  16 [chromium] › tests/Browser/inbox-views.spec.ts:94:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows (1.5s)
+  ✓  17 [chromium] › tests/Browser/inbox-views.spec.ts:121:1 › FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned copy and opens the editor on it (1.3s)
+  ✓  18 [chromium] › tests/Browser/inbox-views.spec.ts:138:1 › Doc 11 SEAM: ?seam_queues=1 renders the Queues section TYPE from the fixture — counts and order, no membership logic (1.2s)
+
+
+  1) [chromium] › tests/Browser/inbox-palette.spec.ts:118:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-search-highlight="1"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-search-highlight="1"]')
+
+
+      130 |     await expect(page.getByTestId('thread-pane')).toBeVisible();
+      131 |     const highlighted = page.locator('[data-search-highlight="1"]');
+    > 132 |     await expect(highlighted).toBeVisible();
+          |                               ^
+      133 |     await expect(highlighted).toContainText(/receipt/i);
+      134 | });
+      135 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-palette.spec.ts:132:31
+
+    Error Context: test-results/inbox-palette-FR-25-a-MESS-f244a-04-EC-08-window-underneath--chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+        "my_open",
+    -   "unassigned",
+    -   "mentions",
+        "following",
+    +   "mentions",
+    +   "unassigned",
+        "sla_at_risk",
+        "expiring_windows",
+        "rescue",
+      ]
+
+      68 |         page.$$eval('[data-view]', (rows) => rows.map((row) => row.getAttribute('data-view')));
+      69 |
+    > 70 |     expect(await keys()).toEqual([
+         |                          ^
+      71 |         'my_open',
+      72 |         'unassigned',
+      73 |         'mentions',
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts:70:26
+
+    Error Context: test-results/inbox-views-FR-08-Alt↓-mov-db3b4-ss-a-reload-prefs-per-user--chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-views.spec.ts:94:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-saved-view]').filter({ hasText: 'Urgent only (spec)' })
+    Expected: visible
+    Error: strict mode violation: locator('[data-saved-view]').filter({ hasText: 'Urgent only (spec)' }) resolved to 2 elements:
+        1) <a href="#" draggable="true" data-saved-view="019ff237-4c6c-71d3-9cab-b30027e9890d" class="group flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">…</a> aka getByRole('link', { name: 'Urgent only (spec) Edit' }).first()
+        2) <a href="#" draggable="true" data-saved-view="019ff24d-2d4c-71e4-9a92-7507ec3bc045" class="group flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">…</a> aka getByRole('link', { name: 'Urgent only (spec) Edit' }).nth(1)
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-saved-view]').filter({ hasText: 'Urgent only (spec)' })
+
+
+      113 |     // R1 row only — the normal-priority rows are absent, not hidden.
+      114 |     const mineRow = page.locator('[data-saved-view]', { hasText: 'Urgent only (spec)' });
+    > 115 |     await expect(mineRow).toBeVisible();
+          |                           ^
+      116 |     await mineRow.click();
+      117 |     await expect(page.locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })).toBeVisible();
+      118 |     await expect(page.locator('[data-ticket]', { hasText: 'Fixture Filler 1' })).toHaveCount(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts:115:27
+
+    Error Context: test-results/inbox-views-FR-06-the-edit-0cbd3-ders-ONLY-the-filtered-rows-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-palette.spec.ts:118:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) 
+    [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) 
+    [chromium] › tests/Browser/inbox-views.spec.ts:94:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows 
+  15 passed (5.2m)

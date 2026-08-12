@@ -26,12 +26,26 @@ function artisan(...args: string[]): void {
     try {
         execFileSync(
             'docker',
-            ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml', 'exec', '-T', 'app', 'php', 'artisan', ...args],
+            [
+                'compose',
+                '-f',
+                'docker/compose.yaml',
+                '-f',
+                'docker/compose.dev.yaml',
+                'exec',
+                '-T',
+                'app',
+                'php',
+                'artisan',
+                ...args,
+            ],
             { stdio: 'pipe' },
         );
     } catch (e) {
         const err = e as { message: string; stdout?: unknown; stderr?: unknown };
-        throw new Error(`${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`);
+        throw new Error(
+            `${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`,
+        );
     }
 }
 
@@ -56,7 +70,10 @@ async function openThreadFixture(page: Page): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
-    await page.locator('[data-ticket]', { hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]').click();
+    await page
+        .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+        .locator('[data-role="row-open"]')
+        .click();
     await expect(page.getByTestId('thread-pane')).toBeVisible();
     await expect(page.locator('[data-message]').first()).toBeVisible();
 }
@@ -81,8 +98,12 @@ test('FR-14: ticket boundary ("#4800 closed · #4801 opened"), the AC-08 handoff
 }) => {
     await openThreadFixture(page);
 
-    await expect(page.locator('[data-role="ticket-boundary"]', { hasText: '#4819 closed' })).toBeVisible();
-    await expect(page.locator('[data-role="ticket-boundary"]').filter({ hasText: '#4820 opened' })).toBeVisible();
+    await expect(
+        page.locator('[data-role="ticket-boundary"]', { hasText: '#4819 closed' }),
+    ).toBeVisible();
+    await expect(
+        page.locator('[data-role="ticket-boundary"]').filter({ hasText: '#4820 opened' }),
+    ).toBeVisible();
 
     const card = page.locator('[data-role="handoff-card"]');
     await expect(card).toBeVisible();
@@ -105,7 +126,9 @@ test('FR-14: ticket boundary ("#4800 closed · #4801 opened"), the AC-08 handoff
     expect(axe.violations, JSON.stringify(axe.violations.map((v) => v.id))).toEqual([]);
 });
 
-test('US-03 (Doc 05 closing row): the owner-phone reply renders MARKED, with the snapshotted display name', async ({ page }) => {
+test('US-03 (Doc 05 closing row): the owner-phone reply renders MARKED, with the snapshotted display name', async ({
+    page,
+}) => {
     await openThreadFixture(page);
 
     const chip = page.locator('[data-role="owner-phone-chip"]');
@@ -114,7 +137,9 @@ test('US-03 (Doc 05 closing row): the owner-phone reply renders MARKED, with the
     await expect(chip).toContainText('KemerBet Owner');
 });
 
-test('EC-10: the 45-line message clamps at 40 with "show more"; expanding reveals the tail', async ({ page }) => {
+test('EC-10: the 45-line message clamps at 40 with "show more"; expanding reveals the tail', async ({
+    page,
+}) => {
     await openThreadFixture(page);
 
     const clamped = page.locator('[data-message]', { hasText: 'long message line 1' });
@@ -163,7 +188,9 @@ test('FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a RE
 
     // The genuine deep link opens the thread directly.
     const ticketId = await page.evaluate(async () => {
-        const response = await fetch('/inbox/list?view=my_open', { headers: { Accept: 'application/json' } });
+        const response = await fetch('/inbox/list?view=my_open', {
+            headers: { Accept: 'application/json' },
+        });
         const body = (await response.json()) as { rows: { ticket_id: string; number: number }[] };
         return body.rows.find((row) => row.number === 4820)?.ticket_id ?? '';
     });
@@ -203,11 +230,16 @@ test('§9 print (SEC-05): the print page carries the watermark (user + timestamp
 }) => {
     await openThreadFixture(page);
 
-    const [printPage] = await Promise.all([context.waitForEvent('page'), page.getByTestId('print-thread').click()]);
+    const [printPage] = await Promise.all([
+        context.waitForEvent('page'),
+        page.getByTestId('print-thread').click(),
+    ]);
     await printPage.waitForLoadState();
 
     await expect(printPage.getByTestId('print-watermark')).toContainText(AGENT_EMAIL);
-    await expect(printPage.getByTestId('print-messages')).toContainText('Thank you for the receipt');
+    await expect(printPage.getByTestId('print-messages')).toContainText(
+        'Thank you for the receipt',
+    );
     await expect(printPage.getByTestId('print-messages')).not.toContainText('SECRET-NOTE-S10');
     await printPage.close();
 });
@@ -220,9 +252,14 @@ test('THE R-26 FOURTH-SIBLING CONSEQUENCE (countersign verify): Read Only opens 
     await page.goto('/inbox');
 
     // Read Only reads the workspace; open the visible thread.
-    const refusal = page.waitForResponse((r) => r.url().includes('/inbox/read') && r.status() === 403);
+    const refusal = page.waitForResponse(
+        (r) => r.url().includes('/inbox/read') && r.status() === 403,
+    );
     await page.locator('[data-view="unassigned"]').first().click();
-    await page.locator('[data-ticket]', { hasText: 'Kidist Haile' }).locator('[data-role="row-open"]').click();
+    await page
+        .locator('[data-ticket]', { hasText: 'Kidist Haile' })
+        .locator('[data-role="row-open"]')
+        .click();
     await expect(page.getByTestId('thread-pane')).toBeVisible();
     await refusal;
 
@@ -231,7 +268,9 @@ test('THE R-26 FOURTH-SIBLING CONSEQUENCE (countersign verify): Read Only opens 
     // And nothing persisted server-side: the marker table stays empty for
     // this viewer (server truth asserted through the thread payload).
     const lastRead = await page.evaluate(async () => {
-        const response = await fetch(window.location.origin + '/inbox/list?view=unassigned', { headers: { Accept: 'application/json' } });
+        const response = await fetch(window.location.origin + '/inbox/list?view=unassigned', {
+            headers: { Accept: 'application/json' },
+        });
         const body = (await response.json()) as { rows: { number: number; unread: number }[] };
         return body.rows.find((row) => row.number === 4802)?.unread ?? -1;
     });

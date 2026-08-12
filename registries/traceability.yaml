@@ -1744,16 +1744,16 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      EXECUTED (S07 step 6): the scope-injection proofs — physical per-tenant index
-      isolation with a cross-tenant positive control, Own-scope filter injection over
-      tickets AND messages, the client-cannot-send-scope HTTP contract (attacker-shaped
-      parameters ignored by construction), FS-03 dead-port degrade + indexer
-      throw-for-retry. Sabotage #2 executed fail+restored.
-    gap: >-
-      The anchored-highlighted message deep link is the AC's second clause — lands with
-      the thread/search UI (steps 10/12 browser suite); this row upgrades there.
+      EXECUTED (S07 step 6 + step 12): the scope-injection proofs — physical per-tenant
+      index isolation with a cross-tenant positive control, Own-scope filter injection
+      over tickets AND messages, the client-cannot-send-scope HTTP contract
+      (attacker-shaped parameters ignored by construction), FS-03 dead-port degrade +
+      indexer throw-for-retry. Sabotage #2 executed fail+restored. The AC's second
+      clause — the anchored-highlighted message deep link — executed at step 12
+      (tests/Browser/inbox-palette.spec.ts, the FR-25 message-hit proof: thread opens
+      AT the message, row highlighted, Doc 04 EC-08 window underneath).
   - ac_ref: "Doc07 AC-10"
     suite_path: manual
     type: manual

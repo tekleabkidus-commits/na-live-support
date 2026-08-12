@@ -1,0 +1,99 @@
+
+Running 40 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/inbox-composer.spec.ts:81:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" (5.8s)
+  ✓   2 [chromium] › tests/Browser/inbox-composer.spec.ts:111:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry (1.2s)
+  ✓   3 [chromium] › tests/Browser/inbox-composer.spec.ts:138:1 › FR-20: the CLOSING strip renders on the seeded closing-window thread; FR-22: typing raises the draft chip and persists the draft server-side (933ms)
+  ✘   4 [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props (5.9s)
+  ✓   5 [chromium] › tests/Browser/inbox-composer.spec.ts:180:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends (1.0s)
+  ✓   6 [chromium] › tests/Browser/inbox-layout.spec.ts:78:5 › FR-01/FR-03: four regions + top bar render at 1440 (light); landmarks name R1–R4; health dot shows the seeded degraded state (1.5s)
+  ✓   7 [chromium] › tests/Browser/inbox-layout.spec.ts:78:5 › FR-01/FR-03: four regions + top bar render at 1440 (dark); landmarks name R1–R4; health dot shows the seeded degraded state (1.4s)
+  ✓   8 [chromium] › tests/Browser/inbox-layout.spec.ts:134:1 › B12-A01 AC-02: first tab press on a cold load reveals the skip link, and it jumps PAST the rail into the list (812ms)
+  ✓   9 [chromium] › tests/Browser/inbox-layout.spec.ts:153:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels (912ms)
+  ✓  10 [chromium] › tests/Browser/inbox-layout.spec.ts:181:1 › AC-01: rail collapse, list width (keyboard resize — §13) and density persist, and RESTORE ACROSS SESSIONS (1.6s)
+  ✓  11 [chromium] › tests/Browser/inbox-layout.spec.ts:251:1 › THE COUNTERSIGNED PREFS RIDER: Read Only degrades to session-local prefs — silent refusal, ZERO error toasts, nothing server-persisted (1.4s)
+  ✓  12 [chromium] › tests/Browser/inbox-list.spec.ts:67:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (1.3s)
+  ✓  13 [chromium] › tests/Browser/inbox-list.spec.ts:95:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (901ms)
+  ✓  14 [chromium] › tests/Browser/inbox-list.spec.ts:123:1 › FR-10: the sort override reorders (priority serves urgent first) and PERSISTS per view across a fresh session (prefs.sort_overrides) (1.5s)
+  ✓  15 [chromium] › tests/Browser/inbox-live-list.spec.ts:74:1 › AC-03 + B12-A01 AC-04: a rescore delta patches IN PLACE at once, but with the pointer inside the list the ORDER holds past the 5 s batch — the affordance offers, the click resorts (6.5s)
+  ✓  16 [chromium] › tests/Browser/inbox-live-list.spec.ts:122:1 › FR-11: an entering row waits for the batch (pointer OUTSIDE → applies on its own), lands IN POSITION with the entering highlight; a leaving row fades and is gone after the batch (6.3s)
+  ✓  17 [chromium] › tests/Browser/inbox-live-list.spec.ts:168:1 › reduced motion: the enter/leave keyframes are suppressed (§13/B12-A01) — the DATA state still flows, nothing animates (942ms)
+  ✓  18 [chromium] › tests/Browser/inbox-live-list.spec.ts:188:1 › EC-09: the active queue view is removed mid-shift → toast (role=status, never an error), then the pane falls back to My Open (3.7s)
+  ✓  19 [chromium] › tests/Browser/inbox-mobile.spec.ts:70:1 › FR-02 @ 1024–1279: R4 is an overlay drawer, not a fixed panel (834ms)
+  ✓  20 [chromium] › tests/Browser/inbox-mobile.spec.ts:84:1 › FR-02 @ 768–1023: the rail is icons PERMANENTLY — the collapse control cannot expand it (821ms)
+  ✓  21 [chromium] › tests/Browser/inbox-mobile.spec.ts:100:5 › FR-02 @ 375 (light): two-level navigation — List ↔ Thread, Views modal sheet, R4 bottom sheet with the same three tabs (1.3s)
+  ✓  22 [chromium] › tests/Browser/inbox-mobile.spec.ts:100:5 › FR-02 @ 375 (dark): two-level navigation — List ↔ Thread, Views modal sheet, R4 bottom sheet with the same three tabs (1.3s)
+  ✓  23 [chromium] › tests/Browser/inbox-notify.spec.ts:90:1 › FR-04 THE DEDUP PROOF (sabotage #5 red here): two tabs, the same event scripted to BOTH — exactly ONE tab emits; the leader survives and the follower stays silent (2.4s)
+  ✓  24 [chromium] › tests/Browser/inbox-notify.spec.ts:143:1 › SEC-04 (sabotage #19 red here): the notification content is NAME + NUMBER only — the event's snippet NEVER appears; reduced mode drops even the name (826ms)
+  ✓  25 [chromium] › tests/Browser/inbox-palette.spec.ts:67:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (883ms)
+  ✘  26 [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (6.1s)
+  ✓  27 [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (944ms)
+  ✓  28 [chromium] › tests/Browser/inbox-scroll-restore.spec.ts:58:1 › FR-12: the list position survives back-navigation — scroll deep, leave, return, land where you were (1.0s)
+  ✓  29 [chromium] › tests/Browser/inbox-selection.spec.ts:70:1 › FR-13: checkbox toggle + shift-range select; the count is honest; selection SURVIVES a live resort (by id, by construction) (951ms)
+  ✓  30 [chromium] › tests/Browser/inbox-selection.spec.ts:97:1 › FR-13/T-05: "select all in view" mints the SERVER token — the shown count is the mint's count, not a client tally (991ms)
+  ✓  31 [chromium] › tests/Browser/inbox-selection.spec.ts:119:1 › EC-02: a selected row that LEAVES the view stays selected in the "no longer in view" tray until deselected there (911ms)
+  ✓  32 [chromium] › tests/Browser/inbox-thread.spec.ts:81:1 › DOC 05 AC-07 — THE CLOSING PROOF, FIRST: the fixture thread holds a delivery_state=delivered telegram message, and the DOM renders NO delivered glyph across ALL states (sabotage #7 red here) (914ms)
+  ✓  33 [chromium] › tests/Browser/inbox-thread.spec.ts:96:1 › FR-14: ticket boundary ("#4800 closed · #4801 opened"), the AC-08 handoff card (collapsible, AI-accented, "customer already saw"), bulk-collapsed system events, the note bubble, axe-clean (1.6s)
+  ✓  34 [chromium] › tests/Browser/inbox-thread.spec.ts:129:1 › US-03 (Doc 05 closing row): the owner-phone reply renders MARKED, with the snapshotted display name (883ms)
+  ✓  35 [chromium] › tests/Browser/inbox-thread.spec.ts:140:1 › EC-10: the 45-line message clamps at 40 with "show more"; expanding reveals the tail (892ms)
+  ✓  36 [chromium] › tests/Browser/inbox-thread.spec.ts:151:1 › B12-S01: the lightbox — clean photo opens WITH description + download; the INFECTED attachment gets the block notice, NO download, NO description (SEC-04 absence) (956ms)
+  ✓  37 [chromium] › tests/Browser/inbox-thread.spec.ts:171:1 › B12-S02: the edited marker opens preserved history for the capability holder (Super Admin fixture); revisions render oldest truth (926ms)
+  ✓  38 [chromium] › tests/Browser/inbox-thread.spec.ts:182:1 › FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a REAL out-of-scope id land the SAME 404-pattern page with "search instead" (EC-01, sabotage #15 red here) (1.3s)
+  ✓  39 [chromium] › tests/Browser/inbox-thread.spec.ts:227:1 › §9 print (SEC-05): the print page carries the watermark (user + timestamp) and the PUBLIC transcript — the internal note NEVER prints (sabotage #20 red here) (946ms)
+  ✓  40 [chromium] › tests/Browser/inbox-thread.spec.ts:247:1 › THE R-26 FOURTH-SIBLING CONSEQUENCE (countersign verify): Read Only opens a thread — the markRead 403 is SILENT (zero alerts), unread stays session-local (882ms)
+
+
+  1) [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('paused-card')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('paused-card')
+
+
+      169 |     await openThread(page, 'Paused Conn Player', 'my_open');
+      170 |     const paused = page.getByTestId('paused-card');
+    > 171 |     await expect(paused).toBeVisible();
+          |                          ^
+      172 |     await expect(paused).toContainText('Paused Fixture Account');
+      173 |
+      174 |     // Blocked: the latest outbound carries {"reason":"blocked_by_user"}.
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:171:26
+
+    Error Context: test-results/inbox-composer-FR-20-REAL--c931b-ivery-error-—-no-seam-props-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-role="search-ticket"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-role="search-ticket"]').first()
+
+
+      102 |     // A hit (the seeded #4801 "Withdrawal delayed") opens its thread.
+      103 |     const hit = page.locator('[data-role="search-ticket"]').first();
+    > 104 |     await expect(hit).toBeVisible();
+          |                       ^
+      105 |     await hit.click();
+      106 |     await expect(page.getByTestId('thread-pane')).toBeVisible();
+      107 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-palette.spec.ts:104:23
+
+    Error Context: test-results/inbox-palette-FR-25-the-Se-7d7ae-ticket-hit-opens-its-thread-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+    [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread 
+  38 passed (1.5m)

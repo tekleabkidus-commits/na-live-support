@@ -112,6 +112,16 @@ final class WorkspaceController extends Controller
                 'tickets_create' => $map->allows('tickets.create'),
             ],
             'tabBadges' => $this->tabBadges($request),
+            // Doc 11 SEAM (FR-05): the queue-view TYPE renders against the
+            // fixture rows in the browser proof; membership/config are
+            // Doc 11's. Empty everywhere else — the section hides itself.
+            'queueViews' => $this->queueViewsSeam($request),
+            // FR-28: the status control's first paint + BR-06's registered
+            // idle policy; FR-26: the bell badge's first value (T-03 posture:
+            // a server count, never a client derivation).
+            'agentStatus' => $this->statusWithAttribution($user),
+            'awayIdleMinutes' => is_numeric($idle = app(\App\Support\Settings\SettingsRepository::class)->get('inbox.away.idle_minutes')) ? (int) $idle : 10,
+            'bellUnread' => DB::table('inbox_notifications')->where('user_id', $user->identifier())->whereNull('read_at')->count(),
             'initialThread' => $initialThread,
             // N-19: the flag hides the RENDER only (FR-18's voice button).
             'features' => [
@@ -206,6 +216,48 @@ final class WorkspaceController extends Controller
         }
 
         return $badges;
+    }
+
+    /**
+     * @return list<array{id: string, name: string, count: int}>
+     */
+    private function queueViewsSeam(Request $request): array
+    {
+        if ($request->query('seam_queues') !== '1' || ! app()->environment(['local', 'testing', 'ci'])) {
+            return [];
+        }
+        /** @var array{queues?: list<array{id: string, name: string, count: int}>} $seam */
+        $seam = json_decode(
+            (string) file_get_contents(base_path('fixtures/inbox/seams/doc11-queue-views.json')),
+            true,
+            8,
+            JSON_THROW_ON_ERROR,
+        );
+
+        return $seam['queues'] ?? [];
+    }
+
+    /**
+     * FR-28: current status with the FORCE attribution resolved to a display
+     * name ("set by Dawit") — the id stays server-side, the name renders.
+     *
+     * @return array{status: string, reason: string|null, since: string|null, set_by_name: string|null}
+     */
+    private function statusWithAttribution(User $user): array
+    {
+        $current = app(\App\Domain\Inbox\Status\AgentStatus::class)->current($user->identifier());
+        $setByName = null;
+        if (is_string($current['set_by_user_id'] ?? null)) {
+            /** @var string|null $setByName */
+            $setByName = DB::table('users')->where('id', $current['set_by_user_id'])->value('name');
+        }
+
+        return [
+            'status' => (string) $current['status'],
+            'reason' => is_string($current['reason'] ?? null) ? $current['reason'] : null,
+            'since' => is_string($current['since'] ?? null) ? $current['since'] : null,
+            'set_by_name' => $setByName,
+        ];
     }
 
     /** @param array<string, string> $states */

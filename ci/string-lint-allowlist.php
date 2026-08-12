@@ -39,4 +39,17 @@ return [
         'Space',
         'Esc',
     ],
+
+    // S07 step 12: FR-07's own words cap count DISPLAY at "999+" — a
+    // numeral-plus literal identical in every locale (locale digits apply
+    // to the count itself, not the cap marker); and the palette's Esc
+    // keycap is a PHYSICAL KEY NAME per §14's layout-aware physical keys —
+    // a translated keycap would lie about the keyboard (the MenuDesigner
+    // precedent above).
+    'resources/js/Components/Inbox/NotificationBell.vue' => [
+        "999 ? '999+' : unread }}",
+    ],
+    'resources/js/Components/Inbox/CommandPalette.vue' => [
+        'Esc',
+    ],
 ];

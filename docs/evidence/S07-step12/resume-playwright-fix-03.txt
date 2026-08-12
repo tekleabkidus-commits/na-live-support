@@ -1,0 +1,38 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-composer.spec.ts:81:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" (5.7s)
+  ✓  2 [chromium] › tests/Browser/inbox-composer.spec.ts:111:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry (1.2s)
+  ✓  3 [chromium] › tests/Browser/inbox-composer.spec.ts:138:1 › FR-20: the CLOSING strip renders on the seeded closing-window thread; FR-22: typing raises the draft chip and persists the draft server-side (1.0s)
+  ✘  4 [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props (30.0s)
+  ✓  5 [chromium] › tests/Browser/inbox-composer.spec.ts:180:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends (1.1s)
+  ✓  6 [chromium] › tests/Browser/inbox-palette.spec.ts:67:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (925ms)
+  ✓  7 [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.1s)
+  ✓  8 [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (861ms)
+
+
+  1) [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#login-email')
+
+
+      59 | async function login(page: Page): Promise<void> {
+      60 |     await page.goto('/login');
+    > 61 |     await page.locator('#login-email').fill(AGENT_EMAIL);
+         |                                        ^
+      62 |     await page.locator('#login-password').fill(PASSWORD);
+      63 |     await page.getByTestId('login-submit').click();
+      64 |     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+        at login (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:61:40)
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:68:5)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:175:5
+
+    Error Context: test-results/inbox-composer-FR-20-REAL--c931b-ivery-error-—-no-seam-props-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+  7 passed (1.1m)

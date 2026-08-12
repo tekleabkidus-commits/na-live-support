@@ -1,0 +1,128 @@
+
+Running 8 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-composer.spec.ts:81:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" (30.0s)
+  ✘  2 [chromium] › tests/Browser/inbox-composer.spec.ts:111:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry (30.0s)
+  ✓  3 [chromium] › tests/Browser/inbox-composer.spec.ts:138:1 › FR-20: the CLOSING strip renders on the seeded closing-window thread; FR-22: typing raises the draft chip and persists the draft server-side (1.1s)
+  ✘  4 [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props (30.0s)
+  ✘  5 [chromium] › tests/Browser/inbox-composer.spec.ts:180:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends (30.0s)
+  ✓  6 [chromium] › tests/Browser/inbox-palette.spec.ts:67:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (1.0s)
+  ✓  7 [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.2s)
+  ✘  8 [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (5.8s)
+
+
+  1) [chromium] › tests/Browser/inbox-composer.spec.ts:81:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      75 |         .locator('[data-ticket]', { hasText: rowText })
+      76 |         .locator('[data-role="row-open"]')
+    > 77 |         .click();
+         |          ^
+      78 |     await expect(page.getByTestId('composer')).toBeVisible();
+      79 | }
+      80 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:77:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:84:5
+
+    Error Context: test-results/inbox-composer-AC-05-THE-5-2d3cf-nd-label-flips-to-Add-note--chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-composer.spec.ts:111:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      75 |         .locator('[data-ticket]', { hasText: rowText })
+      76 |         .locator('[data-role="row-open"]')
+    > 77 |         .click();
+         |          ^
+      78 |     await expect(page.getByTestId('composer')).toBeVisible();
+      79 | }
+      80 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:77:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:114:5
+
+    Error Context: test-results/inbox-composer-FR-17-FR-21-ef5db-trip-with-the-one-tap-retry-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Paused Conn Player' }).locator('[data-role="row-open"]')
+
+
+      75 |         .locator('[data-ticket]', { hasText: rowText })
+      76 |         .locator('[data-role="row-open"]')
+    > 77 |         .click();
+         |          ^
+      78 |     await expect(page.getByTestId('composer')).toBeVisible();
+      79 | }
+      80 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:77:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:169:5
+
+    Error Context: test-results/inbox-composer-FR-20-REAL--c931b-ivery-error-—-no-seam-props-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/inbox-composer.spec.ts:180:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      75 |         .locator('[data-ticket]', { hasText: rowText })
+      76 |         .locator('[data-role="row-open"]')
+    > 77 |         .click();
+         |          ^
+      78 |     await expect(page.getByTestId('composer')).toBeVisible();
+      79 | }
+      80 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:77:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-composer.spec.ts:183:5
+
+    Error Context: test-results/inbox-composer-FR-16-sabot-35ea2-e-confirm-send-anyway-sends-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-ticket]').filter({ hasText: 'Rescue Fixture Player' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Rescue Fixture Player' })
+
+
+      113 |
+      114 |     await page.locator('[data-view="rescue"]').first().click();
+    > 115 |     await expect(page.locator('[data-ticket]', { hasText: 'Rescue Fixture Player' })).toBeVisible();
+          |                                                                                       ^
+      116 | });
+      117 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-palette.spec.ts:115:87
+
+    Error Context: test-results/inbox-palette-Doc-05-US-04-828f0--channel-unreachable-ticket-chromium/error-context.md
+
+  5 failed
+    [chromium] › tests/Browser/inbox-composer.spec.ts:81:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" 
+    [chromium] › tests/Browser/inbox-composer.spec.ts:111:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry 
+    [chromium] › tests/Browser/inbox-composer.spec.ts:165:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props 
+    [chromium] › tests/Browser/inbox-composer.spec.ts:180:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends 
+    [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket 
+  3 passed (2.9m)

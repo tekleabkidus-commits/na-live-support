@@ -14,15 +14,24 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useInboxPrefs } from '../../../stores/inbox/prefs';
 import { useLiveList, type ListRow } from '../../../stores/inbox/liveList';
 import BulkBar from './BulkBar.vue';
+import FilterBar from './FilterBar.vue';
 import Row from './Row.vue';
 
 const props = defineProps<{
     view: string;
-    t: { list: Record<string, string>; row: Record<string, string>; bulk: Record<string, string> };
+    t: {
+        list: Record<string, string>;
+        row: Record<string, string>;
+        bulk: Record<string, string>;
+        filter_bar: Record<string, string>;
+    };
 }>();
 
 const emit = defineEmits<{
-    (e: 'open-ticket', payload: { ticketId: string; conversationId: string }): void;
+    (
+        e: 'open-ticket',
+        payload: { ticketId: string; conversationId: string; number: number | string | null },
+    ): void;
     (e: 'fallback-view'): void;
 }>();
 
@@ -38,7 +47,15 @@ async function fetchPage(cursor: string | null): Promise<void> {
     loading.value = true;
     try {
         const sort = currentSort.value;
-        const params = new URLSearchParams({ view: props.view });
+        // FR-06 (step 12): a 'saved:{id}' key renders the saved view through
+        // the same door — the ?saved= branch ListController shipped at step 9.
+        const params = props.view.startsWith('saved:')
+            ? new URLSearchParams({ saved: props.view.slice(6) })
+            : new URLSearchParams({ view: props.view });
+        // FR-24: the bar's filters compose WITHIN the view (the server ANDs).
+        if (activeFilters.value) {
+            params.set('filters', JSON.stringify(activeFilters.value));
+        }
         if (cursor) {
             params.set('cursor', cursor);
         }
@@ -65,6 +82,13 @@ async function fetchPage(cursor: string | null): Promise<void> {
     } finally {
         loading.value = false;
     }
+}
+
+// FR-24: the in-view filter bar's state — per pane, reset on view change.
+const activeFilters = ref<Record<string, unknown> | null>(null);
+function onFilters(filters: Record<string, unknown> | null): void {
+    activeFilters.value = filters;
+    void fetchPage(null);
 }
 
 // FR-10: the override persists per view (prefs.sort_overrides — FR-08's blob).
@@ -138,6 +162,7 @@ watch(
             sessionStorage.setItem('inbox-scroll-' + previous, String(scroller.value.scrollTop));
         }
         currentSort.value = prefs.sortOverrides[props.view] ?? '';
+        activeFilters.value = null; // FR-24: filters are per-view, not sticky
         void fetchPage(null);
     },
 );
@@ -217,6 +242,9 @@ onBeforeUnmount(() => {
             </label>
         </div>
 
+        <!-- FR-24: the in-view filter bar (composes WITHIN the view). -->
+        <FilterBar :t="t.filter_bar" @change="onFilters" />
+
         <!-- §13 polite live region — announcements, never focus theft. -->
         <p class="sr-only" role="status" aria-live="polite" data-testid="list-announcement">
             {{ announcement }}
@@ -278,6 +306,7 @@ onBeforeUnmount(() => {
                         emit('open-ticket', {
                             ticketId: id,
                             conversationId: String(list.rows[id]?.conversation_id ?? ''),
+                            number: (list.rows[id]?.number ?? null) as number | string | null,
                         })
                 "
             />

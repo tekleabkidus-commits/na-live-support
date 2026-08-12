@@ -127,14 +127,7 @@ final class ThreadController extends Controller
         $oldest = $first !== null ? base64_encode($first->created_at.'|'.$first->id) : null;
 
         return new JsonResponse([
-            'conversation' => [
-                'id' => $conversation->identifier(),
-                'channel' => $conversation->getAttribute('channel'),
-                'state' => $conversation->getAttribute('state'),
-                'reply_window_state' => $conversation->getAttribute('reply_window_state'),
-                'reply_window_expires_at' => $conversation->getAttribute('reply_window_expires_at'),
-                'customer_display_name' => DB::table('customers')->where('id', $conversation->getAttribute('customer_id'))->value('display_name'),
-            ],
+            'conversation' => $this->conversationMeta($conversation),
             'messages' => $messages->map(function (object $row): array {
                 /** @var array<string, mixed> $data */
                 $data = (array) $row;
@@ -230,6 +223,64 @@ final class ThreadController extends Controller
                 $this->dbNow(),
             ),
         ]);
+    }
+
+    /**
+     * FR-20's DATA (the advisor's step-13 order, delivered at step 12): the
+     * composer states resolve from REAL substrate — the conversation's
+     * business_connection state (paused/revoked → the connection cards), the
+     * customer's blocked flag + phone presence (the expired card's SMS
+     * filter). No seam props remain.
+     *
+     * @return array<string, mixed>
+     */
+    private function conversationMeta(Conversation $conversation): array
+    {
+        // conversations.business_connection_id stores TELEGRAM'S connection id
+        // string, not the row uuid — the ChannelUnreachableWriter/ListProjector
+        // join, reused. (An `id` lookup here could never match and every
+        // connection would read 'active' — caught at the resume re-verify.)
+        /** @var object{state: string, account_name: string}|null $connection */
+        $connection = $conversation->getAttribute('business_connection_id') !== null
+            ? DB::table('telegram_business_connections')->where('connection_id', $conversation->getAttribute('business_connection_id'))->first(['state', 'account_name'])
+            : null;
+
+        /** @var object{display_name: string|null, phone: string|null}|null $customer */
+        $customer = DB::table('customers')->where('id', $conversation->getAttribute('customer_id'))->first(['display_name', 'phone']);
+
+        return [
+            'id' => $conversation->identifier(),
+            'channel' => $conversation->getAttribute('channel'),
+            'state' => $conversation->getAttribute('state'),
+            'reply_window_state' => $conversation->getAttribute('reply_window_state'),
+            'reply_window_expires_at' => $conversation->getAttribute('reply_window_expires_at'),
+            'customer_display_name' => $customer->display_name ?? null,
+            'customer_has_phone' => ($customer->phone ?? null) !== null,
+            // Doc 04 reason mapping: the latest outbound's delivery_error is
+            // the blocked_by_user signal (DeliveryFailureReason::BlockedByUser).
+            'blocked_by_user' => $this->latestBlockedByUser($conversation->identifier()),
+            'connection_state' => $connection->state ?? 'active',
+            'connection_account' => $connection->account_name ?? '',
+        ];
+    }
+
+    private function latestBlockedByUser(string $conversationId): bool
+    {
+        /** @var object{delivery_error: string|null}|null $last */
+        $last = DB::table('messages')
+            ->where('conversation_id', $conversationId)
+            ->where('direction', 'out')
+            ->whereNotNull('delivery_error')
+            ->orderByDesc('created_at')->orderByDesc('id')
+            ->first(['delivery_error']);
+
+        if ($last === null || ! is_string($last->delivery_error)) {
+            return false;
+        }
+        /** @var array{reason?: string} $error */
+        $error = json_decode($last->delivery_error, true, 8, JSON_THROW_ON_ERROR);
+
+        return ($error['reason'] ?? null) === 'blocked_by_user';
     }
 
     private function dbNow(): string

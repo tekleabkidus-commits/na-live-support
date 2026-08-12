@@ -64,6 +64,14 @@ final class ListProjector
             return;
         }
 
+        // FR-26's bell fanout (S07 step 12): per-user notification ROWS from
+        // existing events — no new event (the approved plan's own words).
+        // Rides the same consumer transaction as the list projection; the
+        // per-user event-dedupe unique index makes redelivery a no-op (C-09,
+        // the mention row's established physics). sla_warning has NO producer
+        // until Doc 12 — its rows are fixtures (the category closes the set).
+        $this->mintBellRows($event->id, $name, $payload);
+
         // T-04's event-driven indexer: a SEPARATE queued job per affected
         // ticket (FS-03 isolation — a search outage must never fail the list
         // projection riding this same event). Message events also carry
@@ -308,6 +316,128 @@ final class ListProjector
         $this->counts->onDelta($viewKey);
     }
 
+    /**
+     * FR-26's non-mention bell rows. Q7's posture holds row-level too: the
+     * payload carries IDENTIFIERS ONLY (event_id, enum statuses, counts) —
+     * never reason text or message content. Actors never notify themselves.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    private function mintBellRows(string $eventId, string $name, array $payload): void
+    {
+        $rows = match ($name) {
+            // Assignment → the NEW assignee (a null new_assignee_id IS the
+            // unassign — nobody's bell rings for a queue return).
+            'ticket.assigned' => ($to = self::strOr($payload, 'new_assignee_id')) !== '' && $to !== self::strOr($payload, 'by')
+                ? [[$to, 'notify.inbox.assignment', self::str($payload, 'ticket_id'), []]]
+                : [],
+            // Escalation-to-ME (the named target) + Doc 06 FR-18's follower
+            // notice, minus the actor and the target (no double row).
+            'ticket.escalated' => array_merge(
+                ($to = self::strOr($payload, 'target_id')) !== '' && $to !== self::strOr($payload, 'actor_id')
+                    ? [[$to, 'notify.inbox.escalation', self::str($payload, 'ticket_id'), []]]
+                    : [],
+                array_map(
+                    fn (string $userId): array => [$userId, 'notify.inbox.follower', self::str($payload, 'ticket_id'), ['kind' => 'escalation']],
+                    $this->followersExcept(self::str($payload, 'ticket_id'), [self::strOr($payload, 'actor_id'), self::strOr($payload, 'target_id')]),
+                ),
+            ),
+            // Doc 06 FR-18: followers hear status changes.
+            'ticket.status_changed' => array_map(
+                fn (string $userId): array => [$userId, 'notify.inbox.follower', self::str($payload, 'ticket_id'), [
+                    'kind' => 'status', 'old_status' => self::str($payload, 'old_status'), 'new_status' => self::str($payload, 'new_status'),
+                ]],
+                $this->followersExcept(self::str($payload, 'ticket_id'), [self::strOr($payload, 'actor_id')]),
+            ),
+            // Doc 06 FR-18: followers hear public replies (never notes —
+            // those are the mention row's channel). The author never
+            // self-notifies.
+            'message.sent' => $this->publicReplyRows($payload),
+            // Window closing → the open ticket's assignee (Doc 05 FR-22;
+            // the per-category opt-in layer is Doc 16's surface).
+            'telegram.window.closing' => ($t = $this->windowClosingTarget($payload)) !== null
+                ? [[$t['user_id'], 'notify.inbox.window_closing', $t['ticket_id'], ['expires_at' => self::strOr($payload, 'expires_at')]]]
+                : [],
+            // Bulk finished → the requester, with the summary COUNTS only.
+            'ticket.bulk_completed' => ($to = self::strOr($payload, 'requested_by')) !== ''
+                ? [[$to, 'notify.inbox.bulk_completed', null, [
+                    'ok' => is_int($payload['ok'] ?? null) ? $payload['ok'] : 0,
+                    'failed' => is_array($payload['failed'] ?? null) ? count($payload['failed']) : 0,
+                ]]]
+                : [],
+            default => [],
+        };
+
+        foreach ($rows as [$userId, $category, $ticketId, $extra]) {
+            DB::table('inbox_notifications')->insertOrIgnore([
+                'id' => (string) Str::uuid7(),
+                'tenant_id' => self::str($payload, 'tenant_id'),
+                'user_id' => $userId,
+                'category' => $category,
+                'ticket_id' => $ticketId !== null && $ticketId !== '' ? $ticketId : null,
+                'conversation_id' => ($c = self::strOr($payload, 'conversation_id')) !== '' ? $c : null,
+                'payload' => json_encode(['event_id' => $eventId] + $extra, JSON_THROW_ON_ERROR),
+            ]);
+        }
+    }
+
+    /**
+     * FR-18's public-reply follower rows: agent-authored, NOT internal, on a
+     * conversation with an open ticket — else no fanout.
+     *
+     * @param  array<string, mixed>  $payload
+     * @return list<array{0: string, 1: string, 2: string|null, 3: array<string, mixed>}>
+     */
+    private function publicReplyRows(array $payload): array
+    {
+        /** @var object{author_type: string, author_id: string|null, is_internal: bool}|null $message */
+        $message = DB::table('messages')->where('id', self::str($payload, 'message_id'))
+            ->first(['author_type', 'author_id', 'is_internal']);
+        if ($message === null || $message->author_type !== 'agent' || $message->is_internal) {
+            return [];
+        }
+        $ticketId = $this->ticketForConversation(self::strOr($payload, 'conversation_id'));
+        if ($ticketId === null) {
+            return [];
+        }
+
+        return array_map(
+            fn (string $userId): array => [$userId, 'notify.inbox.follower', $ticketId, ['kind' => 'reply']],
+            $this->followersExcept($ticketId, [is_string($message->author_id) ? $message->author_id : '']),
+        );
+    }
+
+    /**
+     * @param  list<string>  $excluded
+     * @return list<string>
+     */
+    private function followersExcept(string $ticketId, array $excluded): array
+    {
+        if ($ticketId === '') {
+            return [];
+        }
+        /** @var list<string> $followers */
+        $followers = DB::table('ticket_followers')->where('ticket_id', $ticketId)->pluck('user_id')->all();
+
+        return array_values(array_diff($followers, array_filter($excluded)));
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array{user_id: string, ticket_id: string}|null
+     */
+    private function windowClosingTarget(array $payload): ?array
+    {
+        $ticketId = $this->ticketForConversation(self::strOr($payload, 'conversation_id'));
+        if ($ticketId === null) {
+            return null;
+        }
+        /** @var string|null $assignee */
+        $assignee = DB::table('tickets')->where('id', $ticketId)->value('assignee_id');
+
+        return is_string($assignee) && $assignee !== '' ? ['user_id' => $assignee, 'ticket_id' => $ticketId] : null;
+    }
+
     /** @param array<string, mixed> $payload */
     private function applyMention(string $eventId, array $payload): void
     {
@@ -410,6 +540,19 @@ final class ListProjector
      *
      * @param  array<string, mixed>  $payload
      */
+    /**
+     * A nullable-tolerant read for fanout keys the catalog allows to be null.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    private static function strOr(array $payload, string $key): string
+    {
+        $value = $payload[$key] ?? null;
+
+        return is_string($value) ? $value : '';
+    }
+
+    /** @param array<string, mixed> $payload */
     private static function str(array $payload, string $key): string
     {
         $value = $payload[$key] ?? null;

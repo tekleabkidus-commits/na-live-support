@@ -62,14 +62,32 @@ final class ListController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        /** @var array{view?: string, saved?: string, cursor?: string, limit?: int|string, sort?: string} $input */
+        /** @var array{view?: string, saved?: string, cursor?: string, limit?: int|string, sort?: string, filters?: string} $input */
         $input = $request->validate([
             'view' => ['required_without:saved', 'string', 'in:my_open,unassigned,mentions,following,sla_at_risk,expiring_windows,rescue'],
             'saved' => ['required_without:view', 'uuid'],
             'cursor' => ['sometimes', 'string', 'max:400'],
             'limit' => ['sometimes', 'integer', 'min:1', 'max:100'],
             'sort' => ['sometimes', 'string', 'in:last_activity,created,sla_due,priority'],
+            // FR-24 (step 12): the in-view filter bar COMPOSES WITHIN the
+            // current view's base filters — same closed grammar as saved
+            // views, validated the same way.
+            'filters' => ['sometimes', 'string', 'max:2000'],
         ]);
+
+        $extraFilters = null;
+        if (isset($input['filters'])) {
+            /** @var mixed $decoded */
+            $decoded = json_decode($input['filters'], true, 16);
+            if (! is_array($decoded)) {
+                return new JsonResponse(['rows' => [], 'next_cursor' => null, 'total' => 0, 'error' => 'view_filters_invalid'], 422);
+            }
+            /** @var array<string, mixed> $decoded */
+            if (! SavedViewFilters::validate($decoded)) {
+                return new JsonResponse(['rows' => [], 'next_cursor' => null, 'total' => 0, 'error' => 'view_filters_invalid'], 422);
+            }
+            $extraFilters = $decoded;
+        }
 
         $limit = (int) ($input['limit'] ?? 50);
         $view = $input['view'] ?? null;
@@ -96,7 +114,16 @@ final class ListController extends Controller
 
         $total = $this->zsets->count($zsetKey);
 
-        if (isset($input['sort'])) {
+        if ($extraFilters !== null) {
+            // Filtered reads ride the SQL path (membership ∧ extra filters);
+            // the header total is the FILTERED count — the list never lies
+            // about what it shows (BR-01).
+            $membership = $this->membershipQuery($view, $savedFilters, $user, $extraFilters);
+            $countQuery = TicketListItem::query()->whereIn('ticket_id', $membership->select('li.ticket_id'));
+            $this->scopes->apply($countQuery, 'tickets', $user, ListReadModel::columns());
+            $total = $countQuery->count();
+            [$rows, $nextCursor] = $this->overridePage($input['sort'] ?? 'last_activity', $view, $savedFilters, $user, $input['cursor'] ?? null, $limit, $extraFilters);
+        } elseif (isset($input['sort'])) {
             [$rows, $nextCursor] = $this->overridePage($input['sort'], $view, $savedFilters, $user, $input['cursor'] ?? null, $limit);
         } else {
             [$rows, $nextCursor] = $this->defaultPage($zsetKey, (string) ($view ?? 'saved'), $user, $input['cursor'] ?? null, $limit);
@@ -198,9 +225,10 @@ final class ListController extends Controller
      * cursor. NULL sort values page LAST (their block resumes by id alone).
      *
      * @param  array<string, mixed>|null  $savedFilters
+     * @param  array<string, mixed>|null  $extraFilters
      * @return array{0: list<object>, 1: string|null}
      */
-    private function overridePage(string $sort, ?string $view, ?array $savedFilters, User $user, ?string $cursor, int $limit): array
+    private function overridePage(string $sort, ?string $view, ?array $savedFilters, User $user, ?string $cursor, int $limit, ?array $extraFilters = null): array
     {
         [$column, $direction, $nullsLast] = self::SORTS[$sort];
         $expr = $sort === 'priority'
@@ -208,7 +236,7 @@ final class ListController extends Controller
             : $column;
 
         $query = TicketListItem::query()
-            ->whereIn('ticket_id', $this->membershipQuery($view, $savedFilters, $user)->select('li.ticket_id'));
+            ->whereIn('ticket_id', $this->membershipQuery($view, $savedFilters, $user, $extraFilters)->select('li.ticket_id'));
 
         // Layer 2, same law as the ZSET path (R-03 / BR-03).
         $this->scopes->apply($query, 'tickets', $user, ListReadModel::columns());
@@ -258,10 +286,16 @@ final class ListController extends Controller
      * them against the ZSETs).
      *
      * @param  array<string, mixed>|null  $savedFilters
+     * @param  array<string, mixed>|null  $extraFilters
      */
-    private function membershipQuery(?string $view, ?array $savedFilters, User $user): Builder
+    private function membershipQuery(?string $view, ?array $savedFilters, User $user, ?array $extraFilters = null): Builder
     {
         $query = DB::table('ticket_list_items as li');
+
+        // FR-24: extra filters COMPOSE (∧) with the base membership.
+        if ($extraFilters !== null) {
+            $query = SavedViewFilters::sql($query, $extraFilters);
+        }
 
         if ($savedFilters !== null) {
             return SavedViewFilters::sql($query, $savedFilters);

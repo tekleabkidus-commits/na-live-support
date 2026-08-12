@@ -5,14 +5,15 @@ import { expect, Page, test } from '@playwright/test';
  * S07 step 11 — the composer. AC-05's HEURISTIC: 50 scripted reply-intent
  * sequences into note mode, each asserting the differentiation checks (the
  * computed surface contrast delta + the label assertions — BR-02's
- * non-themeable floor). FR-20's state renders (normal / closing / expired
- * options card / conversation-blocked from REAL conversation data;
- * paused/blocked_by_user resolve in the same computed, seam-prop-driven
- * until Doc 05's connection linkage reaches the thread payload — stated in
- * BUILD-STATUS). FR-21 split button + rollback + one-tap retry against the
- * REAL matrix. FR-22 draft chip. FR-16 collision strip + send race
- * (sabotage #8's target) via the scripted hook — the same entry points the
- * realtime feed will call.
+ * non-themeable floor). FR-20's state renders from REAL conversation data —
+ * ALL SIX: normal / closing / expired options card / conversation-blocked
+ * (step 11), and, since step 12 closed the advisor's gap, connection_paused
+ * + blocked_by_user resolve from the thread payload's real substrate
+ * (business-connection state; the latest outbound's delivery_error reason)
+ * — no seam props remain. FR-21 split button + rollback + one-tap retry
+ * against the REAL matrix. FR-22 draft chip. FR-16 collision strip + send
+ * race (sabotage #8's target) via the scripted hook — the same entry
+ * points the realtime feed will call.
  */
 
 const PASSWORD = 'browser-fixture-password';
@@ -23,12 +24,26 @@ function artisan(...args: string[]): void {
     try {
         execFileSync(
             'docker',
-            ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml', 'exec', '-T', 'app', 'php', 'artisan', ...args],
+            [
+                'compose',
+                '-f',
+                'docker/compose.yaml',
+                '-f',
+                'docker/compose.dev.yaml',
+                'exec',
+                '-T',
+                'app',
+                'php',
+                'artisan',
+                ...args,
+            ],
             { stdio: 'pipe' },
         );
     } catch (e) {
         const err = e as { message: string; stdout?: unknown; stderr?: unknown };
-        throw new Error(`${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`);
+        throw new Error(
+            `${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`,
+        );
     }
 }
 
@@ -56,7 +71,10 @@ async function openThread(page: Page, rowText: string, view: string | null = nul
     if (view !== null) {
         await page.locator(`[data-view="${view}"]`).first().click();
     }
-    await page.locator('[data-ticket]', { hasText: rowText }).locator('[data-role="row-open"]').click();
+    await page
+        .locator('[data-ticket]', { hasText: rowText })
+        .locator('[data-role="row-open"]')
+        .click();
     await expect(page.getByTestId('composer')).toBeVisible();
 }
 
@@ -131,12 +149,36 @@ test('FR-20: the CLOSING strip renders on the seeded closing-window thread; FR-2
     await expect
         .poll(async () =>
             page.evaluate(async () => {
-                const response = await fetch(window.location.origin + '/inbox/list?view=unassigned', { headers: { Accept: 'application/json' } });
-                const body = (await response.json()) as { rows: { number: number; has_draft: boolean }[] };
+                const response = await fetch(
+                    window.location.origin + '/inbox/list?view=unassigned',
+                    { headers: { Accept: 'application/json' } },
+                );
+                const body = (await response.json()) as {
+                    rows: { number: number; has_draft: boolean }[];
+                };
                 return body.rows.find((row) => row.number === 4802)?.has_draft ?? false;
             }),
         )
         .toBe(true);
+});
+
+test('FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props', async ({
+    page,
+}) => {
+    // Paused: conversations.business_connection_id → the paused row.
+    await openThread(page, 'Paused Conn Player', 'my_open');
+    const paused = page.getByTestId('paused-card');
+    await expect(paused).toBeVisible();
+    await expect(paused).toContainText('Paused Fixture Account');
+
+    // Blocked: the latest outbound carries {"reason":"blocked_by_user"}.
+    // Same session — click the row in place (login() is one-shot per test).
+    await page
+        .locator('[data-ticket]', { hasText: 'Blocked Fixture Player' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('blocked-user-card')).toBeVisible();
+    await expect(page.getByTestId('paused-card')).toHaveCount(0);
 });
 
 test('FR-16 (sabotage #8\'s proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends', async ({
@@ -146,18 +188,30 @@ test('FR-16 (sabotage #8\'s proof): the collision strip renders on a colleague-t
 
     // The scripted feed: the SAME entry point the realtime typing signal
     // will call.
-    await page.evaluate(() => (window as unknown as { __inboxComposer: { typing: (n: string | null) => void } }).__inboxComposer.typing('Sara Bekele'));
+    await page.evaluate(() =>
+        (
+            window as unknown as { __inboxComposer: { typing: (n: string | null) => void } }
+        ).__inboxComposer.typing('Sara Bekele'),
+    );
     const strip = page.getByTestId('collision-strip');
     await expect(strip).toBeVisible();
     await expect(strip).toContainText('Sara Bekele is replying…');
     await expect(strip).not.toContainText('draft'); // their draft is never shown
 
-    await page.evaluate(() => (window as unknown as { __inboxComposer: { typing: (n: string | null) => void } }).__inboxComposer.typing(null));
+    await page.evaluate(() =>
+        (
+            window as unknown as { __inboxComposer: { typing: (n: string | null) => void } }
+        ).__inboxComposer.typing(null),
+    );
     await expect(strip).toHaveCount(0);
 
     // Send race: colleague replied while this agent typed.
     await page.getByTestId('composer-input').fill('my reply, racing');
-    await page.evaluate(() => (window as unknown as { __inboxComposer: { colleagueReplied: (n: string) => void } }).__inboxComposer.colleagueReplied('Sara Bekele'));
+    await page.evaluate(() =>
+        (
+            window as unknown as { __inboxComposer: { colleagueReplied: (n: string) => void } }
+        ).__inboxComposer.colleagueReplied('Sara Bekele'),
+    );
     await page.getByTestId('composer-send').click();
     const race = page.getByTestId('race-dialog');
     await expect(race).toBeVisible();

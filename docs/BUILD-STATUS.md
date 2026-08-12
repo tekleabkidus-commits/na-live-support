@@ -81,6 +81,163 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
+
+**THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
+`wsl --shutdown` mid-step-12 with the client half uncommitted. The resume
+executed the full §5 procedure: solo-process proof (one `claude`, PID by
+ancestry), git state verified (HEAD `584085b`, steps 1–11 accepted, tree
+carrying the intentional uncommitted client work, stash empty), a
+truncation sweep over all 19 modified/untracked files (none zero-byte,
+none mid-line truncated; PHP lint clean), `make fresh` from zero, and
+NOTHING pre-crash counted as green without fresh executed output. Two
+infrastructure truths were diagnosed and recorded on the way: (i) Octane
+holds compiled code in memory — every server-code change before a browser
+run needs `octane:reload` (the Makefile's own warning, confirmed live);
+(ii) `/app/public/build` is an ANONYMOUS VOLUME pinned to the image — host
+`vite build` output reaches the container only via image rebuild + volume
+renewal or an explicit `docker compose cp` + reload (the Vite manifest is
+ALSO cached in the Octane process — cp without reload serves the old
+bundle; both bitten, both fixed, both recorded here for the next session).
+The container recreation wiped redis-volatile, and the FS-02 machinery was
+exercised FOR REAL: `inbox:views-rebuild` rebuilt every ZSET, and
+`inbox:consistency-check` answered PASS — an unplanned live execution of
+the drill on genuine loss.
+
+**THE SERVER HALF (`584085b`).** FR-28: heartbeat as TTL presence physics
+in redis-volatile (90 s), system-away MATERIALIZED on read (written +
+evented, never display-only), `agent.status_changed` through the outbox
+(C-06), the audited `supervision.agent_status.force` door with stored
+attribution. FR-26: the bell doors (list + unread count; read-all stamps
+`read_at` — the ONLY app-updatable column, R-19b physics). Mark-all-read +
+set-own-status ride `views.manage` — **the R-26 AMENDMENT's FIFTH and
+SIXTH siblings, refusals executed in StatusNotificationsTest, flagged at
+this checkpoint for countersign.**
+
+**THE CLIENT HALF (this commit) — the resumed build finished the step:**
+
+- **FR-04/FR-27 + SEC-04, THE ORDERED-FIRST PROOFS (pre-crash, captures
+  committed here):** native-BroadcastChannel tab-leader election
+  (`lib/tabLeader.ts` — the declined-wrapper ruling) + the notifier
+  (`lib/notifier.ts`, SEC-04 as a content LAW: name + number only, reduced
+  drops even the name; FS-04 silent downgrade + one-time hint flag; OS-focus
+  respect; FR-27 defaults my-open ON / unassigned OFF). The dual-tab dedup
+  proof ran BEFORE any sound shipped (the release's ordered minimum).
+  **Sabotage #5** (election disabled → both tabs emit) red → restored
+  (`sabotage-5-RED-01/-RESTORED-01.txt`); **sabotage #19** (snippet added at
+  the ONE shaping point → content proof red) red → restored
+  (`sabotage-19-RED-01/-RESTORED-01.txt`). Re-cited per the resume order,
+  not re-run.
+- **FR-26 bell UI (`Bell.vue`, B1-S03's frames):** badge = SERVER unread
+  (T-03 posture, asserted against the API's own count), rows with
+  identifier-built copy (Q7/SEC-04 — render data resolved from TRUTH at
+  read time: ticket number from the canonical row, mention actor from the
+  minting event), unread accent border, ICU-style relative times, deep link
+  IN PLACE, mark-all-read proven persistent across reload, the quick mute
+  (1 h/today) wired into the notifier's LIVE prefs — a muted bell silences
+  REAL emissions (proven), FS-04's hint renders in the dropdown.
+- **FR-26 fanout (ListProjector):** per-user rows from EXISTING events — no
+  new event: `ticket.assigned` (new assignee, never self, never unassign),
+  `ticket.escalated` (target + Doc 06 FR-18 follower rows minus actor and
+  target), `ticket.status_changed` + PUBLIC `message.sent` (followers minus
+  actor; an internal note mints NOTHING), `telegram.window.closing` (open
+  ticket's assignee), `ticket.bulk_completed` (requester, COUNTS only — the
+  Q7 posture proven: the escalation reason text never lands in a row).
+  C-09 rides the per-user event-dedupe unique index — the same physics
+  sabotage #9 proved at step 2; the redelivery no-ops are asserted again
+  per event family in ListProjectorTest. `sla_warning` rows stay Doc 12
+  FIXTURES (no producer until Doc 12 — the category closes the type set).
+- **FR-28 status UI (`StatusControl.vue`):** Online/Away/Offline through
+  the real door with server-truth round-trip, heartbeat every 30 s while
+  online, idle → BR-06's 60 s CANCELABLE countdown toast (scripted through
+  the SAME function the idle timer calls; decrement + cancel proven; expiry
+  fires the same handler into `auto_idle`), forced status renders WITH
+  attribution ("set by Fixture Supervisor" — proven end-to-end through the
+  real AgentStatus::force). Status hues per the token law: online =
+  `--ds-success-text`, away = `--ds-warn-text` (B2-S02's drawn values,
+  matched to tokens, never re-mixed).
+- **FR-08 + FR-06 rail behaviors (`ViewsRail.vue` + `SavedViewEditor.vue`,
+  B1-S03):** four labelled sections in FR-08's order (System / Queues /
+  Shared / Mine); B1-S03's drawn system order is the DEFAULT (caught live:
+  the server prop order differed — the frame is law); drag reorder within
+  a section + the Alt↑/Alt↓ keyboard equivalent (§13) persisted per user
+  (proven across reload, with the persist-race honestly awaited); the
+  Shared empty-state card verbatim; the FR-06 editor (name, chip'd filters
+  over the CLOSED SavedViewFilters grammar, sort, EC-04's per-viewer note
+  verbatim) through the step-4 doors — create → the saved view RENDERS real
+  filtered membership via the list door's `?saved=` branch (`saved:{id}`
+  view keys); duplicate-to-edit on shared views. **HONEST SEAM, stated:**
+  the editor's Share-with control renders per the frame but DISABLED — the
+  share DOOR (views.share) is step-4-proven, but no org directory (teams/
+  departments) exists yet to pick a target from; the control arms when the
+  directory lands. **Queues = the Doc 11 SEAM:** the section TYPE renders
+  from `fixtures/inbox/seams/doc11-queue-views.json` under `?seam_queues=1`
+  (the tabBadges idiom), empty-hidden otherwise; membership/config stay
+  Doc 11's.
+- **FR-23/24/25 palette + filter bar:** the ⌘K palette completed to the
+  drawn contract — Tickets / Customers / Messages sections, ↑↓/↵ roving
+  selection (keyboard-only ⌘K→view proven, US-01 posture), recent searches
+  per user (prefs `recent_searches`, capped 8), the drawn footer, actions
+  as REAL DOORS ONLY (Resolve-active through the FR-21 transition door,
+  density, Away — the invented "New ticket" action was REMOVED: no door
+  exists). **FR-25's message hits open the thread ANCHORED at the message
+  with the row highlighted** (Doc 04 EC-08's window underneath) — proven,
+  and the AC-09 traceability row upgraded to covered (both clauses).
+  **FR-24's FilterBar** composes WITHIN the current view's base membership
+  — the server ANDs the closed filter grammar into the membership query
+  (never replaces it; proven both directions: normal rows leave, the
+  urgent-but-assigned row cannot leak INTO Unassigned), the header total
+  tells the FILTERED truth (BR-01), clear-all restores. The list door
+  gained the validated `filters` param; message search indexing joined the
+  seeder's real-job indexing pass.
+- **FR-20 REAL DATA — THE ADVISOR'S STEP-13 ORDER, DELIVERED EARLY, GAP
+  CLOSED** (see the amended step-11 FR-20 entry above): conversationMeta
+  resolves connection/customer/blocked truth server-side; the composer
+  consumes the payload with NO seam props; proven against seeded paused
+  (#4831) and blocked (#4832) fixtures. The resume re-verify caught TWO
+  real defects in the pre-crash half: the connection lookup keyed on the
+  uuid `id` instead of Telegram's `connection_id` string (could never
+  match — every connection would have read 'active'), and `load()` never
+  assigning the four new meta fields (the props were switched to refs but
+  the assignments were the crash-interrupted write). Both fixed, both
+  proven by the FR-20 browser test.
+- **Rescue view (Doc 05 US-04 closing row):** real `channel_unreachable`
+  membership seeded (#4830) and proven rendering in the Rescue system view.
+- **Sighting F (0f branch (c)):** filed above in the 0f row — run
+  31487755870 GREEN all six stages; ladder continues, discriminator armed.
+
+**Registries:** traceability AC-09 → covered (both clauses); notification
+categories + `inbox.away.idle_minutes` + permission mappings were step-1
+registrations (nothing new to register); no new events (the bell fanout is
+per-user ROWS from existing events — the approved plan's own words).
+
+**i18n (§14):** `inbox.bell.*`, `inbox.status.*`, `inbox.views_editor.*`,
+`inbox.filter_bar.*`, palette + views additions — en + am, ~90 new keys
+per language, ALL machine-authored Amharic joins the standing R-14
+native-review queue; no destructive-tier strings in this step's set (the
+mute/status/reorder actions are all reversible).
+
+**Proven (evidence `docs/evidence/S07-step12/`):** resume battery
+1058/1058+11 skipped on the fresh stack (`resume-make-test-01.txt`,
+pre-final-tree). **A SECOND interruption (2026-08-12, interrupted
+restart mid-final-battery) voided the `final-*` captures as the
+checkpoint figures — the §5 resume ran AGAIN from a `make fresh` stack
+and every final figure below is from the fresh `resume2-*` captures on
+the exact client-half tree:** browser **55/55** all fourteen inbox specs
+(`resume2-playwright-inbox-01.txt`); canonical **90/597**
+(`resume2-canonical-suites-01.txt`); full battery **1061 passed /
+0 failed / 11 skipped, 14,906 assertions**
+(`resume2-make-test-01.txt`); gates **13/13** (`resume2-gates-01.txt`);
+Pint 755 files PASS + PHPStan max clean (both in-container) + ESLint
+0 errors/3 pre-existing warnings + vue-tsc clean + string-lint PASS
+(`resume2-lint-01.txt` — the pre-crash `final-lint-02.txt` string-lint
+red on the bell's `999+` cap marker is resolved by the reasoned
+allowlist entries in this commit, filed with FR-07's own words). The
+FR-25/FR-20/FR-08 iteration trail is captured honestly:
+`resume-playwright-*.txt`, `new-specs-run-01…04.txt` (stale-bundle
+diagnoses included); the superseded `final-*` captures stay committed
+under their honest names.
+
 ## SESSION-07 (Doc 07) — STEP 11: THE COMPOSER (FR-16…FR-22, AC-05) — TWO COMMITS (`589c75b` server + the client commit)
 
 **MODE SAFETY IS STRUCTURAL (FR-17/BR-02):** reply and note are SEPARATE
@@ -111,7 +268,16 @@ health link) / blocked_by_user / conversation_blocked. HONEST GAP: the
 paused/blocked_by_user states resolve in the same computed but their DATA
 arrives when Doc 05's connection linkage reaches the thread payload —
 seam-prop-driven until then (stated; the closing-row set for §8 render is
-otherwise executed). **FR-18** per the plan row's scope: live caps + the
+otherwise executed). **GAP CLOSED AT STEP 12** (the advisor's step-13
+order, delivered early): `ThreadController::conversationMeta` resolves
+`connection_state`/`connection_account` from the conversation's business
+connection (joined by `connection_id` — the ChannelUnreachableWriter
+join; the step-12 resume re-verify caught and fixed an `id`-keyed lookup
+that could never match), `blocked_by_user` from the latest outbound's
+`delivery_error->>'reason'`, and `customer_has_phone` for the expired
+card's SMS filter; the composer consumes the payload with NO seam props;
+proven by the FR-20 real-data browser test against seeded paused
+(#4831) and blocked (#4832) fixtures. **FR-18** per the plan row's scope: live caps + the
 telegram downgrade hint + the voice button behind `inbox.voice_recording`
 (N-19: render-gate only); rich-lite buttons/attachments/emoji sit with
 FR-18's remainder at close-out. **FR-19:** the "/" palette (macros render
@@ -1204,6 +1370,20 @@ absorption is REFUSED (owner order).**
   request-shaped calls are CONSISTENT with per-IP bucket bleed but the
   ladder waits for the v2 discriminator: the step-11 push carries it, and
   its run is the first CI look that can rule bleed-vs-product-write.
+- **Sighting F — THE FIRST v2-INSTRUMENTED CI RUN, AND IT WENT GREEN
+  (advisor 0f branch (c), 2026-08-11):** the e82ce3a push (step-11 client
+  half) is run
+  [31487755870](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31487755870)
+  — **ALL SIX STAGES GREEN**, including Stage 3 where the 0f flake had
+  recurred on every prior S07 run (sightings D+E). Per the pre-authorized
+  branch (c) — "if the run is green or the failure shape differs, file what
+  it shows and continue" — this is FILED and the ladder continues: a green
+  run does NOT discharge the bleed-vs-product question (it is an
+  intermittent by definition), but the v2 snapshot had nothing to capture
+  because nothing failed. The discriminator remains armed for the next
+  recurrence; the intermittent's own nature is why the ladder never
+  escalates on a single observation, green or red. e82ce3a is the CI-green
+  tree for steps 1–11 by containment.
 
 **Order 3 — the TicketsBudgets linearity failure, capture cited, CLASSED
 KNOWN (host-load, single-sighting).** Capture:

@@ -25,6 +25,11 @@ type PrefsBlob = {
     density?: 'comfortable' | 'compact';
     view_order?: string[];
     sort_overrides?: Record<string, string>;
+    // FR-26's quick mute (step 12): an ISO stamp or null. A per-user comfort
+    // preference — client wall time is in R-19's scope exemption.
+    mute_until?: string | null;
+    // FR-23: recent searches, newest first, capped at 8.
+    recent_searches?: string[];
 };
 
 const SESSION_KEY = 'inbox-prefs-session-local';
@@ -44,6 +49,8 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
         density: 'comfortable' as 'comfortable' | 'compact',
         viewOrder: [] as string[],
         sortOverrides: {} as Record<string, string>,
+        mutedUntil: null as string | null,
+        recentSearches: [] as string[],
         // Writes are SERIALIZED: two in-flight PATCHes can land out of
         // order and the server keeps the loser (a 408-px width overtaking
         // the 424 the UI shows — BR-01's honesty bar caught it in AC-01).
@@ -63,6 +70,27 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
             this.density = merged.density ?? 'comfortable';
             this.viewOrder = merged.view_order ?? [];
             this.sortOverrides = merged.sort_overrides ?? {};
+            this.mutedUntil = merged.mute_until ?? null;
+            this.recentSearches = merged.recent_searches ?? [];
+        },
+
+        // FR-23: remember a search, newest first, deduped, capped at 8.
+        rememberSearch(query: string): void {
+            const next = [query, ...this.recentSearches.filter((q) => q !== query)].slice(0, 8);
+            this.recentSearches = next;
+            void this.persist({ recent_searches: next });
+        },
+
+        // FR-08: the rail's user-arranged order, persisted.
+        setViewOrder(order: string[]): void {
+            this.viewOrder = order;
+            void this.persist({ view_order: order });
+        },
+
+        // FR-26: the bell's quick mute.
+        setMutedUntil(until: string | null): void {
+            this.mutedUntil = until;
+            void this.persist({ mute_until: until });
         },
 
         setRegions(patch: RegionPrefs): void {

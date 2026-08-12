@@ -29,6 +29,9 @@ const props = defineProps<{
     t: Record<string, string>;
     composerT: Record<string, string>;
     voiceFlag: boolean;
+    // FR-25 (step 12): a search-hit anchor — the thread opens AT the
+    // message with the row highlighted (Doc 04 EC-08's window underneath).
+    initialAnchor?: string | null;
 }>();
 
 const messages = ref<Msg[]>([]);
@@ -42,6 +45,10 @@ const ticketStatus = ref('');
 const conversationState = ref('active');
 const windowExpiresAt = ref<string | null>(null);
 const windowState = ref<'open' | 'closing' | 'expired' | 'none'>('none');
+const connectionState = ref('active');
+const connectionAccount = ref('');
+const customerHasPhone = ref(false);
+const blockedByUser = ref(false);
 const lightbox = ref<Record<string, unknown> | null>(null);
 const history = ref<{
     open: boolean;
@@ -83,10 +90,21 @@ async function load(anchor?: string): Promise<void> {
         state?: string;
         reply_window_state?: string;
         reply_window_expires_at?: string | null;
+        customer_has_phone?: boolean;
+        blocked_by_user?: boolean;
+        connection_state?: string;
+        connection_account?: string;
     };
     customerName.value = conversationMeta.customer_display_name ?? '';
     conversationState.value = conversationMeta.state ?? 'active';
     windowExpiresAt.value = conversationMeta.reply_window_expires_at ?? null;
+    // FR-20's real data (the advisor's step-13 order, delivered at step 12):
+    // the composer's paused/blocked/expired cards resolve from the server's
+    // conversationMeta — no seam props remain.
+    customerHasPhone.value = conversationMeta.customer_has_phone ?? false;
+    blockedByUser.value = conversationMeta.blocked_by_user ?? false;
+    connectionState.value = conversationMeta.connection_state ?? 'active';
+    connectionAccount.value = conversationMeta.connection_account ?? '';
     const rawWindow = conversationMeta.reply_window_state ?? 'none';
     windowState.value =
         rawWindow === 'open' || rawWindow === 'closing' || rawWindow === 'expired'
@@ -267,9 +285,21 @@ async function markRead(): Promise<void> {
     }
 }
 
+// FR-25 (step 12): a search hit opens ANCHORED with the row highlighted.
+const highlightedMessage = ref<string | null>(null);
+
 onMounted(async () => {
-    await load();
-    await positionOnOpen();
+    if (props.initialAnchor) {
+        await load(props.initialAnchor);
+        highlightedMessage.value = props.initialAnchor;
+        await nextTick();
+        scroller.value
+            ?.querySelector(`[data-message="${props.initialAnchor}"]`)
+            ?.scrollIntoView({ block: 'center' });
+    } else {
+        await load();
+        await positionOnOpen();
+    }
     void markRead();
 });
 </script>
@@ -380,15 +410,26 @@ onMounted(async () => {
                     </template>
                 </div>
 
-                <MessageBubble
+                <div
                     v-else-if="item.type === 'message'"
-                    :message="item.message"
-                    :channel="channel"
-                    :t="t"
-                    @open-media="openMedia"
-                    @open-history="openHistory"
-                    @jump-to="jumpTo"
-                />
+                    :data-search-highlight="
+                        highlightedMessage === item.message.id ? '1' : undefined
+                    "
+                    :style="
+                        highlightedMessage === item.message.id
+                            ? { outline: '2px solid var(--ds-accent)', borderRadius: '8px' }
+                            : undefined
+                    "
+                >
+                    <MessageBubble
+                        :message="item.message"
+                        :channel="channel"
+                        :t="t"
+                        @open-media="openMedia"
+                        @open-history="openHistory"
+                        @jump-to="jumpTo"
+                    />
+                </div>
             </template>
         </div>
 
@@ -400,10 +441,10 @@ onMounted(async () => {
             :conversation-state="conversationState"
             :window-state="windowState"
             :window-expires-at="windowExpiresAt"
-            connection-state="active"
-            connection-account=""
-            :customer-has-phone="false"
-            :blocked-by-user="false"
+            :connection-state="connectionState"
+            :connection-account="connectionAccount"
+            :customer-has-phone="customerHasPhone"
+            :blocked-by-user="blockedByUser"
             :t="composerT"
             :voice-flag="voiceFlag"
             @sent="() => load()"

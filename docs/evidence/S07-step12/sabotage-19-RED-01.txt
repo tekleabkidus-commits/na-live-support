@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-notify.spec.ts:140:1 › SEC-04 (sabotage #19 red here): the notification content is NAME + NUMBER only — the event's snippet NEVER appears; reduced mode drops even the name (1.5s)
+
+
+  1) [chromium] › tests/Browser/inbox-notify.spec.ts:140:1 › SEC-04 (sabotage #19 red here): the notification content is NAME + NUMBER only — the event's snippet NEVER appears; reduced mode drops even the name 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Kidist Haile · #4802"
+    Received: "Kidist Haile · #4802: the secret message body"
+
+      169 |     );
+      170 |     let emissions = await page.evaluate(() => window.__inboxNotify.emissions());
+    > 171 |     expect(emissions.notifications[0]).toBe('Kidist Haile · #4802');
+          |                                        ^
+      172 |     expect(emissions.notifications[0]).not.toContain('secret');
+      173 |
+      174 |     // Reduced: "New activity" — not even the name (SEC-04's own words).
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-notify.spec.ts:171:40
+
+    Error Context: test-results/inbox-notify-SEC-04-sabota-63408-ed-mode-drops-even-the-name-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-notify.spec.ts:140:1 › SEC-04 (sabotage #19 red here): the notification content is NAME + NUMBER only — the event's snippet NEVER appears; reduced mode drops even the name 

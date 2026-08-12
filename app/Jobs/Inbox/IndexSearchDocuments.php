@@ -73,6 +73,10 @@ final class IndexSearchDocuments implements ShouldQueue
         /** @var array{taskUid: int} $task */
         $task = $tickets->addDocuments([[
             'id' => $row->ticket_id,
+            // The palette opens a ticket hit IN PLACE (FR-25) — the thread
+            // keys on the conversation, so the doc carries it like the
+            // messages doc below (same canonical row, no drift).
+            'conversation_id' => $row->conversation_id,
             'number' => (string) $row->number,
             'subject' => $row->subject,
             'tags' => json_decode($row->tags, true, 8, JSON_THROW_ON_ERROR),

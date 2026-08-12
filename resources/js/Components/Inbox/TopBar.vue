@@ -7,21 +7,34 @@
 // word), profile menu with the §9 density toggle. Every string is a t-key
 // (C-08); the ⌘K glyph is a physical-key label, not copy.
 import { ref } from 'vue';
+import NotificationBell from './NotificationBell.vue';
 import HealthIndicator from './HealthIndicator.vue';
+import StatusControl from './StatusControl.vue';
 
 defineProps<{
     tenantName: string;
     health: { worst: 'healthy' | 'degraded' | 'down' | 'unknown'; states: Record<string, string> };
     canCreateTicket: boolean;
     density: 'comfortable' | 'compact';
+    bellUnread: number;
+    mutedUntil: string | null;
+    agentStatus: { status: string; reason: string | null; set_by_name: string | null };
+    awayIdleMinutes: number;
     t: {
         topbar: Record<string, string>;
         health: Record<string, string>;
         density: Record<string, string>;
+        bell: Record<string, string>;
+        status: Record<string, string>;
     };
 }>();
 
-const emit = defineEmits<{ (e: 'set-density', value: 'comfortable' | 'compact'): void }>();
+const emit = defineEmits<{
+    (e: 'set-density', value: 'comfortable' | 'compact'): void;
+    (e: 'open-thread', payload: { ticketId: string; conversationId: string | null }): void;
+    (e: 'mute', until: string | null): void;
+    (e: 'open-palette'): void;
+}>();
 
 const profileOpen = ref(false);
 
@@ -54,6 +67,7 @@ function toggleDensity(value: 'comfortable' | 'compact'): void {
                 color: 'var(--ds-text-muted)',
             }"
             :aria-label="t.topbar.search_label"
+            @click="emit('open-palette')"
         >
             <span aria-hidden="true">⌕</span>
             <span class="truncate">{{ t.topbar.search_placeholder }}</span>
@@ -77,27 +91,15 @@ function toggleDensity(value: 'comfortable' | 'compact'): void {
 
         <HealthIndicator :worst="health.worst" :states="health.states" :t="t.health" />
 
-        <button
-            type="button"
-            data-testid="notification-bell"
-            class="relative shrink-0 rounded-md px-2 py-1.5"
-            :style="{ color: 'var(--ds-text-secondary)' }"
-            :aria-label="t.topbar.notifications"
-        >
-            <span aria-hidden="true">🔔</span>
-        </button>
+        <NotificationBell
+            :t="t.bell"
+            :initial-unread="bellUnread"
+            :muted-until="mutedUntil"
+            @open-thread="(payload) => emit('open-thread', payload)"
+            @mute="(until) => emit('mute', until)"
+        />
 
-        <button
-            type="button"
-            data-testid="agent-status"
-            class="flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold"
-            :style="{ color: 'var(--ds-text-primary)' }"
-            :aria-label="t.topbar.status_label + ': ' + t.topbar.status_online"
-        >
-            <span aria-hidden="true" :style="{ color: 'var(--ds-health-healthy)' }">●</span>
-            {{ t.topbar.status_online }}
-            <span aria-hidden="true" :style="{ color: 'var(--ds-text-faint)' }">▾</span>
-        </button>
+        <StatusControl :t="t.status" :initial="agentStatus" :away-idle-minutes="awayIdleMinutes" />
 
         <div class="relative shrink-0">
             <button

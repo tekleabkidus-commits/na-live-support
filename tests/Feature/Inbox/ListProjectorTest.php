@@ -308,3 +308,135 @@ it('registers the projector for its 29 events in the ConsumerRegistry (ADR 0011 
             ->toBeTrue("{$event} lost its projector registration");
     }
 });
+
+/*
+|--------------------------------------------------------------------------
+| S07 step 12 — FR-26's bell fanout (per-user rows from EXISTING events)
+|--------------------------------------------------------------------------
+*/
+
+it('FR-26 fanout: ticket.assigned mints the NEW assignee\'s bell row — never a self-row, never on unassign, and redelivery is a no-op (C-09)', function (): void {
+    [$tenant, $conversation, $ticket] = ticketFixture('open');
+    $assignee = User::factory()->create();
+    $assigner = User::factory()->create();
+
+    $eventId = inboxSeedEvent('ticket.assigned', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(),
+        'old_assignee_id' => null, 'new_assignee_id' => $assignee->identifier(),
+        'by' => $assigner->identifier(),
+    ]);
+    runListProjector($eventId);
+    runListProjector($eventId); // C-09
+
+    $rows = DB::table('inbox_notifications')->where('category', 'notify.inbox.assignment')->get();
+    expect($rows)->toHaveCount(1)
+        ->and($rows[0]->user_id)->toBe($assignee->identifier())
+        ->and($rows[0]->ticket_id)->toBe($ticket->identifier());
+
+    // Self-assign mints nothing; unassign (null new) mints nothing.
+    runListProjector(inboxSeedEvent('ticket.assigned', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(),
+        'old_assignee_id' => null, 'new_assignee_id' => $assigner->identifier(), 'by' => $assigner->identifier(),
+    ]));
+    runListProjector(inboxSeedEvent('ticket.assigned', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(),
+        'old_assignee_id' => $assigner->identifier(), 'new_assignee_id' => null, 'by' => $assigner->identifier(),
+    ]));
+    expect(DB::table('inbox_notifications')->where('category', 'notify.inbox.assignment')->count())->toBe(1);
+});
+
+it('FR-26 fanout: escalation rows to the TARGET (escalation-to-me) and Doc 06 FR-18 follower rows minus actor and target; status changes and public replies fan to followers minus the actor', function (): void {
+    [$tenant, $conversation, $ticket] = ticketFixture('open');
+    $actor = User::factory()->create();
+    $target = User::factory()->create();
+    $follower = User::factory()->create();
+    foreach ([$actor, $target, $follower] as $user) {
+        DB::table('ticket_followers')->insert([
+            'id' => (string) Str::uuid7(), 'tenant_id' => $tenant->identifier(),
+            'ticket_id' => $ticket->identifier(), 'user_id' => $user->identifier(),
+        ]);
+    }
+
+    runListProjector(inboxSeedEvent('ticket.escalated', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(), 'path' => 'user',
+        'target_id' => $target->identifier(), 'reason' => 'needs a supervisor decision',
+        'actor_type' => 'staff', 'actor_id' => $actor->identifier(),
+    ]));
+
+    expect(DB::table('inbox_notifications')->where('category', 'notify.inbox.escalation')->pluck('user_id')->all())
+        ->toBe([$target->identifier()])
+        ->and(DB::table('inbox_notifications')->where('category', 'notify.inbox.follower')->pluck('user_id')->all())
+        ->toBe([$follower->identifier()]); // never the actor, never the target twice
+
+    // Q7 row posture: the escalation REASON text never lands in the row.
+    /** @var object{payload: string} $row */
+    $row = DB::table('inbox_notifications')->where('category', 'notify.inbox.escalation')->first(['payload']);
+    expect($row->payload)->not->toContain('supervisor decision');
+
+    runListProjector(inboxSeedEvent('ticket.status_changed', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(),
+        'old_status' => 'open', 'new_status' => 'pending_customer',
+        'actor_type' => 'staff', 'actor_id' => $actor->identifier(),
+    ]));
+    $statusRows = DB::table('inbox_notifications')->where('category', 'notify.inbox.follower')
+        ->whereRaw("payload->>'kind' = 'status'")->pluck('user_id')->all();
+    expect($statusRows)->toContain($follower->identifier())->toContain($target->identifier())
+        ->not->toContain($actor->identifier());
+
+    // Public reply fans to followers minus the author; an internal NOTE mints nothing.
+    $replyId = (string) Str::uuid7();
+    DB::table('messages')->insert([
+        'id' => $replyId, 'tenant_id' => $tenant->identifier(), 'conversation_id' => $conversation->identifier(),
+        'direction' => 'out', 'author_type' => 'agent', 'author_id' => $actor->identifier(),
+        'kind' => 'text', 'body' => 'public reply', 'is_internal' => false, 'delivery_state' => 'sent',
+    ]);
+    runListProjector(inboxSeedEvent('message.sent', [
+        'tenant_id' => $tenant->identifier(), 'message_id' => $replyId, 'conversation_id' => $conversation->identifier(),
+    ]));
+    $replyRows = DB::table('inbox_notifications')->whereRaw("payload->>'kind' = 'reply'")->pluck('user_id')->all();
+    expect($replyRows)->toContain($follower->identifier())->not->toContain($actor->identifier());
+
+    $noteId = (string) Str::uuid7();
+    DB::table('messages')->insert([
+        'id' => $noteId, 'tenant_id' => $tenant->identifier(), 'conversation_id' => $conversation->identifier(),
+        'direction' => 'out', 'author_type' => 'agent', 'author_id' => $actor->identifier(),
+        'kind' => 'note', 'body' => 'internal note', 'is_internal' => true, 'delivery_state' => 'sent',
+    ]);
+    $before = DB::table('inbox_notifications')->count();
+    runListProjector(inboxSeedEvent('message.sent', [
+        'tenant_id' => $tenant->identifier(), 'message_id' => $noteId, 'conversation_id' => $conversation->identifier(),
+    ]));
+    expect(DB::table('inbox_notifications')->count())->toBe($before, 'an internal note fanned out to followers — notes are the mention channel only');
+});
+
+it('FR-26 fanout: window-closing rows to the open ticket\'s assignee; bulk-completed rows to the requester with COUNTS only', function (): void {
+    [$tenant, $conversation, $ticket] = ticketFixture('open');
+    $assignee = User::factory()->create();
+    DB::table('tickets')->where('id', $ticket->identifier())->update(['assignee_id' => $assignee->identifier()]);
+    DB::table('conversations')->where('id', $conversation->identifier())->update(['open_ticket_id' => $ticket->identifier()]);
+
+    runListProjector(inboxSeedEvent('telegram.window.closing', [
+        'tenant_id' => $tenant->identifier(), 'conversation_id' => $conversation->identifier(),
+        'expires_at' => '2026-08-11T12:00:00Z',
+    ]));
+    $rows = DB::table('inbox_notifications')->where('category', 'notify.inbox.window_closing')->get();
+    expect($rows)->toHaveCount(1)
+        ->and($rows[0]->user_id)->toBe($assignee->identifier())
+        ->and($rows[0]->ticket_id)->toBe($ticket->identifier());
+
+    runListProjector(inboxSeedEvent('ticket.bulk_completed', [
+        'tenant_id' => $tenant->identifier(), 'bulk_job_id' => (string) Str::uuid7(),
+        'action' => 'assign', 'ok' => 18, 'failed' => [['ticket_id' => 'x', 'reason' => 'y'], ['ticket_id' => 'z', 'reason' => 'w']],
+        'requested_by' => $assignee->identifier(),
+    ]));
+    /** @var object{payload: string} $bulk */
+    $bulk = DB::table('inbox_notifications')->where('category', 'notify.inbox.bulk_completed')->first(['payload']);
+    /** @var array<string, mixed> $payload */
+    $payload = json_decode($bulk->payload, true, 8, JSON_THROW_ON_ERROR);
+    expect($payload['ok'])->toBe(18)->and($payload['failed'])->toBe(2);
+});

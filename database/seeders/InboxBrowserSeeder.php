@@ -137,6 +137,52 @@ final class InboxBrowserSeeder extends Seeder
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($kidistTicket);
         }
 
+        // T-04: the seeded scene must be SEARCHABLE. The projector's direct
+        // recomputeTicket path (deliberately) does not dispatch the indexer —
+        // only the event-consuming path does — so browser fixtures feed the
+        // index through the REAL job, synchronously (it waits on each
+        // Meilisearch task), on every seed. Upsert-idempotent (C-09 posture).
+        // Each conversation's TEXT messages index too (FR-25's message hits).
+        /** @var list<object{ticket_id: string, conversation_id: string}> $items */
+        $items = DB::table('ticket_list_items')->get(['ticket_id', 'conversation_id'])->all();
+        foreach ($items as $item) {
+            dispatch_sync(new \App\Jobs\Inbox\IndexSearchDocuments($row->id, $item->ticket_id));
+            /** @var list<string> $messageIds */
+            $messageIds = DB::table('messages')->where('conversation_id', $item->conversation_id)
+                ->where('kind', 'text')->where('is_internal', false)->pluck('id')->all();
+            foreach ($messageIds as $messageId) {
+                dispatch_sync(new \App\Jobs\Inbox\IndexSearchDocuments($row->id, $item->ticket_id, $messageId));
+            }
+        }
+
+        // FR-26 bell fixtures for the browser proof: the REAL categories the
+        // fanout mints (assignment — Pest-proven end-to-end) plus the Doc 12
+        // sla_warning FIXTURE row (no producer until Doc 12 — the category
+        // closes the bell's type set) and a bulk summary. Synthetic event ids
+        // (uuid) satisfy the dedupe index; identifiers only (Q7).
+        if (DB::table('inbox_notifications')->where('user_id', $agent->identifier())->count() === 0) {
+            /** @var object{ticket_id: string, conversation_id: string}|null $bellTicket */
+            $bellTicket = DB::table('ticket_list_items')->where('number', 4801)->first(['ticket_id', 'conversation_id']);
+            if ($bellTicket !== null) {
+                foreach ([
+                    ['notify.inbox.assignment', $bellTicket->ticket_id, $bellTicket->conversation_id, []],
+                    ['notify.inbox.sla_warning', $bellTicket->ticket_id, $bellTicket->conversation_id, []],
+                    ['notify.inbox.bulk_completed', null, null, ['ok' => 18, 'failed' => 2]],
+                ] as [$category, $ticketId, $conversationId, $extra]) {
+                    DB::table('inbox_notifications')->insert([
+                        'id' => (string) Str::uuid7(), 'tenant_id' => $row->id,
+                        'user_id' => $agent->identifier(), 'category' => $category,
+                        'ticket_id' => $ticketId, 'conversation_id' => $conversationId,
+                        'payload' => json_encode(['event_id' => (string) Str::uuid7()] + $extra, JSON_THROW_ON_ERROR),
+                    ]);
+                }
+            }
+        }
+        // Self-healing (the prefs idiom): a prior mark-all-read run leaves
+        // the fixture rows read — every seed re-arms them. read_at is the
+        // ONLY app-updatable column (R-19b), and null is a legal value of it.
+        DB::table('inbox_notifications')->where('user_id', $agent->identifier())->update(['read_at' => null]);
+
         app(RlsSession::class)->clear();
         app(TenantContext::class)->clear();
     }
@@ -229,6 +275,61 @@ final class InboxBrowserSeeder extends Seeder
             [, $convN, $ticketN] = $mk("Fixture Filler {$i}", "@fixture_filler_s09_{$i}");
             $message($convN, "Filler inquiry number {$i}", 'text', 'en');
             $projector->recomputeTicket($ticketN);
+        }
+
+        // Rescue view (Doc 05 US-04 closing row): a channel_unreachable
+        // ticket so the rescue system view renders real membership.
+        if (! DB::table('ticket_list_items')->where('number', 4830)->exists()) {
+            [, $rescueConv, $rescueTicket] = $mk('Rescue Fixture Player', '@fixture_rescue_s12', [
+                'number' => 4830, 'channel_unreachable' => true,
+            ]);
+            $message($rescueConv, 'Message stuck — the bot was disconnected.', 'text', 'en');
+            $projector->recomputeTicket($rescueTicket);
+        }
+
+        // FR-20 REAL DATA (the advisor's step-13 order, delivered at step 12):
+        // the composer's paused/blocked cards resolve from REAL substrate —
+        // a PAUSED business connection row and a blocked_by_user delivery
+        // error — through ThreadController::conversationMeta. No seam props.
+        if (! DB::table('ticket_list_items')->where('number', 4831)->exists()) {
+            $bot = \App\Models\TelegramBot::query()->firstWhere('username', 'fixture_brand_bot');
+            if ($bot === null) {
+                $bot = \App\Models\TelegramBot::query()->create([
+                    'telegram_bot_id' => 8_144_038_600,
+                    'username' => 'fixture_brand_bot',
+                    'display_name' => 'Fixture Brand Bot',
+                    'mode' => 'business',
+                    'bot_token' => '8144038600:FAKECREDbrowserfixturebrowserfixture',
+                ]);
+            }
+            if (! DB::table('telegram_business_connections')->where('connection_id', 'fixture-conn-paused-s12')->exists()) {
+                DB::table('telegram_business_connections')->insert([
+                    'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId,
+                    'bot_id' => $bot->getKey(), 'connection_id' => 'fixture-conn-paused-s12',
+                    'account_user_id' => 900_000_012, 'account_name' => 'Paused Fixture Account',
+                    'user_chat_id' => 900_000_012, 'state' => 'paused', 'can_reply' => false,
+                ]);
+            }
+            [, $pausedConv, $pausedTicket] = $mk('Paused Conn Player', '@fixture_paused_s12', [
+                'number' => 4831, 'assignee_id' => $agent->identifier(), 'subject' => 'Paused connection fixture',
+            ], ['business_connection_id' => 'fixture-conn-paused-s12']);
+            $message($pausedConv, 'Still waiting on my bonus question.', 'text', 'en');
+            $projector->recomputeTicket($pausedTicket);
+
+            [, $blockedConv, $blockedTicket] = $mk('Blocked Fixture Player', '@fixture_blocked_s12', [
+                'number' => 4832, 'assignee_id' => $agent->identifier(), 'subject' => 'Blocked by user fixture',
+            ]);
+            $message($blockedConv, 'Please stop contacting me.', 'text', 'en');
+            // The Doc 04 shape: MessageRepository writes {"reason": ...} and
+            // HealthRollup reads delivery_error->>'reason' — same key here.
+            DB::table('messages')->insert([
+                'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $blockedConv,
+                'direction' => 'out', 'author_type' => 'agent', 'kind' => 'text',
+                'body' => 'We have paused your promotions as requested.', 'is_internal' => false,
+                'delivery_state' => 'failed_final',
+                'delivery_error' => json_encode(['reason' => 'blocked_by_user'], JSON_THROW_ON_ERROR),
+            ]);
+            $projector->recomputeTicket($blockedTicket);
         }
 
         // ── Step 10: the THREAD scene on its OWN customer (riding R1

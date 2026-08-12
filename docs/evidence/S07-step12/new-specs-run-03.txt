@@ -1,0 +1,44 @@
+
+Running 12 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:61:1 › FR-24: the High-priority chip composes WITHIN Unassigned — normal rows leave, the total tells the filtered truth, clear-all restores (1.7s)
+  ✓   2 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:85:1 › FR-24: on My Open the same chip KEEPS the matching rows — the urgent R1 and the high Yonas stay, the normal FR-20 fixtures leave (1.2s)
+  ✓   3 [chromium] › tests/Browser/inbox-palette.spec.ts:67:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (1.7s)
+  ✓   4 [chromium] › tests/Browser/inbox-palette.spec.ts:88:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.7s)
+  ✓   5 [chromium] › tests/Browser/inbox-palette.spec.ts:109:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (1.5s)
+  ✓   6 [chromium] › tests/Browser/inbox-palette.spec.ts:118:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) (1.8s)
+  ✓   7 [chromium] › tests/Browser/inbox-palette.spec.ts:136:1 › FR-23: ↑↓ move the roving selection and ↵ opens it — keyboard-only from ⌘K to a switched view (US-01 posture) (1.4s)
+  ✓   8 [chromium] › tests/Browser/inbox-palette.spec.ts:150:1 › FR-23: recent searches persist per user — the footer offers the last query on the next open (1.6s)
+  ✘   9 [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) (1.5s)
+  ✓  10 [chromium] › tests/Browser/inbox-views.spec.ts:94:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows (1.7s)
+  ✓  11 [chromium] › tests/Browser/inbox-views.spec.ts:125:1 › FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned copy and opens the editor on it (1.2s)
+  ✓  12 [chromium] › tests/Browser/inbox-views.spec.ts:142:1 › Doc 11 SEAM: ?seam_queues=1 renders the Queues section TYPE from the fixture — counts and order, no membership logic (1.1s)
+
+
+  1) [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+    -   "unassigned",
+        "my_open",
+    +   "unassigned",
+      ]
+
+      84 |     await page.reload();
+      85 |     await expect(page.getByTestId('views-rail')).toBeVisible();
+    > 86 |     expect((await keys()).slice(0, 2)).toEqual(['unassigned', 'my_open']);
+         |                                        ^
+      87 |
+      88 |     // Restore for later specs (the seeder resets prefs, but stay tidy).
+      89 |     await page.locator('[data-view="my_open"]').focus();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts:86:40
+
+    Error Context: test-results/inbox-views-FR-08-Alt↓-mov-db3b4-ss-a-reload-prefs-per-user--chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-views.spec.ts:62:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) 
+  11 passed (2.6m)

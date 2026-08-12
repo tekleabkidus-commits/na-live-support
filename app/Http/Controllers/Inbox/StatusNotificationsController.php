@@ -35,12 +35,21 @@ final class StatusNotificationsController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        // The render data resolves from TRUTH at read time (the row stores
+        // identifiers only — Q7): the ticket number from the canonical list
+        // row, the mention's actor name from the minting event's author.
         /** @var list<object> $rows */
-        $rows = DB::table('inbox_notifications')
-            ->where('user_id', $user->identifier())
-            ->orderByDesc('created_at')
+        $rows = DB::table('inbox_notifications as n')
+            ->leftJoin('ticket_list_items as t', 't.ticket_id', '=', 'n.ticket_id')
+            ->leftJoin('events as e', DB::raw("(n.payload->>'event_id')::uuid"), '=', 'e.id')
+            ->leftJoin('users as a', DB::raw("(e.payload->>'author_id')::uuid"), '=', 'a.id')
+            ->where('n.user_id', $user->identifier())
+            ->orderByDesc('n.created_at')
             ->limit(50)
-            ->get(['id', 'category', 'ticket_id', 'payload', 'read_at', 'created_at'])
+            ->get([
+                'n.id', 'n.category', 'n.ticket_id', 'n.conversation_id', 'n.payload', 'n.read_at', 'n.created_at',
+                't.number as ticket_number', 'a.name as actor_name',
+            ])
             ->all();
 
         return new JsonResponse([
@@ -74,7 +83,25 @@ final class StatusNotificationsController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        return new JsonResponse($this->status->current($user->identifier()));
+        return new JsonResponse($this->withAttributionName($this->status->current($user->identifier())));
+    }
+
+    /**
+     * FR-28's attribution render data: "set by Dawit" needs the NAME; the id
+     * stays server-side.
+     *
+     * @param  array{status: string, reason: string|null, since: string|null, set_by_user_id: string|null}  $current
+     * @return array<string, mixed>
+     */
+    private function withAttributionName(array $current): array
+    {
+        $setByName = null;
+        if (is_string($current['set_by_user_id'])) {
+            /** @var string|null $setByName */
+            $setByName = DB::table('users')->where('id', $current['set_by_user_id'])->value('name');
+        }
+
+        return ['status' => $current['status'], 'reason' => $current['reason'], 'since' => $current['since'], 'set_by_name' => $setByName];
     }
 
     public function setStatus(Request $request): JsonResponse
@@ -89,7 +116,7 @@ final class StatusNotificationsController extends Controller
         $user = $request->user();
         $this->status->set($user, $input['status'], $input['reason'] ?? 'manual');
 
-        return new JsonResponse($this->status->current($user->identifier()));
+        return new JsonResponse($this->withAttributionName($this->status->current($user->identifier())));
     }
 
     public function heartbeat(Request $request): JsonResponse

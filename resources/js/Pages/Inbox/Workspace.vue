@@ -20,11 +20,21 @@
 // anatomy is step 9, the thread is step 10. The shell must stand before its
 // organs arrive; the placeholders are t-keys, not lorem.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { router } from '@inertiajs/vue3';
+import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
+import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ListPane from '../../Components/Inbox/List/ListPane.vue';
 import ThreadPane from '../../Components/Inbox/Thread/ThreadPane.vue';
 import TopBar from '../../Components/Inbox/TopBar.vue';
 import ViewsRail from '../../Components/Inbox/ViewsRail.vue';
+import {
+    notifierEmissions,
+    notify,
+    type NotifierPrefs,
+    type NotifyEvent,
+} from '../../lib/notifier';
+import { leaderState, startLeaderElection } from '../../lib/tabLeader';
 import {
     LIST_WIDTH_DEFAULT,
     LIST_WIDTH_MAX,
@@ -47,6 +57,12 @@ const props = defineProps<{
         bulk: Record<string, string>;
         thread: Record<string, string>;
         composer: Record<string, string>;
+        notifier: Record<string, string>;
+        palette: Record<string, string>;
+        bell: Record<string, string>;
+        status: Record<string, string>;
+        views_editor: Record<string, string>;
+        filter_bar: Record<string, string>;
     };
     tenantName: string;
     views: ViewRow[];
@@ -58,6 +74,10 @@ const props = defineProps<{
     buildId: string;
     can: { views_manage: boolean; views_share: boolean; tickets_create: boolean };
     tabBadges: { customer: boolean; copilot: boolean };
+    queueViews: { id: string; name: string; count: number }[];
+    agentStatus: { status: string; reason: string | null; set_by_name: string | null };
+    awayIdleMinutes: number;
+    bellUnread: number;
     initialThread: { conversation_id: string; ticket_id: string | null } | null;
     features: { voice_recording: boolean };
 }>();
@@ -70,7 +90,42 @@ const width = ref(typeof window === 'undefined' ? 1440 : window.innerWidth);
 function onResize(): void {
     width.value = window.innerWidth;
 }
-onMounted(() => window.addEventListener('resize', onResize));
+onMounted(() => {
+    window.addEventListener('resize', onResize);
+    // FR-04: the election starts with the workspace — BEFORE any sound can
+    // fire (the release's ordered minimum). The scripted hook feeds the
+    // SAME notify() the realtime feed will call.
+    startLeaderElection();
+    (window as unknown as Record<string, unknown>).__inboxNotify = {
+        fire: (event: NotifyEvent) => notify(event, livePrefs()),
+        fireWith: (event: NotifyEvent, prefs: NotifierPrefs) => notify(event, prefs),
+        emissions: () => notifierEmissions(),
+        leader: () => leaderState(),
+    };
+});
+
+// The LIVE prefs every real emission reads: FR-27's defaults (my-open ON,
+// unassigned OFF — Doc 16 owns the toggles) + the bell's quick mute.
+function livePrefs(): NotifierPrefs {
+    return {
+        soundMyOpen: true,
+        soundUnassigned: false,
+        reduced: false,
+        mutedUntil: prefsStore.mutedUntil,
+        reducedLabel: props.t.notifier?.reduced ?? '',
+    };
+}
+
+// FR-26: a bell row deep-links — in place when the conversation is known,
+// through the FR-15 deep-link door otherwise.
+function onBellThread(payload: { ticketId: string; conversationId: string | null }): void {
+    if (payload.conversationId) {
+        activeThread.value = payload.conversationId;
+        mobileScreen.value = 'thread';
+        return;
+    }
+    window.location.assign('/inbox/t/' + payload.ticketId);
+}
 onBeforeUnmount(() => window.removeEventListener('resize', onResize));
 
 const isMobile = computed(() => width.value < 768);
@@ -136,9 +191,145 @@ const activeView = ref('my_open');
 // list rows open it in place.
 const activeThread = ref<string | null>(props.initialThread?.conversation_id ?? null);
 
-function openThread(payload: { ticketId: string; conversationId: string }): void {
+const activeAnchor = ref<string | null>(null);
+const activeTicketMeta = ref<{ number: number | string } | null>(null);
+
+function openThread(payload: {
+    ticketId: string;
+    conversationId: string;
+    number?: number | string | null;
+}): void {
+    activeAnchor.value = null;
+    activeTicketMeta.value = payload.number != null ? { number: payload.number } : null;
     activeThread.value = payload.conversationId;
     mobileScreen.value = 'thread';
+}
+
+// FR-23: ⌘K / Ctrl-K opens the palette.
+const paletteOpen = ref(false);
+function onGlobalKey(event: KeyboardEvent): void {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        paletteOpen.value = true;
+    }
+}
+onMounted(() => window.addEventListener('keydown', onGlobalKey));
+onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKey));
+
+const paletteViews = computed(() =>
+    props.views.map((v) => ({ key: v.key, label: props.t.views[v.key] ?? v.key })),
+);
+const paletteSaved = computed(() => props.savedViews.map((v) => ({ id: v.id, name: v.name })));
+
+function onPaletteView(key: string): void {
+    // A saved-view id (uuid) vs a system key — saved views render through
+    // the same list door since step 12 wired 'saved:{id}'.
+    activeView.value = key.includes('-') ? 'saved:' + key : key;
+    paletteOpen.value = false;
+}
+function onPaletteThread(conversationId: string): void {
+    activeAnchor.value = null;
+    activeTicketMeta.value = null;
+    activeThread.value = conversationId;
+    mobileScreen.value = 'thread';
+    paletteOpen.value = false;
+}
+
+// FR-25: a message hit opens ANCHORED + highlighted.
+function onPaletteMessage(payload: { conversationId: string; messageId: string }): void {
+    activeAnchor.value = payload.messageId;
+    activeTicketMeta.value = null;
+    activeThread.value = payload.conversationId;
+    mobileScreen.value = 'thread';
+    paletteOpen.value = false;
+}
+
+// Palette actions are REAL DOORS: resolve rides the FR-21 transition door
+// on the active thread; Away rides the FR-28 status door.
+async function onPaletteAction(id: string): Promise<void> {
+    paletteOpen.value = false;
+    if (id === 'toggle-density') {
+        setDensity(density.value === 'comfortable' ? 'compact' : 'comfortable');
+        return;
+    }
+    if (id === 'set-away') {
+        await fetch('/inbox/status', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': workspaceXsrf(),
+            },
+            body: JSON.stringify({ status: 'away', reason: 'manual' }),
+        });
+        return;
+    }
+    if (id === 'resolve-active' && activeThread.value) {
+        await fetch(`/inbox/thread/${activeThread.value}/transition`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': workspaceXsrf(),
+            },
+            body: JSON.stringify({ to: 'resolve' }),
+        });
+    }
+}
+
+// ── FR-06: the saved-view editor (step 12) ─────────────────────────────────
+const editorOpen = ref(false);
+const editorTarget = ref<{
+    id: string | null;
+    name: string;
+    filters: Record<string, unknown>;
+    sort: { by?: string; dir?: string };
+} | null>(null);
+
+async function openEditor(viewId: string | null): Promise<void> {
+    if (viewId === null) {
+        editorTarget.value = { id: null, name: '', filters: {}, sort: {} };
+        editorOpen.value = true;
+        return;
+    }
+    // Prefill from the index door (raw definition JSON per row).
+    const response = await fetch('/inbox/views', { headers: { Accept: 'application/json' } });
+    if (!response.ok) return;
+    const body = (await response.json()) as {
+        views: { id: string; name: string; filters: string; sort: string }[];
+    };
+    const row = body.views.find((v) => v.id === viewId);
+    if (!row) return;
+    editorTarget.value = {
+        id: row.id,
+        name: row.name,
+        filters: JSON.parse(row.filters) as Record<string, unknown>,
+        sort: JSON.parse(row.sort) as { by?: string; dir?: string },
+    };
+    editorOpen.value = true;
+}
+
+// FR-06: shared views are read-only — duplicate mints an editable copy
+// through the step-4 door, then the editor opens on it.
+async function duplicateView(viewId: string): Promise<void> {
+    const response = await fetch(`/inbox/views/${viewId}/duplicate`, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'X-XSRF-TOKEN': workspaceXsrf() },
+    });
+    if (!response.ok) return;
+    const body = (await response.json()) as { id: string };
+    router.reload({ only: ['savedViews'] });
+    await openEditor(body.id);
+}
+
+function onEditorSaved(): void {
+    editorOpen.value = false;
+    router.reload({ only: ['savedViews'] });
+}
+
+function workspaceXsrf(): string {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
 
 // §9 density → the row-height variable list rows (step 9) consume.
@@ -169,13 +360,50 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             <a href="#inbox-context" class="skip-link">{{ t.shell.skip_to_context }}</a>
         </div>
 
+        <SavedViewEditor
+            :open="editorOpen"
+            :t="t.views_editor"
+            :can-share="can.views_share"
+            :editing="editorTarget"
+            @close="editorOpen = false"
+            @saved="onEditorSaved"
+        />
+
+        <CommandPalette
+            :open="paletteOpen"
+            :views="paletteViews"
+            :saved-views="paletteSaved"
+            :recent-searches="prefsStore.recentSearches"
+            :active-ticket="activeTicketMeta"
+            :t="t.palette"
+            @close="paletteOpen = false"
+            @select-view="onPaletteView"
+            @open-thread="onPaletteThread"
+            @open-message="onPaletteMessage"
+            @action="onPaletteAction"
+            @remember-search="(q: string) => prefsStore.rememberSearch(q)"
+        />
+
         <TopBar
             :tenant-name="tenantName"
             :health="health"
             :can-create-ticket="can.tickets_create"
             :density="density"
-            :t="{ topbar: t.topbar, health: t.health, density: t.density }"
+            :bell-unread="bellUnread"
+            :muted-until="prefsStore.mutedUntil"
+            :agent-status="agentStatus"
+            :away-idle-minutes="awayIdleMinutes"
+            :t="{
+                topbar: t.topbar,
+                health: t.health,
+                density: t.density,
+                bell: t.bell,
+                status: t.status,
+            }"
             @set-density="setDensity"
+            @open-thread="onBellThread"
+            @mute="(until) => prefsStore.setMutedUntil(until)"
+            @open-palette="paletteOpen = true"
         />
 
         <!-- ═══ Desktop / tablet (≥768): the region row ═══ -->
@@ -183,10 +411,19 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             <ViewsRail
                 :views="views"
                 :saved-views="savedViews"
+                :queues="queueViews"
+                :view-order="prefsStore.viewOrder"
+                :can-manage="can.views_manage"
+                :can-share="can.views_share"
                 :collapsed="railCollapsed"
                 :t="{ views: t.views, shell: t.shell }"
                 @toggle-collapse="toggleRail"
                 @select="(v: string) => (activeView = v)"
+                @select-saved="(id: string) => (activeView = 'saved:' + id)"
+                @reorder="(order: string[]) => prefsStore.setViewOrder(order)"
+                @new-view="openEditor(null)"
+                @edit-view="openEditor"
+                @duplicate-view="duplicateView"
             />
 
             <!-- R2: the list region (chrome + step-9 slot). -->
@@ -204,7 +441,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             >
                 <ListPane
                     :view="activeView"
-                    :t="{ list: t.list, row: t.row, bulk: t.bulk }"
+                    :t="{ list: t.list, row: t.row, bulk: t.bulk, filter_bar: t.filter_bar }"
                     @open-ticket="openThread"
                     @fallback-view="activeView = 'my_open'"
                 />
@@ -271,8 +508,9 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 </div>
                 <ThreadPane
                     v-if="activeThread"
-                    :key="activeThread"
+                    :key="activeThread + (activeAnchor ?? '')"
                     :conversation-id="activeThread"
+                    :initial-anchor="activeAnchor"
                     :t="t.thread"
                     :composer-t="t.composer"
                     :voice-flag="features.voice_recording"
@@ -341,7 +579,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 >
                     <ListPane
                         :view="activeView"
-                        :t="{ list: t.list, row: t.row, bulk: t.bulk }"
+                        :t="{ list: t.list, row: t.row, bulk: t.bulk, filter_bar: t.filter_bar }"
                         @open-ticket="openThread"
                         @fallback-view="activeView = 'my_open'"
                     />
@@ -381,6 +619,10 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                         <ViewsRail
                             :views="views"
                             :saved-views="savedViews"
+                            :queues="queueViews"
+                            :view-order="prefsStore.viewOrder"
+                            :can-manage="can.views_manage"
+                            :can-share="can.views_share"
                             :collapsed="false"
                             :t="{ views: t.views, shell: t.shell }"
                             @select="
@@ -389,6 +631,16 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                                     viewsSheetOpen = false;
                                 }
                             "
+                            @select-saved="
+                                (id: string) => {
+                                    activeView = 'saved:' + id;
+                                    viewsSheetOpen = false;
+                                }
+                            "
+                            @reorder="(order: string[]) => prefsStore.setViewOrder(order)"
+                            @new-view="openEditor(null)"
+                            @edit-view="openEditor"
+                            @duplicate-view="duplicateView"
                         />
                     </div>
                 </div>
@@ -439,8 +691,9 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 >
                     <ThreadPane
                         v-if="activeThread"
-                        :key="activeThread"
+                        :key="activeThread + (activeAnchor ?? '')"
                         :conversation-id="activeThread"
+                        :initial-anchor="activeAnchor"
                         :t="t.thread"
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
