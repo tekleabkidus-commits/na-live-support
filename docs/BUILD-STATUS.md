@@ -492,6 +492,31 @@ filed honestly):**
   reloading (the shared guard's exact idiom). The §8 test then passed —
   **its first pass in any environment** — in 2.7 s.
 
+**THE BATTERY OF RECORD: THREE ATTEMPTS, STOPPED ON A PHYSICAL BLOCKER
+(2026-08-13, ~01:00–02:30 EAT).** Three full from-zero sequences ran
+(`consolidated-make-fresh-02..04`, `consolidated-make-test-03..05`
+captured). ALL 1067 FUNCTIONAL TESTS PASSED IN EVERY ATTEMPT; each
+attempt was stopped by a DIFFERENT marginal dev-hardware perf ceiling:
+(-03) RBAC NFR-01 cached-map p99 1.618 ms vs the 1.5 ms 5× ceiling
+(+7.9%); (-04) the same at 1.967 ms — diagnosed as boot-churn overlap
+(the cached image makes `make fresh` 67 s, so `make test` landed on
+ClamAV/Horizon/Meilisearch startup; yesterday's full rebuilds had
+absorbed it) and a 4-minute settle window added to the sequence; (-05)
+RBAC PASSED and the NFR-04 bulk-linearity tripwire missed by 3.9%
+(2740 ms vs 2637 ms). Root cause of the jitter CONFIRMED, not guessed:
+**the laptop is ON BATTERY, discharging, 58%** (`BAT1: Discharging`,
+Win32_Battery BatteryStatus 1) — power-saver CPU management inflates
+every p50 3–5× over yesterday evening's mains-powered green
+(`make-test-02`: cached-map p50 0.111 ms; tonight 0.47–0.53 ms).
+**Decision: local attempts STOPPED — each cycle burns ~5% charge, and a
+dead battery mid-Docker-write is the exact vhdx-corruption failure that
+cost two sessions. The tree is final and PUSHED (`3c00435`); CI run
+[31648450302](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31648450302)
+is the independent clean-runner verdict in flight. The local
+consolidated battery of record runs at the next resume ON WALL POWER —
+step 13's full acceptance stays conditional on that green, per the
+standing ruling.**
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
