@@ -152,6 +152,10 @@ enum ErrorCode: string
     case TransitionRejected = 'transition_rejected';
     case ConversationBlocked = 'conversation_blocked';
 
+    // S07 step 13 — Doc 06 FR-16's claim race surfaces over HTTP: the loser
+    // DECIDES on this code (renders "claimed by {name}"), so it is enum-stable.
+    case AlreadyClaimed = 'already_claimed';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

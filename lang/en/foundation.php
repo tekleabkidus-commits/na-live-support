@@ -66,6 +66,7 @@ return [
         'reopen_confirmation_required' => 'The ticket is resolved — confirm to reopen and send',
         'transition_rejected' => 'The status change was refused',
         'conversation_blocked' => 'This conversation cannot receive replies',
+        'already_claimed' => 'Someone claimed this ticket first',
     ],
 
     'provisioning' => [

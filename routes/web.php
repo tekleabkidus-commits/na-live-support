@@ -139,6 +139,29 @@ Route::middleware([
         ->middleware('permission:tickets.reply')->name('inbox.composer.draft');
     Route::post('thread/{conversationId}/transition', [App\Http\Controllers\Inbox\ComposerController::class, 'transition'])
         ->middleware(['permission:tickets.status.change', 'audit:ticket.status_changed'])->name('inbox.composer.transition');
+    // ── S07 step 13: thin doors over Doc 06's headless property services for
+    // FR-31's I/A/P/T bindings and B2-S01's swipe-claim + actions sheet. The
+    // services check the SAME keys internally and audit internally — the
+    // middleware here is the route→permission mapping gate's layer; no audit:
+    // middleware because the domain writes the audit row itself (Doc 06).
+    Route::post('t/{ticketId}/claim', [App\Http\Controllers\Inbox\TicketActionsController::class, 'claim'])
+        ->middleware(['permission:tickets.assign_self', 'audit:ticket.assigned'])->name('inbox.ticket.claim');
+    Route::post('t/{ticketId}/unassign', [App\Http\Controllers\Inbox\TicketActionsController::class, 'unassign'])
+        ->middleware(['permission:tickets.assign', 'audit:ticket.assigned'])->name('inbox.ticket.unassign');
+    Route::post('t/{ticketId}/assign', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assign'])
+        ->middleware(['permission:tickets.assign', 'audit:ticket.assigned'])->name('inbox.ticket.assign');
+    Route::post('t/{ticketId}/priority', [App\Http\Controllers\Inbox\TicketActionsController::class, 'priority'])
+        ->middleware(['permission:tickets.priority.change', 'audit:ticket.priority_changed'])->name('inbox.ticket.priority');
+    // Tags split add/remove: the owning service writes ticket.tagged OR
+    // ticket.untagged, and the audit declaration verifies ONE action per route.
+    Route::post('t/{ticketId}/tags/add', [App\Http\Controllers\Inbox\TicketActionsController::class, 'tagsAdd'])
+        ->middleware(['permission:tickets.tags.manage', 'audit:ticket.tagged'])->name('inbox.ticket.tags.add');
+    Route::post('t/{ticketId}/tags/remove', [App\Http\Controllers\Inbox\TicketActionsController::class, 'tagsRemove'])
+        ->middleware(['permission:tickets.tags.manage', 'audit:ticket.untagged'])->name('inbox.ticket.tags.remove');
+    Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])
+        ->middleware('permission:tickets.assign')->name('inbox.assignees');
+    Route::get('tags/suggest', [App\Http\Controllers\Inbox\TicketActionsController::class, 'suggestTags'])
+        ->middleware('permission:tickets.tags.manage')->name('inbox.tags.suggest');
     // ── FR-26 bell + FR-28 status (S07 step 12). Reads on the audience
     // key; mark-all-read + set-own-status are per-user workspace-state
     // writes on views.manage (R-26 AMENDMENT, FIFTH + SIXTH siblings —

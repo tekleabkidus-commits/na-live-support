@@ -110,6 +110,16 @@ final class WorkspaceController extends Controller
                 'views_manage' => $map->allows('views.manage'),
                 'views_share' => $map->allows('views.share'),
                 'tickets_create' => $map->allows('tickets.create'),
+                // S07 step 13: FR-31's action bindings and B2-S01's mobile
+                // affordances render capability-gated (BR-01: no affordance
+                // for a door the holder cannot open; N-19: render gate only —
+                // the services re-check the same keys as the layer of record).
+                'tickets_assign' => $map->allows('tickets.assign'),
+                'tickets_assign_self' => $map->allows('tickets.assign_self'),
+                'tickets_priority_change' => $map->allows('tickets.priority.change'),
+                'tickets_tags_manage' => $map->allows('tickets.tags.manage'),
+                'tickets_status_change' => $map->allows('tickets.status.change'),
+                'tickets_reply' => $map->allows('tickets.reply'),
             ],
             'tabBadges' => $this->tabBadges($request),
             // Doc 11 SEAM (FR-05): the queue-view TYPE renders against the

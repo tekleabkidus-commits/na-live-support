@@ -64,6 +64,7 @@ return [
         'transition_rejected' => 'የሁኔታ ለውጡ ተከልክሏል',
         'conversation_blocked' => 'ይህ ውይይት መልሶችን መቀበል አይችልም',
         'dead_letter_not_parked' => 'አስቀድሞ እንደገና ተልኳል',
+        'already_claimed' => 'ሌላ ሰው ይህን ቲኬት ቀድሞ ወስዷል',
     ],
 
     'provisioning' => [
