@@ -1,0 +1,37 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:104:1 › AC-08 OVERLAY PARITY: ? opens the overlay, its rows cover EXACTLY the FR-31 enumeration, Esc closes and focus returns (1.6s)
+  ✓  2 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:127:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects (1.3s)
+  ✓  3 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:177:1 › G U / G M / G A chords and M switch views; O opens like Enter (1.7s)
+  ✓  4 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:209:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory (1.9s)
+  ✓  5 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:251:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door (1.5s)
+  ✓  6 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:332:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map (2.0s)
+  ✓  7 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:387:1 › THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13) (1.2s)
+  ✘  8 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (1.4m)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForURL: Test timeout of 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      87 |     await page.locator('#login-password').fill(PASSWORD);
+      88 |     await page.getByTestId('login-submit').click();
+    > 89 |     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+         |                ^
+      90 | }
+      91 |
+      92 | async function openInbox(page: Page): Promise<void> {
+        at login (/home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:89:16)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:423:5
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+  7 passed (2.3m)

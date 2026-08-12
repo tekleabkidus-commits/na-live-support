@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-keyboard-shift.spec.ts:70:1 › SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve on every seeded shift ticket, zero pointer interactions in the core loop (5.6s)
+
+
+  1) [chromium] › tests/Browser/inbox-keyboard-shift.spec.ts:70:1 › SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve on every seeded shift ticket, zero pointer interactions in the core loop 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 60
+    Received: 9
+
+      151 |     }
+      152 |
+    > 153 |     expect(worked).toBe(SHIFT_SIZE);
+          |                    ^
+      154 |
+      155 |     // The shift is done: no shift ticket remains in Unassigned.
+      156 |     const残 = await page.evaluate(() =>
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-keyboard-shift.spec.ts:153:20
+
+    Error Context: test-results/inbox-keyboard-shift-SS-01-f3ebc-teractions-in-the-core-loop-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-keyboard-shift.spec.ts:70:1 › SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve on every seeded shift ticket, zero pointer interactions in the core loop 

@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (1.4m)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.dispatchEvent: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('coach-next')
+
+
+      432 |     await expect(page.getByTestId('coach-card')).toBeVisible();
+      433 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'views');
+    > 434 |     await page.getByTestId('coach-next').dispatchEvent('click');
+          |                                          ^
+      435 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'list');
+      436 |     await page.getByTestId('coach-back').dispatchEvent('click');
+      437 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'views');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:434:42
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 

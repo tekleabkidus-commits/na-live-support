@@ -1,0 +1,146 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:102:1 › AC-08 OVERLAY PARITY: ? opens the overlay, its rows cover EXACTLY the FR-31 enumeration, Esc closes and focus returns (2.0s)
+  ✘  2 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:125:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects (1.7s)
+  ✘  3 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:170:1 › G U / G M / G A chords and M switch views; O opens like Enter (6.6s)
+  ✘  4 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:202:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory (6.5s)
+  ✘  5 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door (1.7s)
+  ✘  6 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map (6.8s)
+  ✓  7 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:362:1 › THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13) (2.0s)
+  ✘  8 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:392:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (6.2s)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:125:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not undefined
+
+      134 |     await page.keyboard.press('j');
+      135 |     const second = await page.evaluate(() => window.__inboxList.state().activeId);
+    > 136 |     expect(second).not.toBe(first);
+          |                        ^
+      137 |     await page.keyboard.press('k');
+      138 |     expect(await page.evaluate(() => window.__inboxList.state().activeId)).toBe(first);
+      139 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:136:24
+
+    Error Context: test-results/inbox-shortcuts-J-K-move-t-db3cb-range-selects-Esc-deselects-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:170:1 › G U / G M / G A chords and M switch views; O opens like Enter 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "unassigned"
+    Received: undefined
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      175 |     await expect
+      176 |         .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+    > 177 |         .toBe('unassigned');
+          |          ^
+      178 |
+      179 |     await page.keyboard.press('g');
+      180 |     await page.keyboard.press('a');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:177:10
+
+    Error Context: test-results/inbox-shortcuts-G-U-G-M-G--ea7f0-ch-views-O-opens-like-Enter-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:202:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "unassigned"
+    Received: undefined
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      209 |     await expect
+      210 |         .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+    > 211 |         .toBe('unassigned');
+          |          ^
+      212 |     await expect(page.locator('[data-ticket]').first()).toBeVisible();
+      213 |
+      214 |     await page.keyboard.press('j');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:211:10
+
+    Error Context: test-results/inbox-shortcuts-I-claims-t-96ddb-gn-palette-on-the-directory-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+
+    Error: page.evaluate: TypeError: window.__inboxList.row is not a function
+        at eval (eval at evaluate (:311:30), <anonymous>:3:70)
+        at UtilityScript.evaluate (<anonymous>:313:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:311:30), <anonymous>:3:70)
+        at UtilityScript.evaluate (<anonymous>:313:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at expect.poll.timeout (/home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:259:28)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:256:5
+
+    Error Context: test-results/inbox-shortcuts-P-sets-pri-ad437--—-each-palette-a-real-door-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByTestId('composer')
+    Expected: "note"
+    Received: "reply"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for getByTestId('composer')
+        14 × locator resolved to <div class="border-t" data-mode="reply" data-state="normal" data-testid="composer">…</div>
+           - unexpected value "reply"
+
+
+      334 |     await page.getByTestId('composer').click(); // blur the input so N is a command
+      335 |     await page.keyboard.press('n');
+    > 336 |     await expect(page.getByTestId('composer')).toHaveAttribute('data-mode', 'note');
+          |                                                ^
+      337 |     await expect(page.getByTestId('note-mode-banner')).toBeVisible();
+      338 |     await expect(page.getByTestId('note-mode-banner')).toHaveRole('status');
+      339 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:336:48
+
+    Error Context: test-results/inbox-shortcuts-R-focuses--34431-he-composer-half-of-the-map-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:392:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('coach-card')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('coach-card')
+
+
+      398 |
+      399 |     // The seeder reset prefs → first run → the coach card shows, step 1.
+    > 400 |     await expect(page.getByTestId('coach-card')).toBeVisible();
+          |                                                  ^
+      401 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'views');
+      402 |     await page.getByTestId('coach-next').click();
+      403 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'list');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:400:50
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  6 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:125:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:170:1 › G U / G M / G A chords and M switch views; O opens like Enter 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:202:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:392:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+  2 passed (4.3m)

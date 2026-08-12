@@ -1,0 +1,77 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:103:1 › AC-08 OVERLAY PARITY: ? opens the overlay, its rows cover EXACTLY the FR-31 enumeration, Esc closes and focus returns (1.8s)
+  ✘  2 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:126:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects (1.6s)
+  ✓  3 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:171:1 › G U / G M / G A chords and M switch views; O opens like Enter (2.3s)
+  ✓  4 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:203:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory (1.8s)
+  ✓  5 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:245:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door (2.2s)
+  ✘  6 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:326:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map (11.6s)
+  ✓  7 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:372:1 › THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13) (2.0s)
+  ✘  8 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:402:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (32.5s)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:126:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "019ff4c3-09b9-72da-b029-d55d57343a1a"
+    Received: "019ff4c3-0b50-723d-a70a-e86b0365c353"
+
+      166 |     expect(
+      167 |         await page.evaluate(() => document.activeElement?.getAttribute('data-ticket') ?? null),
+    > 168 |     ).toBe(activeAfter);
+          |       ^
+      169 | });
+      170 |
+      171 | test('G U / G M / G A chords and M switch views; O opens like Enter', async ({ page }) => {
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:168:7
+
+    Error Context: test-results/inbox-shortcuts-J-K-move-t-db3cb-range-selects-Esc-deselects-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:326:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      367 |             { timeout: 10_000 },
+      368 |         )
+    > 369 |         .toBe(false);
+          |          ^
+      370 | });
+      371 |
+      372 | test('THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13)', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:369:10
+
+    Error Context: test-results/inbox-shortcuts-R-focuses--34431-he-composer-half-of-the-map-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:402:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.dispatchEvent: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('coach-back')
+
+
+      419 |     await page.getByTestId('coach-next').dispatchEvent('click');
+      420 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'list');
+    > 421 |     await page.getByTestId('coach-back').dispatchEvent('click');
+          |                                          ^
+      422 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'views');
+      423 |     await page.getByTestId('coach-next').dispatchEvent('click');
+      424 |     await page.getByTestId('coach-next').dispatchEvent('click');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:421:42
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:126:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:326:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:402:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+  5 passed (2.6m)

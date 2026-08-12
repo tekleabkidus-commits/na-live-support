@@ -81,6 +81,172 @@ BUILD-STATUS row at close with executed evidence. B12-A01's nine rows: all nine
 dispositioned executed-here. NO pixel baselines exist for Batches 1/2 — every S07
 traceability row claims functional-state + a11y coverage only (inherited row 12).
 
+## SESSION-07 (Doc 07) — STEP 13: OFFLINE CLIENT + SHORTCUTS + MOBILE (FR-29/30/31, T-06, EC-03/07/08, FS-05, SS-01/03, AC-07/08, US-01/06) — TWO COMMITS (`0c1ad59` server + the client commit)
+
+**THE SERVER HALF (`0c1ad59`).** Thin HTTP doors over Doc 06's headless
+property services, minted the way step 12 minted the transition door — the
+services keep their own permission checks and audit writes; the doors
+resolve scope (C-10 404-pattern proven on all five mutating doors), map
+refusals to C-04 codes, and nudge the projector. Claim (FR-16's race —
+409 `already_claimed {by}`, the code enum-stable with en/am titles),
+unassign (the mobile undo), assign (422 validation-shaped on bad targets),
+priority (four fixed levels), tags split add/remove so each route's
+`audit:` declaration names the ONE action its service writes (the
+DeclareAuditAction runtime verifier stays honest), plus the two palette
+reads (assignees directory — active human staff, id+name only; tag
+suggest). **DISCOVERED:** `shouldRenderJsonWhen` covers only `api/*` — a
+JSON caller failing `validate()` on a web-group route crashes into the
+HTML redirect path (surfaced by this step's own refusal test; handled
+locally at each new door; **SelectionController and the other inbox doors
+share the latent shape — a platform-wide fix touches Doc 01 C-04 territory
+and needs a ruling**). Doors 7/7 (43 asserts), gates 13/13 at commit.
+
+**THE CLIENT HALF (this commit):**
+
+- **FR-29/T-07-client/EC-07/EC-08/FR-30 — the offline machine**
+  (`lib/offline.ts` + `stores/inbox/connection.ts`): one signal seam
+  (browser events now, Reverb's connection callbacks later, the test hook
+  always); drop → amber reconnecting pill ≤2 s (browser-offline → the
+  offline banner + read-only posture); every recovery runs ONE path —
+  jitter (0–10 s) → `/inbox/sync?cursor` → 429 honored with backoff
+  (EC-08, proven against a scripted 2×429 shed: three attempts, ≥900 ms
+  gaps, no hammering) → server-now anchored (EC-07 — a +120 s sync moves
+  the offset, proven) → build-id compared (FR-30 — the PASSIVE refresh
+  banner, mid-composition text untouched, proven) → overflow/full-refetch
+  or slice-refetch (convergence by REFETCH — T-02's full-row-fetch idiom;
+  the client never re-derives projector semantics) → in-order flush.
+- **Queued sends** (`lib/sendQueue.ts`): IndexedDB, body-only + routing
+  minimums + the idempotency key MINTED AT QUEUE TIME (SS-03's zero-dupes
+  is the server's `findByIdempotencyKey`, not optimism — the online send
+  path now mints per-series keys too, so "no duplicate on retry" is
+  physics). SEC-03 posture stated in the file: a queued send IS the draft
+  exception at its send moment. Flush is sequential; a NETWORK failure
+  stops in place (order preserved); a REFUSAL is removed + surfaced
+  visibly (BR-01 — proven: a 403'd queued send banners its stable code
+  and never blocks the send behind it). Boot flush covers the reload case.
+- **T-06 command objects** (`lib/commands.ts`): optimistic-apply paired
+  with rollback, every consumer surfaces refusals (NFR-06's enforcement
+  point) — the claim (optimistic assignee patch, rollback names the race
+  winner), priority (optimistic patch + rollback), the palettes, the
+  mobile sheet. The full normalized-store re-architecture T-01 sketches
+  stays sized to what exists: liveList + connection + prefs ARE the
+  normalized stores this client has; mutations route through commands.
+- **FS-05 store recovery** (Workspace `recoverSession` + the schema
+  guard): a corrupt/mismatched session store auto-recovers — reset,
+  refetch, the thread REMOUNTS, and the composer text is snapshotted
+  FIRST and handed back through the store (drafts are the last thing ever
+  dropped); queued sends are re-read (valid rows kept, garbage counted +
+  reported — never silently dropped); the agent is told plainly
+  ("Session rebuilt"). **Sabotage #17** (the preserve half disabled) red
+  on exactly the composer-text assertion → restored
+  (`sabotage-17-RED-01/-RESTORED-01.txt`). B12-A01 AC-07's reload case
+  proven (`inbox-store-recovery.spec.ts`).
+- **AC-07 THE OFFLINE GOLDEN** (`inbox-offline.spec.ts`, 6/6): cut during
+  composition → banner ≤2 s → two sends queue as visible chips → the
+  draft in progress survives → reconnect flushes IN ORDER, exactly once
+  each (DOM-proven), stores converge. The 2-min cut is COMPRESSED — the
+  mechanics are duration-independent (stated in the spec); SS-03's 90-s
+  shape rides the same golden, its 40-agent scale staying the Doc 19
+  bucket.
+- **FR-31 + AC-08 + US-01/SS-01 — the keyboard map** (`lib/shortcuts.ts`
+  + `ShortcutOverlay.vue`): ONE binding map as data — the dispatcher
+  executes it and the ? overlay renders it (parity by construction), and
+  the spec proves the rendered rows equal the DOCUMENT's own enumeration.
+  Every binding an executed e2e test (`inbox-shortcuts.spec.ts` 7/8 —
+  the coach test is the environmental intermittent below); G-chords with
+  the 1.5 s window; the input guards (the whole bound alphabet typed into
+  the composer fires nothing); Esc's close-panel/deselect ladder; the
+  A/P/T/S palettes on the REAL step-13 doors (`ActionPalette.vue`);
+  I-claim with the optimistic row patch; E/S through the transition door
+  (a pending_customer→resolved refusal observed the frozen matrix — by
+  design). **The step-9 §13 listbox deferral LANDED**: rows are
+  role=option with roving tabindex (nested controls left the tab order —
+  the deferral note's resolution), arrows mirror J/K with focus moving,
+  J/K themselves NEVER move focus (§13's focus policy, tested: a delta
+  landing mid-typing steals nothing). **SS-01 EXECUTED**
+  (`inbox-keyboard-shift.spec.ts`): SIXTY seeded tickets
+  (`InboxShiftSeeder` — top-up, not reset: `resolved_at` is not
+  app-writable, the R-19b physics observed) worked claim→answer→resolve
+  in 29.7 s with ZERO pointer calls in the core loop, proven by
+  construction.
+- **§8 first-run coach marks** (`CoachMarks.vue`): four steps
+  (views/list/modes/⌘K), STEP n OF 4 + dots + Skip/Back/Next,
+  dismiss-forever on the reserved `coach_marks` pref key, re-openable
+  from the ? overlay footer.
+- **B2-S01 mobile** (`inbox-mobile-interactions.spec.ts` 5/5):
+  swipe-right claim with the THREE drawn states (92 px zone revealing
+  mid-drag; sub-threshold release snaps back silently AND swallows its
+  click — a half-swipe never opens the thread; committed flash; the undo
+  strip naming the ticket, undo capability-gated on tickets.assign per
+  BR-01) — haptic at commit only (`navigator.vibrate`); swipe-left
+  actions sheet (drawn rows on real doors — resolve/pending through the
+  transition door, Priority—Urgent through the priority door);
+  pull-to-refresh (release-triggered — nothing resorts under the thumb,
+  proven order-stable mid-pull); long-press selection mode with the
+  drawn top bar + the amber 25-cap strip (Doc 06 §9's phone cap —
+  Select all stops at 25); execution rides the SAME BulkBar/T-05
+  machinery as desktop. Pointer events end-to-end — one code path for
+  touch and the spec's drags (`touch-action: pan-y`).
+- **EC-03 dual-tab** (same spec): drafts converge LAST-WRITER across
+  tabs via BroadcastChannel on the autosave (with the Doc 04 EC-06
+  "Draft updated on another device" toast; a ping-pong guard on apply),
+  and the collision strip is STRUCTURALLY untriggerable by the user's
+  own other tab (the sync never touches the typing feed — asserted in
+  both tabs).
+- **CSP discovery:** literal `style=""` attributes are blocked by the
+  app's CSP (three new components shipped scrimless until caught) —
+  converted to `:style` bindings (CSSOM); the house idiom exists for
+  this reason.
+
+**THE ENVIRONMENTAL INTERMITTENT (recorded, evidence
+`docs/evidence/S07-step13/env-freeze-note.md`):** the local WSL headless
+Chromium intermittently freezes its renderer main thread on /inbox
+(~1–3 s after load, native block, waves) — REPRODUCED ON A PURE-HEAD
+BUNDLE and ruled out against code by five bisect probes; the same layer
+that crashed yesterday's session. One test (the coach-marks FIRST-RUN
+walk) idles long enough that every local attempt has been hit; its
+wiring is captured working in the probe log. CI's clean runners give the
+independent verdict on this push. Unblocker: owner reboots WSL.
+
+**Registries:** traceability AC-07 + AC-08 flipped to covered;
+route→permission mappings for the six new doors same-commit (closed
+catalog keys: tickets.assign_self/assign/priority.change/tags.manage);
+audit declarations ride the owning services' registered actions
+(ticket.assigned / priority_changed / tagged / untagged); no new events,
+no new settings (coach_marks was reserved at step 8).
+
+**i18n (§14):** `inbox.shortcuts.*` (35), `inbox.coach.*` (14),
+`inbox.action_palette.*` (13), `inbox.offline.*` (12), `inbox.mobile.*`
+(17), composer offline/draft-sync keys — en + am, ~95 new keys per
+language, all machine-authored Amharic joins the standing R-14 queue; no
+destructive-tier strings (claim-undo and selection are reversible).
+
+**Proven (evidence `docs/evidence/S07-step13/`):** per-spec fresh
+executed proofs, each captured — offline **6/6**
+(`offline-run-02.txt`); store-recovery **3/3**
+(`store-recovery-run-04.txt`) + **sabotage #17 red→restored**
+(`sabotage-17-RED-01/-RESTORED-01.txt`); shortcuts **7/8**
+(`shortcuts-run-06.txt` — the eighth is the coach test, every attempt
+hit by the environmental freeze; its wiring captured working in the
+probe log); keyboard-shift **1/1, 60/60 tickets in 29.7 s**
+(`keyboard-shift-run-02.txt`); mobile + EC-03 **5/5**
+(`mobile-run-02.txt`); action doors **7/7** + gates **13/13**
+(`action-doors-02.txt`); host lints green incl. string-lint
+(`final-lint-host-01.txt`); container Pint 757 PASS + PHPStan max clean
+at the server-half commit. **THE CONSOLIDATED FRESH-DB BATTERY WAS
+INTERRUPTED BY THE ENVIRONMENT**: after `make fresh` completed
+(`final-make-fresh-01.txt`), the WSL layer failed outright — `docker ps`
+SIGBUS (bus error, core dumped), Windows interop (`tasklist.exe`)
+hanging — the same layer that crashed the previous session. No
+consolidated local figures exist for the step-13 tree; **CI's run on
+this push is the consolidated verdict of record.** Iteration trail
+captured honestly: `offline-run-01…02`, `store-recovery-run-01…04`,
+`shortcuts-run-01…08` (incl. the freeze-wave reds),
+`keyboard-shift-run-01…02`, `mobile-run-01…02`, `action-doors-01…02`,
+`sabotage-17-*`, `env-freeze-note.md`,
+`ci-31573187355-stage1-failed-01.txt`,
+`ci-31573187355-rerun-stage3-01.txt` (0f sighting G).
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
@@ -1384,6 +1550,24 @@ absorption is REFUSED (owner order).**
   recurrence; the intermittent's own nature is why the ladder never
   escalates on a single observation, green or red. e82ce3a is the CI-green
   tree for steps 1–11 by containment.
+- **Sighting G (S07 step 13's checkpoint — SHAPE-DIFFERENT, filed per
+  branch (c), 2026-08-12):** the 519aa87 push (step-12 client half) is run
+  [31573187355](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31573187355).
+  First attempt: Stage 1 died in `composer install` on a runner-side TLS
+  failure (curl error 60, self-signed cert against api.github.com — the
+  step-2 infrastructure class, zero tests started;
+  `docs/evidence/S07-step13/ci-31573187355-stage1-failed-01.txt`).
+  Re-run once per precedent: Stages 1/2/3b GREEN, **Stage 3 red on
+  `LockoutTest > it throttles per IP independently…` at :330 — an EARLY
+  429 inside the per-minute budget** (1 failed / 1060 passed;
+  `ci-31573187355-rerun-stage3-01.txt`). Same auth-limiter family as 0f
+  but a DIFFERENT test than every prior sighting (A–E were the
+  PasswordReset journey), so branch (c) files the shape and continues.
+  **Instrumentation coverage gap surfaced:** the rung-1 v2 snapshot hooks
+  the PasswordReset auth-ip bucket only — this firing emitted NO
+  snapshot. Extending the snapshot to the LockoutTest per-IP bucket is a
+  LADDER decision flagged to the advisor at this checkpoint, not
+  self-served. The step-13 push's own run is the next observation.
 
 **Order 3 — the TicketsBudgets linearity failure, capture cited, CLASSED
 KNOWN (host-load, single-sighting).** Capture:

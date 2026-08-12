@@ -1,0 +1,56 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (0ms)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Error: Command failed: docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan db:seed --class=Database\Seeders\InboxShiftSeeder --force
+    --- stdout ---
+
+       INFO  Seeding database.  
+
+
+       Illuminate\Database\QueryException 
+
+      SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table tickets (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support, SQL: update "tickets" set "status" = open, "assignee_id" = ?, "resolved_at" = ?, "updated_at" = clock_timestamp() where "id" = 019ff55d-233a-728d-b50b-2fcbaab78a68)
+
+      at vendor/laravel/framework/src/Illuminate/Database/Connection.php:857
+        853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+        854▕                 ? UniqueConstraintViolationException::class
+        855▕                 : QueryException::class;
+        856▕ 
+      ➜ 857▕             $exception = new $exceptionType(
+        858▕                 $this->getNameWithReadWriteType(),
+        859▕                 $query,
+        860▕                 $this->prepareBindings($bindings),
+        861▕                 $e,
+
+          +7 vendor frames 
+
+      8   database/seeders/InboxShiftSeeder.php:56
+          Illuminate\Database\Query\Builder::update(Object(Illuminate\Support\Collection))
+          +23 vendor frames 
+
+      32  artisan:16
+          Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+
+
+    --- stderr ---
+
+
+      66 |     } catch (e) {
+      67 |         const err = e as { message: string; stdout?: unknown; stderr?: unknown };
+    > 68 |         throw new Error(
+         |               ^
+      69 |             `${err.message}\n--- stdout ---\n${String(err.stdout ?? '')}\n--- stderr ---\n${String(err.stderr ?? '')}`,
+      70 |         );
+      71 |     }
+        at artisan (/home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:68:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:77:5
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:417:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 

@@ -1716,27 +1716,40 @@ entries:
       NOT IMPLEMENTED AT S07 STEP 1. Collision: dual-session strip, send-race confirm, exactly one visible outcome ordering. Lands at approved-plan step 11 as
       tests/Browser/inbox-collision.spec.ts; this row flips to automated in that step's commit.
   - ac_ref: "Doc07 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/inbox-offline.spec.ts
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Offline: 2-min cut -> in-order flush, drafts intact, stores converge (sync golden). Lands at approved-plan step 13 as
-      tests/Browser/inbox-offline.spec.ts + tests/Feature/Inbox/SyncGoldenTest.php; this row flips to automated in that step's commit.
+      EXECUTED (S07 step 13): the offline golden — network cut during composition,
+      banner <=2s, sends queue as visible chips (idempotency keys minted at queue
+      time), reconnect flushes IN ORDER with zero dupes (DOM-proven), the draft in
+      progress survives, stores converge by refetch through /inbox/sync (the server
+      golden is tests/Feature/Inbox/SyncGoldenTest.php from step 5). The 2-min cut is
+      compressed — the mechanics under proof are duration-independent (stated in the
+      spec header). FS-05 recovery + the reload case ride
+      tests/Browser/inbox-store-recovery.spec.ts (sabotage #17 red->restored).
   - ac_ref: "Doc07 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/inbox-shortcuts.spec.ts
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Shortcuts: every FR-31 binding e2e; overlay matches live bindings; no browser-default conflicts. Lands at approved-plan step 13 as
-      tests/Browser/inbox-shortcuts.spec.ts; this row flips to automated in that step's commit.
+      EXECUTED (S07 step 13): every FR-31 binding end-to-end (J/K/Enter/O/X/Shift+X/
+      Esc/G-chords/M/cmd-K/I/A/E/P/T/S/R/N/cmd-Enter/Shift+E/?), the overlay parity
+      proof (rendered rows == the document's own enumeration; the overlay renders FROM
+      lib/shortcuts.ts's one map), the input guards (the bound alphabet typed into the
+      composer fires nothing), and the SS-01 sixty-ticket keyboard-only shift
+      (tests/Browser/inbox-keyboard-shift.spec.ts — zero pointer calls in the core
+      loop, proven by construction). No-conflict clause: the bound set is designed
+      clear of browser defaults (documented in the map) and the guard test proves the
+      typing half.
   - ac_ref: "Doc07 AC-09"
     suite_path: tests/Security/InboxSearchScopeTest.php
     type: automated

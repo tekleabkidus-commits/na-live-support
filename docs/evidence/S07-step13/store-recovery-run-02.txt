@@ -1,0 +1,68 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:100:1 › FS-05: an unparseable session store on load AUTO-RECOVERS — the schema guard resets, the workspace comes up working, and the agent is told it rebuilt (1.4s)
+  ✘  2 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:127:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive (11.7s)
+  ✘  3 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory (11.9s)
+
+
+  1) [chromium] › tests/Browser/inbox-store-recovery.spec.ts:127:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('text=queued reply that must survive recovery')
+    Expected: 1
+    Received: 2
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 10000ms
+      - waiting for locator('text=queued reply that must survive recovery')
+        24 × locator resolved to 2 elements
+           - unexpected value "2"
+
+
+      159 |         })
+      160 |         .toBe(1);
+    > 161 |     await expect(page.locator('text=queued reply that must survive recovery')).toHaveCount(1, {
+          |                                                                                ^
+      162 |         timeout: 10_000,
+      163 |     });
+      164 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-store-recovery.spec.ts:161:80
+
+    Error Context: test-results/inbox-store-recovery-FS-05-caf70-sends-come-through-it-alive-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('text=queued reply that must survive a reload')
+    Expected: 1
+    Received: 2
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 10000ms
+      - waiting for locator('text=queued reply that must survive a reload')
+        - locator resolved to 0 elements
+        - unexpected value "0"
+        23 × locator resolved to 2 elements
+           - unexpected value "2"
+
+
+      193 |         .locator('[data-role="row-open"]')
+      194 |         .click();
+    > 195 |     await expect(page.locator('text=queued reply that must survive a reload')).toHaveCount(1, {
+          |                                                                                ^
+      196 |         timeout: 10_000,
+      197 |     });
+      198 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-store-recovery.spec.ts:195:80
+
+    Error Context: test-results/inbox-store-recovery-B12-A-0fb6b-queue-is-storage-not-memory-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/inbox-store-recovery.spec.ts:127:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive 
+    [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory 
+  1 passed (1.5m)

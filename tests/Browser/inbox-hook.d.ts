@@ -12,7 +12,14 @@ type InboxListHook = {
     }) => void;
     viewRemoved: (viewKey: string) => void;
     flush: () => void;
-    state: () => { order: string[]; affordance: boolean; selected: string[] };
+    state: () => {
+        order: string[];
+        affordance: boolean;
+        selected: string[];
+        viewKey: string;
+        activeId: string | null;
+    };
+    row: (id: string) => Record<string, unknown> | null;
 };
 
 declare interface Window {

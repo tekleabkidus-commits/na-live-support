@@ -121,6 +121,18 @@ final class WorkspaceController extends Controller
                 'tickets_status_change' => $map->allows('tickets.status.change'),
                 'tickets_reply' => $map->allows('tickets.reply'),
             ],
+            // EC-07 (step 13): the handshake's clock anchor — DB time, the
+            // same source SyncReader answers with; the client renders
+            // relative times from (server_now − local now), never raw client.
+            'serverNow' => (function (): string {
+                /** @var object{now: string} $clock */
+                $clock = DB::selectOne('select clock_timestamp() as now');
+
+                return $clock->now;
+            })(),
+            // FR-31/T-06 (step 13): the optimistic claim patches the row with
+            // the actor's own id before the server answers — it needs to know it.
+            'userId' => $user->identifier(),
             'tabBadges' => $this->tabBadges($request),
             // Doc 11 SEAM (FR-05): the queue-view TYPE renders against the
             // fixture rows in the browser proof; membership/config are

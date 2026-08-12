@@ -1,0 +1,85 @@
+
+Running 5 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:105:1 › B2-S01 SWIPE-RIGHT CLAIM, three drawn states: the zone reveals mid-drag, commit claims through the REAL door, the undo strip returns it to the queue (7.5s)
+  ✘  2 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:158:1 › B2-S01 SWIPE-LEFT ACTIONS SHEET: the drawn rows on real doors — Resolve removes the ticket from the open family (7.0s)
+  ✓  3 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:185:1 › B2-S01 PULL-TO-REFRESH: pulling past the threshold shows the release strip; RELEASE refreshes — nothing resorts under the thumb (2.1s)
+  ✓  4 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:209:1 › B2-S01 SELECTION MODE: long-press enters it, Select all stops at the 25 cap with the drawn amber strip, ✕ exits clean (2.5s)
+  ✘  5 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:235:1 › EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another device" toast, and a user's own typing NEVER self-triggers the collision strip (30.1s)
+
+
+  1) [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:105:1 › B2-S01 SWIPE-RIGHT CLAIM, three drawn states: the zone reveals mid-drag, commit claims through the REAL door, the undo strip returns it to the queue 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('claim-undo-strip')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('claim-undo-strip')
+
+
+      129 |     // names the ticket, and the row leaves Unassigned.
+      130 |     await dragRow(page, ticketId as string, 140);
+    > 131 |     await expect(page.getByTestId('claim-undo-strip')).toBeVisible();
+          |                                                        ^
+      132 |     await expect(page.getByTestId('claim-undo-strip')).toContainText(rowNumber);
+      133 |     await expect
+      134 |         .poll(
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-mobile-interactions.spec.ts:131:56
+
+    Error Context: test-results/inbox-mobile-interactions--e5983-rip-returns-it-to-the-queue-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:158:1 › B2-S01 SWIPE-LEFT ACTIONS SHEET: the drawn rows on real doors — Resolve removes the ticket from the open family 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('mobile-actions-sheet')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('mobile-actions-sheet')
+
+
+      164 |
+      165 |     await dragRow(page, ticketId as string, -140);
+    > 166 |     await expect(page.getByTestId('mobile-actions-sheet')).toBeVisible();
+          |                                                            ^
+      167 |     await expect(page.getByTestId('sheet-resolve')).toBeVisible();
+      168 |     await expect(page.getByTestId('sheet-pending')).toBeVisible();
+      169 |     await expect(page.getByTestId('sheet-priority-urgent')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-mobile-interactions.spec.ts:166:60
+
+    Error Context: test-results/inbox-mobile-interactions--79e18-ticket-from-the-open-family-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:235:1 › EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another device" toast, and a user's own typing NEVER self-triggers the collision strip 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      247 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      248 |         .locator('[data-role="row-open"]')
+    > 249 |         .click();
+          |          ^
+      250 |     await expect(page.getByTestId('composer')).toBeVisible();
+      251 |
+      252 |     const pageB = await context.newPage();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-mobile-interactions.spec.ts:249:10
+
+    Error Context: test-results/inbox-mobile-interactions--c5050-riggers-the-collision-strip-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:105:1 › B2-S01 SWIPE-RIGHT CLAIM, three drawn states: the zone reveals mid-drag, commit claims through the REAL door, the undo strip returns it to the queue 
+    [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:158:1 › B2-S01 SWIPE-LEFT ACTIONS SHEET: the drawn rows on real doors — Resolve removes the ticket from the open family 
+    [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:235:1 › EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another device" toast, and a user's own typing NEVER self-triggers the collision strip 
+  2 passed (9.7m)

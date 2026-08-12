@@ -56,6 +56,10 @@ export const useLiveList = defineStore('inbox-live-list', {
         // FR-13 selection (by id — survives resorts by construction)
         selected: [] as string[],
         selectionToken: null as { id: string; count: number } | null,
+        // FR-31/§13 (step 13): the roving-tabindex listbox's ACTIVE row —
+        // J/K and the arrows move it; Enter/O open it; X selects it. It is
+        // presentation state, not selection (aria-selected is `selected`).
+        activeId: null as string | null,
         // EC-09
         removedViewToast: false,
         _timer: null as ReturnType<typeof setTimeout> | null,
@@ -188,6 +192,21 @@ export const useLiveList = defineStore('inbox-live-list', {
         },
 
         // ── FR-13 selection ────────────────────────────────────────────────
+        /** FR-31 J/K (and the mirroring arrows): step the active row. */
+        activateStep(delta: 1 | -1): void {
+            if (this.order.length === 0) {
+                return;
+            }
+            const index = this.activeId === null ? -1 : this.order.indexOf(this.activeId);
+            const next =
+                index === -1
+                    ? delta === 1
+                        ? 0
+                        : this.order.length - 1
+                    : Math.min(this.order.length - 1, Math.max(0, index + delta));
+            this.activeId = this.order[next] ?? null;
+        },
+
         toggleSelect(id: string): void {
             this.selected = this.selected.includes(id)
                 ? this.selected.filter((s) => s !== id)

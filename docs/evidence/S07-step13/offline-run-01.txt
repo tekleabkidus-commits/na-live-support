@@ -1,0 +1,69 @@
+
+Running 6 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-offline.spec.ts:104:1 › AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2 s, sends queue as visible chips, reconnect flushes IN ORDER with idempotency keys (zero dupes), the draft in progress survives, stores converge (7.0s)
+  ✓  2 [chromium] › tests/Browser/inbox-offline.spec.ts:166:1 › FR-29: a SOCKET drop with live network shows the amber reconnecting pill within 2 s and recovers by itself through the sync path (1.6s)
+  ✓  3 [chromium] › tests/Browser/inbox-offline.spec.ts:180:1 › EC-08: 429-on-connect is HONORED — the client backs off instead of hammering, and lands when the server stops shedding (8.4s)
+  ✓  4 [chromium] › tests/Browser/inbox-offline.spec.ts:217:1 › FR-30: a build-id mismatch on sync shows the PASSIVE refresh banner — composition is never interrupted, nothing reloads on its own (1.4s)
+  ✓  5 [chromium] › tests/Browser/inbox-offline.spec.ts:251:1 › EC-07: relative times anchor to the SERVER clock — a sync answering 2 minutes ahead moves the client offset, not the client clock (1.2s)
+  ✘  6 [chromium] › tests/Browser/inbox-offline.spec.ts:281:1 › BR-01: a queued send the server REFUSES on flush is reported visibly and never blocks the sends behind it — rolled back in the open, not silently dropped (6.8s)
+
+
+  1) [chromium] › tests/Browser/inbox-offline.spec.ts:104:1 › AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2 s, sends queue as visible chips, reconnect flushes IN ORDER with idempotency keys (zero dupes), the draft in progress survives, stores converge 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('queued-send-chip')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByTestId('queued-send-chip')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      124 |     await page.getByTestId('composer-send').click();
+      125 |
+    > 126 |     await expect(page.getByTestId('queued-send-chip')).toHaveCount(2);
+          |                                                        ^
+      127 |     await expect(page.getByTestId('offline-send-strip')).toContainText('2');
+      128 |
+      129 |     // The third composition stays in the box — the draft AC-07 protects.
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-offline.spec.ts:126:56
+
+    Error Context: test-results/inbox-offline-AC-07-THE-OF-f991f-ss-survives-stores-converge-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-offline.spec.ts:281:1 › BR-01: a queued send the server REFUSES on flush is reported visibly and never blocks the sends behind it — rolled back in the open, not silently dropped 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('queued-send-chip')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByTestId('queued-send-chip')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      292 |     await page.getByTestId('composer-input').fill('the send behind it that must still land');
+      293 |     await page.getByTestId('composer-send').click();
+    > 294 |     await expect(page.getByTestId('queued-send-chip')).toHaveCount(2);
+          |                                                        ^
+      295 |
+      296 |     // First reply POST is refused; everything after passes through.
+      297 |     let refused = false;
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-offline.spec.ts:294:56
+
+    Error Context: test-results/inbox-offline-BR-01-a-queu-ae6a1-e-open-not-silently-dropped-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/inbox-offline.spec.ts:104:1 › AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2 s, sends queue as visible chips, reconnect flushes IN ORDER with idempotency keys (zero dupes), the draft in progress survives, stores converge 
+    [chromium] › tests/Browser/inbox-offline.spec.ts:281:1 › BR-01: a queued send the server REFUSES on flush is reported visibly and never blocks the sends behind it — rolled back in the open, not silently dropped 
+  4 passed (1.5m)

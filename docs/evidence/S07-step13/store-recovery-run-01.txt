@@ -1,0 +1,32 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:100:1 › FS-05: an unparseable session store on load AUTO-RECOVERS — the schema guard resets, the workspace comes up working, and the agent is told it rebuilt (1.4s)
+  ✓  2 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:127:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive (1.7s)
+  ✘  3 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory (15.6s)
+
+
+  1) [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+      186 |             timeout: 15_000,
+      187 |         })
+    > 188 |         .toBe(0);
+          |          ^
+      189 |     // Exactly ONE landing (the idempotency key was minted at queue time and
+      190 |     // survived the reload with the row).
+      191 |     await page
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-store-recovery.spec.ts:188:10
+
+    Error Context: test-results/inbox-store-recovery-B12-A-0fb6b-queue-is-storage-not-memory-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-store-recovery.spec.ts:166:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory 
+  2 passed (49.9s)

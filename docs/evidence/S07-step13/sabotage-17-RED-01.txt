@@ -1,0 +1,35 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:128:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive (7.0s)
+
+
+  1) [chromium] › tests/Browser/inbox-store-recovery.spec.ts:128:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByTestId('composer-input')
+    Expected: "the precious composer text FS-05 protects"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" with timeout 5000ms
+      - waiting for getByTestId('composer-input')
+        14 × locator resolved to <textarea rows="3" aria-label="Reply to …" placeholder="Reply to …" data-testid="composer-input" class="w-full resize-y bg-transparent text-sm outline-none"></textarea>
+           - unexpected value ""
+
+
+      146 |
+      147 |     // THE assertion: the composer text lived through the remount.
+    > 148 |     await expect(page.getByTestId('composer-input')).toHaveValue(
+          |                                                      ^
+      149 |         'the precious composer text FS-05 protects',
+      150 |     );
+      151 |     // The queued send survived too (readable rows are kept, never dropped).
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-store-recovery.spec.ts:148:54
+
+    Error Context: test-results/inbox-store-recovery-FS-05-caf70-sends-come-through-it-alive-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-store-recovery.spec.ts:128:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive 

@@ -21,20 +21,37 @@
 // organs arrive; the placeholders are t-keys, not lorem.
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
+import ActionPalette, { type PaletteItem } from '../../Components/Inbox/ActionPalette.vue';
+import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
 import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
+import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
 import ListPane from '../../Components/Inbox/List/ListPane.vue';
 import ThreadPane from '../../Components/Inbox/Thread/ThreadPane.vue';
 import TopBar from '../../Components/Inbox/TopBar.vue';
 import ViewsRail from '../../Components/Inbox/ViewsRail.vue';
+import { runCommand } from '../../lib/commands';
+import { attachShortcuts } from '../../lib/shortcuts';
+import { useLiveList } from '../../stores/inbox/liveList';
 import {
     notifierEmissions,
     notify,
     type NotifierPrefs,
     type NotifyEvent,
 } from '../../lib/notifier';
+import {
+    flushQueue,
+    initOfflineMachine,
+    recoverStore,
+    refreshQueueMirror,
+    setJitterMax,
+    signalDrop,
+    signalUp,
+} from '../../lib/offline';
+import { anchorServerNow, serverClockOffsetMs } from '../../lib/serverClock';
 import { leaderState, startLeaderElection } from '../../lib/tabLeader';
+import { useInboxConnection } from '../../stores/inbox/connection';
 import {
     LIST_WIDTH_DEFAULT,
     LIST_WIDTH_MAX,
@@ -63,6 +80,11 @@ const props = defineProps<{
         status: Record<string, string>;
         views_editor: Record<string, string>;
         filter_bar: Record<string, string>;
+        offline: Record<string, string>;
+        shortcuts: Record<string, string>;
+        coach: Record<string, string>;
+        action_palette: Record<string, string>;
+        mobile: Record<string, string>;
     };
     tenantName: string;
     views: ViewRow[];
@@ -72,7 +94,17 @@ const props = defineProps<{
     projectorStaleSeconds: number | null;
     tenantId: string;
     buildId: string;
-    can: { views_manage: boolean; views_share: boolean; tickets_create: boolean };
+    can: {
+        views_manage: boolean;
+        views_share: boolean;
+        tickets_create: boolean;
+        tickets_assign: boolean;
+        tickets_assign_self: boolean;
+        tickets_priority_change: boolean;
+        tickets_tags_manage: boolean;
+        tickets_status_change: boolean;
+        tickets_reply: boolean;
+    };
     tabBadges: { customer: boolean; copilot: boolean };
     queueViews: { id: string; name: string; count: number }[];
     agentStatus: { status: string; reason: string | null; set_by_name: string | null };
@@ -80,10 +112,72 @@ const props = defineProps<{
     bellUnread: number;
     initialThread: { conversation_id: string; ticket_id: string | null } | null;
     features: { voice_recording: boolean };
+    serverNow: string;
+    userId: string;
 }>();
 
 const prefsStore = useInboxPrefs();
 prefsStore.hydrate(props.prefs as Parameters<typeof prefsStore.hydrate>[0]);
+const connection = useInboxConnection();
+
+// ── FR-29/FS-05 (step 13): the offline machine + the guarded session store ─
+// FS-05's schema tripwire: a stamp mismatch or unparseable session blob on
+// load means the last session's stores cannot be trusted — recover, tell the
+// agent, refetch. Bump the constant on any session-store shape change.
+const CLIENT_STORE_SCHEMA = '1';
+const offlineAnnouncement = ref('');
+
+function announceOffline(kind: string): void {
+    offlineAnnouncement.value = props.t.offline?.['announce_' + kind] ?? kind;
+}
+
+/**
+ * FS-05: reset + refetch, COMPOSER TEXT ABOVE ALL. The snapshot happens
+ * before anything is cleared; the thread remount (the refetch FS-05 names)
+ * would otherwise destroy the typed text — the restore hands it back.
+ * Sabotage #17 disables exactly this preserve/restore pair.
+ */
+async function recoverSession(): Promise<void> {
+    // 1. Preserve FIRST (drafts are the last thing ever dropped).
+    const preserved = { ...connection.composerLiveText };
+    // 2. Reset the per-session stores (scroll positions, composer modes,
+    //    session-local prefs) and restamp the schema.
+    for (const key of Object.keys(sessionStorage)) {
+        if (key.startsWith('inbox-')) {
+            sessionStorage.removeItem(key);
+        }
+    }
+    sessionStorage.setItem('inbox-client-schema', CLIENT_STORE_SCHEMA);
+    // 3. Recover the send queue (valid rows kept, garbage counted + reported).
+    await recoverStore();
+    // 4. Refetch the active surfaces — the thread REMOUNTS (key bump below).
+    connection.preservedText = preserved;
+    connection.threadRemountTick += 1;
+    connection.viewRefetchTick += 1;
+    connection.storeRebuilt = true;
+    announceOffline('rebuilt');
+}
+
+function guardSessionStores(): void {
+    let corrupt = false;
+    const stamp = sessionStorage.getItem('inbox-client-schema');
+    if (stamp !== null && stamp !== CLIENT_STORE_SCHEMA) {
+        corrupt = true;
+    }
+    const sessionLocal = sessionStorage.getItem('inbox-prefs-session-local');
+    if (sessionLocal !== null) {
+        try {
+            JSON.parse(sessionLocal);
+        } catch {
+            corrupt = true;
+        }
+    }
+    if (corrupt) {
+        void recoverSession();
+    } else if (stamp === null) {
+        sessionStorage.setItem('inbox-client-schema', CLIENT_STORE_SCHEMA);
+    }
+}
 
 // ── Breakpoints (FR-02) ────────────────────────────────────────────────────
 const width = ref(typeof window === 'undefined' ? 1440 : window.innerWidth);
@@ -101,6 +195,58 @@ onMounted(() => {
         fireWith: (event: NotifyEvent, prefs: NotifierPrefs) => notify(event, prefs),
         emissions: () => notifierEmissions(),
         leader: () => leaderState(),
+    };
+
+    // EC-07: the handshake anchor — every later sync re-anchors.
+    anchorServerNow(props.serverNow);
+
+    // FS-05's guard runs BEFORE anything reads the session stores in anger.
+    guardSessionStores();
+
+    // FR-29: the machine — browser events now, Reverb's connection callbacks
+    // later, the test hook always, all through the same signal seam.
+    initOfflineMachine({
+        buildId: props.buildId,
+        xsrf: workspaceXsrf,
+        onEvents: (ticketIds) => {
+            // Convergence by refetch (T-02's full-row-fetch idiom): the slice
+            // names what changed; the active surfaces refetch themselves.
+            void ticketIds;
+            connection.viewRefetchTick += 1;
+            connection.threadRefetchTick += 1;
+        },
+        onOverflow: () => {
+            connection.viewRefetchTick += 1;
+            connection.threadRefetchTick += 1;
+        },
+        announce: announceOffline,
+        onFlushed: (conversationId) => {
+            if (activeThread.value === conversationId) {
+                connection.threadRefetchTick += 1;
+            }
+            connection.viewRefetchTick += 1;
+        },
+    });
+
+    // The scripted seam (FR-29): what Reverb's connection callbacks will
+    // drive in production, the specs drive here — SAME machine entry points.
+    (window as unknown as Record<string, unknown>).__inboxOffline = {
+        drop: () => signalDrop('socket-drop'),
+        up: () => signalUp(),
+        state: () => ({
+            state: connection.state,
+            queued: connection.queued.length,
+            flushed: connection.flushedCount,
+            failures: connection.flushFailures.map((f) => f.reason),
+            lost: connection.lostFromStore,
+            skew: connection.skewDetected,
+            rebuilt: connection.storeRebuilt,
+            clockOffsetMs: serverClockOffsetMs(),
+        }),
+        flush: () => void flushQueue(),
+        refreshMirror: () => void refreshQueueMirror(),
+        setJitterMax: (ms: number) => setJitterMax(ms),
+        recover: () => void recoverSession(),
     };
 });
 
@@ -202,19 +348,13 @@ function openThread(payload: {
     activeAnchor.value = null;
     activeTicketMeta.value = payload.number != null ? { number: payload.number } : null;
     activeThread.value = payload.conversationId;
+    activeTicketId.value = payload.ticketId;
     mobileScreen.value = 'thread';
 }
 
-// FR-23: ⌘K / Ctrl-K opens the palette.
+// FR-23: ⌘K / Ctrl-K opens the palette — since step 13 it rides the ONE
+// FR-31 dispatcher (lib/shortcuts) with every other binding.
 const paletteOpen = ref(false);
-function onGlobalKey(event: KeyboardEvent): void {
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault();
-        paletteOpen.value = true;
-    }
-}
-onMounted(() => window.addEventListener('keydown', onGlobalKey));
-onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKey));
 
 const paletteViews = computed(() =>
     props.views.map((v) => ({ key: v.key, label: props.t.views[v.key] ?? v.key })),
@@ -332,10 +472,363 @@ function workspaceXsrf(): string {
     return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
 
+// FR-30: refresh is USER-initiated, never forced (the banner's own button).
+function reloadPage(): void {
+    window.location.reload();
+}
+
 // §9 density → the row-height variable list rows (step 9) consume.
 const density = computed(() => prefsStore.density);
 function setDensity(value: 'comfortable' | 'compact'): void {
     prefsStore.setDensity(value);
+}
+
+// ══ FR-31 (step 13): the keyboard map — one dispatcher over lib/shortcuts ══
+const list = useLiveList();
+const overlayOpen = ref(false);
+const coachOpen = ref(false);
+const actionToast = ref('');
+
+// The map's ticket actions target the ACTIVE LIST ROW when one is lit,
+// else the open thread's ticket (Gmail's semantics, US-01's shift).
+const activeTicketId = ref<string | null>(props.initialThread?.ticket_id ?? null);
+function currentTicketId(): string | null {
+    return list.activeId ?? activeTicketId.value;
+}
+function currentConversationId(): string | null {
+    if (list.activeId) {
+        const row = list.rows[list.activeId];
+        return row ? String(row.conversation_id) : null;
+    }
+    return activeThread.value;
+}
+
+function toast(message: string): void {
+    actionToast.value = message;
+    setTimeout(() => {
+        if (actionToast.value === message) actionToast.value = '';
+    }, 4_000);
+}
+
+function composerCommand(command: string): void {
+    window.dispatchEvent(new CustomEvent('inbox:composer-command', { detail: { command } }));
+}
+
+// ── The action palettes (A/P/T/S) on the step-13 doors ────────────────────
+const palette = ref<{
+    kind: 'assign' | 'priority' | 'tags' | 'snooze' | null;
+    items: PaletteItem[];
+    currentTags: string[];
+}>({ kind: null, items: [], currentTags: [] });
+
+function closeActionPalette(): void {
+    palette.value = { kind: null, items: [], currentTags: [] };
+}
+
+async function openAssignPalette(): Promise<void> {
+    if (!props.can.tickets_assign || currentTicketId() === null) return;
+    palette.value = { kind: 'assign', items: [], currentTags: [] };
+    await searchAssignees('');
+}
+async function searchAssignees(q: string): Promise<void> {
+    const response = await fetch('/inbox/assignees?q=' + encodeURIComponent(q), {
+        headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return;
+    const body = (await response.json()) as { assignees: { id: string; name: string }[] };
+    if (palette.value.kind === 'assign') {
+        palette.value.items = body.assignees.map((a) => ({ id: a.id, label: a.name }));
+    }
+}
+
+function openPriorityPalette(): void {
+    if (!props.can.tickets_priority_change || currentTicketId() === null) return;
+    palette.value = {
+        kind: 'priority',
+        currentTags: [],
+        items: (['urgent', 'high', 'normal', 'low'] as const).map((level) => ({
+            id: level,
+            label: props.t.action_palette['priority_' + level] ?? level,
+        })),
+    };
+}
+
+async function openTagPalette(): Promise<void> {
+    if (!props.can.tickets_tags_manage || currentTicketId() === null) return;
+    const id = currentTicketId();
+    const row = id ? list.rows[id] : null;
+    palette.value = {
+        kind: 'tags',
+        items: [],
+        currentTags: Array.isArray(row?.tags) ? (row?.tags as string[]) : [],
+    };
+    await searchTags('');
+}
+async function searchTags(q: string): Promise<void> {
+    const response = await fetch('/inbox/tags/suggest?q=' + encodeURIComponent(q), {
+        headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return;
+    const body = (await response.json()) as { tags: string[] };
+    if (palette.value.kind === 'tags') {
+        palette.value.items = body.tags
+            .filter((tag) => !palette.value.currentTags.includes(tag))
+            .map((tag) => ({ id: tag, label: tag }));
+    }
+}
+
+function openSnoozePalette(): void {
+    if (!props.can.tickets_status_change || currentConversationId() === null) return;
+    palette.value = {
+        kind: 'snooze',
+        currentTags: [],
+        items: [
+            {
+                id: 'pending_customer',
+                label: props.t.action_palette.snooze_pending ?? '',
+                hint: props.t.action_palette.snooze_hint ?? '',
+            },
+        ],
+    };
+}
+
+async function onPalettePick(id: string): Promise<void> {
+    const kind = palette.value.kind;
+    const ticketId = currentTicketId();
+    const conversationId = currentConversationId();
+    closeActionPalette();
+    if (kind === 'assign' && ticketId) {
+        const result = await runCommand({
+            optimistic: () => null,
+            execute: () =>
+                fetch(`/inbox/t/${ticketId}/assign`, {
+                    method: 'POST',
+                    headers: actionHeaders(),
+                    body: JSON.stringify({ assignee_id: id }),
+                }),
+            rollback: () => undefined,
+        });
+        finishRowAction(result.ok, ticketId, result.code);
+        return;
+    }
+    if (kind === 'priority' && ticketId) {
+        // T-06: optimistic priority patch, rolled back visibly on refusal.
+        const result = await runCommand({
+            optimistic: () => {
+                const row = list.rows[ticketId];
+                const previous = row?.priority;
+                if (row) row.priority = id;
+                return previous;
+            },
+            execute: () =>
+                fetch(`/inbox/t/${ticketId}/priority`, {
+                    method: 'POST',
+                    headers: actionHeaders(),
+                    body: JSON.stringify({ priority: id }),
+                }),
+            rollback: (previous) => {
+                const row = list.rows[ticketId];
+                if (row) row.priority = previous;
+            },
+        });
+        finishRowAction(result.ok, ticketId, result.code);
+        return;
+    }
+    if (kind === 'tags' && ticketId) {
+        const result = await runCommand({
+            optimistic: () => null,
+            execute: () =>
+                fetch(`/inbox/t/${ticketId}/tags/add`, {
+                    method: 'POST',
+                    headers: actionHeaders(),
+                    body: JSON.stringify({ tags: [id] }),
+                }),
+            rollback: () => undefined,
+        });
+        finishRowAction(result.ok, ticketId, result.code);
+        return;
+    }
+    if (kind === 'snooze' && conversationId) {
+        const result = await runCommand({
+            optimistic: () => null,
+            execute: () =>
+                fetch(`/inbox/thread/${conversationId}/transition`, {
+                    method: 'POST',
+                    headers: actionHeaders(),
+                    body: JSON.stringify({ to: 'pending_customer' }),
+                }),
+            rollback: () => undefined,
+        });
+        finishRowAction(result.ok, ticketId, result.code);
+    }
+}
+
+async function onPaletteRemoveTag(tag: string): Promise<void> {
+    const ticketId = currentTicketId();
+    if (!ticketId) return;
+    palette.value.currentTags = palette.value.currentTags.filter((current) => current !== tag);
+    const result = await runCommand({
+        optimistic: () => null,
+        execute: () =>
+            fetch(`/inbox/t/${ticketId}/tags/remove`, {
+                method: 'POST',
+                headers: actionHeaders(),
+                body: JSON.stringify({ tags: [tag] }),
+            }),
+        rollback: () => undefined,
+    });
+    finishRowAction(result.ok, ticketId, result.code);
+}
+
+function onPaletteSearch(q: string): void {
+    if (palette.value.kind === 'assign') void searchAssignees(q);
+    if (palette.value.kind === 'tags') void searchTags(q);
+}
+
+function actionHeaders(): Record<string, string> {
+    return {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': workspaceXsrf(),
+    };
+}
+
+// After any row action: refetch the view (the row may move or leave) and
+// surface refusals (BR-01 — visible, never silent).
+function finishRowAction(ok: boolean, ticketId: string | null, code: string | null): void {
+    void ticketId;
+    connection.viewRefetchTick += 1;
+    connection.threadRefetchTick += 1;
+    if (!ok) {
+        toast((props.t.shortcuts.action_refused ?? '').replace(':reason', code ?? 'error'));
+    }
+}
+
+// I — claim, the T-06 showcase: the row optimistically becomes mine and the
+// loser's rollback names the winner (FR-16's race message).
+async function claimActive(): Promise<void> {
+    const ticketId = currentTicketId();
+    if (!props.can.tickets_assign_self || !ticketId) return;
+    const result = await runCommand({
+        optimistic: () => {
+            const row = list.rows[ticketId];
+            const previous = row?.assignee_id;
+            if (row) row.assignee_id = props.userId;
+            return previous;
+        },
+        execute: () =>
+            fetch(`/inbox/t/${ticketId}/claim`, { method: 'POST', headers: actionHeaders() }),
+        rollback: (previous) => {
+            const row = list.rows[ticketId];
+            if (row) row.assignee_id = previous;
+        },
+    });
+    if (!result.ok && result.code === 'already_claimed') {
+        toast(props.t.shortcuts.already_claimed ?? '');
+        connection.viewRefetchTick += 1;
+        return;
+    }
+    finishRowAction(result.ok, ticketId, result.code);
+}
+
+async function resolveActive(): Promise<void> {
+    const conversationId = currentConversationId();
+    if (!props.can.tickets_status_change || !conversationId) return;
+    const result = await runCommand({
+        optimistic: () => null,
+        execute: () =>
+            fetch(`/inbox/thread/${conversationId}/transition`, {
+                method: 'POST',
+                headers: actionHeaders(),
+                body: JSON.stringify({ to: 'resolve' }),
+            }),
+        rollback: () => undefined,
+    });
+    finishRowAction(result.ok, currentTicketId(), result.code);
+}
+
+function shortcutEscape(): void {
+    if (overlayOpen.value) {
+        overlayOpen.value = false;
+        return;
+    }
+    if (palette.value.kind !== null) {
+        closeActionPalette();
+        return;
+    }
+    if (paletteOpen.value) {
+        paletteOpen.value = false;
+        return;
+    }
+    if (drawerOpen.value) {
+        drawerOpen.value = false;
+        return;
+    }
+    if (list.selected.length > 0) {
+        list.clearSelection();
+        return;
+    }
+    list.activeId = null;
+}
+
+let detachShortcuts: (() => void) | null = null;
+onMounted(() => {
+    detachShortcuts = attachShortcuts({
+        listNext: () => list.activateStep(1),
+        listPrev: () => list.activateStep(-1),
+        openActive: () => {
+            const id = list.activeId;
+            const row = id ? list.rows[id] : null;
+            if (id && row) {
+                activeTicketId.value = id;
+                openThread({
+                    ticketId: id,
+                    conversationId: String(row.conversation_id),
+                    number: (row.number ?? null) as number | string | null,
+                });
+            }
+        },
+        selectActive: () => {
+            if (list.activeId) list.toggleSelect(list.activeId);
+        },
+        rangeSelectActive: () => {
+            if (!list.activeId) return;
+            const anchor = list.selected[list.selected.length - 1];
+            if (anchor) {
+                list.rangeSelect(anchor, list.activeId);
+            } else {
+                list.toggleSelect(list.activeId);
+            }
+        },
+        escape: shortcutEscape,
+        goUnassigned: () => (activeView.value = 'unassigned'),
+        goMyOpen: () => (activeView.value = 'my_open'),
+        goSlaAtRisk: () => (activeView.value = 'sla_at_risk'),
+        goMentions: () => (activeView.value = 'mentions'),
+        openPalette: () => (paletteOpen.value = true),
+        assignToMe: () => void claimActive(),
+        assignPalette: () => void openAssignPalette(),
+        resolve: () => void resolveActive(),
+        priorityPalette: openPriorityPalette,
+        tagPalette: () => void openTagPalette(),
+        snoozePalette: openSnoozePalette,
+        focusReply: () => composerCommand('focus-reply'),
+        noteMode: () => composerCommand('note-mode'),
+        send: () => composerCommand('send'),
+        sendAndResolve: () => composerCommand('send-resolve'),
+        openOverlay: () => (overlayOpen.value = true),
+    });
+
+    // §8 first-run: the coach marks show until dismissed forever.
+    if (!prefsStore.coachDismissed) {
+        coachOpen.value = true;
+    }
+});
+onBeforeUnmount(() => detachShortcuts?.());
+
+function dismissCoach(): void {
+    coachOpen.value = false;
+    prefsStore.setCoachDismissed(true);
 }
 </script>
 
@@ -384,6 +877,42 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             @remember-search="(q: string) => prefsStore.rememberSearch(q)"
         />
 
+        <!-- FR-31 (step 13): the ? overlay, the A/P/T/S palettes, first-run. -->
+        <ShortcutOverlay
+            :open="overlayOpen"
+            :t="t.shortcuts"
+            @close="overlayOpen = false"
+            @open-coach="
+                () => {
+                    overlayOpen = false;
+                    coachOpen = true;
+                }
+            "
+        />
+        <ActionPalette
+            :open="palette.kind !== null"
+            :kind="palette.kind"
+            :title="palette.kind ? (t.action_palette['title_' + palette.kind] ?? '') : ''"
+            :searchable="palette.kind === 'assign' || palette.kind === 'tags'"
+            :items="palette.items"
+            :current-tags="palette.currentTags"
+            :t="t.action_palette"
+            @close="closeActionPalette"
+            @pick="onPalettePick"
+            @search="onPaletteSearch"
+            @remove-tag="onPaletteRemoveTag"
+        />
+        <CoachMarks :open="coachOpen" :t="t.coach" @dismiss="dismissCoach" />
+        <p
+            v-if="actionToast"
+            data-testid="action-toast"
+            role="status"
+            class="fixed bottom-4 start-1/2 z-50 -translate-x-1/2 rounded-md px-3 py-2 text-xs shadow-lg"
+            :style="{ background: 'var(--ds-text-ink)', color: 'var(--ds-page-bg)' }"
+        >
+            {{ actionToast }}
+        </p>
+
         <TopBar
             :tenant-name="tenantName"
             :health="health"
@@ -405,6 +934,75 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             @mute="(until) => prefsStore.setMutedUntil(until)"
             @open-palette="paletteOpen = true"
         />
+
+        <!-- ═══ FR-29/FR-30/FS-05 (step 13): the whole-workspace banner stack
+             (B1-S02's drawn strips). Live region: state flips are announced. -->
+        <p class="sr-only" role="status" aria-live="polite" data-testid="offline-announcement">
+            {{ offlineAnnouncement }}
+        </p>
+        <p
+            v-if="connection.state === 'reconnecting'"
+            data-testid="reconnecting-pill"
+            role="status"
+            class="px-3 py-2 text-xs font-semibold"
+            :style="{ background: 'var(--ds-window-soon-bg)', color: 'var(--ds-window-soon-fg)' }"
+        >
+            ◌ {{ t.offline.reconnecting }}
+        </p>
+        <p
+            v-else-if="connection.state === 'offline'"
+            data-testid="offline-banner"
+            role="status"
+            class="px-3 py-2 text-xs font-semibold"
+            :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
+        >
+            {{ t.offline.offline_banner }}
+        </p>
+        <p
+            v-if="connection.skewDetected"
+            data-testid="skew-banner"
+            class="flex items-center gap-2 px-3 py-2 text-xs"
+            :style="{
+                background: 'var(--ds-panel-bg)',
+                color: 'var(--ds-text-primary)',
+                borderBottom: '1px solid var(--ds-border)',
+            }"
+        >
+            {{ t.offline.new_version }}
+            <button
+                type="button"
+                data-testid="skew-refresh"
+                class="ms-auto rounded border px-2 py-0.5 text-[11px] font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="reloadPage"
+            >
+                {{ t.offline.refresh }}
+            </button>
+        </p>
+        <p
+            v-if="connection.storeRebuilt"
+            data-testid="store-rebuilt-banner"
+            role="status"
+            class="px-3 py-2 text-xs"
+            :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
+        >
+            {{ t.offline.session_rebuilt }}
+            <template v-if="connection.lostFromStore > 0">
+                {{
+                    (t.offline.sends_lost ?? '').replace(':count', String(connection.lostFromStore))
+                }}
+            </template>
+        </p>
+        <p
+            v-for="failure in connection.flushFailures"
+            :key="failure.id"
+            data-testid="flush-failure-banner"
+            role="status"
+            class="px-3 py-2 text-xs"
+            :style="{ background: 'var(--ds-warn-bg)', color: 'var(--ds-warn-text)' }"
+        >
+            {{ (t.offline.flush_failed ?? '').replace(':reason', failure.reason) }}
+        </p>
 
         <!-- ═══ Desktop / tablet (≥768): the region row ═══ -->
         <div v-if="!isMobile" class="flex min-h-0 flex-1">
@@ -441,7 +1039,21 @@ function setDensity(value: 'comfortable' | 'compact'): void {
             >
                 <ListPane
                     :view="activeView"
-                    :t="{ list: t.list, row: t.row, bulk: t.bulk, filter_bar: t.filter_bar }"
+                    :mobile="false"
+                    :user-id="userId"
+                    :can="{
+                        assignSelf: can.tickets_assign_self,
+                        assign: can.tickets_assign,
+                        statusChange: can.tickets_status_change,
+                        priority: can.tickets_priority_change,
+                    }"
+                    :t="{
+                        list: t.list,
+                        row: t.row,
+                        bulk: t.bulk,
+                        filter_bar: t.filter_bar,
+                        mobile: t.mobile,
+                    }"
                     @open-ticket="openThread"
                     @fallback-view="activeView = 'my_open'"
                 />
@@ -508,7 +1120,7 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 </div>
                 <ThreadPane
                     v-if="activeThread"
-                    :key="activeThread + (activeAnchor ?? '')"
+                    :key="activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick"
                     :conversation-id="activeThread"
                     :initial-anchor="activeAnchor"
                     :t="t.thread"
@@ -579,7 +1191,21 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 >
                     <ListPane
                         :view="activeView"
-                        :t="{ list: t.list, row: t.row, bulk: t.bulk, filter_bar: t.filter_bar }"
+                        :mobile="true"
+                        :user-id="userId"
+                        :can="{
+                            assignSelf: can.tickets_assign_self,
+                            assign: can.tickets_assign,
+                            statusChange: can.tickets_status_change,
+                            priority: can.tickets_priority_change,
+                        }"
+                        :t="{
+                            list: t.list,
+                            row: t.row,
+                            bulk: t.bulk,
+                            filter_bar: t.filter_bar,
+                            mobile: t.mobile,
+                        }"
                         @open-ticket="openThread"
                         @fallback-view="activeView = 'my_open'"
                     />
@@ -691,7 +1317,9 @@ function setDensity(value: 'comfortable' | 'compact'): void {
                 >
                     <ThreadPane
                         v-if="activeThread"
-                        :key="activeThread + (activeAnchor ?? '')"
+                        :key="
+                            activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick
+                        "
                         :conversation-id="activeThread"
                         :initial-anchor="activeAnchor"
                         :t="t.thread"

@@ -30,6 +30,10 @@
 // (window.__inboxComposer, the scripted-stream discipline); sabotage #8
 // suppresses the strip and the dual-surface proof goes red.
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { queueSend } from '../../../lib/offline';
+import { mintIdempotencyKey } from '../../../lib/sendQueue';
+import { serverNow } from '../../../lib/serverClock';
+import { useInboxConnection } from '../../../stores/inbox/connection';
 
 const props = defineProps<{
     conversationId: string;
@@ -58,6 +62,12 @@ watch(mode, (value) => sessionStorage.setItem(modeKey, value));
 
 const body = ref('');
 const sending = ref(false);
+// T-03's outbound half, minted CLIENT-side (step 13): one key per send
+// SERIES — a retry after failure or the reopen-confirm resend reuses the
+// same key, so the server's findByIdempotencyKey makes "no duplicate on
+// retry" (B12-A01 AC-05) a physics fact rather than a hope.
+const currentSendKey = ref<string | null>(null);
+const connection = useInboxConnection();
 const paletteOpen = ref(false);
 const splitOpen = ref(false);
 const reopenPrompt = ref(false);
@@ -96,8 +106,9 @@ function xsrf(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
     return match?.[1] ? decodeURIComponent(match[1]) : '';
 }
+let applyingSync = false;
 watch(body, () => {
-    if (mode.value !== 'reply') return;
+    if (mode.value !== 'reply' || applyingSync) return;
     if (draftTimer) clearTimeout(draftTimer);
     draftTimer = setTimeout(() => void saveDraft(), 800);
 });
@@ -112,10 +123,38 @@ async function saveDraft(): Promise<void> {
             },
             body: JSON.stringify({ body: body.value || null }),
         });
+        // EC-03: the OTHER TAB hears about the write (last-writer wins —
+        // this write IS the latest by construction).
+        draftSync?.postMessage({ conversationId: props.conversationId, body: body.value });
     } catch {
         /* offline: FR-29's machinery owns queued mutations (step 13) */
     }
 }
+
+// ── EC-03 (step 13): dual-tab drafts sync LAST-WRITER with the Doc 04
+// EC-06 toast ("Draft updated on another device"). STRUCTURAL guarantee
+// alongside: this sync NEVER touches typingBy — a user's own other tab can
+// not trigger the collision strip (typing indicators never self-trigger).
+const draftSyncedToast = ref(false);
+let draftSync: BroadcastChannel | null = null;
+onMounted(() => {
+    if (typeof BroadcastChannel === 'undefined') return;
+    draftSync = new BroadcastChannel('inbox-draft-sync');
+    draftSync.onmessage = (event: MessageEvent) => {
+        const data = event.data as { conversationId: string; body: string };
+        if (data.conversationId !== props.conversationId || data.body === body.value) {
+            return;
+        }
+        // The incoming write is the LATER writer — it wins (LWW). The guard
+        // stops the apply from re-broadcasting (no ping-pong).
+        applyingSync = true;
+        body.value = data.body;
+        setTimeout(() => (applyingSync = false), 0);
+        draftSyncedToast.value = true;
+        setTimeout(() => (draftSyncedToast.value = false), 3_000);
+    };
+});
+onBeforeUnmount(() => draftSync?.close());
 
 // FR-22: the unsent-draft guard — only past 20 chars.
 function onPageHide(event: BeforeUnloadEvent): void {
@@ -126,9 +165,59 @@ function onPageHide(event: BeforeUnloadEvent): void {
 onMounted(() => window.addEventListener('beforeunload', onPageHide));
 onBeforeUnmount(() => window.removeEventListener('beforeunload', onPageHide));
 
+// ── FR-29 (step 13): the offline mirror + queue path ───────────────────────
+// The live-text mirror is FS-05's preserve half: recovery snapshots it BEFORE
+// the store reset and hands it back through preservedText after the remount
+// (the guard sabotage #17 disables). Composer text above all.
+watch(body, (value) => {
+    connection.composerLiveText[props.conversationId] = value;
+});
+watch(
+    () => connection.preservedText[props.conversationId],
+    (preserved) => {
+        if (typeof preserved === 'string' && preserved !== '' && body.value === '') {
+            body.value = preserved;
+            delete connection.preservedText[props.conversationId];
+        }
+    },
+    { immediate: true },
+);
+// Reconnect: the draft the server missed while offline is re-persisted, and
+// the queued chips for this conversation come from the store mirror.
+watch(
+    () => connection.state,
+    (state, previous) => {
+        if (
+            state === 'online' &&
+            previous !== 'online' &&
+            mode.value === 'reply' &&
+            body.value !== ''
+        ) {
+            void saveDraft();
+        }
+    },
+);
+const queuedHere = computed(() => connection.queuedFor(props.conversationId));
+
 // ── send paths — SEPARATE, per mode (FR-17's structural arm) ──────────────
 async function send(then: string | null = null, confirmReopen = false): Promise<void> {
     if (body.value.trim() === '' || sending.value) return;
+
+    // FR-29: offline/reconnecting → the send is QUEUED, visibly, with its
+    // idempotency key minted at queue time; the composer clears the way a
+    // real send would (the chip carries the text now — BR-01, no lying).
+    if (connection.readOnly) {
+        await queueSend({
+            conversationId: props.conversationId,
+            mode: mode.value,
+            body: body.value,
+            then,
+            queuedAt: serverNow(),
+        });
+        body.value = '';
+        currentSendKey.value = null;
+        return;
+    }
 
     // FR-16: a colleague replied since typing began → non-blocking confirm.
     if (
@@ -163,6 +252,9 @@ async function send(then: string | null = null, confirmReopen = false): Promise<
             return;
         }
 
+        // One key per send SERIES (reused by the reopen-confirm resend and
+        // any retry) — the server's dedupe makes retries single-shot.
+        currentSendKey.value ??= mintIdempotencyKey();
         const response = await fetch(`/inbox/thread/${props.conversationId}/reply`, {
             method: 'POST',
             headers: {
@@ -172,6 +264,7 @@ async function send(then: string | null = null, confirmReopen = false): Promise<
             },
             body: JSON.stringify({
                 body: body.value,
+                idempotency_key: currentSendKey.value,
                 ...(then ? { then } : {}),
                 ...(confirmReopen ? { confirm_reopen: true } : {}),
             }),
@@ -188,6 +281,7 @@ async function send(then: string | null = null, confirmReopen = false): Promise<
             };
             emit('sent', payload.message_id);
             body.value = '';
+            currentSendKey.value = null;
             reopenPrompt.value = false;
             raceBy.value = null;
             if (payload.transition && !payload.transition.ok) {
@@ -226,6 +320,35 @@ function label(key: string, replacements: Record<string, string> = {}): string {
     return value;
 }
 
+// ── FR-31 (step 13): the shortcut map's composer commands ──────────────────
+// R / N / ⌘Enter / Shift+E arrive as window CustomEvents from the one
+// dispatcher — the composer keeps its internals private and answers the
+// four commands the map names.
+const inputEl = ref<HTMLTextAreaElement | null>(null);
+function onComposerCommand(event: Event): void {
+    const command = (event as CustomEvent<{ command: string }>).detail?.command;
+    switch (command) {
+        case 'focus-reply':
+            mode.value = 'reply';
+            inputEl.value?.focus();
+            return;
+        case 'note-mode':
+            mode.value = 'note';
+            inputEl.value?.focus();
+            return;
+        case 'send':
+            void send(null);
+            return;
+        case 'send-resolve':
+            void send('resolve');
+            return;
+        default:
+            return;
+    }
+}
+onMounted(() => window.addEventListener('inbox:composer-command', onComposerCommand));
+onBeforeUnmount(() => window.removeEventListener('inbox:composer-command', onComposerCommand));
+
 // The scripted-stream hook (FR-16): the SAME entry points the realtime
 // typing/message feed will call.
 onMounted(() => {
@@ -249,6 +372,40 @@ onMounted(() => {
         class="border-t"
         :style="{ borderColor: 'var(--ds-border)' }"
     >
+        <!-- FR-29: the offline-queue strip + the queued chips (B1-S02's drawn
+             states). role=status: the flush outcome is announced, not tinted. -->
+        <p
+            v-if="queuedHere.length > 0"
+            data-testid="offline-send-strip"
+            role="status"
+            class="px-3 py-1 text-xs"
+            :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
+        >
+            {{ label('offline_queued_strip', { count: String(queuedHere.length) }) }}
+        </p>
+        <div v-if="queuedHere.length > 0" class="flex flex-wrap gap-1.5 px-3 py-1">
+            <span
+                v-for="queued in queuedHere"
+                :key="queued.id"
+                data-testid="queued-send-chip"
+                class="rounded-full px-2 py-0.5 text-[10.5px]"
+                :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
+            >
+                ◷ {{ t.queued_chip }}
+            </span>
+        </div>
+
+        <!-- EC-03: the other-device draft toast (Doc 04 EC-06's copy). -->
+        <p
+            v-if="draftSyncedToast"
+            data-testid="draft-synced-toast"
+            role="status"
+            class="px-3 py-1 text-xs"
+            :style="{ background: 'var(--ds-text-ink)', color: 'var(--ds-page-bg)' }"
+        >
+            {{ t.draft_synced }}
+        </p>
+
         <!-- FR-16: the collision strip (role=status; their draft NEVER shows). -->
         <p
             v-if="typingBy"
@@ -419,6 +576,7 @@ onMounted(() => {
                 <p
                     v-if="mode === 'note'"
                     data-testid="note-mode-banner"
+                    role="status"
                     class="text-[10px] font-bold uppercase"
                     :style="{ color: 'var(--ds-note-fg)' }"
                 >
@@ -435,6 +593,7 @@ onMounted(() => {
             </div>
 
             <textarea
+                ref="inputEl"
                 v-model="body"
                 data-testid="composer-input"
                 rows="3"

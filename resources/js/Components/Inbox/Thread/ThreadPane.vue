@@ -9,7 +9,8 @@
 // page. Opening marks read through the REAL marker writer — and a Read
 // Only viewer's 403 is swallowed SILENTLY into session-local read state
 // (the R-26 fourth-sibling consequence, the countersign's posture).
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { useInboxConnection } from '../../../stores/inbox/connection';
 import ComposerPane from './ComposerPane.vue';
 import HandoffCard from './HandoffCard.vue';
 import MediaLightbox from './MediaLightbox.vue';
@@ -61,6 +62,14 @@ const history = ref<{
 });
 const expandedEvents = ref<Record<string, boolean>>({});
 const scroller = ref<HTMLElement | null>(null);
+const connection = useInboxConnection();
+
+// FR-29/T-07 (step 13): sync reconciliation refetches the open thread —
+// convergence by refetch, one reconciliation path.
+watch(
+    () => connection.threadRefetchTick,
+    () => void load(),
+);
 
 async function load(anchor?: string): Promise<void> {
     const params = anchor ? `?anchor=${anchor}` : '';

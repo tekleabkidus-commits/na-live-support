@@ -1,0 +1,83 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:102:1 › AC-08 OVERLAY PARITY: ? opens the overlay, its rows cover EXACTLY the FR-31 enumeration, Esc closes and focus returns (1.9s)
+  ✓  2 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:125:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects (1.6s)
+  ✓  3 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:170:1 › G U / G M / G A chords and M switch views; O opens like Enter (2.1s)
+  ✓  4 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:202:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory (1.9s)
+  ✘  5 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door (11.6s)
+  ✘  6 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map (10.8s)
+  ✓  7 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:364:1 › THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13) (1.9s)
+  ✘  8 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:394:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (33.4s)
+
+
+  1) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "shortcut-fixture-tag"
+    Received array: ["telebirr"]
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      281 |             { timeout: 10_000 },
+      282 |         )
+    > 283 |         .toContain('shortcut-fixture-tag');
+          |          ^
+      284 |     await page.keyboard.press('t');
+      285 |     await page
+      286 |         .locator('[data-testid="palette-current-tag"]', { hasText: 'shortcut-fixture-tag' })
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:283:10
+
+    Error Context: test-results/inbox-shortcuts-P-sets-pri-ad437--—-each-palette-a-real-door-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      359 |             { timeout: 10_000 },
+      360 |         )
+    > 361 |         .toBe(false);
+          |          ^
+      362 | });
+      363 |
+      364 | test('THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13)', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:361:10
+
+    Error Context: test-results/inbox-shortcuts-R-focuses--34431-he-composer-half-of-the-map-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:394:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('coach-next')
+        - locator resolved to <button type="button" data-testid="coach-next" class="ms-auto rounded px-3 py-1 text-[11.5px] font-semibold">Next</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      409 |     await page.getByTestId('coach-back').click();
+      410 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'views');
+    > 411 |     await page.getByTestId('coach-next').click();
+          |                                          ^
+      412 |     await page.getByTestId('coach-next').click();
+      413 |     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'modes');
+      414 |     await page.getByTestId('coach-next').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:411:42
+
+    Error Context: test-results/inbox-shortcuts-§8-FIRST-R-3305f-nd-re-open-from-the-overlay-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:244:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:320:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:394:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay 
+  5 passed (2.8m)

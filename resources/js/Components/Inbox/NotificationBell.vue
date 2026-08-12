@@ -9,6 +9,7 @@
 // i18n templates + numbers — message content never reaches this surface.
 import { computed, ref } from 'vue';
 import { notificationPermissionHintNeeded } from '../../lib/notifier';
+import { serverNow } from '../../lib/serverClock';
 
 const props = defineProps<{
     t: Record<string, string>;
@@ -95,8 +96,10 @@ const muted = computed(
 );
 
 // §14: ICU relative times switching to absolute past 24 h.
+// EC-07 (step 13): delta from the SERVER-NOW offset, never the raw client
+// clock — a client minutes wrong would otherwise mislabel every row.
 function relative(stamp: string): string {
-    const delta = (Date.now() - new Date(stamp).getTime()) / 1000;
+    const delta = (serverNow() - new Date(stamp).getTime()) / 1000;
     if (delta < 60) return props.t.just_now ?? '';
     if (delta < 3600)
         return (props.t.minutes_ago ?? '').replace(':count', String(Math.floor(delta / 60)));

@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-offline.spec.ts:104:1 › AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2 s, sends queue as visible chips, reconnect flushes IN ORDER with idempotency keys (zero dupes), the draft in progress survives, stores converge (2.0s)
+  ✓  2 [chromium] › tests/Browser/inbox-offline.spec.ts:168:1 › FR-29: a SOCKET drop with live network shows the amber reconnecting pill within 2 s and recovers by itself through the sync path (1.3s)
+  ✓  3 [chromium] › tests/Browser/inbox-offline.spec.ts:182:1 › EC-08: 429-on-connect is HONORED — the client backs off instead of hammering, and lands when the server stops shedding (9.4s)
+  ✓  4 [chromium] › tests/Browser/inbox-offline.spec.ts:219:1 › FR-30: a build-id mismatch on sync shows the PASSIVE refresh banner — composition is never interrupted, nothing reloads on its own (1.3s)
+  ✓  5 [chromium] › tests/Browser/inbox-offline.spec.ts:253:1 › EC-07: relative times anchor to the SERVER clock — a sync answering 2 minutes ahead moves the client offset, not the client clock (1.3s)
+  ✓  6 [chromium] › tests/Browser/inbox-offline.spec.ts:283:1 › BR-01: a queued send the server REFUSES on flush is reported visibly and never blocks the sends behind it — rolled back in the open, not silently dropped (1.5s)
+
+  6 passed (49.4s)

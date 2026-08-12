@@ -30,6 +30,9 @@ type PrefsBlob = {
     mute_until?: string | null;
     // FR-23: recent searches, newest first, capped at 8.
     recent_searches?: string[];
+    // §8 first-run (step 13): true = dismissed forever (the key the prefs
+    // door reserved at step 8).
+    coach_marks?: boolean;
 };
 
 const SESSION_KEY = 'inbox-prefs-session-local';
@@ -51,6 +54,7 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
         sortOverrides: {} as Record<string, string>,
         mutedUntil: null as string | null,
         recentSearches: [] as string[],
+        coachDismissed: false,
         // Writes are SERIALIZED: two in-flight PATCHes can land out of
         // order and the server keeps the loser (a 408-px width overtaking
         // the 424 the UI shows — BR-01's honesty bar caught it in AC-01).
@@ -72,6 +76,13 @@ export const useInboxPrefs = defineStore('inbox-prefs', {
             this.sortOverrides = merged.sort_overrides ?? {};
             this.mutedUntil = merged.mute_until ?? null;
             this.recentSearches = merged.recent_searches ?? [];
+            this.coachDismissed = merged.coach_marks ?? false;
+        },
+
+        // §8 (step 13): dismiss-forever for the first-run coach marks.
+        setCoachDismissed(dismissed: boolean): void {
+            this.coachDismissed = dismissed;
+            void this.persist({ coach_marks: dismissed });
         },
 
         // FR-23: remember a search, newest first, deduped, capped at 8.
