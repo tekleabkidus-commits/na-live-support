@@ -492,15 +492,31 @@ const actionToast = ref('');
 // The map's ticket actions target the ACTIVE LIST ROW when one is lit,
 // else the open thread's ticket (Gmail's semantics, US-01's shift).
 const activeTicketId = ref<string | null>(props.initialThread?.ticket_id ?? null);
+// D1 (advisor ruling 2026-08-13): a lit id whose row has LEFT the view is
+// not "lit" — the store clears it on refetch/flush, and these resolvers
+// fall back to the open thread rather than dereferencing a ghost. The old
+// shape returned null there, and every ticket action after a keyboard
+// claim (the claim-refetch drops the row) became a silent no-op — the
+// defect that left all sixty shift tickets claimed-but-unresolved.
 function currentTicketId(): string | null {
-    return list.activeId ?? activeTicketId.value;
+    if (list.activeId && list.rows[list.activeId]) {
+        return list.activeId;
+    }
+    return activeTicketId.value;
 }
 function currentConversationId(): string | null {
     if (list.activeId) {
         const row = list.rows[list.activeId];
-        return row ? String(row.conversation_id) : null;
+        if (row) return String(row.conversation_id);
     }
     return activeThread.value;
+}
+// BR-01: an action with no target anywhere (no lit row, no open thread)
+// says so instead of doing nothing.
+function requireTarget(id: string | null): boolean {
+    if (id !== null) return true;
+    toast(props.t.shortcuts.no_target ?? '');
+    return false;
 }
 
 function toast(message: string): void {
@@ -526,7 +542,7 @@ function closeActionPalette(): void {
 }
 
 async function openAssignPalette(): Promise<void> {
-    if (!props.can.tickets_assign || currentTicketId() === null) return;
+    if (!props.can.tickets_assign || !requireTarget(currentTicketId())) return;
     palette.value = { kind: 'assign', items: [], currentTags: [] };
     await searchAssignees('');
 }
@@ -542,7 +558,7 @@ async function searchAssignees(q: string): Promise<void> {
 }
 
 function openPriorityPalette(): void {
-    if (!props.can.tickets_priority_change || currentTicketId() === null) return;
+    if (!props.can.tickets_priority_change || !requireTarget(currentTicketId())) return;
     palette.value = {
         kind: 'priority',
         currentTags: [],
@@ -554,7 +570,7 @@ function openPriorityPalette(): void {
 }
 
 async function openTagPalette(): Promise<void> {
-    if (!props.can.tickets_tags_manage || currentTicketId() === null) return;
+    if (!props.can.tickets_tags_manage || !requireTarget(currentTicketId())) return;
     const id = currentTicketId();
     const row = id ? list.rows[id] : null;
     palette.value = {
@@ -578,7 +594,7 @@ async function searchTags(q: string): Promise<void> {
 }
 
 function openSnoozePalette(): void {
-    if (!props.can.tickets_status_change || currentConversationId() === null) return;
+    if (!props.can.tickets_status_change || !requireTarget(currentConversationId())) return;
     palette.value = {
         kind: 'snooze',
         currentTags: [],
@@ -707,8 +723,10 @@ function finishRowAction(ok: boolean, ticketId: string | null, code: string | nu
 // I — claim, the T-06 showcase: the row optimistically becomes mine and the
 // loser's rollback names the winner (FR-16's race message).
 async function claimActive(): Promise<void> {
+    if (!props.can.tickets_assign_self) return;
     const ticketId = currentTicketId();
-    if (!props.can.tickets_assign_self || !ticketId) return;
+    if (!requireTarget(ticketId)) return;
+    if (!ticketId) return; // narrowing for the closures below
     const result = await runCommand({
         optimistic: () => {
             const row = list.rows[ticketId];
@@ -732,8 +750,10 @@ async function claimActive(): Promise<void> {
 }
 
 async function resolveActive(): Promise<void> {
+    if (!props.can.tickets_status_change) return;
     const conversationId = currentConversationId();
-    if (!props.can.tickets_status_change || !conversationId) return;
+    if (!requireTarget(conversationId)) return;
+    if (!conversationId) return; // narrowing for the closure below
     const result = await runCommand({
         optimistic: () => null,
         execute: () =>

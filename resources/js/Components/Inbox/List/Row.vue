@@ -108,11 +108,15 @@ function cancelSwipe(): void {
     }
 }
 
-// FR-31/§13 (step 13): the row IS the option — the roving-tabindex focus
-// model. Enter/O open, X (Shift+X range) select, arrows mirror J/K. The
-// inner checkbox/button leave the tab order (tabindex -1): an option may
-// not contain tab-reachable interactive children — the step-9 note's
-// resolution, landed here.
+// FR-31/§13 + A-36 (2026-08-13): the row is a GRID ROW — the roving-tabindex
+// row-focus model (WAI-ARIA APG grid). Enter/O open, X (Shift+X range)
+// select, arrows mirror J/K. §13's word "listbox" could not hold: an option
+// may not contain interactive children AT ALL (WCAG 4.1.2,
+// nested-interactive — axe flagged the checkbox/open-button the moment the
+// sweep ran), while a grid row's cells lawfully hold widgets. The intent
+// (one tab stop, J/K roving focus, visible selection, every control
+// keyboard-reachable) is unchanged; the inner checkbox/button stay out of
+// the tab order (tabindex -1), reached as X and Enter/O on the row.
 function onOptionKeydown(event: KeyboardEvent): void {
     switch (event.key) {
         case 'Enter':
@@ -224,7 +228,7 @@ const SENTIMENT_HUES: Record<string, string> = {
 <template>
     <li
         :id="'inbox-row-' + row.ticket_id"
-        role="option"
+        role="row"
         :aria-selected="selected"
         :tabindex="active ? 0 : -1"
         :data-ticket="row.ticket_id"
@@ -250,6 +254,7 @@ const SENTIMENT_HUES: Record<string, string> = {
         <!-- B2-S01: the revealed claim zone (drawn 92 px, success hues). -->
         <div
             v-if="mobile && swipeX > 8"
+            role="presentation"
             data-testid="swipe-claim-zone"
             class="absolute inset-y-0 start-0 flex flex-col items-center justify-center gap-0.5"
             :style="{
@@ -264,6 +269,7 @@ const SENTIMENT_HUES: Record<string, string> = {
         <!-- B2-S01: the committed state ("✓ Claimed by you") flashes in place. -->
         <p
             v-if="claimedFlash"
+            role="gridcell"
             data-testid="row-claimed-flash"
             class="px-3 py-1 text-[11.5px] font-semibold"
             :style="{ color: 'var(--ds-success-text)' }"
@@ -271,6 +277,7 @@ const SENTIMENT_HUES: Record<string, string> = {
             ✓ {{ t.swipe_claimed_by_you }}
         </p>
         <div
+            role="gridcell"
             class="relative flex items-center gap-2 px-3"
             :style="{
                 minHeight: 'var(--inbox-row-height)',

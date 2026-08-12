@@ -91,6 +91,14 @@ export const useLiveList = defineStore('inbox-live-list', {
             this.pendingChanges = 0;
             this.resortAffordance = false;
             // Selection is NOT cleared on refetch — FR-13: it survives.
+            // The ACTIVE row is presentation state and does NOT survive its
+            // row leaving the view: a lit id whose row a refetch dropped is
+            // not "lit" in any sense a user can see, and holding it made
+            // every ticket action a silent no-op (D1, advisor ruling
+            // 2026-08-13 — the dispatcher falls back to the open thread).
+            if (this.activeId !== null && !(this.activeId in this.rows)) {
+                this.activeId = null;
+            }
         },
 
         appendPage(rows: ListRow[], nextCursor: string | null): void {
@@ -178,6 +186,12 @@ export const useLiveList = defineStore('inbox-live-list', {
             this.pendingResort = false;
             this.pendingChanges = 0;
             this.resortAffordance = false;
+            // Same D1 repair as hydrate: a leaving row takes its lit state
+            // with it, so the next action targets the open thread instead of
+            // silently dereferencing a ghost.
+            if (this.activeId !== null && !(this.activeId in this.rows)) {
+                this.activeId = null;
+            }
             // entering highlights clear on the next frame cycle
             setTimeout(() => {
                 this.entering = {};

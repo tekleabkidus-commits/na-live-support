@@ -381,6 +381,9 @@ return [
         'layout_note' => 'ቁልፎች የአካላዊውን US አቀማመጥ ይከተላሉ፤ ዳግም መመደብ ወደፊት ይመጣል።',
         'action_refused' => 'እርምጃው ተከልክሏል (:reason)።',
         'already_claimed' => 'ሌላ ሰው ይህን ቲኬት ቀድሞ ወስዷል።',
+        // D1 (2026-08-13): a ticket action with nothing to act on says so —
+        // BR-01, the inbox never lies by silence.
+        'no_target' => 'እርምጃ የሚወሰድበት የተመረጠ ወይም የተከፈተ ቲኬት የለም።',
     ],
     // §8 first-run (step 13): the four coach marks, drawn in B1-S03.
     'coach' => [

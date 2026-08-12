@@ -555,13 +555,16 @@ watch(
             ◌ {{ t.mobile.refreshing }}
         </p>
 
-        <!-- §13's listbox + roving tabindex — the step-9 deferral, landed
-             with FR-31 (step 13): rows ARE the options (nested controls left
-             the tab order), the active row holds tabindex 0, arrows mirror
-             J/K, and focus is never stolen by live updates or shortcuts. -->
+        <!-- §13's roving tabindex — the step-9 deferral landed with FR-31
+             (step 13) as a listbox, converted to a GRID at step-13 completion
+             (A-36, class-1 technical necessity): rows carry interactive
+             children, which role="option" cannot lawfully hold (WCAG 4.1.2)
+             and a grid row's cells can. The interaction contract is
+             unchanged: the active row holds tabindex 0, arrows mirror J/K,
+             and focus is never stolen by live updates or shortcuts. -->
         <ul
             ref="scroller"
-            role="listbox"
+            role="grid"
             :aria-label="t.list.listbox_label"
             data-testid="ticket-list"
             class="min-h-0 flex-1 overflow-y-auto"
@@ -601,21 +604,27 @@ watch(
             />
             <li
                 v-if="list.orderedRows.length === 0 && !loading"
+                role="row"
                 class="p-4 text-sm"
                 :style="{ color: 'var(--ds-text-muted)' }"
             >
-                {{ t.list.empty }}
+                <div role="gridcell">{{ t.list.empty }}</div>
             </li>
-            <li v-if="list.nextCursor" class="p-3">
-                <button
-                    type="button"
-                    data-testid="load-more"
-                    class="w-full rounded-md border px-2 py-1.5 text-xs"
-                    :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }"
-                    @click="fetchPage(list.nextCursor)"
-                >
-                    {{ t.list.load_more }}
-                </button>
+            <li v-if="list.nextCursor" role="row" class="p-3">
+                <div role="gridcell">
+                    <button
+                        type="button"
+                        data-testid="load-more"
+                        class="w-full rounded-md border px-2 py-1.5 text-xs"
+                        :style="{
+                            borderColor: 'var(--ds-border)',
+                            color: 'var(--ds-text-secondary)',
+                        }"
+                        @click="fetchPage(list.nextCursor)"
+                    >
+                        {{ t.list.load_more }}
+                    </button>
+                </div>
             </li>
         </ul>
 

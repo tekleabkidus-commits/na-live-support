@@ -165,7 +165,7 @@ export function attachShortcuts(actions: ShortcutActions): () => void {
                 if (
                     el &&
                     el.closest(
-                        'button, a, select, [role="option"], [role="menuitem"], [role="listbox"], [role="dialog"]',
+                        'button, a, select, [role="option"], [role="menuitem"], [role="listbox"], [role="row"], [role="grid"], [role="dialog"]',
                     )
                 ) {
                     return;

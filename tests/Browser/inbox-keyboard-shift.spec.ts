@@ -10,11 +10,13 @@ import { expect, Page, test } from '@playwright/test';
  * interactions in the core loop" is proven by construction: this file
  * contains no click/hover/tap calls past login.
  *
- * The loop per ticket: J (activate the top row) → Enter (open) → I (claim,
- * the real door) → R (focus reply) → type → ⌘Enter (send) → Shift+Tab
- * (leave the input — E in a typing surface is rightly guarded) → E
- * (resolve). The resolved row leaves the open-family views; the loop eats
- * the whole pool.
+ * The loop per ticket: J (activate the top row) → O (open — Enter's twin
+ * on the map; after the first ticket, focus rests on a composer BUTTON
+ * where Enter rightly belongs to the button, §13 — O is the open binding
+ * for exactly this roaming posture) → I (claim, the real door) → R (focus
+ * reply) → type → ⌘Enter (send) → Shift+Tab (leave the input — E in a
+ * typing surface is rightly guarded) → E (resolve). The resolved row
+ * leaves the open-family views; the loop eats the whole pool.
  */
 
 const PASSWORD = 'browser-fixture-password';
@@ -108,6 +110,7 @@ test('SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve 
     let worked = 0;
     let guard = 0;
     let consecutiveSkips = 0;
+    const workedIds: string[] = [];
     // Each worked ticket restarts J at the top, re-walking Unassigned's
     // non-shift residents — the guard budgets those walks, and a full page
     // of consecutive skips means no shift row remains.
@@ -126,9 +129,23 @@ test('SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve 
         }
         consecutiveSkips = 0;
 
-        // Enter — open. I — claim through the real door.
-        await page.keyboard.press('Enter');
+        // O — open (see the header note: Enter would belong to the focused
+        // composer button from ticket 2 onward and the thread would never
+        // switch — the first fresh battery proved exactly that, sixty
+        // replies into one conversation). The composer must then show THIS
+        // ticket before the claim targets it.
+        await page.keyboard.press('o');
         await expect(page.getByTestId('composer')).toBeVisible();
+        // The thread must actually SHOW this ticket before the claim/reply
+        // target it — the print link carries the conversation id.
+        const conversationId = await page.evaluate(
+            (id) => String((window.__inboxList.row(id as string) ?? {}).conversation_id ?? ''),
+            active,
+        );
+        await expect(page.getByTestId('print-thread')).toHaveAttribute(
+            'href',
+            new RegExp(conversationId),
+        );
         await page.keyboard.press('i');
 
         // R — focus the reply box; type; ⌘Enter — send.
@@ -168,6 +185,7 @@ test('SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve 
             .toBe(false); // resolved → left the open-family view
 
         worked += 1;
+        workedIds.push(active);
     }
 
     expect(worked).toBe(SHIFT_SIZE);
@@ -184,4 +202,37 @@ test('SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve 
                 ).length,
     );
     expect(leftovers).toBe(0);
+
+    // THE RESOLVE LEG, NON-VACUOUS (advisor ruling 2026-08-13): the claim
+    // already removed each row from Unassigned, so the in-loop "row left the
+    // view" poll proved nothing about resolution — the first fresh battery
+    // passed it with all sixty tickets claimed and NOT resolved. The proof is
+    // now the server's own truth: every worked ticket's status is resolved AT
+    // THE DATABASE, the same physics that exposed the defect.
+    const resolvedRaw = execFileSync(
+        'docker',
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            '-f',
+            'docker/compose.dev.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'tinker',
+            '--execute',
+            `echo DB::connection("pgsql_platform")->table("tickets")->whereIn("id", json_decode('${JSON.stringify(
+                workedIds,
+            )}'))->where("status", "resolved")->count();`,
+        ],
+        { encoding: 'utf8' },
+    );
+    const resolvedCount = Number(resolvedRaw.trim().match(/\d+$/)?.[0] ?? '-1');
+    expect(
+        resolvedCount,
+        `worked ${worked} tickets but the database holds ${resolvedCount} resolved — the resolve leg did not land`,
+    ).toBe(SHIFT_SIZE);
 });

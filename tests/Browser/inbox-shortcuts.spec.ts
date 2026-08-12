@@ -448,8 +448,15 @@ test('§8 FIRST-RUN: the four coach marks show once, walk views→list→modes�
     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'modes');
     await page.getByTestId('coach-next').dispatchEvent('click');
     await expect(page.getByTestId('coach-card')).toHaveAttribute('data-step', 'palette');
+    // Armed BEFORE Done: the dismiss-forever write must SETTLE before the
+    // reload proves it — an immediate reload cancels the in-flight PATCH and
+    // the proof would race its own subject (the shared guard's idiom).
+    const dismissPersisted = page.waitForResponse(
+        (r) => r.url().includes('/inbox/prefs') && r.request().method() === 'PATCH',
+    );
     await page.getByTestId('coach-next').dispatchEvent('click'); // Done = dismissed forever
     await expect(page.getByTestId('coach-card')).toBeHidden();
+    await dismissPersisted;
 
     // Forever: a reload does not resurrect it.
     await page.reload();

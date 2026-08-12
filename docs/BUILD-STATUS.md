@@ -417,6 +417,81 @@ both truncated where the run was stopped for diagnosis).
   assertion), not on the environment. Step 13's acceptance stays
   conditional per the standing ruling.
 
+### STEP-13 COMPLETION, PART 2 — THE 2026-08-13 RULING EXECUTED (D1 + SS-01 + D2/A-36 + seeder self-heal)
+
+**D1 FIXED (product):** `liveList.hydrate`/`flushResort` now clear a lit
+`activeId` whose row left the view (presentation state does not survive
+its row), and `Workspace.currentTicketId()/currentConversationId()` fall
+back to the open thread when the lit row no longer exists — the code's own
+stated contract, now true. BR-01 half: a ticket action with NO target
+anywhere (no lit row, no open thread) toasts `inbox.shortcuts.no_target`
+(en+am registered) instead of silently returning — every dispatcher door
+(claim, resolve, assign/priority/tags/snooze palettes) rides the one
+`requireTarget` guard. Permission-gated silence is unchanged (N-19: hidden
+affordances stay hidden).
+
+**SS-01 STRENGTHENED (the authorized assertion change):** the shift loop
+ledgers every worked ticket id and the spec's terminal proof is now the
+server's own truth — all sixty ids `status = resolved` AT THE DATABASE
+(the same physics that exposed the defect). The in-loop row-left-the-view
+poll stays as pacing; it is no longer the proof. The corrected acceptance
+text ("claim→answer→RESOLVE proven") applies only when the battery of
+record carries this green.
+
+**D2 FIXED (product) — A-36 filed:** the ticket list converts from the
+literal §13 "listbox" to the **WAI-ARIA grid pattern** (rows `role="row"`
+with aria-selected + the roving tabindex; content in `role="gridcell"`
+cells, which lawfully hold the drawn checkbox/open controls; empty-state
+and load-more become rows; the Enter-yield selector in `lib/shortcuts.ts`
+learns the grid roles). Choice and reasoning in
+`ANSWERS-FROM-DOC-AUTHOR.md` A-36; **DESIGN-DEVIATIONS (S07, class-1
+technical necessity): B1-S02's list frame renders identically — the
+deviation is ARIA-semantic only (listbox/option → grid/row/gridcell),
+forced by WCAG 4.1.2 nested-interactive; drawn geometry, order, states
+untouched; proof = the axe sweep green + keyboard tests unchanged.**
+
+**SEEDER SELF-HEAL (ordered):** the ticket-scene fixtures heal their
+state every run instead of seeding once behind the "#4801 exists" guard —
+the step-9 window-refresh precedent extended to ticket status/assignee
+(details at the seeder).
+
+**THREE MORE FINDINGS FROM THE FIX-VERIFICATION RUNS (all corrected, all
+filed honestly):**
+
+- **The shift loop never switched threads after ticket 1** (found the
+  moment D1 made resolves real): from iteration 2 on, focus rests on a
+  composer BUTTON after Shift+Tab, where Enter rightly belongs to the
+  button (§13 native semantics) — so the loop's Enter never re-opened the
+  next thread, and in the OLD runs all sixty "answers" were sent into
+  ticket 1's conversation (an open ticket accepts replies; nothing
+  asserted the thread switched). **Honest correction extended: SS-01's
+  old green proved claims only — the answer leg landed in the wrong
+  thread from ticket 2 on, and the resolve leg no-oped.** The loop now
+  opens with O (the map's own open binding for roaming focus) and waits
+  for the thread's print link to carry the active row's conversation id
+  before acting. The strengthened spec then passed with the sixty-resolve
+  DB assertion green.
+- **The seeder's reindex loop was the §8 test's real killer — the
+  "environmental freeze" narrative for THAT test is superseded too:** the
+  loop walked EVERY ticket_list_items row (and every text message) on
+  EVERY seed, waiting on a Meilisearch task per document; it grew with
+  the shift seeder's accumulation to a measured **3m09s (356
+  task-waits)** — the §8 first-run test reseeds INSIDE its 30 s budget,
+  so it could never pass, locally or in CI (CI's "session closed" = the
+  teardown killing the browser at test timeout; the same mechanism
+  bloated Stage 4 to 5h22m and the earlier freeze-wave observations on
+  this dialog). Now bounded to the fixture scene (numbers < 4900) at
+  creation and DIRTY-DRIVEN afterwards (only healed tickets re-index —
+  their docs carry assignee/status scope keys): steady-state seed
+  **0.95 s** measured. The env-freeze-note's other observations stand;
+  this test's arbitration moves to the defect ledger.
+- **The §8 dismiss-forever proof raced its own subject:** the Done
+  click's prefs PATCH was still in flight when the spec reloaded to
+  prove persistence — the reload cancelled it and the card returned. The
+  spec arms a response waiter before Done and settles the write before
+  reloading (the shared guard's exact idiom). The §8 test then passed —
+  **its first pass in any environment** — in 2.7 s.
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced

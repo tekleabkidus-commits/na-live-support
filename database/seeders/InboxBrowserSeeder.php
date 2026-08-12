@@ -118,9 +118,23 @@ final class InboxBrowserSeeder extends Seeder
         //    ListProjector (recompute-from-truth — the browser rows are the
         //    projector's own rows, not hand-written fixtures). Idempotent on
         //    the marker customer. All synthetic (@fixture…, CLAUDE.md §8).
+        $sceneCreated = false;
         if (! DB::table('ticket_list_items')->where('number', 4801)->exists()) {
             $this->seedListScene($row->id, $agent);
+            $sceneCreated = true;
         }
+
+        // SELF-HEAL (advisor-ordered, 2026-08-13 — the step-9 window-refresh
+        // precedent extended to ticket STATE): specs legitimately consume
+        // scene fixtures through real doors (a resolve, a claim, a tag edit),
+        // and the once-only create above never repaired them — one stray
+        // resolve was enough to break every later spec's data assumptions on
+        // a fresh battery. Every seed now restores each scene ticket's
+        // canonical status/assignee/priority/tags and reprojects. The status
+        // write lives HERE, in fixture plumbing outside app/ — the
+        // ticket-status-writer gate and its structural twin police app code,
+        // and the R-20 trigger still stamps these updates like any other.
+        $healedTicketIds = $this->healListScene($agent);
 
         // CLOCK-BEARING fixture state decays between runs (a 45-minute
         // window seeded this morning is expired by lunch — the capture run
@@ -141,10 +155,26 @@ final class InboxBrowserSeeder extends Seeder
         // recomputeTicket path (deliberately) does not dispatch the indexer —
         // only the event-consuming path does — so browser fixtures feed the
         // index through the REAL job, synchronously (it waits on each
-        // Meilisearch task), on every seed. Upsert-idempotent (C-09 posture).
-        // Each conversation's TEXT messages index too (FR-25's message hits).
+        // Meilisearch task), upsert-idempotent (C-09 posture). Each scene
+        // conversation's TEXT messages index too (FR-25's message hits).
+        //
+        // BOUNDED + DIRTY-DRIVEN (2026-08-13): the loop used to walk EVERY
+        // ticket_list_items row on EVERY seed — it grew with the shift
+        // seeder's accumulation until one seed took 3m09s (measured; 356
+        // task-waits) and blew the browser suite's 30 s hook/test budgets —
+        // the §8 first-run test's in-test reseed could never fit, in any
+        // environment. The search specs query SCENE rows only, so: index the
+        // whole scene (number < 4900) once at creation, and afterwards only
+        // tickets the heal actually touched (their docs carry
+        // assignee/status scope keys, so a heal must re-index them).
+        $itemsQuery = DB::table('ticket_list_items');
+        if ($sceneCreated) {
+            $itemsQuery->where('number', '<', 4900);
+        } else {
+            $itemsQuery->whereIn('ticket_id', $healedTicketIds);
+        }
         /** @var list<object{ticket_id: string, conversation_id: string}> $items */
-        $items = DB::table('ticket_list_items')->get(['ticket_id', 'conversation_id'])->all();
+        $items = $itemsQuery->get(['ticket_id', 'conversation_id'])->all();
         foreach ($items as $item) {
             dispatch_sync(new \App\Jobs\Inbox\IndexSearchDocuments($row->id, $item->ticket_id));
             /** @var list<string> $messageIds */
@@ -185,6 +215,63 @@ final class InboxBrowserSeeder extends Seeder
 
         app(RlsSession::class)->clear();
         app(TenantContext::class)->clear();
+    }
+
+    /** @return list<string> the ticket ids whose state was actually repaired */
+    private function healListScene(User $agent): array
+    {
+        $projector = app(\App\Domain\Inbox\ReadModels\ListProjector::class);
+
+        /** @var array<int, array{status: string, assignee: string|null, priority: string, tags: string}> $canonical */
+        $canonical = [
+            4801 => ['status' => 'open', 'assignee' => $agent->identifier(), 'priority' => 'urgent', 'tags' => '{withdrawal,vip,telebirr}'],
+            4802 => ['status' => 'open', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'],
+            4803 => ['status' => 'open', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'],
+            4899 => ['status' => 'open', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'],
+            4830 => ['status' => 'open', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'],
+            4831 => ['status' => 'open', 'assignee' => $agent->identifier(), 'priority' => 'normal', 'tags' => '{}'],
+            4832 => ['status' => 'open', 'assignee' => $agent->identifier(), 'priority' => 'normal', 'tags' => '{}'],
+            4819 => ['status' => 'closed', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'],
+            4820 => ['status' => 'open', 'assignee' => $agent->identifier(), 'priority' => 'high', 'tags' => '{}'],
+        ];
+        foreach (range(1, 14) as $i) {
+            $canonical[4803 + $i] = ['status' => 'open', 'assignee' => null, 'priority' => 'normal', 'tags' => '{}'];
+        }
+
+        $healed = [];
+        foreach ($canonical as $number => $want) {
+            /** @var object{id: string, status: string, assignee_id: string|null, priority: string, tags: string|null}|null $ticket */
+            $ticket = DB::table('tickets')->where('number', $number)
+                ->first(['id', 'status', 'assignee_id', 'priority', 'tags']);
+            if ($ticket === null) {
+                continue; // scene variant without this row — nothing to heal
+            }
+            $drifted = $ticket->status !== $want['status']
+                || $ticket->assignee_id !== $want['assignee']
+                || $ticket->priority !== $want['priority']
+                || ($ticket->tags ?? '{}') !== $want['tags'];
+            if (! $drifted) {
+                continue;
+            }
+            DB::table('tickets')->where('id', $ticket->id)->update([
+                'status' => $want['status'],
+                'assignee_id' => $want['assignee'],
+                'priority' => $want['priority'],
+                'tags' => $want['tags'],
+            ]);
+            $projector->recomputeTicket($ticket->id);
+            $healed[] = $ticket->id;
+        }
+
+        // R1's hand-tuned projection columns (sentiment/SLA) do not survive a
+        // recompute — re-apply them whenever the row exists, same values as
+        // the scene's first seeding.
+        DB::table('ticket_list_items')->where('number', 4801)->update([
+            'sentiment' => 'negative', 'sla_state' => 'breached',
+            'sla_due_at' => DB::raw("clock_timestamp() - interval '12 minutes'"),
+        ]);
+
+        return $healed;
     }
 
     private function seedListScene(string $tenantId, User $agent): void

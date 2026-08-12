@@ -403,6 +403,9 @@ return [
         'layout_note' => 'Keys follow the physical US layout; remapping arrives later.',
         'action_refused' => 'That action was refused (:reason).',
         'already_claimed' => 'Someone claimed this ticket first.',
+        // D1 (2026-08-13): a ticket action with nothing to act on says so —
+        // BR-01, the inbox never lies by silence.
+        'no_target' => 'No ticket is selected or open to act on.',
     ],
     // §8 first-run (step 13): the four coach marks, drawn in B1-S03.
     'coach' => [

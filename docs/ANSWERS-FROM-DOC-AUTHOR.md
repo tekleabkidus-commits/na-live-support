@@ -1383,3 +1383,48 @@ indicators are SESSION-LOCAL — the same designed degrade posture as the
 prefs rider: silent, zero error spam. The UI verification of that posture
 rides the step-10 thread surfaces (thread-open is the marker's first
 caller).
+
+### A-36 (ADVISOR-RULED at the S07 step-13 completion, 2026-08-13). §13's "listbox" for the ticket list yields to the GRID pattern — class-1 technical necessity (WCAG 4.1.2)
+
+**The conflict.** Doc 07 §13 (and the step-9 deferral note) name the ticket
+list a *listbox* with roving tabindex. The step-13 landing implemented it
+literally: `role="listbox"` rows as `role="option"`. The moment the coach
+guard let the layout axe sweep actually run, axe failed it **serious, WCAG
+4.1.2 (nested-interactive)**: an option may not contain interactive
+children AT ALL — negative tabindex on the inner checkbox/open-button does
+not exempt them from assistive-tech focus — and the drawn row carries both
+a selection checkbox and an open control. This is the exact constraint the
+step-9 deferral note itself named ("an option may not contain
+tab-reachable interactive children"); the literal listbox cannot hold it.
+
+**The choice: GRID (rows/gridcells), row-focus model — not
+aria-activedescendant.** Two standard resolutions exist. (1)
+`aria-activedescendant` keeps `role="option"` but requires hoisting every
+interactive child out of the option; it also moves DOM focus to the
+container, which breaks the §13 focus policy this workspace proved (the
+roving test asserts `document.activeElement` IS the active row) and
+degrades the drawn per-row controls. (2) The **WAI-ARIA APG grid pattern**:
+container `role="grid"`, rows `role="row"` (aria-selected is lawful on a
+grid row), row content in `role="gridcell"` cells, which lawfully contain
+widgets. The grid preserves the document's INTENT exactly — one tab stop,
+J/K roving focus with arrows mirroring, visible selection, every control
+keyboard-reachable (X selects, Enter/O opens, the inner controls stay out
+of the tab order) — and the existing keyboard tests pass unchanged.
+**Grid is the ruling's choice.**
+
+**Scope of the edit:** `Row.vue` (`option`→`row`; the content wrapper and
+claimed-flash become `gridcell`; the mid-gesture swipe zone is
+`presentation`), `ListPane.vue` (`listbox`→`grid`; the empty-state and
+load-more rows become row/gridcell so the grid's required-children
+contract holds), `lib/shortcuts.ts` (the Enter-yield selector learns
+`[role="row"]`/`[role="grid"]` so Enter on a focused row stays the row's
+own binding, exactly as it was for options). The `t.list.listbox_label`
+i18n KEY name is retained (its value is the accessible name and is
+unchanged); renaming the key would churn both language files for zero
+user-visible effect.
+
+**Proof obligations (per the ruling):** the layout axe sweep RUNNING GREEN
+on the converted list, plus the existing keyboard/roving/selection tests
+unchanged, in the step-13 consolidated battery of record. Filed as a
+class-1 technical-necessity deviation in DESIGN-DEVIATIONS (document word
+yields to markup validity).
