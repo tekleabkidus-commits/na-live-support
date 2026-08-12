@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 12 — FR-08 + FR-06's rail behaviors (B1-S03): keyboard reorder
@@ -56,6 +57,7 @@ async function openInbox(page: Page, query = ''): Promise<void> {
     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
     await page.setViewportSize(V1440);
     await page.goto('/inbox' + query);
+    await dismissCoachMarks(page);
     await expect(page.getByTestId('views-rail')).toBeVisible();
 }
 

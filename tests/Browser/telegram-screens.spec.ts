@@ -51,6 +51,10 @@ function artisan(...args: string[]): void {
 }
 
 test.beforeAll(() => {
+    // Self-seeding (advisor ruling, 2026-08-12): TelegramBrowserSeeder throws
+    // 'Run BrowserFixtureSeeder first' on a fresh DB — seed the base fixtures
+    // here instead of assuming an earlier file did.
+    artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
     artisan('db:seed', '--class=Database\\Seeders\\TelegramBrowserSeeder', '--force');
 });
 

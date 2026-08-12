@@ -1,0 +1,28 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      0f-lockout-inisolation-RESTORED
+# set:        S07-step13
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Auth/LockoutTest.php
+# started:    2026-08-12T21:00:19Z
+# git:        ef3ace0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\LockoutTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives the generic message for failures 1 to 4 and does not lock[39m[90m… [39m [90m7.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit locks the account on the 5th failure (AC-02)[39m[90m                     [39m [90m2.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the CORRECT password while locked, without saying it is[39m[90m… [39m [90m2.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every lockout transition (AC-02: admin unlock audited, an[39m[90m…[39m [90m2.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rolls the window: failures older than auth.lockout.window do not[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit expires the lock after auth.lockout.duration without anyone inte[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit counts a failed attempt against EVERY candidate account for that[39m[90m…[39m [90m2.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a victim always unlock via password reset, per account (EC-[39m[90m…[39m [90m2.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the EC-11 captcha threshold setting even though no ven[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throttles per IP independently of any account, including address[39m[90m…[39m [90m6.88s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (59 assertions)[39m
+  [90mDuration:[39m [39m26.19s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-12T21:00:47Z
+# duration:   28s
+# EXIT:       0

@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * FR-09 — the row anatomy (S07 step 9), against rows the REAL ListProjector
@@ -70,6 +71,7 @@ test('FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
 
     const row = page.locator('[data-ticket]', { hasText: 'አበበ ታደሰ' });
     await expect(row).toBeVisible();
@@ -98,6 +100,7 @@ test('FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key)
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page.locator('[data-view="unassigned"]').first().click();
 
     const kidist = page.locator('[data-ticket]', { hasText: 'Kidist Haile' });
@@ -127,6 +130,7 @@ test('FR-10: the sort override reorders (priority serves urgent first) and PERSI
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page.locator('[data-view="unassigned"]').first().click();
     // Unassigned-only content proves the switch LANDED (the refetch is async).
     await expect(page.locator('[data-ticket]', { hasText: 'Kidist Haile' })).toBeVisible();
@@ -152,6 +156,7 @@ test('FR-10: the sort override reorders (priority serves urgent first) and PERSI
     await login(page2);
     await page2.setViewportSize(V1440);
     await page2.goto('/inbox');
+    await dismissCoachMarks(page2);
     await page2.locator('[data-view="unassigned"]').first().click();
     await expect(page2.getByTestId('sort-select')).toHaveValue('priority');
 

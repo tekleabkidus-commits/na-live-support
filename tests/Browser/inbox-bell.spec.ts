@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 12 — FR-26's bell UI: the badge (server count), the dropdown rows
@@ -57,6 +58,7 @@ async function openInbox(page: Page): Promise<void> {
     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await expect(page.getByTestId('views-rail')).toBeVisible();
 }
 

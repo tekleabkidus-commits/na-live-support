@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * FR-11 / AC-03 / B12-A01 AC-04 (S07 step 9): SCRIPTED DELTA STREAMS —
@@ -66,6 +67,7 @@ async function openUnassigned(page: Page): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page.locator('[data-view="unassigned"]').first().click();
     // Unassigned-only content proves the switch LANDED (the refetch is async).
     await expect(page.locator('[data-ticket]', { hasText: 'Kidist Haile' })).toBeVisible();

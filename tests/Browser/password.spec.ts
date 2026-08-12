@@ -38,6 +38,26 @@ const RESET_PASSWORD_NEW = `A-Browser-Chosen-${RUN_STAMP}`;
 const CHANGE_PASSWORD_NEW = `A-Mid-Shift-${RUN_STAMP}`;
 const INVITE_PASSWORD_NEW = `An-Invitees-Own-${RUN_STAMP}`;
 
+function seedFixtures(): void {
+    // Self-seeding (advisor ruling, 2026-08-12): the fresh-DB battery proved
+    // this spec had assumed ANOTHER file's beforeAll (or CI's pre-suite seed
+    // step) had already created the fixture users. Idempotent, so repeated
+    // runs across files are free.
+    execFileSync('docker', [
+        'compose',
+        '-f',
+        'docker/compose.yaml',
+        'exec',
+        '-T',
+        'app',
+        'php',
+        'artisan',
+        'db:seed',
+        '--class=Database\\Seeders\\BrowserFixtureSeeder',
+        '--force',
+    ]);
+}
+
 function inspect(...args: string[]): string {
     return execFileSync(
         'docker',
@@ -174,6 +194,10 @@ async function resetPasswordVia(
     await requester.dispose();
     await redeemer.dispose();
 }
+
+test.beforeAll(() => {
+    seedFixtures();
+});
 
 test.describe('password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02)', () => {
     test.describe.configure({ mode: 'serial' });

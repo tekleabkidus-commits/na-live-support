@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * FR-12's second half (S07 step 9): scroll-position restoration on
@@ -61,6 +62,7 @@ test('FR-12: the list position survives back-navigation — scroll deep, leave, 
     await login(page);
     await page.setViewportSize({ width: 1440, height: 700 }); // force overflow
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page.locator('[data-view="unassigned"]').first().click();
     await expect(page.locator('[data-ticket]').first()).toBeVisible();
 

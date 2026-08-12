@@ -56,6 +56,30 @@ async function expectAxeClean(page: Page, context: string): Promise<void> {
     ).toEqual([]);
 }
 
+function seedFixtures(): void {
+    // Self-seeding (advisor ruling, 2026-08-12): the fresh-DB battery proved
+    // this spec had assumed ANOTHER file's beforeAll (or CI's pre-suite seed
+    // step) had already created the fixture users. Idempotent, so repeated
+    // runs across files are free.
+    execFileSync('docker', [
+        'compose',
+        '-f',
+        'docker/compose.yaml',
+        'exec',
+        '-T',
+        'app',
+        'php',
+        'artisan',
+        'db:seed',
+        '--class=Database\\Seeders\\BrowserFixtureSeeder',
+        '--force',
+    ]);
+}
+
+test.beforeAll(() => {
+    seedFixtures();
+});
+
 test.describe('AC-08 — UI parity with verdicts', () => {
     test('Super Admin sees the mutating controls; Read Only sees NONE of them, on the same screens', async ({
         browser,

@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 10 — the thread. THE FIRST TEST IS DOC 05 AC-07's CLOSING PROOF
@@ -70,6 +71,7 @@ async function openThreadFixture(page: Page): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page
         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
         .locator('[data-role="row-open"]')
@@ -250,6 +252,7 @@ test('THE R-26 FOURTH-SIBLING CONSEQUENCE (countersign verify): Read Only opens 
     await login(page, READ_ONLY_EMAIL);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
 
     // Read Only reads the workspace; open the visible thread.
     const refusal = page.waitForResponse(

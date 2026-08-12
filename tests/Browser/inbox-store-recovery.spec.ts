@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 13 — FS-05: client-store corruption recovers to a working session,
@@ -91,6 +92,7 @@ async function openThread(page: Page, rowText: string): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page
         .locator('[data-ticket]', { hasText: rowText })
         .locator('[data-role="row-open"]')
@@ -104,6 +106,7 @@ test('FS-05: an unparseable session store on load AUTO-RECOVERS — the schema g
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await expect(page.locator('[data-ticket]').first()).toBeVisible();
 
     // Corrupt the session store the way a half-written deploy-skew write

@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 11 — the composer. AC-05's HEURISTIC: 50 scripted reply-intent
@@ -68,6 +69,7 @@ async function openThread(page: Page, rowText: string, view: string | null = nul
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     if (view !== null) {
         await page.locator(`[data-view="${view}"]`).first().click();
     }

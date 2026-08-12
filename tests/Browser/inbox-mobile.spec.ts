@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * B1-S01 — the FR-02 breakpoint ladder below 1280 (S07 step 8):
@@ -71,6 +72,7 @@ test('FR-02 @ 1024–1279: R4 is an overlay drawer, not a fixed panel', async ({
     await login(page);
     await page.setViewportSize({ width: 1100, height: 800 });
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
 
     await expect(page.getByTestId('context-region')).toHaveCount(0);
     const toggle = page.getByTestId('context-drawer-toggle');
@@ -87,6 +89,7 @@ test('FR-02 @ 768–1023: the rail is icons PERMANENTLY — the collapse control
     await login(page);
     await page.setViewportSize({ width: 900, height: 800 });
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
 
     const rail = page.getByTestId('views-rail');
     await expect(rail).toHaveAttribute('data-collapsed', 'true');
@@ -104,6 +107,7 @@ for (const theme of ['light', 'dark'] as const) {
         await page.setViewportSize({ width: 375, height: 812 });
         await setTheme(page, theme);
         await page.goto('/inbox');
+        await dismissCoachMarks(page);
 
         // Level 1: the list screen; no thread on screen.
         await expect(page.getByTestId('list-region')).toBeVisible();

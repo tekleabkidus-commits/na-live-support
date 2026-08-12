@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 13 — FR-29/FR-30/EC-07/EC-08 + AC-07's OFFLINE GOLDEN.
@@ -95,6 +96,7 @@ async function openThread(page: Page, rowText: string): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page
         .locator('[data-ticket]', { hasText: rowText })
         .locator('[data-role="row-open"]')

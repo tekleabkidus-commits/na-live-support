@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 12 — ⌘K command palette (FR-23/24/25) + the Rescue view (Doc 05
@@ -61,6 +62,7 @@ async function openInbox(page: Page): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await expect(page.getByTestId('views-rail')).toBeVisible();
 }
 

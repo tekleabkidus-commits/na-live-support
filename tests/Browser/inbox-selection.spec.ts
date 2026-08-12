@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * FR-13 + EC-02 (S07 step 9): checkbox toggle, shift-range, "select all in
@@ -62,6 +63,7 @@ async function openUnassigned(page: Page): Promise<void> {
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await page.locator('[data-view="unassigned"]').first().click();
     // Unassigned-only content proves the switch LANDED (the refetch is async).
     await expect(page.locator('[data-ticket]', { hasText: 'Kidist Haile' })).toBeVisible();

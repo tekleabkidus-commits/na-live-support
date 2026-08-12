@@ -50,6 +50,14 @@ async function expectAxeClean(page: Page, context: string): Promise<void> {
     ).toEqual([]);
 }
 
+test.beforeAll(() => {
+    // Self-seeding (advisor ruling, 2026-08-12): DeadLetterBrowserSeeder
+    // throws 'Run BrowserFixtureSeeder first' on a fresh DB — the fixture
+    // tenant and users must be this file's own responsibility, not an
+    // accident of which spec ran earlier.
+    artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
+});
+
 test.describe('FS-05 — parked list + re-drive', () => {
     test('operator sees the parked item with its full payload and re-drives it through the confirmation', async ({
         page,

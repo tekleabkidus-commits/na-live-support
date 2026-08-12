@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * B1-S01 — the inbox shell at desktop (S07 step 8).
@@ -82,6 +83,7 @@ for (const theme of ['light', 'dark'] as const) {
         await page.setViewportSize(V1440);
         await setTheme(page, theme);
         await page.goto('/inbox');
+        await dismissCoachMarks(page);
 
         // The four regions (FR-01 at ≥1280).
         await expect(page.getByTestId('views-rail')).toBeVisible();
@@ -158,6 +160,7 @@ test('§9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures 
 
     // Without the seam override: tabs render, order fixed, no dots.
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     const tabs = page.getByRole('tab');
     await expect(tabs).toHaveText(['Ticket', 'Customer', 'Copilot']);
     await expect(page.getByTestId('badge-customer')).toHaveCount(0);
@@ -185,6 +188,7 @@ test('AC-01: rail collapse, list width (keyboard resize — §13) and density pe
     await login(page);
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
 
     // Collapse the rail (56 px icons).
     await page.getByTestId('rail-collapse').click();
@@ -264,6 +268,10 @@ test('THE COUNTERSIGNED PREFS RIDER: Read Only degrades to session-local prefs �
     const refusal = page.waitForResponse(
         (r) => r.url().includes('/inbox/prefs') && r.status() === 403,
     );
+    // Guard AFTER the waiter is armed: the Read Only coach dismissal is
+    // itself a prefs write, so its designed 403 is the first one the store
+    // swallows — the waiter catches whichever prefs write refuses first.
+    await dismissCoachMarks(page);
     await page.getByTestId('profile-menu').click();
     await page.getByTestId('density-compact').click();
     await refusal;

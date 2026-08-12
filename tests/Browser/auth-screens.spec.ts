@@ -31,6 +31,26 @@ const DEAD_TOKEN = '0'.repeat(64);
 test.use({ viewport: { width: 360, height: 740 } }); // §9 ≥320 px / NFR-05
 test.describe.configure({ mode: 'serial' });
 
+function seedFixtures(): void {
+    // Self-seeding (advisor ruling, 2026-08-12): the fresh-DB battery proved
+    // this spec had assumed ANOTHER file's beforeAll (or CI's pre-suite seed
+    // step) had already created the fixture users. Idempotent, so repeated
+    // runs across files are free.
+    execFileSync('docker', [
+        'compose',
+        '-f',
+        'docker/compose.yaml',
+        'exec',
+        '-T',
+        'app',
+        'php',
+        'artisan',
+        'db:seed',
+        '--class=Database\\Seeders\\BrowserFixtureSeeder',
+        '--force',
+    ]);
+}
+
 function inspect(...args: string[]): string {
     return execFileSync(
         'docker',
@@ -149,6 +169,7 @@ async function actionLinkFor(
 let recoveryCodes: string[] = [];
 
 test.beforeAll(() => {
+    seedFixtures();
     inspect('clear-2fa', `--email=${TWO_FACTOR_EMAIL}`);
 });
 

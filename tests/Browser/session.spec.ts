@@ -36,6 +36,26 @@ const HINT_COOKIE = 'na_tenant_hint';
  * `auth:session-inspect` is the test-only affordance that answers both; it
  * refuses to run outside local/testing/ci.
  */
+function seedFixtures(): void {
+    // Self-seeding (advisor ruling, 2026-08-12): the fresh-DB battery proved
+    // this spec had assumed ANOTHER file's beforeAll (or CI's pre-suite seed
+    // step) had already created the fixture users. Idempotent, so repeated
+    // runs across files are free.
+    execFileSync('docker', [
+        'compose',
+        '-f',
+        'docker/compose.yaml',
+        'exec',
+        '-T',
+        'app',
+        'php',
+        'artisan',
+        'db:seed',
+        '--class=Database\\Seeders\\BrowserFixtureSeeder',
+        '--force',
+    ]);
+}
+
 function inspect(...args: string[]): string {
     return execFileSync(
         'docker',
@@ -126,6 +146,10 @@ async function cookieValue(ctx: APIRequestContext, name: string): Promise<string
     const { cookies } = await ctx.storageState();
     return cookies.find((c) => c.name === name)?.value;
 }
+
+test.beforeAll(() => {
+    seedFixtures();
+});
 
 test.describe('session lifecycle (Doc 02 SEC-04, T-04, Q7)', () => {
     // SERIAL, and not for speed. These tests share global state by nature —

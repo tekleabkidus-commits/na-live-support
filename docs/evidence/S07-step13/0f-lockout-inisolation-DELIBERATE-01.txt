@@ -1,0 +1,45 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      0f-lockout-inisolation-DELIBERATE
+# set:        S07-step13
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Auth/LockoutTest.php
+# started:    2026-08-12T20:59:30Z
+# git:        ef3ace0 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+0f RUNG-1 SNAPSHOT v2/LOCKOUT (failure-time): auth-ip buckets {"203.0.113.5":"2","203.0.113.198":"1","203.0.113.179":"1","203.0.113.89":"1","203.0.113.59":"1","203.0.113.196":"1","203.0.113.105":"1","203.0.113.97":"1","203.0.113.222":"1","203.0.113.122":"1","203.0.113.237":"1","203.0.113.124":"1","203.0.113.24":"1","203.0.113.160":"1","203.0.113.216":"1","203.0.113.53":"2","203.0.113.162":"1","203.0.113.215":"1","203.0.113.90":"1","203.0.113.193":"1","203.0.113.64":"1","203.0.113.186":"1","203.0.113.250":"1","203.0.113.227":"1","203.0.113.33":"1","203.0.113.50":"1","203.0.113.93":"1","203.0.113.30":"1","203.0.113.136":"1","198.51.100.16":"20"} | live volatile keys: 0 | []
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\LockoutTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives the generic message for failures 1 to 4 and does not lock[39m[90m… [39m [90m8.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit locks the account on the 5th failure (AC-02)[39m[90m                     [39m [90m2.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the CORRECT password while locked, without saying it is[39m[90m… [39m [90m2.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every lockout transition (AC-02: admin unlock audited, an[39m[90m…[39m [90m2.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rolls the window: failures older than auth.lockout.window do not[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit expires the lock after auth.lockout.duration without anyone inte[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit counts a failed attempt against EVERY candidate account for that[39m[90m…[39m [90m2.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a victim always unlock via password reset, per account (EC-[39m[90m…[39m [90m2.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the EC-11 captcha threshold setting even though no ven[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit throttles per IP independently of any account, including address[39m[90m…[39m [90m7.24s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\LockoutTest[22m [90m>[39m it throttl… [41;1m AssertionFailedError [49;22m  
+[39;1m  0f rung-1 DELIBERATE in-isolation failure — instrumentation proof only[39;22m
+
+  at [32mtests/Feature/Auth/LockoutTest.php[39m:[32m384[39m
+    380▕ 
+    381▕     // 0f RUNG-1 DELIBERATE FAILURE (temporary — removed after the capture):
+    382▕     // proves the failure-time snapshot fires and dumps the ACTUAL suspect
+    383▕     // auth-ip buckets for this file's minted addresses.
+  ➜ 384▕     $this->fail('0f rung-1 DELIBERATE in-isolation failure — instrumentation proof only');
+    385▕ });
+    386▕
+
+  [33m1   [39m[39;1mtests/Feature/Auth/LockoutTest.php[39;22m:[39;1m384[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m9 passed[39;22m[90m (60 assertions)[39m
+  [90mDuration:[39m [39m26.78s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-12T20:59:59Z
+# duration:   29s
+# EXIT:       1

@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * S07 step 12 — FR-24's in-view filter bar: chips COMPOSE WITHIN the current
@@ -55,6 +56,7 @@ async function openInbox(page: Page): Promise<void> {
     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
     await page.setViewportSize(V1440);
     await page.goto('/inbox');
+    await dismissCoachMarks(page);
     await expect(page.getByTestId('views-rail')).toBeVisible();
 }
 

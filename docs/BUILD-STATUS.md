@@ -295,6 +295,128 @@ applied at the second resume):**
   relaunch cycle. **Step 13's acceptance stays CONDITIONAL on that
   green per the advisor's own words.**
 
+### STEP-13 COMPLETION UNDER THE 2026-08-12 MID-BATTERY RULING (executed 2026-08-12/13) — REPAIRS LANDED; BATTERY BLOCKED ON TWO NEW REAL DEFECTS; STOPPED PER CONDITION 1
+
+**The heal worked; the battery ran and went red — twice, identically.**
+The re-armed DockerHeal task fired, `make fresh` rebuilt from zero, and
+the consolidated battery executed: Pest full suite, canonical suites,
+gates 13/13, container PHPStan max + Pint all GREEN
+(`consolidated-make-test-01/-02.txt`, `consolidated-canonical-suites-01/-02.txt`,
+`consolidated-gates-01/-02.txt`, `consolidated-container-*-01/-02.txt`);
+the browser suite went RED with mass 30-s timeouts
+(`consolidated-playwright-inbox-01/-02.txt` — the batteries of record,
+both truncated where the run was stopped for diagnosis).
+
+- **THE SUPERSEDING CORRECTION (advisor-ruled, same discipline as the
+  step-10 "snapshot silent" sentence):** the earlier
+  "coach-marks freeze = environmental" bisection is **SUPERSEDED on the
+  record**. The arbitration resolves as **A REAL DEFECT IN THE TEST
+  SPECS, not the product**: the §8 coach-marks modal (`fixed inset-0
+  z-50` backdrop) opens on every fresh profile, and
+  `InboxBrowserSeeder` wipes `inbox_user_prefs` on every run — so each
+  spec file's `beforeAll` brings the marks back, and every workspace
+  click underneath times out (`coach-backdrop … intercepts pointer
+  events`, the literal Playwright log). Only
+  inbox-keyboard-shift/-mobile-interactions/-shortcuts carried a
+  dismissal guard. **The per-spec greens without the guard had ridden
+  CARRIED STATE** — a long-lived dev DB whose fixture users had already
+  dismissed the marks: inbox-bell, -composer, -filter-bar, -layout,
+  -list, -live-list, -mobile, -offline, -palette, -scroll-restore,
+  -selection, -status, -store-recovery, -thread, -views are named as
+  such. Likewise auth-screens, dead-letters, password, rbac, session
+  and telegram-screens had assumed users seeded by ANOTHER file (or by
+  CI's pre-suite seed step — `ci.yml` seeds `BrowserFixtureSeeder`
+  before Playwright; `make fresh` seeds nothing): carried order, not
+  self-contained proofs. The `env-freeze-note.md` WSL observations
+  stand as environment record, but the coach-test arbitration lands on
+  the spec-defect side.
+- **CI VERDICT on `ef3ace0` (run
+  [31592356644](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31592356644),
+  taken once):** Stages 1–3b GREEN (the InboxShiftSeeder PHPStan fix
+  held; the 0f rung-1 v2/LOCKOUT instrumentation rode a green Stage 3).
+  **Stage 4 browser RED in 5h22m: 59 failed / 82 passed, with 720
+  occurrences of `coach-backdrop … intercepts pointer events`** — the
+  independent confirmation of the spec-defect arbitration, read and
+  filed per the ruling's own prediction. auth-screens/dead-letters/
+  password/rbac/session/telegram passed there (CI's pre-suite seed
+  masks the order assumption locally exposed). One CI-only oddity:
+  shortcuts:425 (the §8 walk) died on a renderer "session closed"
+  protocol error late in the 5-hour run — an exhausted-runner symptom,
+  superseded by the next push's run.
+- **THE AUTHORIZED SETUP-ONLY REPAIRS (landed this commit):** a shared
+  guard `tests/Browser/support/coach.ts` (the exact idiom the three
+  guarded specs already carried, plus an armed-before-click wait that
+  settles the guard's own prefs PATCH so a test's later prefs-PATCH
+  waiter can never catch the wrong write; placed AFTER the countersign
+  rider's armed 403 waiter so its designed refusal proof still fires),
+  applied at every workspace entry of the 15 affected inbox specs; and
+  self-seeding `beforeAll`s (idempotent `BrowserFixtureSeeder`, plus
+  each file's own seeder) in auth-screens, dead-letters, password,
+  rbac, session, telegram-screens. **148 insertions, 0 deletions — the
+  diff is pure additions; assertions byte-untouched, verified by
+  `git diff` shape.** ESLint + vue-tsc clean. Smoke on the live stack:
+  dead-letters 3/3, bell 3/3, views, and the layout rider all green
+  under the repairs (14/16 — the two reds are Discovery 2 below, a
+  REAL violation the guard un-masked).
+- **DISCOVERY 1 — REAL PRODUCT DEFECT (stop-condition invoked): ticket
+  actions silently no-op on a stale active row.**
+  `stores/inbox/liveList.ts` replaces `rows` wholesale on refetch and
+  never repairs `activeId` when its row leaves the view;
+  `Workspace.vue`'s `currentConversationId()` then finds
+  `rows[activeId]` undefined and returns **null** instead of falling
+  back to the open thread — so after a keyboard I-claim from Unassigned
+  (the claim-refetch drops the row), **E/A/P/T/S dispatch to a silent
+  early-return**: no request, no toast, no error. This contradicts the
+  code's own stated semantics ("the ACTIVE LIST ROW when one is lit,
+  else the open thread's ticket") and breaks US-01's core loop at the
+  resolve leg. **Database physics as evidence:** after the -02 battery,
+  all 60 shift tickets sit `open` + assigned — zero resolves landed
+  (`ticket_list_items`, counted). **Honest correction to SS-01's
+  acceptance:** the keyboard-shift spec's per-ticket resolve proof is
+  VACUOUS — the claim has already removed the row from the unassigned
+  order, so the "row left the view" poll passes with no resolve at
+  all; the 29.7 s "60/60" green (`keyboard-shift-run-02.txt`) proved
+  claims + replies, **NOT resolves**. SS-01/US-01's
+  claim→answer→resolve is therefore **claims+answers proven, resolve
+  leg UNPROVEN and currently broken keyboard-only.** Consequence
+  chain, which IS the remaining battery red: 60 claimed-unresolved
+  rows fill My Open's entire first page (cursor limit 50, newest
+  activity first), the FR-09 fixture row lands on page 2, and
+  inbox-list:67 reds with "element(s) not found" — the exact signature
+  in CI Stage 4 and both local batteries. **The fix requires product
+  code (repair/clear `activeId` on refetch, or fall back when the lit
+  row no longer exists) AND a non-vacuous resolve assertion — both
+  outside the setup-only authorization → STOPPED, escalated to the
+  advisor per condition 1.**
+- **DISCOVERY 2 — REAL §13 DEFECT, un-masked by the guard:** with the
+  coach modal dismissed, inbox-layout's axe sweep finally RUNS on the
+  step-13 listbox conversion and fails **serious WCAG 4.1.2
+  (nested-interactive)**: the row checkbox and controls are interactive
+  children nested inside `role="option"` rows. The §13 listbox
+  deferral's landing was keyboard-tested but its axe sweep had never
+  executed post-conversion (the freeze always hit first). Product
+  markup fix → escalated with Discovery 1.
+- **Fixture-consumption risk (filed, no action demanded):** the
+  seeder's ticket scene is guarded by "#4801 exists" and never heals
+  ticket state, while passing specs legitimately consume fixtures
+  through real doors (#4802 sits resolved on the current DB). On a
+  single clean battery the alphabetical order holds the assumptions
+  together; it is one stray resolve away from not holding. Flagged for
+  the advisor alongside the discoveries.
+- **0f RUNG-1 IN-ISOLATION PROOF — DELIVERED (the owed item):**
+  LockoutTest run alone with a deliberate failure appended to the
+  per-IP test; the failure-time snapshot FIRED and dumped the ACTUAL
+  suspect buckets — every ledgered address with its live attempt count,
+  the per-IP test's dedicated address at its exhausted budget (20), and
+  the capped volatile keyspace
+  (`0f-lockout-inisolation-DELIBERATE-01.txt`); the deliberate failure
+  removed (file byte-identical to HEAD), re-run green 10/10
+  (`0f-lockout-inisolation-RESTORED-01.txt`).
+- **THE GREEN BATTERY OF RECORD REMAINS OWED**, now blocked on the
+  advisor's ruling on Discoveries 1–2 (product fixes + one non-vacuous
+  assertion), not on the environment. Step 13's acceptance stays
+  conditional per the standing ruling.
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
