@@ -88,6 +88,7 @@ function lockoutStateOf(string $email): object
 function attemptLogin(string $email, string $password, ?string $ip = null): Illuminate\Testing\TestResponse
 {
     $ip ??= sprintf('203.0.113.%d', random_int(2, 250));
+    lockoutIpLedger($ip); // 0f rung 1: every attempted address is on the ledger
 
     return test()
         ->withServerVariables(['REMOTE_ADDR' => $ip])
@@ -96,6 +97,54 @@ function attemptLogin(string $email, string $password, ?string $ip = null): Illu
             'password' => $password,
         ]);
 }
+
+/**
+ * RISK 0f LADDER, RUNG 1 — EXTENDED TO THIS FILE (advisor ruling at the S07
+ * step-13 checkpoint, 2026-08-12, on sighting G: run 31573187355's re-run went
+ * red on THIS file's per-IP test with an early 429, and the v2 snapshot in
+ * PasswordResetFlowTest could not see it — its suspect bucket is hardcoded to
+ * 127.0.0.1 while this file mints random per-test addresses).
+ *
+ * The ledger records every address attemptLogin uses, so the failure-time
+ * snapshot below can ask the RateLimiter for THE ACTUAL suspect buckets — the
+ * bleed-vs-product-write discriminator sighting G lacked. Diagnostics only.
+ *
+ * @return list<string>
+ */
+function lockoutIpLedger(?string $record = null): array
+{
+    static $ips = [];
+    if ($record !== null) {
+        $ips[$record] = true;
+    }
+
+    return array_keys($ips);
+}
+
+afterEach(function (): void {
+    if (! $this->status()->isSuccess()) {
+        $limiter = app(Illuminate\Cache\RateLimiter::class);
+        $buckets = [];
+        foreach (lockoutIpLedger() as $ip) {
+            $buckets[$ip] = $limiter->attempts(md5('auth-ip'.$ip));
+        }
+        $redis = Illuminate\Support\Facades\Redis::connection('volatile');
+        /** @var list<string> $keys */
+        $keys = $redis->keys('*');
+        $live = [];
+        foreach ($keys as $key) {
+            $ttl = (int) $redis->ttl($key);
+            if ($ttl >= 0) { // live keys only — expired residue is noise, not evidence
+                $live[$key] = $ttl;
+            }
+        }
+        $total = count($live);
+        $shown = array_slice($live, 0, 200, true); // capped, and the cap is SAID (no silent truncation)
+        fwrite(STDERR, "\n0f RUNG-1 SNAPSHOT v2/LOCKOUT (failure-time): auth-ip buckets ".json_encode($buckets)
+            .' | live volatile keys: '.$total.(count($shown) < $total ? ' (first 200 shown)' : '')
+            .' | '.json_encode($shown)."\n");
+    }
+});
 
 /*
 |--------------------------------------------------------------------------

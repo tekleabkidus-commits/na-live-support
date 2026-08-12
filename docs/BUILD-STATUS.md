@@ -247,6 +247,54 @@ captured honestly: `offline-run-01…02`, `store-recovery-run-01…04`,
 `ci-31573187355-stage1-failed-01.txt`,
 `ci-31573187355-rerun-stage3-01.txt` (0f sighting G).
 
+**THE STEP-13 CHECKPOINT CONDITIONS (advisor rulings of 2026-08-12,
+applied at the second resume):**
+
+- **CI verdict on `4a2b42d` (run
+  [31588533235](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31588533235),
+  taken once): RED at Stage 1 — A REAL DEFECT, MINE.** PHPStan max:
+  `InboxShiftSeeder.php:59 Cannot cast mixed to int`
+  (`ci-31588533235-stage1-01.txt`). The final container PHPStan was
+  exactly what the WSL death interrupted — CI caught what the
+  interrupted battery would have. FIXED (is_numeric guard), host
+  PHPStan + Pint green on the fix. Stages 2–7 skipped, so **the
+  coach-marks arbitration did NOT run — it moves to the fix commit's
+  run** (owed forward, taken once at the next checkpoint).
+- **Ruling (a) — 0f sighting G accepted; the rung-1 v2 snapshot is
+  EXTENDED to LockoutTest** (instrumentation is rung-1 class,
+  authorized): `attemptLogin` now ledgers every address it uses and the
+  file's failure-time afterEach dumps THE ACTUAL suspect auth-ip
+  buckets' live attempts + the capped volatile keyspace — the
+  discriminator sighting G lacked (the PasswordReset snapshot's suspect
+  bucket is hardcoded 127.0.0.1; this file mints random addresses).
+  **The deliberate in-isolation failure proof is OWED to the
+  post-reboot battery run** (the container is down; the proof lands
+  with the consolidated re-run, capture kept).
+- **Ruling (b) — FILED PLATFORM ITEM:** `shouldRenderJsonWhen` covers
+  only `api/*`, so a JSON caller failing `validate()` on any web-group
+  route crashes into the HTML redirect path (discovered at the step-13
+  server half; SelectionController and the older inbox doors share the
+  shape). **The local per-door try/catch → ProblemDetails handling is
+  the interim pattern; NO platform-wide Doc 01 edit mid-document;
+  escalate only if it bites again.**
+- **Ruling (c) — implicit claim IS normative; STEP-14 ROW FILED.**
+  Doc 06 FR-05's exact text: *"new → open occurs on first assignment
+  (auto or manual) OR first staff public reply (implicit claim, setting
+  tickets.implicit_claim default on)"* — reinforced by BR-03: *"A reply
+  is a claim (FR-05 default): whoever answers owns it — prevents
+  'answered but unassigned' limbo; per-tenant toggle."* The inbox reply
+  door (`ComposerController::reply`) does not call the existing
+  `AssignTicket::implicitClaimOnReply` — **wiring it through the
+  existing service, honoring the `tickets.implicit_claim` setting, with
+  a test, is a step-14 row.**
+- **THE CONSOLIDATED BATTERY REMAINS OWED:** the WSL distro survived
+  but its Docker integration is dead (the CLI shim's backing ISO mount
+  I/O-errors; the proxied socket answers nothing; recovery requires a
+  distro restart, which would kill the session doing it). The battery
+  runs at the next resume, after the owner's exit → `wsl --shutdown` →
+  relaunch cycle. **Step 13's acceptance stays CONDITIONAL on that
+  green per the advisor's own words.**
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced

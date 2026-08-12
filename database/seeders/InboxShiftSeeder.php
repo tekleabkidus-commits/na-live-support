@@ -56,7 +56,8 @@ final class InboxShiftSeeder extends Seeder
             ->whereNull('assignee_id')
             ->count();
         $needed = max(0, self::COUNT - $alive);
-        $nextNumber = ((int) DB::table('tickets')->where('number', '<', 1_000_000)->max('number')) + 1;
+        $maxNumber = DB::table('tickets')->where('number', '<', 1_000_000)->max('number');
+        $nextNumber = (is_numeric($maxNumber) ? (int) $maxNumber : 7000) + 1;
 
         for ($i = 0; $i < $needed; $i++) {
             $number = $nextNumber + $i;
