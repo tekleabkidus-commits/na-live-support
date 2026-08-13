@@ -75,6 +75,12 @@ services:
   relay:
     <<: *app-image
     command: ["php", "artisan", "outbox:relay"]
+    # unless-stopped: the relay boots WITH the stack, before migrations exist
+    # on a fresh database — its first query dies on the missing table and the
+    # policy brings it back until the schema does (observed at first boot:
+    # 42P01 → exit 1). A recovery mechanism that stays dead after a transient
+    # is the exact failure its own docblock argues against.
+    restart: unless-stopped
     healthcheck:
       # Process liveness (no pgrep in the image): the artisan loop's own
       # process list entry — a dead loop fails this within one interval.

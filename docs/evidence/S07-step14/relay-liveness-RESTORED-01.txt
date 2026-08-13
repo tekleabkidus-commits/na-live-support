@@ -1,0 +1,13 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      relay-liveness-RESTORED
+# set:        S07-step14
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan outbox:liveness-probe
+# started:    2026-08-13T07:37:27Z
+# git:        89c1d8a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+RELAY LIVE: relayed in 0.61 s (budget 5.0 s — T-02/FR-11's 5 s promise bounds the pipeline)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-13T07:37:28Z
+# duration:   1s
+# EXIT:       0

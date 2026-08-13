@@ -1,0 +1,661 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      relay-fresh-boot
+# set:        S07-step14
+# command:    make fresh
+# started:    2026-08-13T07:32:46Z
+# git:        89c1d8a (clean working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml down -v
+ Container na-live-support-egress-proxy-1 Stopping 
+ Container na-live-support-app-1 Stopping 
+ Container na-live-support-mock-sms-1 Stopping 
+ Container na-live-support-reverb-1 Stopping 
+ Container na-live-support-worker-1 Stopping 
+ Container na-live-support-minio-1 Stopping 
+ Container na-live-support-mailpit-1 Stopping 
+ Container na-live-support-mock-telegram-1 Stopping 
+ Container na-live-support-clamav-1 Stopping 
+ Container na-live-support-scheduler-1 Stopping 
+ Container na-live-support-meilisearch-1 Stopping 
+ Container na-live-support-mock-ai-1 Stopping 
+ Container na-live-support-egress-proxy-1 Stopped 
+ Container na-live-support-egress-proxy-1 Removing 
+ Container na-live-support-scheduler-1 Stopped 
+ Container na-live-support-scheduler-1 Removing 
+ Container na-live-support-minio-1 Stopped 
+ Container na-live-support-minio-1 Removing 
+ Container na-live-support-egress-proxy-1 Removed 
+ Container na-live-support-scheduler-1 Removed 
+ Container na-live-support-minio-1 Removed 
+ Container na-live-support-reverb-1 Stopped 
+ Container na-live-support-reverb-1 Removing 
+ Container na-live-support-reverb-1 Removed 
+ Container na-live-support-meilisearch-1 Stopped 
+ Container na-live-support-meilisearch-1 Removing 
+ Container na-live-support-meilisearch-1 Removed 
+ Container na-live-support-clamav-1 Stopped 
+ Container na-live-support-clamav-1 Removing 
+ Container na-live-support-clamav-1 Removed 
+ Container na-live-support-app-1 Stopped 
+ Container na-live-support-app-1 Removing 
+ Container na-live-support-mailpit-1 Stopped 
+ Container na-live-support-mailpit-1 Removing 
+ Container na-live-support-app-1 Removed 
+ Container na-live-support-mailpit-1 Removed 
+ Container na-live-support-worker-1 Stopped 
+ Container na-live-support-worker-1 Removing 
+ Container na-live-support-worker-1 Removed 
+ Container na-live-support-redis-durable-1 Stopping 
+ Container na-live-support-postgres-1 Stopping 
+ Container na-live-support-redis-volatile-1 Stopping 
+ Container na-live-support-redis-volatile-1 Stopped 
+ Container na-live-support-redis-volatile-1 Removing 
+ Container na-live-support-postgres-1 Stopped 
+ Container na-live-support-postgres-1 Removing 
+ Container na-live-support-redis-volatile-1 Removed 
+ Container na-live-support-postgres-1 Removed 
+ Container na-live-support-redis-durable-1 Stopped 
+ Container na-live-support-redis-durable-1 Removing 
+ Container na-live-support-redis-durable-1 Removed 
+ Container na-live-support-mock-sms-1 Stopped 
+ Container na-live-support-mock-sms-1 Removing 
+ Container na-live-support-mock-ai-1 Stopped 
+ Container na-live-support-mock-ai-1 Removing 
+ Container na-live-support-mock-sms-1 Removed 
+ Container na-live-support-mock-telegram-1 Stopped 
+ Container na-live-support-mock-telegram-1 Removing 
+ Container na-live-support-mock-ai-1 Removed 
+ Container na-live-support-mock-telegram-1 Removed 
+ Volume na-live-support_meilisearch-data Removing 
+ Volume na-live-support_postgres-data Removing 
+ Volume na-live-support_clamav-data Removing 
+ Volume na-live-support_minio-data Removing 
+ Volume na-live-support_redis-durable-data Removing 
+ Network na-live-support_na-net Removing 
+ Volume na-live-support_meilisearch-data Removed 
+ Volume na-live-support_postgres-data Removed 
+ Volume na-live-support_clamav-data Removed 
+ Volume na-live-support_redis-durable-data Removed 
+ Volume na-live-support_minio-data Removed 
+ Network na-live-support_na-net Removed 
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml up -d --build --renew-anon-volumes
+ Image na-live-support/app:dev Building 
+ Image na-live-support/app:dev Building 
+ Image na-live-support/app:dev Building 
+ Image na-live-support/app:dev Building 
+ Image na-live-support/egress-proxy:dev Building 
+ Image na-live-support/app:dev Building 
+ Image na-live-support/mock-sms:dev Building 
+ Image na-live-support/mock-telegram:dev Building 
+ Image na-live-support/mock-ai:dev Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 4.57kB done
+#1 DONE 0.0s
+
+#2 [app internal] load build definition from Dockerfile
+#2 ...
+
+#3 [mock-ai internal] load build definition from Dockerfile
+#3 transferring dockerfile: 392B 0.0s done
+#3 DONE 0.1s
+
+#4 [egress-proxy internal] load build definition from Dockerfile
+#4 transferring dockerfile: 718B 0.0s done
+#4 DONE 0.1s
+
+#2 [reverb internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.40kB done
+#2 DONE 0.1s
+
+#5 [scheduler internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 2.7s
+
+#6 [mock-ai internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.1s
+
+#7 [scheduler internal] load metadata for docker.io/dunglas/frankenphp:1-php8.4
+#7 DONE 2.7s
+
+#8 [mock-sms internal] load build context
+#8 ...
+
+#9 [egress-proxy internal] load metadata for docker.io/library/alpine:3.20
+#9 DONE 2.8s
+
+#8 [mock-sms internal] load build context
+#8 ...
+
+#10 [mock-telegram 1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#10 DONE 0.1s
+
+#11 [egress-proxy internal] load .dockerignore
+#11 transferring context: 2B done
+#11 DONE 0.0s
+
+#12 [reverb internal] load metadata for docker.io/library/composer:2
+#12 DONE 2.9s
+
+#8 [mock-sms internal] load build context
+#8 transferring context: 10.32kB 0.2s done
+#8 DONE 0.2s
+
+#10 [reverb 1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#10 DONE 0.1s
+
+#13 [egress-proxy internal] load build context
+#13 transferring context: 62B done
+#13 DONE 0.1s
+
+#14 [egress-proxy 1/4] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#14 resolve docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc 0.1s done
+#14 DONE 0.1s
+
+#15 [scheduler internal] load .dockerignore
+#15 transferring context: 290B 0.0s done
+#15 DONE 0.1s
+
+#16 [egress-proxy 3/4] COPY tinyproxy.conf /etc/tinyproxy/tinyproxy.conf
+#16 CACHED
+
+#17 [egress-proxy 2/4] RUN apk add --no-cache tinyproxy
+#17 CACHED
+
+#18 [egress-proxy 4/4] COPY filter /etc/tinyproxy/filter
+#18 CACHED
+
+#19 [mock-ai 4/5] COPY sms/server.mjs ./sms.mjs
+#19 CACHED
+
+#20 [mock-ai 2/5] WORKDIR /srv
+#20 CACHED
+
+#21 [mock-ai 3/5] COPY telegram/server.mjs ./telegram.mjs
+#21 CACHED
+
+#22 [mock-ai 5/5] COPY ai/server.mjs ./ai.mjs
+#22 CACHED
+
+#23 [reverb internal] load build context
+#23 DONE 0.0s
+
+#24 [reverb stage-1  1/11] FROM docker.io/dunglas/frankenphp:1-php8.4@sha256:a8bb7b5bfc67280952801541a3b21f1d084d31cea4cd3c65df4a69736348d25e
+#24 ...
+
+#10 [app 1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#10 DONE 0.1s
+
+#24 [app stage-1  1/11] FROM docker.io/dunglas/frankenphp:1-php8.4@sha256:a8bb7b5bfc67280952801541a3b21f1d084d31cea4cd3c65df4a69736348d25e
+#24 resolve docker.io/dunglas/frankenphp:1-php8.4@sha256:a8bb7b5bfc67280952801541a3b21f1d084d31cea4cd3c65df4a69736348d25e
+#24 resolve docker.io/dunglas/frankenphp:1-php8.4@sha256:a8bb7b5bfc67280952801541a3b21f1d084d31cea4cd3c65df4a69736348d25e 0.4s done
+#24 resolve docker.io/dunglas/frankenphp:1-php8.4@sha256:a8bb7b5bfc67280952801541a3b21f1d084d31cea4cd3c65df4a69736348d25e 0.4s done
+#24 DONE 0.5s
+
+#25 [reverb] FROM docker.io/library/composer:2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040
+#25 resolve docker.io/library/composer:2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 0.5s done
+#25 DONE 0.5s
+
+#23 [app internal] load build context
+#23 transferring context: 40.95MB 0.6s done
+#23 transferring context: 40.95MB 0.6s done
+#23 DONE 0.6s
+
+#26 [relay assets 2/7] WORKDIR /build
+#26 CACHED
+
+#27 [relay assets 3/7] COPY package.json package-lock.json ./
+#27 CACHED
+
+#28 [relay assets 4/7] RUN npm ci --ignore-scripts
+#28 CACHED
+
+#29 [relay assets 5/7] COPY vite.config.ts tsconfig.json ./
+#29 CACHED
+
+#30 [reverb stage-1  5/11] COPY docker/app/generate-dev-certs.sh /usr/local/bin/generate-dev-certs.sh
+#30 CACHED
+
+#31 [reverb stage-1  7/11] COPY composer.json composer.lock ./
+#31 CACHED
+
+#32 [reverb stage-1  2/11] WORKDIR /app
+#32 CACHED
+
+#33 [reverb stage-1  4/11] COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+#33 CACHED
+
+#34 [reverb stage-1  6/11] RUN chmod +x /usr/local/bin/generate-dev-certs.sh && /usr/local/bin/generate-dev-certs.sh
+#34 CACHED
+
+#35 [reverb stage-1  3/11] RUN install-php-extensions     pcntl     pdo_pgsql     pgsql     redis     intl     zip     gd     bcmath     opcache
+#35 CACHED
+
+#36 [reverb stage-1  8/11] RUN composer install --no-scripts --no-autoloader --prefer-dist --no-interaction
+#36 CACHED
+
+#32 [worker stage-1  2/11] WORKDIR /app
+#32 CACHED
+
+#35 [worker stage-1  3/11] RUN install-php-extensions     pcntl     pdo_pgsql     pgsql     redis     intl     zip     gd     bcmath     opcache
+#35 CACHED
+
+#33 [worker stage-1  4/11] COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+#33 CACHED
+
+#30 [worker stage-1  5/11] COPY docker/app/generate-dev-certs.sh /usr/local/bin/generate-dev-certs.sh
+#30 CACHED
+
+#34 [worker stage-1  6/11] RUN chmod +x /usr/local/bin/generate-dev-certs.sh && /usr/local/bin/generate-dev-certs.sh
+#34 CACHED
+
+#31 [worker stage-1  7/11] COPY composer.json composer.lock ./
+#31 CACHED
+
+#37 [worker stage-1  9/11] COPY . .
+#37 ...
+
+#38 [egress-proxy] exporting to image
+#38 exporting layers 0.0s done
+#38 exporting manifest sha256:d2e9da389ee17aa0f13403b3ed08a3f844b11d6c82c133fdac6790c0a96d0168 0.0s done
+#38 exporting config sha256:97f89c26ac3064e4854e5d54bbb5e3fba76c251ca43a45b892977cfcc1c3112c 0.0s done
+#38 exporting attestation manifest sha256:34ba711b9416c1848e1be996472d3ab34589165c9d95d76d00d1abbe6e35f411 0.3s done
+#38 exporting manifest list sha256:f052e10472c3f02f09bebeac1fcadaf676712461aefe857ffbe9c7ed94fb25e6 0.2s done
+#38 naming to docker.io/na-live-support/egress-proxy:dev 0.1s done
+#38 unpacking to docker.io/na-live-support/egress-proxy:dev 0.1s done
+#38 DONE 0.9s
+
+#39 [mock-sms] exporting to image
+#39 exporting layers 0.0s done
+#39 exporting manifest sha256:54e4944ac8b94c243a036e2312bd6b8014dfce3c0d15b72480ddd1aaefa8e6eb 0.0s done
+#39 exporting config sha256:b12961ff7bcefdf714a0210c5c42b6dc88719b576f4e4df4d25b377d4fdab494 0.0s done
+#39 exporting attestation manifest sha256:65304b48c31e7909620f59d82d132c123e3cdaf4ce40644f8bfb11aec4a75944 0.2s done
+#39 exporting manifest list sha256:32ce4bc0181846b9c5c6477ab3826ecdaedba51657a6a5ed01966be68ee41bb3 0.2s done
+#39 naming to docker.io/na-live-support/mock-sms:dev 0.0s done
+#39 unpacking to docker.io/na-live-support/mock-sms:dev 0.1s done
+#39 DONE 1.0s
+
+#40 [mock-ai] exporting to image
+#40 exporting layers 0.0s done
+#40 exporting manifest sha256:9b9d76e9ce88976154bdc2ec6e1d1ca48983f771b6e056a42fb508d2ea9e7345 0.0s done
+#40 exporting config sha256:3d03088462c2fdbbb36f74c5259c8f5353e5bbf19704fefd2d8a47d78869f833 0.0s done
+#40 exporting attestation manifest sha256:1ead0b9bc74ce9b6b8c6f9d2128c7847480e72edd08c4e5cc41097c91b483d4c 0.2s done
+#40 exporting manifest list sha256:cb288678b42d54d6ca714bd9c4eec382085b84ae3eab96ef9cf2bbd872fa78c0 0.2s done
+#40 naming to docker.io/na-live-support/mock-ai:dev 0.0s done
+#40 unpacking to docker.io/na-live-support/mock-ai:dev 0.1s done
+#40 DONE 1.0s
+
+#41 [mock-telegram] exporting to image
+#41 exporting layers done
+#41 exporting manifest sha256:52e952fa316735aaaa30aa110ebb2ffa33d171889a43e1abfa7325df037f85b6 0.0s done
+#41 exporting config sha256:34deda6828ed8fd8077224c83d6091c9c7ccff043cda9c497ce97cc06bae7c24 0.0s done
+#41 exporting attestation manifest sha256:80bae72bd011e12f12dfa622e6ffbc6ebd7f0fcbc3d884cc0ebe62f6ef7b0204 0.2s done
+#41 exporting manifest list sha256:070f2e6b30b587e8611c62a80aa81ba9b692cc7f107e337aae2c80c1a30b5dd0 0.2s done
+#41 naming to docker.io/na-live-support/mock-telegram:dev 0.0s done
+#41 unpacking to docker.io/na-live-support/mock-telegram:dev 0.1s done
+#41 DONE 1.0s
+
+#42 [scheduler assets 6/7] COPY resources ./resources
+#42 DONE 0.4s
+
+#43 [reverb assets 7/7] RUN npm run build
+#43 ...
+
+#37 [reverb stage-1  9/11] COPY . .
+#37 DONE 0.8s
+
+#44 [egress-proxy] resolving provenance for metadata file
+#44 DONE 0.3s
+
+#45 [mock-ai] resolving provenance for metadata file
+#45 DONE 0.1s
+
+#46 [mock-sms] resolving provenance for metadata file
+#46 DONE 0.3s
+
+#47 [mock-telegram] resolving provenance for metadata file
+#47 DONE 0.0s
+
+#43 [reverb assets 7/7] RUN npm run build
+#43 1.880 
+#43 1.880 > build
+#43 1.880 > vite build
+#43 1.880 
+#43 3.952 vite v8.1.5 building client environment for production...
+#43 4.064 [2Ktransforming...✓ 683 modules transformed.
+#43 5.937 rendering chunks...
+#43 6.040 computing gzip size...
+#43 6.045 public/build/manifest.json                                  10.75 kB │ gzip:  1.40 kB
+#43 6.045 public/build/assets/Devices-AyKFTUZb.css                     0.30 kB │ gzip:  0.15 kB
+#43 6.045 public/build/assets/SegmentedCodeInput-Bl_1f_zl.css          0.48 kB │ gzip:  0.27 kB
+#43 6.045 public/build/assets/Login-DBJ3jZ06.css                       0.56 kB │ gzip:  0.27 kB
+#43 6.045 public/build/assets/Workspace-gX9yWt5J.css                   0.79 kB │ gzip:  0.37 kB
+#43 6.045 public/build/assets/app-DJRKq-XW.css                        36.55 kB │ gzip:  8.29 kB
+#43 6.045 public/build/assets/_plugin-vue_export-helper-BDNMzG2s.js    0.08 kB │ gzip:  0.09 kB
+#43 6.045 public/build/assets/ResetPassword-BkvOxXIs.js                0.36 kB │ gzip:  0.26 kB
+#43 6.045 public/build/assets/Invitation-CtcrUWmM.js                   0.39 kB │ gzip:  0.28 kB
+#43 6.045 public/build/assets/RiskBadge-Dk-ri8FP.js                    0.46 kB │ gzip:  0.35 kB
+#43 6.045 public/build/assets/CountdownChip-W8cN1pT6.js                0.67 kB │ gzip:  0.47 kB
+#43 6.045 public/build/assets/Welcome-Cq32IsR-.js                      0.69 kB │ gzip:  0.45 kB
+#43 6.045 public/build/assets/HealthRollupPill-C336RtpD.js             0.71 kB │ gzip:  0.43 kB
+#43 6.045 public/build/assets/NotFoundPattern-I1D2WHIr.js              0.75 kB │ gzip:  0.44 kB
+#43 6.045 public/build/assets/SegmentedCodeInput-Bubrgs2S.js           1.22 kB │ gzip:  0.74 kB
+#43 6.045 public/build/assets/ForgotPassword-CT1HWzOY.js               1.51 kB │ gzip:  0.90 kB
+#43 6.045 public/build/assets/PasswordField-ClVe5oMv.js                1.53 kB │ gzip:  0.80 kB
+#43 6.045 public/build/assets/WindowChip-DNYc2Ehv.js                   1.60 kB │ gzip:  0.76 kB
+#43 6.045 public/build/assets/LinkDead-DKddl19m.js                     1.80 kB │ gzip:  1.01 kB
+#43 6.045 public/build/assets/WindowSettings-CHME9JwW.js               3.22 kB │ gzip:  1.24 kB
+#43 6.045 public/build/assets/BackofficeShell-BhLN996n.js              3.95 kB │ gzip:  1.34 kB
+#43 6.045 public/build/assets/SetPasswordForm-CiOffBQF.js              4.22 kB │ gzip:  1.86 kB
+#43 6.045 public/build/assets/PendingGrants-BvnODBPb.js                4.33 kB │ gzip:  1.67 kB
+#43 6.045 public/build/assets/Bots-DCpcjD_l.js                         5.24 kB │ gzip:  1.78 kB
+#43 6.045 public/build/assets/DeadLetters-KivZds8i.js                  5.71 kB │ gzip:  1.97 kB
+#43 6.045 public/build/assets/Connections-CJQ3ymmg.js                  5.78 kB │ gzip:  2.00 kB
+#43 6.045 public/build/assets/RolesList-1b9gzpNO.js                    8.33 kB │ gzip:  2.64 kB
+#43 6.045 public/build/assets/UserOverrides-CXynvIW6.js                8.66 kB │ gzip:  2.83 kB
+#43 6.045 public/build/assets/Login-DHOQ5Zlo.js                        9.07 kB │ gzip:  3.12 kB
+#43 6.045 public/build/assets/RoleEditor-BSkKvXdW.js                  13.36 kB │ gzip:  4.36 kB
+#43 6.045 public/build/assets/Templates-DLbfu5qz.js                   13.86 kB │ gzip:  3.78 kB
+#43 6.045 public/build/assets/MenuDesigner-B9JFvrVl.js                16.77 kB │ gzip:  4.51 kB
+#43 6.045 public/build/assets/Health-BM5aw0xY.js                      18.17 kB │ gzip:  4.74 kB
+#43 6.045 public/build/assets/Devices-A2NE6JnW.js                     18.59 kB │ gzip:  5.68 kB
+#43 6.045 public/build/assets/runtime-core.esm-bundler-CAezsjQH.js    64.27 kB │ gzip: 25.32 kB
+#43 6.045 public/build/assets/app-CQE0We1n.js                        150.64 kB │ gzip: 48.73 kB
+#43 6.045 public/build/assets/Workspace-g0k0HKem.js                  154.22 kB │ gzip: 40.00 kB
+#43 6.045 
+#43 6.048 ✓ built in 2.09s
+#43 DONE 6.1s
+
+#48 [app stage-1 10/11] COPY --from=assets /build/public/build ./public/build
+#48 DONE 0.2s
+
+#49 [scheduler stage-1 11/11] RUN composer dump-autoload --optimize --no-scripts     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache     && chown -R www-data:www-data storage bootstrap/cache     && chmod -R ug+rwX storage bootstrap/cache
+#49 0.777 Generating optimized autoload files
+#49 18.49 Class RecordVerdictAtExecution located in ./tests/Feature/Rbac/JobReResolutionTest.php does not comply with psr-4 autoloading standard (rule: Tests\ => ./tests). Skipping.
+#49 18.49 Class ScopeFixtureItem located in ./tests/Feature/Rbac/ScopeFixtureTest.php does not comply with psr-4 autoloading standard (rule: Tests\ => ./tests). Skipping.
+#49 18.49 Class FixtureMembership located in ./tests/Feature/Rbac/ScopeFixtureTest.php does not comply with psr-4 autoloading standard (rule: Tests\ => ./tests). Skipping.
+#49 18.49 Class A35FixtureJob located in ./tests/Feature/Inbox/TenantBindingRestoreTest.php does not comply with psr-4 autoloading standard (rule: Tests\ => ./tests). Skipping.
+#49 18.49 Class FixtureTenantBoundCommand located in ./tests/Isolation/TenantBindingSurfacesTest.php does not comply with psr-4 autoloading standard (rule: Tests\ => ./tests). Skipping.
+#49 18.69 Generated optimized autoload files containing 12761 classes
+#49 DONE 18.9s
+
+#50 [scheduler] exporting to image
+#50 exporting layers
+#50 exporting layers 2.3s done
+#50 exporting manifest sha256:0ff5f71978413f25577002c9ee5c6ecac70d93c68a066364ea7ee32d4b71fa90
+#50 exporting manifest sha256:0ff5f71978413f25577002c9ee5c6ecac70d93c68a066364ea7ee32d4b71fa90 0.2s done
+#50 exporting config sha256:c404ac2f521e0ba18009e1dd8fc07615a90b1565c12d4e7eeee220f9df767ace
+#50 exporting config sha256:c404ac2f521e0ba18009e1dd8fc07615a90b1565c12d4e7eeee220f9df767ace 0.3s done
+#50 exporting attestation manifest sha256:58c6bab1c22a2f38913d14efb1b0cf368ee2e65c7b0147fdd8ca57c891437e19
+#50 exporting attestation manifest sha256:58c6bab1c22a2f38913d14efb1b0cf368ee2e65c7b0147fdd8ca57c891437e19 0.3s done
+#50 exporting manifest list sha256:8fb188db5149ca44dc903c6604a5f8cf9718e7c0dc9c24fa29ddf2182d015cf9
+#50 exporting manifest list sha256:8fb188db5149ca44dc903c6604a5f8cf9718e7c0dc9c24fa29ddf2182d015cf9 0.3s done
+#50 naming to docker.io/na-live-support/app:dev
+#50 naming to docker.io/na-live-support/app:dev 0.1s done
+#50 unpacking to docker.io/na-live-support/app:dev
+#50 unpacking to docker.io/na-live-support/app:dev 1.2s done
+#50 DONE 5.0s
+
+#51 [worker] exporting to image
+#51 exporting layers 2.3s done
+#51 exporting manifest sha256:213fc234f80915616f1b1d95f750ec7bc0340f8caf757839441ab890bb8da7cb 0.2s done
+#51 exporting config sha256:10528b4f3b3ad95ca95a06215c52b0f4f062fa67b36ec0f0e6928e41eb7c4b46 0.3s done
+#51 exporting attestation manifest sha256:3a07fc9fbccf3cb3901c2b076a469b127aeceff34ee212f42051e3697b6a0e9c 0.4s done
+#51 exporting manifest list sha256:1a1979f9cea557c94d0382ead9a39338db006f821b97d07815e5b0fcc195b9c6 0.3s done
+#51 naming to docker.io/na-live-support/app:dev 0.1s done
+#51 unpacking to docker.io/na-live-support/app:dev 1.2s done
+#51 DONE 5.1s
+
+#52 [reverb] exporting to image
+#52 exporting layers 2.3s done
+#52 exporting manifest sha256:03d886052dcae7ce46d4885a682f6ec168ace5b1573d640b0828b18dbe7f337c 0.2s done
+#52 exporting config sha256:dba34f9bb798a2760069f04ee8974526ec24e5729e3f68a63eea62c549ce9fc5 0.3s done
+#52 exporting attestation manifest sha256:92921a38d7f2386ad413da0b61fef89fbc085ddb0201ed58c6b0036e855704c9 0.4s done
+#52 exporting manifest list sha256:ec913dd9f904e1a968ad7f96ac678a807b0cd064e455f7dd58963bae0dacacd2 0.3s done
+#52 naming to docker.io/na-live-support/app:dev 0.1s done
+#52 unpacking to docker.io/na-live-support/app:dev 1.2s done
+#52 DONE 5.1s
+
+#53 [app] exporting to image
+#53 exporting layers 2.3s done
+#53 exporting manifest sha256:5eb8cb8cb2a4df1ad82677e53b01605597e731fa05019b93d36e507bee7f5c96 0.2s done
+#53 exporting config sha256:872e7f3e39fa25fb0aae4948011a27ae27863c8490768b00dff5143c76dabbb5 0.3s done
+#53 exporting attestation manifest sha256:d76159acb05c5bbaf9332dc9806a029584eaef0e8244d3e6c50b01a062841fcc 0.4s done
+#53 exporting manifest list sha256:3ab5cc37e1d6c54551b1eca1e2dc45c64c26e0a99267775098efcbb2f0860c1c 0.3s done
+#53 naming to docker.io/na-live-support/app:dev 0.1s done
+#53 unpacking to docker.io/na-live-support/app:dev 1.2s done
+#53 DONE 5.2s
+
+#54 [relay] exporting to image
+#54 exporting layers 2.3s done
+#54 exporting manifest sha256:62a79c2a392f55c31ee9eaee454e38341b3bbb45a6fb69b9795ec40c09ba8b8c 0.3s done
+#54 exporting config sha256:e09dc9e8714fc33c6b5e33602b57a15e16c7e01f6a1267f453744b6b8b7732d7 0.3s done
+#54 exporting attestation manifest sha256:ed66f5b54c9af8892fc1f11fee07b2f48d5f5ed41feb6db2a0f1851df37a7fc4 0.3s done
+#54 exporting manifest list sha256:8f338b387fcbc20332076b2043105092c91a7c3a6ca9e052b07e7ac5192a1cc2 0.3s done
+#54 naming to docker.io/na-live-support/app:dev 0.0s done
+#54 unpacking to docker.io/na-live-support/app:dev 1.2s done
+#54 DONE 5.2s
+
+#55 [app] resolving provenance for metadata file
+#55 DONE 0.9s
+
+#56 [worker] resolving provenance for metadata file
+#56 DONE 0.2s
+
+#57 [scheduler] resolving provenance for metadata file
+#57 DONE 0.4s
+
+#58 [reverb] resolving provenance for metadata file
+#58 DONE 0.7s
+
+#59 [relay] resolving provenance for metadata file
+#59 DONE 0.0s
+ Image na-live-support/egress-proxy:dev Built 
+ Image na-live-support/mock-sms:dev Built 
+ Image na-live-support/app:dev Built 
+ Image na-live-support/app:dev Built 
+ Image na-live-support/mock-ai:dev Built 
+ Image na-live-support/app:dev Built 
+ Image na-live-support/app:dev Built 
+ Image na-live-support/app:dev Built 
+ Image na-live-support/mock-telegram:dev Built 
+ Network na-live-support_na-net Creating 
+ Network na-live-support_na-net Created 
+ Volume na-live-support_postgres-data Creating 
+ Volume na-live-support_postgres-data Created 
+ Volume na-live-support_meilisearch-data Creating 
+ Volume na-live-support_meilisearch-data Created 
+ Volume na-live-support_clamav-data Creating 
+ Volume na-live-support_clamav-data Created 
+ Volume na-live-support_redis-durable-data Creating 
+ Volume na-live-support_redis-durable-data Created 
+ Volume na-live-support_minio-data Creating 
+ Volume na-live-support_minio-data Created 
+ Container na-live-support-clamav-1 Creating 
+ Container na-live-support-mock-telegram-1 Creating 
+ Container na-live-support-meilisearch-1 Creating 
+ Container na-live-support-postgres-1 Creating 
+ Container na-live-support-redis-durable-1 Creating 
+ Container na-live-support-minio-1 Creating 
+ Container na-live-support-redis-volatile-1 Creating 
+ Container na-live-support-mock-ai-1 Creating 
+ Container na-live-support-mock-sms-1 Creating 
+ Container na-live-support-egress-proxy-1 Creating 
+ Container na-live-support-mailpit-1 Creating 
+ Container na-live-support-meilisearch-1 Created 
+ Container na-live-support-egress-proxy-1 Created 
+ Container na-live-support-minio-1 Created 
+ Container na-live-support-mailpit-1 Created 
+ Container na-live-support-mock-sms-1 Created 
+ Container na-live-support-redis-durable-1 Created 
+ Container na-live-support-mock-telegram-1 Created 
+ Container na-live-support-mock-ai-1 Created 
+ Container na-live-support-redis-volatile-1 Created 
+ Container na-live-support-postgres-1 Created 
+ Container na-live-support-relay-1 Creating 
+ Container na-live-support-app-1 Creating 
+ Container na-live-support-worker-1 Creating 
+ Container na-live-support-scheduler-1 Creating 
+ Container na-live-support-reverb-1 Creating 
+ Container na-live-support-clamav-1 Created 
+ Container na-live-support-relay-1 Created 
+ Container na-live-support-scheduler-1 Created 
+ Container na-live-support-reverb-1 Created 
+ Container na-live-support-app-1 Created 
+ Container na-live-support-worker-1 Created 
+ Container na-live-support-mock-ai-1 Starting 
+ Container na-live-support-postgres-1 Starting 
+ Container na-live-support-clamav-1 Starting 
+ Container na-live-support-meilisearch-1 Starting 
+ Container na-live-support-mock-telegram-1 Starting 
+ Container na-live-support-minio-1 Starting 
+ Container na-live-support-egress-proxy-1 Starting 
+ Container na-live-support-redis-volatile-1 Starting 
+ Container na-live-support-mailpit-1 Starting 
+ Container na-live-support-mock-sms-1 Starting 
+ Container na-live-support-redis-durable-1 Starting 
+ Container na-live-support-mock-telegram-1 Started 
+ Container na-live-support-mock-ai-1 Started 
+ Container na-live-support-clamav-1 Started 
+ Container na-live-support-mock-sms-1 Started 
+ Container na-live-support-postgres-1 Started 
+ Container na-live-support-redis-volatile-1 Started 
+ Container na-live-support-mailpit-1 Started 
+ Container na-live-support-redis-durable-1 Started 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-meilisearch-1 Started 
+ Container na-live-support-minio-1 Started 
+ Container na-live-support-egress-proxy-1 Started 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-scheduler-1 Starting 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-app-1 Starting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-reverb-1 Starting 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-worker-1 Starting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-relay-1 Starting 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-worker-1 Started 
+ Container na-live-support-app-1 Started 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-relay-1 Started 
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec app php artisan migrate:fresh --seed --force --database=pgsql_migrator
+
+   INFO  Preparing database.  
+
+  Creating migration table ...................................... 21.96ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table ......................... 150.38ms DONE
+  0001_01_01_000001_create_cache_table .......................... 81.55ms DONE
+  0001_01_01_000002_create_jobs_table .......................... 111.14ms DONE
+  2026_07_30_000100_create_reference_tables ..................... 95.68ms DONE
+  2026_07_30_000200_create_tenants_table ........................ 50.56ms DONE
+  2026_07_30_000300_create_tenant_state_transition_guard ......... 4.81ms DONE
+  2026_07_30_000400_add_tenant_id_to_users_table ................ 30.96ms DONE
+  2026_07_30_000500_create_tenant_keys_table .................... 36.66ms DONE
+  2026_07_30_000600_create_tenant_settings_table ................ 42.62ms DONE
+  2026_07_30_000700_create_tenant_sequences_table ............... 29.86ms DONE
+  2026_07_30_000800_create_tenant_provisioning_steps_table ...... 43.21ms DONE
+  2026_07_30_000900_create_audit_log_table ...................... 74.44ms DONE
+  2026_07_30_001000_create_outbox_table ......................... 46.85ms DONE
+  2026_07_30_001100_create_events_table ........................ 335.01ms DONE
+  2026_07_30_001200_create_tenant_quota_usage_table ............. 31.66ms DONE
+  2026_07_30_001300_enable_row_level_security ................... 38.32ms DONE
+  2026_07_30_001400_add_version_to_tenant_settings_table ........ 14.83ms DONE
+  2026_07_30_001500_create_resolve_tenant_state_function ......... 5.54ms DONE
+  2026_07_31_000100_create_tenant_cold_summaries_table .......... 22.27ms DONE
+  2026_07_31_000200_failed_jobs_timestamptz ..................... 35.30ms DONE
+  2026_07_31_010000_add_auth_columns_to_users_table ............. 20.01ms DONE
+  2026_07_31_010100_create_auth_action_tokens_table ............. 47.53ms DONE
+  2026_07_31_010200_create_user_recovery_codes_table ............ 34.70ms DONE
+  2026_07_31_010300_create_user_password_history_table .......... 33.47ms DONE
+  2026_07_31_010400_create_devices_table ........................ 47.40ms DONE
+  2026_07_31_010500_create_personal_access_tokens_table ......... 52.39ms DONE
+  2026_07_31_010600_create_resolve_staff_login_function .......... 8.79ms DONE
+  2026_08_02_010000_add_service_account_to_users ................. 7.40ms DONE
+  2026_08_03_010000_create_widgets_table ........................ 62.39ms DONE
+  2026_08_03_020000_create_webhook_credentials_table ............ 39.45ms DONE
+  2026_08_04_010000_create_roles_table .......................... 44.50ms DONE
+  2026_08_04_010100_create_user_permission_overrides_table ...... 49.77ms DONE
+  2026_08_04_010200_create_pending_grants_table ................. 41.50ms DONE
+  2026_08_04_010300_add_role_id_to_users_table .................. 15.44ms DONE
+  2026_08_04_020000_add_two_factor_required_since_to_users ....... 4.68ms DONE
+  2026_08_04_030000_create_customers_shell_tables ............... 79.67ms DONE
+  2026_08_04_030100_create_conversations_table .................. 60.27ms DONE
+  2026_08_04_030200_create_messages_table ...................... 421.85ms DONE
+  2026_08_04_030300_create_message_revisions_table .............. 65.77ms DONE
+  2026_08_04_030400_create_message_drafts_table ................. 34.73ms DONE
+  2026_08_05_090000_add_legal_hold_and_hold_storage ............. 41.55ms DONE
+  2026_08_05_100000_create_message_dead_letters_table ........... 34.60ms DONE
+  2026_08_07_010000_messages_created_at_db_time .................. 9.96ms DONE
+  2026_08_07_100000_create_tickets_table ........................ 82.77ms DONE
+  2026_08_07_100100_create_ticket_followers_table ............... 26.55ms DONE
+  2026_08_07_100200_create_ticket_handoff_packets_table ......... 35.78ms DONE
+  2026_08_07_100300_create_ticket_merge_snapshots_table ......... 36.37ms DONE
+  2026_08_07_100400_create_ticket_bulk_jobs_tables .............. 70.33ms DONE
+  2026_08_07_100500_create_ticket_message_anchors_table ......... 32.92ms DONE
+  2026_08_07_110000_add_ticket_transition_trigger ................ 7.87ms DONE
+  2026_08_07_120000_add_ticket_idempotency_key .................. 13.64ms DONE
+  2026_08_08_100000_add_ticket_auto_close_timer ................. 13.32ms DONE
+  2026_08_09_100000_create_telegram_bots_table .................. 49.77ms DONE
+  2026_08_09_100100_create_telegram_business_connections_table .. 49.27ms DONE
+  2026_08_09_100200_create_telegram_menus_tables ................ 80.13ms DONE
+  2026_08_09_100300_create_telegram_templates_table ............. 48.01ms DONE
+  2026_08_09_100400_create_telegram_flow_targets_table .......... 38.68ms DONE
+  2026_08_09_100500_create_telegram_owner_phone_identities_table  39.95ms DONE
+  2026_08_09_110000_add_reply_window_to_conversations ............ 4.56ms DONE
+  2026_08_10_100000_add_health_columns_to_telegram_bots ......... 14.32ms DONE
+  2026_08_10_110000_create_telegram_acquisitions_table .......... 35.66ms DONE
+  2026_08_10_120000_create_ticket_list_items_table .............. 50.74ms DONE
+  2026_08_10_120100_create_inbox_saved_views_table .............. 35.83ms DONE
+  2026_08_10_120200_create_inbox_selection_tokens_table ......... 45.05ms DONE
+  2026_08_10_120300_create_inbox_notifications_table ............ 31.49ms DONE
+  2026_08_10_120400_create_inbox_user_prefs_table ............... 32.58ms DONE
+  2026_08_10_120500_create_agent_statuses_table ................. 34.34ms DONE
+  2026_08_10_120600_create_inbox_read_markers_table ............. 27.57ms DONE
+  2026_08_10_121000_events_occurred_at_db_time ................... 5.40ms DONE
+  2026_08_10_130000_inbox_step2_indexes ......................... 12.32ms DONE
+  2026_08_10_140000_inbox_step4_tags_column ...................... 7.73ms DONE
+  2026_08_11_100000_inbox_step9_older_channel_activity ........... 9.43ms DONE
+
+
+   INFO  Seeding database.  
+
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
+Bucket created successfully `local/na-live-support`.
+Fresh stack ready at http://localhost
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-13T07:33:51Z
+# duration:   65s
+# EXIT:       0

@@ -184,6 +184,8 @@ jobs:
         run: |
           docker compose -f docker/compose.yaml exec -T app php artisan migrate:fresh --force --database=pgsql_migrator
           docker compose -f docker/compose.yaml exec -T app php artisan db:seed --class='Database\Seeders\BrowserFixtureSeeder' --force
+      - name: Relay liveness probe (S07 step-14 ruling — the stack must RELAY before it serves a browser)
+        run: docker compose -f docker/compose.yaml exec -T app php artisan outbox:liveness-probe
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
         env:

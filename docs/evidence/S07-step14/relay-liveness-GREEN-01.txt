@@ -1,0 +1,19 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      relay-liveness-GREEN
+# set:        S07-step14
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Integration/OutboxRelayLivenessTest.php
+# started:    2026-08-13T07:34:02Z
+# git:        89c1d8a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Integration\OutboxRelayLivenessTest[39m
+  [33;1m-[39;22m[90m [39m[90mit RELAY LIVENESS: a committed outbox row reaches the events log wi[39m[90m…[39m [90m5.79s[39m  
+
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m5.94s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-13T07:34:08Z
+# duration:   6s
+# EXIT:       0

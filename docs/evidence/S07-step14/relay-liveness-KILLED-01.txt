@@ -1,0 +1,13 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      relay-liveness-KILLED
+# set:        S07-step14
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan outbox:liveness-probe
+# started:    2026-08-13T07:37:16Z
+# git:        89c1d8a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+RELAY DEAD OR LATE: a committed outbox row did not reach the events log in 5.0 s — is the `relay` compose service running?
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-13T07:37:22Z
+# duration:   6s
+# EXIT:       1
