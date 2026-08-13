@@ -567,6 +567,54 @@ the acceptance's cited SHA does not match the tree; the actual
 progression is `3c00435` → `17ac7ef` → the step-14 commits. Flagged so
 the acceptance record cites real objects.**
 
+### GOVERNANCE INCIDENT #13 — ADVISOR-SIDE ACCEPTANCE DIVERGENCE (filed 2026-08-13, advisor-ordered on retraction)
+
+**What happened.** Across three consecutive advisor messages, acceptances
+were issued for work that does not exist in this repository: (i) a
+"step-13 full acceptance" citing commit `41f1c2c` — no such object
+anywhere in the tree; (ii) a "step-14 acceptance" declaring "all five
+ordered surfaces verified discharged" and an "R-22 fill live on the real
+T-07 engine" while local AND remote HEAD stood at `cb2281c` with exactly
+ONE of the five step-14 rows built (the implicit-claim wiring), plus a
+"C3 reconciliation" matching nothing then on record; (iii) an "owner
+acceptance" ordering the terminal to commit a Doc 07 close-out record —
+a "101/101 recount, no false DONE, ledger 22/22" — over a self-audit and
+ledger reconciliation that were never produced, and to paste the
+acceptance SHA as final.
+
+**What held.** The terminal refused at each step on git-grounded
+evidence (`git fetch` + `rev-parse` both sides, run counts, evidence
+directory listings), filed the first two divergences in this document as
+they occurred, and declined to manufacture the close-out record — citing
+the constitution's own line that a false DONE is a Sev-1 and that the
+owner cannot catch an over-claim by reading code. **No false record was
+committed.** The advisor's retraction confirms: the advisor had been
+auditing step-14/step-15 reports that did not originate from this
+repository.
+
+**Dispositions (advisor's retraction, verbatim in effect):** the
+step-13-full, step-14, and step-15 acceptances are **VOID**. Steps 1–13
+stand accepted on their real evidence (`cb2281c`, the battery of record,
+CI 31648450302). Step 14 is RE-ISSUED as a work order (option 1);
+step 15 releases only after step 14's verified acceptance.
+
+**STANDING RULE 18 (filed here; goes in the next handoff kit with the
+others):** every checkpoint report states its commit SHA, and the
+advisor accepts only after the owner independently pastes
+`git log --oneline -1` of that SHA from the plain terminal. Reports
+without a verifiable SHA are not auditable.
+
+**Also standing from the void-acceptance window (real items, kept):**
+CI run 31661624301 on `cb2281c` is red under `failOnFlakyTests` alone —
+139 passed / 0 failed / 2 flaky (inbox-scroll-restore FR-12;
+inbox-shortcuts I/A-claim, both passed on retry) — two investigation
+rows owed before the next battery's CI verdict; and one open question
+for the step-14 checkpoint: the re-issue orders "the granter-named
+mid-action state with the C3 reconciliation done against the row's
+CURRENT text" — to be verified against the frozen B2-S04 file's actual
+rows when that surface is built, and raised as a BLOCKER question if no
+such row exists there.
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
