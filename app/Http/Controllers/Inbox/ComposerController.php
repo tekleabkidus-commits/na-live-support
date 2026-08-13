@@ -233,6 +233,21 @@ final class ComposerController extends Controller
             default => TicketStatus::Open,
         };
 
+        // The closed→open edge demands a REAL written reason (the matrix's
+        // own rule) plus the reopen window check — both live behind the
+        // dedicated reopen door (TicketOperationsController::reopen, over
+        // ReopenTicket::reopenByStaff). Refusing here fixes the defect the
+        // step-14 sweep found: this door used to satisfy the mandatory-reason
+        // check with its own hardcoded origin string.
+        if ($to === TicketStatus::Open && $ticket->getAttribute('status') === 'closed') {
+            return ProblemDetails::response(
+                ErrorCode::TransitionRejected,
+                422,
+                'reopening a closed ticket needs a written reason — use the reopen door (FR-08).',
+                extra: ['refusal_code' => 'reopen_reason_required'],
+            );
+        }
+
         try {
             $context = TransitionContext::staff($user, 'composer transition (FR-21 retry)')
                 ->withPendingReason($input['pending_reason'] ?? null);

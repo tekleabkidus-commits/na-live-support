@@ -182,6 +182,25 @@ Route::middleware([
         ->middleware(['permission:tickets.follow', 'audit:ticket.follower_added'])->name('inbox.ticket.follow');
     Route::post('t/{ticketId}/unfollow', [App\Http\Controllers\Inbox\TicketActionsController::class, 'unfollow'])
         ->middleware(['permission:tickets.follow', 'audit:ticket.follower_removed'])->name('inbox.ticket.unfollow');
+    // B1-S04's operation doors + C7/C9/C10/C11 (step 14) — thin over Doc 06's
+    // owning services; each declares the action its service writes.
+    Route::post('t/{ticketId}/unmerge', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'unmerge'])
+        ->middleware(['permission:tickets.merge', 'audit:ticket.unmerged'])->name('inbox.ticket.unmerge');
+    Route::post('t/{ticketId}/spam', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'spam'])
+        ->middleware(['permission:tickets.spam.mark', 'audit:ticket.spam_marked'])->name('inbox.ticket.spam');
+    Route::post('t/{ticketId}/unspam', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'unspam'])
+        ->middleware(['permission:tickets.spam.mark', 'audit:ticket.spam_unmarked'])->name('inbox.ticket.unspam');
+    Route::post('t/{ticketId}/escalate', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'escalate'])
+        ->middleware(['permission:tickets.escalate', 'audit:ticket.escalated'])->name('inbox.ticket.escalate');
+    Route::post('t/{ticketId}/deescalate', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'deescalate'])
+        ->middleware(['permission:tickets.escalate', 'audit:ticket.deescalated'])->name('inbox.ticket.deescalate');
+    Route::post('t/{ticketId}/split', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'split'])
+        ->middleware(['permission:tickets.split', 'audit:ticket.split'])->name('inbox.ticket.split');
+    Route::post('t/{ticketId}/transfer', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'transfer'])
+        ->middleware(['permission:tickets.department.change', 'audit:ticket.transferred'])->name('inbox.ticket.transfer');
+    Route::post('t/{ticketId}/reopen', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'reopen'])
+        ->middleware(['permission:tickets.reopen', 'audit:ticket.status_changed'])->name('inbox.ticket.reopen');
+
     Route::get('t/{ticketId}/timeline', [App\Http\Controllers\Inbox\TicketActionsController::class, 'timeline'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.timeline');
     Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])

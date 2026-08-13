@@ -106,7 +106,7 @@ final class ThreadController extends Controller
         // FULL property set rides the same read the boundary markers use.
         // Reads only; the literal status KEY never appears as an assignment
         // in this file (the ticket-status-writer gate's design constraint).
-        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string, priority: string, pending_reason: string|null, assignee_id: string|null, tags: string|null, subject: string|null, subject_source: string|null, reopened_count: int, channel_unreachable: bool, department_id: string|null, merged_into: string|null, origin_ticket_id: string|null}> $tickets */
+        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string, priority: string, pending_reason: string|null, assignee_id: string|null, tags: string|null, subject: string|null, subject_source: string|null, reopened_count: int, channel_unreachable: bool, department_id: string|null, merged_into: string|null, origin_ticket_id: string|null, auto_close_at: string|null, closed_at: string|null, resolved_at: string|null, spam_marked_at: string|null, spam_marked_by: string|null, escalation: string|null, previous_ticket_id: string|null}> $tickets */
         $tickets = DB::table('tickets')
             ->where('conversation_id', $conversation->identifier())
             ->orderBy('created_at')
@@ -115,19 +115,41 @@ final class ThreadController extends Controller
                 'priority', 'pending_reason', 'assignee_id', 'tags',
                 'subject', 'subject_source', 'reopened_count', 'channel_unreachable',
                 'department_id', 'merged_into', 'origin_ticket_id',
+                // B2-S04 (step 14): the state banners render from these —
+                // C8's auto-close countdown, C9's reopen window boundary,
+                // C10's spam window + marker, C11's escalation record, C13's
+                // earlier-ticket link. Reads only, same as everything here.
+                'auto_close_at', 'closed_at', 'resolved_at',
+                'spam_marked_at', 'spam_marked_by', 'escalation',
+                'previous_ticket_id',
             ])
             ->all();
 
-        // Assignee display names for the panel's row — id + name only, the
-        // assignees-directory posture (SEC: no emails, no roles).
+        // Display names for the panel's rows and the state banners — id +
+        // name only, the assignees-directory posture (SEC: no emails, no
+        // roles). One lookup covers assignees, spam markers, and the
+        // escalation record's actor/target.
+        $nameIds = [];
+        foreach ($tickets as $ticketRow) {
+            $nameIds[] = is_string($ticketRow->assignee_id ?? null) ? $ticketRow->assignee_id : null;
+            $nameIds[] = is_string($ticketRow->spam_marked_by ?? null) ? $ticketRow->spam_marked_by : null;
+            if (is_string($ticketRow->escalation ?? null)) {
+                /** @var array{by?: string|null, target?: string|null} $escalation */
+                $escalation = (array) json_decode((string) $ticketRow->escalation, true, 4);
+                $nameIds[] = is_string($escalation['by'] ?? null) ? $escalation['by'] : null;
+                $nameIds[] = is_string($escalation['target'] ?? null) ? $escalation['target'] : null;
+            }
+        }
         /** @var array<string, string> $assigneeNames */
         $assigneeNames = DB::table('users')
-            ->whereIn('id', array_values(array_filter(array_map(
-                fn (object $ticket): ?string => is_string($ticket->assignee_id ?? null) ? $ticket->assignee_id : null,
-                $tickets,
-            ))))
+            ->whereIn('id', array_values(array_filter($nameIds)))
             ->pluck('name', 'id')
             ->all();
+
+        // C9's boundary, the database's own arithmetic (C-11) — the client
+        // renders the countdown, it never derives the window.
+        $reopenDays = app(\App\Support\Settings\SettingsRepository::class)->get('tickets.reopen.days');
+        $reopenDays = is_int($reopenDays) ? $reopenDays : 7;
 
         /** @var array<string, object{ticket_id: string, payload: string, schema_version: int}> $packets */
         $packets = DB::table('ticket_handoff_packets')
@@ -162,7 +184,7 @@ final class ThreadController extends Controller
                 return $data;
             })->all(),
             'prev_cursor' => $hasMore ? $oldest : null,
-            'tickets' => array_map(function (object $ticket) use ($assigneeNames): array {
+            'tickets' => array_map(function (object $ticket) use ($assigneeNames, $reopenDays): array {
                 /** @var array<string, mixed> $row */
                 $row = (array) $ticket;
                 $row['tags'] = is_string($ticket->tags ?? null)
@@ -207,6 +229,33 @@ final class ThreadController extends Controller
                 $row['final_survivor_conversation_id'] = $survivor->conversation_id ?? null;
                 $row['origin_ticket_number'] = is_string($ticket->origin_ticket_id ?? null)
                     ? DB::table('tickets')->where('id', $ticket->origin_ticket_id)->value('number')
+                    : null;
+                // B2-S04 banner data (step 14): decoded records + names +
+                // DB-computed boundaries; the client renders, never derives.
+                $row['spam_marked_by_name'] = is_string($ticket->spam_marked_by ?? null)
+                    ? ($assigneeNames[$ticket->spam_marked_by] ?? null)
+                    : null;
+                $row['spam_unmark_until'] = is_string($ticket->spam_marked_at ?? null)
+                    ? ($this->boundary((string) $ticket->spam_marked_at, 7))
+                    : null;
+                if (is_string($ticket->escalation ?? null)) {
+                    /** @var array{path?: string, reason?: string, target?: string|null, at?: string, by?: string} $escalation */
+                    $escalation = (array) json_decode((string) $ticket->escalation, true, 4);
+                    $row['escalation'] = [
+                        'path' => $escalation['path'] ?? null,
+                        'reason' => $escalation['reason'] ?? null,
+                        'at' => $escalation['at'] ?? null,
+                        'by_name' => is_string($escalation['by'] ?? null) ? ($assigneeNames[$escalation['by']] ?? null) : null,
+                        'target_name' => is_string($escalation['target'] ?? null) ? ($assigneeNames[$escalation['target']] ?? null) : null,
+                    ];
+                } else {
+                    $row['escalation'] = null;
+                }
+                $row['reopen_window_until'] = is_string($ticket->closed_at ?? null)
+                    ? $this->boundary((string) $ticket->closed_at, $reopenDays)
+                    : null;
+                $row['previous_ticket_number'] = is_string($ticket->previous_ticket_id ?? null)
+                    ? DB::table('tickets')->where('id', $ticket->previous_ticket_id)->value('number')
                     : null;
                 $row['subject_was_ai'] = ($ticket->subject_source ?? null) === 'ai'
                     || DB::table('events')->where('name', 'ticket.subject_changed')
@@ -400,5 +449,17 @@ final class ThreadController extends Controller
             'not found',
             extra: ['search_instead' => '/inbox'],
         );
+    }
+
+    /** A stamp + N days, computed by the DATABASE (C-11 — never app clocks). */
+    private function boundary(string $timestamp, int $days): ?string
+    {
+        /** @var object{until: string|null}|null $row */
+        $row = DB::selectOne(
+            'SELECT (?::timestamptz + make_interval(days => ?))::text AS until',
+            [$timestamp, $days],
+        );
+
+        return $row->until ?? null;
     }
 }
