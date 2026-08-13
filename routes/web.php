@@ -186,6 +186,10 @@ Route::middleware([
     // owning services; each declares the action its service writes.
     Route::post('t/{ticketId}/unmerge', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'unmerge'])
         ->middleware(['permission:tickets.merge', 'audit:ticket.unmerged'])->name('inbox.ticket.unmerge');
+    // C9 lapsed (ruling 2026-08-13): FR-08's new-ticket-and-link recourse —
+    // the service audits ticket.created itself.
+    Route::post('t/{ticketId}/follow-up', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'followUp'])
+        ->middleware(['permission:tickets.create', 'audit:ticket.created'])->name('inbox.ticket.follow_up');
     Route::post('t/{ticketId}/spam', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'spam'])
         ->middleware(['permission:tickets.spam.mark', 'audit:ticket.spam_marked'])->name('inbox.ticket.spam');
     Route::post('t/{ticketId}/unspam', [App\Http\Controllers\Inbox\TicketOperationsController::class, 'unspam'])

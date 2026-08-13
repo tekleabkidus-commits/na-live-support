@@ -241,6 +241,13 @@ function onReopenWithReason(reason: string): void {
     const id = String(latestTicket.value?.id ?? '');
     void bannerPost(`/inbox/t/${id}/reopen`, { reason });
 }
+function onFollowUp(): void {
+    // C9 lapsed (ruling 2026-08-13): FR-08's new-ticket-and-link — the door
+    // mints the linked ticket; load() refetches and the latest-LIVE law
+    // makes the new ticket govern the thread, no navigation needed.
+    const id = String(latestTicket.value?.id ?? '');
+    void bannerPost(`/inbox/t/${id}/follow-up`, {});
+}
 function onUnspam(reason: string): void {
     const id = String(latestTicket.value?.id ?? '');
     void bannerPost(`/inbox/t/${id}/unspam`, { reason });
@@ -646,6 +653,7 @@ onMounted(async () => {
             :t="t"
             @reopen-now="onReopenNow"
             @reopen-with-reason="onReopenWithReason"
+            @follow-up="onFollowUp"
             @unspam="onUnspam"
             @open-rescue="emit('open-rescue')"
         />

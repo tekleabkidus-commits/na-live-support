@@ -242,3 +242,51 @@ it('unmerge door (C7): reverses through the owning service (source back to open,
         ->assertStatus(422)
         ->assertJsonPath('refusal_code', 'not_merged');
 });
+
+it('follow-up door (C9 lapsed — ruling 2026-08-13, the DOCUMENT wins): FR-08\'s new-ticket-and-link recourse mints the linked ticket (previous_ticket_id carried, FR-10 slot claimed), refuses a non-closed ticket, and answers open_ticket_exists while the follow-up itself is live', function (): void {
+    [$tenant, $conversation, $ticket, $actor] = operationScene('open', ['tickets.create']);
+
+    // A live ticket's recourse is never a follow-up — refused before any mint.
+    $this->actingAs($actor, 'staff')
+        ->postJson('https://localhost/inbox/t/'.$ticket->identifier().'/follow-up')
+        ->assertStatus(422);
+
+    // Close through the machine (the sole writer; the slot releases on close).
+    asTenant($tenant, function () use ($ticket): void {
+        $model = Ticket::query()->findOrFail($ticket->identifier());
+        app(App\Domain\Tickets\Transitions\TicketTransitionService::class)->transition(
+            $model,
+            App\Domain\Tickets\Transitions\TicketStatus::Resolved,
+            App\Domain\Tickets\Transitions\TransitionContext::system('test_resolve'),
+        );
+        app(App\Domain\Tickets\Transitions\TicketTransitionService::class)->transition(
+            $model->refresh(),
+            App\Domain\Tickets\Transitions\TicketStatus::Closed,
+            App\Domain\Tickets\Transitions\TransitionContext::system('test_close'),
+        );
+    });
+
+    $minted = $this->actingAs($actor, 'staff')
+        ->postJson('https://localhost/inbox/t/'.$ticket->identifier().'/follow-up', ['subject' => 'Second payout attempt failed'])
+        ->assertOk();
+
+    /** @var string $newId */
+    $newId = $minted->json('ticket_id');
+    asTenant($tenant, function () use ($newId, $ticket, $conversation): void {
+        /** @var object{previous_ticket_id: string|null, status: string, subject: string|null, conversation_id: string} $row */
+        $row = DB::table('tickets')->where('id', $newId)->first(['previous_ticket_id', 'status', 'subject', 'conversation_id']);
+        expect($row->previous_ticket_id)->toBe($ticket->identifier(), 'the FR-08 link is the point — previous_ticket_id must carry it')
+            ->and($row->conversation_id)->toBe($conversation->identifier())
+            ->and($row->status)->toBe('new')
+            ->and($row->subject)->toBe('Second payout attempt failed');
+        // FR-10: the fresh ticket holds the conversation slot.
+        expect(DB::table('conversations')->where('id', $conversation->identifier())->value('open_ticket_id'))->toBe($newId);
+    });
+
+    // While the follow-up is live, a second follow-up on the SAME closed
+    // ticket answers the service's own open_ticket_exists refusal.
+    $second = $this->actingAs($actor, 'staff')
+        ->postJson('https://localhost/inbox/t/'.$ticket->identifier().'/follow-up');
+    $second->assertStatus(422);
+    expect((string) $second->json('detail'))->toContain('open_ticket_exists');
+});

@@ -216,6 +216,52 @@ final class TicketOperationsController extends Controller
     }
 
     /**
+     * C9 lapsed (advisor ruling 2026-08-13, stop item 2): the DOCUMENT wins —
+     * after the reopen window the affordance is FR-08's new-ticket-and-link,
+     * never a widened reopen. This door is thin over Doc 06's own machinery:
+     * CreateTicket::create with previousTicketId carries the link (C13's
+     * earlier-ticket line renders it), the FR-10 claim inside create() is the
+     * one-open-per-conversation verdict (open_ticket_exists, mapped with the
+     * existing ticket for §8's jump link), and ticket.created is audited by
+     * the service itself. Closed-only: a live ticket's recourse is never a
+     * follow-up. Window state is deliberately NOT checked here — FR-12
+     * creation has no window law; only reopen does (ReopenTicket refuses it).
+     */
+    public function followUp(Request $request, string $ticketId, \App\Domain\Tickets\Creation\CreateTicket $creator): JsonResponse
+    {
+        return $this->door(
+            $request,
+            $ticketId,
+            rules: ['subject' => ['sometimes', 'nullable', 'string', 'max:120']],
+            operation: function (Ticket $ticket, User $user, array $input) use ($creator): array {
+                if ($ticket->getAttribute('status') !== 'closed') {
+                    throw new DomainException('a follow-up ticket is the recourse for a CLOSED ticket (FR-08/§4.2); this one is not closed.');
+                }
+
+                /** @var \App\Models\Conversation $conversation */
+                $conversation = \App\Models\Conversation::query()->findOrFail($ticket->getAttribute('conversation_id'));
+
+                /** @var array{subject?: string|null} $input */
+                try {
+                    $minted = $creator->create(new \App\Domain\Tickets\Creation\NewTicket(
+                        conversation: $conversation,
+                        source: \App\Domain\Tickets\Creation\TicketSource::Agent,
+                        actor: $user,
+                        subject: $input['subject'] ?? null,
+                        previousTicketId: $ticket->identifier(),
+                    ));
+                } catch (\App\Domain\Conversations\Storage\OpenTicketExists $exists) {
+                    throw new DomainException(\App\Domain\Conversations\Storage\OpenTicketExists::CODE.': an open ticket already exists on this conversation (#'.$exists->existingTicketId.')');
+                }
+
+                $this->projector->recomputeTicket($minted->identifier());
+
+                return ['ticket_id' => $minted->identifier(), 'number' => $minted->getAttribute('number')];
+            },
+        );
+    }
+
+    /**
      * The shared door shape: validate (C-04, the step-13 web-group JSON
      * pattern) → scope-resolve (C-10) → the owning service → recompute →
      * C-04 refusal mapping.

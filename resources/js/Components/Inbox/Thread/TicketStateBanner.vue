@@ -45,6 +45,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: 'reopen-now'): void;
     (e: 'reopen-with-reason', reason: string): void;
+    (e: 'follow-up'): void;
     (e: 'unspam', reason: string): void;
     (e: 'open-rescue'): void;
 }>();
@@ -190,6 +191,21 @@ function timeShort(iso: string | null | undefined): string {
                     @click="reasonOpen = 'reopen'"
                 >
                     {{ t.reopen_with_reason }}
+                </button>
+                <!-- Lapsed (ruling 2026-08-13, stop item 2): the DOCUMENT
+                     wins — the affordance is FR-08's new-ticket-and-link,
+                     never a reopen the door would refuse. The frozen
+                     "Reopen with a reason" lapsed copy is superseded (the
+                     frozen file's own new-ticket sentence agrees). -->
+                <button
+                    v-else
+                    type="button"
+                    data-testid="follow-up-ticket"
+                    class="min-h-[32px] rounded-md border px-3 font-medium"
+                    :style="{ borderColor: 'var(--ds-border-strong)' }"
+                    @click="emit('follow-up')"
+                >
+                    {{ t.follow_up_ticket }}
                 </button>
             </div>
         </template>

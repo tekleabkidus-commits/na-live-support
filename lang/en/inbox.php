@@ -176,9 +176,13 @@ return [
         'auto_close_in' => 'Closes in :remaining unless the customer replies. A reply reopens it automatically.',
         'reopen_now' => 'Reopen now',
         'closed_at_time' => 'Closed · :time',
-        'reopen_window_in' => 'Reopens freely for :remaining',
-        'reopen_window_passed' => 'The reopen window has passed. Open a new ticket for this conversation instead.',
+        // Ruling 2026-08-13 (stop item 3): "freely" means NO-DETOUR only —
+        // the copy states BOTH facts: direct within the window, and the
+        // FR-04 matrix's mandatory written reason.
+        'reopen_window_in' => 'Reopens directly for :remaining — a written reason is still required.',
+        'reopen_window_passed' => 'The reopen window has passed. Open a new linked ticket for this conversation instead.',
         'reopen_with_reason' => 'Reopen with a reason',
+        'follow_up_ticket' => 'Open a new linked ticket',
         'reopen_verb' => 'Reopen ticket',
         'reopened_times' => 'Reopened · :count time(s)',
         'reopened_earlier' => 'Earlier ticket #:number',
