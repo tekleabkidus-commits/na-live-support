@@ -265,6 +265,26 @@ final class InboxBrowserSeeder extends Seeder
             $healed[] = $ticket->id;
         }
 
+        // Split children became scene state when the split surface landed
+        // (step 14): live linked-work tickets on canon conversations would
+        // trip FR-21's conversation cap on the NEXT run's first split.
+        // Retire them (closed, never deleted — N-05) and converge their rows.
+        $canonConversations = DB::table('tickets')
+            ->whereIn('number', array_keys($canonical))
+            ->pluck('conversation_id')->all();
+        /** @var list<string> $liveChildren */
+        $liveChildren = DB::table('tickets')
+            ->whereIn('conversation_id', $canonConversations)
+            ->where('linked_work', true)
+            ->whereIn('status', ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'])
+            ->pluck('id')->all();
+        if ($liveChildren !== []) {
+            DB::table('tickets')->whereIn('id', $liveChildren)->update(['status' => 'closed']);
+            foreach ($liveChildren as $childId) {
+                $projector->recomputeTicket($childId);
+            }
+        }
+
         // Drafts became scene state the moment the composer learned to
         // HYDRATE them (FR-22's read half, step 14): a run's leftover draft
         // resurfaces in the next run's composer. Restore draft canon — R2's

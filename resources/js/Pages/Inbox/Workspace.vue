@@ -27,6 +27,7 @@ import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
 import MergeDialog from '../../Components/Inbox/MergeDialog.vue';
 import OperationDialog from '../../Components/Inbox/OperationDialog.vue';
+import SplitUnmergeDialog from '../../Components/Inbox/SplitUnmergeDialog.vue';
 import TicketPanel from '../../Components/Inbox/TicketPanel.vue';
 import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
@@ -520,9 +521,14 @@ watch(
         panelLoading.value = activeThread.value !== null;
     },
 );
-const panelTicket = computed(
-    () => (panelTickets.value[panelTickets.value.length - 1] ?? null) as never,
-);
+const PANEL_LIVE = ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'];
+const panelTicket = computed(() => {
+    // Same law as the thread banner: the latest LIVE ticket governs; a
+    // retired linked-work child never outranks a live origin.
+    const rows = panelTickets.value as { status?: string }[];
+    const live = rows.filter((row) => PANEL_LIVE.includes(String(row.status ?? '')));
+    return ((live.length > 0 ? live[live.length - 1] : rows[rows.length - 1]) ?? null) as never;
+});
 // FS-01 (step 14): the staleness banner's live state — seeded by the page
 // prop, refreshed by every 30 s heartbeat. The banner needs BOTH staleness
 // past the threshold AND pending work (a quiet stack is not an outage).
@@ -558,6 +564,36 @@ function openOperation(payload: { kind: 'escalate' | 'spam'; ticketId: string })
     operationKind.value = payload.kind;
     operationTicketId.value = payload.ticketId;
     operationOpen.value = true;
+}
+// B1-S04 split + C7 unmerge (step 14): selection arms in the thread, the
+// dialog lives here; the cap card opens DIRECTLY when 3 are already live.
+const splitArmTick = ref(0);
+const splitUnmergeOpen = ref(false);
+const splitUnmergeKind = ref<'split' | 'unmerge'>('split');
+const splitMessageIds = ref<string[]>([]);
+const splitTicketId = ref('');
+function onOpenSplit(): void {
+    const ticket = panelTicket.value as { id?: string; linked_work?: unknown[] } | null;
+    splitTicketId.value = String(ticket?.id ?? '');
+    if ((ticket?.linked_work?.length ?? 0) >= 3) {
+        splitUnmergeKind.value = 'split';
+        splitMessageIds.value = [];
+        splitUnmergeOpen.value = true;
+        return;
+    }
+    splitArmTick.value += 1;
+}
+function onSplitSelection(payload: { ticketId: string; messageIds: string[] }): void {
+    splitTicketId.value = payload.ticketId;
+    splitMessageIds.value = payload.messageIds;
+    splitUnmergeKind.value = 'split';
+    splitUnmergeOpen.value = true;
+}
+function onOpenUnmerge(): void {
+    const ticket = panelTicket.value as { id?: string } | null;
+    splitTicketId.value = String(ticket?.id ?? '');
+    splitUnmergeKind.value = 'unmerge';
+    splitUnmergeOpen.value = true;
 }
 const mergeIds = ref<string[]>([]);
 function openMerge(): void {
@@ -1030,6 +1066,33 @@ function dismissCoach(): void {
             @close="operationOpen = false"
             @done="onPanelChanged"
         />
+        <SplitUnmergeDialog
+            :open="splitUnmergeOpen"
+            :kind="splitUnmergeKind"
+            :ticket-id="splitTicketId"
+            :ticket-number="(panelTicket as { number?: number | string } | null)?.number ?? null"
+            :message-ids="splitMessageIds"
+            :linked-work="(panelTicket as { linked_work?: never[] } | null)?.linked_work ?? []"
+            :unmerge-until="(panelTicket as { unmerge_until?: string | null } | null)?.unmerge_until ?? null"
+            :merged-message-count="
+                (panelTicket as { merged_message_count?: number | null } | null)
+                    ?.merged_message_count ?? null
+            "
+            :merged-into-number="
+                (panelTicket as { merged_into_number?: number | string | null } | null)
+                    ?.merged_into_number ?? null
+            "
+            :t="t.ticket_panel"
+            :xsrf="workspaceXsrf"
+            @close="splitUnmergeOpen = false"
+            @done="onPanelChanged"
+            @split-instead="
+                () => {
+                    splitUnmergeOpen = false;
+                    splitArmTick += 1;
+                }
+            "
+        />
         <p
             v-if="actionToast"
             data-testid="action-toast"
@@ -1266,6 +1329,7 @@ function dismissCoach(): void {
                     :key="activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick"
                     :conversation-id="activeThread"
                     :initial-anchor="activeAnchor"
+                    :split-arm-tick="splitArmTick"
                     :t="t.thread"
                     :composer-t="t.composer"
                     :voice-flag="features.voice_recording"
@@ -1277,6 +1341,7 @@ function dismissCoach(): void {
                         }
                     "
                     @open-rescue="activeView = 'rescue'"
+                    @split-selection="onSplitSelection"
                     @scope-lost="
                         () => {
                             panelTickets = [];
@@ -1312,6 +1377,8 @@ function dismissCoach(): void {
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
                             @open-operation="openOperation"
+                    @open-split="onOpenSplit"
+                    @open-unmerge="onOpenUnmerge"
                     @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
@@ -1339,6 +1406,8 @@ function dismissCoach(): void {
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
                             @open-operation="openOperation"
+                    @open-split="onOpenSplit"
+                    @open-unmerge="onOpenUnmerge"
                     @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
@@ -1519,6 +1588,7 @@ function dismissCoach(): void {
                         "
                         :conversation-id="activeThread"
                         :initial-anchor="activeAnchor"
+                    :split-arm-tick="splitArmTick"
                         :t="t.thread"
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
@@ -1530,7 +1600,8 @@ function dismissCoach(): void {
                             }
                         "
                         @open-rescue="activeView = 'rescue'"
-                        @scope-lost="
+                        @split-selection="onSplitSelection"
+                    @scope-lost="
                             () => {
                                 panelTickets = [];
                                 panelLoading = false;
@@ -1580,6 +1651,8 @@ function dismissCoach(): void {
                                     @changed="onPanelChanged"
                                     @claim-next="onClaimNext"
                                     @open-operation="openOperation"
+                    @open-split="onOpenSplit"
+                    @open-unmerge="onOpenUnmerge"
                     @open-survivor="(cid) => (activeThread = cid)"
                                 />
                             </template>

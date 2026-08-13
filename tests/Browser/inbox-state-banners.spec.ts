@@ -308,3 +308,74 @@ test('B1-S04 DIALOGS: Escalate (named path demands a target, ≥10-char reason g
     await expect(page.getByTestId('ticket-state-banner')).toContainText('Marked as spam');
     await expect(page.getByTestId('op-spam')).toHaveCount(0); // ops hidden on spam
 });
+
+test("B1-S04 SPLIT + C7 UNMERGE: the selection strip counts picked bubbles, the split door mints the linked ticket, the FOURTH attempt renders the D11 cap card listing all three; the merged banner's Undo-merge shows C7's available state and the door reverses", async ({
+    page,
+}) => {
+    const splitTicket = ticketField(4807, 'id');
+    await openThread(page);
+    await page.goto(`/inbox/t/${splitTicket}`);
+    await expect(page.getByTestId('thread-scroll')).toBeVisible();
+
+    // Round 1 through the DRAWN path: arm selection, pick a bubble, name
+    // the subject, the verb — the door mints the linked child.
+    await page.getByTestId('op-split').click();
+    await expect(page.getByTestId('split-strip')).toBeVisible();
+    await page.locator('[data-message]').first().click();
+    await expect(page.getByTestId('split-strip')).toContainText('1 selected');
+    await page.getByTestId('split-continue').click();
+    await expect(page.getByTestId('split-unmerge-dialog')).toHaveAttribute('data-kind', 'split');
+    await page.getByTestId('split-subject').fill('Linked work 1');
+    await page.getByTestId('split-confirm').click();
+    await expect(page.getByTestId('split-unmerge-dialog')).toHaveCount(0);
+
+    // Rounds 2–3 through the same drawn path.
+    for (const round of [2, 3]) {
+        await page.reload();
+        await expect(page.getByTestId('thread-scroll')).toBeVisible();
+        await page.getByTestId('op-split').click();
+        await expect(page.getByTestId('split-strip')).toBeVisible();
+        await page.locator('[data-message]').first().click();
+        await page.getByTestId('split-continue').click();
+        await page.getByTestId('split-subject').fill(`Linked work ${round}`);
+        await page.getByTestId('split-confirm').click();
+        await expect(page.getByTestId('split-unmerge-dialog')).toHaveCount(0);
+    }
+    await page.reload();
+    await expect(page.getByTestId('thread-scroll')).toBeVisible();
+
+    // D11 — the FOURTH ask opens the cap card DIRECTLY, all three listed.
+    await page.getByTestId('op-split').click();
+    await expect(page.getByTestId('split-cap-card')).toBeVisible();
+    await expect(page.getByTestId('split-cap-card')).toContainText('Linked work 1');
+    await expect(page.getByTestId('split-cap-card')).toContainText('Linked work 3');
+    await page.getByTestId('split-cap-close').click();
+
+    // C7 — merge the Hana pair through the doors, then undo from the banner.
+    const source = ticketField(4803, 'id');
+    const target = ticketField(4899, 'id');
+    await page.evaluate(
+        async ({ source, target }) => {
+            const xsrf = decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '');
+            await fetch('/inbox/merge', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': xsrf,
+                },
+                body: JSON.stringify({ target_id: target, source_ids: [source] }),
+            });
+        },
+        { source, target },
+    );
+    await page.goto(`/inbox/t/${source}`);
+    await expect(page.getByTestId('merged-banner')).toBeVisible();
+    await page.getByTestId('undo-merge').click();
+    await expect(page.getByTestId('split-unmerge-dialog')).toHaveAttribute('data-kind', 'unmerge');
+    await expect(page.getByTestId('unmerge-available')).toBeVisible();
+    await expect(page.getByTestId('split-unmerge-dialog')).toContainText('returns to Open');
+    await page.getByTestId('unmerge-confirm').click();
+    await expect(page.getByTestId('split-unmerge-dialog')).toHaveCount(0);
+    expect(ticketField(4803, 'merged_into')).toBe('');
+});

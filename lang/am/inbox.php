@@ -162,6 +162,9 @@ return [
         'media_omitted' => '[አባሪ ከህትመት ተትቷል]',
     ],
     'thread' => [
+        'split_selected' => ':count ተመርጠዋል',
+        'split_continue' => 'ወደ አዲስ ትኬት ክፈል',
+        'cancel' => 'ሰርዝ',
         // B2-S04 state banners + D14 universal states (step 14).
         'remaining_days' => ':days ቀን :hours ሰዓት',
         'remaining_hours' => ':hours ሰዓት',
@@ -431,6 +434,27 @@ return [
     // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
     // control + two-level pending selector on the countersigned door.
     'ticket_panel' => [
+        // B1-S04 split + C7 unmerge (step 14).
+        'split_action' => 'ክፈል…',
+        'split_selected' => ':count ተመርጠዋል',
+        'split_continue' => 'ወደ አዲስ ትኬት ክፈል',
+        'split_title' => 'ወደ አዲስ ትኬት መክፈል',
+        'split_detail' => ':count መልዕክቶች ከመጀመሪያ የጊዜ ማህተማቸው ጋር ወደ አዲስ የተገናኘ ትኬት ይንቀሳቀሳሉ።',
+        'split_subject_label' => 'የአዲሱ ትኬት ርዕስ (አማራጭ)',
+        'split_verb' => 'መልዕክቶችን ክፈል',
+        'split_cap_title' => 'ይህ ትኬት አስቀድሞ 3 የተገናኙ የስራ ትኬቶች አሉት',
+        'split_cap_detail' => 'ሶስት ገደቡ ነው። አንዱን ይዝጉ ወይም ይፍቱ፣ ወይም መልዕክቶቹን ወዳለ የተገናኘ ትኬት ይጨምሩ።',
+        'undo_merge' => 'ውህደት ቀልብስ',
+        'unmerge_title' => 'ውህደት መቀልበስ',
+        'unmerge_source_line' => '#:number ወደ #:target ተዋህዶ ነበር',
+        'unmerge_returns' => ':count መልዕክቶች ከመጀመሪያ የጊዜ ማህተማቸው ጋር ይመለሳሉ። ትኬቱ ወደ ክፍት ይመለሳል።',
+        'unmerge_window_in' => 'መቀልበስ ለተጨማሪ :hours ሰዓት ይቻላል።',
+        'unmerge_after_note' => 'ከ24 ሰዓታት በኋላ ቅጂው ይሰረዛል፤ ይህ መቀልበስ አይቻልም።',
+        'unmerge_verb' => 'ውህደቱን ቀልብስ',
+        'unmerge_pruned' => 'ይህ ውህደት ከእንግዲህ መቀልበስ አይቻልም። የ24-ሰዓቱ ቅጂ ተሰርዟል፤ የሚመለስበት ነገር የለም።',
+        'unmerge_split_advice' => 'አሁንም ማድረግ የሚችሉት፦ ሌላ ቦታ የሚገቡ መልዕክቶችን ወደ አዲስ ትኬት መክፈል — ውህደቱ እንዳልነበር ከማስመሰል ይልቅ የኦዲት መዝገቡን ሐቀኛ ያደርገዋል።',
+        'split_instead' => 'በምትኩ መልዕክቶችን ክፈል',
+        'close' => 'ዝጋ',
         // B1-S04 operation dialogs (step 14).
         'escalate_action' => 'አሳድግ…',
         'spam_action' => 'እንደ አይፈለጌ ምልክት አድርግ…',

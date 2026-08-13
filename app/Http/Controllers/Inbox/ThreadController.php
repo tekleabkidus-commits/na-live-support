@@ -146,6 +146,22 @@ final class ThreadController extends Controller
             ->pluck('name', 'id')
             ->all();
 
+        // D11 (step 14): the linked-work list rides EVERY ticket row and is
+        // CONVERSATION-scoped — FR-21's own cap arithmetic ("capped at 3 per
+        // conversation"), so the cap card renders true from any ticket's
+        // panel, child included.
+        /** @var list<object{number: int|string, subject: string|null, status: string}> $linkedLive */
+        $linkedLive = DB::table('tickets')
+            ->where('conversation_id', $conversation->identifier())
+            ->where('linked_work', true)
+            ->whereIn('status', ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'])
+            ->orderBy('created_at')->limit(3)
+            ->get(['number', 'subject', 'status'])->all();
+        $conversationLinkedWork = [];
+        foreach ($linkedLive as $l) {
+            $conversationLinkedWork[] = ['number' => $l->number, 'subject' => $l->subject, 'status' => $l->status];
+        }
+
         // One count serves every merged-source card (the payload is per
         // conversation — the moving messages ARE this conversation's).
         $conversationMessageCount = (int) DB::table('messages')
@@ -190,7 +206,7 @@ final class ThreadController extends Controller
                 return $data;
             })->all(),
             'prev_cursor' => $hasMore ? $oldest : null,
-            'tickets' => array_map(function (object $ticket) use ($assigneeNames, $reopenDays, $conversationMessageCount): array {
+            'tickets' => array_map(function (object $ticket) use ($assigneeNames, $reopenDays, $conversationMessageCount, $conversationLinkedWork): array {
                 /** @var array<string, mixed> $row */
                 $row = (array) $ticket;
                 $row['tags'] = is_string($ticket->tags ?? null)
@@ -272,22 +288,11 @@ final class ThreadController extends Controller
                         ->where('source_ticket_id', $ticket->id)
                         ->orderByDesc('created_at')->first(['created_at'])
                     : null;
-                /** @var list<object{number: int|string, subject: string|null, status: string}> $linked */
-                $linked = DB::table('tickets')
-                    ->where('origin_ticket_id', $ticket->id)
-                    ->where('linked_work', true)
-                    ->whereIn('status', ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'])
-                    ->orderBy('created_at')->limit(3)
-                    ->get(['number', 'subject', 'status'])->all();
-                $linkedRows = [];
-                foreach ($linked as $l) {
-                    $linkedRows[] = ['number' => $l->number, 'subject' => $l->subject, 'status' => $l->status];
-                }
                 /** @var array<string, mixed> $row */
                 $row = array_merge($row, [
                     'unmerge_until' => $snapshot !== null ? $this->boundary($snapshot->created_at, 1) : null,
                     'merged_message_count' => is_string($ticket->merged_into ?? null) ? $conversationMessageCount : null,
-                    'linked_work' => $linkedRows,
+                    'linked_work' => $conversationLinkedWork,
                 ]);
                 $row['subject_was_ai'] = ($ticket->subject_source ?? null) === 'ai'
                     || DB::table('events')->where('name', 'ticket.subject_changed')

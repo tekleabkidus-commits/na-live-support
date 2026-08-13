@@ -46,6 +46,9 @@ const props = defineProps<{
     // FR-25 (step 12): a search-hit anchor — the thread opens AT the
     // message with the row highlighted (Doc 04 EC-08's window underneath).
     initialAnchor?: string | null;
+    // B1-S04 split (step 14): the panel's Split… bumps this to arm the
+    // message-selection mode here (the messages live in this pane).
+    splitArmTick?: number;
 }>();
 
 const emit = defineEmits<{
@@ -54,6 +57,8 @@ const emit = defineEmits<{
     // C12's affordance + D4's honest posture (step 14).
     (e: 'open-rescue'): void;
     (e: 'scope-lost'): void;
+    // The selection is made here; the DIALOG lives at the workspace root.
+    (e: 'split-selection', payload: { ticketId: string; messageIds: string[] }): void;
 }>();
 
 const messages = ref<Msg[]>([]);
@@ -88,6 +93,36 @@ const connection = useInboxConnection();
 // retry, and D4's scope-lost (a 404 MID-VIEW: the ticket left the viewer's
 // scope; the stale panel must not sit lying interactive).
 const loadState = ref<'loading' | 'ready' | 'error' | 'scope-lost'>('loading');
+
+// B1-S04 split (step 14): selection mode — click bubbles to pick the
+// messages that belong elsewhere; the strip carries the count + the verb.
+const splitSelecting = ref(false);
+const splitSelected = ref<Record<string, boolean>>({});
+const splitCount = computed(() => Object.values(splitSelected.value).filter(Boolean).length);
+watch(
+    () => props.splitArmTick,
+    (tick) => {
+        if (typeof tick === 'number' && tick > 0) {
+            splitSelecting.value = true;
+            splitSelected.value = {};
+        }
+    },
+);
+function toggleSplitSelect(messageId: string): void {
+    splitSelected.value = {
+        ...splitSelected.value,
+        [messageId]: !splitSelected.value[messageId],
+    };
+}
+function confirmSplitSelection(): void {
+    const ids = Object.entries(splitSelected.value)
+        .filter(([, on]) => on)
+        .map(([id]) => id);
+    if (ids.length === 0) return;
+    const ticketId = String(latestTicket.value?.id ?? '');
+    splitSelecting.value = false;
+    emit('split-selection', { ticketId, messageIds: ids });
+}
 
 // FR-29/T-07 (step 13): sync reconciliation refetches the open thread —
 // convergence by refetch, one reconciliation path.
@@ -158,12 +193,16 @@ async function load(anchor?: string): Promise<void> {
 
 // B2-S04 (step 14): the banners render from the LATEST ticket's state; the
 // composer is REPLACED (closed/spam) or note-limited (unreachable) by it.
-const latestTicket = computed(
-    () =>
-        (tickets.value.length > 0
-            ? tickets.value[tickets.value.length - 1]
-            : null) as unknown as Record<string, unknown> | null,
-);
+// The LATEST LIVE ticket governs the banner/composer; a retired linked-work
+// child never outranks a live origin. Only when nothing is live does the
+// latest overall govern (the C9/C10 closed-and-spam postures).
+const LIVE = ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'];
+const latestTicket = computed(() => {
+    if (tickets.value.length === 0) return null;
+    const live = tickets.value.filter((t) => LIVE.includes(t.status));
+    const pick = live.length > 0 ? live[live.length - 1] : tickets.value[tickets.value.length - 1];
+    return pick as unknown as Record<string, unknown> | null;
+});
 const bannerVisible = computed(() => {
     const t = latestTicket.value;
     if (!t) return false;
@@ -550,11 +589,15 @@ onMounted(async () => {
                     :data-search-highlight="
                         highlightedMessage === item.message.id ? '1' : undefined
                     "
+                    :data-split-selected="splitSelected[item.message.id] ? '1' : undefined"
                     :style="
                         highlightedMessage === item.message.id
                             ? { outline: '2px solid var(--ds-accent)', borderRadius: '8px' }
-                            : undefined
+                            : splitSelected[item.message.id]
+                              ? { outline: '2px dashed var(--ds-accent)', borderRadius: '8px' }
+                              : undefined
                     "
+                    @click="splitSelecting ? toggleSplitSelect(item.message.id) : undefined"
                 >
                     <MessageBubble
                         :message="item.message"
@@ -566,6 +609,35 @@ onMounted(async () => {
                     />
                 </div>
             </template>
+        </div>
+
+        <!-- B1-S04: the split-selection strip (count + verb + cancel). -->
+        <div
+            v-if="splitSelecting"
+            data-testid="split-strip"
+            class="flex items-center gap-2 border-t px-4 py-2 text-xs"
+            :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)' }"
+        >
+            <span>{{ (t.split_selected ?? '').replace(':count', String(splitCount)) }}</span>
+            <button
+                type="button"
+                data-testid="split-continue"
+                class="min-h-[32px] rounded-md border px-2.5 font-medium"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                :disabled="splitCount === 0"
+                @click="confirmSplitSelection"
+            >
+                {{ t.split_continue }}
+            </button>
+            <button
+                type="button"
+                data-testid="split-cancel-mode"
+                class="min-h-[32px] px-2"
+                :style="{ color: 'var(--ds-text-muted)' }"
+                @click="splitSelecting = false"
+            >
+                {{ t.cancel }}
+            </button>
         </div>
 
         <TicketStateBanner

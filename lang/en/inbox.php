@@ -164,6 +164,9 @@ return [
         'media_omitted' => '[attachment omitted from print]',
     ],
     'thread' => [
+        'split_selected' => ':count selected',
+        'split_continue' => 'Split into a new ticket',
+        'cancel' => 'Cancel',
         // B2-S04 state banners + D14 universal states (step 14).
         'remaining_days' => ':days d :hours h',
         'remaining_hours' => ':hours h',
@@ -453,6 +456,27 @@ return [
     // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
     // control + two-level pending selector on the countersigned door.
     'ticket_panel' => [
+        // B1-S04 split + C7 unmerge (step 14).
+        'split_action' => 'Split…',
+        'split_selected' => ':count selected',
+        'split_continue' => 'Split into a new ticket',
+        'split_title' => 'Split into a new ticket',
+        'split_detail' => ':count messages move to a new linked ticket with their original timestamps.',
+        'split_subject_label' => 'Subject for the new ticket (optional)',
+        'split_verb' => 'Split messages',
+        'split_cap_title' => 'This ticket already has 3 linked-work tickets',
+        'split_cap_detail' => 'Three is the cap. Close or resolve one of them, or add the messages to an existing linked ticket.',
+        'undo_merge' => 'Undo merge',
+        'unmerge_title' => 'Undo merge',
+        'unmerge_source_line' => '#:number was merged into #:target',
+        'unmerge_returns' => ':count messages go back with their original timestamps. The ticket returns to Open.',
+        'unmerge_window_in' => 'Reversal is possible for :hours h more.',
+        'unmerge_after_note' => 'After 24 hours the snapshot is deleted and this cannot be undone.',
+        'unmerge_verb' => 'Undo the merge',
+        'unmerge_pruned' => 'This merge can no longer be undone. The 24-hour snapshot was deleted, so there is nothing to restore from.',
+        'unmerge_split_advice' => 'What you can still do: split the messages that belong elsewhere into a new ticket, which keeps the audit trail honest instead of pretending the merge never happened.',
+        'split_instead' => 'Split messages instead',
+        'close' => 'Close',
         // B1-S04 operation dialogs (step 14).
         'escalate_action' => 'Escalate…',
         'spam_action' => 'Mark as spam…',

@@ -56,6 +56,9 @@ const emit = defineEmits<{
     (e: 'claim-next'): void;
     // B1-S04 (step 14): the operation dialogs live at the workspace root.
     (e: 'open-operation', payload: { kind: 'escalate' | 'spam'; ticketId: string }): void;
+    // B1-S04 split + C7 unmerge (the dialogs live at the workspace root).
+    (e: 'open-split'): void;
+    (e: 'open-unmerge'): void;
     // D12: the merged banner opens the FINAL survivor.
     (e: 'open-survivor', conversationId: string): void;
 }>();
@@ -409,6 +412,16 @@ const initials = computed(() => {
                 {{
                     (t.open_survivor ?? '').replace(':number', String(ticket.final_survivor_number))
                 }}
+            </button>
+            <button
+                v-if="can.tickets_merge"
+                type="button"
+                data-testid="undo-merge"
+                class="ms-2 mt-0.5 underline"
+                :style="{ color: 'var(--ds-text-secondary)' }"
+                @click="emit('open-unmerge')"
+            >
+                {{ t.undo_merge }}
             </button>
         </div>
 
@@ -944,6 +957,16 @@ const initials = computed(() => {
                 @click="emit('open-operation', { kind: 'escalate', ticketId: ticket.id })"
             >
                 {{ t.escalate_action }}
+            </button>
+            <button
+                v-if="can.tickets_split"
+                type="button"
+                data-testid="op-split"
+                class="min-h-[32px] rounded-md border px-2.5 text-xs"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('open-split')"
+            >
+                {{ t.split_action }}
             </button>
             <button
                 v-if="can.tickets_spam_mark"
