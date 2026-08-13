@@ -24,6 +24,9 @@ const props = defineProps<{
 const rows = ref<TimelineRow[]>([]);
 const total = ref(0);
 const expanded = ref(false);
+// D6: this panel section can fail ALONE — the state says so and offers the
+// retry; the conversation to the left is untouched (the drawn copy's law).
+const failed = ref(false);
 
 async function load(all: boolean): Promise<void> {
     if (props.ticketId === null) {
@@ -31,10 +34,20 @@ async function load(all: boolean): Promise<void> {
         total.value = 0;
         return;
     }
-    const response = await fetch(`/inbox/t/${props.ticketId}/timeline` + (all ? '?all=1' : ''), {
-        headers: { Accept: 'application/json' },
-    });
-    if (!response.ok) return;
+    failed.value = false;
+    let response: Response;
+    try {
+        response = await fetch(`/inbox/t/${props.ticketId}/timeline` + (all ? '?all=1' : ''), {
+            headers: { Accept: 'application/json' },
+        });
+    } catch {
+        failed.value = true;
+        return;
+    }
+    if (!response.ok) {
+        failed.value = true;
+        return;
+    }
     const body = (await response.json()) as { total: number; rows: TimelineRow[] };
     rows.value = body.rows;
     total.value = body.total;
@@ -104,8 +117,21 @@ function showEarlier(): void {
         <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
             {{ t.timeline_title }}
         </p>
+        <div v-if="failed" data-testid="timeline-failed" class="text-xs">
+            <p :style="{ color: 'var(--ds-danger-strong)' }">⚠ {{ t.load_failed }}</p>
+            <p :style="{ color: 'var(--ds-text-muted)' }">{{ t.load_failed_hint }}</p>
+            <button
+                type="button"
+                data-testid="timeline-retry"
+                class="mt-1 underline"
+                :style="{ color: 'var(--ds-text-secondary)' }"
+                @click="void load(expanded)"
+            >
+                {{ t.try_again }}
+            </button>
+        </div>
         <p
-            v-if="rows.length === 0"
+            v-else-if="rows.length === 0"
             class="text-xs"
             :style="{ color: 'var(--ds-text-muted)' }"
             data-testid="timeline-empty"

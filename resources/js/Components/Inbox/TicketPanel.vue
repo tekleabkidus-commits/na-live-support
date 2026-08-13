@@ -33,6 +33,7 @@ const props = defineProps<{
     can: Record<string, boolean>;
     t: Record<string, string>;
     xsrf: () => string;
+    loading?: boolean;
     // D3 (SS-04): the per-viewer legal-target map — matrix ∩ capability,
     // computed server-side from the matrix's own table. Absence is the
     // render rule; the refused strip stays the race surface.
@@ -58,6 +59,34 @@ const timelineTick = ref(0);
 // real value; the strip explains; the control never sits lying).
 const pendingTarget = ref<string | null>(null);
 const refusalPutBack = ref(false);
+// D5: the inline claim — an unassigned ticket offers "Assign to me" right
+// on the row (the drawn empty says what fills it and offers the act).
+const claiming = ref(false);
+async function assignToMe(): Promise<void> {
+    if (claiming.value || props.ticket === null) return;
+    claiming.value = true;
+    refusal.value = '';
+    try {
+        const response = await fetch(`/inbox/t/${props.ticket.id}/claim`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': props.xsrf(),
+            },
+        });
+        if (response.ok) {
+            timelineTick.value += 1;
+            emit('changed');
+            return;
+        }
+        const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+        refusal.value = body?.detail ?? props.t.refused ?? '';
+        emit('changed'); // the race case: someone else claimed — show truth
+    } finally {
+        claiming.value = false;
+    }
+}
 
 // ── B13 subject state ───────────────────────────────────────────────────
 const editingSubject = ref(false);
@@ -204,7 +233,17 @@ const initials = computed(() => {
 </script>
 
 <template>
-    <div v-if="ticket === null" data-testid="ticket-panel-empty">
+    <!-- D1: the loading skeleton — a shape, never a stale ticket. -->
+    <div v-if="loading && ticket === null" data-testid="ticket-panel-skeleton" aria-hidden="true">
+        <p class="mb-2 text-xs" :style="{ color: 'var(--ds-text-muted)' }">{{ t.loading }}</p>
+        <div
+            v-for="i in 3"
+            :key="i"
+            class="mb-2 h-3 rounded"
+            :style="{ background: 'var(--ds-row-hover)', width: `${90 - i * 18}%` }"
+        ></div>
+    </div>
+    <div v-else-if="ticket === null" data-testid="ticket-panel-empty">
         <p class="text-sm" :style="{ color: 'var(--ds-text-muted)' }">{{ t.empty }}</p>
     </div>
     <div v-else data-testid="ticket-panel" class="flex flex-col gap-3">
@@ -228,9 +267,12 @@ const initials = computed(() => {
             <template v-if="!editingSubject">
                 <p class="text-xs" data-testid="panel-subject-text">
                     <span v-if="ticket.subject">{{ ticket.subject }}</span>
-                    <span v-else :style="{ color: 'var(--ds-text-muted)' }">{{
-                        t.subject_none
-                    }}</span>
+                    <span
+                        v-else
+                        class="border-b border-dashed"
+                        :style="{ color: 'var(--ds-text-muted)', borderColor: 'var(--ds-border)' }"
+                        >{{ t.subject_none }}</span
+                    >
                 </p>
                 <div class="mt-0.5 flex items-center gap-2">
                     <span
@@ -501,9 +543,25 @@ const initials = computed(() => {
                 >
                 <span class="text-xs">{{ ticket.assignee_name }}</span>
             </div>
-            <p v-else class="text-xs" :style="{ color: 'var(--ds-text-muted)' }">
-                {{ t.unassigned }}
-            </p>
+            <div v-else class="flex items-center gap-2">
+                <p
+                    class="border-b border-dashed text-xs"
+                    :style="{ color: 'var(--ds-text-muted)', borderColor: 'var(--ds-border)' }"
+                >
+                    {{ t.unassigned }}
+                </p>
+                <button
+                    v-if="can.tickets_assign_self"
+                    type="button"
+                    data-testid="panel-assign-me"
+                    class="text-[11px] underline"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    :disabled="claiming"
+                    @click="void assignToMe()"
+                >
+                    {{ t.assign_to_me }}
+                </button>
+            </div>
         </div>
 
         <!-- B12: the timeline, newest first, over the living relay. -->

@@ -19,7 +19,7 @@
 // R2 and R3 render REGION CHROME with honest placeholders here: the list's
 // anatomy is step 9, the thread is step 10. The shell must stand before its
 // organs arrive; the placeholders are t-keys, not lorem.
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import ActionPalette, { type PaletteItem } from '../../Components/Inbox/ActionPalette.vue';
 import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
@@ -500,6 +500,16 @@ type PanelTicketRow = Record<string, unknown> & {
     status: string;
 };
 const panelTickets = ref<PanelTicketRow[]>([]);
+// D1: switching threads empties the panel INTO A SKELETON, never a stale
+// ticket — the loading state is a shape, not a lie about the old data.
+const panelLoading = ref(false);
+watch(
+    () => activeThread.value,
+    () => {
+        panelTickets.value = [];
+        panelLoading.value = activeThread.value !== null;
+    },
+);
 const panelTicket = computed(
     () => (panelTickets.value[panelTickets.value.length - 1] ?? null) as never,
 );
@@ -1202,7 +1212,12 @@ function dismissCoach(): void {
                     :t="t.thread"
                     :composer-t="t.composer"
                     :voice-flag="features.voice_recording"
-                    @tickets="(rows) => (panelTickets = rows)"
+                    @tickets="
+                        (rows) => {
+                            panelTickets = rows;
+                            panelLoading = false;
+                        }
+                    "
                 />
                 <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
@@ -1226,6 +1241,7 @@ function dismissCoach(): void {
                             :can="can"
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
+                            :loading="panelLoading"
                             :transitions="transitions"
                             @changed="onPanelChanged"
                         />
@@ -1248,6 +1264,7 @@ function dismissCoach(): void {
                             :can="can"
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
+                            :loading="panelLoading"
                             :transitions="transitions"
                             @changed="onPanelChanged"
                         />
@@ -1426,7 +1443,12 @@ function dismissCoach(): void {
                         :t="t.thread"
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
-                        @tickets="(rows) => (panelTickets = rows)"
+                        @tickets="
+                        (rows) => {
+                            panelTickets = rows;
+                            panelLoading = false;
+                        }
+                    "
                     />
                     <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}
@@ -1465,6 +1487,7 @@ function dismissCoach(): void {
                                     :can="can"
                                     :t="t.ticket_panel"
                                     :xsrf="workspaceXsrf"
+                                    :loading="panelLoading"
                                     :transitions="transitions"
                                     @changed="onPanelChanged"
                                 />

@@ -256,3 +256,64 @@ test('B14 @ 375: the mobile property sheet carries the SAME controls, nothing dr
     await sheet.getByTestId('panel-status-open').click();
     await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
 });
+
+test('D5/D6/D1: the drawn empties offer the act (Assign to me claims through the real door), the timeline fails ALONE with Try again recovering, and a switching panel shows a SKELETON, never a stale ticket', async ({
+    page,
+}) => {
+    await page.goto('/login');
+    await page.locator('#login-email').fill(AGENT_EMAIL);
+    await page.locator('#login-password').fill(PASSWORD);
+    await page.getByTestId('login-submit').click();
+    await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+    await page.setViewportSize(V1440);
+
+    // D1: delay the thread fetch — the panel must show the skeleton shape
+    // while rows are in flight, never the previous ticket.
+    await page.route('**/inbox/thread/**', async (route) => {
+        if (route.request().method() === 'GET') {
+            await new Promise((resolve) => setTimeout(resolve, 700));
+        }
+        await route.continue();
+    });
+    await page.goto('/inbox');
+    await dismissCoachMarks(page);
+    await page.locator('[data-view="unassigned"]').first().click();
+    await page
+        .locator('[data-ticket]', { hasText: 'Kidist Haile' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('ticket-panel-skeleton')).toBeVisible();
+    await expect(page.getByTestId('ticket-panel')).toBeVisible();
+    await page.unroute('**/inbox/thread/**');
+
+    // D5: the unassigned row says what fills it AND offers the act — the
+    // inline claim rides the REAL claim door (BR-01: the result is visible).
+    await expect(page.getByTestId('panel-assign-me')).toBeVisible();
+    await page.getByTestId('panel-assign-me').click();
+    await expect(page.getByTestId('panel-assignee')).toBeVisible();
+    await expect.poll(() => ticketField(4802, 'assignee_id')).not.toBe('null');
+
+    // D6: the timeline can fail ALONE — block its route, then let the
+    // panel's own landed change trigger the refetch; the state says so and
+    // Try again (after the route heals) recovers it.
+    await page.route('**/timeline**', (route) => route.abort());
+    await page.getByTestId('panel-status-pending').click();
+    await page.getByTestId('pending-set').click();
+    await expect(page.getByTestId('timeline-failed')).toBeVisible();
+    await page.unroute('**/timeline**');
+    await page.getByTestId('timeline-retry').click();
+    await expect(page.getByTestId('timeline-failed')).toHaveCount(0);
+    // Recovery proven by ROWS RENDERING (the claim relayed long before the
+    // block; the fresh transition may still be in relay flight — which row
+    // is not D6's point).
+    await expect(page.locator('[data-timeline-event]').first()).toBeVisible({ timeout: 10_000 });
+    // Status back to canon.
+    await page.getByTestId('panel-status-open').click();
+
+    // Restore the scene: hand the claim back (the seeder would heal it).
+    artisan(
+        'tinker',
+        '--execute',
+        'DB::connection("pgsql_platform")->table("tickets")->where("number", 4802)->update(["assignee_id" => null]); echo "restored";',
+    );
+});
