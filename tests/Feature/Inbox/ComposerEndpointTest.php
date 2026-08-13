@@ -157,3 +157,71 @@ it('FR-22 drafts: save round-trips; the send CLEARS the draft (tombstone); EC-12
             ->toBeFalse('the send did not tombstone the draft (FR-22)');
     });
 });
+
+it('FR-05/BR-03 (ruling (c), step 14): a staff reply through the door IMPLICITLY CLAIMS the unassigned ticket via the owning service — visible in the payload, inert on an already-held ticket, inert without tickets.assign_self, and OFF with the tenant toggle (the reply standing every time)', function (): void {
+    // Actors are created up front — ambient tenant context does not survive
+    // the HTTP request cycles below (the file's standing pattern).
+    [$tenant, $tenantId, $conversation, $ticket] = composerScene();
+    $claimer = inboxScopedActor('All', 'S14 Claimer');
+    grantPermissions($claimer, ['tickets.view', 'conversations.view', 'tickets.reply', 'tickets.assign_self'], 'S14 Claimer Role');
+    $second = inboxScopedActor('All', 'S14 Second');
+    grantPermissions($second, ['tickets.view', 'conversations.view', 'tickets.reply', 'tickets.assign_self'], 'S14 Second Role');
+
+    // (1) The first public reply claims — through AssignTicket's own write,
+    // so the ticket.assigned event rides the outbox like any assignment.
+    $reply = $this->actingAs($claimer, 'staff')->postJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/reply',
+        ['body' => 'On it — the first reply claims.'],
+    );
+    $reply->assertStatus(201);
+    expect($reply->json('implicit_claim'))->toBeTrue();
+    asTenant($tenant, function () use ($ticket, $claimer): void {
+        expect(DB::table('tickets')->where('id', $ticket->identifier())->value('assignee_id'))
+            ->toBe($claimer->identifier(), 'the reply did not claim (FR-05/BR-03)');
+        expect(DB::table('outbox')->where('name', 'ticket.assigned')
+            ->where('payload->ticket_id', $ticket->identifier())->count())
+            ->toBeGreaterThan(0, 'the implicit claim bypassed the owning service (no ticket.assigned event)');
+    });
+
+    // (2) A second replier's reply leaves the held ticket exactly as held.
+    $again = $this->actingAs($second, 'staff')->postJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/reply',
+        ['body' => 'Adding context — not stealing it.'],
+    );
+    $again->assertStatus(201);
+    expect($again->json('implicit_claim'))->toBeFalse();
+    asTenant($tenant, function () use ($ticket, $claimer): void {
+        expect(DB::table('tickets')->where('id', $ticket->identifier())->value('assignee_id'))
+            ->toBe($claimer->identifier(), 'a later reply moved an existing assignment');
+    });
+
+    // (3) Without tickets.assign_self the reply stands and no claim happens
+    // (the scene actor's grant set deliberately lacks it).
+    [$tenant2, , $conversation2, $ticket2, $plainActor] = composerScene();
+    $claimer2 = inboxScopedActor('All', 'S14 Toggled Claimer');
+    grantPermissions($claimer2, ['tickets.view', 'conversations.view', 'tickets.reply', 'tickets.assign_self'], 'S14 Toggled Role');
+    $noPerm = $this->actingAs($plainActor, 'staff')->postJson(
+        'https://localhost/inbox/thread/'.$conversation2->identifier().'/reply',
+        ['body' => 'Reply without the claim capability.'],
+    );
+    $noPerm->assertStatus(201);
+    expect($noPerm->json('implicit_claim'))->toBeFalse();
+    asTenant($tenant2, function () use ($ticket2): void {
+        expect(DB::table('tickets')->where('id', $ticket2->identifier())->value('assignee_id'))->toBeNull();
+    });
+
+    // (4) R-04's per-tenant toggle: off → the reply still sends, the claim
+    // does not (the service's own gate, exercised through the door).
+    asTenant($tenant2, function (): void {
+        app(App\Support\Settings\SettingsRepository::class)->set('tickets.implicit_claim', false);
+    });
+    $toggled = $this->actingAs($claimer2, 'staff')->postJson(
+        'https://localhost/inbox/thread/'.$conversation2->identifier().'/reply',
+        ['body' => 'Strict dispatch — replies never claim here.'],
+    );
+    $toggled->assertStatus(201);
+    expect($toggled->json('implicit_claim'))->toBeFalse();
+    asTenant($tenant2, function () use ($ticket2): void {
+        expect(DB::table('tickets')->where('id', $ticket2->identifier())->value('assignee_id'))->toBeNull();
+    });
+});

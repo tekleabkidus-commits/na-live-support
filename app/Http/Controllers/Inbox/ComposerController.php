@@ -54,6 +54,7 @@ final class ComposerController extends Controller
         private readonly DraftStore $drafts,
         private readonly TicketTransitionService $transitions,
         private readonly ListProjector $projector,
+        private readonly \App\Domain\Tickets\Assignment\AssignTicket $assign,
     ) {}
 
     public function reply(Request $request, string $conversationId): JsonResponse
@@ -98,6 +99,20 @@ final class ComposerController extends Controller
         // FR-22: a successful send clears the sender's draft (tombstone).
         $this->drafts->clearOnSend($user, $conversation);
 
+        // Doc 06 FR-05/BR-03 (ruling (c), step 14): the first staff public
+        // reply IS a claim — through the owning service's own door, honoring
+        // tickets.implicit_claim; a lost race or a scope refusal leaves the
+        // reply standing and only the claim declined (the service's
+        // contract). The claim's ticket.assigned event + audit ride the
+        // service's write path, same as every other assignment.
+        $implicitClaim = false;
+        if ($ticket !== null) {
+            $implicitClaim = $this->assign->implicitClaimOnReply($ticket->refresh(), $user);
+            if ($implicitClaim) {
+                $this->projector->recomputeTicket($ticket->identifier());
+            }
+        }
+
         // FR-21: the transition half, IN ORDER, after the send — a refusal
         // leaves the reply SENT and reports for the one-tap retry.
         $transition = null;
@@ -116,6 +131,8 @@ final class ComposerController extends Controller
             'message_id' => $message->identifier(),
             'delivery_state' => $message->getAttribute('delivery_state'),
             'transition' => $transition,
+            // BR-01: the claim that rode this reply is visible, not implied.
+            'implicit_claim' => $implicitClaim,
         ], 201);
     }
 
