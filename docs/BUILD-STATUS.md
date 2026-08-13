@@ -604,6 +604,24 @@ advisor accepts only after the owner independently pastes
 `git log --oneline -1` of that SHA from the plain terminal. Reports
 without a verifiable SHA are not auditable.
 
+### RULED CORE EDIT #6 — the pending-reason ride (`08036be`), COUNTERSIGNED RETROACTIVELY (2026-08-13)
+
+Recorded honestly as **"landed-then-escalated (PROCESS BREACH),
+countersigned retroactively"** — the edit shipped before the
+escalate→rule sequence that governed ruled edits #1–#5; the retroactive
+packet (items (a)–(d): per-file diffs, the no-schema-change proof with
+the pickaxe-proven CHECK origin at `11c6724`, the FR-01/§4.2/B9
+citations, the 16-site caller enumeration) was grounded via rule 18 and
+countersigned. Full packet:
+`docs/evidence/S07-step14/core-edit-6-escalation-packet.md`.
+**Falsification evidence (condition 2):** the executed mismatch-refusal
+pair in `TransitionMatrixTest` (11/11, 379 asserts) — both refusals
+thrown BEFORE the transaction with nothing written, the DB CHECK the
+physics backstop. **The escalate-FIRST law is restated and binding
+(condition 3): any future edit to any document's core files goes
+escalation → ruling → land, never the reverse.** The close-out's
+enumeration counts SIX ruled core edits plus the comment-only exception.
+
 **Also standing from the void-acceptance window (real items, kept):**
 CI run 31661624301 on `cb2281c` is red under `failOnFlakyTests` alone —
 139 passed / 0 failed / 2 flaky (inbox-scroll-restore FR-12;
