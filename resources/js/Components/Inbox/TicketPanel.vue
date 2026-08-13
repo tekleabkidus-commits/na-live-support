@@ -53,6 +53,11 @@ const level1 = ref<'customer' | 'internal'>('customer');
 const level2 = ref<'department' | 'named_user' | 'external'>('department');
 const busy = ref(false);
 const timelineTick = ref(0);
+// D2: the optimistic marker — the clicked target shows 'saving…' until the
+// server answers; a refusal SNAPS BACK to truth (the refetch re-renders the
+// real value; the strip explains; the control never sits lying).
+const pendingTarget = ref<string | null>(null);
+const refusalPutBack = ref(false);
 
 // ── B13 subject state ───────────────────────────────────────────────────
 const editingSubject = ref(false);
@@ -125,6 +130,12 @@ const openLabel = computed(() =>
         : (props.t.status_open ?? ''),
 );
 const showResolved = computed(() => legalTargets.value.includes('resolved'));
+function statusLabel(value: string): string {
+    if (value === 'pending_customer' || value === 'pending_internal') {
+        return props.t.status_pending ?? value;
+    }
+    return props.t['status_' + value] ?? value;
+}
 const isPending = computed(
     () => status.value === 'pending_customer' || status.value === 'pending_internal',
 );
@@ -143,6 +154,8 @@ async function post(to: string, pendingReason: string | null): Promise<void> {
     if (busy.value || props.conversationId === null) return;
     busy.value = true;
     refusal.value = '';
+    refusalPutBack.value = false;
+    pendingTarget.value = to;
     try {
         const response = await fetch(`/inbox/thread/${props.conversationId}/transition`, {
             method: 'POST',
@@ -163,7 +176,13 @@ async function post(to: string, pendingReason: string | null): Promise<void> {
         }
         const body = (await response.json().catch(() => null)) as { detail?: string } | null;
         refusal.value = body?.detail ?? props.t.refused ?? '';
+        // D2's snap-back: a refusal refetches TRUTH too — after a race the
+        // real value may have moved, and the control re-renders it (with
+        // D3's legal set) rather than sitting in the refused position.
+        refusalPutBack.value = true;
+        emit('changed');
     } finally {
+        pendingTarget.value = null;
         busy.value = false;
     }
 }
@@ -435,8 +454,20 @@ const initials = computed(() => {
             </div>
         </div>
 
-        <!-- INLINE refusal (B2-S06 posture): stable detail, in place. -->
+        <!-- D2: the optimistic 'saving…' marker on the in-flight target. -->
         <p
+            v-if="pendingTarget !== null"
+            data-testid="panel-status-saving"
+            class="text-[11px]"
+            :style="{ color: 'var(--ds-text-muted)' }"
+        >
+            {{ t.saving }}
+        </p>
+
+        <!-- INLINE refusal (B2-S06 posture): stable detail, in place. D2's
+             put-back heading names the value the control snapped back to —
+             reactive, so a raced truth renders once the refetch lands. -->
+        <div
             v-if="refusal !== ''"
             data-testid="panel-refusal"
             role="alert"
@@ -446,8 +477,11 @@ const initials = computed(() => {
                 color: 'var(--ds-danger-strong)',
             }"
         >
-            {{ refusal }}
-        </p>
+            <p v-if="refusalPutBack" class="font-semibold" data-testid="panel-putback">
+                {{ (t.put_back ?? '').replace(':status', statusLabel(status)) }}
+            </p>
+            <p>{{ refusal }}</p>
+        </div>
 
         <!-- Assignee row (display; the edit affordance is the palettes'). -->
         <div>

@@ -167,6 +167,26 @@ test('B9: the panel renders the live ticket, and SET PENDING carries the reason 
     // Back at open, the full at-rest set returns.
     await expect(page.getByTestId('panel-status-pending')).toBeVisible();
     await expect(page.getByTestId('panel-status-resolved')).toBeVisible();
+
+    // D2 + THE RACE STRIP (legal at render, refused at execution): truth
+    // moves behind the panel — the still-rendered Resolved fires, the door
+    // refuses against reality, the strip explains with the put-back heading,
+    // and the control SNAPS BACK to the real value with D3's legal set.
+    artisan(
+        'tinker',
+        '--execute',
+        'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["status" => "escalated"]); echo "raced";',
+    );
+    await page.getByTestId('panel-status-resolved').click();
+    await expect(page.getByTestId('panel-refusal')).toBeVisible();
+    await expect(page.getByTestId('panel-putback')).toBeVisible();
+    // The refetched truth re-renders: escalated offers ONLY de-escalate.
+    await expect(page.getByTestId('panel-status-resolved')).toHaveCount(0);
+    await expect(page.getByTestId('panel-status-pending')).toHaveCount(0);
+    await expect(page.getByTestId('panel-status-open')).toBeVisible();
+    // Recovery through the rendered door: de-escalate back to open.
+    await page.getByTestId('panel-status-open').click();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
 });
 
 test('B9 render gate: without tickets.status.change the status control does not exist — the panel stays read-only truth (N-19: flags and grants hide, they never lie)', async ({
