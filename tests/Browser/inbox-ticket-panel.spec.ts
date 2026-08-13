@@ -414,3 +414,70 @@ test('D7–D10: the race and system surfaces — a lost claim swaps the avatar i
     // Scene canon back (the seeder heals the rest).
     artisan('db:seed', '--class=Database\\Seeders\\InboxBrowserSeeder', '--force');
 });
+
+test('THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast', async ({
+    page,
+}) => {
+    const run = Date.now().toString(36);
+    await page.goto('/login');
+    await page.locator('#login-email').fill(AGENT_EMAIL);
+    await page.locator('#login-password').fill(PASSWORD);
+    await page.getByTestId('login-submit').click();
+    await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+    await page.setViewportSize(V1440);
+    await page.goto('/inbox');
+    await dismissCoachMarks(page);
+
+    // The አበበ thread: hand-tuned BREACHED — the SLA chip is projection truth.
+    await page
+        .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4801');
+    await expect(page.getByTestId('panel-sla-chip')).toBeVisible();
+
+    // Priority through the door: urgent → high → back (DB-checked).
+    await page.getByTestId('panel-priority').selectOption('high');
+    await expect.poll(() => ticketField(4801, 'priority')).toBe('"high"');
+    await page.getByTestId('panel-priority').selectOption('urgent');
+    await expect.poll(() => ticketField(4801, 'priority')).toBe('"urgent"');
+
+    // Tags: a RUN-stamped chip in and out through the split doors.
+    const tag = `panel-${run}`;
+    await page.getByTestId('panel-tag-input').fill(tag);
+    await page.getByTestId('panel-tag-add').click();
+    await expect(page.locator(`[data-panel-tag="${tag}"]`)).toBeVisible();
+    await page
+        .locator(`[data-panel-tag="${tag}"]`)
+        .locator('[data-role="panel-tag-remove"]')
+        .click();
+    await expect(page.locator(`[data-panel-tag="${tag}"]`)).toHaveCount(0);
+
+    // B2-S06: a refused assignment renders INLINE in the panel's own strip.
+    // The door's real 422 is Pest-proven; this proves the PANEL's surface.
+    await page.route('**/assign', (route) =>
+        route.fulfill({
+            status: 422,
+            contentType: 'application/json',
+            body: JSON.stringify({
+                code: 'assignee_out_of_scope',
+                detail: 'that target cannot hold this ticket (out of scope)',
+            }),
+        }),
+    );
+    await page.getByTestId('panel-assign-change').click();
+    await expect(page.getByTestId('panel-assign-picker')).toBeVisible();
+    await page.locator('[data-assign-candidate]').first().click();
+    await expect(page.getByTestId('panel-refusal')).toContainText('out of scope');
+    await page.unroute('**/assign');
+
+    // The window chip on the closing-window fixture.
+    await page.keyboard.press('g');
+    await page.keyboard.press('u');
+    await page
+        .locator('[data-ticket]', { hasText: 'Kidist Haile' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4802');
+    await expect(page.getByTestId('panel-window-chip')).toBeVisible();
+});

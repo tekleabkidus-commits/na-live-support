@@ -25,6 +25,12 @@ type PanelTicket = {
     subject_was_ai?: boolean;
     reopened_count?: number;
     channel_unreachable?: boolean;
+    department_id?: string | null;
+    sla_state?: string | null;
+    sla_due_at?: string | null;
+    window_expires_at?: string | null;
+    merged_into_number?: number | string | null;
+    origin_ticket_number?: number | string | null;
 };
 
 const props = defineProps<{
@@ -243,6 +249,69 @@ async function post(to: string, pendingReason: string | null): Promise<void> {
 function setPending(): void {
     const to = level1.value === 'customer' ? 'pending_customer' : 'pending_internal';
     void post(to, composedReason());
+}
+
+// ── The property rows (priority, tags, assignee picker) ────────────────
+const PRIORITIES = ['urgent', 'high', 'normal', 'low'] as const;
+async function doorPost(path: string, body: Record<string, unknown> | null): Promise<boolean> {
+    refusal.value = '';
+    const response = await fetch(path, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': props.xsrf(),
+        },
+        body: body === null ? undefined : JSON.stringify(body),
+    });
+    if (response.ok) {
+        timelineTick.value += 1;
+        emit('changed');
+        return true;
+    }
+    const parsed = (await response.json().catch(() => null)) as { detail?: string } | null;
+    // B2-S06: the refusal renders INLINE, in place — never a toast.
+    refusal.value = parsed?.detail ?? props.t.refused ?? '';
+    emit('changed');
+    return false;
+}
+function setPriority(level: string): void {
+    if (props.ticket === null) return;
+    void doorPost(`/inbox/t/${props.ticket.id}/priority`, { priority: level });
+}
+const newTag = ref('');
+function addTag(): void {
+    const tag = newTag.value.trim();
+    if (tag === '' || props.ticket === null) return;
+    newTag.value = '';
+    void doorPost(`/inbox/t/${props.ticket.id}/tags/add`, { tags: [tag] });
+}
+function removeTag(tag: string): void {
+    if (props.ticket === null) return;
+    void doorPost(`/inbox/t/${props.ticket.id}/tags/remove`, { tags: [tag] });
+}
+// B2-S06: the assignee inline picker over the directory door; a disabled or
+// out-of-scope target's 422 renders in place.
+const assignPickerOpen = ref(false);
+const assignees = ref<{ id: string; name: string }[]>([]);
+async function openAssignPicker(): Promise<void> {
+    assignPickerOpen.value = !assignPickerOpen.value;
+    if (!assignPickerOpen.value) return;
+    const response = await fetch('/inbox/assignees?q=', { headers: { Accept: 'application/json' } });
+    if (!response.ok) return;
+    const body = (await response.json()) as { assignees: { id: string; name: string }[] };
+    assignees.value = body.assignees;
+}
+function pickAssignee(id: string): void {
+    if (props.ticket === null) return;
+    assignPickerOpen.value = false;
+    void doorPost(`/inbox/t/${props.ticket.id}/assign`, { assignee_id: id });
+}
+function timeShort(iso: string | null | undefined): string {
+    if (!iso) return '';
+    return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
+        new Date(iso),
+    );
 }
 
 const initials = computed(() => {
@@ -599,6 +668,35 @@ const initials = computed(() => {
                     >{{ initials }}</span
                 >
                 <span class="text-xs">{{ ticket.assignee_name }}</span>
+                <button
+                    v-if="can.tickets_assign"
+                    type="button"
+                    data-testid="panel-assign-change"
+                    class="text-[11px] underline"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    @click="void openAssignPicker()"
+                >
+                    {{ t.change }}
+                </button>
+            </div>
+            <!-- B2-S06: the inline directory picker — refusals render in the
+                 panel's own refusal strip, never a toast. -->
+            <div
+                v-if="assignPickerOpen"
+                data-testid="panel-assign-picker"
+                class="mt-1 rounded-md border p-1"
+                :style="{ borderColor: 'var(--ds-border)' }"
+            >
+                <button
+                    v-for="candidate in assignees"
+                    :key="candidate.id"
+                    type="button"
+                    class="block w-full px-1.5 py-0.5 text-start text-[11px]"
+                    :data-assign-candidate="candidate.name"
+                    @click="pickAssignee(candidate.id)"
+                >
+                    {{ candidate.name }}
+                </button>
             </div>
             <div v-else class="flex items-center gap-2">
                 <p
@@ -619,6 +717,117 @@ const initials = computed(() => {
                     {{ t.assign_to_me }}
                 </button>
             </div>
+        </div>
+
+        <!-- Priority (the drawn 'Priority High ▾') — the step-13 door. -->
+        <div v-if="can.tickets_priority_change">
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.priority_label }}
+            </p>
+            <select
+                data-testid="panel-priority"
+                class="rounded-md border px-2 py-1 text-xs"
+                :style="{ borderColor: 'var(--ds-border)' }"
+                :value="ticket.priority ?? 'normal'"
+                :aria-label="t.priority_label"
+                @change="setPriority(($event.target as HTMLSelectElement).value)"
+            >
+                <option v-for="level in PRIORITIES" :key="level" :value="level">
+                    {{ t['priority_' + level] }}
+                </option>
+            </select>
+        </div>
+
+        <!-- SLA + reply-window chips, from the projection's own columns. -->
+        <div class="flex flex-wrap gap-2">
+            <span
+                v-if="ticket.sla_state === 'breached' || ticket.sla_state === 'warned'"
+                data-testid="panel-sla-chip"
+                class="rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                :style="{
+                    background: 'var(--ds-danger-bg, var(--ds-inset-bg))',
+                    color: 'var(--ds-danger-strong)',
+                }"
+                >▲ {{ ticket.sla_state === 'breached' ? t.sla_breached : t.sla_warned }}</span
+            >
+            <span
+                v-if="ticket.window_expires_at"
+                data-testid="panel-window-chip"
+                class="rounded px-1.5 py-0.5 text-[11px]"
+                :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-secondary)' }"
+                >⏱ {{ (t.window_until ?? '').replace(':time', timeShort(ticket.window_expires_at)) }}</span
+            >
+        </div>
+
+        <!-- Department / queue: Doc 11's seam, stated honestly. -->
+        <div>
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.department_label }}
+            </p>
+            <p class="text-xs" data-testid="panel-department" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.department_seam }}
+            </p>
+        </div>
+
+        <!-- Tags: chips with ✕ and an add field — the step-13 split doors. -->
+        <div v-if="can.tickets_tags_manage" data-testid="panel-tags">
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.tags_label }}
+            </p>
+            <div class="flex flex-wrap items-center gap-1">
+                <span
+                    v-for="tag in ticket.tags ?? []"
+                    :key="tag"
+                    class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px]"
+                    :style="{ background: 'var(--ds-row-hover)' }"
+                    :data-panel-tag="tag"
+                >
+                    {{ tag }}
+                    <button
+                        type="button"
+                        :aria-label="(t.remove_tag ?? '').replace(':tag', tag)"
+                        data-role="panel-tag-remove"
+                        @click="removeTag(tag)"
+                    >
+                        ✕
+                    </button>
+                </span>
+                <span v-if="(ticket.tags ?? []).length === 0" class="border-b border-dashed text-[11px]" :style="{ color: 'var(--ds-text-muted)', borderColor: 'var(--ds-border)' }">{{ t.tags_none }}</span>
+            </div>
+            <div class="mt-1 flex gap-1">
+                <input
+                    v-model="newTag"
+                    type="text"
+                    data-testid="panel-tag-input"
+                    :aria-label="t.add_tag"
+                    :placeholder="t.add_tag"
+                    class="w-28 rounded-md border px-1.5 py-0.5 text-[11px]"
+                    :style="{ borderColor: 'var(--ds-border)' }"
+                    @keydown.enter.prevent="addTag"
+                />
+                <button
+                    type="button"
+                    data-testid="panel-tag-add"
+                    class="text-[11px] underline"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    @click="addTag"
+                >
+                    {{ t.add_tag }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Linked tickets (merge/split family), numbers as facts. -->
+        <div v-if="ticket.merged_into_number || ticket.origin_ticket_number" data-testid="panel-linked">
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.linked_label }}
+            </p>
+            <p v-if="ticket.merged_into_number" class="text-xs">
+                {{ (t.merged_into ?? '').replace(':number', String(ticket.merged_into_number)) }}
+            </p>
+            <p v-if="ticket.origin_ticket_number" class="text-xs">
+                {{ (t.split_from ?? '').replace(':number', String(ticket.origin_ticket_number)) }}
+            </p>
         </div>
 
         <!-- D7: the lost race's next move, offered in place. -->

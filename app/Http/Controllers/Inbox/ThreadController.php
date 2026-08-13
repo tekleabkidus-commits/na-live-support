@@ -106,7 +106,7 @@ final class ThreadController extends Controller
         // FULL property set rides the same read the boundary markers use.
         // Reads only; the literal status KEY never appears as an assignment
         // in this file (the ticket-status-writer gate's design constraint).
-        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string, priority: string, pending_reason: string|null, assignee_id: string|null, tags: string|null, subject: string|null, subject_source: string|null, reopened_count: int, channel_unreachable: bool}> $tickets */
+        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string, priority: string, pending_reason: string|null, assignee_id: string|null, tags: string|null, subject: string|null, subject_source: string|null, reopened_count: int, channel_unreachable: bool, department_id: string|null, merged_into: string|null, origin_ticket_id: string|null}> $tickets */
         $tickets = DB::table('tickets')
             ->where('conversation_id', $conversation->identifier())
             ->orderBy('created_at')
@@ -114,6 +114,7 @@ final class ThreadController extends Controller
                 'id', 'number', 'status', 'created_at', 'source',
                 'priority', 'pending_reason', 'assignee_id', 'tags',
                 'subject', 'subject_source', 'reopened_count', 'channel_unreachable',
+                'department_id', 'merged_into', 'origin_ticket_id',
             ])
             ->all();
 
@@ -173,6 +174,21 @@ final class ThreadController extends Controller
                 // B13: the "Copilot draft, edited by staff" label needs the
                 // PROVENANCE the column alone cannot carry — the relayed log
                 // knows whether an AI subject ever existed on this ticket.
+                // The panel's SLA/window chips read the projection's own
+                // columns — one truth, no recompute here.
+                /** @var object{sla_state: string|null, sla_due_at: string|null, window_expires_at: string|null}|null $item */
+                $item = DB::table('ticket_list_items')->where('ticket_id', $ticket->id)
+                    ->first(['sla_state', 'sla_due_at', 'window_expires_at']);
+                $row['sla_state'] = $item->sla_state ?? null;
+                $row['sla_due_at'] = $item->sla_due_at ?? null;
+                $row['window_expires_at'] = $item->window_expires_at ?? null;
+                // Linked tickets (merge/split family), numbers resolved.
+                $row['merged_into_number'] = is_string($ticket->merged_into ?? null)
+                    ? DB::table('tickets')->where('id', $ticket->merged_into)->value('number')
+                    : null;
+                $row['origin_ticket_number'] = is_string($ticket->origin_ticket_id ?? null)
+                    ? DB::table('tickets')->where('id', $ticket->origin_ticket_id)->value('number')
+                    : null;
                 $row['subject_was_ai'] = ($ticket->subject_source ?? null) === 'ai'
                     || DB::table('events')->where('name', 'ticket.subject_changed')
                         ->where('payload->ticket_id', $ticket->id)
