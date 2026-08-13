@@ -95,6 +95,11 @@ gates:
 	bash ci/run-gates.sh
 
 ## Pint (format check) + PHPStan (max) + ESLint + vue-tsc
+## FAIL-FAST IS THE COMMITTED FORM (advisor rider, 2026-08-13, on the 466d359
+## slip): make stops at the first failing line, so a red linter GATES anything
+## chained after `make lint`. Ad-hoc lint chains in shells must use && — a ';'
+## chain let a Pint failure and a PHPStan error ship in a pushed commit once;
+## this target is the form that cannot do that.
 lint:
 	./vendor/bin/pint --test
 	./vendor/bin/phpstan analyse --memory-limit=1G

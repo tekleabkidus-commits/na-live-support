@@ -109,6 +109,12 @@ test('B9: the panel renders the live ticket, and SET PENDING carries the reason 
 
     // Panel truth: the current-reason line renders from the refetched row.
     await expect(page.getByTestId('panel-pending-reason')).toBeVisible();
+    // B12, RELAY-LIVE: the transition's event crosses outbox → relay →
+    // events and the timeline renders it — the first browser proof that
+    // reads the RELAYED log with no seam (the step-14 discovery's point).
+    await expect(page.locator('[data-timeline-event="ticket.status_changed"]').first()).toBeVisible(
+        { timeout: 10_000 },
+    );
     // Database truth: status AND reason landed in one transition.
     await expect.poll(() => ticketField(4820, 'status')).toBe('"pending_customer"');
     expect(ticketField(4820, 'pending_reason')).toBe('"awaiting_customer"');

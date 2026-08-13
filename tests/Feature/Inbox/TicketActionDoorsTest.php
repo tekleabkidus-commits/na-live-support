@@ -192,3 +192,74 @@ it('C-10: an out-of-scope ticket answers the 404-PATTERN on every action door �
             ->assertJsonPath('code', 'resource_not_found');
     }
 });
+
+it('B12 timeline door (step 14): serves the relayed events newest-first with the frame\'s actor law — humans by name, automated events by class and NEVER a person\'s name; the expander count is honest; out-of-scope gets the 404-pattern', function (): void {
+    [$tenant, $conversation, $ticket, $actor] = actionScene();
+    $tenantId = $tenant->identifier();
+    // Front-loaded (the file's standing pattern): ambient tenant context
+    // does not survive the HTTP request cycles below. Bespoke Own-scoped
+    // role, NOT grantPermissions — that helper silently widens scope to All
+    // (the existing C-10 test's own recorded lesson).
+    $outsiderRole = Role::query()->create([
+        'name' => 'S14 Timeline Outsider Role',
+        'color' => 'role-agent',
+        'permissions' => ['tickets.view', 'conversations.view', 'views.manage'],
+        'scopes' => ['tickets' => 'Own', 'conversations' => 'Own', 'customers' => 'Own', 'reports' => 'Own'],
+    ]);
+    $outsider = User::factory()->create();
+    $outsider->forceFill(['role_id' => $outsiderRole->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($outsider);
+
+    // Eight events into the relayed log (the door's truth source): a human
+    // status change, a system reopen, and six filler creations to push past
+    // the first page.
+    inboxSeedEvent('ticket.status_changed', [
+        'tenant_id' => $tenantId, 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(), 'old_status' => 'open',
+        'new_status' => 'pending_customer', 'actor_type' => 'agent', 'actor_id' => $actor->identifier(),
+    ]);
+    inboxSeedEvent('ticket.status_changed', [
+        'tenant_id' => $tenantId, 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(), 'old_status' => 'pending_customer',
+        'new_status' => 'open', 'actor_type' => 'system', 'actor_id' => null,
+    ]);
+    foreach (range(1, 6) as $i) {
+        inboxSeedEvent('ticket.created', [
+            'tenant_id' => $tenantId, 'ticket_id' => $ticket->identifier(),
+            'conversation_id' => $conversation->identifier(), 'customer_id' => $ticket->customer_id,
+            'source' => 'agent', 'actor_type' => 'agent', 'actor_id' => null,
+        ]);
+    }
+
+    $response = $this->actingAs($actor, 'staff')->getJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/timeline',
+    );
+    $response->assertOk();
+    expect($response->json('total'))->toBe(8)
+        ->and(count((array) $response->json('rows')))->toBe(6, 'the first page is six rows; the expander serves the rest');
+
+    // Newest first: the system reopen precedes the human pending in reverse
+    // order (both after the fillers were seeded LAST — order is occurred_at
+    // DESC, so the fillers lead). The actor law on the two status rows:
+    $all = $this->actingAs($actor, 'staff')->getJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/timeline?all=1',
+    );
+    $all->assertOk();
+    /** @var list<array{name: string, actor_type: string, actor_name: string|null, detail: array<string, mixed>}> $rows */
+    $rows = (array) $all->json('rows');
+    expect(count($rows))->toBe(8);
+    $statusRows = array_values(array_filter($rows, fn (array $row): bool => $row['name'] === 'ticket.status_changed'));
+    expect(count($statusRows))->toBe(2);
+    // occurred_at DESC → the system reopen (seeded second) comes first.
+    expect($statusRows[0]['actor_type'])->toBe('system')
+        ->and($statusRows[0]['actor_name'])->toBeNull('an automated event carried a person\'s name — the frame\'s law broken')
+        ->and($statusRows[0]['detail']['old_status'])->toBe('pending_customer')
+        ->and($statusRows[1]['actor_type'])->toBe('agent')
+        ->and($statusRows[1]['actor_name'])->toBe($actor->name)
+        ->and($statusRows[1]['detail']['new_status'])->toBe('pending_customer');
+
+    // C-10: a viewer whose scope excludes the ticket gets the 404-pattern.
+    $this->actingAs($outsider, 'staff')->getJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/timeline',
+    )->assertNotFound();
+});

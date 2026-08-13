@@ -9,6 +9,7 @@
 // posture applied to this surface): the C-04 stable detail, in place,
 // never a toast that outlives the context.
 import { computed, ref, watch } from 'vue';
+import TicketTimeline from './TicketTimeline.vue';
 
 type PanelTicket = {
     id: string;
@@ -46,6 +47,7 @@ const pendingOpen = ref(false);
 const level1 = ref<'customer' | 'internal'>('customer');
 const level2 = ref<'department' | 'named_user' | 'external'>('department');
 const busy = ref(false);
+const timelineTick = ref(0);
 // INLINE refusal (B2-S06 posture): the stable detail renders in place.
 const refusal = ref('');
 
@@ -90,6 +92,7 @@ async function post(to: string, pendingReason: string | null): Promise<void> {
         });
         if (response.ok) {
             pendingOpen.value = false;
+            timelineTick.value += 1; // the relay will have a new row for B12
             emit('changed');
             return;
         }
@@ -326,5 +329,8 @@ const initials = computed(() => {
                 {{ t.unassigned }}
             </p>
         </div>
+
+        <!-- B12: the timeline, newest first, over the living relay. -->
+        <TicketTimeline :ticket-id="ticket.id" :t="t" :refresh-tick="timelineTick" />
     </div>
 </template>

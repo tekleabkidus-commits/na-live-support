@@ -49,6 +49,87 @@ final class TicketActionsController extends Controller
         private readonly ScopeSets $scopes,
     ) {}
 
+    /**
+     * B2-S03/B12 (step 14): the ticket TIMELINE — the relayed events log,
+     * newest first, over the now-living relay (the step-14 discovery's first
+     * consumer). Actor law from the frame: HUMANS resolve to id+name;
+     * automated events carry their CLASS and never a person's name. Payload
+     * fields pass a curated allowlist — events carry ids and enums, and the
+     * one free-text field the frame renders (the escalation reason) is
+     * staff-authored, tenant-scoped content.
+     */
+    public function timeline(Request $request, string $ticketId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $ticket = $this->resolveScoped($user, $ticketId);
+        if ($ticket === null) {
+            return $this->notFound();
+        }
+
+        $all = $request->query('all') === '1';
+        $base = \Illuminate\Support\Facades\DB::table('events')
+            ->where('name', 'like', 'ticket.%')
+            ->where('payload->ticket_id', $ticket->identifier());
+        $total = (clone $base)->count();
+        /** @var list<object{id: string, name: string, payload: string, occurred_at: string}> $rows */
+        $rows = $base->orderByDesc('occurred_at')->orderByDesc('id')
+            ->when(! $all, fn ($q) => $q->limit(6))
+            ->get(['id', 'name', 'payload', 'occurred_at'])->all();
+
+        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path'];
+        $decoded = array_map(function (object $row) use ($detailKeys): array {
+            /** @var array<string, mixed> $payload */
+            $payload = json_decode($row->payload, true, 8, JSON_THROW_ON_ERROR);
+
+            return [
+                'id' => $row->id,
+                'name' => $row->name,
+                'occurred_at' => $row->occurred_at,
+                'actor_type' => is_string($payload['actor_type'] ?? null) ? $payload['actor_type'] : 'system',
+                'actor_id' => is_string($payload['actor_id'] ?? null) ? $payload['actor_id'] : (is_string($payload['by'] ?? null) ? $payload['by'] : null),
+                'detail' => array_intersect_key($payload, array_flip($detailKeys)),
+            ];
+        }, $rows);
+
+        // One name pass for every human id on the page (actors + assignees).
+        $ids = [];
+        foreach ($decoded as $row) {
+            foreach ([$row['actor_id'], $row['detail']['old_assignee_id'] ?? null, $row['detail']['new_assignee_id'] ?? null] as $id) {
+                if (is_string($id)) {
+                    $ids[$id] = true;
+                }
+            }
+        }
+        /** @var array<string, string> $names */
+        $names = $ids === []
+            ? []
+            : \Illuminate\Support\Facades\DB::table('users')->whereIn('id', array_keys($ids))->pluck('name', 'id')->all();
+
+        return new JsonResponse([
+            'total' => $total,
+            'rows' => array_map(function (array $row) use ($names): array {
+                $detail = $row['detail'];
+                $detail['old_assignee_name'] = is_string($detail['old_assignee_id'] ?? null) ? ($names[$detail['old_assignee_id']] ?? null) : null;
+                $detail['new_assignee_name'] = is_string($detail['new_assignee_id'] ?? null) ? ($names[$detail['new_assignee_id']] ?? null) : null;
+                unset($detail['old_assignee_id'], $detail['new_assignee_id']);
+
+                return [
+                    'id' => $row['id'],
+                    'name' => $row['name'],
+                    'occurred_at' => $row['occurred_at'],
+                    'actor_type' => $row['actor_type'],
+                    // The frame's law: a HUMAN actor names itself; an
+                    // automated one names its class, never a person.
+                    'actor_name' => in_array($row['actor_type'], ['agent', 'staff'], true) && is_string($row['actor_id'])
+                        ? ($names[$row['actor_id']] ?? null)
+                        : null,
+                    'detail' => $detail,
+                ];
+            }, $decoded),
+        ]);
+    }
+
     /** FR-31 "I" / mobile swipe-right: Doc 06 FR-16's claim door, race intact. */
     public function claim(Request $request, string $ticketId): JsonResponse
     {
