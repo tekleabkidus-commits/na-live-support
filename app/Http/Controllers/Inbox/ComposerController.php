@@ -182,8 +182,13 @@ final class ComposerController extends Controller
      */
     public function transition(Request $request, string $conversationId): JsonResponse
     {
-        /** @var array{to: string} $input */
-        $input = $request->validate(['to' => ['required', 'string', 'in:resolve,pending_customer,open']]);
+        /** @var array{to: string, pending_reason?: string} $input */
+        $input = $request->validate([
+            'to' => ['required', 'string', 'in:resolve,pending_customer,pending_internal,open'],
+            // Doc 06 FR-01's enum, ridden on the transition (§4.2); the
+            // service asserts the reason↔state pairing, the DB CHECK backs it.
+            'pending_reason' => ['sometimes', 'string', 'in:awaiting_customer,awaiting_internal:department,awaiting_internal:named_user,awaiting_internal:external'],
+        ]);
 
         /** @var User $user */
         $user = $request->user();
@@ -198,11 +203,14 @@ final class ComposerController extends Controller
         $to = match ($input['to']) {
             'resolve' => TicketStatus::Resolved,
             'pending_customer' => TicketStatus::PendingCustomer,
+            'pending_internal' => TicketStatus::PendingInternal,
             default => TicketStatus::Open,
         };
 
         try {
-            $this->transitions->transition($ticket, $to, TransitionContext::staff($user, 'composer transition (FR-21 retry)'));
+            $context = TransitionContext::staff($user, 'composer transition (FR-21 retry)')
+                ->withPendingReason($input['pending_reason'] ?? null);
+            $this->transitions->transition($ticket, $to, $context);
             $this->projector->recomputeTicket($ticket->identifier());
         } catch (\App\Domain\Tickets\Transitions\TransitionNotPermitted|\App\Domain\Tickets\Transitions\IllegalTransition|DomainException|\LogicException $e) {
             return ProblemDetails::response(ErrorCode::TransitionRejected, 422, $e->getMessage());

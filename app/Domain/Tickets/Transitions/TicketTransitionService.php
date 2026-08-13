@@ -70,6 +70,7 @@ final class TicketTransitionService
         $this->assertPermitted($edge, $context);          // Doc 03
         $this->assertReason($edge, $context);             // FR-04 / FR-23 / BR-06
         $this->assertInvariants($ticket, $to, $context);  // BR-07
+        $this->assertPendingReason($to, $context);        // FR-01 — reason↔state pairing
 
         return DB::transaction(function () use ($ticket, $from, $to, $context): TransitionResult {
             // FR-10, reconciled with Doc 04's shipped layer (inherited row 5): the
@@ -90,10 +91,19 @@ final class TicketTransitionService
                 }
             }
 
-            $written = $this->tickets->writeStatus($ticket, $from, $to, [
-                'first_response_message_id' => $context->signalMessageId,
-                'agent_first_response_message_id' => $context->agentSignalMessageId,
-            ]);
+            $written = $this->tickets->writeStatus(
+                $ticket,
+                $from,
+                $to,
+                [
+                    'first_response_message_id' => $context->signalMessageId,
+                    'agent_first_response_message_id' => $context->agentSignalMessageId,
+                ],
+                // FR-01/§4.2: entering pending may carry the reason; leaving the
+                // pending family clears it — both in the transition's own statement.
+                pendingReason: $context->pendingReason,
+                clearPendingReason: $from->isPending() && ! $to->isPending(),
+            );
 
             if (! $written) {
                 // The guard matched nothing: another transaction moved this ticket
@@ -352,6 +362,34 @@ final class TicketTransitionService
         DB::transaction(function () use ($ticket, $messageId, $isHuman): void {
             $this->tickets->recordPublicReply($ticket, $messageId, $isHuman);
         });
+    }
+
+    /**
+     * FR-01's enum is state-shaped: `awaiting_customer` belongs to
+     * pending_customer and the three `awaiting_internal:*` values to
+     * pending_internal — a reason on a non-pending transition, or one paired
+     * with the wrong pending state, is a caller error refused BEFORE the
+     * transaction (C-04 stable message; the DB CHECK remains the backstop).
+     */
+    private function assertPendingReason(TicketStatus $to, TransitionContext $context): void
+    {
+        if ($context->pendingReason === null) {
+            return;
+        }
+
+        $legal = match ($to) {
+            TicketStatus::PendingCustomer => ['awaiting_customer'],
+            TicketStatus::PendingInternal => ['awaiting_internal:department', 'awaiting_internal:named_user', 'awaiting_internal:external'],
+            default => [],
+        };
+
+        if (! in_array($context->pendingReason, $legal, true)) {
+            throw new \DomainException(sprintf(
+                'pending_reason_mismatch: %s does not pair with a transition to %s (FR-01)',
+                $context->pendingReason,
+                $to->value,
+            ));
+        }
     }
 
     /** @param array{permission: string, reason: bool, min_reason_length: int} $edge */

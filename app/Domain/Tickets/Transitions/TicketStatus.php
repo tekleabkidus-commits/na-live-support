@@ -44,4 +44,14 @@ enum TicketStatus: string
     {
         return in_array($this, self::openFamily(), true);
     }
+
+    /**
+     * The two pending states (FR-01's `pending_reason` carrier states) —
+     * added at S07 step 14 with the pending-reason ride; the family itself
+     * is unchanged.
+     */
+    public function isPending(): bool
+    {
+        return $this === self::PendingCustomer || $this === self::PendingInternal;
+    }
 }

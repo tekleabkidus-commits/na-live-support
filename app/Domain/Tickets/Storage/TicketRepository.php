@@ -40,11 +40,21 @@ final class TicketRepository
      * with the transition rather than derived afterwards.
      *
      * @param  array<string, string|null>  $signals  FR-24 first-response signal columns
+     * @param  string|null  $pendingReason  Doc 06 FR-01: written WITH a pending transition (never derived later)
+     * @param  bool  $clearPendingReason  leaving the pending family clears the reason in the same statement
      * @return bool true when this call made the change
      */
-    public function writeStatus(Ticket $ticket, TicketStatus $from, TicketStatus $to, array $signals = []): bool
+    public function writeStatus(Ticket $ticket, TicketStatus $from, TicketStatus $to, array $signals = [], ?string $pendingReason = null, bool $clearPendingReason = false): bool
     {
         $update = ['status' => $to->value, 'updated_at' => DB::raw('clock_timestamp()')];
+
+        // Doc 06 FR-01/§4.2: the reason is part of the transition's own row
+        // version — the DB CHECK enforces the enum, this statement the timing.
+        if ($pendingReason !== null) {
+            $update['pending_reason'] = $pendingReason;
+        } elseif ($clearPendingReason) {
+            $update['pending_reason'] = null;
+        }
 
         foreach ($signals as $column => $messageId) {
             if ($messageId !== null) {

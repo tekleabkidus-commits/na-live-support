@@ -25,6 +25,7 @@ final readonly class TransitionContext
         public ?string $reason = null,
         public ?string $signalMessageId = null,
         public ?string $agentSignalMessageId = null,
+        public ?string $pendingReason = null,
     ) {
         if ($actor === TransitionActor::Staff && ! $user instanceof User) {
             throw new InvalidArgumentException('a staff transition needs the acting user — there is nothing to check a permission against otherwise (FR-04).');
@@ -42,5 +43,24 @@ final readonly class TransitionContext
     public static function system(?string $reason = null): self
     {
         return new self(TransitionActor::System, null, $reason);
+    }
+
+    /**
+     * Doc 06 FR-01/§4.2 (built at S07 step 14): the pending reason rides the
+     * TRANSITION — the document's own machine sets `pending_reason` on the
+     * "staff needs info" edge, so the value travels in the context and is
+     * written in the same statement as the status. Additive wither: every
+     * existing caller carries null and behaves exactly as before.
+     */
+    public function withPendingReason(?string $pendingReason): self
+    {
+        return new self(
+            $this->actor,
+            $this->user,
+            $this->reason,
+            $this->signalMessageId,
+            $this->agentSignalMessageId,
+            $pendingReason,
+        );
     }
 }

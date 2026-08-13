@@ -270,3 +270,38 @@ test('SS-04: the matrix is data, so the legal-target list a UI renders comes fro
         ->and($matrix->legalTargets(TicketStatus::PendingCustomer))
         ->toBe([TicketStatus::Open]);
 });
+
+test('FR-01/§4.2 (S07 step 14): the pending reason RIDES THE TRANSITION — written in the same statement entering pending, refused on a mismatched pairing before the transaction, cleared in the same statement leaving the pending family', function () {
+    $service = app(App\Domain\Tickets\Transitions\TicketTransitionService::class);
+
+    // Entering pending_customer with its one legal reason: atomic with the status;
+    // leaving the pending family clears it in the transition's own write.
+    [$ticket, $actor] = matrixFixture('open');
+    $service->transition($ticket, App\Domain\Tickets\Transitions\TicketStatus::PendingCustomer,
+        App\Domain\Tickets\Transitions\TransitionContext::staff($actor)->withPendingReason('awaiting_customer'));
+    expect($ticket->fresh()->pending_reason)->toBe('awaiting_customer');
+    $service->transition($ticket->fresh(), App\Domain\Tickets\Transitions\TicketStatus::Open,
+        App\Domain\Tickets\Transitions\TransitionContext::staff($actor));
+    expect($ticket->fresh()->pending_reason)->toBeNull();
+
+    // pending_internal takes only the awaiting_internal:* values.
+    [$internal, $internalActor] = matrixFixture('open');
+    $service->transition($internal, App\Domain\Tickets\Transitions\TicketStatus::PendingInternal,
+        App\Domain\Tickets\Transitions\TransitionContext::staff($internalActor)->withPendingReason('awaiting_internal:department'));
+    expect($internal->fresh()->pending_reason)->toBe('awaiting_internal:department');
+
+    // A mismatched pairing is refused BEFORE anything is written (C-04 stable message).
+    [$mismatched, $mismatchedActor] = matrixFixture('open');
+    expect(fn () => $service->transition($mismatched, App\Domain\Tickets\Transitions\TicketStatus::PendingCustomer,
+        App\Domain\Tickets\Transitions\TransitionContext::staff($mismatchedActor)->withPendingReason('awaiting_internal:department')))
+        ->toThrow(DomainException::class, 'pending_reason_mismatch');
+    expect($mismatched->fresh()->status)->toBe('open')
+        ->and($mismatched->fresh()->pending_reason)->toBeNull();
+
+    // A reason on a NON-pending transition is refused the same way.
+    [$wrongTarget, $wrongActor] = matrixFixture('open');
+    expect(fn () => $service->transition($wrongTarget, App\Domain\Tickets\Transitions\TicketStatus::Resolved,
+        App\Domain\Tickets\Transitions\TransitionContext::staff($wrongActor)->withPendingReason('awaiting_customer')))
+        ->toThrow(DomainException::class, 'pending_reason_mismatch');
+    expect($wrongTarget->fresh()->status)->toBe('open');
+});
