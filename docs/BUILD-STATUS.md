@@ -604,6 +604,29 @@ advisor accepts only after the owner independently pastes
 `git log --oneline -1` of that SHA from the plain terminal. Reports
 without a verifiable SHA are not auditable.
 
+### DISCOVERY (S07 step 14, B12 pre-build, 2026-08-13) — THE OUTBOX RELAY IS NEVER STARTED IN ANY LIVE STACK
+
+Preparing the B12 timeline read (which consumes the relayed events log)
+surfaced: **`events` holds 0 rows while `outbox` holds 453 with
+`relayed_at IS NULL` — zero rows EVER relayed on this database.**
+Exhaustive search: `outbox:relay` is invoked NOWHERE — the worker runs
+`php artisan horizon`, the scheduler runs `schedule:work` and
+`routes/console.php` never schedules the relay, no compose service and
+no Dockerfile entrypoint starts it (`RelayOutbox`'s own docblock claims
+it "runs continuously on the outbox-relay Horizon supervisor", but
+Horizon supervisors run queue JOBS — a long-running artisan command
+needs a process, and none exists). CI's ephemeral stack boots the same
+compose file, so the gap is environment-independent and dates from the
+events machinery's landing (Doc 04 era). **Every live event-driven path
+— realtime view deltas, notification fanout, the reopen consumer,
+health rollups — has been dead in actual operation**, masked because
+Pest exercises consumers inline and the browser proofs deliberately
+script (AC-03) or seed (FR-26) their inputs. Filed per the
+fresh-run-discipline pattern (the fourth such discovery this step);
+**fix ESCALATED to the advisor before any landing (escalate-FIRST) —
+options and recommendation in the escalation. B12's timeline build holds
+on the ruling; B13 (relay-independent) proceeds meanwhile.**
+
 ### RULED CORE EDIT #6 — the pending-reason ride (`08036be`), COUNTERSIGNED RETROACTIVELY (2026-08-13)
 
 Recorded honestly as **"landed-then-escalated (PROCESS BREACH),
