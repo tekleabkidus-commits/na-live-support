@@ -181,3 +181,43 @@ test('B9 render gate: without tickets.status.change the status control does not 
     // B13's render gate: no tickets.edit → no Edit affordance.
     await expect(page.getByTestId('panel-subject-edit')).toHaveCount(0);
 });
+
+test('B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set)', async ({
+    page,
+}) => {
+    await page.goto('/login');
+    await page.locator('#login-email').fill(AGENT_EMAIL);
+    await page.locator('#login-password').fill(PASSWORD);
+    await page.getByTestId('login-submit').click();
+    await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/inbox');
+    await dismissCoachMarks(page);
+
+    // Two-level nav: open the Yonas thread from the list screen.
+    await page
+        .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+        .locator('[data-role="row-open"]')
+        .click();
+    // The R4 bottom sheet with the same three tabs (B2-S01's contract).
+    await page.getByTestId('mobile-context-trigger').click();
+    await expect(page.getByTestId('mobile-context-sheet')).toBeVisible();
+
+    // The SAME panel, the SAME testids — nothing dropped.
+    const sheet = page.getByTestId('mobile-context-sheet');
+    await expect(sheet.getByTestId('ticket-panel')).toBeVisible();
+    await expect(sheet.getByTestId('ticket-panel-number')).toHaveText('#4820');
+    await expect(sheet.getByTestId('panel-subject')).toBeVisible();
+    await expect(sheet.getByTestId('ticket-timeline')).toBeVisible();
+
+    // And the controls WORK from the sheet: the same one-tap pending flow.
+    await sheet.getByTestId('panel-status-pending').click();
+    await sheet.getByTestId('pending-set').click();
+    await expect(sheet.getByTestId('panel-pending-reason')).toBeVisible();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"pending_customer"');
+    expect(ticketField(4820, 'pending_reason')).toBe('"awaiting_customer"');
+
+    // Canon restored for later specs.
+    await sheet.getByTestId('panel-status-open').click();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
+});
