@@ -43,11 +43,56 @@ final class TicketActionsController extends Controller
 {
     public function __construct(
         private readonly AssignTicket $assignment,
+        private readonly \App\Domain\Tickets\Creation\SubjectWriter $subjects,
         private readonly ChangePriority $priority,
         private readonly TicketTags $tags,
         private readonly ListProjector $projector,
         private readonly ScopeSets $scopes,
     ) {}
+
+    /**
+     * B2-S03/B13 (step 14): the subject door — FR-03's staff edit through
+     * the owning SubjectWriter (tickets.edit is the service's own gate; the
+     * route middleware repeats it for the mapping gate). The 120-char cap is
+     * the drawn counter's own number; a blank subject is refused (Doc 09
+     * fills absent subjects, staff never blank them).
+     */
+    public function subject(Request $request, string $ticketId): JsonResponse
+    {
+        try {
+            /** @var array{subject: string} $input */
+            $input = $request->validate(['subject' => ['required', 'string', 'max:120']]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // The filed step-13 platform item: web-group validate() renders
+            // the HTML redirect for JSON callers — the per-door interim
+            // pattern applies here as on every sibling door.
+            /** @var array<string, list<string>> $errors */
+            $errors = $e->errors();
+
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, 'invalid input', errors: $errors);
+        }
+
+        /** @var User $user */
+        $user = $request->user();
+        $ticket = $this->resolveScoped($user, $ticketId);
+        if ($ticket === null) {
+            return $this->notFound();
+        }
+
+        try {
+            $this->subjects->editedByStaff($ticket, $input['subject'], $user);
+        } catch (\DomainException $e) {
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, $e->getMessage());
+        }
+        $this->projector->recomputeTicket($ticket->identifier());
+
+        $ticket->refresh();
+
+        return new JsonResponse([
+            'subject' => $ticket->subject,
+            'subject_source' => $ticket->getAttribute('subject_source'),
+        ]);
+    }
 
     /**
      * B2-S03/B12 (step 14): the ticket TIMELINE — the relayed events log,

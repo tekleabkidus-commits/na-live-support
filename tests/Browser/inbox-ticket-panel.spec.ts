@@ -136,6 +136,18 @@ test('B9: the panel renders the live ticket, and SET PENDING carries the reason 
     await expect.poll(() => ticketField(4820, 'status')).toBe('"pending_internal"');
     expect(ticketField(4820, 'pending_reason')).toBe('"awaiting_internal:department"');
 
+    // B13: edit the subject through the door — the text lands, the source
+    // label flips to the staff fact, and the counter guards the cap.
+    await page.getByTestId('panel-subject-edit').click();
+    await page.getByTestId('panel-subject-input').fill('Bonus not credited — checked with finance');
+    await expect(page.getByTestId('panel-subject-counter')).toHaveText('41 / 120');
+    await page.getByTestId('panel-subject-save').click();
+    await expect(page.getByTestId('panel-subject-text')).toHaveText(
+        'Bonus not credited — checked with finance',
+    );
+    await expect(page.getByTestId('panel-subject-source')).toContainText('Edited by staff');
+    expect(ticketField(4820, 'subject_source')).toBe('"staff"');
+
     // Restore the scene's canon for later specs (the seeder would heal it,
     // but stay tidy — the shortcuts precedent).
     await page.getByTestId('panel-status-open').click();
@@ -166,4 +178,6 @@ test('B9 render gate: without tickets.status.change the status control does not 
     await expect(page.getByTestId('panel-status-pending')).toHaveCount(0);
     await expect(page.getByTestId('panel-status-open')).toHaveCount(0);
     await expect(page.getByTestId('panel-status-resolved')).toHaveCount(0);
+    // B13's render gate: no tickets.edit → no Edit affordance.
+    await expect(page.getByTestId('panel-subject-edit')).toHaveCount(0);
 });

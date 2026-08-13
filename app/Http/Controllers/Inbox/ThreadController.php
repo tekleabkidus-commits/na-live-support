@@ -170,6 +170,13 @@ final class ThreadController extends Controller
                 $row['assignee_name'] = is_string($ticket->assignee_id ?? null)
                     ? ($assigneeNames[$ticket->assignee_id] ?? null)
                     : null;
+                // B13: the "Copilot draft, edited by staff" label needs the
+                // PROVENANCE the column alone cannot carry — the relayed log
+                // knows whether an AI subject ever existed on this ticket.
+                $row['subject_was_ai'] = ($ticket->subject_source ?? null) === 'ai'
+                    || DB::table('events')->where('name', 'ticket.subject_changed')
+                        ->where('payload->ticket_id', $ticket->id)
+                        ->where('payload->subject_source', 'ai')->exists();
 
                 return $row;
             }, $tickets),

@@ -105,6 +105,7 @@ const props = defineProps<{
         tickets_priority_change: boolean;
         tickets_tags_manage: boolean;
         tickets_status_change: boolean;
+        tickets_edit: boolean;
         tickets_reply: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };

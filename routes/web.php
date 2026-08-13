@@ -158,6 +158,8 @@ Route::middleware([
         ->middleware(['permission:tickets.tags.manage', 'audit:ticket.tagged'])->name('inbox.ticket.tags.add');
     Route::post('t/{ticketId}/tags/remove', [App\Http\Controllers\Inbox\TicketActionsController::class, 'tagsRemove'])
         ->middleware(['permission:tickets.tags.manage', 'audit:ticket.untagged'])->name('inbox.ticket.tags.remove');
+    Route::post('t/{ticketId}/subject', [App\Http\Controllers\Inbox\TicketActionsController::class, 'subject'])
+        ->middleware(['permission:tickets.edit', 'audit:ticket.subject_changed'])->name('inbox.ticket.subject');
     Route::get('t/{ticketId}/timeline', [App\Http\Controllers\Inbox\TicketActionsController::class, 'timeline'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.timeline');
     Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])

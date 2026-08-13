@@ -263,3 +263,51 @@ it('B12 timeline door (step 14): serves the relayed events newest-first with the
         'https://localhost/inbox/t/'.$ticket->identifier().'/timeline',
     )->assertNotFound();
 });
+
+it('B13 subject door (step 14): a staff edit lands through SubjectWriter — source flips to staff, the event and audit are the service\'s own; blank and over-length are refused; out-of-scope gets the 404-pattern', function (): void {
+    [$tenant, , $ticket, $actor] = actionScene();
+    // Front-loaded: bespoke Own-scoped outsider (grantPermissions widens).
+    $outsiderRole = Role::query()->create([
+        'name' => 'S14 Subject Outsider Role',
+        'color' => 'role-agent',
+        'permissions' => ['tickets.view', 'conversations.view', 'views.manage', 'tickets.edit'],
+        'scopes' => ['tickets' => 'Own', 'conversations' => 'Own', 'customers' => 'Own', 'reports' => 'Own'],
+    ]);
+    $outsider = User::factory()->create();
+    $outsider->forceFill(['role_id' => $outsiderRole->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($outsider);
+    grantPermissions($actor, [
+        'tickets.view', 'conversations.view', 'views.manage', 'tickets.edit',
+    ], 'S14 Subject Editor Role');
+
+    $edited = $this->actingAs($actor, 'staff')->postJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/subject',
+        ['subject' => 'Withdrawal of 2,500 ETB not received'],
+    );
+    $edited->assertOk();
+    expect($edited->json('subject_source'))->toBe('staff');
+    asTenant($tenant, function () use ($ticket): void {
+        expect(DB::table('tickets')->where('id', $ticket->identifier())->value('subject'))
+            ->toBe('Withdrawal of 2,500 ETB not received');
+        expect(DB::table('outbox')->where('name', 'ticket.subject_changed')
+            ->where('payload->ticket_id', $ticket->identifier())->count())
+            ->toBeGreaterThan(0, 'the edit bypassed the owning service (no ticket.subject_changed)');
+    });
+
+    // Blank (whitespace) passes the length rule and hits the SERVICE's own
+    // refusal — 422 with the stable shape; over-length dies at validation.
+    $this->actingAs($actor, 'staff')->postJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/subject',
+        ['subject' => '   '],
+    )->assertStatus(422);
+    $this->actingAs($actor, 'staff')->postJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/subject',
+        ['subject' => str_repeat('x', 121)],
+    )->assertStatus(422);
+
+    // C-10 on the new door.
+    $this->actingAs($outsider, 'staff')->postJson(
+        'https://localhost/inbox/t/'.$ticket->identifier().'/subject',
+        ['subject' => 'should never land'],
+    )->assertNotFound();
+});

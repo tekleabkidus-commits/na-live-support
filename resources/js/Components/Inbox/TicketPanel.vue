@@ -22,6 +22,7 @@ type PanelTicket = {
     tags?: string[];
     subject?: string | null;
     subject_source?: string | null;
+    subject_was_ai?: boolean;
     reopened_count?: number;
     channel_unreachable?: boolean;
 };
@@ -48,6 +49,50 @@ const level1 = ref<'customer' | 'internal'>('customer');
 const level2 = ref<'department' | 'named_user' | 'external'>('department');
 const busy = ref(false);
 const timelineTick = ref(0);
+
+// ── B13 subject state ───────────────────────────────────────────────────
+const editingSubject = ref(false);
+const subjectDraft = ref('');
+const subjectLabel = computed(() => {
+    const source = props.ticket?.subject_source ?? null;
+    if (source === 'ai') return props.t.written_by_copilot ?? '';
+    if (source === 'staff') {
+        return props.ticket?.subject_was_ai
+            ? (props.t.copilot_edited_by_staff ?? '')
+            : (props.t.edited_by_staff ?? '');
+    }
+    return '';
+});
+function startSubjectEdit(): void {
+    subjectDraft.value = props.ticket?.subject ?? '';
+    editingSubject.value = true;
+}
+async function saveSubject(): Promise<void> {
+    if (busy.value || props.ticket === null) return;
+    busy.value = true;
+    refusal.value = '';
+    try {
+        const response = await fetch(`/inbox/t/${props.ticket.id}/subject`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': props.xsrf(),
+            },
+            body: JSON.stringify({ subject: subjectDraft.value }),
+        });
+        if (response.ok) {
+            editingSubject.value = false;
+            timelineTick.value += 1; // B12 gains a Subject-set row
+            emit('changed');
+            return;
+        }
+        const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+        refusal.value = body?.detail ?? (props.t.refused ?? '');
+    } finally {
+        busy.value = false;
+    }
+}
 // INLINE refusal (B2-S06 posture): the stable detail renders in place.
 const refusal = ref('');
 
@@ -132,6 +177,80 @@ const initials = computed(() => {
             <span class="text-sm font-semibold" data-testid="ticket-panel-number"
                 >#{{ ticket.number }}</span
             >
+        </div>
+
+        <!-- B13: the subject field — the source label is a FACT about the
+             field, not decoration (the frame's words); it survives edits as
+             "Copilot draft, edited by staff". -->
+        <div data-testid="panel-subject">
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.subject_label }}
+            </p>
+            <template v-if="!editingSubject">
+                <p class="text-xs" data-testid="panel-subject-text">
+                    <span v-if="ticket.subject">{{ ticket.subject }}</span>
+                    <span v-else :style="{ color: 'var(--ds-text-muted)' }">{{
+                        t.subject_none
+                    }}</span>
+                </p>
+                <div class="mt-0.5 flex items-center gap-2">
+                    <span
+                        v-if="subjectLabel !== ''"
+                        class="text-[11px]"
+                        data-testid="panel-subject-source"
+                        :style="{ color: 'var(--ds-ai-fg)' }"
+                        >◆ {{ subjectLabel }}</span
+                    >
+                    <button
+                        v-if="can.tickets_edit"
+                        type="button"
+                        data-testid="panel-subject-edit"
+                        class="text-[11px] underline"
+                        :style="{ color: 'var(--ds-text-secondary)' }"
+                        @click="startSubjectEdit"
+                    >
+                        {{ t.edit }}
+                    </button>
+                </div>
+            </template>
+            <template v-else>
+                <input
+                    v-model="subjectDraft"
+                    type="text"
+                    maxlength="120"
+                    data-testid="panel-subject-input"
+                    :aria-label="t.subject_label"
+                    class="w-full rounded-md border px-2 py-1 text-xs"
+                    :style="{ borderColor: 'var(--ds-border)' }"
+                />
+                <div class="mt-1 flex items-center gap-2">
+                    <button
+                        type="button"
+                        data-testid="panel-subject-save"
+                        class="rounded-md px-2.5 py-1 text-xs font-semibold"
+                        :style="{ background: 'var(--ds-text-ink)', color: 'var(--ds-page-bg)' }"
+                        :disabled="busy"
+                        @click="void saveSubject()"
+                    >
+                        {{ t.save }}
+                    </button>
+                    <button
+                        type="button"
+                        data-testid="panel-subject-cancel"
+                        class="rounded-md border px-2.5 py-1 text-xs"
+                        :style="{ borderColor: 'var(--ds-border)' }"
+                        @click="editingSubject = false"
+                    >
+                        {{ t.cancel }}
+                    </button>
+                    <span
+                        class="ms-auto text-[11px]"
+                        data-testid="panel-subject-counter"
+                        :style="{ color: 'var(--ds-text-muted)' }"
+                        >{{ subjectDraft.length }} / 120</span
+                    >
+                </div>
+            </template>
         </div>
 
         <!-- Status control (B9: Pending / Open / Resolved). -->

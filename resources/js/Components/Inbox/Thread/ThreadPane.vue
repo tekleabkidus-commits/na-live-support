@@ -32,6 +32,7 @@ type Ticket = {
     tags?: string[];
     subject?: string | null;
     subject_source?: string | null;
+    subject_was_ai?: boolean;
     reopened_count?: number;
     channel_unreachable?: boolean;
 };
