@@ -1252,6 +1252,13 @@ function dismissCoach(): void {
                             panelLoadTick += 1;
                         }
                     "
+                    @open-rescue="activeView = 'rescue'"
+                    @scope-lost="
+                        () => {
+                            panelTickets = [];
+                            panelLoading = false;
+                        }
+                    "
                 />
                 <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
@@ -1490,6 +1497,13 @@ function dismissCoach(): void {
                                 panelTickets = rows;
                                 panelLoading = false;
                                 panelLoadTick += 1;
+                            }
+                        "
+                        @open-rescue="activeView = 'rescue'"
+                        @scope-lost="
+                            () => {
+                                panelTickets = [];
+                                panelLoading = false;
                             }
                         "
                     />

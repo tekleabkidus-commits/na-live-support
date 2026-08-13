@@ -12,6 +12,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useInboxConnection } from '../../../stores/inbox/connection';
 import ComposerPane from './ComposerPane.vue';
+import TicketStateBanner from './TicketStateBanner.vue';
 import HandoffCard from './HandoffCard.vue';
 import MediaLightbox from './MediaLightbox.vue';
 import MessageBubble from './MessageBubble.vue';
@@ -50,6 +51,9 @@ const props = defineProps<{
 const emit = defineEmits<{
     // B2-S03: the workspace lifts the ticket rows to the property panel.
     (e: 'tickets', tickets: Ticket[]): void;
+    // C12's affordance + D4's honest posture (step 14).
+    (e: 'open-rescue'): void;
+    (e: 'scope-lost'): void;
 }>();
 
 const messages = ref<Msg[]>([]);
@@ -80,6 +84,10 @@ const history = ref<{
 const expandedEvents = ref<Record<string, boolean>>({});
 const scroller = ref<HTMLElement | null>(null);
 const connection = useInboxConnection();
+// D14 (step 14): the thread's own universal states — loading, error with
+// retry, and D4's scope-lost (a 404 MID-VIEW: the ticket left the viewer's
+// scope; the stale panel must not sit lying interactive).
+const loadState = ref<'loading' | 'ready' | 'error' | 'scope-lost'>('loading');
 
 // FR-29/T-07 (step 13): sync reconciliation refetches the open thread —
 // convergence by refetch, one reconciliation path.
@@ -94,8 +102,15 @@ async function load(anchor?: string): Promise<void> {
         headers: { Accept: 'application/json' },
     });
     if (!response.ok) {
+        if (response.status === 404) {
+            loadState.value = 'scope-lost';
+            emit('scope-lost');
+        } else {
+            loadState.value = 'error';
+        }
         return;
     }
+    loadState.value = 'ready';
     const body = (await response.json()) as {
         messages: Msg[];
         tickets: Ticket[];
@@ -139,6 +154,54 @@ async function load(anchor?: string): Promise<void> {
             : 'none';
     ticketStatus.value =
         tickets.value.length > 0 ? (tickets.value[tickets.value.length - 1]?.status ?? '') : '';
+}
+
+// B2-S04 (step 14): the banners render from the LATEST ticket's state; the
+// composer is REPLACED (closed/spam) or note-limited (unreachable) by it.
+const latestTicket = computed(
+    () => (tickets.value.length > 0 ? tickets.value[tickets.value.length - 1] : null) as unknown as Record<string, unknown> | null,
+);
+const bannerVisible = computed(() => {
+    const t = latestTicket.value;
+    if (!t) return false;
+    const status = String(t.status ?? '');
+    return (
+        ['resolved', 'closed', 'spam', 'escalated'].includes(status) ||
+        t.channel_unreachable === true ||
+        (status === 'open' && Number(t.reopened_count ?? 0) > 0)
+    );
+});
+const composerReplaced = computed(() =>
+    ['closed', 'spam'].includes(String(latestTicket.value?.status ?? '')),
+);
+
+function bannerXsrf(): string {
+    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+    return match?.[1] ? decodeURIComponent(match[1]) : '';
+}
+async function bannerPost(path: string, payload: Record<string, unknown>): Promise<void> {
+    await fetch(path, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': bannerXsrf(),
+        },
+        body: JSON.stringify(payload),
+    }).catch(() => null);
+    await load();
+}
+function onReopenNow(): void {
+    // resolved→open: the matrix demands no reason on this edge.
+    void bannerPost(`/inbox/thread/${props.conversationId}/transition`, { to: 'open' });
+}
+function onReopenWithReason(reason: string): void {
+    const id = String(latestTicket.value?.id ?? '');
+    void bannerPost(`/inbox/t/${id}/reopen`, { reason });
+}
+function onUnspam(reason: string): void {
+    const id = String(latestTicket.value?.id ?? '');
+    void bannerPost(`/inbox/t/${id}/unspam`, { reason });
 }
 
 // ── The RENDER STREAM: messages interleaved with boundary markers (at each
@@ -371,6 +434,48 @@ onMounted(async () => {
             data-testid="thread-scroll"
             class="min-h-0 flex-1 space-y-2 overflow-y-auto p-3"
         >
+            <!-- D14 (step 14): the thread's own universal states. -->
+            <p
+                v-if="loadState === 'loading' && messages.length === 0"
+                data-testid="thread-loading"
+                class="text-center text-xs"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
+                {{ t.loading_messages }}
+            </p>
+            <div
+                v-else-if="loadState === 'error'"
+                data-testid="thread-error"
+                class="text-center text-xs"
+            >
+                <p :style="{ color: 'var(--ds-text-muted)' }">
+                    <span aria-hidden="true">⚠</span> {{ t.messages_failed }}
+                </p>
+                <button
+                    type="button"
+                    data-testid="thread-retry"
+                    class="mt-1 rounded border px-2 py-0.5"
+                    :style="{ borderColor: 'var(--ds-border-strong)' }"
+                    @click="() => void load()"
+                >
+                    {{ t.try_again }}
+                </button>
+            </div>
+            <div
+                v-else-if="loadState === 'scope-lost'"
+                data-testid="thread-scope-lost"
+                class="text-center text-xs"
+            >
+                <p :style="{ color: 'var(--ds-text-muted)' }">{{ t.scope_lost }}</p>
+            </div>
+            <p
+                v-else-if="loadState === 'ready' && messages.length === 0"
+                data-testid="thread-empty"
+                class="text-center text-xs"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
+                {{ t.no_messages_yet }}
+            </p>
             <template v-for="item in stream" :key="item.key">
                 <p
                     v-if="item.type === 'date'"
@@ -460,7 +565,17 @@ onMounted(async () => {
             </template>
         </div>
 
+        <TicketStateBanner
+            v-if="bannerVisible && latestTicket"
+            :ticket="latestTicket as never"
+            :t="t"
+            @reopen-now="onReopenNow"
+            @reopen-with-reason="onReopenWithReason"
+            @unspam="onUnspam"
+            @open-rescue="emit('open-rescue')"
+        />
         <ComposerPane
+            v-if="!composerReplaced"
             :conversation-id="conversationId"
             :channel="channel"
             :customer-name="customerName"
@@ -472,6 +587,7 @@ onMounted(async () => {
             :connection-account="connectionAccount"
             :customer-has-phone="customerHasPhone"
             :blocked-by-user="blockedByUser"
+            :channel-unreachable="latestTicket?.channel_unreachable === true"
             :t="composerT"
             :voice-flag="voiceFlag"
             @sent="() => load()"

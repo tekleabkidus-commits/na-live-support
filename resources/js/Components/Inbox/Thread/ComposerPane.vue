@@ -47,6 +47,7 @@ const props = defineProps<{
     connectionAccount: string;
     customerHasPhone: boolean;
     blockedByUser: boolean;
+    channelUnreachable?: boolean;
     voiceFlag: boolean;
     t: Record<string, string>;
 }>();
@@ -81,6 +82,10 @@ const raceConfirmOpen = ref(false);
 const composerState = computed((): string => {
     if (props.conversationState === 'blocked') return 'conversation_blocked';
     if (props.blockedByUser) return 'blocked_by_user';
+    // C12 (step 14): the channel is unreachable at the TICKET level — the
+    // reply path is off; notes to colleagues still work (the banner above
+    // the composer says so; BR-07 pauses timers server-side).
+    if (props.channelUnreachable && mode.value !== 'note') return 'unreachable';
     if (props.connectionState === 'paused' || props.connectionState === 'revoked')
         return 'connection_paused';
     if (mode.value === 'note') return 'normal'; // notes never touch the channel
@@ -91,7 +96,7 @@ const composerState = computed((): string => {
 const canType = computed(
     () =>
         mode.value === 'note' ||
-        !['expired', 'connection_paused', 'blocked_by_user', 'conversation_blocked'].includes(
+        !['expired', 'connection_paused', 'blocked_by_user', 'conversation_blocked', 'unreachable'].includes(
             composerState.value,
         ),
 );
