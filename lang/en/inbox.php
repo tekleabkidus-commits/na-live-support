@@ -407,6 +407,35 @@ return [
         // BR-01, the inbox never lies by silence.
         'no_target' => 'No ticket is selected or open to act on.',
     ],
+    // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
+    // control + two-level pending selector on the countersigned door.
+    'ticket_panel' => [
+        'empty' => 'Open a conversation to see its ticket.',
+        'title' => 'Ticket',
+        'status_label' => 'Status',
+        'status_pending' => 'Pending',
+        'status_open' => 'Open',
+        'status_resolved' => 'Resolved',
+        'reason_current' => 'Pending: :reason',
+        'reason_awaiting_customer' => 'awaiting the customer',
+        'reason_awaiting_internal_department' => 'awaiting a department',
+        'reason_awaiting_internal_named_user' => 'awaiting a named person',
+        'reason_awaiting_internal_external' => 'awaiting someone external',
+        'pending_because' => 'Pending because',
+        'awaiting_customer' => 'Awaiting customer',
+        'awaiting_internal' => 'Awaiting internal',
+        'waiting_on' => 'Waiting on',
+        'waiting_department' => 'Department',
+        'waiting_named_user' => 'A named person',
+        'waiting_external' => 'Someone external',
+        'internal_hint' => 'The team sees it as a waiting item. The customer is told nothing automatically.',
+        'sla_hint' => 'The SLA clock keeps running while a ticket waits — it is the reply window that pauses, not the target.',
+        'set_pending' => 'Set pending',
+        'cancel' => 'Cancel',
+        'refused' => 'That change was refused.',
+        'assignee_label' => 'Assignee',
+        'unassigned' => 'Unassigned',
+    ],
     // §8 first-run (step 13): the four coach marks, drawn in B1-S03.
     'coach' => [
         'title' => 'Welcome tour',

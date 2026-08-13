@@ -102,11 +102,30 @@ final class ThreadController extends Controller
             $messages = $page->take(self::PAGE)->reverse()->values();
         }
 
-        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string}> $tickets */
+        // Step 14 (B2-S03): the property panel renders from these rows — the
+        // FULL property set rides the same read the boundary markers use.
+        // Reads only; the literal status KEY never appears as an assignment
+        // in this file (the ticket-status-writer gate's design constraint).
+        /** @var list<object{id: string, number: int|string, status: string, created_at: string, source: string, priority: string, pending_reason: string|null, assignee_id: string|null, tags: string|null, subject: string|null, subject_source: string|null, reopened_count: int, channel_unreachable: bool}> $tickets */
         $tickets = DB::table('tickets')
             ->where('conversation_id', $conversation->identifier())
             ->orderBy('created_at')
-            ->get(['id', 'number', 'status', 'created_at', 'source'])
+            ->get([
+                'id', 'number', 'status', 'created_at', 'source',
+                'priority', 'pending_reason', 'assignee_id', 'tags',
+                'subject', 'subject_source', 'reopened_count', 'channel_unreachable',
+            ])
+            ->all();
+
+        // Assignee display names for the panel's row — id + name only, the
+        // assignees-directory posture (SEC: no emails, no roles).
+        /** @var array<string, string> $assigneeNames */
+        $assigneeNames = DB::table('users')
+            ->whereIn('id', array_values(array_filter(array_map(
+                fn (object $ticket): ?string => is_string($ticket->assignee_id ?? null) ? $ticket->assignee_id : null,
+                $tickets,
+            ))))
+            ->pluck('name', 'id')
             ->all();
 
         /** @var array<string, object{ticket_id: string, payload: string, schema_version: int}> $packets */
@@ -142,7 +161,18 @@ final class ThreadController extends Controller
                 return $data;
             })->all(),
             'prev_cursor' => $hasMore ? $oldest : null,
-            'tickets' => $tickets,
+            'tickets' => array_map(function (object $ticket) use ($assigneeNames): array {
+                /** @var array<string, mixed> $row */
+                $row = (array) $ticket;
+                $row['tags'] = is_string($ticket->tags ?? null)
+                    ? array_values(array_filter(explode(',', trim((string) $ticket->tags, '{}'))))
+                    : [];
+                $row['assignee_name'] = is_string($ticket->assignee_id ?? null)
+                    ? ($assigneeNames[$ticket->assignee_id] ?? null)
+                    : null;
+
+                return $row;
+            }, $tickets),
             'handoff_packets' => array_map(
                 fn (object $packet): array => [
                     'ticket_id' => $packet->ticket_id,

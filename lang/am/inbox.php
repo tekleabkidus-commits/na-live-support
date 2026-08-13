@@ -385,6 +385,35 @@ return [
         // BR-01, the inbox never lies by silence.
         'no_target' => 'እርምጃ የሚወሰድበት የተመረጠ ወይም የተከፈተ ቲኬት የለም።',
     ],
+    // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
+    // control + two-level pending selector on the countersigned door.
+    'ticket_panel' => [
+        'empty' => 'የቲኬቱን ዝርዝር ለማየት ውይይት ይክፈቱ።',
+        'title' => 'ቲኬት',
+        'status_label' => 'ሁኔታ',
+        'status_pending' => 'በመጠባበቅ ላይ',
+        'status_open' => 'ክፍት',
+        'status_resolved' => 'ተፈትቷል',
+        'reason_current' => 'በመጠባበቅ ላይ፦ :reason',
+        'reason_awaiting_customer' => 'ደንበኛውን በመጠበቅ ላይ',
+        'reason_awaiting_internal_department' => 'ክፍልን በመጠበቅ ላይ',
+        'reason_awaiting_internal_named_user' => 'የተጠቀሰ ሰውን በመጠበቅ ላይ',
+        'reason_awaiting_internal_external' => 'የውጭ አካልን በመጠበቅ ላይ',
+        'pending_because' => 'የመጠባበቅ ምክንያት',
+        'awaiting_customer' => 'ደንበኛውን በመጠበቅ',
+        'awaiting_internal' => 'የውስጥ አካልን በመጠበቅ',
+        'waiting_on' => 'የሚጠበቀው',
+        'waiting_department' => 'ክፍል',
+        'waiting_named_user' => 'የተጠቀሰ ሰው',
+        'waiting_external' => 'የውጭ አካል',
+        'internal_hint' => 'ቡድኑ እንደ በመጠባበቅ ላይ ያለ ሥራ ያየዋል። ለደንበኛው በራስ-ሰር ምንም አይነገርም።',
+        'sla_hint' => 'ቲኬት በሚጠብቅበት ጊዜ የSLA ሰዓቱ መቁጠሩን ይቀጥላል — የሚቆመው የመልስ መስኮቱ ነው እንጂ ግቡ አይደለም።',
+        'set_pending' => 'በመጠባበቅ ላይ አድርግ',
+        'cancel' => 'ሰርዝ',
+        'refused' => 'ለውጡ ተከልክሏል።',
+        'assignee_label' => 'ተመዳቢ',
+        'unassigned' => 'ያልተመደበ',
+    ],
     // §8 first-run (step 13): the four coach marks, drawn in B1-S03.
     'coach' => [
         'title' => 'የእንኳን ደህና መጡ ጉብኝት',

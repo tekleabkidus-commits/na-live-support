@@ -23,6 +23,17 @@ type Ticket = {
     status: string;
     created_at: string;
     source: string;
+    // Step 14 (B2-S03): the property panel renders from the same rows the
+    // boundary markers use — one read, no drift.
+    priority?: string;
+    pending_reason?: string | null;
+    assignee_id?: string | null;
+    assignee_name?: string | null;
+    tags?: string[];
+    subject?: string | null;
+    subject_source?: string | null;
+    reopened_count?: number;
+    channel_unreachable?: boolean;
 };
 
 const props = defineProps<{
@@ -33,6 +44,11 @@ const props = defineProps<{
     // FR-25 (step 12): a search-hit anchor — the thread opens AT the
     // message with the row highlighted (Doc 04 EC-08's window underneath).
     initialAnchor?: string | null;
+}>();
+
+const emit = defineEmits<{
+    // B2-S03: the workspace lifts the ticket rows to the property panel.
+    (e: 'tickets', tickets: Ticket[]): void;
 }>();
 
 const messages = ref<Msg[]>([]);
@@ -89,6 +105,7 @@ async function load(anchor?: string): Promise<void> {
     };
     messages.value = body.messages;
     tickets.value = body.tickets;
+    emit('tickets', body.tickets);
     packets.value = body.handoff_packets;
     lastReadAt.value = body.last_read_at;
     prevCursor.value = body.prev_cursor;

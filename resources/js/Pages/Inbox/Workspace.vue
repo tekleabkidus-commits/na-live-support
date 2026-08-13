@@ -25,6 +25,7 @@ import ActionPalette, { type PaletteItem } from '../../Components/Inbox/ActionPa
 import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
+import TicketPanel from '../../Components/Inbox/TicketPanel.vue';
 import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
 import ListPane from '../../Components/Inbox/List/ListPane.vue';
@@ -83,6 +84,7 @@ const props = defineProps<{
         offline: Record<string, string>;
         shortcuts: Record<string, string>;
         coach: Record<string, string>;
+        ticket_panel: Record<string, string>;
         action_palette: Record<string, string>;
         mobile: Record<string, string>;
     };
@@ -487,6 +489,22 @@ function setDensity(value: 'comfortable' | 'compact'): void {
 const list = useLiveList();
 const overlayOpen = ref(false);
 const coachOpen = ref(false);
+
+// B2-S03 (step 14): the ticket rows the open thread lifted up — the
+// property panel renders the LAST row (the thread's live ticket).
+type PanelTicketRow = Record<string, unknown> & {
+    id: string;
+    number: number | string;
+    status: string;
+};
+const panelTickets = ref<PanelTicketRow[]>([]);
+const panelTicket = computed(
+    () => (panelTickets.value[panelTickets.value.length - 1] ?? null) as never,
+);
+function onPanelChanged(): void {
+    connection.viewRefetchTick += 1;
+    connection.threadRefetchTick += 1;
+}
 const actionToast = ref('');
 
 // The map's ticket actions target the ACTIVE LIST ROW when one is lit,
@@ -1146,6 +1164,7 @@ function dismissCoach(): void {
                     :t="t.thread"
                     :composer-t="t.composer"
                     :voice-flag="features.voice_recording"
+                    @tickets="(rows) => (panelTickets = rows)"
                 />
                 <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
@@ -1161,7 +1180,18 @@ function dismissCoach(): void {
                 :style="{ borderColor: 'var(--ds-border)' }"
                 tabindex="-1"
             >
-                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }" />
+                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                    <template #ticket>
+                        <TicketPanel
+                            :ticket="panelTicket"
+                            :conversation-id="activeThread"
+                            :can="can"
+                            :t="t.ticket_panel"
+                            :xsrf="workspaceXsrf"
+                            @changed="onPanelChanged"
+                        />
+                    </template>
+                </ContextPanel>
             </div>
             <div
                 v-else-if="contextAsDrawer && drawerOpen"
@@ -1171,7 +1201,18 @@ function dismissCoach(): void {
                 :style="{ background: 'var(--ds-panel-bg)', borderColor: 'var(--ds-border)' }"
                 tabindex="-1"
             >
-                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }" />
+                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                    <template #ticket>
+                        <TicketPanel
+                            :ticket="panelTicket"
+                            :conversation-id="activeThread"
+                            :can="can"
+                            :t="t.ticket_panel"
+                            :xsrf="workspaceXsrf"
+                            @changed="onPanelChanged"
+                        />
+                    </template>
+                </ContextPanel>
             </div>
         </div>
 
@@ -1345,6 +1386,7 @@ function dismissCoach(): void {
                         :t="t.thread"
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
+                        @tickets="(rows) => (panelTickets = rows)"
                     />
                     <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}
@@ -1375,7 +1417,18 @@ function dismissCoach(): void {
                                 :style="{ background: 'var(--ds-border-strong)' }"
                             ></span>
                         </div>
-                        <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }" />
+                        <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                            <template #ticket>
+                                <TicketPanel
+                                    :ticket="panelTicket"
+                                    :conversation-id="activeThread"
+                                    :can="can"
+                                    :t="t.ticket_panel"
+                                    :xsrf="workspaceXsrf"
+                                    @changed="onPanelChanged"
+                                />
+                            </template>
+                        </ContextPanel>
                     </div>
                 </div>
             </template>
