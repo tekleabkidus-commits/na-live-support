@@ -503,6 +503,9 @@ const panelTickets = ref<PanelTicketRow[]>([]);
 // D1: switching threads empties the panel INTO A SKELETON, never a stale
 // ticket — the loading state is a shape, not a lie about the old data.
 const panelLoading = ref(false);
+// Each thread LIFT bumps this — the panel's timeline reloads even when the
+// same ticket reopens (its own watch keys on ticket id + this tick).
+const panelLoadTick = ref(0);
 watch(
     () => activeThread.value,
     () => {
@@ -537,6 +540,12 @@ const staleAsOf = computed(() => {
     return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(asOf);
 });
 
+// D7: the lost race's offered next move — Unassigned, top row lit.
+function onClaimNext(): void {
+    activeView.value = 'unassigned';
+    list.activeId = null;
+    list.activateStep(1);
+}
 function onPanelChanged(): void {
     connection.viewRefetchTick += 1;
     connection.threadRefetchTick += 1;
@@ -1216,6 +1225,7 @@ function dismissCoach(): void {
                         (rows) => {
                             panelTickets = rows;
                             panelLoading = false;
+                            panelLoadTick += 1;
                         }
                     "
                 />
@@ -1242,8 +1252,10 @@ function dismissCoach(): void {
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
                             :loading="panelLoading"
+                            :load-tick="panelLoadTick"
                             :transitions="transitions"
                             @changed="onPanelChanged"
+                            @claim-next="onClaimNext"
                         />
                     </template>
                 </ContextPanel>
@@ -1265,8 +1277,10 @@ function dismissCoach(): void {
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
                             :loading="panelLoading"
+                            :load-tick="panelLoadTick"
                             :transitions="transitions"
                             @changed="onPanelChanged"
+                            @claim-next="onClaimNext"
                         />
                     </template>
                 </ContextPanel>
@@ -1447,6 +1461,7 @@ function dismissCoach(): void {
                         (rows) => {
                             panelTickets = rows;
                             panelLoading = false;
+                            panelLoadTick += 1;
                         }
                     "
                     />
@@ -1488,8 +1503,10 @@ function dismissCoach(): void {
                                     :t="t.ticket_panel"
                                     :xsrf="workspaceXsrf"
                                     :loading="panelLoading"
+                                    :load-tick="panelLoadTick"
                                     :transitions="transitions"
                                     @changed="onPanelChanged"
+                            @claim-next="onClaimNext"
                                 />
                             </template>
                         </ContextPanel>

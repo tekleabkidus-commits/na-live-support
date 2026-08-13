@@ -21,6 +21,12 @@ const props = defineProps<{
     refreshTick?: number;
 }>();
 
+const emit = defineEmits<{
+    // D9/D10: the panel renders system explanations when a system event is
+    // the newest thing that happened.
+    (e: 'newest', name: string): void;
+}>();
+
 const rows = ref<TimelineRow[]>([]);
 const total = ref(0);
 const expanded = ref(false);
@@ -51,6 +57,7 @@ async function load(all: boolean): Promise<void> {
     const body = (await response.json()) as { total: number; rows: TimelineRow[] };
     rows.value = body.rows;
     total.value = body.total;
+    emit('newest', body.rows[0]?.name ?? '');
 }
 
 watch(

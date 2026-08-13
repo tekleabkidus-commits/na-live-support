@@ -50,6 +50,17 @@ final class DeclareAuditAction
 
         $response = $next($request);
 
+        // A-37 (advisor-ruled, 2026-08-13): a handler that took a DOCUMENTED
+        // noop path may declare it — explicitly, in code, at the exact
+        // branch, tied to the owning service's own noop return (EC-07's
+        // same-state success is the first such path: "no error, no event,
+        // no audit entry" is its S22-proven contract). The declaration is
+        // the signed-skip shape: a silent missing audit still throws below;
+        // only a deliberate, reviewable attribute passes.
+        if ($request->attributes->get('audit.noop') === true) {
+            return $response;
+        }
+
         // Only successful mutations are expected to have audited. A 4xx means the mutation
         // did not happen, and auditing a rejected attempt is the exception (EC-06's
         // conflict entry) rather than the rule.

@@ -1428,3 +1428,28 @@ on the converted list, plus the existing keyboard/roving/selection tests
 unchanged, in the step-13 consolidated battery of record. Filed as a
 class-1 technical-necessity deviation in DESIGN-DEVIATIONS (document word
 yields to markup validity).
+
+### A-37 (ADVISOR-RULED at the S07 step-14 D8 stop, 2026-08-13). The audit-declaration verifier recognizes DOCUMENTED noop paths by explicit in-code declaration — EC-07's same-state success is the first
+
+**The collision, both sides correct by their own documents:** Doc 17
+FR-11 / CLAUDE.md §2 (via the step-13 `DeclareAuditAction` verifier): a
+2xx on a route declaring an audit action MUST have written the row. Doc
+06 EC-07 (AC-01 clause 3, S22-proven): a same-state transition is a
+SUCCESS that writes "no error, no event, no audit entry." D8's drawn
+quiet-agreement surface pushed the noop through the declared route for
+the first time in a guarded environment → LogicException → 500. Latent
+since the route's declaration; filed in the honest-trail.
+
+**The ruling (option b, conditions executed):** the verifier skips ONLY
+on an explicit `audit.noop` request attribute — the signed-skip shape:
+deliberate, in-code, reviewable. The declaration is CAUSAL, set at the
+exact EC-07 branch in the transition door, tied to the OWNING service's
+own noop return (`TransitionResult::$changed === false`) — never at
+controller entry, never derived from response shape; no Doc 06 file was
+touched (the noop fact was already public on the service's return).
+**Falsification executed both directions** (ComposerEndpointTest): the
+declared noop passes the REAL guarded route with zero
+`ticket.status_changed` audit rows; an UNDECLARED missing audit on a
+bespoke route through the real middleware still THROWS. EC-07's S22
+clause and the D8 browser proof both run green through the guarded
+route.

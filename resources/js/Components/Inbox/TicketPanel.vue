@@ -34,6 +34,7 @@ const props = defineProps<{
     t: Record<string, string>;
     xsrf: () => string;
     loading?: boolean;
+    loadTick?: number;
     // D3 (SS-04): the per-viewer legal-target map — matrix ∩ capability,
     // computed server-side from the matrix's own table. Absence is the
     // render rule; the refused strip stays the race surface.
@@ -43,6 +44,8 @@ const props = defineProps<{
 const emit = defineEmits<{
     // The workspace owns the stores; a landed change refetches view+thread.
     (e: 'changed'): void;
+    // D7: the lost race offers the next unassigned ticket instead.
+    (e: 'claim-next'): void;
 }>();
 
 // ── B9 state ────────────────────────────────────────────────────────────
@@ -62,6 +65,10 @@ const refusalPutBack = ref(false);
 // D5: the inline claim — an unassigned ticket offers "Assign to me" right
 // on the row (the drawn empty says what fills it and offers the act).
 const claiming = ref(false);
+// D7/D8/D9/D10 race+system surfaces
+const claimLost = ref(false);
+const noopStrip = ref(false);
+const newestEvent = ref('');
 async function assignToMe(): Promise<void> {
     if (claiming.value || props.ticket === null) return;
     claiming.value = true;
@@ -82,7 +89,10 @@ async function assignToMe(): Promise<void> {
         }
         const body = (await response.json().catch(() => null)) as { detail?: string } | null;
         refusal.value = body?.detail ?? props.t.refused ?? '';
-        emit('changed'); // the race case: someone else claimed — show truth
+        // D7: no dialog — the avatar swaps in place via the refetch, the
+        // words explain, and the next move is offered.
+        claimLost.value = response.status === 409;
+        emit('changed');
     } finally {
         claiming.value = false;
     }
@@ -139,6 +149,9 @@ watch(
     () => {
         pendingOpen.value = false;
         refusal.value = '';
+        claimLost.value = false;
+        noopStrip.value = false;
+        newestEvent.value = '';
     },
 );
 
@@ -146,19 +159,25 @@ const status = computed(() => props.ticket?.status ?? '');
 // D3: what THIS viewer may do from HERE — the drawn control renders only
 // these; escalate/spam ride their own operation surfaces (B1-S04).
 const legalTargets = computed(() => props.transitions[status.value] ?? []);
+// The drawn control shows the CURRENT state ✓-marked ALONGSIDE the legal
+// targets ("Closed ✓ | Reopen") — clicking the current one is EC-07's
+// documented noop, which D8 says quietly. Absent stays absent.
 const showPending = computed(
     () =>
+        isPending.value ||
         legalTargets.value.includes('pending_customer') ||
         legalTargets.value.includes('pending_internal'),
 );
-const showOpen = computed(() => legalTargets.value.includes('open'));
+const showOpen = computed(() => status.value === 'open' || legalTargets.value.includes('open'));
 // From closed/resolved the open target IS the reopen act — the drawn label.
 const openLabel = computed(() =>
     status.value === 'closed' || status.value === 'resolved'
         ? (props.t.reopen ?? props.t.status_open ?? '')
         : (props.t.status_open ?? ''),
 );
-const showResolved = computed(() => legalTargets.value.includes('resolved'));
+const showResolved = computed(
+    () => status.value === 'resolved' || legalTargets.value.includes('resolved'),
+);
 function statusLabel(value: string): string {
     if (value === 'pending_customer' || value === 'pending_internal') {
         return props.t.status_pending ?? value;
@@ -198,6 +217,11 @@ async function post(to: string, pendingReason: string | null): Promise<void> {
             ),
         });
         if (response.ok) {
+            const okBody = (await response.json().catch(() => null)) as {
+                noop?: boolean;
+            } | null;
+            // D8: two agents agreeing is not a conflict — say it quietly.
+            noopStrip.value = okBody?.noop === true;
             pendingOpen.value = false;
             timelineTick.value += 1; // the relay will have a new row for B12
             emit('changed');
@@ -367,7 +391,7 @@ const initials = computed(() => {
                     }"
                     @click="void post('open', null)"
                 >
-                    {{ openLabel }}
+                    {{ openLabel }}<span v-if="status === 'open'" aria-hidden="true"> ✓</span>
                 </button>
                 <button
                     v-if="showResolved"
@@ -382,7 +406,8 @@ const initials = computed(() => {
                     }"
                     @click="void post('resolve', null)"
                 >
-                    {{ t.status_resolved }}
+                    {{ t.status_resolved
+                    }}<span v-if="status === 'resolved'" aria-hidden="true"> ✓</span>
                 </button>
             </div>
         </div>
@@ -496,6 +521,38 @@ const initials = computed(() => {
             </div>
         </div>
 
+        <!-- D8: the quiet agreeing strip — never an error. -->
+        <p
+            v-if="noopStrip"
+            data-testid="panel-noop-strip"
+            role="status"
+            class="rounded-md border px-2 py-1 text-xs"
+            :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }"
+        >
+            {{ t.noop_strip }}
+        </p>
+
+        <!-- D9/D10: system events explain themselves in place when they are
+             the newest thing that happened to this ticket. -->
+        <p
+            v-if="newestEvent === 'ticket.assignee_deactivated' && !ticket.assignee_name"
+            data-testid="panel-handed-back"
+            role="status"
+            class="rounded-md border px-2 py-1 text-xs"
+            :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }"
+        >
+            {{ t.handed_back }}
+        </p>
+        <p
+            v-else-if="newestEvent === 'ticket.escalation_rerouted'"
+            data-testid="panel-rerouted"
+            role="status"
+            class="rounded-md border px-2 py-1 text-xs"
+            :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }"
+        >
+            {{ t.rerouted }}
+        </p>
+
         <!-- D2: the optimistic 'saving…' marker on the in-flight target. -->
         <p
             v-if="pendingTarget !== null"
@@ -564,7 +621,27 @@ const initials = computed(() => {
             </div>
         </div>
 
+        <!-- D7: the lost race's next move, offered in place. -->
+        <button
+            v-if="claimLost"
+            type="button"
+            data-testid="panel-claim-next"
+            class="self-start text-xs underline"
+            :style="{ color: 'var(--ds-text-secondary)' }"
+            @click="
+                claimLost = false;
+                emit('claim-next');
+            "
+        >
+            {{ t.claim_next }}
+        </button>
+
         <!-- B12: the timeline, newest first, over the living relay. -->
-        <TicketTimeline :ticket-id="ticket.id" :t="t" :refresh-tick="timelineTick" />
+        <TicketTimeline
+            :ticket-id="ticket.id"
+            :t="t"
+            :refresh-tick="timelineTick + (loadTick ?? 0)"
+            @newest="(name) => (newestEvent = name)"
+        />
     </div>
 </template>

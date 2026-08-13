@@ -225,3 +225,35 @@ it('FR-05/BR-03 (ruling (c), step 14): a staff reply through the door IMPLICITLY
         expect(DB::table('tickets')->where('id', $ticket2->identifier())->value('assignee_id'))->toBeNull();
     });
 });
+
+it('A-37 (the D8 guard ruling), BOTH DIRECTIONS EXECUTED: a same-state transition through the REAL declared route is EC-07\'s success-noop — 200, noop:true, no audit row, and the verifier PASSES on the causal declaration; an UNDECLARED missing audit still THROWS (the teeth, tested not asserted)', function (): void {
+    [$tenant, $tenantId, $conversation, $ticket, $actor] = composerScene('open');
+
+    // Direction 1: the declared noop passes the guarded route. The ticket is
+    // already open; asking for open again is EC-07's documented success.
+    $before = 0;
+    asTenant($tenant, function () use (&$before): void {
+        $before = (int) DB::table('audit_log')->where('action_key', 'ticket.status_changed')->count();
+    });
+    $response = $this->actingAs($actor, 'staff')->postJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/transition',
+        ['to' => 'open'],
+    );
+    $response->assertOk();
+    expect($response->json('noop'))->toBeTrue()
+        ->and($response->json('ok'))->toBeTrue();
+    asTenant($tenant, function () use ($before): void {
+        expect((int) DB::table('audit_log')->where('action_key', 'ticket.status_changed')->count())
+            ->toBe($before, 'EC-07: a noop wrote an audit row — "no error, no event, no audit entry" broken');
+    });
+
+    // Direction 2 — THE TEETH: a route that declares the audit action,
+    // writes nothing, and does NOT declare a noop still throws. A bespoke
+    // test route through the real middleware, nothing mocked.
+    \Illuminate\Support\Facades\Route::post('_test/a37-undeclared', fn () => response()->json(['ok' => true]))
+        ->middleware(['web', 'auth:staff', App\Http\Middleware\DeclareAuditAction::class.':ticket.status_changed']);
+
+    $this->expectException(LogicException::class);
+    $this->withoutExceptionHandling()->actingAs($actor, 'staff')
+        ->postJson('https://localhost/_test/a37-undeclared');
+});

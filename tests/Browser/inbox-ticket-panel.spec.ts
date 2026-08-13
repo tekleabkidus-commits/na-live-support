@@ -160,7 +160,9 @@ test('B9: the panel renders the live ticket, and SET PENDING carries the reason 
     await page.getByTestId('panel-status-resolved').click();
     await expect.poll(() => ticketField(4820, 'status')).toBe('"resolved"');
     await expect(page.getByTestId('panel-status-pending')).toHaveCount(0);
-    await expect(page.getByTestId('panel-status-resolved')).toHaveCount(0);
+    // The CURRENT state stays, ✓-marked (the drawn "Closed ✓ | Reopen"
+    // shape); only the ILLEGAL targets are absent.
+    await expect(page.getByTestId('panel-status-resolved')).toContainText('✓');
     await expect(page.getByTestId('panel-status-open')).toHaveText('Reopen');
     await page.getByTestId('panel-status-open').click();
     await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
@@ -300,8 +302,18 @@ test('D5/D6/D1: the drawn empties offer the act (Assign to me claims through the
     await page.getByTestId('panel-status-pending').click();
     await page.getByTestId('pending-set').click();
     await expect(page.getByTestId('timeline-failed')).toBeVisible();
-    await page.unroute('**/timeline**');
+    // The retry is proven TWICE: against the still-blocked route it fails
+    // honestly and the state persists (no lucky pass) —
     await page.getByTestId('timeline-retry').click();
+    await expect(page.getByTestId('timeline-failed')).toBeVisible();
+    // — and after the route heals it recovers. (A lift-triggered reload may
+    // legitimately beat the click to the recovery; the guard idiom absorbs
+    // that benign race — the recovery assertions below stand either way.)
+    await page.unroute('**/timeline**');
+    await page
+        .getByTestId('timeline-retry')
+        .click({ timeout: 3000 })
+        .catch(() => undefined);
     await expect(page.getByTestId('timeline-failed')).toHaveCount(0);
     // Recovery proven by ROWS RENDERING (the claim relayed long before the
     // block; the fresh transition may still be in relay flight — which row
@@ -316,4 +328,90 @@ test('D5/D6/D1: the drawn empties offer the act (Assign to me claims through the
         '--execute',
         'DB::connection("pgsql_platform")->table("tickets")->where("number", 4802)->update(["assignee_id" => null]); echo "restored";',
     );
+});
+
+test('D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves', async ({
+    page,
+    browser,
+}) => {
+    await openYonasThread(page);
+
+    // D8: a COLLEAGUE resolves through the real door (the slot machinery
+    // runs — a tinker status write would strand FR-10's open-ticket slot);
+    // then the stale-rendered Resolved fires here and EC-07 answers
+    // SUCCESS-noop — the strip says it quietly.
+    const ctxB = await browser.newContext({ ignoreHTTPSErrors: true });
+    const pageB = await ctxB.newPage();
+    await openYonasThread(pageB);
+    await pageB.getByTestId('panel-status-resolved').click();
+    await expect(pageB.getByTestId('panel-status-open')).toHaveText('Reopen');
+    await ctxB.close();
+    await page.getByTestId('panel-status-resolved').click();
+    await expect(page.getByTestId('panel-noop-strip')).toBeVisible();
+    // eslint-disable-next-line playwright/no-conditional-in-test -- one-line canon guard
+    await expect(page.getByTestId('panel-refusal')).toHaveCount(0);
+    // Reopen through the rendered door for the next scene.
+    await page.getByTestId('panel-status-open').click();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
+
+    // D7: the ticket is unassigned for the race, then claimed by ANOTHER
+    // hand behind the client — Assign to me loses, no dialog, the avatar
+    // swaps via refetch, the words explain, the next move is offered.
+    artisan(
+        'tinker',
+        '--execute',
+        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); '
+        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); echo "unassigned";',
+    );
+    await page.getByTestId('panel-status-open').click(); // nudge a refetch
+    await expect(page.getByTestId('panel-assign-me')).toBeVisible();
+    artisan(
+        'tinker',
+        '--execute',
+        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); '
+        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => $other]); echo "sniped";',
+    );
+    await page.getByTestId('panel-assign-me').click();
+    await expect(page.getByTestId('panel-refusal')).toBeVisible();
+    await expect(page.getByTestId('panel-claim-next')).toBeVisible();
+    await expect(page.getByTestId('panel-assignee')).toBeVisible(); // the avatar swapped in place
+    await page.getByTestId('panel-claim-next').click();
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+        .toBe('unassigned');
+
+    // D9/D10: system events explain themselves when they are the newest
+    // thing — seeded as the relayed log's own rows.
+    artisan(
+        'tinker',
+        '--execute',
+        '$t = DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->first(["id","tenant_id","conversation_id"]); '
+        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); '
+        + 'DB::connection("pgsql_platform")->table("events")->insert(["id" => (string) Str::uuid7(), "tenant_id" => $t->tenant_id, "name" => "ticket.assignee_deactivated", "schema_version" => 1, "payload" => json_encode(["tenant_id" => $t->tenant_id, "ticket_id" => $t->id, "conversation_id" => $t->conversation_id, "actor_type" => "system", "actor_id" => null]), "correlation_id" => (string) Str::uuid7(), "occurred_at" => DB::raw("clock_timestamp()")]); '
+        + 'app(App\\Support\\Tenancy\\TenantContext::class)->bind($t->tenant_id, App\\Support\\Tenancy\\ResolutionSource::Console); app(App\\Support\\Tenancy\\RlsSession::class)->set($t->tenant_id); app(App\\Domain\\Inbox\\ReadModels\\ListProjector::class)->recomputeTicket($t->id); '
+        + 'echo "deactivation seeded";',
+    );
+    // The direct writes bypass the relay — the projection was recomputed
+    // above; a view round-trip refetches the LIST, and bouncing through a
+    // DIFFERENT thread forces the real lift (re-opening the same
+    // conversation is a no-op by design — same key, no refetch).
+    await page.keyboard.press('g');
+    await page.keyboard.press('m');
+    await page.keyboard.press('g');
+    await page.keyboard.press('u');
+    await page
+        .locator('[data-ticket]', { hasText: 'Kidist Haile' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4802');
+    await page
+        .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+        .locator('[data-role="row-open"]')
+        .click();
+    await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4820');
+    await expect(page.getByTestId('panel-handed-back')).toBeVisible();
+    await expect(page.getByTestId('panel-assign-me')).toBeVisible();
+
+    // Scene canon back (the seeder heals the rest).
+    artisan('db:seed', '--class=Database\\Seeders\\InboxBrowserSeeder', '--force');
 });

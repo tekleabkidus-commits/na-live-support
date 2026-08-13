@@ -210,13 +210,22 @@ final class ComposerController extends Controller
         try {
             $context = TransitionContext::staff($user, 'composer transition (FR-21 retry)')
                 ->withPendingReason($input['pending_reason'] ?? null);
-            $this->transitions->transition($ticket, $to, $context);
+            $result = $this->transitions->transition($ticket, $to, $context);
             $this->projector->recomputeTicket($ticket->identifier());
         } catch (\App\Domain\Tickets\Transitions\TransitionNotPermitted|\App\Domain\Tickets\Transitions\IllegalTransition|DomainException|\LogicException $e) {
             return ProblemDetails::response(ErrorCode::TransitionRejected, 422, $e->getMessage());
         }
 
-        return new JsonResponse(['ok' => true, 'to' => $to->value]);
+        // D8 (EC-07's surface): two agents agreeing is not a conflict — the
+        // noop is a SUCCESS the client may say quietly. A-37: the CAUSAL
+        // noop declaration — set here and only here, tied to the OWNING
+        // service's own noop return, so the audit verifier skips exactly
+        // the documented no-write path and nothing else.
+        if (! $result->changed) {
+            $request->attributes->set('audit.noop', true);
+        }
+
+        return new JsonResponse(['ok' => true, 'to' => $to->value, 'noop' => ! $result->changed]);
     }
 
     private function openOrLatestTicket(string $conversationId): ?Ticket
