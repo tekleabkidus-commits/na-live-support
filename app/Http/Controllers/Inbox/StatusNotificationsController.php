@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Inbox;
 
+use App\Domain\Inbox\ReadModels\ProjectorStatus;
 use App\Domain\Inbox\Status\AgentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -132,16 +133,16 @@ final class StatusNotificationsController extends Controller
         // outbox row older than the threshold, or an event newer than the
         // last applied beat. The pill shows only for staleness WITH pending
         // work — "projector down", never "nothing happened".
-        $projector = app(\App\Domain\Inbox\ReadModels\ProjectorStatus::class);
+        $projector = app(ProjectorStatus::class);
         $stale = $projector->staleSeconds();
         $pending = false;
-        if ($stale !== null && $stale > \App\Domain\Inbox\ReadModels\ProjectorStatus::STALE_AFTER_SECONDS) {
-            $pending = \Illuminate\Support\Facades\DB::table('outbox')
+        if ($stale !== null && $stale > ProjectorStatus::STALE_AFTER_SECONDS) {
+            $pending = DB::table('outbox')
                 ->whereNull('relayed_at')
-                ->where('occurred_at', '<', \Illuminate\Support\Facades\DB::raw(sprintf("clock_timestamp() - interval '%d seconds'", \App\Domain\Inbox\ReadModels\ProjectorStatus::STALE_AFTER_SECONDS)))
+                ->whereRaw('occurred_at < clock_timestamp() - make_interval(secs => ?)', [ProjectorStatus::STALE_AFTER_SECONDS])
                 ->exists()
-                || \Illuminate\Support\Facades\DB::table('events')
-                    ->where('occurred_at', '>', \Illuminate\Support\Facades\DB::raw(sprintf("clock_timestamp() - interval '%d seconds'", max(1, $stale))))
+                || DB::table('events')
+                    ->whereRaw('occurred_at > clock_timestamp() - make_interval(secs => ?)', [max(1, $stale)])
                     ->exists();
         }
 
