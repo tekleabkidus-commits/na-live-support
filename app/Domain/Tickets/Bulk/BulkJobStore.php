@@ -43,4 +43,31 @@ final class BulkJobStore
             'updated_at' => DB::raw('clock_timestamp()'),
         ]);
     }
+
+    /**
+     * C15's Stop: latch the cancel request on a batch that has not finished.
+     * Returns false when the batch already completed (nothing left to stop)
+     * or the latch was already set — the door turns that into its refusal.
+     */
+    public function requestCancel(string $jobId): bool
+    {
+        return DB::table('ticket_bulk_jobs')
+            ->where('id', $jobId)
+            ->whereIn('status', ['queued', 'running'])
+            ->whereNull('cancel_requested_at')
+            ->update(['cancel_requested_at' => DB::raw('clock_timestamp()'), 'updated_at' => DB::raw('clock_timestamp()')]) === 1;
+    }
+
+    /** The observed cancel: items that never ran finish failed('cancelled'). */
+    public function failPending(string $jobId, string $reason): int
+    {
+        return DB::table('ticket_bulk_job_items')
+            ->where('bulk_job_id', $jobId)
+            ->where('status', 'pending')
+            ->update([
+                'status' => 'failed',
+                'failure_reason' => $reason,
+                'updated_at' => DB::raw('clock_timestamp()'),
+            ]);
+    }
 }

@@ -868,6 +868,26 @@ return [
         'owning_doc' => 'Doc07',
     ],
     [
+        // Doc 07 FR-13/SEC-03 (S07 step 14, Unit D): an ID-BASED bulk submit
+        // (the drawn bar's partial selections) — the same wide-mutation
+        // posture as inbox.selection_executed; retry-the-failed records the
+        // same key with retried_from in the payload.
+        'action_key' => 'inbox.bulk_submitted',
+        'entity' => 'ticket_bulk_job',
+        'actor_types' => ['staff'],
+        'required_fields' => ['action', 'count'],
+        'owning_doc' => 'Doc07',
+    ],
+    [
+        // Doc 07 §8 C15 (S07 step 14, Unit D): the drawn Stop on a running
+        // batch — a state-mutating latch the running job observes live.
+        'action_key' => 'inbox.bulk_stop_requested',
+        'entity' => 'ticket_bulk_job',
+        'actor_types' => ['staff'],
+        'required_fields' => ['action'],
+        'owning_doc' => 'Doc07',
+    ],
+    [
         // Doc 07 FR-28 (S07 step 12): a supervisor FORCED another agent's
         // availability — Doc 03's supervision.agent_status.force key, with
         // attribution ("set by …") stored on the agent_statuses row.

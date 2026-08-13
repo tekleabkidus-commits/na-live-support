@@ -1,0 +1,113 @@
+
+Running 12 tests using 1 worker
+
+  ✘   1 [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor (6.6s)
+  ✓   2 [chromium] › tests/Browser/inbox-state-banners.spec.ts:83:1 › C8→C11→C10: resolve raises the banner with Reopen now (the no-reason edge); escalate shows the ▲ record and KEEPS the composer; spam replaces it until "Not spam" with a written reason restores (3.1s)
+  ✓   3 [chromium] › tests/Browser/inbox-state-banners.spec.ts:165:1 › C9: the CLOSED ticket's banner replaces the composer with the reopen posture; D14: a blocked thread route shows the error state and Try again recovers it (2.2s)
+  ✓   4 [chromium] › tests/Browser/inbox-state-banners.spec.ts:206:1 › D13: a failed list fetch is SAID — the error strip with the cached-truth note, and Try again recovers; My Open emptied through the REAL doors shows the claim-next shape whose affordance lands on the waiting queue (the D7 handler, first row lit) (1.6s)
+  ✓   5 [chromium] › tests/Browser/inbox-state-banners.spec.ts:262:1 › B1-S04 DIALOGS: Escalate (named path demands a target, ≥10-char reason gates the verb) and Mark-as-spam (block is a separate unticked decision) drive the REAL doors from the panel — the banners confirm (2.5s)
+  ✓   6 [chromium] › tests/Browser/inbox-state-banners.spec.ts:312:1 › B1-S04 SPLIT + C7 UNMERGE: the selection strip counts picked bubbles, the split door mints the linked ticket, the FOURTH attempt renders the D11 cap card listing all three; the merged banner's Undo-merge shows C7's available state and the door reverses (4.8s)
+  ✘   7 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:92:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) (30.1s)
+  ✓   8 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:194:1 › B9 render gate: without tickets.status.change the status control does not exist — the panel stays read-only truth (N-19: flags and grants hide, they never lie) (1.2s)
+  ✘   9 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:222:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) (30.0s)
+  ✓  10 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:262:1 › D5/D6/D1: the drawn empties offer the act (Assign to me claims through the real door), the timeline fails ALONE with Try again recovering, and a switching panel shows a SKELETON, never a stale ticket (3.5s)
+  ✘  11 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:333:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves (30.1s)
+  ✓  12 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:418:1 › THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast (3.3s)
+
+
+  1) [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-ticket]').filter({ hasText: 'Hana Girma' }).first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Hana Girma' }).first()
+
+
+      90 |     await dismissCoachMarks(page);
+      91 |     await page.locator('[data-view="unassigned"]').first().click();
+    > 92 |     await expect(page.locator('[data-ticket]', { hasText: 'Hana Girma' }).first()).toBeVisible();
+         |                                                                                    ^
+      93 | }
+      94 |
+      95 | test('THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor', async ({
+        at openUnassigned (/home/kidus/projects/na-live-support/tests/Browser/inbox-merge.spec.ts:92:84)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-merge.spec.ts:99:5
+
+    Error Context: test-results/inbox-merge-THE-MERGE-JOUR-29cd1-at-opens-the-FINAL-survivor-chromium/error-context.md
+
+    Error Context: test-results/inbox-merge-THE-MERGE-JOUR-29cd1-at-opens-the-FINAL-survivor-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:92:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      86 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      87 |         .locator('[data-role="row-open"]')
+    > 88 |         .click();
+         |          ^
+      89 |     await expect(page.getByTestId('composer')).toBeVisible();
+      90 | }
+      91 |
+        at openYonasThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:88:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:95:5
+
+    Error Context: test-results/inbox-ticket-panel-B9-the--eaa0a-l-truth-AND-database-truth--chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:222:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      236 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      237 |         .locator('[data-role="row-open"]')
+    > 238 |         .click();
+          |          ^
+      239 |     // The R4 bottom sheet with the same three tabs (B2-S01's contract).
+      240 |     await page.getByTestId('mobile-context-trigger').click();
+      241 |     await expect(page.getByTestId('mobile-context-sheet')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:238:10
+
+    Error Context: test-results/inbox-ticket-panel-B14-375-4c735-controls-not-a-reduced-set--chromium/error-context.md
+
+  4) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:333:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      86 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      87 |         .locator('[data-role="row-open"]')
+    > 88 |         .click();
+         |          ^
+      89 |     await expect(page.getByTestId('composer')).toBeVisible();
+      90 | }
+      91 |
+        at openYonasThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:88:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:337:5
+
+    Error Context: test-results/inbox-ticket-panel-D7–D10--0e5af-fallback-explain-themselves-chromium/error-context.md
+
+  4 failed
+    [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:92:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:222:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:333:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves 
+  8 passed (2.3m)

@@ -268,6 +268,20 @@ Route::middleware([
     Route::post('selections/{tokenId}/execute', [App\Http\Controllers\Inbox\SelectionController::class, 'execute'])
         ->middleware(['permission:views.manage', 'audit:inbox.selection_executed'])->name('inbox.selections.execute');
 
+    // Unit D (C15/C16): the id-based bulk doors — the drawn bar executes on
+    // "3 selected", which the token door (whole-view by design, T-05) cannot
+    // carry. Writes ride views.manage (the R-26 principle, as the token doors
+    // do); the progress read rides tickets.view. Per-item verdicts stay
+    // Doc 06's live checks (SEC-04 structural).
+    Route::post('bulk', [App\Http\Controllers\Inbox\BulkJobsController::class, 'store'])
+        ->middleware(['permission:views.manage', 'audit:inbox.bulk_submitted'])->name('inbox.bulk.store');
+    Route::get('bulk-jobs', [App\Http\Controllers\Inbox\BulkJobsController::class, 'index'])
+        ->middleware('permission:tickets.view')->name('inbox.bulk.index');
+    Route::post('bulk-jobs/{jobId}/cancel', [App\Http\Controllers\Inbox\BulkJobsController::class, 'cancel'])
+        ->middleware(['permission:views.manage', 'audit:inbox.bulk_stop_requested'])->name('inbox.bulk.cancel');
+    Route::post('bulk-jobs/{jobId}/retry', [App\Http\Controllers\Inbox\BulkJobsController::class, 'retry'])
+        ->middleware(['permission:views.manage', 'audit:inbox.bulk_submitted'])->name('inbox.bulk.retry');
+
     // FR-23/SEC-02: the search proxy — the ONLY search path; the request
     // contract is the query string alone.
     Route::get('search', App\Http\Controllers\Inbox\SearchController::class)

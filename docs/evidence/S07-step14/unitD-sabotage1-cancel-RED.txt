@@ -1,0 +1,31 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\BulkJobDoorsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit C15's Stop: the running loop OBSERVES the latch before each item[39m[90m…[39m [90m5.21s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\BulkJobDoorsTest[22m [90m>[39m it C15's Stop: the running…   
+[39;1m  items that never ran must finish failed(cancelled)
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'cancelled',[39m[39;1m
+  [39;22m[32m+    0 => null,[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Inbox/BulkJobDoorsTest.php[39m:[32m166[39m
+    162▕     });
+    163▕ 
+    164▕     asTenant($tenant, function () use ($jobId, $rows): void {
+    165▕         expect(DB::table('ticket_bulk_jobs')->where('id', $jobId)->value('status'))->toBe('completed')
+  ➜ 166▕             ->and(DB::table('ticket_bulk_job_items')->where('bulk_job_id', $jobId)->pluck('failure_reason')->unique()->all())->toBe(['cancelled'], 'items that never ran must finish failed(cancelled)');
+    167▕         $ids = array_map(static fn (App\Models\Ticket $t): string => $t->identifier(), $rows);
+    168▕         expect(DB::table('tickets')->whereIn('id', $ids)->where('status', 'resolved')->count())->toBe(count($rows), 'a cancelled batch must run NOTHING');
+    169▕     });
+    170▕
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/BulkJobDoorsTest.php[39;22m:[39;1m166[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m5.25s[39m
+

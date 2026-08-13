@@ -46,7 +46,7 @@ final class SelectionTokens
 
     /**
      * @param  array<string, mixed>  $filterSnapshot
-     * @return array{id: string, count: int}
+     * @return array{id: string, count: int, open_windows: int}
      */
     public function mint(User $user, string $viewKey, array $filterSnapshot = []): array
     {
@@ -65,7 +65,17 @@ final class SelectionTokens
             'item_count' => $count,
         ]);
 
-        return ['id' => $id, 'count' => $count];
+        // C16's drawn consequence line ("Customers on 41 of these still have
+        // an open reply window") — SERVER truth at mint, compared in DB time
+        // (C-11): the client never derives window state.
+        /** @var list<string> $ids */
+        $ids = $this->zsets->allIds($viewKey);
+        $openWindows = DB::table('ticket_list_items')
+            ->whereIn('ticket_id', $ids)
+            ->whereRaw('window_expires_at > clock_timestamp()')
+            ->count();
+
+        return ['id' => $id, 'count' => $count, 'open_windows' => $openWindows];
     }
 
     /**

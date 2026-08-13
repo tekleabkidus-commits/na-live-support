@@ -1,0 +1,54 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-bulk.spec.ts:197:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees (30.1s)
+  ✘  2 [chromium] › tests/Browser/inbox-bulk.spec.ts:231:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet (5.0m)
+
+
+  1) [chromium] › tests/Browser/inbox-bulk.spec.ts:197:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('bulk-priority')
+
+
+      205 |     await expect(page.getByTestId('bulk-count')).toHaveText('3 selected');
+      206 |
+    > 207 |     await page.getByTestId('bulk-priority').click();
+          |                                             ^
+      208 |     await expect(page.getByTestId('action-palette')).toHaveAttribute('data-kind', 'priority');
+      209 |     await page.locator('[data-testid="action-palette-item"]', { hasText: 'High' }).click();
+      210 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bulk.spec.ts:207:45
+
+    Error Context: test-results/inbox-bulk-C15-all-ok-the--343c4-ces-and-the-database-agrees-chromium/error-context.md
+
+    Error Context: test-results/inbox-bulk-C15-all-ok-the--343c4-ces-and-the-database-agrees-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-bulk.spec.ts:231:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet 
+
+    Test timeout of 300000ms exceeded.
+
+    Error: locator.click: Test timeout of 300000ms exceeded.
+    Call log:
+      - waiting for getByTestId('bulk-close')
+
+
+      241 |     await expect(page.getByTestId('bulk-count')).toHaveText('2 selected');
+      242 |
+    > 243 |     await page.getByTestId('bulk-close').click();
+          |                                          ^
+      244 |     const confirm = page.getByTestId('bulk-confirm-dialog');
+      245 |     await expect(confirm).toBeVisible();
+      246 |     await expect(confirm).toContainText('Close 2 tickets');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bulk.spec.ts:243:42
+
+    Error Context: test-results/inbox-bulk-C15-failures-re-6cdd0-the-drawer-is-the-375-sheet-chromium/error-context.md
+
+    Error Context: test-results/inbox-bulk-C15-failures-re-6cdd0-the-drawer-is-the-375-sheet-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/inbox-bulk.spec.ts:197:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees 
+    [chromium] › tests/Browser/inbox-bulk.spec.ts:231:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet 

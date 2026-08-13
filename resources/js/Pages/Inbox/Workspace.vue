@@ -22,6 +22,8 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import ActionPalette, { type PaletteItem } from '../../Components/Inbox/ActionPalette.vue';
+import BulkConfirmDialog from '../../Components/Inbox/BulkConfirmDialog.vue';
+import BulkProgressDrawer from '../../Components/Inbox/BulkProgressDrawer.vue';
 import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
@@ -53,7 +55,11 @@ import {
     signalDrop,
     signalUp,
 } from '../../lib/offline';
-import { anchorServerNow, serverClockOffsetMs } from '../../lib/serverClock';
+import {
+    anchorServerNow,
+    serverClockOffsetMs,
+    serverNow as serverNowMs,
+} from '../../lib/serverClock';
 import { leaderState, startLeaderElection } from '../../lib/tabLeader';
 import { useInboxConnection } from '../../stores/inbox/connection';
 import {
@@ -115,6 +121,7 @@ const props = defineProps<{
         tickets_escalate: boolean;
         tickets_spam_mark: boolean;
         tickets_split: boolean;
+        tickets_close: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
     transitions: Record<string, string[]>;
@@ -665,6 +672,7 @@ const palette = ref<{
 
 function closeActionPalette(): void {
     palette.value = { kind: null, items: [], currentTags: [] };
+    paletteBulk.value = false;
 }
 
 async function openAssignPalette(): Promise<void> {
@@ -738,6 +746,13 @@ async function onPalettePick(id: string): Promise<void> {
     const kind = palette.value.kind;
     const ticketId = currentTicketId();
     const conversationId = currentConversationId();
+    // Unit D: a bulk-armed palette routes its pick into the bulk flow —
+    // the SAME picker component, a different door (no second implementation).
+    if (paletteBulk.value && (kind === 'assign' || kind === 'priority' || kind === 'tags')) {
+        closeActionPalette();
+        onBulkParamPicked(kind, id);
+        return;
+    }
     closeActionPalette();
     if (kind === 'assign' && ticketId) {
         const result = await runCommand({
@@ -833,6 +848,127 @@ function actionHeaders(): Record<string, string> {
         'Content-Type': 'application/json',
         'X-XSRF-TOKEN': workspaceXsrf(),
     };
+}
+
+// ── Unit D (C15/C16): bulk execution over the step-7 machinery ────────────
+// The bar names the verb; params come through the SAME A/P/T palette in a
+// bulk-armed mode; close (and anything over the drawn 50 line) confirms via
+// C16; execution rides the token door when "select all in view" minted one,
+// else the id-based /inbox/bulk door; C15's drawer watches the job ids.
+const paletteBulk = ref(false);
+const bulkPending = ref<{ action: string; params: Record<string, unknown> } | null>(null);
+const bulkConfirm = ref<{ action: string; count: number; openWindows: number | null } | null>(null);
+const bulkDrawer = ref<{ jobIds: string[]; action: string } | null>(null);
+
+function bulkCount(): number {
+    return list.selectionToken?.count ?? list.selected.length;
+}
+
+function bulkOpenWindows(): number | null {
+    // Token selections carry the mint's SERVER count; id selections count
+    // the server-sent window stamps on the rows the user selected (every
+    // selected row was rendered, so its stamp is cached), compared against
+    // the EC-07 server-now anchor — never the raw client clock.
+    if (list.selectionToken) {
+        return list.selectionToken.open_windows ?? null;
+    }
+    let open = 0;
+    for (const id of list.selected) {
+        const stamp = list.rows[id]?.window_expires_at;
+        if (typeof stamp === 'string' && new Date(stamp).getTime() > serverNowMs()) {
+            open += 1;
+        }
+    }
+    return open;
+}
+
+function onBulkAction(kind: 'assign' | 'tag' | 'priority' | 'close'): void {
+    if (list.selected.length === 0 && list.selectionToken === null) return;
+    if (kind === 'close') {
+        // Close always confirms (B5's weight for a wide status mutation);
+        // the typed phrase arms itself above the 50 line inside the dialog.
+        bulkPending.value = { action: 'close', params: {} };
+        bulkConfirm.value = {
+            action: 'close',
+            count: bulkCount(),
+            openWindows: bulkOpenWindows(),
+        };
+        return;
+    }
+    // assign / tag / priority: pick the param through the house palette.
+    paletteBulk.value = true;
+    if (kind === 'assign') {
+        palette.value = { kind: 'assign', items: [], currentTags: [] };
+        void searchAssignees('');
+    } else if (kind === 'priority') {
+        palette.value = {
+            kind: 'priority',
+            currentTags: [],
+            items: (['urgent', 'high', 'normal', 'low'] as const).map((level) => ({
+                id: level,
+                label: props.t.action_palette['priority_' + level] ?? level,
+            })),
+        };
+    } else {
+        palette.value = { kind: 'tags', items: [], currentTags: [] };
+        void searchTags('');
+    }
+}
+
+function onBulkParamPicked(kind: 'assign' | 'priority' | 'tags', id: string): void {
+    const action = kind === 'assign' ? 'assign' : kind === 'priority' ? 'priority' : 'tag';
+    const params =
+        kind === 'assign'
+            ? { assignee_id: id }
+            : kind === 'priority'
+              ? { priority: id }
+              : { tags: [id] };
+    bulkPending.value = { action, params };
+    if (bulkCount() > 50) {
+        // C16: above the drawn line the operation is typed, not clicked.
+        bulkConfirm.value = { action, count: bulkCount(), openWindows: bulkOpenWindows() };
+    } else {
+        void executeBulk();
+    }
+}
+
+async function executeBulk(): Promise<void> {
+    const pending = bulkPending.value;
+    if (!pending) return;
+    bulkPending.value = null;
+    bulkConfirm.value = null;
+    const token = list.selectionToken;
+    const response = token
+        ? await fetch(`/inbox/selections/${token.id}/execute`, {
+              method: 'POST',
+              headers: actionHeaders(),
+              body: JSON.stringify({ action: pending.action, params: pending.params }),
+          })
+        : await fetch('/inbox/bulk', {
+              method: 'POST',
+              headers: actionHeaders(),
+              body: JSON.stringify({
+                  action: pending.action,
+                  ticket_ids: list.selected,
+                  params: pending.params,
+              }),
+          });
+    if (response.ok) {
+        const body = (await response.json()) as { bulk_job_ids: string[] };
+        bulkDrawer.value = { jobIds: body.bulk_job_ids, action: pending.action };
+        list.clearSelection();
+        connection.viewRefetchTick += 1;
+    } else {
+        const problem = (await response.json().catch(() => null)) as { code?: string } | null;
+        toast(
+            (props.t.shortcuts.action_refused ?? '').replace(':reason', problem?.code ?? 'error'),
+        );
+    }
+}
+
+function onBulkRetried(newJobIds: string[]): void {
+    const action = bulkDrawer.value?.action ?? 'close';
+    bulkDrawer.value = { jobIds: newJobIds, action };
 }
 
 // After any row action: refetch the view (the row may move or leave) and
@@ -1057,6 +1193,26 @@ function dismissCoach(): void {
             @close="mergeOpen = false"
             @merged="onMerged"
         />
+        <!-- Unit D: C16's confirm (typed above the 50 line) + C15's drawer. -->
+        <BulkConfirmDialog
+            :open="bulkConfirm !== null"
+            :action="bulkConfirm?.action ?? 'close'"
+            :count="bulkConfirm?.count ?? 0"
+            :open-windows="bulkConfirm?.openWindows ?? null"
+            :t="t.bulk"
+            @close="((bulkConfirm = null), (bulkPending = null))"
+            @confirm="void executeBulk()"
+        />
+        <BulkProgressDrawer
+            :open="bulkDrawer !== null"
+            :job-ids="bulkDrawer?.jobIds ?? []"
+            :action="bulkDrawer?.action ?? 'close'"
+            :mobile="isMobile"
+            :t="t.bulk"
+            :xsrf="workspaceXsrf"
+            @close="((bulkDrawer = null), (connection.viewRefetchTick += 1))"
+            @retried="onBulkRetried"
+        />
         <OperationDialog
             :open="operationOpen"
             :kind="operationKind"
@@ -1073,7 +1229,9 @@ function dismissCoach(): void {
             :ticket-number="(panelTicket as { number?: number | string } | null)?.number ?? null"
             :message-ids="splitMessageIds"
             :linked-work="(panelTicket as { linked_work?: never[] } | null)?.linked_work ?? []"
-            :unmerge-until="(panelTicket as { unmerge_until?: string | null } | null)?.unmerge_until ?? null"
+            :unmerge-until="
+                (panelTicket as { unmerge_until?: string | null } | null)?.unmerge_until ?? null
+            "
             :merged-message-count="
                 (panelTicket as { merged_message_count?: number | null } | null)
                     ?.merged_message_count ?? null
@@ -1243,7 +1401,6 @@ function dismissCoach(): void {
                     :merge-allowed="can.tickets_merge"
                     :view="activeView"
                     :unassigned-count="views.find((v) => v.key === 'unassigned')?.count ?? null"
-                    @claim-next="onClaimNext"
                     :mobile="false"
                     :user-id="userId"
                     :can="{
@@ -1251,6 +1408,8 @@ function dismissCoach(): void {
                         assign: can.tickets_assign,
                         statusChange: can.tickets_status_change,
                         priority: can.tickets_priority_change,
+                        tags: can.tickets_tags_manage,
+                        close: can.tickets_close,
                     }"
                     :t="{
                         list: t.list,
@@ -1259,6 +1418,8 @@ function dismissCoach(): void {
                         filter_bar: t.filter_bar,
                         mobile: t.mobile,
                     }"
+                    @claim-next="onClaimNext"
+                    @bulk-action="onBulkAction"
                     @merge-selection="openMerge"
                     @open-ticket="openThread"
                     @fallback-view="activeView = 'my_open'"
@@ -1377,9 +1538,9 @@ function dismissCoach(): void {
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
                             @open-operation="openOperation"
-                    @open-split="onOpenSplit"
-                    @open-unmerge="onOpenUnmerge"
-                    @open-survivor="(cid) => (activeThread = cid)"
+                            @open-split="onOpenSplit"
+                            @open-unmerge="onOpenUnmerge"
+                            @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1406,9 +1567,9 @@ function dismissCoach(): void {
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
                             @open-operation="openOperation"
-                    @open-split="onOpenSplit"
-                    @open-unmerge="onOpenUnmerge"
-                    @open-survivor="(cid) => (activeThread = cid)"
+                            @open-split="onOpenSplit"
+                            @open-unmerge="onOpenUnmerge"
+                            @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1452,10 +1613,7 @@ function dismissCoach(): void {
                     <ListPane
                         :merge-allowed="can.tickets_merge"
                         :view="activeView"
-                        :unassigned-count="
-                            views.find((v) => v.key === 'unassigned')?.count ?? null
-                        "
-                        @claim-next="onClaimNext"
+                        :unassigned-count="views.find((v) => v.key === 'unassigned')?.count ?? null"
                         :mobile="true"
                         :user-id="userId"
                         :can="{
@@ -1463,6 +1621,8 @@ function dismissCoach(): void {
                             assign: can.tickets_assign,
                             statusChange: can.tickets_status_change,
                             priority: can.tickets_priority_change,
+                            tags: can.tickets_tags_manage,
+                            close: can.tickets_close,
                         }"
                         :t="{
                             list: t.list,
@@ -1471,6 +1631,8 @@ function dismissCoach(): void {
                             filter_bar: t.filter_bar,
                             mobile: t.mobile,
                         }"
+                        @claim-next="onClaimNext"
+                        @bulk-action="onBulkAction"
                         @merge-selection="openMerge"
                         @open-ticket="openThread"
                         @fallback-view="activeView = 'my_open'"
@@ -1588,7 +1750,7 @@ function dismissCoach(): void {
                         "
                         :conversation-id="activeThread"
                         :initial-anchor="activeAnchor"
-                    :split-arm-tick="splitArmTick"
+                        :split-arm-tick="splitArmTick"
                         :t="t.thread"
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
@@ -1601,7 +1763,7 @@ function dismissCoach(): void {
                         "
                         @open-rescue="activeView = 'rescue'"
                         @split-selection="onSplitSelection"
-                    @scope-lost="
+                        @scope-lost="
                             () => {
                                 panelTickets = [];
                                 panelLoading = false;
@@ -1651,9 +1813,9 @@ function dismissCoach(): void {
                                     @changed="onPanelChanged"
                                     @claim-next="onClaimNext"
                                     @open-operation="openOperation"
-                    @open-split="onOpenSplit"
-                    @open-unmerge="onOpenUnmerge"
-                    @open-survivor="(cid) => (activeThread = cid)"
+                                    @open-split="onOpenSplit"
+                                    @open-unmerge="onOpenUnmerge"
+                                    @open-survivor="(cid) => (activeThread = cid)"
                                 />
                             </template>
                         </ContextPanel>

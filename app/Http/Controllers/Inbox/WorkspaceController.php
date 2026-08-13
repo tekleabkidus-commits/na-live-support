@@ -150,6 +150,9 @@ final class WorkspaceController extends Controller
                 'tickets_escalate' => $map->allows('tickets.escalate'),
                 'tickets_spam_mark' => $map->allows('tickets.spam.mark'),
                 'tickets_split' => $map->allows('tickets.split'),
+                // Unit D (C15/C16): the bulk bar's Close — the EXISTING
+                // tickets.close key, catalog untouched.
+                'tickets_close' => $map->allows('tickets.close'),
             ],
             // EC-07 (step 13): the handshake's clock anchor — DB time, the
             // same source SyncReader answers with; the client renders

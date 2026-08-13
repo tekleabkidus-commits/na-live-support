@@ -28,7 +28,14 @@ const props = defineProps<{
     view: string;
     mobile?: boolean;
     userId?: string;
-    can?: { assignSelf: boolean; assign: boolean; statusChange: boolean; priority: boolean };
+    can?: {
+        assignSelf: boolean;
+        assign: boolean;
+        statusChange: boolean;
+        priority: boolean;
+        tags?: boolean;
+        close?: boolean;
+    };
     t: {
         list: Record<string, string>;
         row: Record<string, string>;
@@ -47,6 +54,9 @@ const emit = defineEmits<{
     (e: 'fallback-view'): void;
     // D13: the empty queue's affordance (the workspace owns the claim).
     (e: 'claim-next'): void;
+    // Unit D: the drawn bulk actions — the workspace owns params + confirm
+    // + execution (C15/C16); the bar only names the verb.
+    (e: 'bulk-action', kind: 'assign' | 'tag' | 'priority' | 'close'): void;
 }>();
 
 const list = useLiveList();
@@ -153,7 +163,11 @@ async function selectAllInView(): Promise<void> {
         body: JSON.stringify({ view_key: props.view }),
     });
     if (response.ok) {
-        const body = (await response.json()) as { id: string; count: number };
+        const body = (await response.json()) as {
+            id: string;
+            count: number;
+            open_windows: number;
+        };
         list.selectionToken = body; // the SERVER count is the shown truth
         list.selected = [...list.order];
     }
@@ -715,11 +729,16 @@ watch(
             :tray-ids="list.trayIds"
             :total="list.total"
             :token-count="list.selectionToken?.count ?? null"
+            :can-assign="can?.assign"
+            :can-tag="can?.tags"
+            :can-priority="can?.priority"
+            :can-close="can?.close"
             :t="t.bulk"
             @select-all="selectAllInView"
             @merge="emit('merge-selection')"
             @clear="list.clearSelection()"
             @deselect="(id) => list.deselect(id)"
+            @action="(kind) => emit('bulk-action', kind)"
         />
 
         <!-- B2-S01: the claim UNDO strip (dark bar, ≥44 px button). Undo is

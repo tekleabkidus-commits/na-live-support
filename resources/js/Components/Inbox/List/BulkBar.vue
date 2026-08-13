@@ -13,6 +13,13 @@ const props = defineProps<{
     trayIds: string[];
     total: number;
     tokenCount: number | null;
+    // B1-S02's drawn action row (Assign | Tag | Priority | Close) —
+    // capability render-gates (BR-01: no affordance for a door the holder
+    // cannot open; the services re-check the same keys).
+    canAssign?: boolean;
+    canTag?: boolean;
+    canPriority?: boolean;
+    canClose?: boolean;
     t: Record<string, string>;
 }>();
 
@@ -21,6 +28,7 @@ const emit = defineEmits<{
     (e: 'select-all'): void;
     (e: 'clear'): void;
     (e: 'deselect', id: string): void;
+    (e: 'action', kind: 'assign' | 'tag' | 'priority' | 'close'): void;
 }>();
 
 const label = (key: string, replacements: Record<string, string>): string => {
@@ -43,7 +51,10 @@ const selectedLabel = computed(() =>
         class="border-t px-3 py-2"
         :style="{ background: 'var(--ds-panel-soft)', borderColor: 'var(--ds-border)' }"
     >
-        <div class="flex items-center gap-2">
+        <!-- flex-wrap: the grown action row must never overflow the list
+             column (an overflowing button lands under the thread region,
+             which then intercepts its clicks). -->
+        <div class="flex flex-wrap items-center gap-2">
             <span
                 class="text-xs font-semibold"
                 :style="{ color: 'var(--ds-text-primary)' }"
@@ -60,6 +71,47 @@ const selectedLabel = computed(() =>
                 @click="emit('select-all')"
             >
                 {{ label('select_all', { count: String(total) }) }}
+            </button>
+            <!-- The drawn action row, in the drawn order. -->
+            <button
+                v-if="canAssign"
+                type="button"
+                data-testid="bulk-assign"
+                class="rounded-md border px-2 py-1 text-xs font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('action', 'assign')"
+            >
+                {{ t.action_assign }}
+            </button>
+            <button
+                v-if="canTag"
+                type="button"
+                data-testid="bulk-tag"
+                class="rounded-md border px-2 py-1 text-xs font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('action', 'tag')"
+            >
+                {{ t.action_tag }}
+            </button>
+            <button
+                v-if="canPriority"
+                type="button"
+                data-testid="bulk-priority"
+                class="rounded-md border px-2 py-1 text-xs font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('action', 'priority')"
+            >
+                {{ t.action_priority }}
+            </button>
+            <button
+                v-if="canClose"
+                type="button"
+                data-testid="bulk-close"
+                class="rounded-md border px-2 py-1 text-xs font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('action', 'close')"
+            >
+                {{ t.action_close }}
             </button>
             <button
                 v-if="mergeAllowed && selectedCount >= 2"

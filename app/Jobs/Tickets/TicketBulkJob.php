@@ -126,7 +126,19 @@ final class TicketBulkJob implements ShouldQueue
         $ok = (int) DB::table('ticket_bulk_job_items')->where('bulk_job_id', $job->id)->where('status', 'ok')->count();
         $failed = [];
 
+        $cancelled = false;
+
         foreach ($items as $item) {
+            // C15's Stop, observed LIVE before each item — the same
+            // at-execution posture the permission checks carry (SEC-04): a
+            // cancel latched between two items stops before the next one
+            // runs. The items that never ran finish failed('cancelled') so
+            // the drawer names what happened on every row.
+            if (DB::table('ticket_bulk_jobs')->where('id', $job->id)->value('cancel_requested_at') !== null) {
+                $cancelled = true;
+                break;
+            }
+
             try {
                 /** @var Ticket $ticket */
                 $ticket = Ticket::query()->findOrFail($item->ticket_id);
@@ -190,6 +202,10 @@ final class TicketBulkJob implements ShouldQueue
                 'ticket_id' => $item->ticket_id,
                 ...$outcome,
             ]);
+        }
+
+        if ($cancelled) {
+            $store->failPending($job->id, 'cancelled');
         }
 
         $store->markCompleted($job->id);

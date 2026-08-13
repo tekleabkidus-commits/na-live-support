@@ -1,0 +1,48 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\BulkJobDoorsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit C15's Stop: the running loop OBSERVES the latch before each item[39m[90m…[39m [90m4.64s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\BulkJobDoorsTest[22m [90m>[39m it C15's Stop: the running…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => Array &1 [[39m[39;1m
+  [39;22m[32m+        'id' => '019ffc47-3ff8-70b9-abfd-ff92c2135884',[39m[39;1m
+  [39;22m[32m+        'action' => 'close',[39m[39;1m
+  [39;22m[32m+        'status' => 'completed',[39m[39;1m
+  [39;22m[32m+        'total' => 2,[39m[39;1m
+  [39;22m[32m+        'ok' => 0,[39m[39;1m
+  [39;22m[32m+        'failed_count' => 2,[39m[39;1m
+  [39;22m[32m+        'done' => 2,[39m[39;1m
+  [39;22m[32m+        'cancel_requested' => true,[39m[39;1m
+  [39;22m[32m+        'failed' => Array &2 [[39m[39;1m
+  [39;22m[32m+            0 => Array &3 [[39m[39;1m
+  [39;22m[32m+                'number' => 1098532306,[39m[39;1m
+  [39;22m[32m+                'reason' => 'cancelled',[39m[39;1m
+  [39;22m[32m+            ],[39m[39;1m
+  [39;22m[32m+            1 => Array &4 [[39m[39;1m
+  [39;22m[32m+                'number' => 319645186,[39m[39;1m
+  [39;22m[32m+                'reason' => 'cancelled',[39m[39;1m
+  [39;22m[32m+            ],[39m[39;1m
+  [39;22m[32m+        ],[39m[39;1m
+  [39;22m[32m+    ],[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Inbox/BulkJobDoorsTest.php[39m:[32m179[39m
+    175▕     // (c) Requester binding: the colleague's read omits the job silently and
+    176▕     // their stop answers the 404 pattern (C-10 — no existence probing).
+    177▕     $foreignRead = $this->actingAs($colleague, 'staff')->getJson('https://localhost/inbox/bulk-jobs?ids[]='.$jobId);
+    178▕     $foreignRead->assertOk();
+  ➜ 179▕     expect($foreignRead->json('jobs'))->toBe([]);
+    180▕     $foreignStop = $this->actingAs($colleague, 'staff')->postJson("https://localhost/inbox/bulk-jobs/{$jobId}/cancel");
+    181▕     $foreignStop->assertStatus(404);
+    182▕ 
+    183▕     // (d) A stoppable batch takes the latch through the door and audits it.
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/BulkJobDoorsTest.php[39;22m:[39;1m179[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m4.68s[39m
+

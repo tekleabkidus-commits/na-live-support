@@ -55,7 +55,7 @@ export const useLiveList = defineStore('inbox-live-list', {
         leaving: {} as Record<string, boolean>,
         // FR-13 selection (by id — survives resorts by construction)
         selected: [] as string[],
-        selectionToken: null as { id: string; count: number } | null,
+        selectionToken: null as { id: string; count: number; open_windows?: number } | null,
         // FR-31/§13 (step 13): the roving-tabindex listbox's ACTIVE row —
         // J/K and the arrows move it; Enter/O open it; X selects it. It is
         // presentation state, not selection (aria-selected is `selected`).

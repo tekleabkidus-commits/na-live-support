@@ -1,0 +1,23 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\BulkJobDoorsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit C16's consequence line is SERVER truth: mint returns open_window[39m[90m…[39m [90m5.61s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\BulkJobDoorsTest[22m [90m>[39m it C16's consequence line…    
+[39;1m  the consequence line must count only windows still open in DB time
+Failed asserting that 3 is identical to 2.[39;22m
+
+  at [32mtests/Feature/Inbox/BulkJobDoorsTest.php[39m:[32m245[39m
+    241▕ 
+    242▕     $minted = $this->actingAs($actor, 'staff')->postJson('https://localhost/inbox/selections', ['view_key' => 'unassigned']);
+    243▕     $minted->assertStatus(201);
+    244▕     expect($minted->json('count'))->toBe(4)
+  ➜ 245▕         ->and($minted->json('open_windows'))->toBe(2, 'the consequence line must count only windows still open in DB time');
+    246▕ });
+    247▕
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/BulkJobDoorsTest.php[39;22m:[39;1m245[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m5.65s[39m
+

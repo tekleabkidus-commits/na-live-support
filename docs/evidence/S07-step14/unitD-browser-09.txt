@@ -1,0 +1,30 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-bulk.spec.ts:212:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees (8.3s)
+  ✘  2 [chromium] › tests/Browser/inbox-bulk.spec.ts:246:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet (6.0s)
+
+
+  1) [chromium] › tests/Browser/inbox-bulk.spec.ts:246:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 50
+    Received:   1
+
+      300 |     const countText = await page.getByTestId('bulk-count').textContent();
+      301 |     const minted = Number(countText?.match(/\d+/)?.[0] ?? '0');
+    > 302 |     expect(minted).toBeGreaterThan(50);
+          |                    ^
+      303 |
+      304 |     await page.getByTestId('bulk-close').click();
+      305 |     await expect(page.getByTestId('bulk-confirm-dialog')).toContainText(
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bulk.spec.ts:302:20
+
+    Error Context: test-results/inbox-bulk-C15-failures-re-6cdd0-the-drawer-is-the-375-sheet-chromium/error-context.md
+
+    Error Context: test-results/inbox-bulk-C15-failures-re-6cdd0-the-drawer-is-the-375-sheet-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-bulk.spec.ts:246:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet 
+  1 passed (33.4s)
