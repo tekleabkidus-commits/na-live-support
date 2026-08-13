@@ -11,9 +11,13 @@ use Illuminate\Contracts\Redis\Factory as RedisFactory;
  * FS-01's staleness signal: the projector heartbeats on every applied event;
  * the workspace reads the gap. Lists FREEZE CORRECT-AS-OF when the projector
  * is down (the ZSETs simply stop moving — nothing here fabricates
- * freshness), the pill appears past 30 s (rendered at step 8; the SIGNAL and
- * its threshold live here), and NO agent action is blocked — writes ride the
- * normal APIs untouched.
+ * freshness), the pill appears past 30 s, and NO agent action is blocked —
+ * writes ride the normal APIs untouched. HONEST CORRECTION (step 14): this
+ * docblock used to say the pill was "rendered at step 8" — it was not; the
+ * prop was plumbed and nothing consumed it, found when the relay ruling's
+ * FS-01 re-drill went looking for the surface it had to prove. The banner
+ * renders at step 14, fed by the 30 s status heartbeat, and shows only for
+ * staleness WITH pending work (a quiet stack is not an outage).
  *
  * The heartbeat is OPS METADATA, not an ordering key or metric (R-19b
  * analysis: wall-clock seconds are fine here; nothing orders by it, and the

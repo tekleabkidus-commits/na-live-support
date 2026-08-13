@@ -21,6 +21,13 @@ const menu = ref(false);
 const countdown = ref<number | null>(null); // seconds left, null = no toast
 
 let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
+// FS-01 (step 14): the heartbeat's answer carries the projector staleness
+// signal up to the workspace — the banner's live feed, on the cadence the
+// control already owns.
+const emit = defineEmits<{
+    (e: 'staleness', payload: { stale: number | null; pending: boolean }): void;
+}>();
 let idleTimer: ReturnType<typeof setTimeout> | null = null;
 let countdownTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -84,7 +91,21 @@ function cancelCountdown(): void {
 
 onMounted(() => {
     heartbeatTimer = setInterval(() => {
-        if (status.value === 'online') void post('/inbox/status/heartbeat');
+        if (status.value === 'online') {
+            void post('/inbox/status/heartbeat').then(async (response) => {
+                if (!response.ok) return;
+                const body = (await response.json().catch(() => null)) as {
+                    projector_stale_seconds?: number | null;
+                    projector_pending?: boolean;
+                } | null;
+                if (body !== null) {
+                    emit('staleness', {
+                        stale: body.projector_stale_seconds ?? null,
+                        pending: body.projector_pending ?? false,
+                    });
+                }
+            });
+        }
     }, 30_000);
     window.addEventListener('mousemove', resetIdle, { passive: true });
     window.addEventListener('keydown', resetIdle, { passive: true });

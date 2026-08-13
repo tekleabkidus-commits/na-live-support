@@ -125,7 +125,31 @@ final class StatusNotificationsController extends Controller
         $user = $request->user();
         $this->status->heartbeat($user);
 
-        return new JsonResponse(['ok' => true]);
+        // FS-01 (step 14): the staleness pill's live feed rides the 30 s
+        // heartbeat the workspace already sends — no new request. Beat-age
+        // ALONE lies on a quiet stack (no events ≠ a dead projector), so the
+        // door also answers WHETHER THERE IS ANYTHING TO MISS: an unrelayed
+        // outbox row older than the threshold, or an event newer than the
+        // last applied beat. The pill shows only for staleness WITH pending
+        // work — "projector down", never "nothing happened".
+        $projector = app(\App\Domain\Inbox\ReadModels\ProjectorStatus::class);
+        $stale = $projector->staleSeconds();
+        $pending = false;
+        if ($stale !== null && $stale > \App\Domain\Inbox\ReadModels\ProjectorStatus::STALE_AFTER_SECONDS) {
+            $pending = \Illuminate\Support\Facades\DB::table('outbox')
+                ->whereNull('relayed_at')
+                ->where('occurred_at', '<', \Illuminate\Support\Facades\DB::raw(sprintf("clock_timestamp() - interval '%d seconds'", \App\Domain\Inbox\ReadModels\ProjectorStatus::STALE_AFTER_SECONDS)))
+                ->exists()
+                || \Illuminate\Support\Facades\DB::table('events')
+                    ->where('occurred_at', '>', \Illuminate\Support\Facades\DB::raw(sprintf("clock_timestamp() - interval '%d seconds'", max(1, $stale))))
+                    ->exists();
+        }
+
+        return new JsonResponse([
+            'ok' => true,
+            'projector_stale_seconds' => $stale,
+            'projector_pending' => $pending,
+        ]);
     }
 
     /** Doc 03 supervision.agent_status.force — audited, attributed. */

@@ -470,6 +470,7 @@ return [
     // FR-29/FR-30/FS-05 (step 13): the whole-workspace connection banners
     // (B1-S02's drawn strips) + the §13 live-region announcements.
     'offline' => [
+        'stale_banner' => 'የቀጥታ ዝማኔዎች ዘግይተዋል — እስከ :time ድረስ ያለው እየታየ ነው',
         'reconnecting' => 'እንደገና በመገናኘት ላይ… ዝርዝርዎ ለጊዜው ለንባብ ብቻ ነው',
         'offline_banner' => 'ከመስመር ውጭ ነዎት — የመጨረሻውን እይታዎን በማሳየት ላይ',
         'new_version' => 'አዲስ ስሪት አለ።',

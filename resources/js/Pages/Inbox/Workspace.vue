@@ -501,6 +501,30 @@ const panelTickets = ref<PanelTicketRow[]>([]);
 const panelTicket = computed(
     () => (panelTickets.value[panelTickets.value.length - 1] ?? null) as never,
 );
+// FS-01 (step 14): the staleness banner's live state — seeded by the page
+// prop, refreshed by every 30 s heartbeat. The banner needs BOTH staleness
+// past the threshold AND pending work (a quiet stack is not an outage).
+const projectorStale = ref<{ stale: number | null; pending: boolean }>({
+    stale: props.projectorStaleSeconds,
+    // The prop alone cannot know about pending work — until the first
+    // heartbeat answers, an aged-but-idle stack must not banner.
+    pending: false,
+});
+function onStaleness(payload: { stale: number | null; pending: boolean }): void {
+    projectorStale.value = payload;
+}
+const staleBannerVisible = computed(
+    () =>
+        projectorStale.value.stale !== null &&
+        projectorStale.value.stale > 30 &&
+        projectorStale.value.pending,
+);
+const staleAsOf = computed(() => {
+    const stale = projectorStale.value.stale ?? 0;
+    const asOf = new Date(Date.now() + serverClockOffsetMs() - stale * 1000);
+    return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(asOf);
+});
+
 function onPanelChanged(): void {
     connection.viewRefetchTick += 1;
     connection.threadRefetchTick += 1;
@@ -967,6 +991,7 @@ function dismissCoach(): void {
                 bell: t.bell,
                 status: t.status,
             }"
+            @staleness="onStaleness"
             @set-density="setDensity"
             @open-thread="onBellThread"
             @mute="(until) => prefsStore.setMutedUntil(until)"
@@ -995,6 +1020,17 @@ function dismissCoach(): void {
             :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
         >
             {{ t.offline.offline_banner }}
+        </p>
+        <!-- FS-01 (step 14): the drawn "Live updates delayed" banner — the
+             projector's freeze made visible, with the correct-as-of time. -->
+        <p
+            v-if="staleBannerVisible"
+            data-testid="projector-stale-banner"
+            role="status"
+            class="px-3 py-2 text-xs font-semibold"
+            :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-ink)' }"
+        >
+            {{ (t.offline.stale_banner ?? '').replace(':time', staleAsOf) }}
         </p>
         <p
             v-if="connection.skewDetected"

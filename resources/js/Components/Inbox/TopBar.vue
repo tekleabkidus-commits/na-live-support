@@ -30,6 +30,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
+    (e: 'staleness', payload: { stale: number | null; pending: boolean }): void;
     (e: 'set-density', value: 'comfortable' | 'compact'): void;
     (e: 'open-thread', payload: { ticketId: string; conversationId: string | null }): void;
     (e: 'mute', until: string | null): void;
@@ -99,7 +100,12 @@ function toggleDensity(value: 'comfortable' | 'compact'): void {
             @mute="(until) => emit('mute', until)"
         />
 
-        <StatusControl :t="t.status" :initial="agentStatus" :away-idle-minutes="awayIdleMinutes" />
+        <StatusControl
+            :t="t.status"
+            :initial="agentStatus"
+            :away-idle-minutes="awayIdleMinutes"
+            @staleness="(p) => emit('staleness', p)"
+        />
 
         <div class="relative shrink-0">
             <button

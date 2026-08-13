@@ -1,0 +1,34 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      fs01-relay-drill
+# set:        S07-step14
+# command:    npx playwright test tests/Browser/relay-outage-drill.spec.ts
+# started:    2026-08-13T07:49:22Z
+# git:        07a2c99 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 1 test using 1 worker
+
+ Container na-live-support-relay-1 Stopping 
+ Container na-live-support-relay-1 Stopped 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-relay-1 Starting 
+ Container na-live-support-relay-1 Started 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+  ✓  1 [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes (1.5m)
+
+  1 passed (2.6m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-08-13T07:52:00Z
+# duration:   158s
+# EXIT:       0

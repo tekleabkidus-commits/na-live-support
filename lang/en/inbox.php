@@ -472,6 +472,7 @@ return [
     // FR-29/FR-30/FS-05 (step 13): the whole-workspace connection banners
     // (B1-S02's drawn strips) + the §13 live-region announcements.
     'offline' => [
+        'stale_banner' => 'Live updates delayed — showing everything as of :time',
         'reconnecting' => 'Reconnecting… your list is read-only for now',
         'offline_banner' => "You're offline — showing your last view",
         'new_version' => 'A new version is available.',
