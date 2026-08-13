@@ -106,6 +106,28 @@ final class WorkspaceController extends Controller
             'projectorStaleSeconds' => $projector->staleSeconds(),
             'tenantId' => $context->tenantId(),
             'buildId' => is_string($build = config('app.build_id')) ? $build : 'dev',
+            // D3 (step 14, SS-04's bar + the advisor's precision): the legal
+            // next states a UI renders come from the MATRIX AS DATA,
+            // intersected with THIS viewer's capabilities server-side —
+            // absence is the render posture; the refused strip stays the
+            // RACE surface (legal at render, refused at execution).
+            'transitions' => (function () use ($map): array {
+                $matrix = app(\App\Domain\Tickets\Transitions\TransitionMatrix::class);
+                $out = [];
+                foreach (\App\Domain\Tickets\Transitions\TicketStatus::cases() as $from) {
+                    $targets = [];
+                    foreach ($matrix->legalTargets($from) as $to) {
+                        /** @var array{permission: string} $edge */
+                        $edge = $matrix->edge($from, $to);
+                        if ($map->allows($edge['permission'])) {
+                            $targets[] = $to->value;
+                        }
+                    }
+                    $out[$from->value] = $targets;
+                }
+
+                return $out;
+            })(),
             'can' => [
                 'views_manage' => $map->allows('views.manage'),
                 'views_share' => $map->allows('views.share'),

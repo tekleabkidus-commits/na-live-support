@@ -393,6 +393,7 @@ return [
         'status_label' => 'ሁኔታ',
         'status_pending' => 'በመጠባበቅ ላይ',
         'status_open' => 'ክፍት',
+        'reopen' => 'እንደገና ክፈት',
         'status_resolved' => 'ተፈትቷል',
         'reason_current' => 'በመጠባበቅ ላይ፦ :reason',
         'reason_awaiting_customer' => 'ደንበኛውን በመጠበቅ ላይ',

@@ -33,6 +33,10 @@ const props = defineProps<{
     can: Record<string, boolean>;
     t: Record<string, string>;
     xsrf: () => string;
+    // D3 (SS-04): the per-viewer legal-target map — matrix ∩ capability,
+    // computed server-side from the matrix's own table. Absence is the
+    // render rule; the refused strip stays the race surface.
+    transitions: Record<string, string[]>;
 }>();
 
 const emit = defineEmits<{
@@ -105,6 +109,22 @@ watch(
 );
 
 const status = computed(() => props.ticket?.status ?? '');
+// D3: what THIS viewer may do from HERE — the drawn control renders only
+// these; escalate/spam ride their own operation surfaces (B1-S04).
+const legalTargets = computed(() => props.transitions[status.value] ?? []);
+const showPending = computed(
+    () =>
+        legalTargets.value.includes('pending_customer') ||
+        legalTargets.value.includes('pending_internal'),
+);
+const showOpen = computed(() => legalTargets.value.includes('open'));
+// From closed/resolved the open target IS the reopen act — the drawn label.
+const openLabel = computed(() =>
+    status.value === 'closed' || status.value === 'resolved'
+        ? (props.t.reopen ?? props.t.status_open ?? '')
+        : (props.t.status_open ?? ''),
+);
+const showResolved = computed(() => legalTargets.value.includes('resolved'));
 const isPending = computed(
     () => status.value === 'pending_customer' || status.value === 'pending_internal',
 );
@@ -260,6 +280,7 @@ const initials = computed(() => {
             </p>
             <div class="flex gap-1">
                 <button
+                    v-if="showPending"
                     type="button"
                     data-testid="panel-status-pending"
                     class="rounded-md border px-2 py-1 text-xs"
@@ -274,6 +295,7 @@ const initials = computed(() => {
                     {{ t.status_pending }}<span v-if="isPending" aria-hidden="true"> ✓</span>
                 </button>
                 <button
+                    v-if="showOpen"
                     type="button"
                     data-testid="panel-status-open"
                     class="rounded-md border px-2 py-1 text-xs"
@@ -284,9 +306,10 @@ const initials = computed(() => {
                     }"
                     @click="void post('open', null)"
                 >
-                    {{ t.status_open }}
+                    {{ openLabel }}
                 </button>
                 <button
+                    v-if="showResolved"
                     type="button"
                     data-testid="panel-status-resolved"
                     class="rounded-md border px-2 py-1 text-xs"

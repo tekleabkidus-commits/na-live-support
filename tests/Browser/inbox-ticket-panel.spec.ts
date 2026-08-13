@@ -148,10 +148,25 @@ test('B9: the panel renders the live ticket, and SET PENDING carries the reason 
     await expect(page.getByTestId('panel-subject-source')).toContainText('Edited by staff');
     expect(ticketField(4820, 'subject_source')).toBe('"staff"');
 
-    // Restore the scene's canon for later specs (the seeder would heal it,
-    // but stay tidy — the shortcuts precedent).
+    // Back to open first — from pending_internal the matrix (rightly)
+    // offers no resolve; the D3 absence just proved itself en passant.
     await page.getByTestId('panel-status-open').click();
     await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
+
+    // D3, LEGALITY AS DATA (SS-04's bar): resolve the ticket — the control
+    // re-renders from the matrix ∩ this viewer, and what is illegal is
+    // ABSENT, not greyed. From resolved: no Pending, no Resolved; the open
+    // target IS the reopen act and wears its label.
+    await page.getByTestId('panel-status-resolved').click();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"resolved"');
+    await expect(page.getByTestId('panel-status-pending')).toHaveCount(0);
+    await expect(page.getByTestId('panel-status-resolved')).toHaveCount(0);
+    await expect(page.getByTestId('panel-status-open')).toHaveText('Reopen');
+    await page.getByTestId('panel-status-open').click();
+    await expect.poll(() => ticketField(4820, 'status')).toBe('"open"');
+    // Back at open, the full at-rest set returns.
+    await expect(page.getByTestId('panel-status-pending')).toBeVisible();
+    await expect(page.getByTestId('panel-status-resolved')).toBeVisible();
 });
 
 test('B9 render gate: without tickets.status.change the status control does not exist — the panel stays read-only truth (N-19: flags and grants hide, they never lie)', async ({

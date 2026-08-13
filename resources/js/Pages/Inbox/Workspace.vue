@@ -109,6 +109,7 @@ const props = defineProps<{
         tickets_reply: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
+    transitions: Record<string, string[]>;
     queueViews: { id: string; name: string; count: number }[];
     agentStatus: { status: string; reason: string | null; set_by_name: string | null };
     awayIdleMinutes: number;
@@ -1225,6 +1226,7 @@ function dismissCoach(): void {
                             :can="can"
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
+                            :transitions="transitions"
                             @changed="onPanelChanged"
                         />
                     </template>
@@ -1246,6 +1248,7 @@ function dismissCoach(): void {
                             :can="can"
                             :t="t.ticket_panel"
                             :xsrf="workspaceXsrf"
+                            :transitions="transitions"
                             @changed="onPanelChanged"
                         />
                     </template>
@@ -1462,6 +1465,7 @@ function dismissCoach(): void {
                                     :can="can"
                                     :t="t.ticket_panel"
                                     :xsrf="workspaceXsrf"
+                                    :transitions="transitions"
                                     @changed="onPanelChanged"
                                 />
                             </template>

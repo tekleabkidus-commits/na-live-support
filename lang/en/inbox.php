@@ -415,6 +415,7 @@ return [
         'status_label' => 'Status',
         'status_pending' => 'Pending',
         'status_open' => 'Open',
+        'reopen' => 'Reopen',
         'status_resolved' => 'Resolved',
         'reason_current' => 'Pending: :reason',
         'reason_awaiting_customer' => 'awaiting the customer',
