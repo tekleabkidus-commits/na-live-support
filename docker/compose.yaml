@@ -66,6 +66,24 @@ services:
       retries: 6
       start_period: 20s
 
+  # The outbox relay (C-06's live half): committed outbox rows → the events
+  # log + event queues. A DEDICATED process by advisor ruling (2026-08-13,
+  # S07 step 14): the RelayOutbox command is built to run continuously, and
+  # until this service existed NOTHING started it — every live event-driven
+  # path was dead outside test processes (the S07 step-14 discovery). Its
+  # death must stay observable independently of the worker's (FS-01).
+  relay:
+    <<: *app-image
+    command: ["php", "artisan", "outbox:relay"]
+    healthcheck:
+      # Process liveness (no pgrep in the image): the artisan loop's own
+      # process list entry — a dead loop fails this within one interval.
+      test: ["CMD", "sh", "-c", "ps ax | grep -v grep | grep -q 'outbox:relay'"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+      start_period: 15s
+
   scheduler:
     <<: *app-image
     command: ["php", "artisan", "schedule:work"]

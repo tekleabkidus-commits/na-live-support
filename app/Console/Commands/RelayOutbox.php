@@ -10,10 +10,19 @@ use Illuminate\Console\Command;
 /**
  * The outbox relay worker (Doc 01 T-03, FS-02; §12's lag budget).
  *
- * Runs continuously on the `outbox-relay` Horizon supervisor that Session 0 already
- * provisioned. A command rather than a queued job, deliberately: a job that relays the
- * outbox would itself need to be dispatched onto a queue, and if the queue is the thing
- * that is unavailable, the recovery mechanism is unavailable with it.
+ * Runs continuously as the dedicated `relay` compose service (advisor ruling,
+ * 2026-08-13 — S07 step 14). THE HONEST CORRECTION: this docblock used to claim
+ * the command "runs continuously on the outbox-relay Horizon supervisor that
+ * Session 0 already provisioned" — that claim was ASPIRATIONAL AND NEVER TRUE.
+ * Horizon supervisors run queue jobs, not artisan commands; no process invoked
+ * this command anywhere (worker = horizon, scheduler = schedule:work, no compose
+ * service), so from Doc 04's landing until the step-14 discovery, zero events
+ * were ever relayed in a live stack — C-06 held only inside test processes,
+ * which run consumers inline. A command rather than a queued job, deliberately:
+ * a job that relays the outbox would itself need to be dispatched onto a queue,
+ * and if the queue is the thing that is unavailable, the recovery mechanism is
+ * unavailable with it. (That reasoning was always right; the process to run the
+ * command is what was missing.)
  *
  * `--once` exists for tests and for a manual drain; without it the command loops with a
  * short sleep between empty passes. The sleep is only on EMPTY passes — after a productive
