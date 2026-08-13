@@ -250,7 +250,7 @@ it('A-37 (the D8 guard ruling), BOTH DIRECTIONS EXECUTED: a same-state transitio
     // Direction 2 — THE TEETH: a route that declares the audit action,
     // writes nothing, and does NOT declare a noop still throws. A bespoke
     // test route through the real middleware, nothing mocked.
-    \Illuminate\Support\Facades\Route::post('_test/a37-undeclared', fn () => response()->json(['ok' => true]))
+    Illuminate\Support\Facades\Route::post('_test/a37-undeclared', fn () => response()->json(['ok' => true]))
         ->middleware(['web', 'auth:staff', App\Http\Middleware\DeclareAuditAction::class.':ticket.status_changed']);
 
     $this->expectException(LogicException::class);

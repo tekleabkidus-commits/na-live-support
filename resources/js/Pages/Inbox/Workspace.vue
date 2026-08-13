@@ -1458,12 +1458,12 @@ function dismissCoach(): void {
                         :composer-t="t.composer"
                         :voice-flag="features.voice_recording"
                         @tickets="
-                        (rows) => {
-                            panelTickets = rows;
-                            panelLoading = false;
-                            panelLoadTick += 1;
-                        }
-                    "
+                            (rows) => {
+                                panelTickets = rows;
+                                panelLoading = false;
+                                panelLoadTick += 1;
+                            }
+                        "
                     />
                     <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}
@@ -1506,7 +1506,7 @@ function dismissCoach(): void {
                                     :load-tick="panelLoadTick"
                                     :transitions="transitions"
                                     @changed="onPanelChanged"
-                            @claim-next="onClaimNext"
+                                    @claim-next="onClaimNext"
                                 />
                             </template>
                         </ContextPanel>

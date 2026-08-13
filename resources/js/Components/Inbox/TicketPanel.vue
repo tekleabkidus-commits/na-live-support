@@ -136,7 +136,7 @@ async function saveSubject(): Promise<void> {
             return;
         }
         const body = (await response.json().catch(() => null)) as { detail?: string } | null;
-        refusal.value = body?.detail ?? (props.t.refused ?? '');
+        refusal.value = body?.detail ?? props.t.refused ?? '';
     } finally {
         busy.value = false;
     }

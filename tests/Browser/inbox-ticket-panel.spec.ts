@@ -348,7 +348,6 @@ test('D7–D10: the race and system surfaces — a lost claim swaps the avatar i
     await ctxB.close();
     await page.getByTestId('panel-status-resolved').click();
     await expect(page.getByTestId('panel-noop-strip')).toBeVisible();
-    // eslint-disable-next-line playwright/no-conditional-in-test -- one-line canon guard
     await expect(page.getByTestId('panel-refusal')).toHaveCount(0);
     // Reopen through the rendered door for the next scene.
     await page.getByTestId('panel-status-open').click();
@@ -360,16 +359,16 @@ test('D7–D10: the race and system surfaces — a lost claim swaps the avatar i
     artisan(
         'tinker',
         '--execute',
-        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); '
-        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); echo "unassigned";',
+        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); ' +
+            'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); echo "unassigned";',
     );
     await page.getByTestId('panel-status-open').click(); // nudge a refetch
     await expect(page.getByTestId('panel-assign-me')).toBeVisible();
     artisan(
         'tinker',
         '--execute',
-        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); '
-        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => $other]); echo "sniped";',
+        '$other = DB::connection("pgsql_platform")->table("users")->where("email", "readonly-fixture@fixture.example")->value("id"); ' +
+            'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => $other]); echo "sniped";',
     );
     await page.getByTestId('panel-assign-me').click();
     await expect(page.getByTestId('panel-refusal')).toBeVisible();
@@ -385,11 +384,11 @@ test('D7–D10: the race and system surfaces — a lost claim swaps the avatar i
     artisan(
         'tinker',
         '--execute',
-        '$t = DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->first(["id","tenant_id","conversation_id"]); '
-        + 'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); '
-        + 'DB::connection("pgsql_platform")->table("events")->insert(["id" => (string) Str::uuid7(), "tenant_id" => $t->tenant_id, "name" => "ticket.assignee_deactivated", "schema_version" => 1, "payload" => json_encode(["tenant_id" => $t->tenant_id, "ticket_id" => $t->id, "conversation_id" => $t->conversation_id, "actor_type" => "system", "actor_id" => null]), "correlation_id" => (string) Str::uuid7(), "occurred_at" => DB::raw("clock_timestamp()")]); '
-        + 'app(App\\Support\\Tenancy\\TenantContext::class)->bind($t->tenant_id, App\\Support\\Tenancy\\ResolutionSource::Console); app(App\\Support\\Tenancy\\RlsSession::class)->set($t->tenant_id); app(App\\Domain\\Inbox\\ReadModels\\ListProjector::class)->recomputeTicket($t->id); '
-        + 'echo "deactivation seeded";',
+        '$t = DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->first(["id","tenant_id","conversation_id"]); ' +
+            'DB::connection("pgsql_platform")->table("tickets")->where("number", 4820)->update(["assignee_id" => null]); ' +
+            'DB::connection("pgsql_platform")->table("events")->insert(["id" => (string) Str::uuid7(), "tenant_id" => $t->tenant_id, "name" => "ticket.assignee_deactivated", "schema_version" => 1, "payload" => json_encode(["tenant_id" => $t->tenant_id, "ticket_id" => $t->id, "conversation_id" => $t->conversation_id, "actor_type" => "system", "actor_id" => null]), "correlation_id" => (string) Str::uuid7(), "occurred_at" => DB::raw("clock_timestamp()")]); ' +
+            'app(App\\Support\\Tenancy\\TenantContext::class)->bind($t->tenant_id, App\\Support\\Tenancy\\ResolutionSource::Console); app(App\\Support\\Tenancy\\RlsSession::class)->set($t->tenant_id); app(App\\Domain\\Inbox\\ReadModels\\ListProjector::class)->recomputeTicket($t->id); ' +
+            'echo "deactivation seeded";',
     );
     // The direct writes bypass the relay — the projection was recomputed
     // above; a view round-trip refetches the LIST, and bouncing through a
