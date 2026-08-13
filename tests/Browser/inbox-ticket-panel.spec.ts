@@ -471,6 +471,16 @@ test('THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remov
     await expect(page.getByTestId('panel-refusal')).toContainText('out of scope');
     await page.unroute('**/assign');
 
+    // Followers (FR-18): the self toggle round-trips through the doors —
+    // Follow adds the avatar, Following ✓ removes it.
+    await expect(page.getByTestId('panel-follow-toggle')).toHaveText('Follow');
+    await page.getByTestId('panel-follow-toggle').click();
+    await expect(page.getByTestId('panel-follow-toggle')).toHaveText('Following ✓');
+    await expect(page.locator('[data-follower="Fixture Agent"]')).toBeVisible();
+    await page.getByTestId('panel-follow-toggle').click();
+    await expect(page.getByTestId('panel-follow-toggle')).toHaveText('Follow');
+    await expect(page.locator('[data-follower="Fixture Agent"]')).toHaveCount(0);
+
     // The window chip on the closing-window fixture.
     await page.keyboard.press('g');
     await page.keyboard.press('u');

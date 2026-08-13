@@ -160,6 +160,12 @@ Route::middleware([
         ->middleware(['permission:tickets.tags.manage', 'audit:ticket.untagged'])->name('inbox.ticket.tags.remove');
     Route::post('t/{ticketId}/subject', [App\Http\Controllers\Inbox\TicketActionsController::class, 'subject'])
         ->middleware(['permission:tickets.edit', 'audit:ticket.subject_changed'])->name('inbox.ticket.subject');
+    Route::get('t/{ticketId}/followers', [App\Http\Controllers\Inbox\TicketActionsController::class, 'followers'])
+        ->middleware('permission:tickets.view')->name('inbox.ticket.followers');
+    Route::post('t/{ticketId}/follow', [App\Http\Controllers\Inbox\TicketActionsController::class, 'follow'])
+        ->middleware(['permission:tickets.follow', 'audit:ticket.follower_added'])->name('inbox.ticket.follow');
+    Route::post('t/{ticketId}/unfollow', [App\Http\Controllers\Inbox\TicketActionsController::class, 'unfollow'])
+        ->middleware(['permission:tickets.follow', 'audit:ticket.follower_removed'])->name('inbox.ticket.unfollow');
     Route::get('t/{ticketId}/timeline', [App\Http\Controllers\Inbox\TicketActionsController::class, 'timeline'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.timeline');
     Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])

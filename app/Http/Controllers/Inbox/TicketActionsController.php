@@ -44,11 +44,82 @@ final class TicketActionsController extends Controller
     public function __construct(
         private readonly AssignTicket $assignment,
         private readonly \App\Domain\Tickets\Creation\SubjectWriter $subjects,
+        private readonly \App\Domain\Tickets\Followers\TicketFollowers $followerService,
         private readonly ChangePriority $priority,
         private readonly TicketTags $tags,
         private readonly ListProjector $projector,
         private readonly ScopeSets $scopes,
     ) {}
+
+    /**
+     * B2-S03/B14 (step 14): the followers row — state read + the self
+     * follow/unfollow toggle through the owning TicketFollowers service
+     * (tickets.follow is the service's own gate; FR-18).
+     */
+    public function followers(Request $request, string $ticketId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $ticket = $this->resolveScoped($user, $ticketId);
+        if ($ticket === null) {
+            return $this->notFound();
+        }
+
+        $ids = $this->followerService->followerIds($ticket);
+        /** @var array<string, string> $names */
+        $names = $ids === []
+            ? []
+            : \Illuminate\Support\Facades\DB::table('users')->whereIn('id', $ids)->pluck('name', 'id')->all();
+
+        return new JsonResponse([
+            'followers' => array_map(
+                fn (string $id): array => ['id' => $id, 'name' => $names[$id] ?? ''],
+                $ids,
+            ),
+            'following' => in_array($user->identifier(), $ids, true),
+        ]);
+    }
+
+    public function follow(Request $request, string $ticketId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $ticket = $this->resolveScoped($user, $ticketId);
+        if ($ticket === null) {
+            return $this->notFound();
+        }
+
+        try {
+            $added = $this->followerService->follow($ticket, $user);
+        } catch (\DomainException $e) {
+            return ProblemDetails::response(ErrorCode::Forbidden, 403, $e->getMessage());
+        }
+        if (! $added) {
+            // Already following — the service's documented noop (A-37).
+            $request->attributes->set('audit.noop', true);
+        }
+
+        return new JsonResponse(['ok' => true, 'following' => true]);
+    }
+
+    public function unfollow(Request $request, string $ticketId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $ticket = $this->resolveScoped($user, $ticketId);
+        if ($ticket === null) {
+            return $this->notFound();
+        }
+
+        $removed = $this->followerService->unfollow($ticket, $user);
+        if (! $removed) {
+            // A-37's shape: not-following → nothing removed, nothing audited
+            // — a documented noop the declaration must not punish.
+            $request->attributes->set('audit.noop', true);
+        }
+
+        return new JsonResponse(['ok' => true, 'following' => false]);
+    }
 
     /**
      * B2-S03/B13 (step 14): the subject door — FR-03's staff edit through

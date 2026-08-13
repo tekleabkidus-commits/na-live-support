@@ -307,6 +307,42 @@ function pickAssignee(id: string): void {
     assignPickerOpen.value = false;
     void doorPost(`/inbox/t/${props.ticket.id}/assign`, { assignee_id: id });
 }
+// Followers (FR-18): state read + the self toggle through the doors.
+const followers = ref<{ id: string; name: string }[]>([]);
+const following = ref(false);
+async function loadFollowers(): Promise<void> {
+    if (props.ticket === null) return;
+    const response = await fetch(`/inbox/t/${props.ticket.id}/followers`, {
+        headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return;
+    const body = (await response.json()) as {
+        followers: { id: string; name: string }[];
+        following: boolean;
+    };
+    followers.value = body.followers;
+    following.value = body.following;
+}
+watch(
+    () => [props.ticket?.id, props.loadTick] as const,
+    () => void loadFollowers(),
+    { immediate: true },
+);
+async function toggleFollow(): Promise<void> {
+    if (props.ticket === null) return;
+    const path = following.value ? 'unfollow' : 'follow';
+    const ok = await doorPost(`/inbox/t/${props.ticket.id}/${path}`, null);
+    if (ok) void loadFollowers();
+}
+function nameInitials(name: string): string {
+    return name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0] ?? '')
+        .join('');
+}
+
 function timeShort(iso: string | null | undefined): string {
     if (!iso) return '';
     return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
@@ -813,6 +849,33 @@ const initials = computed(() => {
                     @click="addTag"
                 >
                     {{ t.add_tag }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Followers (FR-18): avatars + the self toggle. -->
+        <div v-if="can.tickets_follow" data-testid="panel-followers">
+            <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.followers_label }}
+            </p>
+            <div class="flex items-center gap-1">
+                <span
+                    v-for="follower in followers"
+                    :key="follower.id"
+                    :title="follower.name"
+                    :data-follower="follower.name"
+                    class="inline-flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-semibold"
+                    :style="{ background: 'var(--ds-row-hover)' }"
+                    >{{ nameInitials(follower.name) }}</span
+                >
+                <button
+                    type="button"
+                    data-testid="panel-follow-toggle"
+                    class="ms-1 text-[11px] underline"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    @click="void toggleFollow()"
+                >
+                    {{ following ? t.following : t.follow }}
                 </button>
             </div>
         </div>
