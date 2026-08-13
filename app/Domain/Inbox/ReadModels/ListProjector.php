@@ -495,6 +495,27 @@ final class ListProjector
     }
 
     /**
+     * R-22 (step 14): converge the projection's tags column from ticket truth
+     * in ONE set-based statement — the T-07 historical rewrite touches rows by
+     * the hundred thousand, so per-row recompute is the wrong tool. The
+     * projection is never the source of truth (C-07); this is it catching up.
+     *
+     * @return int rows converged
+     */
+    public function syncTagsFromTruth(): int
+    {
+        return DB::update(
+            <<<'SQL'
+                UPDATE ticket_list_items li
+                   SET tags = to_jsonb(t.tags)
+                  FROM tickets t
+                 WHERE li.ticket_id = t.id
+                   AND li.tags IS DISTINCT FROM to_jsonb(t.tags)
+                SQL,
+        );
+    }
+
+    /**
      * Which tickets an event names — ids only; every VALUE comes from truth.
      *
      * @param  array<string, mixed>  $payload

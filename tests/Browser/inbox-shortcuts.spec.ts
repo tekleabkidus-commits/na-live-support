@@ -246,8 +246,18 @@ test('I claims the active row through the REAL door (the unassigned row leaves t
     // A → the directory palette (names from /inbox/assignees).
     await page.keyboard.press('g');
     await page.keyboard.press('m');
+    // Flake row (CI 31661624301): the first-row check alone is satisfied
+    // INSTANTLY by the old view's still-rendered rows, so j/a raced the
+    // refetch (active row momentarily unrepaired → no palette). Settle on
+    // the view's own truth first, exactly like the g,u block above.
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+        .toBe('my_open');
     await expect(page.locator('[data-ticket]').first()).toBeVisible();
     await page.keyboard.press('j');
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().activeId))
+        .not.toBeNull();
     await page.keyboard.press('a');
     await expect(page.getByTestId('action-palette')).toBeVisible();
     await expect(page.getByTestId('action-palette')).toHaveAttribute('data-kind', 'assign');

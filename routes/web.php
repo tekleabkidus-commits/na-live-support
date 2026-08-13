@@ -40,6 +40,16 @@ Route::middleware([
     Route::get('pending-grants', [App\Http\Controllers\Admin\RbacScreensController::class, 'pending'])
         ->middleware('permission:admin.roles.view')
         ->name('rbac.screens.pending');
+
+    // R-22's class-2 fill (S07 step 14) — the tag rename/merge surface over
+    // Doc 06's T-07 engine. Same catalog key as every tag write (the catalog
+    // is closed); the rewrite door declares the engine's own audit action.
+    Route::get('tags', [App\Http\Controllers\Admin\TagScreensController::class, 'manager'])
+        ->middleware('permission:tickets.tags.manage')
+        ->name('tags.screens.manager');
+    Route::post('tags/rewrite', [App\Http\Controllers\Admin\TagScreensController::class, 'rewrite'])
+        ->middleware(['permission:tickets.tags.manage', 'audit:ticket.tags_rewritten'])
+        ->name('tags.rewrite');
 });
 
 // Doc 05 §8/§9 — the Telegram admin surfaces (B6-S01/S02/S03). Same staff

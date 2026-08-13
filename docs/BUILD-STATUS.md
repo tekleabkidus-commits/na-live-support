@@ -665,6 +665,23 @@ journey's EC-12 assertion, step 14):**
   the existing `DraftStore::for`, composer hydration only into an EMPTY
   composer with FS-05's preserved text outranking the stored row.
 
+### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — S07 step 14, the R-22 fill)
+
+| File / frame | What differs | Class | Why |
+|---|---|---|---|
+| **Tag manager** (`Admin/Tags/TagManager`) | Required functionality **no frame draws** — the recorded design gap (`B2-S06-closing-audit-v2`: "Tags — per-tenant autocomplete; no rename or merge designed"). Built from existing design-system patterns ONLY: the B6-S11 shell + per-key settings-row contract (B6-X01 J03–J08 — label/description left, typed control right, J08 consequence stated BEFORE save, J06-flavored result strip carrying T-07's count), the B5-addendum confirmation weights (the verb on the primary — never OK/Confirm; the irreversible MERGE takes the typed phrase and the red primary; 44px targets, confirm on the end side), the J19 viewport read-only law, B2-S06's inline refusal; tokens only, logical properties throughout | **2 (gap fill)** | **Owner ruling R-22 RESOLVED** (2026-08-10) ordered exactly this: "implementation-side class-2 fill using existing design-system components (settings-row + confirmation patterns); no design-track reopen. Built and frame-mapped when Doc 07 reaches it" — reached at step 14 |
+
+The surface drives Doc 06's T-07 engine UNTOUCHED (chunked, resumable,
+audited with counts); the door makes the engine's audit-free same-tag
+noop UNREACHABLE by validation (the D8/A-37 lesson applied at design
+time) and converges the Doc 07 list projection set-based after the
+historical rewrite (`ListProjector::syncTagsFromTruth` — per-row
+recompute is the wrong tool at T-07's scale). Proof: TagManagerTest 4/4
+(50 asserts — page door + engine e2e with audit count + projection
+converged + refusals + mid-rewrite RESUME through the door);
+admin-tag-manager.spec.ts 2/2 (rename→merge journey with the typed gate
+and DB convergence; J19 read-only at 375).
+
 ### RULED CORE EDIT #6 — the pending-reason ride (`08036be`), COUNTERSIGNED RETROACTIVELY (2026-08-13)
 
 Recorded honestly as **"landed-then-escalated (PROCESS BREACH),

@@ -67,10 +67,18 @@ test('FR-12: the list position survives back-navigation — scroll deep, leave, 
     await expect(page.locator('[data-ticket]').first()).toBeVisible();
 
     const scroller = page.getByTestId('ticket-list');
-    await scroller.evaluate((el) => {
-        el.scrollTop = 400;
-    });
-    await expect.poll(async () => scroller.evaluate((el) => el.scrollTop)).toBeGreaterThan(300);
+    // Flake row (CI 31661624301): a one-shot write clamps to 0 when it
+    // lands before the list overflows (rows still streaming in), and a
+    // read-only poll can never recover it. Re-apply the write each round —
+    // it converges the moment the content is tall enough.
+    await expect
+        .poll(async () =>
+            scroller.evaluate((el) => {
+                el.scrollTop = 400;
+                return el.scrollTop;
+            }),
+        )
+        .toBeGreaterThan(300);
 
     // Back-navigation: full page reload (unload → remount, the harshest
     // shape — an in-app back is the same remount path).
