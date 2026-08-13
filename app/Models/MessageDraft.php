@@ -16,6 +16,12 @@ use LogicException;
  * (body NULL + cleared_at) — ADR 0003 revokes DELETE, and the row is reused.
  * `draft.saved` is local-only: nothing about this model touches the event bus.
  *
+ * `cleared_at` is fillable for the SERVICE's un-tombstone (a re-draft after a
+ * send reuses the row; save() writes cleared_at=null) — ruled core edit #7:
+ * without it, fill() silently dropped the clear and the reused row stayed
+ * tombstoned forever. The model is written only via DraftStore (sole-writer
+ * grep in the evidence packet), so nothing else can mass-assign it.
+ *
  * @property string $user_id
  * @property string $conversation_id
  * @property string|null $body
@@ -24,6 +30,7 @@ use LogicException;
     'user_id',
     'conversation_id',
     'body',
+    'cleared_at',
 ])]
 final class MessageDraft extends Model implements TenantScoped
 {

@@ -186,6 +186,25 @@ final class ThreadController extends Controller
                 $row['merged_into_number'] = is_string($ticket->merged_into ?? null)
                     ? DB::table('tickets')->where('id', $ticket->merged_into)->value('number')
                     : null;
+                // D12: the banner skips the middle — walk the chain to the
+                // FINAL survivor (EC-03's transitive truth), bounded.
+                $survivorId = $ticket->merged_into ?? null;
+                $hops = 0;
+                while (is_string($survivorId) && $hops < 10) {
+                    $next = DB::table('tickets')->where('id', $survivorId)->value('merged_into');
+                    if (! is_string($next)) {
+                        break;
+                    }
+                    $survivorId = $next;
+                    $hops++;
+                }
+                $row['final_survivor_id'] = is_string($survivorId) ? $survivorId : null;
+                /** @var object{number: int|string, conversation_id: string}|null $survivor */
+                $survivor = is_string($survivorId)
+                    ? DB::table('tickets')->where('id', $survivorId)->first(['number', 'conversation_id'])
+                    : null;
+                $row['final_survivor_number'] = $survivor->number ?? null;
+                $row['final_survivor_conversation_id'] = $survivor->conversation_id ?? null;
                 $row['origin_ticket_number'] = is_string($ticket->origin_ticket_id ?? null)
                     ? DB::table('tickets')->where('id', $ticket->origin_ticket_id)->value('number')
                     : null;

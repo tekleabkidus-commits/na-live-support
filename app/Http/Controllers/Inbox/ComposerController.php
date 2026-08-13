@@ -154,6 +154,32 @@ final class ComposerController extends Controller
         return new JsonResponse(['message_id' => $note->identifier()], 201);
     }
 
+    /**
+     * FR-22 drafts, the READ half — DraftStore's own restore contract ("the
+     * row simply persists"); the composer hydrates from here on thread open.
+     * EC-12's executed form (a draft SURVIVING a merge, B12-A01 AC-08)
+     * surfaced that nothing ever called it.
+     */
+    public function draftShow(Request $request, string $conversationId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $conversation = $this->resolveScoped($user, $conversationId);
+        if ($conversation === null) {
+            return $this->notFound();
+        }
+
+        $draft = $this->drafts->for($user, $conversation);
+        $updatedAt = $draft?->getAttribute('updated_at');
+
+        return new JsonResponse([
+            'body' => $draft?->getAttribute('body'),
+            'updated_at' => $updatedAt instanceof \DateTimeInterface
+                ? CarbonImmutable::instance($updatedAt)->toIso8601String()
+                : null,
+        ]);
+    }
+
     /** FR-22 drafts: LWW with the Doc 04 EC-06 conflict signal. */
     public function draft(Request $request, string $conversationId): JsonResponse
     {

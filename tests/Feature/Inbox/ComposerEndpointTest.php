@@ -147,6 +147,15 @@ it('FR-22 drafts: save round-trips; the send CLEARS the draft (tombstone); EC-12
         expect(DB::table('message_drafts')->where('user_id', $actor->identifier())->where('conversation_id', $conversation->identifier())->whereNull('cleared_at')->exists())->toBeTrue();
     });
 
+    // The READ half (step 14): the composer's hydration door hands the row
+    // back — DraftStore's restore contract made visible.
+    $restored = $this->actingAs($actor, 'staff')->getJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/draft',
+    );
+    $restored->assertOk();
+    expect($restored->json('body'))->toBe('half-typed thought');
+    expect($restored->json('updated_at'))->not->toBeNull();
+
     $this->actingAs($actor, 'staff')->postJson(
         'https://localhost/inbox/thread/'.$conversation->identifier().'/reply',
         ['body' => 'the real reply'],
@@ -156,6 +165,30 @@ it('FR-22 drafts: save round-trips; the send CLEARS the draft (tombstone); EC-12
         expect(DB::table('message_drafts')->where('user_id', $actor->identifier())->where('conversation_id', $conversation->identifier())->whereNull('cleared_at')->exists())
             ->toBeFalse('the send did not tombstone the draft (FR-22)');
     });
+
+    // After the tombstone the read door hands back NOTHING — a cleared
+    // draft never resurrects into the composer.
+    $cleared = $this->actingAs($actor, 'staff')->getJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/draft',
+    );
+    $cleared->assertOk();
+    expect($cleared->json('body'))->toBeNull();
+
+    // RE-DRAFT AFTER SEND (the merge journey's discovery): typing again in
+    // the SAME conversation must UN-tombstone the reused row — DraftStore
+    // writes cleared_at=null, and the read door must hand the body back.
+    $again = $this->actingAs($actor, 'staff')->patchJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/draft',
+        ['body' => 'second thought after sending'],
+    );
+    $again->assertOk();
+    $restoredAgain = $this->actingAs($actor, 'staff')->getJson(
+        'https://localhost/inbox/thread/'.$conversation->identifier().'/draft',
+    );
+    expect($restoredAgain->json('body'))->toBe(
+        'second thought after sending',
+        'the reused row stayed tombstoned — save() never cleared cleared_at (the model drops it from fill)',
+    );
 });
 
 it('FR-05/BR-03 (ruling (c), step 14): a staff reply through the door IMPLICITLY CLAIMS the unassigned ticket via the owning service — visible in the payload, inert on an already-held ticket, inert without tickets.assign_self, and OFF with the tenant toggle (the reply standing every time)', function (): void {

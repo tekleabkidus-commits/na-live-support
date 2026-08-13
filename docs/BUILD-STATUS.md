@@ -627,6 +627,44 @@ fresh-run-discipline pattern (the fourth such discovery this step);
 options and recommendation in the escalation. B12's timeline build holds
 on the ruling; B13 (relay-independent) proceeds meanwhile.**
 
+### RULED CORE EDIT #7 — the draft un-tombstone (2026-08-13), ESCALATE-FIRST HONORED
+
+**Sequence: escalation → ruling → land — by contrast with #6's record, the
+law was honored to the letter.** One line: `cleared_at` added to
+`MessageDraft`'s `#[Fillable]`; `DraftStore::save()` stays byte-identical
+(diff = 0 lines) — the owning author's reviewed statement
+(`fill(['cleared_at' => null])`) becomes true instead of being silently
+dropped by Eloquent. **Falsification both directions, executed and
+captured:** the re-draft-after-send clause in `ComposerEndpointTest`
+red pre-fix at the predicted line ("the reused row stayed tombstoned"),
+green post-fix (send → tombstone → PATCH new body → GET returns it);
+**sole-writer proof:** the grep enumerates every app reference to the
+model — all in `DraftStore` — pinned in the model docblock. **Owning-doc
+regression:** Doc 04's draft suites (ComposerEndpointTest,
+NotesTypingDraftsTest, ConversationSchemaTest, ListEndpointTest) 32/32,
+145 asserts. Packet:
+`docs/evidence/S07-step14/draft-untombstone-defect-01.txt`.
+The enumeration counts SEVEN ruled core edits plus the comment-only
+exception.
+
+**DEFECT LEDGER — two entries from the same discovery (the merge
+journey's EC-12 assertion, step 14):**
+- **Latent since step 11 (Doc 04):** a draft re-typed after a send in the
+  same conversation saved its body but stayed tombstoned — `fill()`
+  dropped the non-fillable `cleared_at`, so `DraftStore::for()` and
+  `ReadMarkers`' list draft chips never saw the reused row. Invisible
+  until now because first saves take the create path and no test
+  re-drafted after a send.
+- **Restore never wired (Doc 07):** `DraftStore`'s docblock promised
+  "restored after re-login — the row simply persists" while ZERO callers
+  of the read half existed; drafts saved but never came back. **Honest
+  trail:** the claimed-but-never-running family grows to two (the outbox
+  relay that had never relayed; the restore that had never restored).
+  Fixed Doc 07-side (accepted as filed): GET
+  `/inbox/thread/{conv}/draft` → `ComposerController::draftShow` over
+  the existing `DraftStore::for`, composer hydration only into an EMPTY
+  composer with FS-05's preserved text outranking the stored row.
+
 ### RULED CORE EDIT #6 — the pending-reason ride (`08036be`), COUNTERSIGNED RETROACTIVELY (2026-08-13)
 
 Recorded honestly as **"landed-then-escalated (PROCESS BREACH),

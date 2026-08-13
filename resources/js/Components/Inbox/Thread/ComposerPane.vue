@@ -182,6 +182,30 @@ watch(
     },
     { immediate: true },
 );
+// FR-22's restore half: hydrate the persisted draft on thread open — the
+// DraftStore contract ("the row simply persists") only SHOWS if someone
+// reads it back. Live text always outranks the stored row: FS-05's
+// preservedText and anything already typed win (body must still be empty
+// when the fetch lands). applyingSync keeps the watcher from re-saving
+// what the server just handed us.
+onMounted(async () => {
+    if (mode.value !== 'reply') return;
+    try {
+        const response = await fetch(`/inbox/thread/${props.conversationId}/draft`, {
+            headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) return;
+        const draft = (await response.json()) as { body: string | null };
+        if (typeof draft.body === 'string' && draft.body !== '' && body.value === '') {
+            applyingSync = true;
+            body.value = draft.body;
+            setTimeout(() => (applyingSync = false), 0);
+        }
+    } catch {
+        /* offline: nothing to restore from the server */
+    }
+});
+
 // Reconnect: the draft the server missed while offline is re-persisted, and
 // the queued chips for this conversation come from the store mirror.
 watch(

@@ -25,6 +25,7 @@ import ActionPalette, { type PaletteItem } from '../../Components/Inbox/ActionPa
 import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
+import MergeDialog from '../../Components/Inbox/MergeDialog.vue';
 import TicketPanel from '../../Components/Inbox/TicketPanel.vue';
 import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
@@ -107,6 +108,7 @@ const props = defineProps<{
         tickets_status_change: boolean;
         tickets_edit: boolean;
         tickets_follow: boolean;
+        tickets_merge: boolean;
         tickets_reply: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
@@ -542,6 +544,17 @@ const staleAsOf = computed(() => {
 });
 
 // D7: the lost race's offered next move — Unassigned, top row lit.
+// B1-S04: the merge dialog over the selection.
+const mergeOpen = ref(false);
+const mergeIds = ref<string[]>([]);
+function openMerge(): void {
+    mergeIds.value = [...list.selectedInView];
+    mergeOpen.value = mergeIds.value.length >= 2;
+}
+function onMerged(): void {
+    list.clearSelection();
+    onPanelChanged();
+}
 function onClaimNext(): void {
     activeView.value = 'unassigned';
     list.activeId = null;
@@ -987,6 +1000,14 @@ function dismissCoach(): void {
             @remove-tag="onPaletteRemoveTag"
         />
         <CoachMarks :open="coachOpen" :t="t.coach" @dismiss="dismissCoach" />
+        <MergeDialog
+            :open="mergeOpen"
+            :ticket-ids="mergeIds"
+            :t="t.ticket_panel"
+            :xsrf="workspaceXsrf"
+            @close="mergeOpen = false"
+            @merged="onMerged"
+        />
         <p
             v-if="actionToast"
             data-testid="action-toast"
@@ -1134,6 +1155,7 @@ function dismissCoach(): void {
                 tabindex="-1"
             >
                 <ListPane
+                    :merge-allowed="can.tickets_merge"
                     :view="activeView"
                     :mobile="false"
                     :user-id="userId"
@@ -1150,6 +1172,7 @@ function dismissCoach(): void {
                         filter_bar: t.filter_bar,
                         mobile: t.mobile,
                     }"
+                    @merge-selection="openMerge"
                     @open-ticket="openThread"
                     @fallback-view="activeView = 'my_open'"
                 />
@@ -1257,6 +1280,7 @@ function dismissCoach(): void {
                             :transitions="transitions"
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
+                            @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1282,6 +1306,7 @@ function dismissCoach(): void {
                             :transitions="transitions"
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
+                            @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1323,6 +1348,7 @@ function dismissCoach(): void {
                     tabindex="-1"
                 >
                     <ListPane
+                        :merge-allowed="can.tickets_merge"
                         :view="activeView"
                         :mobile="true"
                         :user-id="userId"
@@ -1339,6 +1365,7 @@ function dismissCoach(): void {
                             filter_bar: t.filter_bar,
                             mobile: t.mobile,
                         }"
+                        @merge-selection="openMerge"
                         @open-ticket="openThread"
                         @fallback-view="activeView = 'my_open'"
                     />
@@ -1508,6 +1535,7 @@ function dismissCoach(): void {
                                     :transitions="transitions"
                                     @changed="onPanelChanged"
                                     @claim-next="onClaimNext"
+                                    @open-survivor="(cid) => (activeThread = cid)"
                                 />
                             </template>
                         </ContextPanel>

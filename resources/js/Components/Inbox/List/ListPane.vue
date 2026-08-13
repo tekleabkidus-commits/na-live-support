@@ -21,6 +21,7 @@ import MobileActionsSheet from './MobileActionsSheet.vue';
 import Row from './Row.vue';
 
 const props = defineProps<{
+    mergeAllowed?: boolean;
     view: string;
     mobile?: boolean;
     userId?: string;
@@ -35,6 +36,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
+    (e: 'merge-selection'): void;
     (
         e: 'open-ticket',
         payload: { ticketId: string; conversationId: string; number: number | string | null },
@@ -641,12 +643,14 @@ watch(
         </p>
 
         <BulkBar
+            :merge-allowed="mergeAllowed"
             :selected-count="list.selected.length"
             :tray-ids="list.trayIds"
             :total="list.total"
             :token-count="list.selectionToken?.count ?? null"
             :t="t.bulk"
             @select-all="selectAllInView"
+            @merge="emit('merge-selection')"
             @clear="list.clearSelection()"
             @deselect="(id) => list.deselect(id)"
         />

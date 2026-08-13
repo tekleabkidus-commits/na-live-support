@@ -135,6 +135,8 @@ Route::middleware([
         ->middleware('permission:tickets.reply')->name('inbox.composer.reply');
     Route::post('thread/{conversationId}/note', [App\Http\Controllers\Inbox\ComposerController::class, 'note'])
         ->middleware(['permission:tickets.note', 'audit:conversation.note_added'])->name('inbox.composer.note');
+    Route::get('thread/{conversationId}/draft', [App\Http\Controllers\Inbox\ComposerController::class, 'draftShow'])
+        ->middleware('permission:tickets.reply')->name('inbox.composer.draft_show');
     Route::patch('thread/{conversationId}/draft', [App\Http\Controllers\Inbox\ComposerController::class, 'draft'])
         ->middleware('permission:tickets.reply')->name('inbox.composer.draft');
     Route::post('thread/{conversationId}/transition', [App\Http\Controllers\Inbox\ComposerController::class, 'transition'])

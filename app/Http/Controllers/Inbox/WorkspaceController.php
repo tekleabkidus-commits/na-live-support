@@ -143,6 +143,7 @@ final class WorkspaceController extends Controller
                 'tickets_status_change' => $map->allows('tickets.status.change'),
                 'tickets_edit' => $map->allows('tickets.edit'),
                 'tickets_follow' => $map->allows('tickets.follow'),
+                'tickets_merge' => $map->allows('tickets.merge'),
                 'tickets_reply' => $map->allows('tickets.reply'),
             ],
             // EC-07 (step 13): the handshake's clock anchor — DB time, the

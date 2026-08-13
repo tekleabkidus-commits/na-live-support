@@ -1,0 +1,59 @@
+=== DRAFT UN-TOMBSTONE DEFECT — evidence (2026-08-13) ===
+
+--- (1) The browser trace's PATCH /inbox/thread/{conv}/draft response body (merge journey run):
+{"draft":{"id":"019ffa84-6510-724d-8bc5-83c1a064d3f6","conversation_id":"019ffa18-fab9-7049-93d4-f650afde039d","body":"merge-survivor draft msrcp5sn","cleared_at":"2026-08-13T10:03:51.000000Z","updated_at":"2026-08-13T10:03:53.000000Z"},"conflict":false}
+>>> body SAVED at 10:03:53 while cleared_at STAYS 10:03:51 — the un-tombstone was dropped.
+
+--- (2) The subsequent GET on the same conversation (same trace):
+{"body":null,"updated_at":null}
+
+--- (3) The red Pest proof (re-draft after send), executed:
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\ComposerEndpointTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-22 drafts: save round-trips; the send CLEARS the draft (tombs[39m[90m…[39m [90m5.70s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\ComposerEndpointTest[22m [90m>[39m it FR-22 drafts: save…    
+[39;1m  the reused row stayed tombstoned — save() never cleared cleared_at (the model drops it from fill)
+Failed asserting that null is identical to 'second thought after sending'.[39;22m
+
+  at [32mtests/Feature/Inbox/ComposerEndpointTest.php[39m:[32m188[39m
+    184▕     $again->assertOk();
+    185▕     $restoredAgain = $this->actingAs($actor, 'staff')->getJson(
+    186▕         'https://localhost/inbox/thread/'.$conversation->identifier().'/draft',
+    187▕     );
+  ➜ 188▕     expect($restoredAgain->json('body'))->toBe(
+    189▕         'second thought after sending',
+    190▕         'the reused row stayed tombstoned — save() never cleared cleared_at (the model drops it from fill)',
+    191▕     );
+    192▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/ComposerEndpointTest.php[39;22m:[39;1m188[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (11 assertions)[39m
+  [90mDuration:[39m [39m5.90s[39m
+
+
+=== POST-FIX (ruled core edit #7 — cleared_at added to #[Fillable]; DraftStore.php diff = 0 lines) ===
+
+--- (4) SOLE-WRITER PROOF: every app reference to the MessageDraft model:
+app/Domain/Conversations/Drafts/DraftStore.php:8:use App\Models\MessageDraft;
+app/Domain/Conversations/Drafts/DraftStore.php:33:     * @return array{draft: MessageDraft, conflict: bool}
+app/Domain/Conversations/Drafts/DraftStore.php:38:            $existing = MessageDraft::query()
+app/Domain/Conversations/Drafts/DraftStore.php:44:            if (! $existing instanceof MessageDraft) {
+app/Domain/Conversations/Drafts/DraftStore.php:45:                $draft = MessageDraft::query()->create([
+app/Domain/Conversations/Drafts/DraftStore.php:70:    public function for(User $user, Conversation $conversation): ?MessageDraft
+app/Domain/Conversations/Drafts/DraftStore.php:72:        $draft = MessageDraft::query()
+app/Domain/Conversations/Drafts/DraftStore.php:78:        return $draft instanceof MessageDraft ? $draft : null;
+app/Domain/Conversations/Drafts/DraftStore.php:84:        MessageDraft::query()
+
+--- (5) The SAME clause, GREEN direction (send → tombstone → PATCH new body → GET returns it):
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\ComposerEndpointTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 drafts: save round-trips; the send CLEARS the draft (tombs[39m[90m…[39m [90m6.86s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (11 assertions)[39m
+  [90mDuration:[39m [39m7.35s[39m
+
+
+--- (6) Doc 04 owning-document regression (drafts suites): ComposerEndpointTest + NotesTypingDraftsTest + ConversationSchemaTest + ListEndpointTest = 32 passed (145 assertions), 25.10s

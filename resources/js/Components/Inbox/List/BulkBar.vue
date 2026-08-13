@@ -8,6 +8,7 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
+    mergeAllowed?: boolean;
     selectedCount: number;
     trayIds: string[];
     total: number;
@@ -16,6 +17,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
+    (e: 'merge'): void;
     (e: 'select-all'): void;
     (e: 'clear'): void;
     (e: 'deselect', id: string): void;
@@ -58,6 +60,16 @@ const selectedLabel = computed(() =>
                 @click="emit('select-all')"
             >
                 {{ label('select_all', { count: String(total) }) }}
+            </button>
+            <button
+                v-if="mergeAllowed && selectedCount >= 2"
+                type="button"
+                data-testid="bulk-merge"
+                class="rounded-md border px-2 py-1 text-xs font-semibold"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('merge')"
+            >
+                {{ t.merge }}
             </button>
             <button
                 type="button"

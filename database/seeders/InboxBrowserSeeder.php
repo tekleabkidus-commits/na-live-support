@@ -240,16 +240,17 @@ final class InboxBrowserSeeder extends Seeder
 
         $healed = [];
         foreach ($canonical as $number => $want) {
-            /** @var object{id: string, status: string, assignee_id: string|null, priority: string, tags: string|null}|null $ticket */
+            /** @var object{id: string, status: string, assignee_id: string|null, priority: string, tags: string|null, merged_into: string|null}|null $ticket */
             $ticket = DB::table('tickets')->where('number', $number)
-                ->first(['id', 'status', 'assignee_id', 'priority', 'tags']);
+                ->first(['id', 'status', 'assignee_id', 'priority', 'tags', 'merged_into']);
             if ($ticket === null) {
                 continue; // scene variant without this row — nothing to heal
             }
             $drifted = $ticket->status !== $want['status']
                 || $ticket->assignee_id !== $want['assignee']
                 || $ticket->priority !== $want['priority']
-                || ($ticket->tags ?? '{}') !== $want['tags'];
+                || ($ticket->tags ?? '{}') !== $want['tags']
+                || $ticket->merged_into !== null;
             if (! $drifted) {
                 continue;
             }
@@ -258,9 +259,33 @@ final class InboxBrowserSeeder extends Seeder
                 'assignee_id' => $want['assignee'],
                 'priority' => $want['priority'],
                 'tags' => $want['tags'],
+                'merged_into' => null,
             ]);
             $projector->recomputeTicket($ticket->id);
             $healed[] = $ticket->id;
+        }
+
+        // Drafts became scene state the moment the composer learned to
+        // HYDRATE them (FR-22's read half, step 14): a run's leftover draft
+        // resurfaces in the next run's composer. Restore draft canon — R2's
+        // fixture draft stands, every other agent row tombstones (the table
+        // REVOKEs DELETE; same shape as DraftStore::clearOnSend).
+        $kidistConversation = DB::table('conversations')
+            ->join('customers', 'customers.id', '=', 'conversations.customer_id')
+            ->where('customers.username', '@fixture_kidist_s09')
+            ->value('conversations.id');
+        DB::table('message_drafts')
+            ->where('user_id', $agent->identifier())
+            ->when(
+                is_string($kidistConversation),
+                static fn ($query) => $query->where('conversation_id', '!=', $kidistConversation),
+            )
+            ->update(['body' => null, 'cleared_at' => DB::raw('now()')]);
+        if (is_string($kidistConversation)) {
+            DB::table('message_drafts')
+                ->where('user_id', $agent->identifier())
+                ->where('conversation_id', $kidistConversation)
+                ->update(['body' => 'fixture draft in progress', 'cleared_at' => null]);
         }
 
         // R1's hand-tuned projection columns (sentiment/SLA) do not survive a

@@ -31,6 +31,8 @@ type PanelTicket = {
     window_expires_at?: string | null;
     merged_into_number?: number | string | null;
     origin_ticket_number?: number | string | null;
+    final_survivor_number?: number | string | null;
+    final_survivor_conversation_id?: string | null;
 };
 
 const props = defineProps<{
@@ -52,6 +54,8 @@ const emit = defineEmits<{
     (e: 'changed'): void;
     // D7: the lost race offers the next unassigned ticket instead.
     (e: 'claim-next'): void;
+    // D12: the merged banner opens the FINAL survivor.
+    (e: 'open-survivor', conversationId: string): void;
 }>();
 
 // ── B9 state ────────────────────────────────────────────────────────────
@@ -297,7 +301,9 @@ const assignees = ref<{ id: string; name: string }[]>([]);
 async function openAssignPicker(): Promise<void> {
     assignPickerOpen.value = !assignPickerOpen.value;
     if (!assignPickerOpen.value) return;
-    const response = await fetch('/inbox/assignees?q=', { headers: { Accept: 'application/json' } });
+    const response = await fetch('/inbox/assignees?q=', {
+        headers: { Accept: 'application/json' },
+    });
     if (!response.ok) return;
     const body = (await response.json()) as { assignees: { id: string; name: string }[] };
     assignees.value = body.assignees;
@@ -376,6 +382,34 @@ const initials = computed(() => {
         <p class="text-sm" :style="{ color: 'var(--ds-text-muted)' }">{{ t.empty }}</p>
     </div>
     <div v-else data-testid="ticket-panel" class="flex flex-col gap-3">
+        <!-- D12: a merged ticket lives on in its FINAL survivor — the
+             banner skips the middle of the chain. -->
+        <div
+            v-if="ticket.final_survivor_number"
+            data-testid="merged-banner"
+            role="status"
+            class="rounded-md border px-2 py-1.5 text-xs"
+            :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)' }"
+        >
+            <p class="font-semibold">
+                {{
+                    (t.merged_banner ?? '').replace(':number', String(ticket.final_survivor_number))
+                }}
+            </p>
+            <button
+                v-if="ticket.final_survivor_conversation_id"
+                type="button"
+                data-testid="merged-open-survivor"
+                class="mt-0.5 underline"
+                :style="{ color: 'var(--ds-text-secondary)' }"
+                @click="emit('open-survivor', ticket.final_survivor_conversation_id)"
+            >
+                {{
+                    (t.open_survivor ?? '').replace(':number', String(ticket.final_survivor_number))
+                }}
+            </button>
+        </div>
+
         <!-- Header: the drawn "Ticket #4812" row. -->
         <div class="flex items-baseline gap-2">
             <span class="text-xs font-semibold" :style="{ color: 'var(--ds-text-muted)' }">{{
@@ -791,7 +825,10 @@ const initials = computed(() => {
                 data-testid="panel-window-chip"
                 class="rounded px-1.5 py-0.5 text-[11px]"
                 :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-secondary)' }"
-                >⏱ {{ (t.window_until ?? '').replace(':time', timeShort(ticket.window_expires_at)) }}</span
+                >⏱
+                {{
+                    (t.window_until ?? '').replace(':time', timeShort(ticket.window_expires_at))
+                }}</span
             >
         </div>
 
@@ -800,7 +837,11 @@ const initials = computed(() => {
             <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
                 {{ t.department_label }}
             </p>
-            <p class="text-xs" data-testid="panel-department" :style="{ color: 'var(--ds-text-muted)' }">
+            <p
+                class="text-xs"
+                data-testid="panel-department"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
                 {{ t.department_seam }}
             </p>
         </div>
@@ -828,7 +869,12 @@ const initials = computed(() => {
                         ✕
                     </button>
                 </span>
-                <span v-if="(ticket.tags ?? []).length === 0" class="border-b border-dashed text-[11px]" :style="{ color: 'var(--ds-text-muted)', borderColor: 'var(--ds-border)' }">{{ t.tags_none }}</span>
+                <span
+                    v-if="(ticket.tags ?? []).length === 0"
+                    class="border-b border-dashed text-[11px]"
+                    :style="{ color: 'var(--ds-text-muted)', borderColor: 'var(--ds-border)' }"
+                    >{{ t.tags_none }}</span
+                >
             </div>
             <div class="mt-1 flex gap-1">
                 <input
@@ -881,7 +927,10 @@ const initials = computed(() => {
         </div>
 
         <!-- Linked tickets (merge/split family), numbers as facts. -->
-        <div v-if="ticket.merged_into_number || ticket.origin_ticket_number" data-testid="panel-linked">
+        <div
+            v-if="ticket.merged_into_number || ticket.origin_ticket_number"
+            data-testid="panel-linked"
+        >
             <p class="mb-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
                 {{ t.linked_label }}
             </p>

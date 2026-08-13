@@ -157,7 +157,10 @@ test('AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2
     const bodies = await page
         .locator('[data-message]')
         .allTextContents()
-        .then((all) => all.filter((t) => t.includes('offline golden')));
+        // Filter by THIS run's token — the thread accumulates prior local
+        // runs' golden messages between `make fresh`es (found the second
+        // run after a fresh: 2 old + 2 new read as 4).
+        .then((all) => all.filter((t) => t.includes(`offline golden`) && t.includes(RUN)));
     expect(bodies.length).toBe(2);
     expect(bodies[0]).toContain('first');
     expect(bodies[1]).toContain('second');
