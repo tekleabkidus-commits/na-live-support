@@ -453,6 +453,25 @@ return [
     // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
     // control + two-level pending selector on the countersigned door.
     'ticket_panel' => [
+        // B1-S04 operation dialogs (step 14).
+        'escalate_action' => 'Escalate…',
+        'spam_action' => 'Mark as spam…',
+        'escalate_title' => 'Escalate this ticket',
+        'escalate_help' => 'Escalation adds a reviewer — you keep the ticket and keep replying.',
+        'escalate_path_label' => 'Escalate to',
+        'path_supervisor' => 'Supervisor review',
+        'path_named' => 'A named person',
+        'pick_target' => 'Pick a person…',
+        'path_department_deferred' => 'Escalating to a department arrives with the department directory (Doc 11).',
+        'escalate_keeps' => 'The reason is audited with your name.',
+        'escalate_verb' => 'Escalate ticket',
+        'spam_title' => 'Mark as spam',
+        'spam_help' => 'The ticket leaves every view. It can be unmarked for 7 days; after that the decision is final.',
+        'spam_block_label' => 'Also block this customer',
+        'spam_block_consequence' => 'Blocking is a separate decision — nothing is blocked unless you tick it.',
+        'spam_verb' => 'Mark as spam',
+        'reason_label' => 'Written reason',
+        'reason_min_hint' => 'At least 10 characters — the reason is the record.',
         'empty' => 'Open a conversation to see its ticket.',
         'title' => 'Ticket',
         'status_label' => 'Status',

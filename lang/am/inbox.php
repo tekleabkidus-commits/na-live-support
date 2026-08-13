@@ -431,6 +431,25 @@ return [
     // B2-S03 (step 14): the R4 Ticket tab's property panel — B9's status
     // control + two-level pending selector on the countersigned door.
     'ticket_panel' => [
+        // B1-S04 operation dialogs (step 14).
+        'escalate_action' => 'አሳድግ…',
+        'spam_action' => 'እንደ አይፈለጌ ምልክት አድርግ…',
+        'escalate_title' => 'ይህን ትኬት ማሳደግ',
+        'escalate_help' => 'ማሳደግ ገምጋሚ ይጨምራል — ትኬቱ የእርስዎ ነው፣ መመለስም ይቀጥላሉ።',
+        'escalate_path_label' => 'ወደ',
+        'path_supervisor' => 'የተቆጣጣሪ ግምገማ',
+        'path_named' => 'የተሰየመ ሰው',
+        'pick_target' => 'ሰው ይምረጡ…',
+        'path_department_deferred' => 'ወደ ክፍል ማሳደግ ከክፍል ማውጫው ጋር ይመጣል (Doc 11)።',
+        'escalate_keeps' => 'ምክንያቱ ከስምዎ ጋር ይመዘገባል።',
+        'escalate_verb' => 'ትኬት አሳድግ',
+        'spam_title' => 'እንደ አይፈለጌ ምልክት ማድረግ',
+        'spam_help' => 'ትኬቱ ከሁሉም እይታዎች ይወጣል። ለ7 ቀናት መመለስ ይቻላል፤ ከዚያ በኋላ ውሳኔው የመጨረሻ ነው።',
+        'spam_block_label' => 'ይህን ደንበኛም አግድ',
+        'spam_block_consequence' => 'ማገድ የተለየ ውሳኔ ነው — ካልመረጡት ምንም አይታገድም።',
+        'spam_verb' => 'እንደ አይፈለጌ ምልክት አድርግ',
+        'reason_label' => 'የጽሁፍ ምክንያት',
+        'reason_min_hint' => 'ቢያንስ 10 ፊደላት — ምክንያቱ መዝገቡ ነው።',
         'empty' => 'የቲኬቱን ዝርዝር ለማየት ውይይት ይክፈቱ።',
         'title' => 'ቲኬት',
         'status_label' => 'ሁኔታ',

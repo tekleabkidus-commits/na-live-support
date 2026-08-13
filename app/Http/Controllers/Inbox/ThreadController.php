@@ -146,6 +146,12 @@ final class ThreadController extends Controller
             ->pluck('name', 'id')
             ->all();
 
+        // One count serves every merged-source card (the payload is per
+        // conversation — the moving messages ARE this conversation's).
+        $conversationMessageCount = (int) DB::table('messages')
+            ->where('conversation_id', $conversation->identifier())
+            ->where('is_internal', false)->count();
+
         // C9's boundary, the database's own arithmetic (C-11) — the client
         // renders the countdown, it never derives the window.
         $reopenDays = app(\App\Support\Settings\SettingsRepository::class)->get('tickets.reopen.days');
@@ -184,7 +190,7 @@ final class ThreadController extends Controller
                 return $data;
             })->all(),
             'prev_cursor' => $hasMore ? $oldest : null,
-            'tickets' => array_map(function (object $ticket) use ($assigneeNames, $reopenDays): array {
+            'tickets' => array_map(function (object $ticket) use ($assigneeNames, $reopenDays, $conversationMessageCount): array {
                 /** @var array<string, mixed> $row */
                 $row = (array) $ticket;
                 $row['tags'] = is_string($ticket->tags ?? null)
@@ -257,6 +263,32 @@ final class ThreadController extends Controller
                 $row['previous_ticket_number'] = is_string($ticket->previous_ticket_id ?? null)
                     ? DB::table('tickets')->where('id', $ticket->previous_ticket_id)->value('number')
                     : null;
+                // C7/D11 (step 14): the unmerge window + the linked-work
+                // list, merged in one step (the row bag is past PHPStan's
+                // literal-shape size — array_merge keeps it a plain map).
+                /** @var object{created_at: string}|null $snapshot */
+                $snapshot = is_string($ticket->merged_into ?? null)
+                    ? DB::table('ticket_merge_snapshots')
+                        ->where('source_ticket_id', $ticket->id)
+                        ->orderByDesc('created_at')->first(['created_at'])
+                    : null;
+                /** @var list<object{number: int|string, subject: string|null, status: string}> $linked */
+                $linked = DB::table('tickets')
+                    ->where('origin_ticket_id', $ticket->id)
+                    ->where('linked_work', true)
+                    ->whereIn('status', ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'])
+                    ->orderBy('created_at')->limit(3)
+                    ->get(['number', 'subject', 'status'])->all();
+                $linkedRows = [];
+                foreach ($linked as $l) {
+                    $linkedRows[] = ['number' => $l->number, 'subject' => $l->subject, 'status' => $l->status];
+                }
+                /** @var array<string, mixed> $row */
+                $row = array_merge($row, [
+                    'unmerge_until' => $snapshot !== null ? $this->boundary($snapshot->created_at, 1) : null,
+                    'merged_message_count' => is_string($ticket->merged_into ?? null) ? $conversationMessageCount : null,
+                    'linked_work' => $linkedRows,
+                ]);
                 $row['subject_was_ai'] = ($ticket->subject_source ?? null) === 'ai'
                     || DB::table('events')->where('name', 'ticket.subject_changed')
                         ->where('payload->ticket_id', $ticket->id)

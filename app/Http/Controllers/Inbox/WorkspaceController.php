@@ -145,6 +145,11 @@ final class WorkspaceController extends Controller
                 'tickets_follow' => $map->allows('tickets.follow'),
                 'tickets_merge' => $map->allows('tickets.merge'),
                 'tickets_reply' => $map->allows('tickets.reply'),
+                // Step 14 (B1-S04 operation dialogs) — derivations of the
+                // EXISTING catalog keys, catalog untouched.
+                'tickets_escalate' => $map->allows('tickets.escalate'),
+                'tickets_spam_mark' => $map->allows('tickets.spam.mark'),
+                'tickets_split' => $map->allows('tickets.split'),
             ],
             // EC-07 (step 13): the handshake's clock anchor — DB time, the
             // same source SyncReader answers with; the client renders

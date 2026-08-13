@@ -54,6 +54,8 @@ const emit = defineEmits<{
     (e: 'changed'): void;
     // D7: the lost race offers the next unassigned ticket instead.
     (e: 'claim-next'): void;
+    // B1-S04 (step 14): the operation dialogs live at the workspace root.
+    (e: 'open-operation', payload: { kind: 'escalate' | 'spam'; ticketId: string }): void;
     // D12: the merged banner opens the FINAL survivor.
     (e: 'open-survivor', conversationId: string): void;
 }>();
@@ -924,6 +926,35 @@ const initials = computed(() => {
                     {{ following ? t.following : t.follow }}
                 </button>
             </div>
+        </div>
+
+        <!-- B1-S04 (step 14): the operation entries — render-gated by the
+             viewer's own keys (BR-01/N-19), the dialogs at the root. -->
+        <div
+            v-if="(can.tickets_escalate || can.tickets_spam_mark) && ticket.status !== 'spam' && ticket.status !== 'closed'"
+            data-testid="panel-operations"
+            class="flex flex-wrap gap-2"
+        >
+            <button
+                v-if="can.tickets_escalate && ticket.status !== 'escalated'"
+                type="button"
+                data-testid="op-escalate"
+                class="min-h-[32px] rounded-md border px-2.5 text-xs"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('open-operation', { kind: 'escalate', ticketId: ticket.id })"
+            >
+                {{ t.escalate_action }}
+            </button>
+            <button
+                v-if="can.tickets_spam_mark"
+                type="button"
+                data-testid="op-spam"
+                class="min-h-[32px] rounded-md border px-2.5 text-xs"
+                :style="{ borderColor: 'var(--ds-border-strong)', color: 'var(--ds-danger-strong)' }"
+                @click="emit('open-operation', { kind: 'spam', ticketId: ticket.id })"
+            >
+                {{ t.spam_action }}
+            </button>
         </div>
 
         <!-- Linked tickets (merge/split family), numbers as facts. -->

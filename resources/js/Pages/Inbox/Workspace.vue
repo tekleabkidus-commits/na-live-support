@@ -26,6 +26,7 @@ import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
 import MergeDialog from '../../Components/Inbox/MergeDialog.vue';
+import OperationDialog from '../../Components/Inbox/OperationDialog.vue';
 import TicketPanel from '../../Components/Inbox/TicketPanel.vue';
 import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
@@ -110,6 +111,9 @@ const props = defineProps<{
         tickets_follow: boolean;
         tickets_merge: boolean;
         tickets_reply: boolean;
+        tickets_escalate: boolean;
+        tickets_spam_mark: boolean;
+        tickets_split: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
     transitions: Record<string, string[]>;
@@ -546,6 +550,15 @@ const staleAsOf = computed(() => {
 // D7: the lost race's offered next move — Unassigned, top row lit.
 // B1-S04: the merge dialog over the selection.
 const mergeOpen = ref(false);
+// B1-S04 operation dialogs (step 14): escalate / mark-as-spam.
+const operationOpen = ref(false);
+const operationKind = ref<'escalate' | 'spam'>('escalate');
+const operationTicketId = ref('');
+function openOperation(payload: { kind: 'escalate' | 'spam'; ticketId: string }): void {
+    operationKind.value = payload.kind;
+    operationTicketId.value = payload.ticketId;
+    operationOpen.value = true;
+}
 const mergeIds = ref<string[]>([]);
 function openMerge(): void {
     mergeIds.value = [...list.selectedInView];
@@ -1008,6 +1021,15 @@ function dismissCoach(): void {
             @close="mergeOpen = false"
             @merged="onMerged"
         />
+        <OperationDialog
+            :open="operationOpen"
+            :kind="operationKind"
+            :ticket-id="operationTicketId"
+            :t="t.ticket_panel"
+            :xsrf="workspaceXsrf"
+            @close="operationOpen = false"
+            @done="onPanelChanged"
+        />
         <p
             v-if="actionToast"
             data-testid="action-toast"
@@ -1289,7 +1311,8 @@ function dismissCoach(): void {
                             :transitions="transitions"
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
-                            @open-survivor="(cid) => (activeThread = cid)"
+                            @open-operation="openOperation"
+                    @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1315,7 +1338,8 @@ function dismissCoach(): void {
                             :transitions="transitions"
                             @changed="onPanelChanged"
                             @claim-next="onClaimNext"
-                            @open-survivor="(cid) => (activeThread = cid)"
+                            @open-operation="openOperation"
+                    @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
                 </ContextPanel>
@@ -1555,7 +1579,8 @@ function dismissCoach(): void {
                                     :transitions="transitions"
                                     @changed="onPanelChanged"
                                     @claim-next="onClaimNext"
-                                    @open-survivor="(cid) => (activeThread = cid)"
+                                    @open-operation="openOperation"
+                    @open-survivor="(cid) => (activeThread = cid)"
                                 />
                             </template>
                         </ContextPanel>

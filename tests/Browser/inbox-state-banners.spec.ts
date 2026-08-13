@@ -242,10 +242,7 @@ test('D13: a failed list fetch is SAID — the error strip with the cached-truth
     await expect(page.locator('[data-ticket]').first()).toBeVisible({ timeout: 10_000 });
 
     // The ERROR shape: block the list read, force a refetch, see it said.
-    await page.route(
-        /\/inbox\/list/,
-        (route) => void route.fulfill({ status: 500, body: '{}' }),
-    );
+    await page.route(/\/inbox\/list/, (route) => void route.fulfill({ status: 500, body: '{}' }));
     // claim-next already switched the view to Unassigned (D7's own
     // behavior), so the switch must go SOMEWHERE ELSE to force a fetch —
     // the rail click is the deterministic route.
@@ -260,4 +257,54 @@ test('D13: a failed list fetch is SAID — the error strip with the cached-truth
     // The recovered view is the EMPTIED My Open — the honest post-retry
     // state is the D13 empty shape, not rows.
     await expect(page.getByTestId('list-empty-my-open')).toBeVisible({ timeout: 10_000 });
+});
+
+test('B1-S04 DIALOGS: Escalate (named path demands a target, ≥10-char reason gates the verb) and Mark-as-spam (block is a separate unticked decision) drive the REAL doors from the panel — the banners confirm', async ({
+    page,
+}) => {
+    const openTicket = ticketField(4806, 'id');
+    await openThread(page);
+    await page.goto(`/inbox/t/${openTicket}`);
+    await expect(page.getByTestId('thread-scroll')).toBeVisible();
+
+    // ESCALATE — the dialog's own gates first, then the door.
+    await page.getByTestId('op-escalate').click();
+    await expect(page.getByTestId('operation-dialog')).toHaveAttribute('data-kind', 'escalate');
+    await page.getByTestId('path-named').check();
+    await page.getByTestId('operation-reason').fill('payout over limit, mismatched ref');
+    await expect(page.getByTestId('operation-confirm')).toBeDisabled(); // named needs a target
+    await page.getByTestId('path-supervisor').check();
+    await page.getByTestId('operation-reason').fill('short');
+    await expect(page.getByTestId('operation-confirm')).toBeDisabled(); // reason < 10
+    await page.getByTestId('operation-reason').fill('payout over limit, mismatched ref');
+    await expect(page.getByTestId('operation-confirm')).toBeEnabled();
+    await page.getByTestId('operation-confirm').click();
+    await expect(page.getByTestId('operation-dialog')).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByTestId('ticket-state-banner')).toContainText('Escalated');
+
+    // De-escalate through the door so spam is reachable, then SPAM.
+    await page.evaluate(async (id) => {
+        const xsrf = decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '');
+        await fetch(`/inbox/t/${id}/deescalate`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': xsrf,
+            },
+            body: JSON.stringify({ note: 'reviewed and cleared by supervisor' }),
+        });
+    }, openTicket);
+    await page.reload();
+    await page.getByTestId('op-spam').click();
+    await expect(page.getByTestId('operation-dialog')).toHaveAttribute('data-kind', 'spam');
+    // Blocking is a SEPARATE decision, unticked by default.
+    await expect(page.getByTestId('spam-block')).not.toBeChecked();
+    await page.getByTestId('operation-reason').fill('promo blast, not a customer');
+    await page.getByTestId('operation-confirm').click();
+    await expect(page.getByTestId('operation-dialog')).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByTestId('ticket-state-banner')).toContainText('Marked as spam');
+    await expect(page.getByTestId('op-spam')).toHaveCount(0); // ops hidden on spam
 });
