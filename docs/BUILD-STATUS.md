@@ -548,6 +548,82 @@ Honest-trail note for the close-out, as ruled: SS-01's arc — vacuous
 non-vacuous (sixty resolved AT the database, green in this battery) —
 "the old claim standing is the greater sin."
 
+### STEP 14 CHECKPOINT (2026-08-14) — THE BATCH CLOSED: frames units A–D, the five-item ruling, the condition-4 relay-live battery, and the CI-red root cause
+
+**The batch (cadence amendment: one batch, mandatory stops only), commit-by-commit:**
+`af6a824` merge client + EC-12 + ruled core edit #7 → `cc52cc1` R-22 fill +
+two flaky rows root-caused → `30d6439` Unit A operation doors (server) +
+the reopen-reason defect closed → `4932f24` Unit B state banners C8–C13 +
+D14/D4 → `f4b4ee4` Unit B2 D13 list states → `4e0efc8` Unit C-a
+escalate/spam dialogs → `9cee1dc` Unit C-b split + C7 unmerge + D11 + the
+latest-live law → `6747f5d` **Unit D: the bulk-execution client** (C15
+drawer + C16 typed phrase, the id-based submit/progress/stop/retry doors,
+cancel observed live per item, mint's open_windows; BulkJobDoorsTest 4/4 +
+3 sabotages red→restored; inbox-bulk.spec 2/2 on the live automation
+queue) → `3162240` **the five-item ruling discharged** (C3 struck + bounded
+fill; C9 lapsed → the FR-08 follow-up door, document wins; C9 "freely" =
+no-detour only, copy states both facts; ticket-status-writer gate REFINED
+with its falsification pair, 13/13; the disabled-reason strip superseded by
+SEC-04 — all five filed in DESIGN-DEVIATIONS below).
+
+**CONDITION 4 — the relay-live full battery (BAT1 Charging), all captures
+under `docs/evidence/S07-step14/condition4-*`:** `make fresh` exit 0 →
+240 s settle → **full Pest 1090 passed / 16,648 assertions, 11 skipped,
+exit 0** (take 2; take 1 surfaced finding 1) → views-rebuild + NFR-07
+consistency PASS → **full browser 157/158** with the 1 red re-run green
+solo 8/8 (single-sighting timing note: the shortcuts T-palette tag poll
+under battery load — a lettered risk on recurrence, per the S23
+precedent) → **canonical suites 114 passed / 788 assertions** → **gates
+13/13** → **lint exit 0**. Four findings, each repaired and re-proven:
+**(1)** NFR-03's STRUCTURAL half (StatusWriterEncapsulationTest) carried
+the same read-shaped false-positive class the ruled gate refinement fixed —
+refined identically, positive control green, its own falsification pair
+captured (plant → red → restore → green); **(2)** the bulk spec's window
+stamps raced the LIVE relay's async projector recomputes — test 2 moved to
+head rows test 1 never touches; **(3)** the merge spec's source-branch
+draft assert predated Unit B's composer-replacement law (an unsatisfiable
+state that only fired when the drafted thread was the source) — EC-12's
+survival now asserted at the draft door with the composer's absence
+asserted alongside; **(4)** the relay drill's g,u/g,m chords raced the
+refetch (the banked shortcuts lesson's shape) — the viewKey settle idiom
+applied.
+
+**THE CI RED, ROOT-CAUSED (the owed verdicts, each taken once):** every CI
+run since the relay service landed (`89c1d8a`) failed — the LAST GREEN is
+`17ac7ef` (2026-08-12 22:49), and runs 31737678816 (`6747f5d`) and
+31743103417 (`3162240`) plus the whole batch failed identically at Stage 3
+"Bring up the ephemeral stack": **`container na-live-support-relay-1 is
+unhealthy`**. The recorded first-boot race (relay boots before migrate,
+dies 42P01, `unless-stopped` recovers it locally) is FATAL under CI's
+`up --wait`, which treats a restarting container as failed bring-up.
+Fixed at the command level: RelayOutbox now treats 42P01/08xxx as an
+EMPTY PASS (stay alive, warn once, sleep, retry — the process-liveness
+health stays green while the schema arrives); every other failure still
+crashes loudly where FS-01 can see it. SQLSTATE shape proven in-container;
+liveness probe green post-change (0.82 s). The definitive proof is this
+filing push's CI run — owed forward, taken once.
+
+**HONEST-TRAIL (filed by the ruling's condition iii and this checkpoint's
+own findings):** (a) `make gates` was not re-run per unit commit under the
+batch cadence — the ticket-status-writer red entered at units A/C and ran
+undetected until Unit D; gates run per remaining commit from here.
+(b) The CI verdicts were owed forward all batch — the relay-unhealthy red
+ran 20+ pushes undetected for the same reason. (c) The traceability
+AC-04/05/06 flips were owed from step 11 — flipped in this checkpoint's
+registry edit with the real built paths (the plan's guessed filenames never
+existed).
+
+**R-14 QUEUE:** 50 new machine-authored Amharic keys this batch (the bulk
+block + banner additions). Destructive-tier flagged for native review:
+the C16 confirm phrases (`ዝጋ/መድብ/መለያ/ቅድሚያ :count`), stop/stopping, the
+cancelled-reason line.
+
+**OPERATIONAL NOTE (new standing knowledge):** redis-volatile ZSET loss on
+every stack restart is by design — `inbox:views-rebuild` +
+`inbox:consistency-check` is the FS-02 heal and MUST run after any
+restart before browser suites; the resume regression red-then-green proved
+it end-to-end this session.
+
 ### STEP 14 OPENED (advisor release of 2026-08-13) — first row landed
 
 **implicitClaimOnReply (ruling (c)):** `ComposerController::reply` now
@@ -665,11 +741,15 @@ journey's EC-12 assertion, step 14):**
   the existing `DraftStore::for`, composer hydration only into an EMPTY
   composer with FS-05's preserved text outranking the stored row.
 
-### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — S07 step 14, the R-22 fill)
+### DESIGN-DEVIATIONS (DESIGN-FIDELITY-MANDATE §3 — S07 step 14, the R-22 fill + the five-item-ruling rows)
 
 | File / frame | What differs | Class | Why |
 |---|---|---|---|
 | **Tag manager** (`Admin/Tags/TagManager`) | Required functionality **no frame draws** — the recorded design gap (`B2-S06-closing-audit-v2`: "Tags — per-tenant autocomplete; no rename or merge designed"). Built from existing design-system patterns ONLY: the B6-S11 shell + per-key settings-row contract (B6-X01 J03–J08 — label/description left, typed control right, J08 consequence stated BEFORE save, J06-flavored result strip carrying T-07's count), the B5-addendum confirmation weights (the verb on the primary — never OK/Confirm; the irreversible MERGE takes the typed phrase and the red primary; 44px targets, confirm on the end side), the J19 viewport read-only law, B2-S06's inline refusal; tokens only, logical properties throughout | **2 (gap fill)** | **Owner ruling R-22 RESOLVED** (2026-08-10) ordered exactly this: "implementation-side class-2 fill using existing design-system components (settings-row + confirmation patterns); no design-track reopen. Built and frame-mapped when Doc 07 reaches it" — reached at step 14 |
+| **C3 / the mid-action revocation affordance** (no file — the frame does not exist) | The step plan referenced a C3 frame; **no C3 frame exists in the frozen record** (verified 2026-08-13: `B2-S04-state-affordances-v2` holds C1, C5, C7–C13, C15, C16, C18, C19; no "granter"/"mid-action"/"reconcil" text in v1, v2, or B2-S05). The stale reference is STRUCK (advisor ruling, stop item 1). The underlying Doc 03 EC-02 obligation is delivered **at the level the existing refusal payload supports**: mid-action refusals render the 403 `detail` naming the missing permission inline (the D2 strip idiom, `rbac.denied`), and D4's scope-lost posture covers mid-view loss. The GRANTER-NAMING half is a **bounded deferral**: the refusal payload carries `permission` only, and naming the granter would widen `RequirePermission`'s 403 — a Doc 03 door (the ruling's stop-there branch). Unblocker: a Doc 03-owned payload extension, if ever ordered | **2 (gap fill, bounded)** | Advisor ruling 2026-08-13 stop item 1: strike the stale reference AND deliver the fill bounded by the existing payload; file either way |
+| **C9 lapsed** (`Thread/TicketStateBanner` + `TicketOperationsController::followUp`) | The frozen lapsed-window frame draws **"Reopen with a reason"**; the FR-04/FR-08 machinery **refuses reopen after the window** (`ReopenTicket::reopenByStaff`, window check), and the frozen file's own other sentence agrees with the document ("When the window had lapsed the platform opens a new ticket and links it"). The DOCUMENT wins: the lapsed affordance is now **"Open a new linked ticket"** → `POST /inbox/t/{id}/follow-up`, thin over Doc 06's `CreateTicket` with `previousTicketId` (C13 renders the link; FR-10's claim is the one-open verdict; `ticket.created` audited by the service). The frozen lapsed copy is superseded — an internal design staleness | **1 (document conflict)** | Advisor ruling 2026-08-13 stop item 2; citations: Doc 06 FR-08/§4.2 vs frozen `B2-S04-…-v2` C9 lapsed frame; proof `TicketOperationDoorsTest` 7/7 (the follow-up clause) |
+| **C9 within-window copy** (`inbox.banner.reopen_window_in`, en+am) | The frozen frame reads **"Reopens freely for 5 d 6 h"**; the FR-04 matrix demands a non-empty written reason on every closed→open edge (the `30d6439` reopen-reason defect fix). Ruled: "freely" means **no-detour only**. The copy now states both facts: "Reopens directly for :remaining — a written reason is still required." | **1 (document conflict)** | Advisor ruling 2026-08-13 stop item 3; the matrix governs, the defect fix stands |
+| **B1-S02 bulk-bar disabled-reason strip** (`List/BulkBar` — deliberately not built) | The frozen bar draws a per-item pre-execution advisory ("Close is off: you don't hold tickets.close on 1 of the 3 — #4788, in Finance"). **SEC-04's at-execution law supersedes it**: per-item verdicts are asked live at execution, and a preview door would be a second authorization surface. The drawn promise is kept honestly at execution by C15's per-row NAMED failures. Delivered form: holder-gated action buttons (BR-01) + the drawer's failure rows. **Recorded note (ruling): a dry-run door reusing the SAME live-check path is owner-orderable polish for a later document — never a second implementation** | **1 (document conflict)** | Advisor ruling 2026-08-13 stop item 5; citations: Doc 06 SEC-04 vs frozen `B1-S02-inbox-states-v2` bulk-bar frame |
 
 The surface drives Doc 06's T-07 engine UNTOUCHED (chunked, resumable,
 audited with counts); the door makes the engine's audit-free same-tag

@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Support\Events\OutboxRelay;
 use Illuminate\Console\Command;
+use Illuminate\Database\QueryException;
 
 /**
  * The outbox relay worker (Doc 01 T-03, FS-02; §12's lag budget).
@@ -28,6 +29,20 @@ use Illuminate\Console\Command;
  * short sleep between empty passes. The sleep is only on EMPTY passes — after a productive
  * batch it immediately tries again, so a backlog drains at full speed rather than at one
  * batch per tick.
+ *
+ * PRE-SCHEMA RESILIENCE (S07 step 14, found by the condition-4 CI verdicts):
+ * on a fresh stack the relay boots BEFORE migrations exist and its first
+ * query died on the missing outbox table (42P01) — locally the compose
+ * `unless-stopped` policy papered over the crash loop, but CI's
+ * `up --wait` treats a restarting container as a failed bring-up, and
+ * EVERY run since the service landed (89c1d8a) failed there: the last
+ * green run predates the relay. The loop now treats "the world is not
+ * ready" (undefined table 42P01, or a refused/failed connection 08xxx) as
+ * an EMPTY PASS — stay alive, sleep, retry — so the process-liveness
+ * health stays green while the schema arrives, in CI and on first local
+ * boot alike. Every OTHER failure still crashes loudly: a genuinely broken
+ * relay must die where FS-01 can see it, and the restart policy remains
+ * the second layer, not the first.
  */
 final class RelayOutbox extends Command
 {
@@ -44,8 +59,26 @@ final class RelayOutbox extends Command
         $sleep = (int) $this->option('sleep');
         $once = (bool) $this->option('once');
 
+        $waitingAnnounced = false;
+
         do {
-            $relayed = $relay->relayBatch($batch);
+            try {
+                $relayed = $relay->relayBatch($batch);
+            } catch (QueryException $e) {
+                $state = $e->getCode();
+                $notReadyYet = $state === '42P01' || str_starts_with((string) $state, '08');
+                if (! $notReadyYet || $once) {
+                    throw $e;
+                }
+                if (! $waitingAnnounced) {
+                    $this->warn('outbox schema/connection not ready yet — waiting (42P01/08xxx treated as an empty pass)');
+                    $waitingAnnounced = true;
+                }
+                sleep(max(1, $sleep));
+
+                continue;
+            }
+            $waitingAnnounced = false;
 
             if ($relayed > 0) {
                 $this->info(sprintf('relayed %d event(s)', $relayed));

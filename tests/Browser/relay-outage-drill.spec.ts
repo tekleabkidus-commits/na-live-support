@@ -102,10 +102,22 @@ test('FS-01 v REAL RELAY: kill the service → truth moves, the list freezes cor
     // THE FREEZE: the Yonas row stays in My Open — a full refetch (view
     // switch there and back) still serves the FROZEN projection, because
     // the projector never saw the event. Correct-as-of, not fabricated.
+    //
+    // Each chord SETTLES on the store's viewKey (SERVER-truth — it only
+    // flips when the fetch lands) before the next fires: back-to-back
+    // g,u/g,m raced the unassigned refetch and the second chord was
+    // swallowed — the step-14 battery caught it (the shortcuts spec's own
+    // banked lesson, applied here). Assertions are unchanged.
     await page.keyboard.press('g');
     await page.keyboard.press('u');
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+        .toBe('unassigned');
     await page.keyboard.press('g');
     await page.keyboard.press('m');
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+        .toBe('my_open');
     const yonasRow = page.locator('[data-ticket]', { hasText: 'Yonas Tesfaye' });
     await expect(yonasRow).toBeVisible();
     await page.waitForTimeout(8_000); // the world keeps not-changing

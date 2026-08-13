@@ -1,0 +1,47 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor (3.4s)
+ Container na-live-support-relay-1 Stopping 
+ Container na-live-support-relay-1 Stopped 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-relay-1 Starting 
+ Container na-live-support-relay-1 Started 
+  ✘  2 [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes (18.5s)
+
+
+  1) [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' })
+
+
+      110 |     await expect(yonasRow).toBeVisible();
+      111 |     await page.waitForTimeout(8_000); // the world keeps not-changing
+    > 112 |     await expect(yonasRow).toBeVisible();
+          |                            ^
+      113 |
+      114 |     // THE BANNER: staleness crosses 30 s with pending work; the next
+      115 |     // heartbeat (30 s cadence) carries it up. Budget: threshold + cadence.
+        at /home/kidus/projects/na-live-support/tests/Browser/relay-outage-drill.spec.ts:112:28
+
+    Error Context: test-results/relay-outage-drill-FS-01-v-a277f-t-converges-the-banner-goes-chromium/error-context.md
+
+    Error Context: test-results/relay-outage-drill-FS-01-v-a277f-t-converges-the-banner-goes-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes 
+  1 passed (36.9s)

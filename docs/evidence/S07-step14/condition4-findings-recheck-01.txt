@@ -1,0 +1,57 @@
+
+Running 4 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-bulk.spec.ts:221:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees (6.4s)
+  ✓  2 [chromium] › tests/Browser/inbox-bulk.spec.ts:255:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet (8.2s)
+  ✓  3 [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor (4.3s)
+ Container na-live-support-relay-1 Stopping 
+ Container na-live-support-relay-1 Stopped 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-relay-1 Starting 
+ Container na-live-support-relay-1 Started 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+  ✓  4 [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes (1.5m)
+
+
+  1) [chromium] › tests/Browser/inbox-bulk.spec.ts:221:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByTestId('bulk-count')
+    Expected: "3 selected"
+    Received: "5 selected"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for getByTestId('bulk-count')
+        14 × locator resolved to <span data-testid="bulk-count" class="text-xs font-semibold">5 selected</span>
+           - unexpected value "5 selected"
+
+
+      227 |         await selectRow(page, row.id);
+      228 |     }
+    > 229 |     await expect(page.getByTestId('bulk-count')).toHaveText('3 selected');
+          |                                                  ^
+      230 |
+      231 |     await page.getByTestId('bulk-priority').click();
+      232 |     await expect(page.getByTestId('action-palette')).toHaveAttribute('data-kind', 'priority');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bulk.spec.ts:229:50
+
+    Error Context: test-results/inbox-bulk-C15-all-ok-the--343c4-ces-and-the-database-agrees-chromium/error-context.md
+
+    Error Context: test-results/inbox-bulk-C15-all-ok-the--343c4-ces-and-the-database-agrees-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-bulk.spec.ts:221:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees 
+  3 passed (2.4m)

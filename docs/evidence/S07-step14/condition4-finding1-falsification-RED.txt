@@ -1,0 +1,31 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m4.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\StatusWriterEncapsulationTest[22m [90m>[39m it has exac…   
+[39;1m  SEV-1: ticket status is written in 2 place(s): app/Domain/Tickets/Storage/TicketRepository.php, app/Http/Controllers/Inbox/BulkJobsController.php
+Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, and leaves a ticket that looks entirely normal afterwards.
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => 'app/Domain/Tickets/Storage/TicketRepository.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Http/Controllers/Inbox/BulkJobsController.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39m:[32m116[39m
+    112▕ 
+    113▕ it('has exactly one file in app/ that writes a ticket status (NFR-03 encapsulation)', function () {
+    114▕     $writers = array_values(array_filter(applicationPhpFiles(), writesTicketStatus(...)));
+    115▕ 
+  ➜ 116▕     expect($writers)->toBe(['app/Domain/Tickets/Storage/TicketRepository.php'], sprintf(
+    117▕         "SEV-1: ticket status is written in %d place(s): %s\n".
+    118▕         'Doc 06 T-01/NFR-03 allow exactly one — TicketTransitionService through TicketRepository. '
+    119▕         .'A status set anywhere else skips the FR-24 timestamps, the outbox event and the FR-10 invariant, '
+    120▕         .'and leaves a ticket that looks entirely normal afterwards.',
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/StatusWriterEncapsulationTest.php[39;22m:[39;1m116[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m4.14s[39m
+

@@ -69,12 +69,33 @@ function applicationCodeWithoutComments(string $path): string
  * check that cannot see the thing it guards condemns the check, so the check was
  * strengthened rather than the finding explained away. `assertsTheKnownWriter` below is
  * the positive control that keeps it honest from here on.
+ *
+ * REFINED with the gate (S07 step 14, advisor-ruled 2026-08-13 stop item 4;
+ * this half's failure surfaced in the condition-4 battery and is filed as a
+ * finding): a RESPONSE PAYLOAD that projects the current status into JSON
+ * (`'status' => $ticket->getAttribute('status')`) is assignment-shaped but
+ * reads — it cannot change the column. Assignment lines whose VALUE side is
+ * itself a status read (getAttribute('status') / ->status property or method /
+ * ->value('status')) no longer count; a literal, variable, or computed value
+ * still does. The positive control keeps the refinement honest: the sanctioned
+ * writer's `'status' => $to->value` is NOT read-shaped and must stay detected —
+ * an over-exclusion turns the control red, exactly as an under-detection would.
  */
 function writesTicketStatus(string $path): bool
 {
     $code = applicationCodeWithoutComments($path);
 
-    $assigns = preg_match('/([\'"]status[\'"]\s*=>|->status\s*=[^=>])/', $code) === 1;
+    $assignLines = preg_grep(
+        '/([\'"]status[\'"]\s*=>|->status\s*=[^=>])/',
+        explode("\n", $code),
+    ) ?: [];
+    $writeLines = preg_grep(
+        '/[\'"]status[\'"]\s*=>\s*[^,]*(->getAttribute\([\'"]status[\'"]\)|->status\b|->value\([\'"]status[\'"]\))/',
+        $assignLines,
+        PREG_GREP_INVERT,
+    ) ?: [];
+
+    $assigns = $writeLines !== [];
     $ticketContext = preg_match('/(Ticket::|table\([\'"]tickets[\'"]\)|UPDATE\s+tickets\s)/i', $code) === 1;
 
     return $assigns && $ticketContext;

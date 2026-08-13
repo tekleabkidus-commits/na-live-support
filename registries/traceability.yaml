@@ -1683,27 +1683,42 @@ entries:
       My Open fallback. Sabotage #6 (batcher bypassed) turns exactly the batch-dependent proofs red. The physical Reverb feed wires into the
       same applyDelta at its step; visual-state assertions are functional + a11y, NO pixel baselines (inherited row 12).
   - ac_ref: "Doc07 AC-04"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Inbox/ComposerEndpointTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Composer: all Doc 05/04 channel states per contract; send-and-set-status success + partial-failure. Lands at approved-plan step 11 as
-      tests/Feature/Inbox/ComposerStateResolverTest.php + SendAndSetStatusTest.php + tests/Browser/inbox-composer-states.spec.ts; this row flips to automated in that step's commit.
+      EXECUTED at S07 steps 11+14 (row flipped at the step-14 checkpoint — the
+      flip was owed from step 11 under the batch cadence; honest-trail filed).
+      The BUILT names differ from the plan's guesses: ComposerEndpointTest.php
+      (channel-state contract render + FR-21 send-and-set-status success AND
+      partial-failure — reply STAYS SENT on a refused edge, one-tap retry
+      through its own audited door, proven against the REAL frozen matrix) +
+      tests/Browser/inbox-composer.spec.ts (states + split button end-to-end) +
+      tests/Browser/inbox-state-banners.spec.ts (step 14: composer REPLACED on
+      closed/spam, 'unreachable' state — reply off, note escapes). Functional +
+      a11y only, no pixel baselines (inherited row 12).
   - ac_ref: "Doc07 AC-05"
-    suite_path: manual
-    type: manual
-    tier: integration
+    suite_path: tests/Browser/inbox-composer.spec.ts
+    type: automated
+    tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Mode-safety heuristic x50 + zero note payloads reach adapters (Doc 04 AC-04 integration). Lands at approved-plan step 11 as
-      tests/Feature/Inbox/ModeSafetyHeuristicTest.php + tests/Browser/inbox-composer-modes.spec.ts; this row flips to automated in that step's commit.
+      EXECUTED at S07 step 11 (row flipped at the step-14 checkpoint — owed
+      from step 11; honest-trail filed). The 50-sequence heuristic runs as
+      drawn: fifty scripted reply-intent flips into note mode, EACH asserting
+      the computed surface-color delta, dashed border, banner, and the send
+      label flipping to "Add note" (inbox-composer.spec.ts). The zero-note-
+      payloads half is STRUCTURAL: separate routes to separate services, the
+      note door ends at NotesWriter (N-04), ComposeOutbound refuses kind=note
+      in its own body — proven at the OUTBOX (zero outbound events for a
+      note; sabotage #14 red->restored), the Doc 04 AC-04 integration re-proof.
   - ac_ref: "Doc07 AC-06"
     suite_path: manual
     type: manual
@@ -1711,10 +1726,16 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: covered
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Collision: dual-session strip, send-race confirm, exactly one visible outcome ordering. Lands at approved-plan step 11 as
-      tests/Browser/inbox-collision.spec.ts; this row flips to automated in that step's commit.
+      EXECUTED at S07 step 11 (row flipped at the step-14 checkpoint — owed
+      from step 11; honest-trail filed). Built as
+      tests/Browser/inbox-composer.spec.ts (not the plan's guessed filename):
+      the FR-16 collision strip renders on a colleague-typing signal with the
+      colleague's draft NEVER shown, and a colleague reply raises the
+      NON-BLOCKING send-race confirm whose "send anyway" sends — sabotage #8's
+      target, exactly one visible outcome ordering through the scripted hook
+      (the same entry the realtime feed drives).
   - ac_ref: "Doc07 AC-07"
     suite_path: tests/Browser/inbox-offline.spec.ts
     type: automated

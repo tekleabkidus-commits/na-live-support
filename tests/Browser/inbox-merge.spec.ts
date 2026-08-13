@@ -147,7 +147,22 @@ test('THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the 
     await expect(page.getByTestId('merged-banner')).toBeVisible();
     await expect(page.getByTestId('merged-banner')).toContainText(`#${survivorNumber}`);
     if (openedNumber === `#${sourceNumber}`) {
-        await expect(page.getByTestId('composer-input')).toHaveValue(draftText);
+        // The source is CLOSED (merged): the banner replaces the composer —
+        // C9's law (4932f24), which POSTDATES this branch's first draft
+        // assert; the condition-4 battery hit the contradiction (filed as a
+        // finding). EC-12's survival is the DRAFT ROW, read through the same
+        // door the composer hydrates from — drafts key by CONVERSATION,
+        // which persists (the structural point of EC-12).
+        await expect(page.getByTestId('composer-input')).toHaveCount(0);
+        const sourceConversation = ticketField(sourceNumber, 'conversation_id').replaceAll('"', '');
+        const surviving = await page.evaluate(async (conversation) => {
+            const response = await fetch(`/inbox/thread/${conversation}/draft`, {
+                headers: { Accept: 'application/json' },
+            });
+            if (!response.ok) return null;
+            return ((await response.json()) as { body?: string | null }).body ?? null;
+        }, sourceConversation);
+        expect(surviving).toBe(draftText);
     }
 
     // D12's affordance: the banner opens the FINAL survivor in place.

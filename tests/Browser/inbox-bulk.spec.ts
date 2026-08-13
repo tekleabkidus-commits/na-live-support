@@ -113,14 +113,17 @@ for ($i = 0; $i < 55; $i++) {
     $proj->recomputeTicket($ticketId);
     $made[] = ["id" => $ticketId, "number" => $base + $i];
 }
-// The queue's OWN head — the ascending unassigned definition's first three
-// (SystemViews' exact membership), which page 1 renders at rank 1–3. The
-// second and third get open reply windows for the consequence line.
+// The queue's OWN head — the ascending unassigned definition's first FIVE
+// (SystemViews' exact membership), page-1 ranks 1–5. Test 1 acts on rows
+// 0–2; test 2 acts on rows 3–4 ONLY: with the relay LIVE, test 1's
+// priority events reach the projector ASYNCHRONOUSLY and their recomputes
+// wipe fixture window stamps on the same rows — the condition-4 battery
+// caught the race (filed as a finding). Disjoint rows remove it.
 $head = DB::table("tickets as t")
     ->whereNull("t.assignee_id")
     ->whereIn("t.status", ["new", "open", "pending_customer", "pending_internal", "escalated"])
     ->orderBy("t.created_at")
-    ->limit(3)
+    ->limit(5)
     ->get(["t.id", "t.number"])
     ->all();
 // Reset the heads to normal priority so the bulk change CHANGES on every
@@ -220,7 +223,7 @@ test('C15 all-ok: the bar\'s Priority arms the HOUSE palette for the whole selec
 }) => {
     await openUnassigned(page);
 
-    for (const row of top) {
+    for (const row of top.slice(0, 3)) {
         await selectRow(page, row.id);
     }
     await expect(page.getByTestId('bulk-count')).toHaveText('3 selected');
@@ -242,7 +245,7 @@ test('C15 all-ok: the bar\'s Priority arms the HOUSE palette for the whole selec
     // §13/AC-09: the live region spoke — not a silent bar.
     await expect(page.getByTestId('bulk-progress-announcer')).toContainText('3 of 3 done');
 
-    for (const row of top) {
+    for (const row of top.slice(0, 3)) {
         expect(ticketColumn(row.id, 'priority')).toBe('high');
     }
     await page.getByTestId('bulk-progress-close').click();
@@ -254,12 +257,12 @@ test('C15 failures + retry, then C16 over the 50 line: close refuses per item wi
 }) => {
     // The wide execute runs the whole queue through the automation family.
     test.setTimeout(300_000);
-    stampOpenWindows([headRow(1).id, headRow(2).id]);
+    stampOpenWindows([headRow(3).id, headRow(4).id]);
     await openUnassigned(page);
 
-    // The window pair (server stamps set at seed) — the consequence line's rows.
-    await selectRow(page, headRow(1).id);
-    await selectRow(page, headRow(2).id);
+    // The window pair (rows test 1 never touched — see the seed note).
+    await selectRow(page, headRow(3).id);
+    await selectRow(page, headRow(4).id);
     await expect(page.getByTestId('bulk-count')).toHaveText('2 selected');
 
     await page.getByTestId('bulk-close').click();
@@ -281,8 +284,8 @@ test('C15 failures + retry, then C16 over the 50 line: close refuses per item wi
         timeout: 30_000,
     });
     const failures = page.getByTestId('bulk-progress-failures');
-    await expect(failures).toContainText(`#${headRow(1).number}`);
-    await expect(failures).toContainText(`#${headRow(2).number}`);
+    await expect(failures).toContainText(`#${headRow(3).number}`);
+    await expect(failures).toContainText(`#${headRow(4).number}`);
     // The reason is a NAMED sentence, never the raw stable code (N-03/§14).
     await expect(failures).not.toContainText('illegal_transition');
 
@@ -291,7 +294,7 @@ test('C15 failures + retry, then C16 over the 50 line: close refuses per item wi
     await expect(page.getByTestId('bulk-progress-done')).toHaveText('2 of 2 done', {
         timeout: 30_000,
     });
-    await expect(failures).toContainText(`#${headRow(1).number}`);
+    await expect(failures).toContainText(`#${headRow(3).number}`);
 
     // 375: the same drawer renders as the bottom sheet (drawn variant).
     await page.setViewportSize({ width: 375, height: 812 });
