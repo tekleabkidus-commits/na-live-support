@@ -517,6 +517,56 @@ consolidated battery of record runs at the next resume ON WALL POWER —
 step 13's full acceptance stays conditional on that green, per the
 standing ruling.**
 
+### THE BATTERY OF RECORD — GREEN END TO END (2026-08-13, wall power verified before start)
+
+**CI first (the clean-runner verdict, taken once):** run
+[31648450302](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31648450302)
+on the fix tree `3c00435` — **ALL STAGES GREEN; Stage 4 browser 11m40s**
+(the previous full Stage 4 ran 5h22m red — the seeder bound + the guards
++ D1/D2 are what changed). The docs push's run 31648525771 equally green.
+
+**Then the local consolidated battery, one sequence from `make fresh`,
+on the committed tree (the step-13 tree + the step-14 implicit-claim
+row), captured as `consolidated-*` (-06/-07/-04/-04/-03/-03/-03):**
+`make fresh` EXIT 0 → `make test` **1069 passed / 0 failed (15,346
+assertions; 11 skipped, the standing environment-gated set)** →
+`npx playwright test` **141/141 GREEN in 9.2 minutes** — the first fully
+green browser suite in ANY environment, fresh-DB, no carried state →
+canonical suites **98 passed (653 assertions)** → `make gates` all PASS
+→ container PHPStan max **no errors** → container Pint **758 files
+PASS**. The wall-power diagnosis held: the same perf ceilings that
+tripped three battery-powered attempts passed with margin. (One earlier
+sequence on this day red-stopped at canonical because the step-14
+implicit-claim test's FIRST DRAFT leaked into the running battery via
+the bind mount — my sequencing error, filed as such; the test was fixed
+and the entire sequence re-ran green on the committed tree.)
+
+**Step 13's conditional acceptance predicate is now TRUE in the
+evidence: the green battery exists, captured, on a committed tree.**
+Honest-trail note for the close-out, as ruled: SS-01's arc — vacuous
+(row-left-view) → exposed (sixty claimed-unresolved at the database) →
+non-vacuous (sixty resolved AT the database, green in this battery) —
+"the old claim standing is the greater sin."
+
+### STEP 14 OPENED (advisor release of 2026-08-13) — first row landed
+
+**implicitClaimOnReply (ruling (c)):** `ComposerController::reply` now
+rides `AssignTicket::implicitClaimOnReply` — first staff public reply IS
+a claim (Doc 06 FR-05/BR-03), `tickets.implicit_claim` honored, the
+claim's event+audit on the owning service's write, refusals leave the
+reply standing, `implicit_claim` visible in the payload (BR-01).
+End-to-end proof (ComposerEndpointTest, in the green battery's canonical
+98): claims-on-first-reply at the DB + outbox; inert on a held ticket;
+inert without `tickets.assign_self`; off with the toggle. REMAINING
+step-14 scope (in progress): B2-S03 properties panel through the Doc 06
+doors, B1-S04 merge surfaces + the merge-preview READ, the R-22
+class-2 tag rename/merge fill on T-07, B2-S04/B2-S05 state/race frames,
+SEC-05 export mounts, audit entries. **A record correction for the
+step-14 release note: no commit `41f1c2c` exists in this repository —
+the acceptance's cited SHA does not match the tree; the actual
+progression is `3c00435` → `17ac7ef` → the step-14 commits. Flagged so
+the acceptance record cites real objects.**
+
 ## SESSION-07 (Doc 07) — STEP 12: VIEWS/SEARCH/NOTIFY UI + STATUS (FR-04/08, FR-23…28, SEC-04, FS-04) — TWO COMMITS (`584085b` server + the client commit), RESUMED ACROSS A WSL CRASH
 
 **THE CRASH AND THE §5 RESUME (2026-08-11).** A WSL-layer crash forced
