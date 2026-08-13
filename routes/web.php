@@ -160,6 +160,10 @@ Route::middleware([
         ->middleware(['permission:tickets.tags.manage', 'audit:ticket.untagged'])->name('inbox.ticket.tags.remove');
     Route::post('t/{ticketId}/subject', [App\Http\Controllers\Inbox\TicketActionsController::class, 'subject'])
         ->middleware(['permission:tickets.edit', 'audit:ticket.subject_changed'])->name('inbox.ticket.subject');
+    Route::get('merge/preview', [App\Http\Controllers\Inbox\MergeController::class, 'preview'])
+        ->middleware('permission:tickets.merge')->name('inbox.merge.preview');
+    Route::post('merge', [App\Http\Controllers\Inbox\MergeController::class, 'merge'])
+        ->middleware(['permission:tickets.merge', 'audit:ticket.merged'])->name('inbox.merge');
     Route::get('t/{ticketId}/followers', [App\Http\Controllers\Inbox\TicketActionsController::class, 'followers'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.followers');
     Route::post('t/{ticketId}/follow', [App\Http\Controllers\Inbox\TicketActionsController::class, 'follow'])
