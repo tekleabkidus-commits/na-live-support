@@ -96,9 +96,13 @@ const composerState = computed((): string => {
 const canType = computed(
     () =>
         mode.value === 'note' ||
-        !['expired', 'connection_paused', 'blocked_by_user', 'conversation_blocked', 'unreachable'].includes(
-            composerState.value,
-        ),
+        ![
+            'expired',
+            'connection_paused',
+            'blocked_by_user',
+            'conversation_blocked',
+            'unreachable',
+        ].includes(composerState.value),
 );
 
 // ── FR-18: live caps + downgrade hint ──────────────────────────────────────

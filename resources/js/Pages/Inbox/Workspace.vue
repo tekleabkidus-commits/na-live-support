@@ -1157,6 +1157,8 @@ function dismissCoach(): void {
                 <ListPane
                     :merge-allowed="can.tickets_merge"
                     :view="activeView"
+                    :unassigned-count="views.find((v) => v.key === 'unassigned')?.count ?? null"
+                    @claim-next="onClaimNext"
                     :mobile="false"
                     :user-id="userId"
                     :can="{
@@ -1357,6 +1359,10 @@ function dismissCoach(): void {
                     <ListPane
                         :merge-allowed="can.tickets_merge"
                         :view="activeView"
+                        :unassigned-count="
+                            views.find((v) => v.key === 'unassigned')?.count ?? null
+                        "
+                        @claim-next="onClaimNext"
                         :mobile="true"
                         :user-id="userId"
                         :can="{

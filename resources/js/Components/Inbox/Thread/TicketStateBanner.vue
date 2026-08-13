@@ -67,7 +67,11 @@ function remaining(until: string | null | undefined): string | null {
     const ms = new Date(until).getTime() - now.value;
     if (ms <= 0) return null;
     const hours = Math.floor(ms / 3_600_000);
-    if (hours >= 48) return label('remaining_days', { days: String(Math.floor(hours / 24)), hours: String(hours % 24) });
+    if (hours >= 48)
+        return label('remaining_days', {
+            days: String(Math.floor(hours / 24)),
+            hours: String(hours % 24),
+        });
     if (hours >= 1) return label('remaining_hours', { hours: String(hours) });
     return label('remaining_minutes', { minutes: String(Math.max(1, Math.floor(ms / 60_000))) });
 }
@@ -100,41 +104,91 @@ function timeShort(iso: string | null | undefined): string {
 </script>
 
 <template>
-    <div data-testid="ticket-state-banner" class="border-t px-4 py-2.5 text-xs" :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)' }">
+    <div
+        data-testid="ticket-state-banner"
+        class="border-t px-4 py-2.5 text-xs"
+        :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)' }"
+    >
         <!-- C13 — the reopened marker rides ABOVE the status shape. -->
-        <p v-if="(ticket.reopened_count ?? 0) > 0 && ticket.status === 'open'" data-testid="reopened-marker" class="mb-1.5">
+        <p
+            v-if="(ticket.reopened_count ?? 0) > 0 && ticket.status === 'open'"
+            data-testid="reopened-marker"
+            class="mb-1.5"
+        >
             <span aria-hidden="true">↺</span>
             {{ label('reopened_times', { count: String(ticket.reopened_count) }) }}
-            <span v-if="ticket.previous_ticket_number != null" :style="{ color: 'var(--ds-text-muted)' }">
+            <span
+                v-if="ticket.previous_ticket_number != null"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
                 · {{ label('reopened_earlier', { number: String(ticket.previous_ticket_number) }) }}
             </span>
         </p>
 
         <!-- C8 — resolved, auto-close running. -->
         <template v-if="ticket.status === 'resolved'">
-            <p class="font-semibold" :style="{ color: 'var(--ds-ok-strong, var(--ds-text-primary))' }">
+            <p
+                class="font-semibold"
+                :style="{ color: 'var(--ds-ok-strong, var(--ds-text-primary))' }"
+            >
                 <span aria-hidden="true">✓</span>
-                {{ ticket.assignee_name ? label('resolved_by', { name: ticket.assignee_name }) : label('resolved_title') }}
+                {{
+                    ticket.assignee_name
+                        ? label('resolved_by', { name: ticket.assignee_name })
+                        : label('resolved_title')
+                }}
             </p>
-            <p v-if="autoCloseIn" data-testid="auto-close-countdown" class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
+            <p
+                v-if="autoCloseIn"
+                data-testid="auto-close-countdown"
+                class="mt-0.5"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
                 {{ label('auto_close_in', { remaining: autoCloseIn }) }}
             </p>
-            <button type="button" data-testid="reopen-now" class="mt-1.5 min-h-[32px] rounded-md border px-3 font-medium" :style="{ borderColor: 'var(--ds-border-strong)' }" @click="emit('reopen-now')">
+            <button
+                type="button"
+                data-testid="reopen-now"
+                class="mt-1.5 min-h-[32px] rounded-md border px-3 font-medium"
+                :style="{ borderColor: 'var(--ds-border-strong)' }"
+                @click="emit('reopen-now')"
+            >
                 {{ t.reopen_now }}
             </button>
         </template>
 
         <!-- C9 — closed; the banner replaces the composer. -->
         <template v-else-if="ticket.status === 'closed'">
-            <p class="font-semibold"><span aria-hidden="true">⊝</span> {{ label('closed_at_time', { time: timeShort(ticket.closed_at) }) }}</p>
-            <p v-if="reopenWindowIn" data-testid="reopen-window-open" class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
-                <span aria-hidden="true">⏱</span> {{ label('reopen_window_in', { remaining: reopenWindowIn }) }}
+            <p class="font-semibold">
+                <span aria-hidden="true">⊝</span>
+                {{ label('closed_at_time', { time: timeShort(ticket.closed_at) }) }}
             </p>
-            <p v-else data-testid="reopen-window-lapsed" class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
+            <p
+                v-if="reopenWindowIn"
+                data-testid="reopen-window-open"
+                class="mt-0.5"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
+                <span aria-hidden="true">⏱</span>
+                {{ label('reopen_window_in', { remaining: reopenWindowIn }) }}
+            </p>
+            <p
+                v-else
+                data-testid="reopen-window-lapsed"
+                class="mt-0.5"
+                :style="{ color: 'var(--ds-text-muted)' }"
+            >
                 {{ t.reopen_window_passed }}
             </p>
             <div v-if="reasonOpen !== 'reopen'" class="mt-1.5">
-                <button v-if="reopenWindowIn" type="button" data-testid="reopen-closed" class="min-h-[32px] rounded-md border px-3 font-medium" :style="{ borderColor: 'var(--ds-border-strong)' }" @click="reasonOpen = 'reopen'">
+                <button
+                    v-if="reopenWindowIn"
+                    type="button"
+                    data-testid="reopen-closed"
+                    class="min-h-[32px] rounded-md border px-3 font-medium"
+                    :style="{ borderColor: 'var(--ds-border-strong)' }"
+                    @click="reasonOpen = 'reopen'"
+                >
                     {{ t.reopen_with_reason }}
                 </button>
             </div>
@@ -143,29 +197,64 @@ function timeShort(iso: string | null | undefined): string {
         <!-- C10 — spam: unmark window running, or terminal. -->
         <template v-else-if="ticket.status === 'spam'">
             <template v-if="unmarkIn">
-                <p class="font-semibold"><span aria-hidden="true">⊘</span> {{ label('spam_marked_by', { name: ticket.spam_marked_by_name ?? '', time: timeShort(ticket.spam_marked_at) }) }}</p>
-                <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">{{ label('spam_unmark_in', { remaining: unmarkIn }) }}</p>
-                <button v-if="reasonOpen !== 'unspam'" type="button" data-testid="not-spam" class="mt-1.5 min-h-[32px] rounded-md border px-3 font-medium" :style="{ borderColor: 'var(--ds-border-strong)' }" @click="reasonOpen = 'unspam'">
+                <p class="font-semibold">
+                    <span aria-hidden="true">⊘</span>
+                    {{
+                        label('spam_marked_by', {
+                            name: ticket.spam_marked_by_name ?? '',
+                            time: timeShort(ticket.spam_marked_at),
+                        })
+                    }}
+                </p>
+                <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
+                    {{ label('spam_unmark_in', { remaining: unmarkIn }) }}
+                </p>
+                <button
+                    v-if="reasonOpen !== 'unspam'"
+                    type="button"
+                    data-testid="not-spam"
+                    class="mt-1.5 min-h-[32px] rounded-md border px-3 font-medium"
+                    :style="{ borderColor: 'var(--ds-border-strong)' }"
+                    @click="reasonOpen = 'unspam'"
+                >
                     {{ t.not_spam }}
                 </button>
             </template>
             <template v-else>
-                <p data-testid="spam-terminal" class="font-semibold"><span aria-hidden="true">⊘</span> {{ t.spam_final }}</p>
-                <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">{{ t.spam_final_detail }}</p>
+                <p data-testid="spam-terminal" class="font-semibold">
+                    <span aria-hidden="true">⊘</span> {{ t.spam_final }}
+                </p>
+                <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
+                    {{ t.spam_final_detail }}
+                </p>
             </template>
         </template>
 
         <!-- C11 — escalated: reviewer added, conversation kept. -->
         <template v-else-if="ticket.status === 'escalated' && ticket.escalation">
-            <p class="font-semibold" :style="{ color: 'var(--ds-warn-strong, var(--ds-text-primary))' }">
+            <p
+                class="font-semibold"
+                :style="{ color: 'var(--ds-warn-strong, var(--ds-text-primary))' }"
+            >
                 <span aria-hidden="true">▲</span> {{ t.escalated_title }}
             </p>
             <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
                 {{ label('escalated_by', { name: ticket.escalation.by_name ?? '' }) }}
-                <span v-if="ticket.escalation.target_name"> · {{ label('escalated_target', { name: ticket.escalation.target_name }) }}</span>
+                <span v-if="ticket.escalation.target_name">
+                    · {{ label('escalated_target', { name: ticket.escalation.target_name }) }}</span
+                >
             </p>
-            <p v-if="escalationExpanded" data-testid="escalation-reason" class="mt-0.5">{{ ticket.escalation.reason }}</p>
-            <button v-else type="button" data-testid="read-escalation-reason" class="mt-0.5 underline" :style="{ color: 'var(--ds-accent)' }" @click="escalationExpanded = true">
+            <p v-if="escalationExpanded" data-testid="escalation-reason" class="mt-0.5">
+                {{ ticket.escalation.reason }}
+            </p>
+            <button
+                v-else
+                type="button"
+                data-testid="read-escalation-reason"
+                class="mt-0.5 underline"
+                :style="{ color: 'var(--ds-accent)' }"
+                @click="escalationExpanded = true"
+            >
                 {{ t.read_full_reason }}
             </button>
             <p class="mt-0.5" :style="{ color: 'var(--ds-text-faint)' }">{{ t.escalated_keeps }}</p>
@@ -173,20 +262,54 @@ function timeShort(iso: string | null | undefined): string {
 
         <!-- C12 — channel unreachable (any live status). -->
         <template v-if="ticket.channel_unreachable && !['spam', 'closed'].includes(ticket.status)">
-            <p data-testid="unreachable-banner" class="mt-1 font-semibold" :style="{ color: 'var(--ds-warn-strong, var(--ds-text-primary))' }">
+            <p
+                data-testid="unreachable-banner"
+                class="mt-1 font-semibold"
+                :style="{ color: 'var(--ds-warn-strong, var(--ds-text-primary))' }"
+            >
                 <span aria-hidden="true">⚠</span> {{ t.unreachable_title }}
-                <span class="ms-1 rounded border px-1 text-[10px]" :style="{ borderColor: 'var(--ds-border-strong)' }">⏸ {{ t.sla_paused }}</span>
+                <span
+                    class="ms-1 rounded border px-1 text-[10px]"
+                    :style="{ borderColor: 'var(--ds-border-strong)' }"
+                    >⏸ {{ t.sla_paused }}</span
+                >
             </p>
-            <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">{{ t.unreachable_detail }}</p>
-            <button type="button" data-testid="open-rescue" class="mt-0.5 underline" :style="{ color: 'var(--ds-accent)' }" @click="emit('open-rescue')">
+            <p class="mt-0.5" :style="{ color: 'var(--ds-text-muted)' }">
+                {{ t.unreachable_detail }}
+            </p>
+            <button
+                type="button"
+                data-testid="open-rescue"
+                class="mt-0.5 underline"
+                :style="{ color: 'var(--ds-accent)' }"
+                @click="emit('open-rescue')"
+            >
                 {{ t.open_rescue }}
             </button>
         </template>
 
         <!-- The shared written-reason field (C9 reopen / C10 not-spam). -->
         <div v-if="reasonOpen !== null" class="mt-1.5 flex items-center gap-2">
-            <input v-model="reason" type="text" maxlength="500" data-testid="banner-reason" :placeholder="t.reason_placeholder" class="w-64 rounded-md border px-2 py-1" :style="{ borderColor: 'var(--ds-border-strong)', background: 'var(--ds-panel-bg)' }" @keydown.enter="submitReason" />
-            <button type="button" data-testid="banner-reason-submit" class="min-h-[32px] rounded-md px-3 font-semibold" :style="{ background: 'var(--ds-text-ink)', color: 'var(--ds-page-bg)' }" @click="submitReason">
+            <input
+                v-model="reason"
+                type="text"
+                maxlength="500"
+                data-testid="banner-reason"
+                :placeholder="t.reason_placeholder"
+                class="w-64 rounded-md border px-2 py-1"
+                :style="{
+                    borderColor: 'var(--ds-border-strong)',
+                    background: 'var(--ds-panel-bg)',
+                }"
+                @keydown.enter="submitReason"
+            />
+            <button
+                type="button"
+                data-testid="banner-reason-submit"
+                class="min-h-[32px] rounded-md px-3 font-semibold"
+                :style="{ background: 'var(--ds-text-ink)', color: 'var(--ds-page-bg)' }"
+                @click="submitReason"
+            >
                 {{ reasonOpen === 'reopen' ? t.reopen_verb : t.not_spam }}
             </button>
         </div>

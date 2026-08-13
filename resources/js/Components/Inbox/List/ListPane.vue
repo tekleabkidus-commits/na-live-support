@@ -22,6 +22,9 @@ import Row from './Row.vue';
 
 const props = defineProps<{
     mergeAllowed?: boolean;
+    // D13 (step 14): the drawn My-Open empty state names how many sit in
+    // Unassigned — the rail's own count, passed through.
+    unassignedCount?: number | null;
     view: string;
     mobile?: boolean;
     userId?: string;
@@ -42,6 +45,8 @@ const emit = defineEmits<{
         payload: { ticketId: string; conversationId: string; number: number | string | null },
     ): void;
     (e: 'fallback-view'): void;
+    // D13: the empty queue's affordance (the workspace owns the claim).
+    (e: 'claim-next'): void;
 }>();
 
 const list = useLiveList();
@@ -49,6 +54,9 @@ const prefs = useInboxPrefs();
 const connection = useInboxConnection();
 
 const loading = ref(false);
+// D13 (step 14): a failed page fetch is SAID, not swallowed — and the rows
+// already rendered are the cached truth ("nothing was lost").
+const loadError = ref(false);
 const announcement = ref('');
 const lastSelectedId = ref<string | null>(null);
 const scroller = ref<HTMLElement | null>(null);
@@ -76,8 +84,10 @@ async function fetchPage(cursor: string | null): Promise<void> {
             headers: { Accept: 'application/json' },
         });
         if (!response.ok) {
+            loadError.value = true;
             return;
         }
+        loadError.value = false;
         const body = (await response.json()) as {
             rows: ListRow[];
             next_cursor: string | null;
@@ -605,12 +615,69 @@ watch(
                 "
             />
             <li
-                v-if="list.orderedRows.length === 0 && !loading"
+                v-if="list.orderedRows.length === 0 && !loading && !loadError"
                 role="row"
                 class="p-4 text-sm"
                 :style="{ color: 'var(--ds-text-muted)' }"
             >
-                <div role="gridcell">{{ t.list.empty }}</div>
+                <!-- D13 (step 14): the drawn empty shapes — My Open points at
+                     the waiting queue with the claim affordance; every other
+                     view keeps the plain truth. -->
+                <div v-if="view === 'my_open'" role="gridcell" data-testid="list-empty-my-open">
+                    <p aria-hidden="true" class="text-center text-lg">◇</p>
+                    <p class="text-center font-medium" :style="{ color: 'var(--ds-text-primary)' }">
+                        {{ t.list.empty_my_open }}
+                    </p>
+                    <p
+                        v-if="typeof unassignedCount === 'number' && unassignedCount > 0"
+                        class="mt-0.5 text-center text-xs"
+                    >
+                        {{
+                            (t.list.empty_unassigned_waiting ?? '').replace(
+                                ':count',
+                                String(unassignedCount),
+                            )
+                        }}
+                    </p>
+                    <p class="mt-2 text-center">
+                        <button
+                            type="button"
+                            data-testid="empty-claim-next"
+                            class="min-h-[36px] rounded-md border px-3 text-xs font-medium"
+                            :style="{ borderColor: 'var(--ds-border-strong)' }"
+                            @click="emit('claim-next')"
+                        >
+                            {{ t.list.claim_next }}
+                        </button>
+                    </p>
+                </div>
+                <div v-else role="gridcell">{{ t.list.empty }}</div>
+            </li>
+            <li v-if="loadError" role="row" class="p-4 text-sm">
+                <!-- D13: list error — the rendered rows below/above ARE the
+                     cached version, so the drawn "show the cached list"
+                     collapses to the honest note that it never left. -->
+                <div role="gridcell" data-testid="list-error" class="text-center">
+                    <p :style="{ color: 'var(--ds-text-muted)' }">
+                        <span aria-hidden="true">⚠</span> {{ t.list.load_failed }}
+                    </p>
+                    <p
+                        v-if="list.orderedRows.length > 0"
+                        class="mt-0.5 text-xs"
+                        :style="{ color: 'var(--ds-text-faint)' }"
+                    >
+                        {{ t.list.cached_kept }}
+                    </p>
+                    <button
+                        type="button"
+                        data-testid="list-retry"
+                        class="mt-1.5 min-h-[32px] rounded-md border px-3 text-xs"
+                        :style="{ borderColor: 'var(--ds-border-strong)' }"
+                        @click="fetchPage(null)"
+                    >
+                        {{ t.list.try_again }}
+                    </button>
+                </div>
             </li>
             <li v-if="list.nextCursor" role="row" class="p-3">
                 <div role="gridcell">

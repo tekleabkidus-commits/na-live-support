@@ -103,6 +103,13 @@ return [
         'compact' => 'የታመቀ',
     ],
     'list' => [
+        // D13 universal states (step 14).
+        'empty_my_open' => 'ለእርስዎ የተመደበ የለም',
+        'empty_unassigned_waiting' => ':count ውይይቶች ባልተመደበ ውስጥ ተቀምጠዋል።',
+        'claim_next' => 'ቀጣዩን ያዙ',
+        'load_failed' => 'ዝርዝሩ አልተጫነም',
+        'cached_kept' => 'ምንም አልጠፋም። የነበረዎት የመጨረሻ ቅጂ አሁንም እየታየ ነው።',
+        'try_again' => 'እንደገና ሞክር',
         'loaded' => 'ከ:total ውስጥ :shown ተጭኗል',
         'total' => ':total ቲኬቶች',
         'resort' => 'ዝርዝሩ ተዘምኗል — እንደገና ደርድር',

@@ -159,7 +159,10 @@ async function load(anchor?: string): Promise<void> {
 // B2-S04 (step 14): the banners render from the LATEST ticket's state; the
 // composer is REPLACED (closed/spam) or note-limited (unreachable) by it.
 const latestTicket = computed(
-    () => (tickets.value.length > 0 ? tickets.value[tickets.value.length - 1] : null) as unknown as Record<string, unknown> | null,
+    () =>
+        (tickets.value.length > 0
+            ? tickets.value[tickets.value.length - 1]
+            : null) as unknown as Record<string, unknown> | null,
 );
 const bannerVisible = computed(() => {
     const t = latestTicket.value;

@@ -36,7 +36,21 @@ function artisan(...args: string[]): void {
 function ticketField(number: number, column: string): string {
     return execFileSync(
         'docker',
-        ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml', 'exec', '-T', 'app', 'php', 'artisan', 'tinker', '--execute', `echo (string) DB::connection("pgsql_platform")->table("tickets")->where("number", ${number})->value("${column}");`],
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            '-f',
+            'docker/compose.dev.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'tinker',
+            '--execute',
+            `echo (string) DB::connection("pgsql_platform")->table("tickets")->where("number", ${number})->value("${column}");`,
+        ],
         { encoding: 'utf8' },
     ).trim();
 }
@@ -187,4 +201,63 @@ test("C9: the CLOSED ticket's banner replaces the composer with the reopen postu
     await page.getByTestId('thread-retry').click();
     await expect(page.getByTestId('thread-error')).toHaveCount(0, { timeout: 5_000 });
     await expect(page.getByTestId('ticket-state-banner')).toContainText('Closed');
+});
+
+test('D13: a failed list fetch is SAID — the error strip with the cached-truth note, and Try again recovers; My Open emptied through the REAL doors shows the claim-next shape whose affordance lands on the waiting queue (the D7 handler, first row lit)', async ({
+    page,
+}) => {
+    await openThread(page);
+
+    // Empty My Open honestly: resolve every canon ticket of mine through
+    // the composer's own transition door (the heal restores them after).
+    await page.evaluate(async () => {
+        const xsrf = decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '');
+        const state = window.__inboxList.state() as unknown as { viewKey: string };
+        void state;
+        const list = await fetch('/inbox/list?view=my_open', {
+            headers: { Accept: 'application/json' },
+        }).then((r) => r.json() as Promise<{ rows: { conversation_id: string }[] }>);
+        for (const row of list.rows) {
+            await fetch(`/inbox/thread/${row.conversation_id}/transition`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': xsrf,
+                },
+                body: JSON.stringify({ to: 'resolve' }),
+            });
+        }
+    });
+    await page.keyboard.press('g');
+    await page.keyboard.press('m');
+    await expect
+        .poll(async () => await page.evaluate(() => window.__inboxList.state().viewKey))
+        .toBe('my_open');
+    await expect(page.getByTestId('list-empty-my-open')).toBeVisible({ timeout: 10_000 });
+
+    // The affordance is the D7 handler: land on Unassigned, first row lit
+    // (it navigates to the claim, it does not claim silently).
+    await page.getByTestId('empty-claim-next').click();
+    await expect(page.locator('[data-ticket]').first()).toBeVisible({ timeout: 10_000 });
+
+    // The ERROR shape: block the list read, force a refetch, see it said.
+    await page.route(
+        /\/inbox\/list/,
+        (route) => void route.fulfill({ status: 500, body: '{}' }),
+    );
+    // claim-next already switched the view to Unassigned (D7's own
+    // behavior), so the switch must go SOMEWHERE ELSE to force a fetch —
+    // the rail click is the deterministic route.
+    await page.locator('[data-view="my_open"]').first().click();
+    // The store's viewKey is SERVER-truth (it flips when a fetch lands) —
+    // exactly what the block prevents; the strip is the assertable signal.
+    await expect(page.getByTestId('list-error')).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId('list-error')).toContainText('Nothing was lost');
+    await page.unroute(/\/inbox\/list/);
+    await page.getByTestId('list-retry').click();
+    await expect(page.getByTestId('list-error')).toHaveCount(0, { timeout: 10_000 });
+    // The recovered view is the EMPTIED My Open — the honest post-retry
+    // state is the D13 empty shape, not rows.
+    await expect(page.getByTestId('list-empty-my-open')).toBeVisible({ timeout: 10_000 });
 });

@@ -105,6 +105,13 @@ return [
         'compact' => 'Compact',
     ],
     'list' => [
+        // D13 universal states (step 14).
+        'empty_my_open' => 'Nothing assigned to you',
+        'empty_unassigned_waiting' => ':count conversations are sitting in Unassigned.',
+        'claim_next' => 'Claim the next one',
+        'load_failed' => "The list didn't load",
+        'cached_kept' => 'Nothing was lost. The last version you had is still shown.',
+        'try_again' => 'Try again',
         'loaded' => ':shown of :total loaded',
         'total' => ':total tickets',
         'resort' => 'List updated — resort',
