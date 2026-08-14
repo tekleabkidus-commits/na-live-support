@@ -33,6 +33,57 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-08 (Doc 08) — "DOC 08 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
+
+**Every S08 checkpoint figure and the close-out recount use this and only this:**
+
+```
+./vendor/bin/pest tests/Feature/Customers \
+                  tests/Contract/CustomerEventConsumerContractsTest.php \
+                  tests/Isolation/CustomerGrantPhysicsTest.php \
+                  tests/Security/CustomerSearchScopeTest.php \
+                  tests/Security/RgVisibilityTest.php \
+                  tests/Security/NoVerifiedAffordanceTest.php \
+                  tests/Security/DuplicateHintScopeTest.php
+```
+
+Performance suites run under `make perf` / the dedicated CI stage; browser proofs under
+`make browser`; any new Doc 08 file at another tier joins this command in the same
+commit that creates it. RECORD NOTE (the S23/S07 precedent, applied at definition
+time): the command names files later steps create — figures cited before a named file
+exists come from the extant paths, stated as such.
+
+## SESSION-08 (Doc 08) — APPROVED PLAN RECORD (committed at approval per standing rule 12)
+
+**Approved by the owner on the advisor's audit 2026-08-14: 91/91 family-exact**
+(FR 22 / NFR 6 / US 7 / BR 7 / T 8 / SEC 6 / EC 12 / FS 5 / SS 4 / AC 9 / R 5).
+**The full plan table — every id → file → proving test, the twelve FR-22 events, the
+inherited rows 0–11, the closing set (with the advisor's 4a/4b avatar-seam split), the
+frame map over the Batch-4 stack, the escalate-first forecast, and the 15-item
+sabotage enumeration — is committed at `docs/SESSION-08-APPROVED-PLAN.md`** (this
+section is the pointer of record, not a summary that could drift). Two blocking
+corrections folded in before the commit: the step-1a/1b split (SCHEMA AMENDMENT 2
+countersigned BEFORE any migration ships) and the legacy shared-phone backfill policy
+(deterministic keeper, losers preserved + reported — FR-09's "humans consolidate"
+applied to legacy data). Rulings **A-38** (erasure initiation rides `customers.delete`)
+and **A-39** (unblock rides `customers.block`) are FILED in
+`docs/ANSWERS-FROM-DOC-AUTHOR.md` (S08 section); **stack growth approved: ADR 0014**
+(`giggsey/libphonenumber-for-php`, three conditions). Zero new permission keys
+(catalog stays CLOSED at 113); zero new settings; two notification categories; no
+flags. Precedent correction of record: Doc 07's plan-approval commit is `c9510c9`
+(creation), not `b727322` (a later amendment to the same file).
+
+**HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
+(i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
+under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session
+prompt — every Batch-4 file named by the session prompt exists at its named version,
+so no obligation is affected; the advisor cannot adjudicate from the kit packaging and
+carries the corrected count into the v8 kit; v7 is NOT edited. (ii) `B4-S09-closing-audit-v1`
+references "B4-A01-v2" while the frozen file is `B4-A01-behaviour-acceptance-v1.dc.html`
+— confirmed by the advisor as a stale internal reference; the on-disk v1 carries all
+three build-acceptance rows (AC-B4-01/02/03) including the reopen-admitted AC-B4-03,
+so nothing is missing.
+
 ## SESSION-07 (Doc 07) — "DOC 07 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 
 **Every S07 checkpoint figure and the close-out recount use this and only this:**

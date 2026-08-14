@@ -1453,3 +1453,60 @@ declared noop passes the REAL guarded route with zero
 bespoke route through the real middleware still THROWS. EC-07's S22
 clause and the D8 browser proof both run green through the guarded
 route.
+
+---
+
+## S08 (Doc 08) plan-approval rulings — advisor-audited, owner-approved, 2026-08-14
+
+Filed at plan approval, before implementation (the committed plan is
+`docs/SESSION-08-APPROVED-PLAN.md`). The advisor's independent enumeration reconciled
+91/91 family-exact. The doc author has NOT been consulted. This record is canonical
+over any restatement in commits or BUILD-STATUS.
+
+### A-38 (RULED at S08 plan approval). Erasure INITIATION rides `customers.delete`
+
+Doc 08 SEC-04's erasure-request door ("erasure requests only *initiate* here —
+approval and execution are Doc 17's workflow"; drawn as B4-S07 H06) names no
+permission, and the catalog is CLOSED at 113 (NFR-03). RULED: the initiation door
+rides **`customers.delete`** — the only erasure-shaped key in the closed catalog, and
+since nothing is ever hard-deleted (BR-05, §21), "delete" in this product means
+precisely "set erasure in motion". BOTH CONSEQUENCES STATED PLAINLY, per the ruling:
+(1) the key authorizes INITIATING a request only — Doc 17 owns approval and
+execution; the door writes a request row + audit entry and deletes nothing (the H06
+frame's own copy: "This does not delete anything"); (2) it is **Super-Admin-only by
+default**, because R-10's ratified templates exclude `customers.delete` from Admin —
+operators may grant it to a role explicitly (templates are editable, FR-02 of
+Doc 03).
+
+### A-39 (FILED INTERPRETATION, the Q9 shape). Unblock rides `customers.block`
+
+Doc 08 §8's prose calls unblock "a distinct permissioned action with reason" while
+the closed registry holds no `customers.unblock` key. Q9 governs: the registry is
+normative, prose descriptive. Unblock rides **`customers.block`**; the distinctness
+the prose names is delivered as the separate door (`POST …/unblock`), its own
+mandatory reason, and its own audit action (`customer.unblocked` event +
+audit-coverage row) — never a second key.
+
+### Binding corrections folded at approval (advisor, blocking)
+
+- **B1 — step 1 split into 1a/1b.** SCHEMA AMENDMENT 2 is filed and COUNTERSIGNED at
+  the 1a mandatory stop BEFORE any migration ships; migrations, grant physics and the
+  migration-level sabotages are 1b. Nothing touches the database before 1a returns.
+- **B2 — legacy shared-phone backfill policy** (EC-02 is a documented reality, so the
+  collision is expected, not hypothetical): when N customers share one
+  `customers.phone` value, the phone identity goes to ONE deterministic keeper —
+  oldest customer by `created_at`, tiebreak lowest UUIDv7; every loser's value is
+  preserved (the deprecated `customers.phone` column survives the C-12 contract
+  window) and the migration emits a shared-phone report enumerating every collision
+  group for later human consolidation — FR-09's "humans consolidate" applied to
+  legacy data. Proven by `IdentityBackfillTest` (two customers, one phone →
+  deterministic completion, both values retrievable, pair reported).
+
+### Stack growth approved (S08): ADR 0014 — `giggsey/libphonenumber-for-php`
+
+Approved with three conditions the ADR must state: (a) the pinned version; (b) stored
+values are normalized ONCE at write and never silently re-normalized by a metadata
+upgrade; (c) the policy when a metadata upgrade would change an already-stored value.
+The approval's stated ground: normalization correctness is a SAFETY property here —
+BR-04's unique index assumes one phone normalizes one way forever, so an in-house
+subset is the riskier option. Nothing else grows.
