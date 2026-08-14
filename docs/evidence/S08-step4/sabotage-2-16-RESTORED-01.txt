@@ -1,0 +1,19 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\RgVisibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01/BR-03: an unpermitted payload NEVER NAMES the rg columns[39m[90m… [39m [90m6.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permitted payload carries the rg block, values intact[39m[90m        [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06/AC-B4-01: RG reads are FRESH against a warm cache — an in[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: the history is immutable LIVE — app UPDATE and DELETE bot[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05: Doc 03's capability cache already bypasses customers.rg_fl[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\RgStorageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 set (staff): flag + provenance columns, history row, outbo[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 set (ai, the [D09] fixture): actor NULL by the schema's ow[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15/EC-06 clear: permission + reason, history keeps BOTH rows[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-B4-02 (server half): the history exports WHOLE — authors, rea[39m[90m…[39m [90m0.09s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (53 assertions)[39m
+  [90mDuration:[39m [39m7.11s[39m
+

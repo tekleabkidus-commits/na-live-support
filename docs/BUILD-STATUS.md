@@ -123,6 +123,12 @@ the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
 surfaced during the ADR 0014 install, not introduced by it; dependency
 maintenance is Doc 18's.
 
+**DOC 18 NOTE (S08 step 4, filed by the step-3 checkpoint's ruling D):** the
+0i flaky specs pass 15/15 locally and fail only on the 2-vCPU GitHub runner —
+**the cheapest candidate fix is a LARGER RUNNER (infrastructure), not a
+Doc 07 spec rewrite.** Filed beside the residual contention hypothesis so the
+next investigator weighs the cheap option BEFORE touching frozen specs.
+
 **PLATFORM NOTE (S08 step 2, filed by checkpoint ruling — for the NEXT author
 of a transaction closure, not just this document's trail):**
 `DB::transaction(fn () => …)` **rolls back ONLY on a throw. A plain `return`

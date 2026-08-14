@@ -1,0 +1,34 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\RgVisibilityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-01/BR-03: an unpermitted payload NEVER NAMES the rg columns[39m[90m… [39m [90m5.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permitted payload carries the rg block, values intact[39m[90m        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06/AC-B4-01: RG reads are FRESH against a warm cache — an in[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: the history is immutable LIVE — app UPDATE and DELETE bot[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05: Doc 03's capability cache already bypasses customers.rg_fl[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\RgVisibilityTest[22m [90m>[39m it SEC-01/BR-03: an unpermitted…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'select "id", "display_name", "is_shell", "language", "language_source", "country", "country_source", "tags", "created_source", "blocked", "blocked_reason", "blocked_by", "blocked_at", "tickets_count", "open_tickets", "contacts_30d_count", "satisfaction_avg", "satisfaction_count", "last_contact_at", "merged_into_id", "created_at", "rg_flag", "rg_flag_set_by", "rg_flag_set_at", "rg_flag_reason" from "customers" where "id" = ? limit 1',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/RgVisibilityTest.php[39m:[32m55[39m
+     51▕ 
+     52▕     $payload = app(CustomerPayload::class)->build($customerId, viewerSeesRg: false);
+     53▕ 
+     54▕     $rgMentions = array_values(array_filter($statements, fn (string $sql): bool => str_contains($sql, 'rg_')));
+  ➜  55▕     expect($rgMentions)->toBe([]);
+     56▕ 
+     57▕     expect($payload)->not->toBeNull()
+     58▕         ->and(array_key_exists('rg_flag', $payload))->toBeFalse()
+     59▕         ->and(array_key_exists('rg_flag_reason', $payload))->toBeFalse()
+
+  [33m1   [39m[39;1mtests/Security/RgVisibilityTest.php[39;22m:[39;1m55[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (13 assertions)[39m
+  [90mDuration:[39m [39m6.11s[39m
+

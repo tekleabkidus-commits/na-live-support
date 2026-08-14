@@ -260,7 +260,7 @@ with any miss flagged plainly (the TTI precedent).
 | 7 | Blocking: outbound guard FIRST (escalation #2), then cascade + unblock (AC-06; sabotage #8) |
 | 8 | Search: `customers_index` + scope-injection proof BEFORE real data + indexer + Amharic corpus + FS-01 degrade + SearchProxy deepen (escalation #3 part; sabotage #9) ⇒ closing row 3 |
 | 9 | Panel/profile backend: T-07 + sections + notes + files gallery (⇒ closing row 4a) + export/erasure doors (SEC-04/06, FS-05) — C-10 + curated allowlist on every read door |
-| 10 | Hex-extraction re-run → panel UI (slot-fill escalation #3 + badge ⇒ closing row 2; badge-dot ruling taken at the stop) + AC-08 + AC-B4-03 |
+| 10 | Hex-extraction re-run → panel UI (slot-fill escalation #3 + badge ⇒ closing row 2; badge-dot ruling taken at the stop) + AC-08 + AC-B4-03. *(Added by the step-3 checkpoint ruling C, 2026-08-14:)* **`CustomerBrowserSeeder` — Doc 08's OWN seeder for its own scenes, minting identities THROUGH THE REAL RESOLVER** so the provenance under browser test is the provenance the resolver actually writes; the S07 seeders' 262 zero-identity customers cannot render B4-S01's enriched frames and the Doc 07 seeders are NOT extended (a core edit for a Doc 08 convenience) |
 | 11 | Profile page + tombstone (sabotage #13) + identity-work UI + merge UI (FIRST human reach — every guard already falsified) + RG/blocking UI |
 | 12 | Directory UI + data-honesty surfaces + §13/§14 sweep + i18n en+am + R-14 flags |
 | 13 | Close-out: 91-id self-audit; ledger 15/15 item-by-item; closing-set outcomes; B4-A01 dispositions; DESIGN-DEVIATIONS; inherited 0–11; core-edit enumeration; honest trail; R-14 totals; §12 budget table; final battery; CI once; §9 report — ends with its SHA, owner grounds before the recount |

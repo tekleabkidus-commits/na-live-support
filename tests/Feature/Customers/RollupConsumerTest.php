@@ -169,3 +169,29 @@ it('NFR-05: drift() names a manufactured non-decay drift, recompute heals it, an
     expect($rollups->drift($customerId))->toBe([])
         ->and(DB::table('customers')->where('id', $customerId)->value('tickets_count'))->toBe(1);
 });
+
+it('RULING A: window decay (stored > recomputed) heals QUIETLY, but an under-count (stored < recomputed) ALERTS — direction is the discriminator, both proven', function (): void {
+    [, $customerId, $conversationId] = rollupScene();
+    $tenantId = (string) DB::table('customers')->where('id', $customerId)->value('tenant_id');
+    rollupTicket($tenantId, $conversationId, $customerId, 'open');
+
+    $rollups = app(CustomerRollups::class);
+    $rollups->recompute($customerId);
+
+    // OVER-count: the shape pure window aging leaves (a contact aged out,
+    // nothing decremented). Expected residual — drift detected, NOT alertable.
+    DB::table('customers')->where('id', $customerId)->update(['contacts_30d_count' => 9]);
+    expect($rollups->drift($customerId))->toBe(['contacts_30d_count'])
+        ->and($rollups->alertableDrift($customerId))->toBe([]);
+
+    // UNDER-count: the incrementer missed an event. No benign explanation —
+    // it must alert exactly like any other column.
+    DB::table('customers')->where('id', $customerId)->update(['contacts_30d_count' => 0]);
+    expect($rollups->drift($customerId))->toBe(['contacts_30d_count'])
+        ->and($rollups->alertableDrift($customerId))->toBe(['contacts_30d_count']);
+
+    // And a non-window column always alerts, unchanged by the carve-out.
+    $rollups->recompute($customerId);
+    DB::table('customers')->where('id', $customerId)->update(['tickets_count' => 5]);
+    expect($rollups->alertableDrift($customerId))->toBe(['tickets_count']);
+});

@@ -48,34 +48,32 @@ final class CustomerRollups
     {
         $included = $this->exclusion->includedSql('tickets.status');
 
+        // ONE pass over tickets + one over messages (FILTER aggregates —
+        // the step-3 checkpoint's ruling B: this body runs per EVENT, so it
+        // is held to §12's ≤5 ms HANDLER line and was optimized from four
+        // subselects while the code was fresh).
         DB::statement(
             <<<SQL
             UPDATE customers c
-               SET tickets_count = (
-                       SELECT count(*) FROM tickets
-                        WHERE tickets.customer_id = c.id AND {$included}
-                   ),
-                   open_tickets = (
-                       SELECT count(*) FROM tickets
-                        WHERE tickets.customer_id = c.id AND {$included}
-                          AND tickets.status IN ('new', 'open', 'pending_customer', 'pending_internal', 'escalated')
-                   ),
-                   contacts_30d_count = (
-                       SELECT count(*) FROM tickets
-                        WHERE tickets.customer_id = c.id AND {$included}
-                          AND tickets.created_at >= now() - interval '30 days'
-                   ),
-                   last_contact_at = (
-                       SELECT max(m.created_at)
-                         FROM messages m
-                         JOIN conversations cv ON cv.id = m.conversation_id
-                        WHERE cv.customer_id = c.id
-                          AND m.author_type = 'customer'
-                          AND m.quarantined = false
-                   )
+               SET tickets_count = t.total,
+                   open_tickets = t.open,
+                   contacts_30d_count = t.recent,
+                   last_contact_at = m.newest
+              FROM (
+                    SELECT count(*) FILTER (WHERE {$included}) AS total,
+                           count(*) FILTER (WHERE {$included} AND tickets.status IN ('new', 'open', 'pending_customer', 'pending_internal', 'escalated')) AS open,
+                           count(*) FILTER (WHERE {$included} AND tickets.created_at >= now() - interval '30 days') AS recent
+                      FROM tickets WHERE tickets.customer_id = ?
+                   ) t,
+                   (
+                    SELECT max(m2.created_at) AS newest
+                      FROM messages m2
+                      JOIN conversations cv ON cv.id = m2.conversation_id
+                     WHERE cv.customer_id = ? AND m2.author_type = 'customer' AND m2.quarantined = false
+                   ) m
              WHERE c.id = ?
             SQL,
-            [$customerId],
+            [$customerId, $customerId, $customerId],
         );
     }
 
@@ -89,12 +87,13 @@ final class CustomerRollups
     {
         $included = $this->exclusion->includedSql('tickets.status');
 
-        /** @var object{tickets_drift: bool, open_drift: bool, window_drift: bool, contact_drift: bool}|null $row */
+        /** @var object{tickets_drift: bool, open_drift: bool, window_drift: bool, window_under: bool, contact_drift: bool}|null $row */
         $row = DB::selectOne(
             <<<SQL
             SELECT c.tickets_count IS DISTINCT FROM t.total   AS tickets_drift,
                    c.open_tickets IS DISTINCT FROM t.open     AS open_drift,
                    c.contacts_30d_count IS DISTINCT FROM t.recent AS window_drift,
+                   c.contacts_30d_count < t.recent            AS window_under,
                    c.last_contact_at IS DISTINCT FROM m.newest AS contact_drift
               FROM customers c
               LEFT JOIN LATERAL (
@@ -125,6 +124,41 @@ final class CustomerRollups
             }
         }
 
+        // Ruling A's discriminator rides the same read: window aging can only
+        // leave the stored value TOO HIGH, so stored < recomputed on the
+        // window column has NO benign explanation.
+        $this->lastWindowUnder = (bool) $row->window_under;
+
         return $drifted;
+    }
+
+    private bool $lastWindowUnder = false;
+
+    /**
+     * NFR-05's ALERT set (the step-3 checkpoint's RULING A): every drifted
+     * column alerts EXCEPT contacts_30d_count when the drift is pure window
+     * decay — and decay has a DIRECTION. stored > recomputed = contacts aged
+     * out (or retroactive spam exclusion): expected residual, heal quietly.
+     * stored < recomputed = the incrementer MISSED events: there is no benign
+     * explanation, so it alerts like any other column. Exempt from ALERTING
+     * on expected decay; never exempt from DETECTING error — a silent
+     * carve-out would let a broken writer be healed weekly forever, the
+     * FS-03 lesson inverted.
+     *
+     * @return list<string> columns that must alert; drift() must have run
+     */
+    public function alertableDrift(string $customerId): array
+    {
+        $drifted = $this->drift($customerId);
+
+        if (! in_array('contacts_30d_count', $drifted, true)) {
+            return $drifted;
+        }
+
+        if ($this->lastWindowUnder) {
+            return $drifted;    // under-count: a missed event — alert it
+        }
+
+        return array_values(array_diff($drifted, ['contacts_30d_count']));
     }
 }

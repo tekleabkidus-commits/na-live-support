@@ -24,6 +24,14 @@ use Illuminate\Support\Facades\DB;
  * still writes legacy-shaped rows until step 2 rewires it. Enforce rides
  * step 2's commit, after the writer changes — the correct expand-contract
  * order (amendment item 2).
+ *
+ * TO WHOEVER RUNS THIS AGAINST STAGING OR PRODUCTION DATA (step-3 checkpoint
+ * observation): every dev run so far printed "0 unconsolidated shared-identity
+ * pair(s)" — the keeper/conflict machinery is proven BY FIXTURE ONLY and its
+ * first real execution will be on your data. READ THE SHARED-PHONE REPORT
+ * this migration prints (and the durable customer_identity_conflicts rows)
+ * BEFORE anyone acts on the affected customers — the keeper choice is
+ * deterministic, not necessarily right; FR-09's humans consolidate.
  */
 return new class extends Migration
 {

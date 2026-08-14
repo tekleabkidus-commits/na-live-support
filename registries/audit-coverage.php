@@ -22,6 +22,27 @@ declare(strict_types=1);
 */
 
 return [
+    // ── Doc 08 (Customers) — registered at S08 step 4, same-commit as the
+    //    RgFlagService that emits them (SEC-02: high-visibility, reasons
+    //    mandatory both directions).
+    [
+        'action_key' => 'customer.rg_flag.set',
+        'entity' => 'customer',
+        // staff sets manually; 'system' is the AI-detection path (FR-14,
+        // [D09] — actor_id null by the history table's own CHECK).
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['reason', 'source'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.rg_flag.cleared',
+        'entity' => 'customer',
+        // Clearing is always a HUMAN act (FR-15/EC-06 — a false-positive
+        // review), never automated.
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc08',
+    ],
     [
         'action_key' => 'tenant.provisioned',
         'entity' => 'tenant',

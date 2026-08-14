@@ -46,6 +46,10 @@ final class CustomersConsistencyCheck extends Command
             $customerIds = DB::table('customers')->whereNull('merged_into_id')->pluck('id');
 
             foreach ($customerIds as $customerId) {
+                // Ruling A: alertableDrift carries the DIRECTION discriminator —
+                // window decay (stored > recomputed) heals quietly; an
+                // under-count alerts like any other column.
+                $alertable = $rollups->alertableDrift($customerId);
                 $drifted = $rollups->drift($customerId);
 
                 if ($drifted === []) {
@@ -55,7 +59,6 @@ final class CustomersConsistencyCheck extends Command
                 $rollups->recompute($customerId);
                 $healed++;
 
-                $alertable = array_values(array_diff($drifted, ['contacts_30d_count']));
                 if ($alertable !== []) {
                     $alerted++;
                     Log::warning('customer rollup drift healed', [

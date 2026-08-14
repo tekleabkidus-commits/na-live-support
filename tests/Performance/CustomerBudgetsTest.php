@@ -33,7 +33,7 @@ it('NFR-01 indicatively: the resolver HIT path (every inbound message) inside 0.
     assertBudget('resolver hit (NFR-01, spec ≤5 ms p99)', $stats, 5.0);
 });
 
-it('§12 indicatively: one rollup recompute inside 5 ms×tier — it runs on every ticket/CSAT event [D19: L2 rates]', function (): void {
+it('§12 indicatively: the per-event HANDLER inside 5 ms×tier, and the repair unit reported separately (ruling B) [D19: L2 rates]', function (): void {
     $tenant = createTenant();
     legacyIdentityShapeEnforce();
     bindTenant($tenant);
@@ -57,9 +57,24 @@ it('§12 indicatively: one rollup recompute inside 5 ms×tier — it runs on eve
         reopenCustomerMessage($tenant->identifier(), $conversationId);
     }
 
+    // RULING B (step-3 checkpoint): TWO lines, reported separately.
+    // (1) The per-EVENT HANDLER — §12's "rollup event handlers ≤ 5 ms each"
+    //     line: the full consumer body (event fetch + customer resolution +
+    //     recompute), driven by a real seeded event row.
+    /** @var App\Models\Conversation $conversation */
+    $conversation = App\Models\Conversation::query()->findOrFail($conversationId);
+    $eventId = reopenSeedEvent($conversation, reopenCustomerMessage($tenant->identifier(), $conversationId));
     $rollups = app(CustomerRollups::class);
-    $stats = measure(static fn () => $rollups->recompute($customerId));
 
-    reportBudget('rollup recompute p99 (§12)', assertedBudget(5.0), $stats);
-    assertBudget('rollup handler (§12, spec ≤5 ms each)', $stats, 5.0);
+    $handlerStats = measure(static function () use ($eventId, $rollups): void {
+        (new App\Jobs\Customers\RollupConsumer($eventId))->handle($rollups);
+    });
+    reportBudget('rollup HANDLER p99 (§12 line)', assertedBudget(5.0), $handlerStats);
+    assertBudget('rollup event handler (§12, spec ≤5 ms each)', $handlerStats, 5.0);
+
+    // (2) The recompute as the weekly repair job's unit of work — §12 names
+    //     NO budget for the batch repair; reported informationally against
+    //     the same figure so regressions stay visible.
+    $repairStats = measure(static fn () => $rollups->recompute($customerId));
+    reportBudget('recompute (repair unit, no §12 budget)', assertedBudget(5.0), $repairStats);
 });

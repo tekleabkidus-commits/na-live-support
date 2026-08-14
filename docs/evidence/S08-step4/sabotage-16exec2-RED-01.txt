@@ -1,0 +1,97 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\RgStorageTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at[39m[90m…[39m [90m6.19s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 set (staff): flag + provenance columns, history row, outbo[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 set (ai, the [D09] fixture): actor NULL by the schema's ow[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15/EC-06 clear: permission + reason, history keeps BOTH rows[39m[90m… [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-B4-02 (server half): the history exports WHOLE — authors, rea[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it SABOTAGE-16 CON… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m21[39m
+     17▕     legacyIdentityShapeEnforce();
+     18▕ });
+     19▕ 
+     20▕ it('SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at is a BYTE-COPY of the owning history row\'s own DB stamp — never a fresh clock', function (): void {
+  ➜  21▕     [$customerId, $actorId] = rgScene();
+     22▕ 
+     23▕     $historyId = app(RgFlagService::class)->set($customerId, 'fixture: byte copy', 'staff', $actorId);
+     24▕ 
+     25▕     $historyStamp = (string) DB::selectOne('SELECT created_at::text AS s FROM rg_flag_history WHERE id = ?', [$historyId])->s;
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m21[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-14 set (staf… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m32[39m
+     28▕     expect($currentStamp)->toBe($historyStamp);
+     29▕ });
+     30▕ 
+     31▕ it('FR-14 set (staff): flag + provenance columns, history row, outbox event, audit entry — all in one transaction', function (): void {
+  ➜  32▕     [$customerId, $actorId] = rgScene();
+     33▕ 
+     34▕     $historyId = app(RgFlagService::class)->set($customerId, 'fixture: chasing losses over three sessions', 'staff', $actorId);
+     35▕ 
+     36▕     $customer = DB::table('customers')->where('id', $customerId)->first();
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-14 set (ai,…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m51[39m
+     47▕         ->and(DB::table('audit_log')->where('action_key', 'customer.rg_flag.set')->count())->toBe(1);
+     48▕ });
+     49▕ 
+     50▕ it('FR-14 set (ai, the [D09] fixture): actor NULL by the schema\'s own CHECK, excerpt reference MANDATORY and stored', function (): void {
+  ➜  51▕     [$customerId] = rgScene();
+     52▕     $service = app(RgFlagService::class);
+     53▕ 
+     54▕     // The mandatory-excerpt clause refuses first.
+     55▕     expect(fn () => $service->set($customerId, 'fixture: ai without excerpt', 'ai', null))
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-15/EC-06 cle… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m67[39m
+     63▕         ->and(json_decode((string) $history->excerpt_ref, true)['message_id'])->toBe('01a0-fixture');
+     64▕ });
+     65▕ 
+     66▕ it('FR-15/EC-06 clear: permission + reason, history keeps BOTH rows forever; clearing an unset flag is the honest no-change the door will declare (A-37)', function (): void {
+  ➜  67▕     [$customerId, $actorId] = rgScene();
+     68▕     $service = app(RgFlagService::class);
+     69▕ 
+     70▕     // Clear on an unset flag: NO history row, no event — the null return is
+     71▕     // the causal fact the step-11 door ties its audit.noop declaration to.
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it AC-B4-02 (serve… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m95[39m
+     91▕         ->and(DB::table('audit_log')->where('action_key', 'customer.rg_flag.cleared')->count())->toBe(1);
+     92▕ });
+     93▕ 
+     94▕ it('AC-B4-02 (server half): the history exports WHOLE — authors, reasons, sources, AI excerpt refs — including entries whose flag has since been cleared', function (): void {
+  ➜  95▕     [$customerId, $actorId] = rgScene();
+     96▕     $service = app(RgFlagService::class);
+     97▕ 
+     98▕     $service->set($customerId, 'fixture: manual set', 'staff', $actorId);
+     99▕     $service->clear($customerId, 'fixture: first review', $actorId);
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m95[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m6.65s[39m
+
