@@ -1,0 +1,11 @@
+{
+  "doc": "Doc08",
+  "spec": "Doc 06 NFR-06/T-09 — consumer contract for Doc 08's ticket.* consumption (S08 step 4; ADR 0011)",
+  "note": "Doc 08's RollupConsumer reads ticket_id ONLY from the ticket.* payloads — the customer id comes from the ticket ROW (truth), never the payload. These mirror fixtures/customers/consumers/doc08-events.json (this file feeds Doc 06's NFR-06 completeness machinery; that one feeds Doc 08's own).",
+  "entries": [
+    { "event": "ticket.created", "consumer": "Doc08/Rollups", "schema_version": 1, "reads": ["tenant_id", "ticket_id"] },
+    { "event": "ticket.status_changed", "consumer": "Doc08/Rollups", "schema_version": 1, "reads": ["tenant_id", "ticket_id"] },
+    { "event": "ticket.spam_marked", "consumer": "Doc08/Rollups", "schema_version": 1, "reads": ["tenant_id", "ticket_id"] },
+    { "event": "ticket.spam_unmarked", "consumer": "Doc08/Rollups", "schema_version": 1, "reads": ["tenant_id", "ticket_id"] }
+  ]
+}

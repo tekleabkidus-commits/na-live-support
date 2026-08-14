@@ -51,10 +51,14 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         TicketReopenConsumer::class,
         App\Jobs\Telegram\WindowReopenConsumer::class,
         App\Jobs\Inbox\ListProjectorConsumer::class,
+        // S08 step 3: the Doc 08 rollup maintainer joins DELIBERATELY (FR-03;
+        // contract fixtures doc08-events.json + doc08.json) — the pin moves
+        // WITH the registry change, which is this guard doing its job.
+        App\Jobs\Customers\RollupConsumer::class,
     ])
-        // S07: ticket.created now carries exactly the projector — the "no
-        // silent growth" posture continues with the new baseline pinned.
-        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class], 'ticket.created must map to exactly the list projector (S07 step 2)')
+        // S07/S08: ticket.created carries the projector + the Doc 08 rollup
+        // maintainer — the "no silent growth" posture continues, new baseline pinned.
+        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class], 'ticket.created must map to exactly the projector + rollups (S07 step 2 / S08 step 3)')
         ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([], 'no other event has grown a consumer silently');
 });
 
