@@ -21,7 +21,12 @@ use Symfony\Component\Uid\UuidV7;
  *
  * IDEMPOTENT ON event_id (C-09) BY STATE AND BY KEY: the block half skips
  * already-blocked conversations and the cascade-item unique index refuses a
- * double record (ON CONFLICT DO NOTHING); the unblock half touches only
+ * double record — a re-block RE-ARMS the existing marker (ON CONFLICT DO
+ * UPDATE clears restored_at) instead of duplicating it, and that RETURNING
+ * always yields exactly one row: the conflict target CONTAINS tenant_id, so a
+ * conflicting row is by definition this tenant's own (RLS cannot hide it from
+ * the DO UPDATE), and a conflict on any OTHER constraint throws rather than
+ * returning empty. The unblock half touches only
  * unrestored items whose conversation is still blocked. A crash mid-cascade
  * leaves the OUTBOUND GUARD holding (FS-04) and the re-driven job completes
  * the remainder — the repair IS the redelivery.
@@ -77,12 +82,17 @@ final class BlockingCascadeConsumer extends OutboxConsumer
             ->all();
 
         foreach ($activeIds as $conversationId) {
-            /** @var object{id: string}|null $recorded */
+            // The marker RE-ARMS on a re-block (the step-7 acceptance's owed
+            // cycle): a row left stamped by a prior unblock would make this
+            // cycle's restore find nothing and leave the conversation blocked
+            // forever — so the upsert CLEARS restored_at, and the raced case
+            // below withdraws the claim again.
+            /** @var object{id: string} $recorded */
             $recorded = DB::selectOne(
                 <<<'SQL'
                 INSERT INTO customer_block_cascade_items (id, tenant_id, customer_id, conversation_id)
                 VALUES (?, ?, ?, ?)
-                ON CONFLICT (tenant_id, customer_id, conversation_id) DO NOTHING
+                ON CONFLICT (tenant_id, customer_id, conversation_id) DO UPDATE SET restored_at = NULL
                 RETURNING id
                 SQL,
                 [(string) new UuidV7, $tenantId, $customerId, $conversationId],
@@ -92,7 +102,7 @@ final class BlockingCascadeConsumer extends OutboxConsumer
             $conversation = Conversation::query()->findOrFail($conversationId);
             if ($conversation->state !== 'blocked') {
                 $blocking->block($conversation, null, __('customers.block.cascade_reason', ['reason' => $reason]));
-            } elseif ($recorded !== null) {
+            } else {
                 // Raced: someone blocked it between our list and our act — the
                 // cascade did NOT block this one; withdraw the claim.
                 DB::table('customer_block_cascade_items')->where('id', $recorded->id)

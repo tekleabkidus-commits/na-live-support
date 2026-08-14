@@ -1,0 +1,25 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\BlockingCascadeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit THE RACED WITHDRAW (fold ownership): a conversation blocked betw[39m[90m…[39m [90m6.36s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\BlockingCascadeTest[22m [90m>[39m it THE RACED WITHDR…   
+[39;1m  Failed asserting that 1 is identical to 0.[39;22m
+
+  at [32mtests/Feature/Customers/BlockingCascadeTest.php[39m:[32m253[39m
+    249▕ 
+    250▕     expect($raceArmed)->toBeTrue()
+    251▕         ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $b)->count())->toBe(1)
+    252▕         ->and((string) DB::table('customer_block_cascade_items')->where('conversation_id', $b)->value('id'))->toBe($cycle1RowId)
+  ➜ 253▕         ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $b)->whereNull('restored_at')->count())->toBe(0)
+    254▕         ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $a)->whereNull('restored_at')->count())->toBe(1);
+    255▕ 
+    256▕     // The unblock releases only A — the racer's block on B SURVIVES, because
+    257▕     // the withdrawn claim means the cascade never owned it.
+
+  [33m1   [39m[39;1mtests/Feature/Customers/BlockingCascadeTest.php[39;22m:[39;1m253[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m6.45s[39m
+

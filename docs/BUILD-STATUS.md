@@ -109,10 +109,27 @@ hazard is the AGGREGATE: when every run is red-but-flaky, "red" stops
 carrying information and the next REAL red gets rationalized as one more
 flake. **Triage law: every future red is dispositioned explicitly against
 this risk — "flaky-only, retry-green, matches 0i" or "REAL" — stated, never
-implied. THRESHOLD (stated at lettering): if five consecutive verdicts of
-record are 0i-class red, 0i becomes a BLOCKER — the session halts feature
-work and investigates before the next push. `failOnFlakyTests` is NOT
-disabled — the noise it surfaces is the finding.** INVESTIGATION HYPOTHESIS
+implied. THRESHOLD (REPLACED at the step-7 acceptance — the advisor's own
+correction, on the record: the original "five CONSECUTIVE" was mis-specified;
+at the observed ~1-in-3 rate a five-consecutive event is ~0.4% and the
+instrument could essentially never fire): 0i-class reds in 3 OR MORE of any
+10 consecutive COMPLETED runs.** **THE REPLACED THRESHOLD TRIPPED ON THE
+EARLIER WINDOW** (~four 0i-class reds inside about five runs) — **the
+resume-acceptance correction, the advisor keeping its own arithmetic honest:
+the CURRENT ten-run window holds only TWO**, so the rate improved or the
+real-red run displaced the observations; either way the standing consequence
+is unchanged. It is NOT another investigation — that ran, refuted the relay
+hypothesis, and left CI-runner contention as the residual — it is an OWNER
+DECISION, put to Kidus by the advisor: a larger CI runner, or accepting a
+red verdict about one run in three, **with its real deadline BEFORE STEP 10,
+when the browser-heavy work begins.** Recorded; the build carries on.
+`failOnFlakyTests` is NOT disabled — the noise it surfaces is the finding.**
+**DATAPOINT (resume checkpoint, run of record for `903f4c1`):
+[31835723225](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31835723225)
+RED at Stage 4 — `157 passed, 1 skipped, 1 flaky, 0 failed`; the sole flaky
+is `inbox-mobile-interactions.spec.ts:233` EC-03 DUAL-TAB DRAFTS, one of
+0i's three NAMED specs. Triage: flaky-only, retry-green, matches 0i. A
+datapoint in the ten-run window, not a fresh trip.** INVESTIGATION HYPOTHESIS
 (recorded for whoever picks it up, test FIRST): all three specs are
 timing-sensitive realtime paths and the relay is LIVE since S07 step 14 —
 the same family as 0g's relay-backlog root cause (a battery backlog holding
@@ -168,7 +185,11 @@ distribution; the synthesis says the same from two other directions). At the
 close-out battery: **0d GREEN there → the synthesis is confirmed, 0d's entry
 records "host-bound on this hardware" and stops being read as a code signal;
 0d RED there → a real regression and a different problem entirely.** Decidable
-at the close instead of accumulating.
+at the close instead of accumulating. **POSITIVE DATAPOINT (step-7 battery,
+recorded at the step-7 acceptance's order): 1178/17,356 exit 0, ZERO reds —
+0d GREEN on a quiet full run. The tripwire's own logic arriving early: if the
+close-out battery agrees, "host-bound on this hardware" will stand on two
+independent observations, not one.**
 
 **THE CONTENTION SYNTHESIS (recorded at the step-4 acceptance — one
 hypothesis linking three entries, so three test-rewrite efforts are not spent

@@ -168,3 +168,97 @@ it('A-37 noops both directions: blocking a blocked customer and unblocking an un
     expect(app(BlockCustomer::class)->block($customerId, 'fixture: twice', $actor->identifier()))->toBeNull()
         ->and(DB::table('outbox')->where('name', 'customer.blocked')->count())->toBe(1);
 });
+
+it('THE OWED CYCLE (step-7 acceptance): block → unblock → RE-block → unblock, with an individually-blocked conversation partway — the correct set restores at BOTH unblocks (the marker re-arms)', function (): void {
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $actor = App\Models\User::factory()->create();
+    $blocking = app(App\Domain\Conversations\Actions\ConversationBlocking::class);
+
+    $a = anchoredConversation($tenantId, $customerId, 'tg-cyc-1', 'bot-business');
+    $b = anchoredConversation($tenantId, $customerId, 'tg-cyc-2', 'bot-direct');
+
+    // CYCLE 1: block cascades over both; unblock restores both.
+    app(BlockCustomer::class)->block($customerId, 'fixture: cycle 1', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.blocked', $customerId, $actor->identifier())))->handle($blocking);
+    app(BlockCustomer::class)->unblock($customerId, 'fixture: lift 1', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.unblocked', $customerId, $actor->identifier())))->handle($blocking);
+
+    expect(DB::table('conversations')->whereIn('id', [$a, $b])->where('state', 'active')->count())->toBe(2);
+
+    // PARTWAY: conversation B gets blocked INDIVIDUALLY between the cycles.
+    /** @var App\Models\Conversation $cb */
+    $cb = App\Models\Conversation::query()->findOrFail($b);
+    $blocking->block($cb, null, 'fixture: individual nuisance between cycles');
+
+    // CYCLE 2: re-block — the marker for A must RE-ARM (its cycle-1 row is
+    // stamped restored); B is already blocked so the cascade must NOT claim it.
+    app(BlockCustomer::class)->block($customerId, 'fixture: cycle 2', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.blocked', $customerId, $actor->identifier())))->handle($blocking);
+
+    expect(DB::table('conversations')->whereIn('id', [$a, $b])->where('state', 'blocked')->count())->toBe(2)
+        ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $a)->whereNull('restored_at')->count())->toBe(1)
+        ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $b)->whereNull('restored_at')->count())->toBe(0);
+
+    // SECOND unblock: A restores (the re-armed marker), B SURVIVES — the
+    // silent failure modes were "A blocked forever" and "B released by
+    // someone else's unblock"; both are refuted here.
+    app(BlockCustomer::class)->unblock($customerId, 'fixture: lift 2', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.unblocked', $customerId, $actor->identifier())))->handle($blocking);
+
+    expect(DB::table('conversations')->where('id', $a)->value('state'))->toBe('active')
+        ->and(DB::table('conversations')->where('id', $b)->value('state'))->toBe('blocked')
+        ->and(DB::table('customer_block_cascade_items')->whereNull('restored_at')->count())->toBe(0);
+});
+
+it('THE RACED WITHDRAW (fold ownership): a conversation blocked between LIST and ACT is withdrawn — on a RE-ARMED pre-existing marker, whose own row id the upsert RETURNING hands back', function (): void {
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $actor = App\Models\User::factory()->create();
+    $blocking = app(App\Domain\Conversations\Actions\ConversationBlocking::class);
+
+    $a = anchoredConversation($tenantId, $customerId, 'tg-race-1', 'bot-business');
+    $b = anchoredConversation($tenantId, $customerId, 'tg-race-2', 'bot-direct');
+
+    // CYCLE 1 lays down the pre-existing markers, both stamped restored.
+    app(BlockCustomer::class)->block($customerId, 'fixture: race cycle 1', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.blocked', $customerId, $actor->identifier())))->handle($blocking);
+    app(BlockCustomer::class)->unblock($customerId, 'fixture: race lift 1', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.unblocked', $customerId, $actor->identifier())))->handle($blocking);
+    $cycle1RowId = (string) DB::table('customer_block_cascade_items')->where('conversation_id', $b)->value('id');
+
+    // THE RACER: the cascade writes B's marker BEFORE it re-reads B's state —
+    // this listener fires on exactly that upsert and blocks B individually in
+    // the gap, the deterministic version of "blocked between list and act".
+    $raceArmed = false;
+    DB::listen(function ($query) use (&$raceArmed, $b, $blocking): void {
+        if ($raceArmed || ! str_contains($query->sql, 'customer_block_cascade_items') || ! in_array($b, $query->bindings ?? [], true)) {
+            return;
+        }
+        $raceArmed = true;
+        $blocking->block(App\Models\Conversation::query()->findOrFail($b), null, 'fixture: the racer, between list and act');
+    });
+
+    // CYCLE 2: the cascade lists both as active, re-arms both markers, blocks
+    // A itself — and finds B already taken. The withdraw must stamp B's
+    // CYCLE-1 row (the id the DO UPDATE returned), never a duplicate.
+    app(BlockCustomer::class)->block($customerId, 'fixture: race cycle 2', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.blocked', $customerId, $actor->identifier())))->handle($blocking);
+
+    expect($raceArmed)->toBeTrue()
+        ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $b)->count())->toBe(1)
+        ->and((string) DB::table('customer_block_cascade_items')->where('conversation_id', $b)->value('id'))->toBe($cycle1RowId)
+        ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $b)->whereNull('restored_at')->count())->toBe(0)
+        ->and(DB::table('customer_block_cascade_items')->where('conversation_id', $a)->whereNull('restored_at')->count())->toBe(1);
+
+    // The unblock releases only A — the racer's block on B SURVIVES, because
+    // the withdrawn claim means the cascade never owned it.
+    app(BlockCustomer::class)->unblock($customerId, 'fixture: race lift 2', $actor->identifier());
+    (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.unblocked', $customerId, $actor->identifier())))->handle($blocking);
+
+    expect(DB::table('conversations')->where('id', $a)->value('state'))->toBe('active')
+        ->and(DB::table('conversations')->where('id', $b)->value('state'))->toBe('blocked')
+        ->and(DB::table('customer_block_cascade_items')->whereNull('restored_at')->count())->toBe(0);
+});
