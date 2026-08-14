@@ -172,6 +172,15 @@ MACHINE CAPACITY, which is also ruling D's larger-runner note arriving from a
 second direction. Any future investigation of any one of the three starts by
 testing this link, not by rewriting its own test.
 
+**THE STREAK CLOSED — CI GREEN AT `ef378d9` (run 31808038991, all stages),
+recorded at the step-6 checkpoint as EXACTLY WHAT IT IS: the first
+trustworthy CI signal since the plan commit (`8f85b3c`).** Every red between
+them was real, diagnosed, and named — the flaky-only pair (0i), the
+created_source saga's three surfaces (seeders → PHP fixtures → spec-embedded
+tinker), and the two Doc 06-machinery pins — none rationalized, none waved.
+The interim `2ef6b6f` red predates the spec fix and was pre-triaged to
+exactly it. From here every verdict is read against a clean baseline.
+
 **0i COUNTER CORRECTION (filed with the investigation order, so the
 instrument stays honest):** run 31796266320 on `b759229` was PRE-TRIAGED as a
 REAL red — the disclosed seeder gap (created_source NOT NULL), ruled and
