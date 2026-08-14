@@ -1,119 +1,24 @@
-# DESIGN-FIDELITY-MANDATE.md — how the build implements the delivered UI design
-_File 4 of the handoff package. Commit to `docs/` beside PROJECT-HANDOFF.md. This file BINDS
-every Claude Code session that builds anything a user sees. The advisor folds its rules into
-every session prompt whose scope includes a designed surface (SESSION-PROMPT-SPEC.md §B
-gains this as a mandatory block), and the owner attaches the relevant design files directly
-to the terminal session alongside it. Carried forward UNCHANGED from the v3/v4/v5 kits (the
-owner has not amended it); v6 note: the S23 build added four filed deviations and committed
-the re-runnable hex-extraction script — see PROJECT-HANDOFF-v6 §10._
+# DESIGN-FIDELITY-MANDATE (v7 reissue — unchanged in force, precedents updated through Doc 07)
 
----
+## 1. The mandate
+Every built surface renders at **100% fidelity to the frozen design record**: design/frozen/ — 219 files (screens/audits at their highest frozen version; the system = B1-DS-v2 + addenda B5/B6/B7). Design tokens only; the drawn copy verbatim (localized via i18n, both languages); the drawn states ALL built (loading/empty/error/refusal/races), not just the happy path. B7's 44-frame manifest is the only wired pixel baseline; Batches 1/2 have none — fidelity there is proven by frame-mapped assertions, not screenshots.
 
-## 1. Authority and rank
+## 2. Deviations — exactly three classes, all FILED in DESIGN-DEVIATIONS, none silent
+- **Class 1 — technical necessity / document conflict.** The drawn thing cannot be built as drawn (platform/ARIA/architecture constraint) or contradicts a specification document. **The document wins, always.** File with BOTH citations (the document line and the frozen file's own text) and the chosen resolution's reasoning.
+- **Class 2 — design gap.** The document requires a surface no frozen frame draws. Fill it from design-system components ONLY, with an owner ruling naming the fill's shape, and file the row.
+- **Class 3 — design defect.** The frozen file is internally wrong and no document resolves it: flag, wait for the owner; build nothing for it meanwhile.
 
-The seven-batch Claude Design program delivered the platform's UI: 165 frozen files, audited
-batch by batch (PROGRAM-REPORT-v1 is the map). For everything visual, those files are LAW,
-ranked as follows:
+## 3. Conflict/gap procedure
+STOP at discovery (a design conflict is a mandatory batch stop). Present options with evidence; the advisor rules; the ruling and its citations ride the filing. Stale frame references (a frame number that exists in no frozen file) are STRUCK from plans, never built. Never bend a status code, weaken a guard, or fork a second implementation to satisfy a drawing.
 
-1. **The 19-document series + CLAUDE.md** — always supreme. If a design file ever
-   contradicts a numbered requirement, the session STOPs and asks; it never picks a winner.
-   (Designs were audited against the documents, so a real conflict is rare and is always an
-   escalation, never a judgment call.)
-2. **The design files** — the drawn screens, their states, their copy, their tokens.
-3. **The build session's own preferences** — rank: none. A builder's taste is not an input.
+## 4. Precedents of record (Doc 07) — cite these when the same shapes recur
+- **A-36 (class 1):** §13's word "listbox" yielded to the **grid pattern** — interactive children are unlawful in role="option"; activedescendant was REJECTED with reasons (moves DOM focus, breaks proven roving assertions). Word yields to validity; intent preserved; axe green both themes.
+- **C9-lapsed (class 1, document wins):** the drawn "Reopen with a reason" on a lapsed window contradicted FR-08's new-ticket-and-link — and the frozen file's own other sentence. Affordance rebuilt to the document; both citations filed.
+- **C9-open (copy precision):** "reopens freely" ruled to mean no-detour ONLY; the mandatory reason stands; the copy states both facts.
+- **SEC-04 supersedes (class 1):** the drawn pre-execution per-item disabled-reason strip conflicted with at-execution verdict law; the delivered form (holder-gated affordances + named per-row failures at execution) stands; a dry-run door reusing the SAME checks is owner-orderable later.
+- **R-22 fill (class 2 exemplar, cc52cc1):** the tag rename/merge surface, owner-ruled, built whole from settings-row + confirmation-weight components on the untouched engine, deviation row filed — including the A-37 noop lesson applied AT DESIGN TIME.
+- **C3 (struck + bounded fill):** a frame reference that existed in no frozen file was struck; the underlying document obligation was delivered at the level the existing substrate supports, with the remainder a bounded, filed deferral.
+- **Drawn laws that bind everywhere:** "legal next states are ABSENT, not greyed" (D3 — legality ships as data from the single source); "identical controls, not a reduced set" at 375 (B14); refusals inline in the surface's own strip (B2-S06); countdowns render SERVER-computed stamps only; proofs assert VISIBILITY, not existence.
 
-## 2. The fidelity rule — 100%, not "similar"
-
-**The build implements the design exactly as drawn. Not inspired-by, not approximately, not
-"in the spirit of" — the drawn screen IS the specification of the screen.** Concretely:
-
-- **Tokens come from the design system, never from the builder.** `B1-DS-design-system-v2`
-  is the token source (its §2 carries every fixed token in BOTH light and dark colourways),
-  extended additively by the B5 addendum, v3 (Batch 6), and v4 (Batch 7, the frozen system
-  of record). Colors, spacing, radii, type sizes/weights, and component metrics are read
-  from these files and encoded once as design tokens (CSS variables / Tailwind config) —
-  never re-derived, never eyeballed from a screenshot.
-- **Dark mode comes from v2 §2's dark column — never mixed by eye.** The design program's
-  worst recorded error was twice inventing dark tokens when the real column existed
-  (§6 of the program report). The build does not repeat it: if a dark value seems missing,
-  the answer is "search the design system, then ask" — never "approximate it".
-- **Fixed tokens are outside the theme and are never re-mixed** (design-system law R-07/R-08):
-  the eight status pills, priority dots, SLA chip, reply-window chip, connection state,
-  channel-health rollup, note tokens, and the violet AI accent keep their exact values in
-  both colourways; status hues are reserved to their semantic components — generic
-  pass/fail UI uses the neutral success/danger tokens.
-- **Every frame, every state, every viewport, every theme, every language.** A design file's
-  frames are enumerated like spec ids: idle, loading, empty, error, edge and race states,
-  1440 and 375 (and the filed exceptions), light and dark, English and Amharic — each drawn
-  frame maps to an implemented state. The drawn Amharic strings are the `am` translations
-  (i18n keys as always; the design's copy is the copy).
-- **Layout and behavior as drawn**: information order, component choice, interaction
-  patterns (the visible-and-focusable bulk-bar reason, the single-input segmented code
-  field, the MERGE token beside the input, the 56px stop button with its named-consequence
-  contract on incident surfaces only, the 44px mobile floor over desktop metrics). Where a
-  design encodes a ruling, the ruling ships.
-
-## 3. What MAY deviate — narrow, named, and never silent
-
-The owner permits customization only in these classes, and **every instance is filed**:
-
-1. **Technical necessity** — a rendering, accessibility, framework, or performance
-   constraint makes the drawn form unimplementable as-is. The implementation gets as close
-   as the constraint allows.
-2. **Required functionality the design doesn't draw** — the documents demand a behavior or
-   state no frame covers (designs can't draw everything; the specs still bind). The gap is
-   filled using existing design-system components and patterns — the empty-state pattern,
-   the confirmation component, the per-key settings row contract — never invented styling.
-3. **Genuine design defects** — a measured error in a frozen file (wrong contrast, a token
-   the system doesn't contain). Not fixed unilaterally: flagged to the owner, who routes it
-   to the design track for a scope-limited reopen or rules an implementation-side value.
-
-**Filing discipline:** every deviation, from any class, is recorded in a
-`DESIGN-DEVIATIONS` section of BUILD-STATUS — design file + frame, what differs, which
-class, why — AND named in the session's close-out report. A deviation that isn't filed is
-treated as a fidelity violation. "I improved it" is never a class.
-
-**Explicitly forbidden:** substituting components ("a dropdown works like the drawn
-segmented control"), skipping drawn states because they're rare, dropping a viewport or
-theme or language, re-spacing "to feel better", using a UI library's default styling where
-a drawn component exists, and omitting anything from a design file without a filed
-deviation. Nothing is skipped, nothing is left out, nothing is "taken as inspiration".
-
-## 4. How a session works with design files (the loop)
-
-1. **The owner attaches** the design files for the surfaces in scope (plus B1-DS v2 + the
-   addenda + v4, always) directly to the terminal session, alongside the session prompt.
-2. **The plan table maps frames like ids**: for each designed surface, the plan enumerates
-   the design file's rows/frames and maps frame → component/file → proving test, exactly as
-   it maps FR/AC ids. A designed surface with no frame rows in the plan is an incomplete
-   plan.
-3. **Tokens first**: before the first screen, the session encodes the design-system tokens
-   once (or verifies the existing encoding against the files) — all subsequent styling
-   consumes tokens, never literals.
-4. **Proof**: functional states proven as always (tests, sabotage-before-counting); visual
-   fidelity proven by pixel baselines where they exist — `B7-AC09-manifest.json` names 44
-   auth frames (language × theme × viewport, each with its target PNG name) that become
-   Doc 02 AC-09's baselines the moment the owner fires the export; later batches' exports
-   attach the same way as their surfaces get built. Until a surface's baselines are
-   exported, its traceability row says so instead of claiming visual coverage.
-5. **Acceptance lists become tests**: B12-A01's nine behaviour rows, B3-A01's one, and
-   B4-A01's three are build obligations — each closes as an executed test when its surface
-   is built, cited by row id. (Batches 5–7's equivalent obligations currently live as prose
-   in their closing audits; if the owner commissions the three missing acceptance files,
-   they bind the same way.)
-6. **Conflicts and gaps**: design-vs-document conflict → STOP and ask. Design gap → class-2
-   fill with design-system patterns, filed. Design defect → class-3 flag, wait.
-
-## 5. Session-prompt obligation (binds the advisor)
-
-Every session prompt whose scope touches a user-visible surface MUST: name this file in its
-reading list; list the exact design files the owner will attach; require the frame-mapping
-rows in the plan table (§4.2); and carry this sentence verbatim in its SCOPE block:
-
-> "The attached design files are the specification of every screen in scope. Implement them
-> at 100% fidelity per DESIGN-FIDELITY-MANDATE.md — every frame, state, viewport, theme,
-> and language, tokens from the design system only, deviations only in the mandate's three
-> classes and every one filed. Nothing skipped, nothing approximated, nothing redesigned."
-
-Sessions with no designed surface in scope (pure backend documents) read this file once and
-carry no further obligation from it.
+## 5. For Doc 08 specifically
+The customer panel inherits every precedent above inside the same ContextPanel slot system. Provenance rendering (staff-collected-never-verified) follows the B13 subject-source idiom. PII surfaces take the curated-payload-allowlist + C-10 404-pattern floor. Any frame that implies betting-account data is a class-1 conflict on its face — the documents forbid the access.
