@@ -1,0 +1,33 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-print.spec.ts:47:1 › §9 print: the thread is the printable artifact — chrome regions hide under print media, and the note bubble prints ONLY when the server-stamped history_full class allows it (7.6s)
+
+
+  1) [chromium] › tests/Browser/inbox-print.spec.ts:47:1 › §9 print: the thread is the printable artifact — chrome regions hide under print media, and the note bubble prints ONLY when the server-stamped history_full class allows it 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-note-bubble]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-note-bubble]').first()
+
+
+      70 |         .locator('[data-role="row-open"]')
+      71 |         .click();
+    > 72 |     await expect(page.locator('[data-note-bubble]').first()).toBeVisible();
+         |                                                              ^
+      73 |
+      74 |     await page.emulateMedia({ media: 'print' });
+      75 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-print.spec.ts:72:62
+
+    Error Context: test-results/inbox-print-§9-print-the-t-33ff1-istory-full-class-allows-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-print.spec.ts:47:1 › §9 print: the thread is the printable artifact — chrome regions hide under print media, and the note bubble prints ONLY when the server-stamped history_full class allows it 

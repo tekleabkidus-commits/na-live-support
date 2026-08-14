@@ -121,3 +121,8 @@ logs:
 ## what is running, what is healthy
 status:
 	$(COMPOSE) ps
+
+## Doc 07 T-08/NFR-01: the Lighthouse budget on the AUTHED inbox route
+## (dev-indicative by default; PERF_BUDGETS_ENFORCE=1 asserts the spec 1.5 s)
+lhci:
+	CHROME_PATH=$$(node -e "console.log(require('@playwright/test').chromium.executablePath?.() ?? '')") bash ci/lighthouse-budget.sh

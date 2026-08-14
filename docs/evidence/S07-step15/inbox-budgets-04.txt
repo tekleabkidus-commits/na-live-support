@@ -1,0 +1,29 @@
+  [dev-hardware-indicative] §12 projector recompute (≤500ms p95; +200ms publish rides the same call) p50  24.032 ms   p99  30.359 ms   max  49.468 ms   budget(p99) 500.0 ms   WITHIN
+  [dev-hardware-indicative] §12 view recompute, 300 candidates (spec: 50k ≤ 5000ms — Doc 19 at scale) p50   2.465 ms   p99   2.714 ms   max   2.714 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 search tickets+messages via proxy (tickets ≤150ms / messages ≤300ms) p50  24.435 ms   p99  27.418 ms   max  27.418 ms   budget(p99) 300.0 ms   WITHIN
+  [dev-hardware-indicative] Doc 06 §12 merge preview, 2x500 messages (≤400ms) p50  26.462 ms   p99  28.921 ms   max  28.921 ms   budget(p99) 400.0 ms   WITHIN
+
+  [90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[31;1m⨯[39;22m[90;1m.[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\InboxBudgetsTest[22m [90m>[39m §12: the sync endpoint repla…   
+[39;1m  Expected response status code [200] but received 429.
+Failed asserting that 429 is identical to 200.[39;22m
+
+  at [32mtests/Performance/InboxBudgetsTest.php[39m:[32m146[39m
+    142▕ 
+    143▕         // 25 samples, deliberately under EC-08's own 30/min limiter — the
+    144▕         // throttle is a product control this clause respects, never clears.
+    145▕         $stats = measure(function () use ($actor): void {
+  ➜ 146▕             $this->actingAs($actor, 'staff')->getJson('https://localhost/inbox/sync')->assertOk();
+    147▕         }, samples: 25);
+    148▕ 
+    149▕         reportBudget('§12 sync 500-event replay (≤250ms p95)', 250.0, $stats);
+    150▕         assertBudget('§12 sync replay', $stats, 250.0);
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m811[39;22m
+  [33m2   [39m[39;1mtests/Performance/InboxBudgetsTest.php[39;22m:[39;1m145[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (189 assertions)[39m
+  [90mDuration:[39m [39m31.42s[39m
+

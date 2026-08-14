@@ -135,3 +135,12 @@ gates:
     owner: platform-engineering
     added_date: "2026-08-07"
     blocking: true
+
+  - gate_id: bundle-budget
+    name: Inbox route initial JS <= 350 KB gz from Vite's own manifest; dynamic imports are the lazy set (R-03)
+    command: bash ci/bundle-budget.sh
+    owning_doc: Doc07
+    owning_ac: NFR-04
+    owner: platform-engineering
+    added_date: "2026-08-14"
+    blocking: true

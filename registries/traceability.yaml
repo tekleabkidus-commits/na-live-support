@@ -1789,13 +1789,26 @@ entries:
       (tests/Browser/inbox-palette.spec.ts, the FR-25 message-hit proof: thread opens
       AT the message, row highlighted, Doc 04 EC-08 window underneath).
   - ac_ref: "Doc07 AC-10"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Performance/InboxBudgetsTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: not-implemented
+    status: partial
     justification: >-
-      NOT IMPLEMENTED AT S07 STEP 1. Perf: CI budgets (NFR-01/03/04); soak structure; projector lag SLO (L2 halves -> Doc 19 bucket, stated). Lands at approved-plan step 15 as
-      tests/Performance/InboxBudgetsTest.php + CI budget stages; this row flips to automated in that step's commit.
+      EXECUTED at S07 step 15, dev-hardware-indicative with the house two-tier
+      discipline (5x regression ceiling default; PERF_BUDGETS_ENFORCE=1 asserts
+      the spec numbers — the inbox suite passed STRICT on dev hardware for all
+      five §12 rows incl. the Doc 06 merge-preview bucket now closed).
+      NFR-04's bundle budget is the blocking `bundle-budget` CI gate (Vite
+      manifest walk, 125.1 KB gz measured vs 350; lazy set printed).
+      NFR-01's Lighthouse budget runs via `make lhci` (@lhci/cli, REAL authed
+      login): script-size binding at every scale; TTI measured 1977 ms vs the
+      1500 ms spec under simulated fast-3G on dev hardware — the spec number
+      binds under ENFORCE on Doc 19's L1 profile, and the miss is FLAGGED in
+      the close-out, never hidden. NFR-05's soak is STRUCTURE
+      (tests/Browser/inbox-soak.spec.ts, SOAK=1, GC-forced heap series flat at
+      dev duration). PARTIAL because AC-10's own words include the 8 h soak
+      p-values and the projector-lag SLO under L2 — the pre-agreed Doc 19
+      bucket, named here as everywhere.

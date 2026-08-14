@@ -58,3 +58,9 @@ Schedule::command('telegram:window-sweep')->everyFiveMinutes()->withoutOverlappi
 // Doc 05 FR-29/FS-02: getWebhookInfo poll + silent-broken detection, 5-minute
 // cadence per the document; event-driven health rides Doc 04's tracker.
 Schedule::command('telegram:health-poll')->everyFiveMinutes()->withoutOverlapping();
+
+// Doc 07 NFR-07/SS-04 (S07 step 15): the read-model consistency checker —
+// every view ZSET compared against its direct scoped query, hourly, with
+// drift ALERTING through the command's own non-zero exit + error log (the
+// SS-04 "week with zero drift alerts" measurement runs on exactly this).
+Schedule::command('inbox:consistency-check')->hourly()->withoutOverlapping();

@@ -1,0 +1,28 @@
+  [dev-hardware-indicative] §12 projector recompute (≤500ms p95; +200ms publish rides the same call) p50  23.399 ms   p99  41.980 ms   max  43.015 ms   budget(p99) 500.0 ms   WITHIN
+  [dev-hardware-indicative] §12 view recompute, 300 candidates (spec: 50k ≤ 5000ms — Doc 19 at scale) p50   2.457 ms   p99   3.171 ms   max   3.171 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 search tickets+messages via proxy (tickets ≤150ms / messages ≤300ms) p50  18.793 ms   p99  26.236 ms   max  26.236 ms   budget(p99) 300.0 ms   WITHIN
+  [dev-hardware-indicative] Doc 06 §12 merge preview, 2x500 messages (≤400ms) p50  26.434 ms   p99  30.077 ms   max  30.077 ms   budget(p99) 400.0 ms   WITHIN
+
+  [90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[31;1m⨯[39;22m[90;1m.[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\InboxBudgetsTest[22m [90m>[39m §12: the s… [41;1m RuntimeException [49;22m  
+[39;1m  the replay did not cover the 500-event backlog[39;22m
+
+  at [32mtests/Performance/InboxBudgetsTest.php[39m:[32m162[39m
+    158▕         $viewer = $actor;
+    159▕         $stats = measure(function () use ($tenant, $viewer): void {
+    160▕             $result = asTenant($tenant, fn (): array => syncReaderForPerf()->since(null, $viewer));
+    161▕             if (count($result['events'] ?? []) < 500) {
+  ➜ 162▕                 throw new RuntimeException('the replay did not cover the 500-event backlog');
+    163▕             }
+    164▕         }, samples: 25);
+    165▕ 
+    166▕         reportBudget('§12 sync 500-event replay via SyncReader (≤250ms p95)', 250.0, $stats);
+
+  [33m1   [39m[39;1mtests/Performance/InboxBudgetsTest.php[39;22m:[39;1m162[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m811[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (158 assertions)[39m
+  [90mDuration:[39m [39m29.22s[39m
+
