@@ -65,8 +65,15 @@ final class RelayOutbox extends Command
             try {
                 $relayed = $relay->relayBatch($batch);
             } catch (QueryException $e) {
-                $state = $e->getCode();
-                $notReadyYet = $state === '42P01' || str_starts_with((string) $state, '08');
+                // The SQLSTATE lives in errorInfo[0]; getCode() is only the
+                // SQLSTATE for post-connection errors — a CONNECTION failure
+                // reports the pgsql driver int (7) there, which is exactly
+                // how the first version of this catch stayed blind in CI
+                // (run 31748210036: relay still unhealthy — postgres was not
+                // accepting connections yet when the relay booted).
+                $sqlstate = $e->errorInfo[0] ?? null;
+                $state = is_string($sqlstate) ? $sqlstate : (string) $e->getCode();
+                $notReadyYet = $state === '42P01' || str_starts_with($state, '08');
                 if (! $notReadyYet || $once) {
                     throw $e;
                 }
