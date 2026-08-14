@@ -1764,3 +1764,25 @@ identity values is exactly what the backfill must never do; a zero-identity
 profile is legal, EC-05). A customer with neither identities nor
 conversations still refuses loudly — truly unknown provenance stays a human
 question. Proven by two new IdentityBackfillTest clauses.
+
+### A-42 (FILED INTERPRETATION at S08 step 5; needs advisor countersign). FR-10's conversation anchor is derived from CHANNEL PHYSICS — no schema addition
+
+FR-10: "conversations/tickets tied to that identity's conversations move with
+it — conversation ownership follows the identity that anchors it." The schema
+stores no identity_id on conversations (a Doc 04 column would be a core
+edit), and Doc 08 T-01 adds none — the document presumes the linkage without
+naming its carrier. INTERPRETATION: the anchor DERIVES — a conversation is
+anchored by the channel identity whose external user id equals the
+conversation's external_chat_id on the same channel. BASIS: Telegram
+private-chat physics — for the Business and direct surfaces Doc 05 built,
+the chat id of a private conversation IS the user id, so the equality is the
+channel's own fact, not a heuristic; Doc 13's web identities anchor by
+visitor id through the same equality when they land. CONSEQUENCE, stated:
+phone/email identities anchor NO conversations in v1 — no channel produces
+them (SMS is notification-only, N-15) — so unlinking one moves the identity
+alone; the B4-S03 C03 frame's fiction of "5 tickets that came through the
+phone" cannot occur in v1 data, and AC-04's law makes the typed confirmation
+render whatever the move-set query actually answers, so the surface stays
+honest whichever way the fiction reads (noted for the step-11 frame mapping,
+not a conflict — the confirmation is COMPUTED, per the document's own AC-04).
+Implemented in UnlinkMoveSet, whose docblock cites this record.

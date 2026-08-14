@@ -34,6 +34,7 @@ return [
     ],
 
     'error' => [
+        'identity_already_linked' => 'Identity already linked',
         // Titles for the RFC 9457 `code` enum (T-07). Short, human, and safe to
         // translate — clients branch on `code`, never on these.
         'quota_exceeded' => 'Usage limit reached',

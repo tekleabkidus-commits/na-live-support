@@ -1382,3 +1382,21 @@ function enforcedCustomer(string $tenantId, string $createdAt, ?string $id = nul
 
     return $id;
 }
+
+/** A raw ticket row for rollup/move-set fixtures (S08; status chosen directly). */
+function rollupTicket(string $tenantId, string $conversationId, string $customerId, string $status): string
+{
+    $id = (string) Str::uuid7();
+    DB::table('tickets')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'conversation_id' => $conversationId,
+        'customer_id' => $customerId,
+        'number' => random_int(1, 2_000_000_000),
+        'status' => $status,
+        'priority' => 'normal',
+        'source' => 'agent',
+    ]);
+
+    return $id;
+}

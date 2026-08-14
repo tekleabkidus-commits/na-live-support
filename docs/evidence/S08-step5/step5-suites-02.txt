@@ -1,0 +1,69 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\LinkUnlinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-09: a staff-linked phone stores E.164, source=staff, DB-time[39m[90m… [39m [90m4.93s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-09/AC-02 (the block half): the value on ANOTHER customer refu[39m[90m…[39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit linking the SAME value to the SAME customer is the A-37 noop — t[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: the typed confirmation and the executed move come from ON[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: unlinking the ONLY identity is allowed — the profile keep[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-42's consequence: a phone identity anchors NO conversations —[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: a mismatched customer/identity pairing answers 404 — indis[39m[90m…[39m [90m0.15s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\LinkUnlinkTest[22m [90m>[39m it FR-09… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select count(*) as "aggregate" from "customer_identities" where "value" = +251900887766)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/Customers/LinkUnlinkTest.php[39;22m:[39;1m78[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\LinkUnlinkTest[22m [90m>[39m it linki… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select count(*) as "aggregate" from "audit_log" where "action_key" = customer.identity.linked)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/Customers/LinkUnlinkTest.php[39;22m:[39;1m97[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\LinkU[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "conversations_identity_unique" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "conversations" ("id", "tenant_id", "channel", "channel_ref_id", "external_chat_id", "customer_id", "state") values (01a00086-068c-7312-b726-09513ec05863, 01a00086-066f-7250-acfc-06411736e310, telegram, fixture_bot, tg-900800, 01a00086-067e-7e53-94d6-6f73894bf62b, active))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Customers/LinkUnlinkTest.php[39;22m:[39;1m27[39;22m
+  [33m8   [39m[39;1mtests/Feature/Customers/LinkUnlinkTest.php[39;22m:[39;1m118[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (23 assertions)[39m
+  [90mDuration:[39m [39m5.76s[39m
+

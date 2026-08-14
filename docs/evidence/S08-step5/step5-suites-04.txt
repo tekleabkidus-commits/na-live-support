@@ -1,0 +1,22 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\LinkUnlinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-09: a staff-linked phone stores E.164, source=staff, DB-time[39m[90m… [39m [90m6.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/AC-02 (the block half): the value on ANOTHER customer refu[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit linking the SAME value to the SAME customer is the A-37 noop — t[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the typed confirmation and the executed move come from ON[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: unlinking the ONLY identity is allowed — the profile keep[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-42's consequence: a phone identity anchors NO conversations —[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: a mismatched customer/identity pairing answers 404 — indis[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING A: window decay (stored > recomputed) heals QUIETLY, but[39m[90m… [39m [90m0.14s[39m  
+
+  [90mTests:[39m    [32;1m13 passed[39;22m[90m (60 assertions)[39m
+  [90mDuration:[39m [39m8.46s[39m
+

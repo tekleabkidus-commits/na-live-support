@@ -26,6 +26,25 @@ return [
     //    RgFlagService that emits them (SEC-02: high-visibility, reasons
     //    mandatory both directions).
     [
+        'action_key' => 'customer.identity.linked',
+        'entity' => 'customer',
+        // channel_auto rows are written by the resolver (system); staff adds
+        // phone/email by hand (FR-09).
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['type'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.identity.unlinked',
+        'entity' => 'customer',
+        // FR-10: high-risk, human-only, reason mandatory (SEC-02); the entry
+        // carries the MOVED COUNTS so the audit trail answers "what did that
+        // unlink actually take" without replaying the move-set query.
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason', 'type', 'new_customer_id', 'moved_conversations', 'moved_tickets'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
         'action_key' => 'customer.rg_flag.set',
         'entity' => 'customer',
         // staff sets manually; 'system' is the AI-detection path (FR-14,

@@ -15,6 +15,9 @@ declare(strict_types=1);
 */
 
 return [
+    'identity' => [
+        'duplicate' => 'That :type already belongs to another profile — a value can only be on one customer (merge instead?).',
+    ],
     'notify' => [
         'merge_completed' => 'Customer merge completed',
         'export_ready' => 'Customer export ready',

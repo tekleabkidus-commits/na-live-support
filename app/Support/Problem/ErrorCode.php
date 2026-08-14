@@ -157,6 +157,12 @@ enum ErrorCode: string
     case AlreadyClaimed = 'already_claimed';
 
     /**
+     * Doc 08 FR-09: the value already belongs to another customer — blocked,
+     * with the merge-instead offer riding the response's extra members.
+     */
+    case IdentityAlreadyLinked = 'identity_already_linked';
+
+    /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
      * Titles are translated, codes are not. A client that needs to display something

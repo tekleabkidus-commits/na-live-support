@@ -12,6 +12,9 @@ declare(strict_types=1);
 */
 
 return [
+    'identity' => [
+        'duplicate' => 'ይህ :type አስቀድሞ በሌላ መገለጫ ላይ ነው — አንድ እሴት በአንድ ደንበኛ ላይ ብቻ ሊሆን ይችላል (በምትኩ ይዋሃዱ?)።',
+    ],
     'notify' => [
         'merge_completed' => 'የደንበኛ ውህደት ተጠናቋል',
         'export_ready' => 'የደንበኛ ኤክስፖርት ዝግጁ ነው',

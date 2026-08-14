@@ -278,6 +278,20 @@ Route::group([], function (): void {
             Route::post('conversations/dead-letters/{deadLetterId}/redrive', [App\Http\Controllers\Conversations\DeadLettersController::class, 'redrive'])
                 ->middleware(['permission:tickets.reply', 'audit:conversation.message_redriven'])
                 ->name('conversations.dead_letters.redrive');
+
+            // ── Doc 08 FR-09/FR-10 (S08 step 5): the identity doors — T-02
+            //    names the link route. C-10 404-shape + curated payloads in
+            //    the controller; AC-04's single-source law binds preview and
+            //    execute to UnlinkMoveSet.
+            Route::post('customers/{customerId}/identities', [App\Http\Controllers\Customers\IdentityController::class, 'link'])
+                ->middleware(['permission:customers.identity.link', 'audit:customer.identity.linked'])
+                ->name('customers.identities.link');
+            Route::get('customers/{customerId}/identities/{identityId}/unlink-preview', [App\Http\Controllers\Customers\IdentityController::class, 'unlinkPreview'])
+                ->middleware('permission:customers.identity.unlink')
+                ->name('customers.identities.unlink_preview');
+            Route::post('customers/{customerId}/identities/{identityId}/unlink', [App\Http\Controllers\Customers\IdentityController::class, 'unlink'])
+                ->middleware(['permission:customers.identity.unlink', 'audit:customer.identity.unlinked'])
+                ->name('customers.identities.unlink');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.

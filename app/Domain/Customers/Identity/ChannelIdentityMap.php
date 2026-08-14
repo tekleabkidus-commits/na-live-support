@@ -56,4 +56,16 @@ final class ChannelIdentityMap
     {
         return array_keys(self::MAP);
     }
+
+    /**
+     * The identity types CHANNELS mint (the map's value set) — everything
+     * else (phone, email) is staff/api-linked and anchors no conversations
+     * (A-42). Derived, so the taxonomy has one home.
+     *
+     * @return list<string>
+     */
+    public static function channelMintedTypes(): array
+    {
+        return array_values(array_unique(array_values(self::MAP)));
+    }
 }

@@ -44,22 +44,7 @@ function rollupScene(): array
     return [$tenant, $customerId, $conversationId];
 }
 
-function rollupTicket(string $tenantId, string $conversationId, string $customerId, string $status): string
-{
-    $id = (string) Str::uuid7();
-    DB::table('tickets')->insert([
-        'id' => $id,
-        'tenant_id' => $tenantId,
-        'conversation_id' => $conversationId,
-        'customer_id' => $customerId,
-        'number' => random_int(1, 2_000_000_000),
-        'status' => $status,
-        'priority' => 'normal',
-        'source' => 'agent',
-    ]);
-
-    return $id;
-}
+// rollupTicket() lives in tests/Pest.php (shared with LinkUnlinkTest).
 
 it('recomputes every rollup from truth, with N-14 riding the ONE MetricExclusion predicate — spam counts nowhere', function (): void {
     [, $customerId, $conversationId] = rollupScene();

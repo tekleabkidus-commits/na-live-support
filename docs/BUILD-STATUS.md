@@ -160,6 +160,18 @@ would live in Doc 07-owned spec files (wait budgets/actionability handling)
 separate session; NOT folded into Doc 08. The 0i triage law and threshold
 stand unchanged.
 
+**THE CONTENTION SYNTHESIS (recorded at the step-4 acceptance — one
+hypothesis linking three entries, so three test-rewrite efforts are not spent
+on one cause):** three timing sensitivities now stand — **0d**
+(RbacBudgetsTest p99), the **EnumerationTest R-3 timing-equalization note**
+(first S08 sighting), and **0i** (the browser flakes). All three fire ONLY
+under load (a full local battery, or the 2-vCPU CI runner) and all three pass
+on a single re-run or in isolation. HYPOTHESIS: they are ONE phenomenon —
+host CPU contention — wearing three names. If it holds, the answer is
+MACHINE CAPACITY, which is also ruling D's larger-runner note arriving from a
+second direction. Any future investigation of any one of the three starts by
+testing this link, not by rewriting its own test.
+
 **0i COUNTER CORRECTION (filed with the investigation order, so the
 instrument stays honest):** run 31796266320 on `b759229` was PRE-TRIAGED as a
 REAL red — the disclosed seeder gap (created_source NOT NULL), ruled and
