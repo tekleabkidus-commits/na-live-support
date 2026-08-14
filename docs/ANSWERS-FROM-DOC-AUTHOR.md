@@ -1510,3 +1510,164 @@ upgrade; (c) the policy when a metadata upgrade would change an already-stored v
 The approval's stated ground: normalization correctness is a SAFETY property here —
 BR-04's unique index assumes one phone normalizes one way forever, so an in-house
 subset is the riskier option. Nothing else grows.
+
+### S08 SCHEMA AMENDMENT 2 (filed at step 1a, BEFORE any migration exists — the B1 correction's split honored; needs advisor countersign)
+
+The Doc 08 schema, complete: six items, every column R-19b-analyzed, ADR-0003
+grant physics throughout, `APP_WRITABLE_COLUMNS` split-comment discipline, DB time
+only (C-11), FORCED RLS + tenant_isolation + `REVOKE DELETE` on every new table.
+Two interpretations are FLAGGED inline for the countersign (marked ⚑) rather than
+chosen silently. No migration ships until this amendment returns countersigned.
+
+**1. `customers` — column additions (FR-01, FR-03, FR-14, FR-18, FR-02).**
+
+- `language` (text, nullable) + `language_source` (text CHECK detected|staff,
+  nullable) — EC-10's sticky law lives in the profile service, marked by source.
+- `country` (text ISO-3166-1 alpha-2, nullable) + `country_source` (text CHECK
+  staff|geoip, nullable).
+- `tags` (text[], NOT NULL default '{}', GIN) — the Doc 06/07 tag idiom.
+- `rg_flag` (bool NOT NULL default false), `rg_flag_set_by` (uuid, nullable —
+  null for AI-set), `rg_flag_reason` (text, nullable), `rg_flag_set_at`
+  (timestamptz, nullable) — **PINNED-PROVENANCE**: a byte-copy of the owning
+  `rg_flag_history` row's own DB-time `created_at`, never a fresh clock read
+  (the history table is the authority; the customer columns are the current-state
+  denormalization SEC-01's query-level gate covers). App-writable by that
+  documented discipline; byte-equality with the history stamp proven by test.
+- `blocked` (bool NOT NULL default false), `blocked_reason` (text, nullable),
+  `blocked_by` (uuid, nullable), `blocked_at` (timestamptz, nullable) — same
+  pinned-provenance treatment: byte-copy of the block operation's audit/event
+  DB stamp.
+- `merged_into_id` (uuid, nullable, self-FK) — FR-02's tombstone pointer; BR-05's
+  redirect key; acyclic by the merge service's chain check (the Doc 06 A-13
+  precedent).
+- `created_source` (text CHECK telegram|webchat|staff|api, NOT NULL) — backfill
+  by a MIGRATION-LOCAL static map from the creating identity's channel
+  (telegram→telegram, fake→webchat); an unmapped channel FAILS the migration
+  loudly. This map is migration-local on purpose — the RUNTIME mapping mechanism
+  is escalation #1's ruling (options (a)/(b) below) and the backfill must not
+  depend on it.
+- Rollups (FR-03, event-maintained, recomputable): `tickets_count` (int NOT NULL
+  default 0), `open_tickets` (int NOT NULL default 0), `satisfaction_avg`
+  (numeric, nullable) + `satisfaction_count` (int NOT NULL default 0) — inputs
+  fixture-fed until Doc 12 produces (the [D12] bucket) — and `last_contact_at`
+  (timestamptz, nullable) — **PINNED-PROVENANCE**: byte-copy of the source
+  message's `messages.created_at`, app-writable by documented discipline,
+  byte-equality proven (the A-33/R-19b law; a wall-clock write here would let
+  clock skew reorder "last contact" against the thread itself).
+- ⚑ **FLAGGED INTERPRETATION — the repeat-contact input** (FR-03 names
+  "repeat_contact_rate inputs" and defines them nowhere): proposed as ONE column,
+  `repeat_contacts_count` (int NOT NULL default 0) — the rollup consumer counts a
+  non-spam ticket (N-14 via the one MetricExclusion predicate) as a repeat when
+  the same customer already had a ticket created within the preceding 30 days.
+  The 30-day window is PROVISIONAL and so marked in the column comment: Doc 15's
+  metric dictionary owns the formula (rate = repeat/tickets) and may redefine the
+  window; the column is recomputable by the drift job, so a redefinition is a
+  recompute, not a migration. Countersign confirms or adjusts.
+- Deprecations opened (C-12 expand-contract): `customers.phone` and
+  `customers.username` stop being written by the resolver the moment the new
+  identity shape lands (phone becomes an identity type; username lives in the
+  telegram identity's display + metadata history). Both columns SURVIVE through
+  the contract window; the drop is GATED — see item 6.
+
+**2. `customer_identities` — the evolution (FR-04/FR-05/FR-06, T-02).**
+Expand: add `type` (text CHECK telegram|web|phone|email, nullable until enforce),
+`value` (text, nullable until enforce), `source` (text CHECK
+channel_auto|staff|api), `first_seen_at` (timestamptz — for backfilled rows a
+byte-copy of the row's own `created_at`; for new rows filled by the writing
+service from the statement's DB clock; not an ordering key, but provenance the
+UI renders, so the copy discipline is documented), `metadata` (jsonb NOT NULL
+default '{}' — username history {old, changed_at} per FR-06). Backfill: type/value
+from (channel, external_user_id) via the migration-local map above; existing
+`customers.username` copied into the telegram identity's metadata where absent.
+Enforce: `type`/`value` NOT NULL + **UNIQUE (tenant_id, type, value)** (BR-04's
+physics; AC-02's direct-SQL target; the resolver's ON CONFLICT arbiter). Legacy
+`channel`/`external_user_id` columns deprecated (kept through the window, dropped
+under item 6's same gate discipline).
+
+**3. `customer_notes` (FR-17).** `id` (UUIDv7), `tenant_id`, `customer_id` (FK),
+`author_id` (uuid NOT NULL — notes always have a human author), `body` (text
+NOT NULL), `pinned` (bool NOT NULL default false; partial UNIQUE
+(tenant_id, customer_id) WHERE pinned — FR-17's "pinned note (one)"),
+`created_at` — **ORDERING-RELEVANT** (notes render newest-first):
+clock_timestamp() default + the R-19a column grant (app INSERT-denied on it),
+`updated_at` maintenance. N-04: no adapter path exists from this table; the
+structural-undeliverability test (sabotage #15's subject) asserts it.
+
+**4. `customer_merge_snapshots` (FR-13, T-03).** Named with the `customer_`
+prefix because Doc 06's `ticket_merge_snapshots` already claims the namespace —
+T-01's bare "merge_snapshots" is read as prose (Q9), the schema takes the
+collision-free name, stated here so it is a filed reading, not drift. Columns:
+`id`, `tenant_id`, `survivor_id`, `merged_id`, `payload` (jsonb — the FULL
+re-pointing map: every moved conversation/ticket/file/note/identity id, the
+field diff with chosen values, pre-merge field values, armed-timer state —
+AC-03's byte-identical bar is only reachable if this payload is exhaustive, so
+the payload schema is asserted by test, not convention), `expires_at`
+(timestamptz NOT NULL — creation stamp + 30 days, computed in SQL from the same
+statement clock), `undone_at` (timestamptz, nullable), `created_at` —
+**ORDERING-RELEVANT** (EC-04's outermost-first chain order is determined by
+snapshot recency): clock_timestamp() default + R-19a grant. Grant shape: app
+UPDATE restricted by column list to `undone_at` alone (the one legal mutation);
+REVOKE DELETE (pruning after expiry runs as platform role — the
+TicketMergeSnapshotsPrune precedent).
+
+**5. `rg_flag_history` (T-05, FR-15, AC-05, AC-B4-02).** `id`, `tenant_id`,
+`customer_id`, `action` (text CHECK set|cleared), `source` (text CHECK
+staff|ai), `actor_id` (uuid, nullable — null exactly when source=ai),
+`reason` (text NOT NULL), `excerpt_ref` (jsonb, nullable — the AI triggering
+excerpt's message reference, [D09]-fed), `created_at` — **ORDERING-RELEVANT**
+(history renders and exports in order): clock_timestamp() default + R-19a grant.
+**INSERT-ONLY BY GRANT: REVOKE UPDATE, DELETE** — AC-05's immutability and
+AC-B4-02's "an export run twice a year apart still contains the same early
+rows" as physics, not convention.
+
+**6. `customer_identity_conflicts` — the backfill's PERMANENT HOME (correction
+B2 + the advisor's Note 1).** `id`, `tenant_id`, `type` (text), `value` (text —
+the shared value itself), `keeper_customer_id`, `loser_customer_id`,
+`resolved_at` (timestamptz, nullable, app-writable — stamped when a human
+consolidates through the FR-09/FR-10/merge doors), `created_at` (hygiene
+default). REVOKE DELETE. One row per (value, loser); written by the backfill in
+the same transaction that chooses the keeper (oldest `created_at`, tiebreak
+lowest UUIDv7).
+
+**THE NOTE-1 ANSWER, STATED FOR THE PERSON WHO WRITES THE DROP MIGRATION:**
+the mechanism is **permanent home FIRST, gated drop as the verification
+backstop — both.** (i) By construction, every loser value is preserved FOREVER
+in `customer_identity_conflicts` at backfill time — the preservation does not
+depend on the operator acting on any report. (ii) The future contract-window
+migration that drops `customers.phone`/`customers.username` MUST run this check
+and REFUSE loudly on failure: every non-null `customers.phone` value is either
+present as a phone identity on that customer or recorded in
+`customer_identity_conflicts`; every non-null `customers.username` is mirrored
+in its telegram identity's display/metadata. A drop that cannot prove both
+halves does not run. This paragraph is the constraint of record — the drop
+migration cites THIS amendment, not a comment on the deprecation.
+`IdentityBackfillTest` proves the whole policy: two customers, one phone →
+deterministic keeper → both values retrievable → the conflict row exists → the
+drop-gate check passes on the healthy state and REFUSES when a conflict row is
+deleted from under it (the negative control).
+
+**ESCALATION #1 — THE RUNTIME channel→identity-type MAPPING (the advisor's
+Note 2; for ruling with this countersign, both options presented, neither
+pre-committed):**
+
+- **(a) `identityType()` on the ChannelAdapter contract.** Each adapter
+  self-describes; drift structurally impossible. COSTS: a Doc 04 CORE-CONTRACT
+  edit — every adapter (real + both fakes), the conformance suite gains a
+  clause, and R-16's zero-core-edits proof is spent on a contract change.
+- **(b) A Doc 08-owned registry** —
+  `App\Domain\Customers\Identity\ChannelIdentityMap` (const MAP:
+  telegram→telegram, fake→web, webchat→web reserved for Doc 13), consulted at
+  the resolver boundary, with a test asserting (i) every channel the
+  AdapterRegistry knows has a mapping and (ii) an unmapped channel THROWS at the
+  resolver — the same fail-loud property, zero core edits. LAYERING: the
+  identity taxonomy (telegram|web|phone|email) is Doc 08's domain model; (a)
+  would put Doc 08's taxonomy on Doc 04's frozen contract — a dependency
+  inversion. CONSEQUENCE IF (b) RULES: escalation #1's Doc 04 surface SHRINKS to
+  the `CustomerResolver` file itself (rewritten in place per its own docblock's
+  cession; signature `resolve(string $channel, InboundSender)` unchanged), and
+  `NormalizeInbound` needs NO edit. The session's recommendation matches the
+  advisor's stated lean: **(b)**.
+
+Remaining step-1a items (the twelve catalog events, the AC-09 repo-wide test,
+notification categories, traceability rows) land in the 1a completion commit
+immediately after this countersign returns, before any 1b migration.
