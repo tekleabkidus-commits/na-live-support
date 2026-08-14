@@ -1584,7 +1584,15 @@ physics; AC-02's direct-SQL target; the resolver's ON CONFLICT arbiter). Legacy
 `channel`/`external_user_id` columns deprecated (kept through the window, dropped
 under item 6's same gate discipline).
 
-**3. `customer_notes` (FR-17).** `id` (UUIDv7), `tenant_id`, `customer_id` (FK),
+**3. `customer_notes` (FR-17).** *(AMENDED at step 6, countersigned at the
+step-6 acceptance — this amendment stays the single source for the grants:
+the app UPDATE grant is `(customer_id, pinned, updated_at)`. The original
+fence omitted `customer_id`; the merge's first execution was refused by the
+grant itself (42501) because FR-12 re-points notes and FS-02 re-points them
+back. Content stays fenced (`body`/`author_id`/`created_at`/`id`/`tenant_id`
+denied). The surrendered physics is replaced by a PROVEN BOUNDARY: the
+CustomerGrantPhysicsTest architecture assertion that customer_notes.customer_id
+is written only by the merge machinery.)* Original filing:  `id` (UUIDv7), `tenant_id`, `customer_id` (FK),
 `author_id` (uuid NOT NULL — notes always have a human author), `body` (text
 NOT NULL), `pinned` (bool NOT NULL default false; partial UNIQUE
 (tenant_id, customer_id) WHERE pinned — FR-17's "pinned note (one)"),
@@ -1839,3 +1847,23 @@ document-required mutation of this table. DELTA: the app UPDATE grant becomes
 (no note-body edit has a document line). Shipped as a NEW migration (a
 shipped migration is never edited); the CustomerGrantPhysicsTest denied-set
 moves in the same commit, which is that guard's job.
+
+### SCHEMA AMENDMENT 2 — ADDITION 7 (filed at S08 step 7, BEFORE shipping; needs advisor countersign at the checkpoint). `customer_block_cascade_items` — the cascade's restore memory
+
+FR-18: "unblock restores conversation states" and F04's frame: "their 4
+conversations RETURN TO THE STATE THEY WERE IN." Conversations are binary
+(active|blocked, no reason column — Doc 04's schema), so restore needs ONE
+fact the platform does not durably hold: WHICH conversations the CUSTOMER
+cascade blocked, versus those already blocked individually (Doc 04's
+per-conversation block "remains available" per FR-18's own last sentence —
+those must SURVIVE a customer unblock). Audit rows are append-only truth but
+not a control-flow source (house norm), so the memory is a table:
+`customer_block_cascade_items` — `id`, `tenant_id`, `customer_id`,
+`conversation_id`, `restored_at` (nullable), `created_at` (hygiene). R-19b:
+no ordering key or metric reads it. Grant physics (the marker pattern's THIRD
+application): INSERT column-granted (`restored_at` excluded — an item is born
+unrestored), UPDATE granted to exactly `restored_at`, DELETE revoked;
+FORCED RLS + tenant_isolation; UNIQUE (tenant_id, customer_id,
+conversation_id) so the idempotent cascade cannot double-record. The cascade
+consumer inserts one row per conversation IT blocks; the unblock cascade
+restores exactly the unrestored items and stamps them.

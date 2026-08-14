@@ -78,3 +78,32 @@ it('§12 indicatively: the per-event HANDLER inside 5 ms×tier, and the repair u
     $repairStats = measure(static fn () => $rollups->recompute($customerId));
     reportBudget('recompute (repair unit, no §12 budget)', assertedBudget(5.0), $repairStats);
 });
+
+it('§12 indicatively: the blocking cascade over 50 conversations inside 3000 ms×tier [D19: formal run]', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    bindTenant($tenant);
+    $tenantId = $tenant->identifier();
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $actor = App\Models\User::factory()->create();
+
+    foreach (range(1, 50) as $i) {
+        anchoredConversation($tenantId, $customerId, 'tg-perf-'.$i, 'bot-'.$i);
+    }
+    app(App\Domain\Customers\Blocking\BlockCustomer::class)->block($customerId, 'fixture: §12 cascade', $actor->identifier());
+    $eventId = (string) Str::uuid7();
+    DB::table('events')->insert([
+        'id' => $eventId, 'tenant_id' => $tenantId, 'name' => 'customer.blocked', 'schema_version' => 1,
+        'payload' => json_encode(['tenant_id' => $tenantId, 'customer_id' => $customerId, 'blocked_by' => $actor->identifier()]),
+    ]);
+
+    // One shot (not the sampling harness — a cascade is not idempotent-cheap
+    // to repeat 250×): wall time for the full 50-conversation cascade.
+    $start = hrtime(true);
+    (new App\Jobs\Customers\BlockingCascadeConsumer($eventId))->handle(app(App\Domain\Conversations\Actions\ConversationBlocking::class));
+    $ms = (hrtime(true) - $start) / 1_000_000;
+
+    fwrite(STDERR, sprintf("  [dev-hardware-indicative] cascade 50 conversations: %.0f ms (spec ≤3000 ms)\n", $ms));
+    expect(DB::table('conversations')->where('customer_id', $customerId)->where('state', 'blocked')->count())->toBe(50)
+        ->and($ms)->toBeLessThan(assertedBudget(3000.0));
+});

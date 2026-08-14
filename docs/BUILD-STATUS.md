@@ -160,6 +160,16 @@ would live in Doc 07-owned spec files (wait budgets/actionability handling)
 separate session; NOT folded into Doc 08. The 0i triage law and threshold
 stand unchanged.
 
+**0d TRIPWIRE (set at the step-6 acceptance — the decision attaches to the
+close-out §12 battery on a quiet machine):** the position, stated: on THIS
+hardware 0d measures the HOST, not the code (its step-6 solo re-run was red at
+p50 0.344 ms — AT the 0.3 spec floor — p99 2.683, inside its own filed
+distribution; the synthesis says the same from two other directions). At the
+close-out battery: **0d GREEN there → the synthesis is confirmed, 0d's entry
+records "host-bound on this hardware" and stops being read as a code signal;
+0d RED there → a real regression and a different problem entirely.** Decidable
+at the close instead of accumulating.
+
 **THE CONTENTION SYNTHESIS (recorded at the step-4 acceptance — one
 hypothesis linking three entries, so three test-rewrite efforts are not spent
 on one cause):** three timing sensitivities now stand — **0d**

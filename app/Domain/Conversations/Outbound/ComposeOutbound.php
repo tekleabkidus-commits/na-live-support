@@ -40,6 +40,7 @@ final class ComposeOutbound
         private readonly MessageRepository $messages,
         private readonly EventPublisher $events,
         private readonly AdapterRegistry $registry,
+        private readonly \App\Domain\Customers\Blocking\CustomerSendGuard $customerGuard,
     ) {}
 
     public function compose(
@@ -56,6 +57,16 @@ final class ComposeOutbound
 
         if ($conversation->state === 'blocked') {
             throw new DomainException('conversation_blocked: no outbound to a blocked conversation, no exceptions (BR-02).');
+        }
+
+        // RULED CORE EDIT (S08 escalation #2, plan-forecast accepted at the
+        // plan audit, landing ordered at the step-6 acceptance): Doc 08
+        // T-06's SECOND BELT — the customer-level guard, checked on every
+        // outbound so a conversation created MID-CASCADE is still refused and
+        // a crashed cascade cannot open a gap (FS-04). Sabotage #8 removes
+        // this call and AC-06's mid-cascade clause goes red.
+        if ($this->customerGuard->refuses($conversation->customer_id)) {
+            throw new DomainException('customer_blocked: this customer is blocked on every channel — nothing can be sent (Doc 08 FR-18/T-06).');
         }
 
         if ($idempotencyKey !== null) {

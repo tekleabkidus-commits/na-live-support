@@ -12,6 +12,10 @@ declare(strict_types=1);
 */
 
 return [
+    'block' => [
+        'cascade_reason' => 'የደንበኛ-ደረጃ እገዳ ተከታታይ፦ :reason',
+        'cascade_restore_reason' => 'የደንበኛ-ደረጃ እገዳ መነሳት — በተከታታዩ የታገዱ ውይይቶች እየተመለሱ ነው።',
+    ],
     'merge' => [
         'linked_work_note' => 'በደንበኛ ውህደት ምክንያት እንደ የተያያዘ ሥራ ተለይቷል — ሁለቱም መገለጫዎች ክፍት ጥያቄ ነበራቸው (የተፈቀደ ባለብዙ-ክፍት)።',
     ],

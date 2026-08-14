@@ -1,0 +1,47 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\BlockingCascadeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #3 (inverted R-19): blocked_at is a BYTE-COP[39m[90m…[39m [90m6.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06: the cascade quiets EVERY channel, unblock restores — and[39m[90m… [39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-06 (the mid-cascade clause, sabotage #8's subject): a convers[39m[90m…[39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-04: a PARTIAL cascade (crash mid-way) leaves the guard holdin[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-07 (the documented limitation): a blocked customer's brand-ne[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-37 noops both directions: blocking a blocked customer and unbl[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\BlockingCascadeTest[22m [90m>[39m it AC-06 (the mid-c…   
+[39;1m  Exception "DomainException" not thrown.[39;22m
+
+  at [32mtests/Feature/Customers/BlockingCascadeTest.php[39m:[32m100[39m
+     96▕     /** @var App\Models\Conversation $conversation */
+     97▕     $conversation = App\Models\Conversation::query()->findOrFail($fresh);
+     98▕ 
+     99▕     expect(fn () => app(ComposeOutbound::class)->compose($conversation, 'agent', null, 'text', 'should never send'))
+  ➜ 100▕         ->toThrow(DomainException::class, 'customer_blocked');
+    101▕ 
+    102▕     expect(DB::table('messages')->where('conversation_id', $fresh)->count())->toBe(0);
+    103▕ });
+    104▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/BlockingCascadeTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\BlockingCascadeTest[22m [90m>[39m it FS-04: a PARTIAL…   
+[39;1m  Exception "DomainException" not thrown.[39;22m
+
+  at [32mtests/Feature/Customers/BlockingCascadeTest.php[39m:[32m128[39m
+    124▕     // The guard holds for BOTH conversations regardless of cascade state.
+    125▕     /** @var App\Models\Conversation $cb */
+    126▕     $cb = App\Models\Conversation::query()->findOrFail($b);
+    127▕     expect(fn () => app(ComposeOutbound::class)->compose($cb, 'agent', null, 'text', 'gap probe'))
+  ➜ 128▕         ->toThrow(DomainException::class, 'customer_blocked');
+    129▕ 
+    130▕     // The REDELIVERY completes the cascade: A skipped (already blocked and
+    131▕     // recorded — the unique index refuses a double record), B blocked.
+    132▕     (new BlockingCascadeConsumer(blockingEvent($tenantId, 'customer.blocked', $customerId, $actor->identifier())))
+
+  [33m1   [39m[39;1mtests/Feature/Customers/BlockingCascadeTest.php[39;22m:[39;1m128[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (18 assertions)[39m
+  [90mDuration:[39m [39m6.94s[39m
+

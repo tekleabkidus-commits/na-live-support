@@ -7,43 +7,83 @@
       "event": "message.received",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "customer_id"]
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
     },
     {
       "event": "ticket.created",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "ticket_id"]
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
     },
     {
       "event": "ticket.status_changed",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "ticket_id"]
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
     },
     {
       "event": "ticket.spam_marked",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "ticket_id"]
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
     },
     {
       "event": "ticket.spam_unmarked",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "ticket_id"]
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
     },
     {
       "event": "customer.merged",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "survivor_id"]
+      "reads": [
+        "tenant_id",
+        "survivor_id"
+      ]
     },
     {
       "event": "customer.unmerged",
       "consumer": "Doc08/Rollups",
       "schema_version": 1,
-      "reads": ["tenant_id", "survivor_id", "restored_id"]
+      "reads": [
+        "tenant_id",
+        "survivor_id",
+        "restored_id"
+      ]
+    },
+    {
+      "event": "customer.blocked",
+      "consumer": "Doc08/BlockingCascade",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "customer.unblocked",
+      "consumer": "Doc08/BlockingCascade",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
     }
   ]
 }

@@ -1,0 +1,14 @@
+  [dev-hardware-indicative] resolver hit p99 (NFR-01)    p50   1.570 ms   p99   3.090 ms   max  14.883 ms   budget(p99) 25.0 ms   WITHIN
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] rollup HANDLER p99 (§12 line) p50   3.995 ms   p99   8.231 ms   max  13.628 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] recompute (repair unit, no §12 budget) p50   1.874 ms   p99   5.231 ms   max  11.959 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] cascade 50 conversations: 536 ms (spec ≤3000 ms)
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\CustomerBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01 indicatively: the resolver HIT path (every inbound messa[39m[90m…[39m [90m10.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the per-event HANDLER inside 5 ms×tier, and t[39m[90m…[39m [90m13.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the blocking cascade over 50 conversations ins[39m[90m…[39m [90m0.87s[39m  
+
+  [90mTests:[39m    [32;1m3 passed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m24.69s[39m
+

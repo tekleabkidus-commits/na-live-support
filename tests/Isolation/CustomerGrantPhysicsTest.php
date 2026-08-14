@@ -37,7 +37,7 @@ beforeEach(function (): void {
 
 const DOC08_TABLES = [
     'customer_notes', 'customer_merge_snapshots', 'rg_flag_history',
-    'customer_identity_conflicts',
+    'customer_identity_conflicts', 'customer_block_cascade_items',
 ];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). */
@@ -59,6 +59,11 @@ const DOC08_DENIED_COLUMNS = [
     'customer_identity_conflicts' => [
         'INSERT' => ['resolved_at', 'resolved_by'],
         'UPDATE' => ['created_at', 'id', 'keeper_customer_id', 'loser_customer_id', 'tenant_id', 'type', 'value'],
+    ],
+    // Amendment addition 7 (step 7): the marker pattern's third application.
+    'customer_block_cascade_items' => [
+        'INSERT' => ['restored_at'],
+        'UPDATE' => ['conversation_id', 'created_at', 'customer_id', 'id', 'tenant_id'],
     ],
 ];
 
@@ -215,4 +220,33 @@ it('the (tenant, type, value) unique index exists on customer_identities (BR-04 
     expect($rows)->toHaveCount(1, 'the BR-04 unique index is gone')
         ->and($rows[0]->indexdef)->toContain('UNIQUE')
         ->and($rows[0]->indexdef)->toContain('tenant_id, type, value');
+});
+
+it('THE GRANT DELTA\'S REPLACEMENT CONTROL (step-6 countersign): customer_notes.customer_id is written ONLY by the merge machinery — a stray re-point anywhere else fails here, not silently in production', function (): void {
+    // The delta surrendered a piece of physics (the column grant); this
+    // architecture assertion is the proven boundary that replaces it. A note
+    // carries an author, a timestamp and PII — moving one to the wrong
+    // customer must be a red test, never a quiet line of code.
+    $offenders = [];
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(app_path(), FilesystemIterator::SKIP_DOTS)
+    );
+
+    /** @var SplFileInfo $file */
+    foreach ($iterator as $file) {
+        if (! $file->isFile() || $file->getExtension() !== 'php') {
+            continue;
+        }
+        $contents = (string) file_get_contents($file->getPathname());
+        if (! str_contains($contents, 'customer_notes')) {
+            continue;
+        }
+        // Any update statement on customer_notes that names customer_id.
+        if (preg_match('/customer_notes.{0,400}?->update\([^)]*customer_id/s', $contents) === 1
+            || preg_match('/UPDATE\s+customer_notes.{0,200}customer_id/si', $contents) === 1) {
+            $offenders[] = str_replace(base_path().'/', '', $file->getPathname());
+        }
+    }
+
+    expect($offenders)->toBe(['app/Domain/Customers/Merge/CustomerMerge.php']);
 });

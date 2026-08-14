@@ -85,6 +85,12 @@ final class ConsumerRegistry
         'customer.merged' => [RollupConsumer::class],
         'customer.unmerged' => [RollupConsumer::class],
 
+        // Doc 08 FR-18/T-06 (S08 step 7): the blocking cascade — quiets every
+        //    conversation on block, restores exactly the cascade-blocked set
+        //    on unblock (amendment addition 7's memory).
+        'customer.blocked' => [\App\Jobs\Customers\BlockingCascadeConsumer::class],
+        'customer.unblocked' => [\App\Jobs\Customers\BlockingCascadeConsumer::class],
+
         // Doc 07 FR-03 (S07 step 3): channel.health.changed v2's FIRST
         // consumer — the header indicator's feed (inherited row 5; A-22's
         // transition-only semantics consumed, never re-derived).

@@ -75,6 +75,24 @@ return [
         'owning_doc' => 'Doc08',
     ],
     [
+        'action_key' => 'customer.blocked',
+        'entity' => 'customer',
+        // FR-18: reason mandatory; every channel goes quiet (the cascade +
+        // the outbound guard are the enforcement, this is the paper trail).
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.unblocked',
+        'entity' => 'customer',
+        // §8: a DISTINCT permissioned action with its own reason (rides
+        // customers.block per A-39).
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
         'action_key' => 'customer.rg_flag.set',
         'entity' => 'customer',
         // staff sets manually; 'system' is the AI-detection path (FR-14,

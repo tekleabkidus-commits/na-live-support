@@ -15,6 +15,10 @@ declare(strict_types=1);
 */
 
 return [
+    'block' => [
+        'cascade_reason' => 'Customer-level block cascade: :reason',
+        'cascade_restore_reason' => 'Customer-level unblock — restoring the cascade-blocked conversations.',
+    ],
     'merge' => [
         'linked_work_note' => 'Flagged as linked work by a customer merge — both profiles held an open ticket (sanctioned multi-open).',
     ],

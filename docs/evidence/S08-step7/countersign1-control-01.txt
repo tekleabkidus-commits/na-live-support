@@ -1,0 +1,15 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m6.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit type/value/source and customers.created_source are NOT NULL afte[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE GRANT DELTA'S REPLACEMENT CONTROL (step-6 countersign): cust[39m[90m…[39m [90m0.09s[39m  
+
+  [90mTests:[39m    [32;1m8 passed[39;22m[90m (59 assertions)[39m
+  [90mDuration:[39m [39m7.59s[39m
+
