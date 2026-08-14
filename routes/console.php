@@ -64,3 +64,8 @@ Schedule::command('telegram:health-poll')->everyFiveMinutes()->withoutOverlappin
 // drift ALERTING through the command's own non-zero exit + error log (the
 // SS-04 "week with zero drift alerts" measurement runs on exactly this).
 Schedule::command('inbox:consistency-check')->hourly()->withoutOverlapping();
+
+// Doc 08 NFR-05: the WEEKLY rollup checker (drift ≤ 0; non-decay drift
+// alerts; contacts_30d_count window decay heals silently — the command's
+// docblock carries the reasoning).
+Schedule::command('customers:consistency-check')->weekly()->withoutOverlapping();

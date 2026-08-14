@@ -399,7 +399,7 @@ An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`, `customer_id`, `kind`
 - **Producers:** Doc04/InboundPersister
-- **Consumers:** Doc09/AiTurnDecision, Doc06/TicketReopenConsumer, Doc07/Realtime, Doc07/UnreadCounters
+- **Consumers:** Doc09/AiTurnDecision, Doc06/TicketReopenConsumer, Doc07/Realtime, Doc07/UnreadCounters, Doc08/Rollups
 
 ## `message.sent`
 
@@ -705,7 +705,7 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/CreateTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups
 
 ## `ticket.deescalated`
 
@@ -795,7 +795,7 @@ FR-09: a ticket was marked spam (reason on the audit entry, SEC-03). Excluded fr
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `conversation_blocked`, `actor_type`, `actor_id`
 - **Producers:** Doc06/SpamTicket
-- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit
+- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit, Doc08/Rollups
 
 ## `ticket.spam_unmarked`
 
@@ -804,7 +804,7 @@ FR-09: a spam mark was reversed within its 7-day window — the prior status (ne
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `restored_status`, `actor_type`, `actor_id`
 - **Producers:** Doc06/SpamTicket
-- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit
+- **Consumers:** Doc15/Reporting, Doc07/Inbox, Doc17/Audit, Doc08/Rollups
 
 ## `ticket.split`
 
@@ -822,7 +822,7 @@ FR-04: a ticket moved between statuses, with old/new and the acting class. THE t
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_status`, `new_status`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups
 
 ## `ticket.subject_changed`
 

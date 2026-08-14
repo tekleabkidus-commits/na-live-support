@@ -1,0 +1,35 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m5.95s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\CustomerEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 08 durable con[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe rollup consumer is registered for the customer merge family — t[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it S… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "messages_2026_08" violates check constraint "messages_outbound_has_state_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "messages" ("id", "tenant_id", "conversation_id", "direction", "author_type", "kind", "body", "is_internal") values (01a0003a-b52f-738f-9aed-31b2f5e3db1a, 01a0003a-b520-734d-abc8-b101636a7e7d, 01a0003a-b528-71d1-8401-55cb485ba080, out, agent, text, agent reply, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m89[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (44 assertions)[39m
+  [90mDuration:[39m [39m6.56s[39m
+

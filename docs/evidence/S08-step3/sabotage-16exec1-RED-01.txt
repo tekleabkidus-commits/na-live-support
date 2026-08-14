@@ -1,0 +1,71 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m4.64s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it recomputes every…    
+[39;1m  Failed asserting that '2026-08-14 12:26:41.273124+00' is null.[39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m78[39m
+     74▕     $row = DB::table('customers')->where('id', $customerId)->first();
+     75▕     expect($row->tickets_count)->toBe(2)
+     76▕         ->and($row->open_tickets)->toBe(1)
+     77▕         ->and($row->contacts_30d_count)->toBe(2)
+  ➜  78▕         ->and($row->last_contact_at)->toBeNull();
+     79▕ });
+     80▕ 
+     81▕ it('SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYTE-COPY of the newest customer message\'s own DB stamp — never a fresh clock; agent and quarantined messages are invisible to it', function (): void {
+     82▕     [, $customerId, $conversationId] = rollupScene();
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m78[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it SABOTAGE-16 CONTR…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'2026-08-14 12:26:41.397715+00'[39m[39;1m
+  [39;22m[32m+'2026-08-14 12:26:41.359985+00'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m106[39m
+    102▕     // moment". A now() writer diverges here by construction.
+    103▕     $sourceStamp = (string) DB::table('messages')->where('id', $second)->value('created_at');
+    104▕     $written = (string) DB::table('customers')->where('id', $customerId)->value('last_contact_at');
+    105▕ 
+  ➜ 106▕     expect($written)->toBe($sourceStamp)
+    107▕         ->and($written)->not->toBe((string) DB::table('messages')->where('id', $first)->value('created_at'));
+    108▕ });
+    109▕ 
+    110▕ it('C-09: the consumer is idempotent on event_id — a redelivery recomputes the same truth into the same state (sabotage #12\'s subject)', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m106[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it NFR-05: drift() n…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'last_contact_at',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m161[39m
+    157▕     rollupTicket($tenantId, $conversationId, $customerId, 'open');
+    158▕ 
+    159▕     $rollups = app(CustomerRollups::class);
+    160▕     $rollups->recompute($customerId);
+  ➜ 161▕     expect($rollups->drift($customerId))->toBe([]);
+    162▕ 
+    163▕     // Manufacture the drift a missed event would leave.
+    164▕     DB::table('customers')->where('id', $customerId)->update(['tickets_count' => 7]);
+    165▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m161[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m5.09s[39m
+

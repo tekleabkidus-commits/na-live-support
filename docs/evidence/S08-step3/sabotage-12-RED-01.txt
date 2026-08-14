@@ -1,0 +1,75 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m6.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.14s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it recomputes every…    
+[39;1m  Failed asserting that 1 is identical to 2.[39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m75[39m
+     71▕ 
+     72▕     app(CustomerRollups::class)->recompute($customerId);
+     73▕ 
+     74▕     $row = DB::table('customers')->where('id', $customerId)->first();
+  ➜  75▕     expect($row->tickets_count)->toBe(2)
+     76▕         ->and($row->open_tickets)->toBe(1)
+     77▕         ->and($row->contacts_30d_count)->toBe(2)
+     78▕         ->and($row->last_contact_at)->toBeNull();
+     79▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m75[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it C-09: the consume…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    'tickets_count' => 1,[39m[39;1m
+  [39;22m[32m+    'tickets_count' => 2,[39m[39;1m
+  [39;22m[32m     'open_tickets' => 1,[39m[39;1m
+  [39;22m[32m     'contacts_30d_count' => 1,[39m[39;1m
+  [39;22m[32m     'last_contact_at' => '2026-08-14 12:26:18.10741+00',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m130[39m
+    126▕     (new RollupConsumer($eventId))->handle(app(CustomerRollups::class));
+    127▕     $afterSecond = (array) DB::table('customers')->where('id', $customerId)
+    128▕         ->first(['tickets_count', 'open_tickets', 'contacts_30d_count', 'last_contact_at']);
+    129▕ 
+  ➜ 130▕     expect($afterSecond)->toBe($afterFirst)
+    131▕         ->and($afterFirst['tickets_count'])->toBe(1)
+    132▕         ->and($afterFirst['last_contact_at'])->not->toBeNull();
+    133▕ });
+    134▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m130[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RollupConsumerTest[22m [90m>[39m it NFR-05: drift() n…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'tickets_count',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/RollupConsumerTest.php[39m:[32m169[39m
+    165▕ 
+    166▕     expect($rollups->drift($customerId))->toBe(['tickets_count']);
+    167▕ 
+    168▕     $rollups->recompute($customerId);
+  ➜ 169▕     expect($rollups->drift($customerId))->toBe([])
+    170▕         ->and(DB::table('customers')->where('id', $customerId)->value('tickets_count'))->toBe(1);
+    171▕ });
+    172▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RollupConsumerTest.php[39;22m:[39;1m169[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (8 assertions)[39m
+  [90mDuration:[39m [39m6.74s[39m
+

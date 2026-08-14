@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Events;
 
+use App\Jobs\Customers\RollupConsumer;
 use App\Jobs\Inbox\ListProjectorConsumer;
 use App\Jobs\OutboxConsumer;
 use App\Jobs\Tickets\TicketReopenConsumer;
@@ -37,7 +38,10 @@ final class ConsumerRegistry
         // reopen its ticket, cancel an auto-close, or open a windowed successor.
         // Doc 07 T-01 (S07 step 2): the same event also feeds the list projector
         // (last activity, snippet, unread anchor).
-        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class],
+        // Doc 08 FR-03 (S08 step 3): RollupConsumer joins the fan-out —
+        //    an event names WHICH customer to recompute; values from truth
+        //    (C-09 by construction; contract fixture doc08-events.json).
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class],
 
         // ── Doc 07 T-01 (S07 step 2): the list-projector's durable
         //    subscriptions — 29 events total, each a TRIGGER naming which
@@ -47,8 +51,8 @@ final class ConsumerRegistry
         //    consumer-contract fixture was tightened in this same commit.
         'message.sent' => [ListProjectorConsumer::class],
         'note.mentioned' => [ListProjectorConsumer::class],
-        'ticket.created' => [ListProjectorConsumer::class],
-        'ticket.status_changed' => [ListProjectorConsumer::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class],
+        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],
@@ -61,8 +65,8 @@ final class ConsumerRegistry
         'ticket.merged' => [ListProjectorConsumer::class],
         'ticket.unmerged' => [ListProjectorConsumer::class],
         'ticket.split' => [ListProjectorConsumer::class],
-        'ticket.spam_marked' => [ListProjectorConsumer::class],
-        'ticket.spam_unmarked' => [ListProjectorConsumer::class],
+        'ticket.spam_marked' => [ListProjectorConsumer::class, RollupConsumer::class],
+        'ticket.spam_unmarked' => [ListProjectorConsumer::class, RollupConsumer::class],
         'ticket.reopened' => [ListProjectorConsumer::class],
         'ticket.resolved' => [ListProjectorConsumer::class],
         'ticket.closed' => [ListProjectorConsumer::class],
@@ -73,6 +77,13 @@ final class ConsumerRegistry
         'telegram.window.reopened' => [ListProjectorConsumer::class],
         'telegram.connection.revoked' => [ListProjectorConsumer::class],
         'telegram.connection.active' => [ListProjectorConsumer::class],
+
+        // Doc 08 FR-22/T-03 (S08 step 3): the customer merge family — the
+        //    rollup consumer recomputes survivor (and restored, on unmerge);
+        //    Doc 07's projector consumption of customer.merged (T-03's list
+        //    rewrite) lands with the merge saga at step 6, escalation #3.
+        'customer.merged' => [RollupConsumer::class],
+        'customer.unmerged' => [RollupConsumer::class],
 
         // Doc 07 FR-03 (S07 step 3): channel.health.changed v2's FIRST
         // consumer — the header indicator's feed (inherited row 5; A-22's

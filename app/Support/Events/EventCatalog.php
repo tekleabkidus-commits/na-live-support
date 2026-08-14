@@ -310,7 +310,7 @@ final class EventCatalog
             'producers' => ['Doc04/InboundPersister'],
             // Doc06/TicketReopenConsumer is the first DURABLE consumer (ADR 0011):
             // the relay's dispatch map queues it with this event's id.
-            'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketReopenConsumer', 'Doc07/Realtime', 'Doc07/UnreadCounters'],
+            'consumers' => ['Doc09/AiTurnDecision', 'Doc06/TicketReopenConsumer', 'Doc07/Realtime', 'Doc07/UnreadCounters', 'Doc08/Rollups'],
             'description' => 'An inbound customer message persisted with its row (Doc 04 FR-10 step 4) — THE fan-out signal; quarantined rows (FR-11) never emit it.',
         ],
         'message.queued' => [
@@ -542,7 +542,7 @@ final class EventCatalog
             // accumulate free-text an agent typed about a player.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_status', 'new_status', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/TicketTransitionService'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups'],
             'description' => 'FR-04: a ticket moved between statuses, with old/new and the acting class. THE transition signal — SLA, automation, routing, metrics and audit all hang off it. A same-state call (EC-07) changes nothing and emits nothing.',
         ],
         'ticket.created' => [
@@ -551,7 +551,7 @@ final class EventCatalog
             // it; the subject does not, being staff- or AI-authored free text.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'customer_id', 'source', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/CreateTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups'],
             'description' => 'A ticket was created through one of FR-12/13/14\'s doors or FR-11\'s handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.',
         ],
         'ticket.subject_changed' => [
@@ -706,14 +706,14 @@ final class EventCatalog
             // also taken (its own conversation.blocked event still fires).
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'conversation_blocked', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/SpamTicket'],
-            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit'],
+            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit', 'Doc08/Rollups'],
             'description' => 'FR-09: a ticket was marked spam (reason on the audit entry, SEC-03). Excluded from SLA/CSAT/agent metrics while in this status (N-14); unmarkable for 7 days, terminal after (EC-09).',
         ],
         'ticket.spam_unmarked' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'restored_status', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/SpamTicket'],
-            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit'],
+            'consumers' => ['Doc15/Reporting', 'Doc07/Inbox', 'Doc17/Audit', 'Doc08/Rollups'],
             'description' => 'FR-09: a spam mark was reversed within its 7-day window — the prior status (new|open, A-10) restored from the event history, metrics re-included by the same one predicate that excluded them.',
         ],
         'ticket.bulk_completed' => [
