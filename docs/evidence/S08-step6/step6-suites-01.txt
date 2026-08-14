@@ -1,0 +1,145 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeFlowTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-11/FR-12: the full flow — chosen fields apply, tags/notes/fil[39m[90m…[39m [90m5.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a merge without a reason refuses before anything moves[39m[90m   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit chain law: a tombstone can take part in NO merge — its only path[39m[90m…[39m [90m0.09s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeCollisionTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12: both sides open → the NEWER open ticket is auto-flagged l[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit one side only open → nothing is flagged (no collision exists)[39m[90m    [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12: combined open linked_work beyond Doc 06's cap of 3 → BLOC[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeSagaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FS-02: a crash AFTER the tickets chunk compensates back to the p[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-02: a crash after the FIRST chunk compensates identically — t[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeUndoTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13: past the 30-day window the merge is PERMANENT, and a reve[39m[90m…[39m [90m0.11s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeFlowTest[22m [90m>[39m it FR-11/FR-12: th… [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeFlowTest.php[39m:[32m69[39m
+     65▕     $actor = App\Models\User::factory()->create();
+     66▕ 
+     67▕     flowIdentity($tenantId, $survivor, 'tg-s1');
+     68▕     $movedIdentity = flowIdentity($tenantId, $merged, 'tg-m1');
+  ➜  69▕     $conversation = anchoredConversation($tenantId, $merged, 'tg-m1');
+     70▕     $ticket = rollupTicket($tenantId, $conversation, $merged, 'closed');
+     71▕     flowNote($tenantId, $survivor, 'survivor pin', true);
+     72▕     $mergedPin = flowNote($tenantId, $merged, 'merged pin', true);
+     73▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeFlowTest.php[39;22m:[39;1m69[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeCollisionTest[22m [90m>[39m it FR-12: bot… [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeCollisionTest.php[39m:[32m35[39m
+     31▕ it('FR-12: both sides open → the NEWER open ticket is auto-flagged linked_work with a system note; the oldest keeps the plain slot', function (): void {
+     32▕     [$tenantId, $survivor, $merged] = collisionScene();
+     33▕     $actor = App\Models\User::factory()->create();
+     34▕ 
+  ➜  35▕     $cs = anchoredConversation($tenantId, $survivor, 'tg-col-s');
+     36▕     $cm = anchoredConversation($tenantId, $merged, 'tg-col-m');
+     37▕     $older = rollupTicket($tenantId, $cs, $survivor, 'open');
+     38▕     sleep(0); // ordering by created_at; same-instant rows tiebreak by insert order
+     39▕     $newer = rollupTicket($tenantId, $cm, $merged, 'open');
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeCollisionTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeCollisionTest[22m [90m>[39m it one side o… [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeCollisionTest.php[39m:[32m54[39m
+     50▕ it('one side only open → nothing is flagged (no collision exists)', function (): void {
+     51▕     [$tenantId, $survivor, $merged] = collisionScene();
+     52▕     $actor = App\Models\User::factory()->create();
+     53▕ 
+  ➜  54▕     $cm = anchoredConversation($tenantId, $merged, 'tg-col2-m');
+     55▕     $only = rollupTicket($tenantId, $cm, $merged, 'open');
+     56▕ 
+     57▕     app(CustomerMerge::class)->execute($survivor, $merged, [], 'fixture: no collision', $actor->identifier());
+     58▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeCollisionTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeCollisionTest[22m [90m>[39m it EC-12: com… [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeCollisionTest.php[39m:[32m67[39m
+     63▕     [$tenantId, $survivor, $merged] = collisionScene();
+     64▕     $actor = App\Models\User::factory()->create();
+     65▕ 
+     66▕     // Survivor: one plain open + two open linked_work (a prior sanctioned pile).
+  ➜  67▕     $cs = anchoredConversation($tenantId, $survivor, 'tg-cap-s');
+     68▕     rollupTicket($tenantId, $cs, $survivor, 'open');
+     69▕     $lw = [];
+     70▕     foreach ([1, 2] as $i) {
+     71▕         $c = anchoredConversation($tenantId, $survivor, "tg-cap-s{$i}");
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeCollisionTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeSagaTest[22m [90m>[39m it FS-02: a crash…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeSagaTest.php[39m:[32m31[39m
+     27▕     $merged = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+     28▕     DB::table('customers')->where('id', $survivor)->update(['tags' => '{vip}']);
+     29▕     DB::table('customers')->where('id', $merged)->update(['tags' => '{new-account}']);
+     30▕ 
+  ➜  31▕     $conversation = anchoredConversation($tenantId, $merged, 'tg-chaos-m');
+     32▕     $ticket = rollupTicket($tenantId, $conversation, $merged, 'closed');
+     33▕ 
+     34▕     $identity = (string) new UuidV7;
+     35▕     DB::table('customer_identities')->insert([
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m66[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeSagaTest[22m [90m>[39m it FS-02: a crash…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeSagaTest.php[39m:[32m31[39m
+     27▕     $merged = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+     28▕     DB::table('customers')->where('id', $survivor)->update(['tags' => '{vip}']);
+     29▕     DB::table('customers')->where('id', $merged)->update(['tags' => '{new-account}']);
+     30▕ 
+  ➜  31▕     $conversation = anchoredConversation($tenantId, $merged, 'tg-chaos-m');
+     32▕     $ticket = rollupTicket($tenantId, $conversation, $merged, 'closed');
+     33▕ 
+     34▕     $identity = (string) new UuidV7;
+     35▕     DB::table('customer_identities')->insert([
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m87[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeUndoTest[22m [90m>[39m it AC-03: the roun… [41;1m Error [49;22m  
+[39;1m  Call to undefined function anchoredConversation()[39;22m
+
+  at [32mtests/Feature/Customers/MergeUndoTest.php[39m:[32m32[39m
+     28▕     DB::table('customers')->where('id', $survivor)->update(['display_name' => 'Survivor S', 'tags' => '{vip}']);
+     29▕     DB::table('customers')->where('id', $merged)->update(['display_name' => 'Merged M', 'language' => 'en', 'tags' => '{new-account}']);
+     30▕     $actor = App\Models\User::factory()->create();
+     31▕ 
+  ➜  32▕     $conversation = anchoredConversation($tenantId, $merged, 'tg-undo-m');
+     33▕     $ticket = rollupTicket($tenantId, $conversation, $merged, 'closed');
+     34▕     $identity = (string) new UuidV7;
+     35▕     DB::table('customer_identities')->insert([
+     36▕         'id' => $identity, 'tenant_id' => $tenantId, 'customer_id' => $merged,
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeUndoTest.php[39;22m:[39;1m32[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (15 assertions)[39m
+  [90mDuration:[39m [39m6.27s[39m
+

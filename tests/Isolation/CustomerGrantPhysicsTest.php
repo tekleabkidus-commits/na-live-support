@@ -44,7 +44,9 @@ const DOC08_TABLES = [
 const DOC08_DENIED_COLUMNS = [
     'customer_notes' => [
         'INSERT' => ['created_at'],
-        'UPDATE' => ['author_id', 'body', 'created_at', 'customer_id', 'id', 'tenant_id'],
+        // The GRANT DELTA (step 6): customer_id joined the grant — FR-12
+        // re-points notes and FS-02 re-points them back; content stays fenced.
+        'UPDATE' => ['author_id', 'body', 'created_at', 'id', 'tenant_id'],
     ],
     'customer_merge_snapshots' => [
         'INSERT' => ['created_at', 'undone_at'],

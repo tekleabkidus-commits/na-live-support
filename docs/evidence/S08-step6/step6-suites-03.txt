@@ -1,0 +1,33 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11/FR-12: the full flow — chosen fields apply, tags/notes/fil[39m[90m…[39m [90m5.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a merge without a reason refuses before anything moves[39m[90m   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit chain law: a tombstone can take part in NO merge — its only path[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeCollisionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: both sides open → the NEWER open ticket is auto-flagged l[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit one side only open → nothing is flagged (no collision exists)[39m[90m    [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: combined open linked_work beyond Doc 06's cap of 3 → BLOC[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeSagaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash AFTER the tickets chunk compensates back to the p[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash after the FIRST chunk compensates identically — t[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeUndoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13: past the 30-day window the merge is PERMANENT, and a reve[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit type/value/source and customers.created_source are NOT NULL afte[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.07s[39m  
+
+  [90mTests:[39m    [32;1m18 passed[39;22m[90m (136 assertions)[39m
+  [90mDuration:[39m [39m6.77s[39m
+

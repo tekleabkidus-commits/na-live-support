@@ -7,7 +7,6 @@ use App\Domain\Customers\Identity\LinkIdentity;
 use App\Domain\Customers\Identity\UnlinkIdentity;
 use App\Domain\Customers\Identity\UnlinkMoveSet;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,18 +19,7 @@ beforeEach(function (): void {
     legacyIdentityShapeEnforce();
 });
 
-/** Seed a conversation with a CHOSEN external_chat_id (the A-42 anchor key). */
-function anchoredConversation(string $tenantId, string $customerId, string $externalChatId, string $channelRef = 'fixture_bot'): string
-{
-    $id = (string) Str::uuid7();
-    DB::table('conversations')->insert([
-        'id' => $id, 'tenant_id' => $tenantId, 'channel' => 'telegram',
-        'channel_ref_id' => $channelRef, 'external_chat_id' => $externalChatId,
-        'customer_id' => $customerId, 'state' => 'active',
-    ]);
-
-    return $id;
-}
+// anchoredConversation() lives in tests/Pest.php (shared with the merge suites).
 
 it('FR-09: a staff-linked phone stores E.164, source=staff, DB-time provenance — and the event + audit rows land', function (): void {
     $tenant = createTenant();

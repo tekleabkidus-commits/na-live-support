@@ -1,0 +1,51 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeSagaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FS-02: a crash AFTER the tickets chunk compensates back to the p[39m[90m…[39m [90m6.73s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-02: a crash after the FIRST chunk compensates identically — t[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeSagaTest[22m [90m>[39m it FS-02: a crash AFTER t…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'01a001ad-f8fa-7376-a5da-9f22a19af233'[39m[39;1m
+  [39;22m[32m+'01a001ad-f8f6-7895-9df5-d539e4f5aaad'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/MergeSagaTest.php[39m:[32m56[39m
+     52▕ function assertPreMergeState(string $survivor, string $merged, array $pointers): void
+     53▕ {
+     54▕     foreach ($pointers as $table => $rows) {
+     55▕         foreach ($rows as $id => $owner) {
+  ➜  56▕             expect(DB::table($table)->where('id', $id)->value('customer_id'))->toBe($owner);
+     57▕         }
+     58▕     }
+     59▕     expect(DB::table('customers')->where('id', $merged)->value('merged_into_id'))->toBeNull()
+     60▕         ->and((string) DB::table('customers')->where('id', $survivor)->value('tags'))->toBe('{vip}')
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m56[39;22m
+  [33m2   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m81[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeSagaTest[22m [90m>[39m it FS-02: a crash after t…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'01a001ad-fa18-7c3c-b810-43edd67bad24'[39m[39;1m
+  [39;22m[32m+'01a001ad-fa17-7792-83d3-50c6a9b22e4f'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/MergeSagaTest.php[39m:[32m56[39m
+     52▕ function assertPreMergeState(string $survivor, string $merged, array $pointers): void
+     53▕ {
+     54▕     foreach ($pointers as $table => $rows) {
+     55▕         foreach ($rows as $id => $owner) {
+  ➜  56▕             expect(DB::table($table)->where('id', $id)->value('customer_id'))->toBe($owner);
+     57▕         }
+     58▕     }
+     59▕     expect(DB::table('customers')->where('id', $merged)->value('merged_into_id'))->toBeNull()
+     60▕         ->and((string) DB::table('customers')->where('id', $survivor)->value('tags'))->toBe('{vip}')
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m56[39;22m
+  [33m2   [39m[39;1mtests/Feature/Customers/MergeSagaTest.php[39;22m:[39;1m101[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m6.86s[39m
+

@@ -1,0 +1,27 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeUndoTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot[39m[90m…[39m [90m7.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13: past the 30-day window the merge is PERMANENT, and a reve[39m[90m…[39m [90m0.19s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeUndoTest[22m [90m>[39m it AC-03: the round-trip…    
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Customers/MergeUndoTest.php[39m:[32m57[39m
+     53▕ 
+     54▕     $preview = app(UnmergeCustomer::class)->preview($snapshotId);
+     55▕     expect($preview['restores']['conversations'])->toBe(1)
+     56▕         ->and($preview['restores']['tickets'])->toBe(1)
+  ➜  57▕         ->and($preview['restores']['identities'])->toBe(1)
+     58▕         ->and($preview['stays']['conversations'])->toBe(1)     // the post-merge arrival, LISTED
+     59▕         ->and($preview['stays']['tickets'])->toBe(1)
+     60▕         ->and($preview['undoable'])->toBeTrue();
+     61▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/MergeUndoTest.php[39;22m:[39;1m57[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (12 assertions)[39m
+  [90mDuration:[39m [39m7.72s[39m
+

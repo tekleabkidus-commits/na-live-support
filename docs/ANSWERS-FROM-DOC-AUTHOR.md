@@ -1786,3 +1786,56 @@ render whatever the move-set query actually answers, so the surface stays
 honest whichever way the fiction reads (noted for the step-11 frame mapping,
 not a conflict — the confirmation is COMPUTED, per the document's own AC-04).
 Implemented in UnlinkMoveSet, whose docblock cites this record.
+
+### COUNTERSIGN RECORD — A-42 (advisor, 2026-08-14, at the step-5 acceptance; three conditions, each discharged at the step-6 commit)
+
+- **Condition 1 — the reconciliation with the step-3 rider, stated inside this
+  record:** the rider says "a chat id is not a user id" (never mint identities
+  from conversations); A-42 says "Telegram private-chat chat-id == user-id"
+  (anchor derivation). THE ASYMMETRY IS THE WHOLE RULING: a MATCH against an
+  EXISTING identity is EVIDENCE — that identity was already minted through a
+  path that established it, and the equality merely finds its conversations.
+  MINTING an identity from a chat id is INFERENCE — nothing guarantees a given
+  conversation is a private chat rather than a group, and an inferred identity
+  is exactly the silent link BR-02 forbids. Matching is safe where minting is
+  not; the two claims govern different acts and both stand.
+- **Condition 2 — v1 scope and the reopeners, named:** "phone/email anchor
+  nothing" is true TODAY only because no conversation arrives on those
+  channels — SMS is notification-only (Doc 14) and webchat carries its own
+  visitor identity (Doc 13). **Doc 13 and Doc 14 are A-42's REOPENERS**: the
+  session that lands either one re-derives this anchor rule against its new
+  channel before building on it. "Phone anchors nothing" is a v1 fact, not
+  permanent law.
+- **Condition 3 — the enumeration PROVEN, not claimed:** a repo-wide sweep
+  across ALL file types (every `Customer::create`/`firstOrCreate`, raw
+  `INSERT INTO customers`, and `table('customers')->insert` shape, no
+  extension filter) finds every executable creation site carrying
+  `created_source`, with exactly two sanctioned exceptions: a frozen S07
+  evidence log (not executable) and `legacyCustomer()` in tests/Pest.php —
+  the DELIBERATELY pre-enforce fixture that exists only inside the
+  migrator-connection toggle. The three-surface enumeration (seeders → PHP
+  fixtures → spec-embedded tinker) is therefore COMPLETE as of this sweep;
+  captured in the step-6 commit.
+
+### RULING-1 FILING NOTE (the step-5 acceptance's rider, on the record): the volume sweep ran on RECOMPUTE deliberately
+
+The §12-budgeted figure is the HANDLER's; the swept figure is RECOMPUTE's —
+and that was the CONSERVATIVE choice, stated here so a future reader need not
+guess: recompute IS the handler's only volume-dependent part (the handler
+wraps it with an O(1) event fetch + customer resolution), so sweeping
+recompute sweeps everything in the handler that CAN scale. A flat recompute
+p50 across 64× volume bounds the handler's own volume behavior from above.
+
+### SCHEMA AMENDMENT 2 — GRANT DELTA (filed at S08 step 6, BEFORE the migration ships; needs advisor countersign at the checkpoint)
+
+The countersigned analysis fenced `customer_notes` UPDATE to
+`(pinned, updated_at)` — "pinning is FR-17's one named mutation." The merge
+saga's first execution proved the fence one column too narrow, BY THE GRANT
+REFUSING THE MERGE ITSELF (42501 in MergeFlowTest): **FR-12 re-points notes
+to the survivor and FR-13/FS-02 re-point them back** — `customer_id` is a
+document-required mutation of this table. DELTA: the app UPDATE grant becomes
+`(customer_id, pinned, updated_at)`; `body`, `author_id`, `created_at`,
+`id`, `tenant_id` stay denied — the original reasoning stands for CONTENT
+(no note-body edit has a document line). Shipped as a NEW migration (a
+shipped migration is never edited); the CustomerGrantPhysicsTest denied-set
+moves in the same commit, which is that guard's job.

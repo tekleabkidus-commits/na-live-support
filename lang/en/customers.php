@@ -15,6 +15,9 @@ declare(strict_types=1);
 */
 
 return [
+    'merge' => [
+        'linked_work_note' => 'Flagged as linked work by a customer merge — both profiles held an open ticket (sanctioned multi-open).',
+    ],
     'identity' => [
         'duplicate' => 'That :type already belongs to another profile — a value can only be on one customer (merge instead?).',
     ],

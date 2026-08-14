@@ -45,6 +45,36 @@ return [
         'owning_doc' => 'Doc08',
     ],
     [
+        'action_key' => 'customer.merged',
+        'entity' => 'customer',
+        // FR-11/SEC-02: human-only consolidation, reason mandatory; the entry
+        // carries the snapshot id + moved counts so the trail answers "what
+        // did that merge take" without replaying the plan.
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason', 'snapshot_id', 'merged_id', 'moved_conversations', 'moved_tickets'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.unmerged',
+        'entity' => 'customer',
+        // FR-13: audited both ways (SEC-02's plain reading — reason mandatory
+        // on the undo too; the D09 frame draws no reason input, filed for the
+        // step-11 frame mapping, the document wins).
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason', 'snapshot_id', 'restored_id'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.merge_compensated',
+        'entity' => 'customer',
+        // FS-02: the saga crashed and the restoration ran — a SYSTEM act with
+        // the snapshot as its evidence; deliberately NOT a catalog event (the
+        // FR-22 twelve are closed; rule 16).
+        'actor_types' => ['system'],
+        'required_fields' => ['snapshot_id'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
         'action_key' => 'customer.rg_flag.set',
         'entity' => 'customer',
         // staff sets manually; 'system' is the AI-detection path (FR-14,

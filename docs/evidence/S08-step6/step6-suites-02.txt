@@ -1,0 +1,44 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\MergeFlowTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-11/FR-12: the full flow — chosen fields apply, tags/notes/fil[39m[90m…[39m [90m6.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a merge without a reason refuses before anything moves[39m[90m   [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit chain law: a tombstone can take part in NO merge — its only path[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeCollisionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: both sides open → the NEWER open ticket is auto-flagged l[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit one side only open → nothing is flagged (no collision exists)[39m[90m    [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: combined open linked_work beyond Doc 06's cap of 3 → BLOC[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeSagaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash AFTER the tickets chunk compensates back to the p[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash after the FIRST chunk compensates identically — t[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeUndoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13: past the 30-day window the merge is PERMANENT, and a reve[39m[90m…[39m [90m0.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\MergeFlowTest[22m [90m>[39m it FR-11/… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table customer_notes (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "customer_notes" set "customer_id" = 01a001ac-58fb-7ee3-8d0c-89fd73976d61 where "id" in (01a001ac-59ce-740d-87d7-ae882490051c) and "customer_id" = 01a001ac-58f8-7182-ba58-9f396d636c14)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Customers/Merge/CustomerMerge.php[39;22m:[39;1m198[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Customers/Merge/CustomerMerge.php[39;22m:[39;1m195[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (63 assertions)[39m
+  [90mDuration:[39m [39m8.62s[39m
+

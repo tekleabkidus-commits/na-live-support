@@ -1400,3 +1400,16 @@ function rollupTicket(string $tenantId, string $conversationId, string $customer
 
     return $id;
 }
+
+/** Seed a conversation with a CHOSEN external_chat_id (the A-42 anchor key; S08). */
+function anchoredConversation(string $tenantId, string $customerId, string $externalChatId, string $channelRef = 'fixture_bot'): string
+{
+    $id = (string) Str::uuid7();
+    DB::table('conversations')->insert([
+        'id' => $id, 'tenant_id' => $tenantId, 'channel' => 'telegram',
+        'channel_ref_id' => $channelRef, 'external_chat_id' => $externalChatId,
+        'customer_id' => $customerId, 'state' => 'active',
+    ]);
+
+    return $id;
+}
