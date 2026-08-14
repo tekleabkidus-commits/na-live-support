@@ -123,6 +123,65 @@ the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
 surfaced during the ADR 0014 install, not introduced by it; dependency
 maintenance is Doc 18's.
 
+**PLATFORM NOTE (S08 step 2, filed by checkpoint ruling — for the NEXT author
+of a transaction closure, not just this document's trail):**
+`DB::transaction(fn () => …)` **rolls back ONLY on a throw. A plain `return`
+— including returning null to mean "abandon this" — COMMITS everything the
+closure wrote.** S08's resolver nearly committed an orphan shell customer on
+every lost race this way. THE PATTERN THAT ANSWERS IT: make the abandon path
+a dedicated SENTINEL EXCEPTION thrown inside the closure and caught one frame
+outside (`App\Domain\Customers\Identity\RaceLost` is the exemplar — final,
+documented, never escaping its owner). If your closure has any outcome that
+must not persist, that outcome must throw.
+
+**0i INVESTIGATION — THE BOX CLOSED (S08 step 3, ordered at the step-2
+acceptance; findings filed, hypothesis REFUTED):** the relay-backlog
+hypothesis was tested FIRST as ordered, by its cheapest decisive
+discriminator: the three flaky specs run locally with the relay STOPPED
+ENTIRELY — worst-case backlog, deltas never arrive. **All three PASSED
+(3/3, 47.5 s; `docs/evidence/S08-step3/0i-box-relay-stopped-01.txt`), so
+these specs consume NO relayed deltas and the 0g-family hypothesis is RULED
+OUT for them** — the rollback strip renders from the HTTP response, the
+dual-tab rows come from hydration, the trigger's stability is local
+rendering. Second probe: 15 repeated runs with the relay live — **15/15
+green** (`0i-box-repeat-01.txt`); zero local reproduction on dev hardware.
+WHAT REMAINS (the residual hypothesis, recorded for the next investigator):
+CI-runner resource contention — the signatures are the classic slow-runner
+shapes ("visible, enabled and **stable**" actionability timeouts; 5 s
+`toBeVisible` windows) on a 2-vCPU runner, load-dependent and CI-only. A fix
+would live in Doc 07-owned spec files (wait budgets/actionability handling)
+— per the ordering ruling that is a SEPARATE escalation and probably a
+separate session; NOT folded into Doc 08. The 0i triage law and threshold
+stand unchanged.
+
+**0i COUNTER CORRECTION (filed with the investigation order, so the
+instrument stays honest):** run 31796266320 on `b759229` was PRE-TRIAGED as a
+REAL red — the disclosed seeder gap (created_source NOT NULL), ruled and
+fixed at the next commit — and **does NOT count toward the 0i consecutive
+counter**, which stands at FOUR (31787479671 / 31788529540 / 31790656958 /
+31793819083, all flaky-only, zero failures). The 0i investigation was ORDERED
+at the step-2 acceptance rather than waiting for a fifth; findings filed
+below when the box closes.
+
+**S08 CORE-EDIT ENUMERATION (running record; the close-out reproduces it):**
+1. `tests/Pest.php` `asTenant()` 25P02-only restore guard — AUTHORIZED
+   (step-1 checkpoint ruling 3), landed `6aa1206`, pin + full-battery pair.
+2. `app/Domain/Conversations/Identity/CustomerResolver.php` delegation —
+   RULED (A-40), landed `b759229`, signature unchanged, diff quoted at the
+   step-2 checkpoint.
+3. `app/Models/Customer.php` `#[Fillable]` + `created_source` —
+   **COUNTERSIGNED AT THE STEP-2 ACCEPTANCE with a NAMING CORRECTION**: it
+   landed inside the A-40 escalation but A-40's words did not cover it (the
+   Doc 07 core-edit-#7 shape, which was escalated on its own). Not an
+   incident; recorded as its own row, and future Fillable-class edits get
+   named individually even when they ride an approved escalation.
+4. `database/seeders/InboxShiftSeeder.php` + `InboxBrowserSeeder.php` —
+   the created_source ripple, ESCALATED-FIRST at the step-2 checkpoint
+   (Stage 4 consequence disclosed in advance), RULED with the value
+   corrected to **channel_auto** (in the fiction the resolver minted these
+   on first inbound; 'staff' would have poisoned the step 10–12 provenance
+   browser proofs with wrong-but-green data), landed at the step-3 commit.
+
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
 under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session

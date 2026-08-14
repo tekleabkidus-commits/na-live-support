@@ -1746,3 +1746,21 @@ the source stamp, never a fresh clock) goes red → restored. The three
 controls land WITH their writers (rollups step 3; RG step 4; blocking
 step 7) and each executes this one amendment's sabotage at its own step;
 the ledger reconciles the item once with three execution citations.
+
+### SCHEMA AMENDMENT 2 — BACKFILL RIDER (filed at S08 step 3, BEFORE shipping; cites the step-2 acceptance ruling)
+
+The refuse-loudly clause FIRED on the real dev database: 262 customers hold no
+channel identity — they are the S07 browser-seeded customers, minted by the
+seeders directly (customer + conversation inserts) rather than through the
+resolver, so identity-derivation finds nothing. The step-2 acceptance ruling
+states the fiction for exactly these rows: "in the fiction it was created by
+the resolver on first inbound — that is channel_auto." RIDER: the backfill
+gains a SECOND derivation pass — a customer with no identity but WITH
+conversations derives `created_source` from its OLDEST conversation's channel
+(telegram → telegram; the fake/webchat family → webchat; an unmapped
+conversation channel refuses loudly). Identities are NOT minted from
+conversations (a conversation's external_chat_id is not a user id — inventing
+identity values is exactly what the backfill must never do; a zero-identity
+profile is legal, EC-05). A customer with neither identities nor
+conversations still refuses loudly — truly unknown provenance stays a human
+question. Proven by two new IdentityBackfillTest clauses.

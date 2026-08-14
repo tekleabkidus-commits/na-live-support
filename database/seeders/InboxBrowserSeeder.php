@@ -327,7 +327,7 @@ final class InboxBrowserSeeder extends Seeder
         $mk = function (string $name, string $username, array $ticket = [], array $conversation = []) use ($tenantId, &$number): array {
             $customer = \App\Models\Customer::query()->firstOrCreate(
                 ['username' => $username],
-                ['display_name' => $name, 'is_shell' => true],
+                ['display_name' => $name, 'is_shell' => true, 'created_source' => 'channel_auto'], // S08 ruled ripple: in the fiction the resolver minted this on first inbound — channel_auto, never 'staff' (FR-05; the step-2 checkpoint ruling)
             );
             $conversationId = (string) Str::uuid7();
             DB::table('conversations')->insert(array_merge([

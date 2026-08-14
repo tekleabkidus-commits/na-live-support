@@ -1,0 +1,18 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m5.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — a second run changes nothing[39m[90m                     [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES loudly on an unmapped channel, naming it[39m[90m                 [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirrors customers.username into the telegram identity metadata —[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drop gate: green after the backfill, RED for a value with no per[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING 1: a legacy-shaped straggler written AFTER the first back[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforce re-normalizes a backfilled phone to E.164 (ADR 0014), pr[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforce REFUSES when normalization would fuse two customers — me[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER: an identity-less customer derives created_source from its[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER: a customer with neither identities nor conversations stil[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m11 passed[39;22m[90m (40 assertions)[39m
+  [90mDuration:[39m [39m7.51s[39m
+

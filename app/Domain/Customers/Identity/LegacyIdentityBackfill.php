@@ -153,9 +153,7 @@ final class LegacyIdentityBackfill
             }
         }
 
-        // ── created_source, identity-derived; identity-less legacy rows would
-        //    be a data state this project never produced — refuse loudly
-        //    rather than invent a source (the honesty rule).
+        // ── created_source, identity-derived first…
         $db->statement(<<<'SQL'
             UPDATE customers c
                SET created_source = sub.src
@@ -164,6 +162,39 @@ final class LegacyIdentityBackfill
                            CASE type WHEN 'telegram' THEN 'telegram' ELSE 'webchat' END AS src
                       FROM customer_identities
                      WHERE type IN ('telegram', 'web')
+                     ORDER BY customer_id, created_at ASC
+                   ) sub
+             WHERE c.id = sub.customer_id
+               AND c.created_source IS NULL
+            SQL);
+
+        // …then CONVERSATION-derived for identity-less customers (the FILED
+        //    RIDER, citing the step-2 acceptance ruling: seeder-minted
+        //    customers were "created by the resolver on first inbound" in the
+        //    fiction — the oldest conversation's channel is that inbound's
+        //    channel). Identities are NOT minted here (EC-05: zero-identity
+        //    profiles are legal; a chat id is not a user id).
+        $unmappedConvo = $db->table('conversations')
+            ->join('customers', 'customers.id', '=', 'conversations.customer_id')
+            ->whereNull('customers.created_source')
+            ->whereNotIn('conversations.channel', ['telegram', 'fake', 'fakechan', 'minchan', 'webchat'])
+            ->distinct()
+            ->pluck('conversations.channel');
+
+        if ($unmappedConvo->isNotEmpty()) {
+            throw new RuntimeException(
+                'S08 backfill rider refuses: unmapped conversation channel(s) '.$unmappedConvo->implode(', ')
+                .' — extend the map deliberately (SCHEMA AMENDMENT 2 rider).'
+            );
+        }
+
+        $db->statement(<<<'SQL'
+            UPDATE customers c
+               SET created_source = sub.src
+              FROM (
+                    SELECT DISTINCT ON (customer_id) customer_id,
+                           CASE channel WHEN 'telegram' THEN 'telegram' ELSE 'webchat' END AS src
+                      FROM conversations
                      ORDER BY customer_id, created_at ASC
                    ) sub
              WHERE c.id = sub.customer_id

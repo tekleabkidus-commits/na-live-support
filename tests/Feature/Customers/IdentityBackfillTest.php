@@ -240,3 +240,36 @@ it('enforce REFUSES when normalization would fuse two customers — merging is a
             ->toThrow(RuntimeException::class, 'collide');
     });
 });
+
+it('RIDER: an identity-less customer derives created_source from its OLDEST conversation\'s channel — no identity is minted (EC-05)', function (): void {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        $seeded = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00');
+        DB::table('conversations')->insert([
+            'id' => (string) new UuidV7,
+            'tenant_id' => $tenant->id,
+            'channel' => 'telegram',
+            'channel_ref_id' => 'fixture_bot',
+            'external_chat_id' => 'chat-rider-1',
+            'customer_id' => $seeded,
+            'state' => 'active',
+        ]);
+
+        (new LegacyIdentityBackfill)->run('pgsql');
+
+        expect(DB::table('customers')->where('id', $seeded)->value('created_source'))->toBe('telegram')
+            ->and(DB::table('customer_identities')->where('customer_id', $seeded)->count())->toBe(0);
+    });
+});
+
+it('RIDER: a customer with neither identities nor conversations still REFUSES loudly — unknown provenance stays a human question', function (): void {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        legacyCustomer($tenant->id, '2026-06-01 10:00:00+00');
+
+        expect(fn () => (new LegacyIdentityBackfill)->run('pgsql'))
+            ->toThrow(RuntimeException::class, 'no channel identity');
+    });
+});

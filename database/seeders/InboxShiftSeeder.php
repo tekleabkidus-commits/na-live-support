@@ -63,7 +63,7 @@ final class InboxShiftSeeder extends Seeder
             $number = $nextNumber + $i;
             $customer = Customer::query()->firstOrCreate(
                 ['username' => sprintf('@fixture_shift_%04d', $number)],
-                ['display_name' => sprintf('Shift Player %04d', $number), 'is_shell' => true],
+                ['display_name' => sprintf('Shift Player %04d', $number), 'is_shell' => true, 'created_source' => 'channel_auto'], // S08 ruled ripple: in the fiction the resolver minted this on first inbound — channel_auto, never 'staff' (FR-05; the step-2 checkpoint ruling)
             );
             $conversationId = (string) Str::uuid7();
             DB::table('conversations')->insert([
