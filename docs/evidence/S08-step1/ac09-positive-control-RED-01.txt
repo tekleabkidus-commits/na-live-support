@@ -1,0 +1,56 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\NoVerifiedAffordanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-shaped column on any customer table (schema swee[39m[90m…[39m [90m6.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit has no verified-named component anywhere in the client tree (BR-[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit keeps the customer UI namespaces and customers.* lang files free[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Customers server namespaces free of any verified API f[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\NoVerifiedAffordanceTest[22m [90m>[39m it has no verified-name…   
+[39;1m  a verified-named client file exists: ["\/app\/resources\/js\/Components\/Customers\/VerifiedBadge.vue"]
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '/app/resources/js/Components/Customers/VerifiedBadge.vue',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/NoVerifiedAffordanceTest.php[39m:[32m89[39m
+     85▕             $matches[] = $file->getPathname();
+     86▕         }
+     87▕     }
+     88▕ 
+  ➜  89▕     expect($matches)->toBe([], 'a verified-named client file exists: '.json_encode($matches));
+     90▕ });
+     91▕ 
+     92▕ it('keeps the customer UI namespaces and customers.* lang files free of the verified concept', function (): void {
+     93▕     $offenders = array_merge(
+
+  [33m1   [39m[39;1mtests/Security/NoVerifiedAffordanceTest.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\NoVerifiedAffordanceTest[22m [90m>[39m it keeps the customer U…   
+[39;1m  the verified concept reached a customer UI namespace: ["resources\/js\/Components\/Customers\/VerifiedBadge.vue"]
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'resources/js/Components/Customers/VerifiedBadge.vue',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/NoVerifiedAffordanceTest.php[39m:[32m105[39m
+    101▕             $offenders[] = 'lang/'.$locale.'/customers.php';
+    102▕         }
+    103▕     }
+    104▕ 
+  ➜ 105▕     expect($offenders)->toBe([], 'the verified concept reached a customer UI namespace: '.json_encode($offenders));
+    106▕ });
+    107▕ 
+    108▕ it('keeps the Customers server namespaces free of any verified API field', function (): void {
+    109▕     $offenders = array_merge(
+
+  [33m1   [39m[39;1mtests/Security/NoVerifiedAffordanceTest.php[39;22m:[39;1m105[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m6.30s[39m
+

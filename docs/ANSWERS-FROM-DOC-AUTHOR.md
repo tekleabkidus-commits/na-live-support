@@ -1671,3 +1671,50 @@ pre-committed):**
 Remaining step-1a items (the twelve catalog events, the AC-09 repo-wide test,
 notification categories, traceability rows) land in the 1a completion commit
 immediately after this countersign returns, before any 1b migration.
+
+### COUNTERSIGN RECORD — SCHEMA AMENDMENT 2 (advisor, 2026-08-14, at `a23befe`; four rulings, each folded before any migration)
+
+- **Ruling 1 → A-40 below** (escalation #1 resolves to option (b)).
+- **Ruling 2 — `customer_identity_conflicts` gains the full grant physics**,
+  superseding the item-6 text above: REVOKE DELETE from app (Doc 01 convention);
+  resolution is a MARKER, never row removal — the column set gains `resolved_by`
+  (uuid, nullable) beside `resolved_at`, and app UPDATE is COLUMN-GRANTED to
+  exactly (`resolved_at`, `resolved_by`) — the `customer_merge_snapshots`
+  pattern applied a second time. The IdentityBackfillTest negative control moves
+  to MIGRATION level (the grant makes a live delete impossible — the stronger
+  proof, the ledger row-7/row-10 precedent): sabotage edits the migration's
+  grant, migrate:fresh, the drop-gate/physics test goes red, restore, green.
+  Because it carries phone values, any door that ever reads this table sits
+  inside the C-10 404-pattern + curated-payload-allowlist floor.
+- **Ruling 3 — the repeat-contact input is renamed to carry its own window:**
+  `contacts_30d_count` (tickets by this customer created in the trailing 30
+  days, N-14-excluded, recomputable). The provisional window lives in the NAME,
+  never wearing Doc 15's metric name — Doc 15 owns `repeat_contact_rate` and its
+  four-surface parity; Doc 08 stores a recomputable input. A **[D15] bucket** is
+  added to the approved plan's closure table (marked as this ruling's amendment)
+  and this row lives in it. CONFIRMED against US-01: the panel renders "how
+  often they contact us" as a COUNT ("14 tickets · 2 open" — the B4-S01 frame),
+  never a computed rate; the directory's satisfaction column is Doc 12-fed and
+  no Doc 08 surface computes a rate.
+- **Ruling 4 — `customer_merge_snapshots` approved**; recorded in BUILD-STATUS
+  as a NAMED DEVIATION from the approved plan's `merge_snapshots` text (reason:
+  Doc 06's `ticket_merge_snapshots` claims the namespace; symmetry beats
+  matching the plan's text; the plan stays honest by naming its own edits).
+
+### A-40 (RULED at the SCHEMA AMENDMENT 2 countersign). The runtime channel→identity-type mapping is a Doc 08-owned registry — option (b)
+
+`App\Domain\Customers\Identity\ChannelIdentityMap` (telegram→telegram,
+fake→web, webchat→web reserved for Doc 13), consulted at the resolver boundary,
+with the fail-loud pair: every channel the AdapterRegistry knows must have a
+mapping, and an unmapped channel THROWS at the resolver. REASONS OF RECORD:
+layering (the identity taxonomy telegram|web|phone|email is Doc 08's domain
+model — putting it on Doc 04's frozen contract points the dependency the wrong
+way); R-16's zero-core-edits proof is a finite project asset nothing here
+requires spending; blast radius (under (b) the Doc 04 surface shrinks to
+`CustomerResolver` alone — `resolve(string $channel, InboundSender)` unchanged,
+`NormalizeInbound` untouched); drift risk equal either way because the
+fail-loud test carries it. **Option (a) recorded so the choice is visible, not
+defaulted into:** `identityType()` on the ChannelAdapter contract —
+self-describing adapters, drift structurally impossible — rejected at the cost
+of a core-contract edit touching every adapter and the 32-combination
+conformance suite.

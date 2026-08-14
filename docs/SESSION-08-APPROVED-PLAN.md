@@ -239,9 +239,12 @@ content fixture-fed). 11 hygiene: battery legs self-gate on `BAT1: Charging`.
 whale, SS-04 L2 race, **R-03's periodic red-team fixture** (advisor correction 2).
 `[D09]`: FR-14 `source=ai` producer + EC-06 calibration consumption. `[D11]`: FR-15
 RG-queue routing. `[D12]`: custom-field definitions, EC-09 rule ownership,
-satisfaction inputs. `[D13]`: `web` visitor_id producer. `[D17]`: erasure
-approval/execution + Audit-tab depth. Dev-scale figures print with any miss flagged
-plainly (the TTI precedent).
+satisfaction inputs. `[D13]`: `web` visitor_id producer. **`[D15]`** *(added by the
+SCHEMA AMENDMENT 2 countersign, ruling 3, 2026-08-14)*: the `repeat_contact_rate`
+metric definition and its four-surface parity — Doc 08 stores the recomputable input
+(`contacts_30d_count`, window in the name) and renders counts only, never a computed
+rate. `[D17]`: erasure approval/execution + Audit-tab depth. Dev-scale figures print
+with any miss flagged plainly (the TTI precedent).
 
 ## 10. Build order — steps 1a/1b then 2–13 (safety before the features they constrain)
 

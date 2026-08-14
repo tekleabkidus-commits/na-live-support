@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-84 event(s).
+96 event(s).
 
 ## `agent.status_changed`
 
@@ -193,6 +193,114 @@ A blocked conversation returned to active. Nothing retro-fans-out (FR-11): quara
 - **Payload:** `tenant_id`, `conversation_id`
 - **Producers:** Doc04/ConversationBlocking
 - **Consumers:** Doc06/SpamDisposition, Doc07/Inbox
+
+## `customer.blocked`
+
+FR-22/FR-18 (T-06): customer-level block — the cascade consumer quiets every conversation, and the outbound guard refuses new sends independently (belt and braces, FS-04).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `blocked_by`
+- **Producers:** Doc08/BlockCustomer
+- **Consumers:** Doc08/BlockingCascade, Doc07/ListProjector, Doc17/Audit
+
+## `customer.created`
+
+FR-22/FR-02: a customer came into existence — a resolver shell (created_source=telegram|webchat) or a staff/api creation. Shells are full customers (FR-02).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `created_source`
+- **Producers:** Doc08/CustomerResolver, Doc08/Customers
+- **Consumers:** Doc08/SearchIndexer, Doc15/Reporting, Doc17/Audit
+
+## `customer.fields_changed`
+
+FR-22/FR-16: custom-field values changed for entity=customer (Doc 12 definitions; the player_id change re-feeds the duplicate-hint counts and the search index).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `field_keys`
+- **Producers:** Doc08/CustomerProfile
+- **Consumers:** Doc08/SearchIndexer, Doc17/Audit
+
+## `customer.identity.linked`
+
+FR-22/FR-09 (and FR-07's shell creation): an identity attached to a customer. type=telegram|web|phone|email; source=channel_auto|staff|api (FR-05).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `identity_id`, `type`, `source`
+- **Producers:** Doc08/LinkIdentity, Doc08/CustomerResolver
+- **Consumers:** Doc08/SearchIndexer, Doc17/Audit
+
+## `customer.identity.unlinked`
+
+FR-22/FR-10: an identity moved off a profile onto a fresh shell, carrying its conversations/tickets. High-risk, typed-confirmed, heavily audited.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `identity_id`, `type`, `new_customer_id`
+- **Producers:** Doc08/UnlinkIdentity
+- **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
+
+## `customer.merged`
+
+FR-22/FR-12 (T-03): a merge completed — merged became a tombstone, everything re-pointed to the survivor. Doc 07's projector rewrites list rows from it (EC-01's live re-point).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `survivor_id`, `merged_id`, `snapshot_id`
+- **Producers:** Doc08/CustomerMerge
+- **Consumers:** Doc07/ListProjector, Doc08/SearchIndexer, Doc08/Rollups, Doc15/Reporting, Doc17/Audit
+
+## `customer.note.added`
+
+FR-22/FR-17: a customer note was added (body never rides the stream — N-04's cousin discipline; the pinned one surfaces in the Doc 07 panel header).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `note_id`, `author_id`, `pinned`
+- **Producers:** Doc08/CustomerNotes
+- **Consumers:** Doc07/ListProjector, Doc17/Audit
+
+## `customer.rg_flag.cleared`
+
+FR-22/FR-15: the flag was cleared (permission + mandatory reason; history retained forever). Doc 09's calibration consumes clear-reasons (EC-06) — via the history row, not this payload.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `history_id`
+- **Producers:** Doc08/RgFlagService
+- **Consumers:** Doc11/Routing, Doc12/Automation, Doc14/SmsSuppression, Doc09/Calibration, Doc17/Audit
+
+## `customer.rg_flag.set`
+
+FR-22/FR-14: the RG flag was set (source=staff|ai). FR-15's contracts consume it: Doc 11 routes new tickets to the RG queue, Doc 12 suppresses promotional automations, Doc 14 suppresses non-essential SMS.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `history_id`, `source`
+- **Producers:** Doc08/RgFlagService
+- **Consumers:** Doc11/Routing, Doc12/Automation, Doc14/SmsSuppression, Doc17/Audit
+
+## `customer.unblocked`
+
+FR-22/FR-18: the distinct unblock action (rides customers.block per A-39) — conversation states restore; quarantined messages are not replayed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `unblocked_by`
+- **Producers:** Doc08/BlockCustomer
+- **Consumers:** Doc08/BlockingCascade, Doc07/ListProjector, Doc17/Audit
+
+## `customer.unmerged`
+
+FR-22/FR-13: a 30-day undo executed — pre-merge pointers restored byte-identically (AC-03); post-merge objects stayed with the survivor.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `survivor_id`, `restored_id`, `snapshot_id`
+- **Producers:** Doc08/UnmergeCustomer
+- **Consumers:** Doc07/ListProjector, Doc08/SearchIndexer, Doc08/Rollups, Doc17/Audit
+
+## `customer.updated`
+
+FR-22/FR-01: profile attributes changed (display_name, language, country, tags…). The name list rides the payload; values live in audit.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `changed`
+- **Producers:** Doc08/CustomerProfile
+- **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
 
 ## `media.infected`
 

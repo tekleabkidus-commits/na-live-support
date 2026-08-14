@@ -753,6 +753,111 @@ final class EventCatalog
             'consumers' => ['Doc11/Routing', 'Doc15/Reporting'],
             'description' => 'FR-28: an agent\'s availability changed (online|away|offline; reason manual|auto_idle|heartbeat_lost|forced|logout). Doc 11 consumes it for routability; Doc 15 counts transitions — active-time metrics derive from activity events, never from this state (BR-06).',
         ],
+
+        // ── Doc 08 FR-22: the customer family — TWELVE events, the closed
+        //    enumeration of record (S08 plan §1; grows only by filed amendment,
+        //    standing rule 16). Identifiers only (Q7): reasons, field values and
+        //    actor detail live in audit_log; a consumer re-fetches by id under
+        //    its own tenant context. `customer.updated` covers PROFILE attribute
+        //    writes (name/language/country/tags); `customer.fields_changed`
+        //    covers CUSTOM-FIELD values (entity=customer, Doc 12 definitions —
+        //    FR-16's betting fields ride the seeded set), a reading filed with
+        //    the S08 plan.
+        'customer.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'created_source'],
+            'producers' => ['Doc08/CustomerResolver', 'Doc08/Customers'],
+            'consumers' => ['Doc08/SearchIndexer', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-02: a customer came into existence — a resolver shell (created_source=telegram|webchat) or a staff/api creation. Shells are full customers (FR-02).',
+        ],
+        'customer.updated' => [
+            'schema_version' => 1,
+            // `changed` is the list of profile attribute NAMES that changed —
+            // never values (Q7; EC-11's old/new pairs live in audit_log).
+            'payload' => ['tenant_id', 'customer_id', 'changed'],
+            'producers' => ['Doc08/CustomerProfile'],
+            'consumers' => ['Doc08/SearchIndexer', 'Doc07/ListProjector', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-01: profile attributes changed (display_name, language, country, tags…). The name list rides the payload; values live in audit.',
+        ],
+        'customer.identity.linked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'identity_id', 'type', 'source'],
+            'producers' => ['Doc08/LinkIdentity', 'Doc08/CustomerResolver'],
+            'consumers' => ['Doc08/SearchIndexer', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-09 (and FR-07\'s shell creation): an identity attached to a customer. type=telegram|web|phone|email; source=channel_auto|staff|api (FR-05).',
+        ],
+        'customer.identity.unlinked' => [
+            'schema_version' => 1,
+            // new_customer_id is the fresh shell that received the identity and
+            // its conversations (FR-10: ownership follows the anchoring identity).
+            'payload' => ['tenant_id', 'customer_id', 'identity_id', 'type', 'new_customer_id'],
+            'producers' => ['Doc08/UnlinkIdentity'],
+            'consumers' => ['Doc08/SearchIndexer', 'Doc07/ListProjector', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-10: an identity moved off a profile onto a fresh shell, carrying its conversations/tickets. High-risk, typed-confirmed, heavily audited.',
+        ],
+        'customer.merged' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'survivor_id', 'merged_id', 'snapshot_id'],
+            'producers' => ['Doc08/CustomerMerge'],
+            'consumers' => ['Doc07/ListProjector', 'Doc08/SearchIndexer', 'Doc08/Rollups', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-12 (T-03): a merge completed — merged became a tombstone, everything re-pointed to the survivor. Doc 07\'s projector rewrites list rows from it (EC-01\'s live re-point).',
+        ],
+        'customer.unmerged' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'survivor_id', 'restored_id', 'snapshot_id'],
+            'producers' => ['Doc08/UnmergeCustomer'],
+            'consumers' => ['Doc07/ListProjector', 'Doc08/SearchIndexer', 'Doc08/Rollups', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-13: a 30-day undo executed — pre-merge pointers restored byte-identically (AC-03); post-merge objects stayed with the survivor.',
+        ],
+        'customer.blocked' => [
+            'schema_version' => 1,
+            // The cascade consumer (T-06) needs only the customer id; the
+            // mandatory reason lives in audit_log (SEC-02).
+            'payload' => ['tenant_id', 'customer_id', 'blocked_by'],
+            'producers' => ['Doc08/BlockCustomer'],
+            'consumers' => ['Doc08/BlockingCascade', 'Doc07/ListProjector', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-18 (T-06): customer-level block — the cascade consumer quiets every conversation, and the outbound guard refuses new sends independently (belt and braces, FS-04).',
+        ],
+        'customer.unblocked' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'unblocked_by'],
+            'producers' => ['Doc08/BlockCustomer'],
+            'consumers' => ['Doc08/BlockingCascade', 'Doc07/ListProjector', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-18: the distinct unblock action (rides customers.block per A-39) — conversation states restore; quarantined messages are not replayed.',
+        ],
+        'customer.rg_flag.set' => [
+            'schema_version' => 1,
+            // Identifiers only — BR-03/SEC-01 discipline extends to the stream:
+            // the reason and excerpt live on the insert-only history row, read
+            // through the permission-gated no-cache repository (T-05).
+            'payload' => ['tenant_id', 'customer_id', 'history_id', 'source'],
+            'producers' => ['Doc08/RgFlagService'],
+            'consumers' => ['Doc11/Routing', 'Doc12/Automation', 'Doc14/SmsSuppression', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-14: the RG flag was set (source=staff|ai). FR-15\'s contracts consume it: Doc 11 routes new tickets to the RG queue, Doc 12 suppresses promotional automations, Doc 14 suppresses non-essential SMS.',
+        ],
+        'customer.rg_flag.cleared' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'history_id'],
+            'producers' => ['Doc08/RgFlagService'],
+            'consumers' => ['Doc11/Routing', 'Doc12/Automation', 'Doc14/SmsSuppression', 'Doc09/Calibration', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-15: the flag was cleared (permission + mandatory reason; history retained forever). Doc 09\'s calibration consumes clear-reasons (EC-06) — via the history row, not this payload.',
+        ],
+        'customer.note.added' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'note_id', 'author_id', 'pinned'],
+            'producers' => ['Doc08/CustomerNotes'],
+            'consumers' => ['Doc07/ListProjector', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-17: a customer note was added (body never rides the stream — N-04\'s cousin discipline; the pinned one surfaces in the Doc 07 panel header).',
+        ],
+        'customer.fields_changed' => [
+            'schema_version' => 1,
+            // `field_keys` are the custom-field definition keys that changed —
+            // FR-16's betting fields ride the seeded set; values live in audit.
+            'payload' => ['tenant_id', 'customer_id', 'field_keys'],
+            'producers' => ['Doc08/CustomerProfile'],
+            'consumers' => ['Doc08/SearchIndexer', 'Doc17/Audit'],
+            'description' => 'FR-22/FR-16: custom-field values changed for entity=customer (Doc 12 definitions; the player_id change re-feeds the duplicate-hint counts and the search index).',
+        ],
     ];
 
     /**

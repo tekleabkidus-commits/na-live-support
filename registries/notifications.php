@@ -21,6 +21,28 @@ declare(strict_types=1);
 */
 
 return [
+    // ── Doc 08 (Customers) — registered at S08 step 1a, before their producers
+    //    (the S23 C3 discipline: no producer ships uncategorised).
+    [
+        // NFR-02: merge is async UX — the completion notification is the
+        // contract's other half (progress rides user.{id} realtime; completion
+        // is durable and opt-modelled here).
+        'category_key' => 'notify.customers.merge_completed',
+        'label_i18n_key' => 'customers.notify.merge_completed',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        // SEC-04: the export archive builds in the background; the signed-URL
+        // ready signal arrives here ("you'll get a link when it is ready").
+        'category_key' => 'notify.customers.export_ready',
+        'label_i18n_key' => 'customers.notify.export_ready',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc08',
+    ],
+
     // ── Doc 05 (Telegram) — the registry's first entries, per S23 correction
     //    C3: every admin notification Doc 05 mints is a registered category,
     //    same-commit as its producer (producers land steps 4–11; categories

@@ -1812,3 +1812,134 @@ entries:
       dev duration). PARTIAL because AC-10's own words include the 8 h soak
       p-values and the projector-lag SLO under L2 — the pre-agreed Doc 19
       bucket, named here as everywhere.
+
+  # ── Doc 08 (S08): seeded at step 1a when the BUILD-STATUS row left NOT
+  #    STARTED (the per-document flip, ADR 0004). AC-09's test lands in the
+  #    SAME commit as these rows; AC-01…AC-08 are honest planned-manual
+  #    entries, each naming the approved-plan step whose suite flips it to
+  #    automated. A row here never claims coverage that does not exist.
+  - ac_ref: "Doc08 AC-01"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 2 to tests/Feature/Customers/ResolverMatrixTest.php
+      (T-08's matrix: exact-match, create-shell, concurrent-first-message race → 1
+      customer, username-history append, and the no-cross-type-auto-link fixture —
+      BR-02's sharpest prohibition — all proven BEFORE the resolver serves Doc 04,
+      per the plan's ordered minimum).
+  - ac_ref: "Doc08 AC-02"
+    suite_path: manual
+    type: manual
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — the (tenant,type,value) direct-SQL half flips at S08 step 1b to
+      tests/Feature/Customers/IdentityInvariantsTest.php (with sabotage #3 at
+      migration level); the FR-09 duplicate-phone-block half completes at step 5
+      (LinkUnlinkTest).
+  - ac_ref: "Doc08 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 6 to tests/Feature/Customers/MergeUndoTest.php
+      (30-day undo restores byte-identical pointers, snapshot diff = ∅ for pre-merge
+      objects; post-merge objects stay with the survivor and are LISTED in the undo
+      preview; EC-04 outermost-first chain ordering).
+  - ac_ref: "Doc08 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 5 to tests/Feature/Customers/LinkUnlinkTest.php
+      (identity moves to a fresh shell with exactly its conversations/tickets; the
+      typed confirmation's content is COMPUTED from the same query that performs the
+      move — sabotage #7's subject).
+  - ac_ref: "Doc08 AC-05"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 4 to tests/Security/RgVisibilityTest.php (per-role
+      fixtures proving column-level API absence — keys OMITTED, never null — UI
+      absence, cache-bypass freshness incl. AC-B4-01's warm-cache clause, and
+      history immutability), BEFORE any RG surface renders.
+  - ac_ref: "Doc08 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 7 to tests/Feature/Customers/BlockingCascadeTest.php
+      (block quiets all channels ≤ 3 s INCLUDING the mid-cascade new-conversation
+      guard — the outbound guard lands and is falsified BEFORE the cascade is
+      trusted; unblock restores; both audited).
+  - ac_ref: "Doc08 AC-07"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 8 to tests/Security/CustomerSearchScopeTest.php
+      (scope injection proven — the Doc 03 AC-03 reuse — BEFORE customers_index
+      serves real data; historical-username hits; Amharic name search on the seeded
+      corpus, §14's Meilisearch tokenization validation).
+  - ac_ref: "Doc08 AC-08"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S08 step 10 to tests/Browser/customers-panel.spec.ts +
+      tests/Feature/Customers/PanelEndpointTest.php (header ≤ 300 ms dev-scale,
+      sections lazy per T-07, inline edits save with provenance, the Doc 07 slot
+      integration; AC-B4-03's SPOKEN announce cycle). Frame-mapped functional-state
+      + a11y only — NO pixel baselines exist for Batch 4 (stated per the mandate).
+  - ac_ref: "Doc08 AC-09"
+    suite_path: tests/Security/NoVerifiedAffordanceTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      LANDED AT STEP 1a in the same commit as this row — the repo-wide BR-01
+      assertion exists BEFORE any customer surface: no *verified*-named component
+      anywhere in resources/js; zero /verif/i occurrences in the customer UI
+      namespaces, the customers.* lang files (en+am), and the Customers domain/HTTP
+      namespaces; no /verif|confirmed/ column on any customer% table or
+      rg_flag_history (information_schema). PARTIAL only because the customer UI
+      namespaces it polices are still empty — the sweep is non-vacuous today via
+      the repo-wide filename check and the schema check, and every later step
+      builds under it. Sabotage #10 (a verified variant added → red) executes when
+      the identity component exists (step 10). §21: this test is kept forever.
