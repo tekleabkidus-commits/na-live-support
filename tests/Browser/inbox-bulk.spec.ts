@@ -82,7 +82,7 @@ function seedBulkScene(): void {
 $proj = app(App\\Domain\\Inbox\\ReadModels\\ListProjector::class);
 $customer = App\\Models\\Customer::query()->firstOrCreate(
     ["username" => "@fixturebulkrun"],
-    ["display_name" => "Bulk Run", "is_shell" => true],
+    ["display_name" => "Bulk Run", "is_shell" => true, "created_source" => "telegram"], // S08 ripple: NOT NULL, the resolver-fiction value
 );
 // Prior-run leftovers: closed, never deleted (N-05), and re-projected.
 $old = DB::table("tickets")->where("customer_id", $customer->identifier())->where("status", "!=", "closed")->pluck("id")->all();
