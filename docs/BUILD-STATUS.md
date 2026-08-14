@@ -53,6 +53,12 @@ commit that creates it. RECORD NOTE (the S23/S07 precedent, applied at definitio
 time): the command names files later steps create — figures cited before a named file
 exists come from the extant paths, stated as such.
 
+**PER-STEP COMMIT ROUTINE ADDITION (advisor's order at the step-8 acceptance,
+after the AC-03/04/05/06 flips lapsed silently at steps 4–7):** every step
+commit VERIFIES the traceability flip against the suite that landed in that
+same commit — a convention that held twice and then lapsed needs a check,
+not a resolution.
+
 ## SESSION-08 (Doc 08) — APPROVED PLAN RECORD (committed at approval per standing rule 12)
 
 **Approved by the owner on the advisor's audit 2026-08-14: 91/91 family-exact**
@@ -129,7 +135,14 @@ when the browser-heavy work begins.** Recorded; the build carries on.
 RED at Stage 4 — `157 passed, 1 skipped, 1 flaky, 0 failed`; the sole flaky
 is `inbox-mobile-interactions.spec.ts:233` EC-03 DUAL-TAB DRAFTS, one of
 0i's three NAMED specs. Triage: flaky-only, retry-green, matches 0i. A
-datapoint in the ten-run window, not a fresh trip.** INVESTIGATION HYPOTHESIS
+datapoint in the ten-run window, not a fresh trip.** **DATAPOINT (the fold
+`2c9139e`, run
+[31840668789](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31840668789)):
+RED at Stage 4 — `157 passed, 1 skipped, 1 flaky, 0 failed`; sole flaky =
+`inbox-mobile-interactions.spec.ts:105` (mobile swipe-claim), another of the
+three NAMED specs. Triage: flaky-only, retry-green, matches 0i. The window
+arithmetic stays on the advisor's ledger; the consequence is unchanged
+either way — the owner's runner decision, deadline BEFORE STEP 10.** INVESTIGATION HYPOTHESIS
 (recorded for whoever picks it up, test FIRST): all three specs are
 timing-sensitive realtime paths and the relay is LIVE since S07 step 14 —
 the same family as 0g's relay-backlog root cause (a battery backlog holding

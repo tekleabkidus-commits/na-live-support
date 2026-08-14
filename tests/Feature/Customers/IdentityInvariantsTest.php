@@ -95,3 +95,46 @@ it('REFUSES a legacy NULL-typed insert after enforce — the C-12 window is clos
         }
     });
 });
+
+it('ADDITION 8 (condition 1b): every WRITER mirrors the legacy pair onto the arbiter pair — the subsumption the index drop stands on, asserted over real writer output', function (): void {
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    $actor = App\Models\User::factory()->create();
+
+    // The two live writers: the resolver (channel_auto) and LinkIdentity
+    // (staff phone + email). Every row they mint must satisfy
+    // external_user_id = value AND a lawful channel→type pair — the exact
+    // predicate the drop migration refuses on.
+    app(App\Domain\Customers\Identity\IdentityResolution::class)->resolveInbound(
+        'telegram',
+        new App\Domain\Conversations\Adapters\InboundSender('mirror-900900', 'Mirror Fixture', '@mirror_fixture'),
+    );
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $linker = app(App\Domain\Customers\Identity\LinkIdentity::class);
+    $linker->link($customerId, 'phone', '0900112233', $actor->identifier(), 'ET');
+    $linker->link($customerId, 'email', 'mirror@example.et', $actor->identifier());
+
+    $mappedPairs = implode(', ', array_map(
+        static fn (string $channel): string => sprintf(
+            "('%s', '%s')",
+            $channel,
+            App\Domain\Customers\Identity\ChannelIdentityMap::typeFor($channel),
+        ),
+        App\Domain\Customers\Identity\ChannelIdentityMap::channels(),
+    ));
+
+    /** @var object{n: int|string} $divergent */
+    $divergent = DB::selectOne(
+        <<<SQL
+        SELECT count(*) AS n FROM customer_identities
+        WHERE channel IS NOT NULL
+          AND (
+            external_user_id IS DISTINCT FROM value
+            OR NOT (channel = type OR (channel, type) IN ({$mappedPairs}))
+          )
+        SQL,
+    );
+
+    expect(DB::table('customer_identities')->count())->toBeGreaterThanOrEqual(3)
+        ->and((int) $divergent->n)->toBe(0, 'a writer minted a divergent legacy pair — the arbiter no longer subsumes what the dropped index constrained (addition 8\'s ground assumption broken)');
+});

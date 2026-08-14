@@ -222,6 +222,56 @@ it('the (tenant, type, value) unique index exists on customer_identities (BR-04 
         ->and($rows[0]->indexdef)->toContain('tenant_id, type, value');
 });
 
+it('ADDITION 8: the arbiter is the ONLY non-PK unique index on customer_identities — the raw-23505 class is STRUCTURALLY eliminated (T-02\'s guarantee restored)', function (): void {
+    // ON CONFLICT with a named arbiter handles conflicts on THAT index only.
+    // The step-8 canonical red proved a race loser can hit a NON-arbiter
+    // unique index mid-statement and throw raw 23505, bypassing the graceful
+    // RaceLost path — a window between the winner's per-index insertions
+    // that no external hook can freeze, so the proof is STRUCTURAL: the only
+    // unique indexes are the PK (a fresh UUIDv7 per insert — collision
+    // impossible) and the arbiter (handled). No third source can exist.
+    /** @var list<object{indexname: string}> $unique */
+    $unique = DB::connection('pgsql_migrator')->select(
+        "SELECT indexname FROM pg_indexes WHERE tablename = 'customer_identities' AND indexdef LIKE 'CREATE UNIQUE%' ORDER BY indexname",
+    );
+
+    expect(array_column($unique, 'indexname'))->toBe(
+        ['customer_identities_pkey', 'customer_identities_type_value_unique'],
+        'a non-arbiter unique index stands on customer_identities — ON CONFLICT cannot handle its conflicts and T-02\'s race guarantee is breached (the legacy match_unique defect)',
+    );
+
+    // The probe: the exact scenario that raised raw 23505 pre-drop — a
+    // conflict visible ONLY to the legacy (channel, external_user_id) pair.
+    // The resolver-shaped upsert must proceed (no exception): nothing but
+    // the arbiter constrains it now. Divergent state is test-planted; real
+    // writers cannot produce it (the mirror invariant + migration check).
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    $planted = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    DB::statement(
+        "INSERT INTO customer_identities (id, tenant_id, customer_id, channel, external_user_id, type, value, source, first_seen_at, metadata, created_at, updated_at)
+         VALUES (?, ?, ?, 'telegram', 'add8-probe-1', 'telegram', 'add8-DIVERGENT', 'channel_auto', clock_timestamp(), '{}', now(), now())",
+        [(string) Illuminate\Support\Str::uuid7(), $tenantId, $planted],
+    );
+
+    $other = enforcedCustomer($tenantId, '2026-06-01 10:05:00+00');
+    /** @var object{id: string}|null $row */
+    $row = DB::selectOne(
+        <<<'SQL'
+        INSERT INTO customer_identities
+            (id, tenant_id, customer_id, channel, external_user_id,
+             type, value, source, first_seen_at, metadata, created_at, updated_at)
+        VALUES (?, ?, ?, 'telegram', 'add8-probe-1', 'telegram', 'add8-probe-1',
+                'channel_auto', clock_timestamp(), '{}', now(), now())
+        ON CONFLICT (tenant_id, type, value) DO NOTHING
+        RETURNING id
+        SQL,
+        [(string) Illuminate\Support\Str::uuid7(), $tenantId, $other],
+    );
+
+    expect($row)->not->toBeNull('the arbiter refused a non-conflicting insert — wrong index in play');
+});
+
 it('THE GRANT DELTA\'S REPLACEMENT CONTROL (step-6 countersign): customer_notes.customer_id is written ONLY by the merge machinery — a stray re-point anywhere else fails here, not silently in production', function (): void {
     // The delta surrendered a piece of physics (the column grant); this
     // architecture assertion is the proven boundary that replaces it. A note

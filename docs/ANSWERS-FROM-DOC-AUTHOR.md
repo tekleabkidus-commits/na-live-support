@@ -1867,3 +1867,50 @@ FORCED RLS + tenant_isolation; UNIQUE (tenant_id, customer_id,
 conversation_id) so the idempotent cascade cannot double-record. The cascade
 consumer inserts one row per conversation IT blocks; the unblock cascade
 restores exactly the unrestored items and stamps them.
+
+### SCHEMA AMENDMENT 2 — ADDITION 8 (filed at the S08 step-8 checkpoint; APPROVED by the advisor at that checkpoint with four conditions, all discharged in the landing commit). Drop `customer_identities_match_unique` — the legacy index that breaks T-02's arbiter guarantee
+
+THE DEFECT (found by a single kept red in the step-8 canonical run, capture
+`docs/evidence/S08-step8/step8-canonical-01.txt`): `ON CONFLICT` with a named
+arbiter handles conflicts on THAT index only. The legacy unique index
+`(tenant_id, channel, external_user_id)` predates the amendment-2 evolution
+and still stands beside the countersigned `(tenant_id, type, value)` arbiter.
+A race loser whose arbiter pre-check runs before the winner's commit (the
+speculative-insertion window) detects the physical conflict on whichever
+index raises first — the legacy one, being older, can raise 23505 RAW,
+bypassing the graceful RaceLost path entirely. T-02's "race safety is a DB
+property" is breached in that window; `LinkIdentity`'s upsert shares the
+exposure.
+
+THE CHANGE — **SCOPE STATED EXPLICITLY (condition 4): this drops the INDEX
+only.** The deprecated `channel` / `external_user_id` COLUMNS, their C-12
+contract window, and `DeprecatedColumnDropGate` are UNTOUCHED — this is not
+the column drop and must not be mistaken for it; the columns still drop two
+releases after deprecation through the existing gate.
+
+SUBSUMPTION, PROVEN NOT ASSERTED (condition 1): every writer mirrors the
+pairs — the resolver and LinkIdentity write `external_user_id = value` and
+`channel` equal to the value `ChannelIdentityMap` maps to the row's `type`
+(telegram→telegram, fake→web; staff link: channel = type for phone/email) —
+so a legacy-pair collision implies an arbiter-pair collision and the legacy
+index constrains nothing the arbiter does not. Checked twice: (a) the DROP
+MIGRATION itself refuses to run if any existing row diverges
+(`external_user_id IS DISTINCT FROM value` on rows carrying the legacy pair)
+— the data check travels with the migration to every database it ever runs
+on, including the backfill-written dev rows; (b) a standing test asserts the
+mirror invariant on writer-created rows.
+
+DETERMINISTIC PROOF (condition 2, the raced-withdraw technique's sibling): a
+forked competitor inserts the same identity in an OPEN transaction and holds
+it with pg_sleep before committing; the resolver then races into the held
+window — its arbiter pre-check sees nothing (uncommitted competitor), the
+speculative insert blocks on the competitor's index entry, and on the
+competitor's commit the conflict materializes. BEFORE the drop: raw 23505
+naming the legacy index (captured red). AFTER: the arbiter takes it —
+RaceLost → winner adopted, same customer id, no exception (the standing
+green regression proof).
+
+MECHANICS (condition 3): a NEW migration, never editing a shipped one;
+R-19b: no ordering key or metric reads the index; grant physics unchanged
+(an index drop moves no column grants). This addition lives IN SCHEMA
+AMENDMENT 2 (the amendment stays the single source).

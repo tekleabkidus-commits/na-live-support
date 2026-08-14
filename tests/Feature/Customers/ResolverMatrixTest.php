@@ -229,3 +229,86 @@ it('AC-01 RACE: six forked processes race the same first message — exactly ONE
         cleanupTenants([$tenantId]);
     }
 });
+
+it('T-02 THE SPECULATIVE WINDOW (amendment addition 8): a loser racing into a HELD uncommitted competitor takes the graceful RaceLost path — never a raw 23505 off a non-arbiter index', function (): void {
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    commitFixtures();
+
+    DB::purge('pgsql');
+    DB::purge('pgsql_migrator');
+    DB::purge('pgsql_platform');
+
+    $dir = sys_get_temp_dir().'/s08-specwin-'.bin2hex(random_bytes(4));
+    mkdir($dir);
+    $winnerId = (string) Illuminate\Support\Str::uuid7();
+
+    try {
+        // THE COMPETITOR (forked): inserts the same identity in an OPEN
+        // transaction, signals, HOLDS the window with pg_sleep, then commits.
+        // The loser's arbiter pre-check runs while this sits uncommitted —
+        // the exact window the step-8 canonical red fell into by chance.
+        $pid = pcntl_fork();
+        if ($pid === 0) {
+            try {
+                DB::purge('pgsql');
+                $child = DB::connection('pgsql');
+                $child->statement("SELECT set_config('app.tenant_id', ?, false)", [$tenantId]);
+                $child->statement('BEGIN');
+                $child->statement(
+                    "INSERT INTO customers (id, tenant_id, is_shell, created_source, created_at, updated_at) VALUES (?, ?, true, 'telegram', now(), now())",
+                    [$winnerId, $tenantId],
+                );
+                $child->statement(
+                    <<<'SQL'
+                    INSERT INTO customer_identities
+                        (id, tenant_id, customer_id, channel, external_user_id,
+                         type, value, source, first_seen_at, metadata, created_at, updated_at)
+                    VALUES (?, ?, ?, 'telegram', 'specwin-900800', 'telegram', 'specwin-900800',
+                            'channel_auto', clock_timestamp(), '{}', now(), now())
+                    SQL,
+                    [(string) Illuminate\Support\Str::uuid7(), $tenantId, $winnerId],
+                );
+                file_put_contents("{$dir}/held", '1');
+                $child->statement('SELECT pg_sleep(1.2)');
+                $child->statement('COMMIT');
+                file_put_contents("{$dir}/committed", '1');
+            } catch (Throwable $e) {
+                file_put_contents("{$dir}/err", $e->getMessage());
+            }
+
+            posix_kill(posix_getpid(), SIGKILL);
+        }
+
+        // THE LOSER (this process): waits for the held signal, then races in.
+        $deadline = microtime(true) + 5.0;
+        while (! file_exists("{$dir}/held") && ! file_exists("{$dir}/err") && microtime(true) < $deadline) {
+            usleep(20_000);
+        }
+        expect(file_exists("{$dir}/err"))->toBeFalse('the competitor failed to arm: '.@file_get_contents("{$dir}/err"))
+            ->and(file_exists("{$dir}/held"))->toBeTrue('the competitor never armed the window');
+
+        DB::purge('pgsql');
+        bindTenant($tenantId, ResolutionSource::Console);
+
+        // Blocks on the competitor's held index entry until its commit, then
+        // the conflict materializes. GRACEFUL is the whole assertion: the
+        // arbiter takes it (RaceLost → adopt), no raw 23505 off the legacy
+        // (tenant, channel, external_user_id) index (addition 8 dropped it).
+        $result = app(IdentityResolution::class)->resolveInbound(
+            'telegram',
+            new InboundSender('specwin-900800', 'Specwin Fixture', '@specwin_fixture'),
+        );
+
+        pcntl_waitpid($pid, $status);
+
+        expect($result->created)->toBeFalse('the loser thinks it created — it never saw the committed winner')
+            ->and($result->customerId)->toBe($winnerId)
+            ->and(DB::table('customer_identities')->where('type', 'telegram')->where('value', 'specwin-900800')->count())->toBe(1);
+    } finally {
+        array_map('unlink', glob("{$dir}/*") ?: []);
+        @rmdir($dir);
+        DB::purge('pgsql');
+        cleanupTenants([$tenantId]);
+    }
+});
