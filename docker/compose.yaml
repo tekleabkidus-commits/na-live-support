@@ -82,9 +82,14 @@ services:
     # is the exact failure its own docblock argues against.
     restart: unless-stopped
     healthcheck:
-      # Process liveness (no pgrep in the image): the artisan loop's own
-      # process list entry — a dead loop fails this within one interval.
-      test: ["CMD", "sh", "-c", "ps ax | grep -v grep | grep -q 'outbox:relay'"]
+      # Process liveness via /proc directly — the image has NEITHER pgrep
+      # NOR ps (found at the Doc 07 close: the old `ps ax` check failed in
+      # every environment, invisibly locally where nothing gates on relay
+      # health, fatally in CI where `up --wait` does — the floor under all
+      # three retry-loop causes of the relay saga). The bracket pattern
+      # excludes the check's own cmdline; a dead loop fails within one
+      # interval. Verified with a positive AND negative control in-container.
+      test: ["CMD", "sh", "-c", "grep -aq 'outbox[:]relay' /proc/*/cmdline"]
       interval: 15s
       timeout: 5s
       retries: 4

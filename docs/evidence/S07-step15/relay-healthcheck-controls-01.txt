@@ -1,0 +1,9 @@
+== positive control (relay container — the loop runs) ==
+rc=0
+== negative control (worker container — same image, no relay process) ==
+rc=1
+== old check on the same image (the broken floor) ==
+sh: 1: ps: not found
+rc=127
+== settled health ==
+Up 40 seconds (healthy)
