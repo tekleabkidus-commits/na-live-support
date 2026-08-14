@@ -1,0 +1,16 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\NotesTypingDraftsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a note persists internal-only with note.added + audit, and a[39m[90m…[39m [90m6.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-04 runtime half: the compose path REFUSES kind=note before any r[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: staff composing signals the adapter at most once per 4 s win[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: the typing signal is capability-gated — a channel that canno[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-12: customer typing auto-expires by TTL physics — a dead Reverb[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: one draft per (user, conversation) — saves upsert, the unique[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: last-writer-wins — the device holding a STALE updated_at los[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-20: cleared on send — a tombstone (the table cannot DELETE), and[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-26: draft.saved is LOCAL ONLY — absent from the catalog, so the[39m[90m… [39m [90m0.07s[39m  
+
+  [90mTests:[39m    [32;1m9 passed[39;22m[90m (25 assertions)[39m
+  [90mDuration:[39m [39m7.26s[39m
+

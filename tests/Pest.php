@@ -1281,3 +1281,41 @@ function inboxScopedActor(string $level, string $roleName): User
 
     return $user;
 }
+
+// ── S08 (Doc 08) legacy-shape seeders — pre-amendment column shapes, used by
+//    IdentityBackfillTest / IdentityInvariantsTest to reproduce the data the
+//    SCHEMA AMENDMENT 2 backfill migrates. Synthetic only (+2519xxx fixtures).
+function legacyCustomer(string $tenantId, string $createdAt, ?string $phone = null, ?string $username = null, ?string $id = null): string
+{
+    $id ??= (string) new Symfony\Component\Uid\UuidV7;
+
+    DB::table('customers')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'display_name' => 'Fixture '.substr($id, -4),
+        'username' => $username,
+        'phone' => $phone,
+        'is_shell' => true,
+        'created_at' => $createdAt,
+        'updated_at' => $createdAt,
+    ]);
+
+    return $id;
+}
+
+function legacyIdentity(string $tenantId, string $customerId, string $channel, string $externalId, string $createdAt): string
+{
+    $id = (string) new Symfony\Component\Uid\UuidV7;
+
+    DB::table('customer_identities')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'customer_id' => $customerId,
+        'channel' => $channel,
+        'external_user_id' => $externalId,
+        'created_at' => $createdAt,
+        'updated_at' => $createdAt,
+    ]);
+
+    return $id;
+}

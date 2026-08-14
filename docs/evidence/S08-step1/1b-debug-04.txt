@@ -1,0 +1,35 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\ProbeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit probe stage D: the full first-test body, unmasked[39m[90m                [39m [90m6.00s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\ProbeTest[22m [90m>[39m it probe stag… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "$1"
+LINE 7:    AND NOT (ci.metadata $1 'username')
+                                ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: UPDATE customer_identities ci
+   SET metadata = jsonb_set(ci.metadata, '{username}', to_jsonb(c.username))
+  FROM customers c
+ WHERE ci.customer_id = c.id
+   AND ci.type = 'telegram'
+   AND c.username IS NOT NULL
+   AND NOT (ci.metadata ? 'username'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+4 vendor frames [22m
+  [33m5   [39m[39;1mapp/Domain/Customers/Identity/LegacyIdentityBackfill.php[39;22m:[39;1m80[39;22m
+  [33m6   [39m[39;1mtests/Feature/Customers/ProbeTest.php[39;22m:[39;1m17[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m6.10s[39m
+

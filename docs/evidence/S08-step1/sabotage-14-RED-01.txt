@@ -1,0 +1,72 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m6.19s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\CustomerGrantPhysicsTest[22m [90m>[39m it R-19b: the app-deni…   
+[39;1m  rg_flag_history INSERT: app-denied columns are [], the filed analysis says [created_at] — a column moved without the amendment moving
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'created_at',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/CustomerGrantPhysicsTest.php[39m:[32m118[39m
+    114▕             sort($expected);
+    115▕ 
+    116▕             [, $denied] = doc08AppColumnSplit($table, $privilege);
+    117▕ 
+  ➜ 118▕             expect($denied)->toBe($expected, sprintf(
+    119▕                 '%s %s: app-denied columns are [%s], the filed analysis says [%s] — a column moved without the amendment moving',
+    120▕                 $table, $privilege, implode(', ', $denied), implode(', ', $expected),
+    121▕             ));
+    122▕         }
+
+  [33m1   [39m[39;1mtests/Isolation/CustomerGrantPhysicsTest.php[39;22m:[39;1m118[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\CustomerGrantPhysicsTest[22m [90m>[39m it rg_flag_history is…    
+[39;1m  an UPDATE grant reached the insert-only history
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Isolation/CustomerGrantPhysicsTest.php[39m:[32m139[39m
+    135▕         "SELECT has_any_column_privilege('app', 'rg_flag_history', 'UPDATE') AS ok",
+    136▕     );
+    137▕ 
+    138▕     expect((bool) $insert[0]->ok)->toBeTrue('app cannot insert history rows at all')
+  ➜ 139▕         ->and((bool) $update[0]->ok)->toBeFalse('an UPDATE grant reached the insert-only history')
+    140▕         ->and(doc08AppHasTablePrivilege('rg_flag_history', 'DELETE'))->toBeFalse('a DELETE grant reached the insert-only history');
+    141▕ });
+    142▕ 
+    143▕ it('DELETE is revoked for app on every customer table, the S20 pair included (Doc 01 BR-02)', function (): void {
+
+  [33m1   [39m[39;1mtests/Isolation/CustomerGrantPhysicsTest.php[39;22m:[39;1m139[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\CustomerGrantPhysicsTest[22m [90m>[39m it DELETE is revoked f…   
+[39;1m  app can DELETE on rg_flag_history — BR-02's revoke is gone
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Isolation/CustomerGrantPhysicsTest.php[39m:[32m146[39m
+    142▕ 
+    143▕ it('DELETE is revoked for app on every customer table, the S20 pair included (Doc 01 BR-02)', function (): void {
+    144▕     foreach (array_merge(DOC08_TABLES, ['customers', 'customer_identities']) as $table) {
+    145▕         expect(doc08AppHasTablePrivilege($table, 'DELETE'))
+  ➜ 146▕             ->toBeFalse("app can DELETE on {$table} — BR-02's revoke is gone");
+    147▕     }
+    148▕ });
+    149▕ 
+    150▕ it('the three ordering timestamps carry the clock_timestamp() default (R-19b db-time-only)', function (): void {
+
+  [33m1   [39m[39;1mtests/Isolation/CustomerGrantPhysicsTest.php[39;22m:[39;1m146[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (40 assertions)[39m
+  [90mDuration:[39m [39m6.51s[39m
+

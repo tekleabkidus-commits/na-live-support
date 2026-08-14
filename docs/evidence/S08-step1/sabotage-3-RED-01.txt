@@ -1,0 +1,53 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m6.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets legacy NULL-typed rows coexist during the expand window (th[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityInvariantsT[22m… [41;1m AssertionFailedError [49;22m  
+[39;1m  the duplicate (tenant, type, value) insert was ACCEPTED — BR-04's index is gone[39;22m
+
+  at [32mtests/Feature/Customers/IdentityInvariantsTest.php[39m:[32m63[39m
+     59▕             // same physics the S20 resolver's docblock records.
+     60▕             DB::transaction(function () use ($tenant, $b): void {
+     61▕                 DB::table('customer_identities')->insert(typedIdentityRow($tenant->id, $b, 'phone', '+251900005555'));
+     62▕             });
+  ➜  63▕             $this->fail('the duplicate (tenant, type, value) insert was ACCEPTED — BR-04\'s index is gone');
+     64▕         } catch (QueryException $e) {
+     65▕             expect($e->getCode())->toBe('23505')
+     66▕                 ->and($e->getMessage())->toContain('customer_identities_type_value_unique');
+     67▕         }
+
+  [33m1   [39m[39;1mtests/Feature/Customers/IdentityInvariantsTest.php[39;22m:[39;1m63[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\CustomerGrantPhysicsTest[22m [90m>[39m it the (tenant, type,…    
+[39;1m  the BR-04 unique index is gone
+Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Isolation/CustomerGrantPhysicsTest.php[39m:[32m194[39m
+    190▕     $rows = DB::connection('pgsql_migrator')->select(
+    191▕         "SELECT indexdef FROM pg_indexes WHERE tablename = 'customer_identities' AND indexname = 'customer_identities_type_value_unique'",
+    192▕     );
+    193▕ 
+  ➜ 194▕     expect($rows)->toHaveCount(1, 'the BR-04 unique index is gone')
+    195▕         ->and($rows[0]->indexdef)->toContain('UNIQUE')
+    196▕         ->and($rows[0]->indexdef)->toContain('tenant_id, type, value');
+    197▕ });
+    198▕
+
+  [33m1   [39m[39;1mtests/Isolation/CustomerGrantPhysicsTest.php[39;22m:[39;1m194[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (50 assertions)[39m
+  [90mDuration:[39m [39m7.16s[39m
+

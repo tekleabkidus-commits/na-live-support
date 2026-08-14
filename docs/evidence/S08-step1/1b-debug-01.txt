@@ -1,0 +1,25 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m6.13s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityBackfillTest[22m [90m>[39m it… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT set_config('app.tenant_id', 019fffa8-02e7-7089-b5cf-deba6b80f75b, false))[39;22m
+
+  at [32mapp/Support/Tenancy/RlsSession.php[39m:[32m94[39m
+     90▕ 
+     91▕         // Bound as a parameter, never interpolated: this value arrives from
+     92▕         // resolution and interpolating it would be an injection point into the
+     93▕         // one statement that decides what every other statement can see.
+  ➜  94▕         $connection->statement(sprintf("SELECT set_config('%s', ?, false)", self::VARIABLE), [$value]);
+     95▕     }
+     96▕ }
+     97▕
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/RlsSession.php[39;22m:[39;1m58[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m121[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m6.23s[39m
+

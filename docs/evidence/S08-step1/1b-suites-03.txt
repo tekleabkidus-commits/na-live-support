@@ -1,0 +1,51 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m4.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — a second run changes nothing[39m[90m                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES loudly on an unmapped channel, naming it[39m[90m                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirrors customers.username into the telegram identity metadata —[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drop gate: green after the backfill, RED for a value with no per[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets legacy NULL-typed rows coexist during the expand window (th[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoVerifiedAffordanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-shaped column on any customer table (schema swee[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-named component anywhere in the client tree (BR-[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the customer UI namespaces and customers.* lang files free[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Customers server namespaces free of any verified API f[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityInvariantsTest[22m [90m>[39m it refuses a dir…   
+[39;1m  Expected: [39;22m[31mSQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "customer_identities_match_unique" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customer_identities" ("id", "tenant_id", "customer_id", "channel", "external_user_id", "type", "value", "source", "metadata", "created_at", "updated_at") values (019fffaa-f492-7a58-91d1-416713b940de, 019fffaa-f48a-714a-8418-f30d378a8268, 019fffaa-f490-7b12-bde6-cf19b5c629a0, phone, +251900005555, phone, +251900005555, staff, {}, 2026-08-14 09:47:01, 2026-08-14 09:47:01))[39m[39;1m
+
+  To contain: [39;22m[32mcustomer_identities_type_value_unique[39m
+
+  at [32mtests/Feature/Customers/IdentityInvariantsTest.php[39m:[32m60[39m
+     56▕             });
+     57▕             $this->fail('the duplicate (tenant, type, value) insert was ACCEPTED — BR-04\'s index is gone');
+     58▕         } catch (QueryException $e) {
+     59▕             expect($e->getCode())->toBe('23505')
+  ➜  60▕                 ->and($e->getMessage())->toContain('customer_identities_type_value_unique');
+     61▕         }
+     62▕ 
+     63▕         // Same value, DIFFERENT type: legal — the tuple is (type, value).
+     64▕         DB::table('customer_identities')->insert(typedIdentityRow($tenant->id, $b, 'email', '+251900005555'));
+
+  [33m1   [39m[39;1mtests/Feature/Customers/IdentityInvariantsTest.php[39;22m:[39;1m60[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m17 passed[39;22m[90m (81 assertions)[39m
+  [90mDuration:[39m [39m5.67s[39m
+

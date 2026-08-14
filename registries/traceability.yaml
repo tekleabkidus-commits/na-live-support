@@ -1833,17 +1833,23 @@ entries:
       BR-02's sharpest prohibition — all proven BEFORE the resolver serves Doc 04,
       per the plan's ordered minimum).
   - ac_ref: "Doc08 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Customers/IdentityInvariantsTest.php
+    type: automated
     tier: isolation
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED — the (tenant,type,value) direct-SQL half flips at S08 step 1b to
-      tests/Feature/Customers/IdentityInvariantsTest.php (with sabotage #3 at
-      migration level); the FR-09 duplicate-phone-block half completes at step 5
+      FLIPPED AT S08 STEP 1b as the plan scheduled. COVERED: the
+      (tenant,type,value) uniqueness enforced AT THE DATABASE — a direct-SQL
+      duplicate fails on customer_identities_type_value_unique itself (the first
+      take collided on the LEGACY match index and proved the wrong guard —
+      corrected and filed); sabotage #3 executed at migration level (index
+      dropped → duplicate ACCEPTED + index-existence red → restored green,
+      captures under docs/evidence/S08-step1/). CustomerGrantPhysicsTest pins
+      the index's existence and shape. PARTIAL because AC-02's other half — the
+      FR-09 duplicate-phone block with merge shortcut — lands at step 5
       (LinkUnlinkTest).
   - ac_ref: "Doc08 AC-03"
     suite_path: manual

@@ -31,10 +31,17 @@ use Illuminate\Support\Facades\DB;
 |   4. CUSTOMER SERVER NAMESPACES: zero /verif/i in app/Domain/Customers and
 |      app/Http/Controllers/Customers — no API field, no serializer key.
 |
-| Word-boundary caution is deliberate in sweeps 3–4: /verif/i also catches
-| "verification", "unverified", "verify" — any of them in a CUSTOMER
-| namespace is the concept arriving, which N-06 forbids wholesale.
+| PATTERN CALIBRATION (honest trail, first run): sweeps 3–4 started as
+| /verif/i and promptly caught THIS GUARD'S OWN IMPLEMENTATION — the drop
+| gate's verify() method and the backfill's "the drop gate verifies it"
+| comment. The concept BR-01 forbids is the STATUS ("verified",
+| "verification", "unverified", "is_verified", VerifiedBadge…), not the code
+| verb "verify/verifies"; the content pattern is therefore
+| /verified|verification/i — substring, so is_verified and unverified still
+| match — while the FILENAME sweep stays at the wider /verif/i.
 */
+
+const VERIFIED_CONCEPT = '/verified|verification/i';
 
 /** @return list<string> repo-relative offenders */
 function verifSweepFiles(string $absoluteDir, string $pattern): array
@@ -91,13 +98,13 @@ it('has no verified-named component anywhere in the client tree (BR-01 component
 
 it('keeps the customer UI namespaces and customers.* lang files free of the verified concept', function (): void {
     $offenders = array_merge(
-        verifSweepFiles(resource_path('js/Components/Customers'), '/verif/i'),
-        verifSweepFiles(resource_path('js/Pages/Customers'), '/verif/i'),
+        verifSweepFiles(resource_path('js/Components/Customers'), VERIFIED_CONCEPT),
+        verifSweepFiles(resource_path('js/Pages/Customers'), VERIFIED_CONCEPT),
     );
 
     foreach (['en', 'am'] as $locale) {
         $path = lang_path($locale.'/customers.php');
-        if (is_file($path) && preg_match('/verif/i', (string) file_get_contents($path)) === 1) {
+        if (is_file($path) && preg_match(VERIFIED_CONCEPT, (string) file_get_contents($path)) === 1) {
             $offenders[] = 'lang/'.$locale.'/customers.php';
         }
     }
@@ -107,8 +114,8 @@ it('keeps the customer UI namespaces and customers.* lang files free of the veri
 
 it('keeps the Customers server namespaces free of any verified API field', function (): void {
     $offenders = array_merge(
-        verifSweepFiles(app_path('Domain/Customers'), '/verif/i'),
-        verifSweepFiles(app_path('Http/Controllers/Customers'), '/verif/i'),
+        verifSweepFiles(app_path('Domain/Customers'), VERIFIED_CONCEPT),
+        verifSweepFiles(app_path('Http/Controllers/Customers'), VERIFIED_CONCEPT),
     );
 
     expect($offenders)->toBe([], 'the verified concept reached a Customers server namespace: '.json_encode($offenders));
