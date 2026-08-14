@@ -551,7 +551,7 @@ final class EventCatalog
             // it; the subject does not, being staff- or AI-authored free text.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'customer_id', 'source', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/CreateTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups', 'Doc08/SearchIndexer'],
             'description' => 'A ticket was created through one of FR-12/13/14\'s doors or FR-11\'s handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.',
         ],
         'ticket.subject_changed' => [
@@ -568,7 +568,7 @@ final class EventCatalog
             // FR-15 names this payload exactly: "{old, new, by}".
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_assignee_id', 'new_assignee_id', 'by'],
             'producers' => ['Doc06/AssignTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit', 'Doc08/SearchIndexer'],
             'description' => 'FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS the unassign that returns it to Doc 11\'s queue.',
         ],
         'ticket.priority_changed' => [
@@ -614,7 +614,7 @@ final class EventCatalog
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'previous_assignee_id'],
             'producers' => ['Doc06/AssigneeDeactivated'],
-            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc17/Audit'],
+            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc17/Audit', 'Doc08/SearchIndexer'],
             'description' => 'EC-06: an open-family ticket was handed back because its assignee was deactivated — one event PER TICKET so Doc 11 re-routes each on its own merits. Name filed as interpretation A-8 (iii): EC-06 requires this event and FR-26\'s list does not name it.',
         ],
         'ticket.resolved' => [
@@ -679,7 +679,7 @@ final class EventCatalog
             // the ticket went back to the queue with its department change.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_department_id', 'new_department_id', 'assignee_retained', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/TransferTicket'],
-            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc11/Routing', 'Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/SearchIndexer'],
             'description' => 'FR-22: a ticket changed department. Doc 11 re-routes off this; Doc 12 decides SLA re-targeting off this (the instance keeps original targets unless policy says otherwise); status untouched.',
         ],
         'ticket.escalated' => [

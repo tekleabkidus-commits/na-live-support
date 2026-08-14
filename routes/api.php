@@ -292,6 +292,14 @@ Route::group([], function (): void {
             Route::post('customers/{customerId}/identities/{identityId}/unlink', [App\Http\Controllers\Customers\IdentityController::class, 'unlink'])
                 ->middleware(['permission:customers.identity.unlink', 'audit:customer.identity.unlinked'])
                 ->name('customers.identities.unlink');
+
+            // ── Doc 08 FR-20/T-04 (S08 step 8): the customer search door —
+            //    query string in, curated hits out; scope injected server-side
+            //    (SEC-02's one-path law); FS-01's degrade labeled in-band.
+            //    Read door: no audit middleware (not state-mutating).
+            Route::get('customers/search', [App\Http\Controllers\Customers\CustomerSearchController::class, 'search'])
+                ->middleware('permission:customers.view')
+                ->name('customers.search');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.

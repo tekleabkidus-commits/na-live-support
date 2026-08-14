@@ -1,0 +1,41 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\CustomerSearchScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 layer 1: tenant A NEVER sees tenant B's indexed customers[39m[90m… [39m [90m4.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 2: the customers-module scope filter is INJECTED ser[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: the HTTP door accepts a QUERY STRING and nothing else —[39m[90m… [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07: HISTORICAL usernames hit (FR-06) — a renamed Telegram ide[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 / §14: Amharic name search returns the expected customers[39m[90m… [39m [90m1.88s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CustomerSearchScopeTest[22m [90m>[39m it AC-07 layer 1: tenant…   
+[39;1m  CROSS-TENANT SEARCH HIT: tenant B's customer surfaced in tenant A's results (N-01 at the index layer)
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => Array &1 [[39m[39;1m
+  [39;22m[32m+        'id' => '01a00228-6736-7d8a-bb03-cb99f12b1169',[39m[39;1m
+  [39;22m[32m+        'display_name' => 'Zebra Crossline',[39m[39;1m
+  [39;22m[32m+        'usernames' => Array &2 [],[39m[39;1m
+  [39;22m[32m+        'phones' => Array &3 [],[39m[39;1m
+  [39;22m[32m+        'emails' => Array &4 [],[39m[39;1m
+  [39;22m[32m+    ],[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/CustomerSearchScopeTest.php[39m:[32m40[39m
+     36▕     try {
+     37▕         $result = app(CustomerSearch::class)->search('Zebra', $viewerA);
+     38▕ 
+     39▕         expect($result['degraded'])->toBeFalse('tenant A\'s search degraded instead of answering — the isolation claim below would be vacuous');
+  ➜  40▕         expect($result['hits'])->toBe([], 'CROSS-TENANT SEARCH HIT: tenant B\'s customer surfaced in tenant A\'s results (N-01 at the index layer)');
+     41▕ 
+     42▕         // Positive control: tenant B FINDS its own customer — the empty
+     43▕         // result above is isolation, not a broken index.
+     44▕         $hitIds = asTenant($tenantB, function (): array {
+
+  [33m1   [39m[39;1mtests/Security/CustomerSearchScopeTest.php[39;22m:[39;1m40[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (12 assertions)[39m
+  [90mDuration:[39m [39m8.46s[39m
+

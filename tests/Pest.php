@@ -1413,3 +1413,44 @@ function anchoredConversation(string $tenantId, string $customerId, string $exte
 
     return $id;
 }
+
+// ── S08 step 8 (Doc 08 T-04/AC-07) — customers_index helpers, shared here per
+//    the rollupTicket lesson (two suites consume them: the scope proofs and
+//    the directory/indexer suites).
+
+/** A viewer whose CUSTOMERS-module scope is exactly $level ('none' = the module stays silent → fail-closed). */
+function customersScopedActor(string $level, string $roleName): User
+{
+    $role = App\Models\Role::query()->firstOrCreate(
+        ['name' => $roleName],
+        [
+            'color' => 'role-agent',
+            'permissions' => ['customers.view'],
+            'scopes' => $level === 'none' ? [] : ['customers' => $level],
+        ],
+    );
+    $user = User::factory()->create();
+    $user->forceFill(['role_id' => $role->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
+
+    return $user;
+}
+
+/** Index one customer's document from truth (the writer the durable indexer calls). */
+function indexCustomer(string $customerId): void
+{
+    app(App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($customerId);
+}
+
+/** Drop the ambient tenant's customers index (Meilisearch state survives DB rollback — tests clean up). */
+function dropCustomersSearchIndex(): void
+{
+    $index = app(App\Domain\Customers\Search\CustomerSearchIndex::class);
+    try {
+        $client = $index->client();
+        $task = $client->deleteIndex($index->customersIndexName());
+        $client->waitForTask($task['taskUid']);
+    } catch (Throwable) {
+        // absent index on a cold tenant — nothing to drop
+    }
+}

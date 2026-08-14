@@ -1858,70 +1858,80 @@ entries:
       FR-09 duplicate-phone block with merge shortcut — lands at step 5
       (LinkUnlinkTest).
   - ac_ref: "Doc08 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Customers/MergeUndoTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 6 to tests/Feature/Customers/MergeUndoTest.php
-      (30-day undo restores byte-identical pointers, snapshot diff = ∅ for pre-merge
-      objects; post-merge objects stay with the survivor and are LISTED in the undo
-      preview; EC-04 outermost-first chain ordering).
+      FLIPPED AT S08 STEP 8 — a SELF-FILED MISS: the suite landed and ran green at
+      step 6 as planned, but this row was not flipped in that commit (the per-step
+      flip convention was honored at steps 1b/2, then dropped silently for steps
+      4-7; found and corrected at step 8, filed in the honest trail). Coverage: the
+      30-day undo round-trip restores byte-identical pointers (snapshot diff = ∅
+      for pre-merge objects); post-merge objects stay with the survivor and are
+      LISTED in the undo preview; EC-04 outermost-first chain ordering.
   - ac_ref: "Doc08 AC-04"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Customers/LinkUnlinkTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 5 to tests/Feature/Customers/LinkUnlinkTest.php
-      (identity moves to a fresh shell with exactly its conversations/tickets; the
-      typed confirmation's content is COMPUTED from the same query that performs the
-      move — sabotage #7's subject).
+      FLIPPED AT S08 STEP 8 — a SELF-FILED MISS (suite landed green at step 5;
+      the row flip was dropped — same finding as AC-03, corrected together).
+      Coverage: identity moves to a fresh shell with exactly its
+      conversations/tickets; the typed confirmation's content is COMPUTED from the
+      same query that performs the move (sabotage #7's subject).
   - ac_ref: "Doc08 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/RgVisibilityTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 4 to tests/Security/RgVisibilityTest.php (per-role
-      fixtures proving column-level API absence — keys OMITTED, never null — UI
-      absence, cache-bypass freshness incl. AC-B4-01's warm-cache clause, and
-      history immutability), BEFORE any RG surface renders.
+      FLIPPED AT S08 STEP 8 — a SELF-FILED MISS (suite landed green at step 4,
+      BEFORE any RG surface, as ordered; the row flip was dropped — corrected with
+      AC-03/04/06). Coverage: per-role fixtures proving column-level API absence
+      (keys OMITTED, never null), UI absence, cache-bypass freshness incl.
+      AC-B4-01's warm-cache clause, and history immutability.
   - ac_ref: "Doc08 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Customers/BlockingCascadeTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 7 to tests/Feature/Customers/BlockingCascadeTest.php
-      (block quiets all channels ≤ 3 s INCLUDING the mid-cascade new-conversation
-      guard — the outbound guard lands and is falsified BEFORE the cascade is
-      trusted; unblock restores; both audited).
+      FLIPPED AT S08 STEP 8 — a SELF-FILED MISS (suite landed green at step 7;
+      the row flip was dropped — corrected with AC-03/04/05). Coverage: block
+      quiets all channels ≤ 3 s INCLUDING the mid-cascade new-conversation guard
+      (the outbound guard landed and was falsified BEFORE the cascade was
+      trusted); unblock restores; both audited; the re-block cycle and raced
+      withdraw folded at the S08 resume.
   - ac_ref: "Doc08 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/CustomerSearchScopeTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 8 to tests/Security/CustomerSearchScopeTest.php
-      (scope injection proven — the Doc 03 AC-03 reuse — BEFORE customers_index
-      serves real data; historical-username hits; Amharic name search on the seeded
-      corpus, §14's Meilisearch tokenization validation).
+      FLIPPED AT S08 STEP 8, in the same commit as the suite (the plan's
+      schedule). Coverage: scope injection proven at BOTH layers — physical
+      per-tenant index and server-injected customers-module filter (the Doc 03
+      AC-03 reuse) — BEFORE customers_index serves real data; the SEC-02
+      client-parameter smuggle; historical-username hits through the REAL
+      resolver's rename; Amharic first-word AND second-word hits on the seeded
+      corpus (§14's Meilisearch Ethiopic tokenization validation).
   - ac_ref: "Doc08 AC-08"
     suite_path: manual
     type: manual

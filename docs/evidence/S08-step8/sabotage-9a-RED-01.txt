@@ -1,0 +1,64 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\CustomerSearchScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 1: tenant A NEVER sees tenant B's indexed customers[39m[90m… [39m [90m4.98s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 layer 2: the customers-module scope filter is INJECTED ser[39m[90m…[39m [90m1.27s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: the HTTP door accepts a QUERY STRING and nothing else —[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07: HISTORICAL usernames hit (FR-06) — a renamed Telegram ide[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 / §14: Amharic name search returns the expected customers[39m[90m… [39m [90m1.67s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CustomerSearchScopeTest[22m [90m>[39m it AC-07 layer 2: the cu…   
+[39;1m  an out-of-scope customer hit returned — the injected filter is gone (AC-07)
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => '01a00228-139e-7c32-a160-d9700b803d66',[39m[39;1m
+  [39;22m[32m+    1 => '01a00228-13aa-7c76-8c3f-0c909f163f5c',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/CustomerSearchScopeTest.php[39m:[32m82[39m
+     78▕     try {
+     79▕         $search = app(CustomerSearch::class);
+     80▕ 
+     81▕         expect(array_column($search->search('Quagga', $own)['hits'], 'id'))
+  ➜  82▕             ->toBe([$mine], 'an out-of-scope customer hit returned — the injected filter is gone (AC-07)');
+     83▕ 
+     84▕         // Positive control: All-scope sees both.
+     85▕         expect(array_column($search->search('Quagga', $all)['hits'], 'id'))
+     86▕             ->toEqualCanonicalizing([$mine, $other]);
+
+  [33m1   [39m[39;1mtests/Security/CustomerSearchScopeTest.php[39;22m:[39;1m82[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CustomerSearchScopeTest[22m [90m>[39m it SEC-02: the HTTP door…   
+[39;1m  a client-sent parameter widened search scope — SEC-02's one-path contract is broken
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => Array &1 [[39m[39;1m
+  [39;22m[32m+        'id' => '01a00228-1865-7346-97e1-0bddfa27144d',[39m[39;1m
+  [39;22m[32m+        'display_name' => 'Okapi Bonus',[39m[39;1m
+  [39;22m[32m+        'usernames' => Array &2 [],[39m[39;1m
+  [39;22m[32m+        'phones' => Array &3 [],[39m[39;1m
+  [39;22m[32m+        'emails' => Array &4 [],[39m[39;1m
+  [39;22m[32m+    ],[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/CustomerSearchScopeTest.php[39m:[32m116[39m
+    112▕         $response = test()->actingAs($own, 'staff')->getJson(
+    113▕             'https://localhost/api/staff/customers/search?q=Okapi&filter=assignee_ids%20IS%20NULL&scope=all&index=t_other&department_id=*'
+    114▕         );
+    115▕         $response->assertOk();
+  ➜ 116▕         expect($response->json('hits'))->toBe([], 'a client-sent parameter widened search scope — SEC-02\'s one-path contract is broken')
+    117▕             ->and($response->json('degraded'))->toBeFalse();
+    118▕     } finally {
+    119▕         dropCustomersSearchIndex();
+    120▕     }
+
+  [33m1   [39m[39;1mtests/Security/CustomerSearchScopeTest.php[39;22m:[39;1m116[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m9.12s[39m
+

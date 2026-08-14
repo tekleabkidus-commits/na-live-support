@@ -107,3 +107,32 @@ it('§12 indicatively: the blocking cascade over 50 conversations inside 3000 ms
     expect(DB::table('conversations')->where('customer_id', $customerId)->where('state', 'blocked')->count())->toBe(50)
         ->and($ms)->toBeLessThan(assertedBudget(3000.0));
 });
+
+it('NFR-04 indicatively: customers_index search round-trip at dev scale (150-customer corpus), the §12 directory figure as anchor [D19: 1 M formal]', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    bindTenant($tenant);
+    $tenantId = $tenant->identifier();
+    $viewer = customersScopedActor('All', 'S08 Perf Search');
+
+    $documents = app(App\Domain\Customers\Search\CustomerSearchDocuments::class);
+    foreach (range(1, 150) as $i) {
+        $id = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+        DB::table('customers')->where('id', $id)->update(['display_name' => 'Perfsearch Customer '.$i]);
+        $documents->writeFor($id);
+    }
+
+    try {
+        $search = app(App\Domain\Customers\Search\CustomerSearch::class);
+        $stats = measure(static function () use ($search, $viewer): void {
+            $search->search('Perfsearch', $viewer);
+        });
+
+        // §12's nearest figure is the directory's 150 ms p95; NFR-04's 1 M
+        // profile is [D19] — this row prints the dev-scale reality.
+        reportBudget('customers_index search p99 (NFR-04 dev-scale)', assertedBudget(150.0), $stats);
+        assertBudget('customers_index search (NFR-04, anchor ≤150 ms)', $stats, 150.0);
+    } finally {
+        dropCustomersSearchIndex();
+    }
+});

@@ -239,6 +239,22 @@ below when the box closes.
    corrected to **channel_auto** (in the fiction the resolver minted these
    on first inbound; 'staff' would have poisoned the step 10–12 provenance
    browser proofs with wrong-but-green data), landed at the step-3 commit.
+5. `app/Domain/Conversations/Outbound/ComposeOutbound.php` — the T-06
+   customer-level guard (escalate-first forecast #2): plan-forecast accepted
+   at the plan audit, landing ORDERED at the step-6 acceptance, landed
+   `903f4c1` (one injection + one check after the conversation-level refusal;
+   diff quoted at the step-7 checkpoint). **BACKFILLED into this running
+   enumeration at step 8, self-filed:** the edit was ruled and recorded in
+   the step-7 commit but this list was not appended in that commit — the
+   same record-keeping drop as the traceability flips (honest trail, step-8
+   checkpoint).
+6. **PENDING — escalation #3 part 1 (Doc 07, step 8):**
+   `app/Domain/Inbox/Search/SearchProxy.php` customers-section deepen onto
+   `customers_index` + `resources/js/Components/Inbox/CommandPalette.vue`
+   customers-row type/key. Diff PREPARED and quoted at the step-8
+   checkpoint; NOT LANDED — escalate-first honored (the #7 shape). Closing
+   row 3 (BUILD-STATUS's S07 step-6 line "deepens with Doc 08") completes
+   when this lands.
 
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44

@@ -51,15 +51,21 @@ final class ConsumerRegistry
         //    consumer-contract fixture was tightened in this same commit.
         'message.sent' => [ListProjectorConsumer::class],
         'note.mentioned' => [ListProjectorConsumer::class],
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class],
+        // Doc 08 T-04 (S08 step 8): CustomerSearchIndexer rides the ticket
+        //    events that change a customer's SCOPE arrays (assignee_ids /
+        //    department_ids on the customers_index doc) — a reassigned-away
+        //    agent keeping a customer in search would be a scope leak. The
+        //    customer resolves from the ticket ROW (the RollupConsumer
+        //    precedent), never the payload.
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class],
-        'ticket.assignee_deactivated' => [ListProjectorConsumer::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
         'ticket.tagged' => [ListProjectorConsumer::class],
         'ticket.untagged' => [ListProjectorConsumer::class],
-        'ticket.transferred' => [ListProjectorConsumer::class],
+        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.escalated' => [ListProjectorConsumer::class],
         'ticket.deescalated' => [ListProjectorConsumer::class],
         'ticket.merged' => [ListProjectorConsumer::class],
@@ -82,8 +88,20 @@ final class ConsumerRegistry
         //    rollup consumer recomputes survivor (and restored, on unmerge);
         //    Doc 07's projector consumption of customer.merged (T-03's list
         //    rewrite) lands with the merge saga at step 6, escalation #3.
-        'customer.merged' => [RollupConsumer::class],
-        'customer.unmerged' => [RollupConsumer::class],
+        // Doc 08 T-04 (S08 step 8): the search indexer joins — survivor
+        //    reindexed, the tombstoned merged row REMOVED from the index
+        //    (BR-05: tombstones redirect, they do not surface as results).
+        'customer.merged' => [RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        'customer.unmerged' => [RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+
+        // Doc 08 T-04 (S08 step 8): the customers_index feed — the seven
+        //    FR-22 events the catalog names Doc08/SearchIndexer on. Documents
+        //    are rewritten from TRUTH per delivery (C-09 by construction).
+        'customer.created' => [\App\Jobs\Customers\CustomerSearchIndexer::class],
+        'customer.updated' => [\App\Jobs\Customers\CustomerSearchIndexer::class],
+        'customer.identity.linked' => [\App\Jobs\Customers\CustomerSearchIndexer::class],
+        'customer.identity.unlinked' => [\App\Jobs\Customers\CustomerSearchIndexer::class],
+        'customer.fields_changed' => [\App\Jobs\Customers\CustomerSearchIndexer::class],
 
         // Doc 08 FR-18/T-06 (S08 step 7): the blocking cascade — quiets every
         //    conversation on block, restores exactly the cascade-blocked set

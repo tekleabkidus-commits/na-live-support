@@ -669,7 +669,7 @@ FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_assignee_id`, `new_assignee_id`, `by`
 - **Producers:** Doc06/AssignTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit, Doc08/SearchIndexer
 
 ## `ticket.assignee_deactivated`
 
@@ -678,7 +678,7 @@ EC-06: an open-family ticket was handed back because its assignee was deactivate
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `previous_assignee_id`
 - **Producers:** Doc06/AssigneeDeactivated
-- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc17/Audit
+- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc17/Audit, Doc08/SearchIndexer
 
 ## `ticket.bulk_completed`
 
@@ -705,7 +705,7 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/CreateTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups, Doc08/SearchIndexer
 
 ## `ticket.deescalated`
 
@@ -849,7 +849,7 @@ FR-22: a ticket changed department. Doc 11 re-routes off this; Doc 12 decides SL
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_department_id`, `new_department_id`, `assignee_retained`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TransferTicket
-- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc11/Routing, Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/SearchIndexer
 
 ## `ticket.unmerged`
 

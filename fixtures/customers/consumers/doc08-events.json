@@ -1,7 +1,7 @@
 {
   "doc": "Doc08",
   "spec": "Doc 08 FR-03/T-03 — consumer contracts for the events Doc 08 consumes durably (S08 step 3; ADR 0011: durable consumption ⇒ contract)",
-  "note": "The keys Doc 08's RollupConsumer DEPENDS ON, per event. The ticket.* slices read ticket_id ONLY — the customer id comes from the ticket ROW (truth), never the payload. customer.merged/unmerged entries are those events' FIRST consumer contracts. Doc 07's projector consumption of customer.merged (T-03's list rewrite) joins at step 6 with its own entry.",
+  "note": "The keys Doc 08's RollupConsumer DEPENDS ON, per event. The ticket.* slices read ticket_id ONLY — the customer id comes from the ticket ROW (truth), never the payload. customer.merged/unmerged entries are those events' FIRST consumer contracts. Doc 07's projector consumption of customer.merged (T-03's list rewrite) joins at step 6 with its own entry. S08 step 8: Doc08/SearchIndexer joins — the seven catalog-declared customer.* feeds plus the ticket-family events that change a customer's SCOPE arrays; ticket.* slices read ticket_id ONLY (customer from the ticket ROW, the same law).",
   "entries": [
     {
       "event": "message.received",
@@ -83,6 +83,108 @@
       "reads": [
         "tenant_id",
         "customer_id"
+      ]
+    },
+    {
+      "event": "customer.created",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "customer.updated",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "customer.identity.linked",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "customer.identity.unlinked",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id",
+        "new_customer_id"
+      ]
+    },
+    {
+      "event": "customer.merged",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "survivor_id",
+        "merged_id"
+      ]
+    },
+    {
+      "event": "customer.unmerged",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "survivor_id",
+        "restored_id"
+      ]
+    },
+    {
+      "event": "customer.fields_changed",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "customer_id"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
+    },
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
+    },
+    {
+      "event": "ticket.assignee_deactivated",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
+    },
+    {
+      "event": "ticket.transferred",
+      "consumer": "Doc08/SearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
       ]
     }
   ]
