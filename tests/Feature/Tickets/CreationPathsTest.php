@@ -38,6 +38,7 @@ function creationFixture(): array
         'display_name' => 'Fixture Player',
         'username' => '@fixture_creation_'.Str::random(6),
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversationId = (string) Str::uuid7();
@@ -135,6 +136,7 @@ test('AC-02 (concurrent half): concurrent creates on one conversation yield exac
         'display_name' => 'Fixture Player',
         'username' => '@fixture_ac02',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([

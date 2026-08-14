@@ -90,7 +90,7 @@ test('AC-09: the run drops exactly the eligible partition, copies held rows (wit
         )), 'webchat-in', 'webchat-out');
     }
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_ret', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_ret', 'is_shell' => true, 'created_source' => 'staff']);
     $repo = app(ConversationRepository::class);
     $held = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-held', $customer->identifier());
     $unheld = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-unheld', $customer->identifier());

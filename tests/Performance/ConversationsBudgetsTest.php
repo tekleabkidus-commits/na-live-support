@@ -52,6 +52,7 @@ function burstFixture(): array
 
     $customer = Customer::query()->create([
         'display_name' => 'Fixture', 'username' => '@fixture_burst', 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     return [$tenant, $customer];

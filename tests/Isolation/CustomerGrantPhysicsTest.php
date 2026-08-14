@@ -29,6 +29,12 @@ use Illuminate\Support\Facades\DB;
 | - DELETE revoked on every customer table incl. the S20 pair (Doc 01 BR-02).
 */
 
+beforeEach(function (): void {
+    // The backfill suite re-opens the legacy window via the migrator toggle;
+    // this suite asserts the ENFORCED schema, so it closes it first.
+    legacyIdentityShapeEnforce();
+});
+
 const DOC08_TABLES = [
     'customer_notes', 'customer_merge_snapshots', 'rg_flag_history',
     'customer_identity_conflicts',
@@ -182,6 +188,19 @@ it('every Doc 08 table has FORCED row-level security with the tenant_isolation p
         );
 
         expect(array_column($policies, 'polname'))->toContain('tenant_isolation');
+    }
+});
+
+it('type/value/source and customers.created_source are NOT NULL after enforce (SCHEMA AMENDMENT 2 item 2)', function (): void {
+    foreach ([['customer_identities', 'type'], ['customer_identities', 'value'], ['customer_identities', 'source'], ['customers', 'created_source']] as [$table, $column]) {
+        /** @var list<object{is_nullable: string}> $rows */
+        $rows = DB::connection('pgsql_migrator')->select(
+            'SELECT is_nullable FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name = ?',
+            ['public', $table, $column],
+        );
+
+        expect($rows)->toHaveCount(1)
+            ->and($rows[0]->is_nullable)->toBe('NO');
     }
 });
 

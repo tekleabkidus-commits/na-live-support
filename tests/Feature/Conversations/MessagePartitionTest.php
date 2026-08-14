@@ -105,6 +105,7 @@ it('monitor goes RED when any row sits in messages_default — FS-04\'s pager pa
         'display_name' => 'Fixture Customer',
         'username' => '@fixture_partition',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversation = Conversation::query()->create([
         'channel' => 'fakechan',

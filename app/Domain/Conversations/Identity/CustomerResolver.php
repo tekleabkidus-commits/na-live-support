@@ -5,74 +5,33 @@ declare(strict_types=1);
 namespace App\Domain\Conversations\Identity;
 
 use App\Domain\Conversations\Adapters\InboundSender;
-use App\Models\Customer;
-use App\Models\CustomerIdentity;
-use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Facades\DB;
-use RuntimeException;
+use App\Domain\Customers\Identity\IdentityResolution;
 
 /**
- * The Doc 08 identity-resolver SEAM (Doc 04 FR-10 step 3, out-of-scope rule).
+ * The Doc 08 identity-resolver SEAM (Doc 04 FR-10 step 3) — REAL since S08
+ * step 2, exactly as the S20 docblock promised ("DOC 08 OWNS EVERYTHING
+ * RICHER"): this class is now a one-line delegation to
+ * App\Domain\Customers\Identity\IdentityResolution, the FR-07/T-02 resolver.
  *
- * Doc 04's whole contract with identity is one call: sender → customer_id,
- * existing or shell. DOC 08 OWNS EVERYTHING RICHER — merge rules, shell-customer
- * semantics beyond match-or-create, profile fields, dedupe across channels. This
- * class must stay exactly this small; a Doc 04 session extending it is scope creep
- * by definition (session mandate §SCOPE).
+ * RULED WIRING (A-40, the SCHEMA AMENDMENT 2 countersign): the
+ * channel→identity-type mapping is Doc 08's ChannelIdentityMap — this file is
+ * the ONLY Doc 04 surface the wiring touches; the signature
+ * resolve(string $channel, InboundSender): string is UNCHANGED and
+ * NormalizeInbound needed no edit, which is what A-40's blast-radius clause
+ * predicted and the ruling chose.
  *
- * Every stored field is channel-reported or staff-collected, never `verified`
- * (invariant N-06 — the customers migration carries the same note).
- *
- * Race-safety: the (tenant, channel, external_user_id) unique index arbitrates
- * concurrent first-contact. The create runs in a NESTED transaction (savepoint):
- * without it, the caught unique violation would poison the caller's enclosing
- * persist transaction — Postgres refuses every later statement in an aborted
- * transaction, so the catch would "handle" the race and then crash the persist.
- * The savepoint also takes the orphan shell customer down with the rolled-back
- * identity row.
+ * Doc 04's contract with identity is still one call: sender → customer_id,
+ * existing or shell. Race safety moved from the S20 catch-the-unique-violation
+ * shape to T-02's single INSERT … ON CONFLICT upsert inside IdentityResolution
+ * (a DB property, proven by ResolverMatrixTest). Every stored field remains
+ * channel-reported or staff-collected, never `verified` (N-06).
  */
 final class CustomerResolver
 {
+    public function __construct(private readonly IdentityResolution $identity) {}
+
     public function resolve(string $channel, InboundSender $sender): string
     {
-        $existing = CustomerIdentity::query()
-            ->where('channel', $channel)
-            ->where('external_user_id', $sender->externalUserId)
-            ->first();
-
-        if ($existing instanceof CustomerIdentity) {
-            return $existing->customer_id;
-        }
-
-        try {
-            return DB::transaction(function () use ($channel, $sender): string {
-                $customer = Customer::query()->create([
-                    'display_name' => $sender->display,
-                    'username' => $sender->username,
-                    'phone' => $sender->phone,
-                    'is_shell' => true,
-                ]);
-
-                CustomerIdentity::query()->create([
-                    'customer_id' => $customer->identifier(),
-                    'channel' => $channel,
-                    'external_user_id' => $sender->externalUserId,
-                ]);
-
-                return $customer->identifier();
-            });
-        } catch (UniqueConstraintViolationException) {
-            // The concurrent first-contact won; adopt their customer.
-            $winner = CustomerIdentity::query()
-                ->where('channel', $channel)
-                ->where('external_user_id', $sender->externalUserId)
-                ->first();
-
-            if (! $winner instanceof CustomerIdentity) {
-                throw new RuntimeException('unique violation on customer identity but no winner row visible — investigate RLS context.');
-            }
-
-            return $winner->customer_id;
-        }
+        return $this->identity->resolveInbound($channel, $sender)->customerId;
     }
 }

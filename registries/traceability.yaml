@@ -1819,19 +1819,25 @@ entries:
   #    entries, each naming the approved-plan step whose suite flips it to
   #    automated. A row here never claims coverage that does not exist.
   - ac_ref: "Doc08 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Customers/ResolverMatrixTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 2 to tests/Feature/Customers/ResolverMatrixTest.php
-      (T-08's matrix: exact-match, create-shell, concurrent-first-message race → 1
-      customer, username-history append, and the no-cross-type-auto-link fixture —
-      BR-02's sharpest prohibition — all proven BEFORE the resolver serves Doc 04,
-      per the plan's ordered minimum).
+      FLIPPED AT S08 STEP 2 as the plan scheduled, in the SAME commit as the
+      A-40 wiring. The full T-08 matrix: exact-match; create-shell (deprecated
+      columns unwritten, both FR-22 create events on the outbox); the
+      concurrent-first-message race run as a GENUINE six-process fork race
+      against the committed fixture — one customer, one created flag, losers
+      adopt the winner (T-02's ON CONFLICT as a DB property); FR-06
+      username-history append with a DB-time stamp; the no-cross-type
+      auto-link fixture (BR-02 — sabotage #4 executed: the resolver taught to
+      attach the sender phone → this fixture red → restored, captures under
+      docs/evidence/S08-step2/); A-40's fail-loud map pair; and the Doc 05
+      EC-04 identity-half closing clause.
   - ac_ref: "Doc08 AC-02"
     suite_path: tests/Feature/Customers/IdentityInvariantsTest.php
     type: automated

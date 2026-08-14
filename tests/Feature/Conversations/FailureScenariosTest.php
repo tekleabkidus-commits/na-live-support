@@ -72,7 +72,7 @@ function failureFixture(): array
 
 function failureConversation(ConversationRepository $repo, string $chat): Conversation
 {
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_fs', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_fs', 'is_shell' => true, 'created_source' => 'staff']);
 
     return $repo->findOrCreateForInbound('fakechan', 'bot-1', $chat, $customer->identifier());
 }

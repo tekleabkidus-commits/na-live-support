@@ -41,6 +41,7 @@ function healthMessages(string $tenant, string $botId, int $total, int $failed):
 {
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Health Player', 'username' => '@fixture_health_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([
@@ -175,6 +176,7 @@ it('FR-22 wiring: the telegram:window-sweep command sweeps a due window across t
 
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Sweep CLI Player', 'username' => '@fixture_cli_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([

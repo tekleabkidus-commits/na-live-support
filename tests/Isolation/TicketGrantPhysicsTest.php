@@ -216,6 +216,7 @@ function grantPhysicsTicket(): array
         'display_name' => 'Fixture Player',
         'username' => '@fixture_grants',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversationId = (string) Str::uuid7();

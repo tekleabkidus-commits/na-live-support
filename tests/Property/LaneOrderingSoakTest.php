@@ -95,6 +95,7 @@ test('AC-03: zero order violations across a 10k-message soak with failures injec
         // One customer, many conversations — lanes are per CONVERSATION (FR-15).
         $customer = Customer::query()->create([
             'display_name' => 'Fixture', 'username' => '@fixture_soak', 'is_shell' => true,
+            'created_source' => 'staff',
         ]);
 
         /** @var list<Conversation> $conversations */

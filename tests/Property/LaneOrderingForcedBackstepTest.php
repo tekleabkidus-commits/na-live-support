@@ -117,6 +117,7 @@ function runForcedBackstepSoak(int $backstepMs, ?int $restoreAfter, int $stepAtR
 
     $customer = Customer::query()->create([
         'display_name' => 'Fixture', 'username' => '@fixture_backstep', 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversations = [];

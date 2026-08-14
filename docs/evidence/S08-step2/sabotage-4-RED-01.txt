@@ -1,0 +1,32 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\ResolverMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-40: every channel the AdapterRegistry knows has an identity-ty[39m[90m…[39m [90m6.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 create-shell: a first contact mints a shell + typed identi[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 exact-match: the second contact returns the SAME customer,[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 / FR-06 username change: display refreshes and the OLD nam[39m[90m…[39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01 NO CROSS-TYPE AUTO-LINK (BR-02, the document's sharpest pr[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 05 EC-04 CLOSING (identity-resolution half): the same Telegr[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 RACE: six forked processes race the same first message — e[39m[90m…[39m [90m0.29s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\ResolverMatrixTest[22m [90m>[39m it AC-01 NO CROSS-TY…   
+[39;1m  Failed asserting that 1 is identical to 0.[39;22m
+
+  at [32mtests/Feature/Customers/ResolverMatrixTest.php[39m:[32m135[39m
+    131▕             'telegram',
+    132▕             new InboundSender('900400', 'Dawit Fixture', '@dawit_fixture', '+251900887766'),
+    133▕         );
+    134▕ 
+  ➜ 135▕         expect(CustomerIdentity::query()->where('type', 'phone')->count())->toBe(0)
+    136▕             ->and(Customer::query()->findOrFail($result->customerId)->phone)->toBeNull()
+    137▕             ->and(CustomerIdentity::query()->count())->toBe(1);
+    138▕     });
+    139▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Customers/ResolverMatrixTest.php[39;22m:[39;1m135[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (39 assertions)[39m
+  [90mDuration:[39m [39m7.57s[39m
+

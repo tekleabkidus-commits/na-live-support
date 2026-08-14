@@ -185,6 +185,7 @@ it('FR-10 + inherited row 2: a revoke flags open tickets channel_unreachable —
     // A conversation on the connection with an open ticket.
     $customerId = (string) App\Models\Customer::query()->create([
         'display_name' => 'Fixture Player', 'username' => '@fixture_life_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ])->getKey();
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([
@@ -258,6 +259,7 @@ it('EC-06: bot removed from Business AND token revoked in the same minute — bo
     // One conversation on the connection, one open ticket (the rescue set).
     $customerId = (string) App\Models\Customer::query()->create([
         'display_name' => 'Fixture Player', 'username' => '@fixture_ec6_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ])->getKey();
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([

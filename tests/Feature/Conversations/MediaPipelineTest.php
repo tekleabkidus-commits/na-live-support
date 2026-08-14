@@ -61,7 +61,7 @@ function mediaFixture(): Conversation
         )), 'webchat-in', 'webchat-out');
     }
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_media', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_media', 'is_shell' => true, 'created_source' => 'staff']);
 
     return app(ConversationRepository::class)
         ->findOrCreateForInbound('fakechan', 'bot-1', 'chat-media-'.uniqid(), $customer->identifier());

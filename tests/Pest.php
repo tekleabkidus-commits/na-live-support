@@ -560,6 +560,7 @@ function ticketFixture(string $status = 'new', array $attributes = []): array
         'display_name' => 'Fixture Player',
         'username' => '@fixture_ticket_'.Str::random(6),
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversationId = (string) Str::uuid7();
@@ -618,6 +619,7 @@ function anotherConversation(string $tenantId, string $label = '', ?string $cust
             'display_name' => 'Fixture Player',
             'username' => '@fixture_extra_'.Str::random(6),
             'is_shell' => true,
+            'created_source' => 'staff',
         ]);
         $customerId = $customer->identifier();
     }
@@ -1327,6 +1329,53 @@ function legacyIdentity(string $tenantId, string $customerId, string $channel, s
         'customer_id' => $customerId,
         'channel' => $channel,
         'external_user_id' => $externalId,
+        'created_at' => $createdAt,
+        'updated_at' => $createdAt,
+    ]);
+
+    return $id;
+}
+
+/**
+ * S08 enforce-toggle (the migrator-connection instrument): the ENFORCE
+ * migration makes legacy-shaped rows impossible, but the backfill/enforce
+ * suites exist precisely to prove how legacy shapes were handled — so they
+ * re-open the pre-enforce window per test, and every suite that needs the
+ * enforced world closes it first. DDL rides pgsql_migrator; call ONLY at the
+ * top of a test/beforeEach, before the test transaction touches these tables
+ * (an ALTER behind row locks would hang — the failFast lesson).
+ */
+function legacyIdentityShapeAllow(): void
+{
+    foreach (['type', 'value', 'source'] as $column) {
+        DB::connection('pgsql_migrator')
+            ->statement("ALTER TABLE customer_identities ALTER COLUMN {$column} DROP NOT NULL");
+    }
+    DB::connection('pgsql_migrator')
+        ->statement('ALTER TABLE customers ALTER COLUMN created_source DROP NOT NULL');
+}
+
+function legacyIdentityShapeEnforce(): void
+{
+    foreach (['type', 'value', 'source'] as $column) {
+        DB::connection('pgsql_migrator')
+            ->statement("ALTER TABLE customer_identities ALTER COLUMN {$column} SET NOT NULL");
+    }
+    DB::connection('pgsql_migrator')
+        ->statement('ALTER TABLE customers ALTER COLUMN created_source SET NOT NULL');
+}
+
+/** A post-enforce customer seed (created_source supplied, unlike legacyCustomer). */
+function enforcedCustomer(string $tenantId, string $createdAt, ?string $id = null): string
+{
+    $id ??= (string) new Symfony\Component\Uid\UuidV7;
+
+    DB::table('customers')->insert([
+        'id' => $id,
+        'tenant_id' => $tenantId,
+        'display_name' => 'Fixture '.substr($id, -4),
+        'is_shell' => true,
+        'created_source' => 'staff',
         'created_at' => $createdAt,
         'updated_at' => $createdAt,
     ]);

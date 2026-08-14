@@ -183,7 +183,10 @@ test('FR-10 end-to-end: one inbound becomes shell customer + conversation + mess
         ->and($message->body)->toBe('hello from the fixture')
         ->and($message->quarantined)->toBeFalse()
         ->and($customer->is_shell)->toBeTrue()
-        ->and($customer->username)->toBe('@fixture_inbound')
+        // S08 step 2 (A-40 wiring): the channel username lives on the typed
+        // identity's metadata; customers.username is deprecated and unwritten
+        // (SCHEMA AMENDMENT 2). Tests-only change, the SS-02 precedent.
+        ->and(json_decode((string) DB::table('customer_identities')->where('customer_id', $customer->getKey())->value('metadata'), true)['username'] ?? null)->toBe('@fixture_inbound')
         // Step 4's one transaction left BOTH events on the outbox:
         ->and(DB::table('outbox')->where('name', 'conversation.created')->count())->toBe(1)
         ->and(DB::table('outbox')->where('name', 'message.received')->count())->toBe(1);

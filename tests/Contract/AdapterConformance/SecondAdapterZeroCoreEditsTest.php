@@ -98,7 +98,7 @@ test('SS-02: the whole outbound pipeline works on the second adapter unchanged â
     $context = app(App\Support\Tenancy\TenantContext::class);
     $tenant = $context->tenantId();
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_minimal', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_minimal', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = app(ConversationRepository::class)
         ->findOrCreateForInbound('minchan', 'line-1', 'min-room-out', $customer->identifier());
 
@@ -117,7 +117,7 @@ test('SS-02: the capability envelope binds the core, not conditionals â€” an ove
     $context = app(App\Support\Tenancy\TenantContext::class);
     $tenant = $context->tenantId();
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_minimal', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_minimal', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = app(ConversationRepository::class)
         ->findOrCreateForInbound('minchan', 'line-1', 'min-room-cap', $customer->identifier());
 

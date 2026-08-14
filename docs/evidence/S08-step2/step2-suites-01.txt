@@ -1,0 +1,59 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m6.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — a second run changes nothing[39m[90m                     [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES loudly on an unmapped channel, naming it[39m[90m                 [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirrors customers.username into the telegram identity metadata —[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drop gate: green after the backfill, RED for a value with no per[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES a legacy NULL-typed insert after enforce — the C-12 wind[39m[90m…[39m [90m0.09s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\ResolverMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-40: every channel the AdapterRegistry knows has an identity-ty[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 create-shell: a first contact mints a shell + typed identi[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01 exact-match: the second contact returns the SAME customer,[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 / FR-06 username change: display refreshes and the OLD nam[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 NO CROSS-TYPE AUTO-LINK (BR-02, the document's sharpest pr[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 05 EC-04 CLOSING (identity-resolution half): the same Telegr[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 RACE: six forked processes race the same first message — e[39m[90m…[39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\CustomerGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b: the app-denied column set of every Doc 08 table matches t[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit DELETE is revoked for app on every customer table, the S20 pair[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three ordering timestamps carry the clock_timestamp() defaul[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every Doc 08 table has FORCED row-level security with the tenant[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit type/value/source and customers.created_source are NOT NULL afte[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the (tenant, type, value) unique index exists on customer_identi[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoVerifiedAffordanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-shaped column on any customer table (schema swee[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-named component anywhere in the client tree (BR-[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the customer UI namespaces and customers.* lang files free[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Customers server namespaces free of any verified API f[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\ResolverMatrixTest[22m [90m>[39m it AC-01…  [41;1m TypeError [49;22m  
+[39;1m  App\Domain\Conversations\Identity\CustomerResolver::resolve(): Argument #2 ($sender) must be of type App\Domain\Conversations\Identity\InboundSender, App\Domain\Conversations\Adapters\InboundSender given, called in /app/tests/Feature/Customers/ResolverMatrixTest.php on line 100[39;22m
+
+  at [32mapp/Domain/Conversations/Identity/CustomerResolver.php[39m:[32m32[39m
+     28▕ final class CustomerResolver
+     29▕ {
+     30▕     public function __construct(private readonly IdentityResolution $identity) {}
+     31▕ 
+  ➜  32▕     public function resolve(string $channel, InboundSender $sender): string
+     33▕     {
+     34▕         return $this->identity->resolveInbound($channel, $sender)->customerId;
+     35▕     }
+     36▕ }
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Identity/CustomerResolver.php[39;22m:[39;1m32[39;22m
+  [33m2   [39m[39;1mtests/Feature/Customers/ResolverMatrixTest.php[39;22m:[39;1m100[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m25 passed[39;22m[90m (130 assertions)[39m
+  [90mDuration:[39m [39m9.54s[39m
+

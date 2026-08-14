@@ -26,9 +26,10 @@ use LogicException;
  */
 #[Fillable([
     'display_name',
-    'username',
-    'phone',
+    'username',      // DEPRECATED (SCHEMA AMENDMENT 2) — no writer since the S08 step-2 resolver; drop is gated
+    'phone',         // DEPRECATED (SCHEMA AMENDMENT 2) — same window, same gate
     'is_shell',
+    'created_source', // S08 step 2 (A-40 wiring): the resolver stamps FR-01's enum on creation
 ])]
 final class Customer extends Model implements TenantScoped
 {

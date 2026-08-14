@@ -162,6 +162,7 @@ it('NFR-03/§12: sweep at 10k armed / 20 due inside the pro-rated budget — O(d
     // 20 DUE candidates with REAL conversation rows behind them.
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Perf Player', 'username' => '@fixture_perf_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     for ($i = 0; $i < 20; $i++) {
         $conversationId = (string) Str::uuid7();

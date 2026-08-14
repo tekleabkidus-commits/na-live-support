@@ -51,6 +51,7 @@ function l10nFixture(): Conversation
 
     $customer = Customer::query()->create([
         'display_name' => 'Fixture', 'username' => '@fixture_l10n', 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     return app(ConversationRepository::class)

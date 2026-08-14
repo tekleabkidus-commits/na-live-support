@@ -52,7 +52,7 @@ function laneFixture(): array
 
 function laneConversation(ConversationRepository $repo, string $chat): Conversation
 {
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_lane', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_lane', 'is_shell' => true, 'created_source' => 'staff']);
 
     return $repo->findOrCreateForInbound('fakechan', 'bot-1', $chat, $customer->identifier());
 }

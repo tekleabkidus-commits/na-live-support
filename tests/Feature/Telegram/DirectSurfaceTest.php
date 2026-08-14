@@ -29,6 +29,7 @@ function directFixture(): array
     ]);
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Direct Player', 'username' => '@fixture_direct_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([

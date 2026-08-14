@@ -154,6 +154,7 @@ it('FR-30 BOTH WAYS: simulate-window-expiry expires a real window outside produc
 
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Sim Player', 'username' => '@fixture_sim_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     DB::table('conversations')->insert([

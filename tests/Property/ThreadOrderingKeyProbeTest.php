@@ -90,6 +90,7 @@ function probeThread(string $chatId): array
 
     $customer = Customer::query()->create([
         'display_name' => 'Fixture', 'username' => '@fixture_orderkey', 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversation = app(ConversationRepository::class)

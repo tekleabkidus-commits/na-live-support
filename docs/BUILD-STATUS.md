@@ -100,6 +100,29 @@ reported SQL contains a bare `?` used as a jsonb/hstore operator, this is it.
 FIX — double it (`??`, `??|`, `??&`); PDO unescapes `??` to `?`. A THIRD
 sighting makes a CI grep gate the answer (ruling 2's own threshold); not yet.
 
+**0i. LETTERED (checkpoint ruling 5) — the CI flaky-red RATE, an aggregate
+risk separate from the per-spec sightings.** Three consecutive runs red with
+ZERO failures — all flaky-only under `failOnFlakyTests`, all Doc 07-era
+browser specs (mobile swipe-claim; composer note/reply; mobile dual-tab
+drafts), one on a DOCS-ONLY commit (the tree-independence control). The
+hazard is the AGGREGATE: when every run is red-but-flaky, "red" stops
+carrying information and the next REAL red gets rationalized as one more
+flake. **Triage law: every future red is dispositioned explicitly against
+this risk — "flaky-only, retry-green, matches 0i" or "REAL" — stated, never
+implied. THRESHOLD (stated at lettering): if five consecutive verdicts of
+record are 0i-class red, 0i becomes a BLOCKER — the session halts feature
+work and investigates before the next push. `failOnFlakyTests` is NOT
+disabled — the noise it surfaces is the finding.** INVESTIGATION HYPOTHESIS
+(recorded for whoever picks it up, test FIRST): all three specs are
+timing-sensitive realtime paths and the relay is LIVE since S07 step 14 —
+the same family as 0g's relay-backlog root cause (a battery backlog holding
+consumes past a poll window).
+
+**DOC 18 NOTE (S08 step 2, filed):** `composer audit` reports 6 advisories on
+the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
+surfaced during the ADR 0014 install, not introduced by it; dependency
+maintenance is Doc 18's.
+
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
 under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session

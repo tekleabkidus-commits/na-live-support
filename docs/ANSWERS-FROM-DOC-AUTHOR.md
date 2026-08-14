@@ -1718,3 +1718,31 @@ defaulted into:** `identityType()` on the ChannelAdapter contract —
 self-describing adapters, drift structurally impossible — rejected at the cost
 of a core-contract edit touching every adapter and the 32-combination
 conformance suite.
+
+### A-41 (FILED at S08 step 2, per the step-1 checkpoint's ruling 6). The S08 migrations' platform-role use is a SCOPED interpretation, not a precedent
+
+Doc 01 SEC-02 names two sanctioned uses of `platform_admin`: the platform
+console service account and retention jobs. The S08 backfill and enforce
+migrations are a third: **one-time, migration-local TENANT ENUMERATION only**
+— `FORCE ROW LEVEL SECURITY` polices the migrator (ADR 0003 working as
+designed), so a data migration that must visit every tenant cannot list them
+any other way. The scope is exactly `SELECT id FROM tenants`; every WRITE then
+runs on the migration connection under each tenant's own RLS binding; the
+actor is logged (`s08.enforce: tenant enumeration via platform role`, with
+the migration name and this filing's scope line). **This filing is the fence:
+a future document citing these migrations as precedent for anything broader
+than migration-local tenant enumeration is widening a deliberately narrow
+surface and needs its own ruling** (the checkpoint ruling's own words).
+
+### SABOTAGE-LIST AMENDMENT 15→16 (filed at S08 step 2, BEFORE the sabotage runs — standing rule 16; the step-1 checkpoint's ruling 7)
+
+**Item 16 — the pinned-provenance trio's copy discipline broken:** a writer of
+`customers.last_contact_at` (source: the message's own `messages.created_at`),
+`customers.rg_flag_set_at` (source: the owning `rg_flag_history` row's
+`created_at`), or `customers.blocked_at` (source: the block operation's audit
+stamp) switched to an app clock (`now()`) → that writer's **inverted-R-19
+byte-equality control** (the Doc 05 shape: assert the written value ===
+the source stamp, never a fresh clock) goes red → restored. The three
+controls land WITH their writers (rollups step 3; RG step 4; blocking
+step 7) and each executes this one amendment's sabotage at its own step;
+the ledger reconciles the item once with three execution citations.

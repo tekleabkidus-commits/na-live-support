@@ -1,0 +1,71 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m6.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — a second run changes nothing[39m[90m                     [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES loudly on an unmapped channel, naming it[39m[90m                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirrors customers.username into the telegram identity metadata —[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drop gate: green after the backfill, RED for a value with no per[39m[90m…[39m [90m0.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RULING 1: a legacy-shaped straggler written AFTER the first back[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit enforce re-normalizes a backfilled phone to E.164 (ADR 0014), pr[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit enforce REFUSES when normalization would fuse two customers — me[39m[90m…[39m [90m0.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityBackfillTest[22m [90m>[39m it RULING 1… [41;1m Error [49;22m  
+[39;1m  Class "libphonenumber\PhoneNumberUtil" not found[39;22m
+
+  at [32mapp/Domain/Customers/Identity/PhoneNumber.php[39m:[32m32[39m
+     28▕      *                              tenant default — FR-04's inference help)
+     29▕      */
+     30▕     public static function toE164(string $raw, string $regionHint = 'ET'): string
+     31▕     {
+  ➜  32▕         $util = PhoneNumberUtil::getInstance();
+     33▕ 
+     34▕         try {
+     35▕             $parsed = $util->parse($raw, $regionHint);
+     36▕         } catch (NumberParseException $e) {
+
+  [33m1   [39m[39;1mapp/Domain/Customers/Identity/PhoneNumber.php[39;22m:[39;1m32[39;22m
+  [33m2   [39m[39;1mapp/Domain/Customers/Identity/LegacyIdentityEnforce.php[39;22m:[39;1m48[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityBackfillTest[22m [90m>[39m it enforce…  [41;1m Error [49;22m  
+[39;1m  Class "libphonenumber\PhoneNumberUtil" not found[39;22m
+
+  at [32mapp/Domain/Customers/Identity/PhoneNumber.php[39m:[32m32[39m
+     28▕      *                              tenant default — FR-04's inference help)
+     29▕      */
+     30▕     public static function toE164(string $raw, string $regionHint = 'ET'): string
+     31▕     {
+  ➜  32▕         $util = PhoneNumberUtil::getInstance();
+     33▕ 
+     34▕         try {
+     35▕             $parsed = $util->parse($raw, $regionHint);
+     36▕         } catch (NumberParseException $e) {
+
+  [33m1   [39m[39;1mapp/Domain/Customers/Identity/PhoneNumber.php[39;22m:[39;1m32[39;22m
+  [33m2   [39m[39;1mapp/Domain/Customers/Identity/LegacyIdentityEnforce.php[39;22m:[39;1m48[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\IdentityBackfillTest[22m [90m>[39m it enforce REFUSES…   
+[39;1m  Expected: [39;22m[31mClass "libphonenumber\PhoneNumberUtil" not found[39m[39;1m
+
+  To contain: [39;22m[32mcollide[39m
+
+  at [32mtests/Feature/Customers/IdentityBackfillTest.php[39m:[32m240[39m
+    236▕         // second normalizes onto the first → enforce must stop, loudly.
+    237▕         (new LegacyIdentityBackfill)->run('pgsql');
+    238▕ 
+    239▕         expect(fn () => (new \App\Domain\Customers\Identity\LegacyIdentityEnforce)->run('pgsql'))
+  ➜ 240▕             ->toThrow(RuntimeException::class, 'collide');
+    241▕     });
+    242▕ });
+    243▕
+
+  [33m1   [39m[39;1mtests/Feature/Customers/IdentityBackfillTest.php[39;22m:[39;1m240[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (25 assertions)[39m
+  [90mDuration:[39m [39m7.88s[39m
+

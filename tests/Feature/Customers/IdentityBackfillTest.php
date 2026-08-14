@@ -24,6 +24,13 @@ use Symfony\Component\Uid\UuidV7;
 // legacyCustomer()/legacyIdentity() live in tests/Pest.php (shared with
 // IdentityInvariantsTest so each suite runs standalone).
 
+// The ENFORCE migration closed the legacy window; this suite exists to prove
+// how legacy shapes were handled, so it re-opens the window per test (the
+// migrator-connection toggle — see tests/Pest.php).
+beforeEach(function (): void {
+    legacyIdentityShapeAllow();
+});
+
 it('gives a shared phone to the OLDER customer, preserves the loser value in a conflict row, and both values stay retrievable', function (): void {
     $tenant = createTenant();
 
@@ -163,5 +170,73 @@ it('drop gate: green after the backfill, RED for a value with no permanent home 
         // statement cannot poison the harness transaction.
         expect(fn () => DB::transaction(fn () => DB::table('customer_identity_conflicts')->delete()))
             ->toThrow(QueryException::class, '42501');
+    });
+});
+
+it('RULING 1: a legacy-shaped straggler written AFTER the first backfill is handled by enforce under the same keeper policy, then nothing is left un-typed', function (): void {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        $older = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00', '+251900005566');
+        legacyIdentity($tenant->id, $older, 'telegram', 'fixture-tg-r1a', '2026-06-01 10:00:00+00');
+
+        (new LegacyIdentityBackfill)->run('pgsql');
+
+        // The straggler: the S20 writer minted this AFTER the 1b backfill —
+        // NULL-typed, sharing the first customer's phone, invisible to the
+        // unique index (NULLs distinct). Exactly ruling 1's scenario.
+        $straggler = legacyCustomer($tenant->id, '2026-08-01 10:00:00+00', '+251900005566');
+        legacyIdentity($tenant->id, $straggler, 'telegram', 'fixture-tg-r1b', '2026-08-01 10:00:00+00');
+
+        (new App\Domain\Customers\Identity\LegacyIdentityEnforce)->run('pgsql');
+
+        // The straggler is typed; the shared phone resolved under the SAME
+        // keeper policy (older keeps it, straggler gets the conflict row);
+        // zero un-typed rows remain for NOT NULL to refuse.
+        $stragglerTg = DB::table('customer_identities')->where('customer_id', $straggler)->where('type', 'telegram')->first();
+        expect($stragglerTg)->not->toBeNull()
+            ->and($stragglerTg->value)->toBe('fixture-tg-r1b')
+            ->and(DB::table('customer_identities')->where('type', 'phone')->value('customer_id'))->toBe($older)
+            ->and(DB::table('customer_identity_conflicts')->where('loser_customer_id', $straggler)->count())->toBe(1)
+            ->and(DB::table('customer_identities')->whereNull('type')->count())->toBe(0)
+            ->and(DB::table('customers')->whereNull('created_source')->count())->toBe(0);
+    });
+});
+
+it('enforce re-normalizes a backfilled phone to E.164 (ADR 0014), preserving the ORIGINAL spelling in metadata.raw and the drop gate\'s equality', function (): void {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        $customer = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00', '0912344417');
+        legacyIdentity($tenant->id, $customer, 'telegram', 'fixture-tg-n1', '2026-06-01 10:00:00+00');
+
+        (new LegacyIdentityBackfill)->run('pgsql');
+        (new App\Domain\Customers\Identity\LegacyIdentityEnforce)->run('pgsql');
+
+        $identity = DB::table('customer_identities')->where('type', 'phone')->first();
+        $metadata = (array) json_decode((string) $identity->metadata, true);
+
+        expect($identity->value)->toBe('+251912344417')
+            ->and($metadata['raw'] ?? null)->toBe('0912344417')
+            ->and(DB::table('customers')->where('id', $customer)->value('phone'))->toBe('+251912344417')
+            ->and((new DeprecatedColumnDropGate)->verify('pgsql'))->toBe([]);
+    });
+});
+
+it('enforce REFUSES when normalization would fuse two customers — merging is a human decision, never a migration\'s', function (): void {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        $a = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00', '+251912344417');
+        $b = legacyCustomer($tenant->id, '2026-07-01 10:00:00+00', '0912344417');
+        legacyIdentity($tenant->id, $a, 'telegram', 'fixture-tg-c1', '2026-06-01 10:00:00+00');
+        legacyIdentity($tenant->id, $b, 'telegram', 'fixture-tg-c2', '2026-07-01 10:00:00+00');
+
+        // Two RAW-distinct values → two phone identities at backfill; the
+        // second normalizes onto the first → enforce must stop, loudly.
+        (new LegacyIdentityBackfill)->run('pgsql');
+
+        expect(fn () => (new App\Domain\Customers\Identity\LegacyIdentityEnforce)->run('pgsql'))
+            ->toThrow(RuntimeException::class, 'collide');
     });
 });

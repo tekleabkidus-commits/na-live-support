@@ -178,7 +178,7 @@ test('FR-21 still holds after the idempotency fix: a GENUINE customer edit (chan
 
 test('SS-04: a lane worker killed mid-send reconciles from recorded truth — an accepted send becomes sent, never a double delivery', function () {
     [$adapter, $repo] = drillFixture();
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_drill', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_drill', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-kill-send', $customer->identifier());
     $t0 = CarbonImmutable::now('UTC');
 
@@ -211,7 +211,7 @@ test('SS-04: a lane worker killed mid-send reconciles from recorded truth — an
 
 test('SS-04: a mid-send kill with NO recorded acceptance re-queues for retry under the SAME idempotency key — zero loss, dedupe left to the channel', function () {
     [$adapter, $repo] = drillFixture();
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_drill', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_drill', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = $repo->findOrCreateForInbound('fakechan', 'bot-1', 'chat-kill-send-2', $customer->identifier());
     $t0 = CarbonImmutable::now('UTC');
 

@@ -21,6 +21,10 @@ use Symfony\Component\Uid\UuidV7;
 | (LinkUnlinkTest) — the traceability row carries the split.
 */
 
+beforeEach(function (): void {
+    legacyIdentityShapeEnforce();
+});
+
 function typedIdentityRow(string $tenantId, string $customerId, string $type, string $value): array
 {
     $id = (string) new UuidV7;
@@ -48,8 +52,8 @@ it('refuses a direct-SQL duplicate (tenant, type, value) on the unique index its
     $tenant = createTenant();
 
     asTenant($tenant, function () use ($tenant): void {
-        $a = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00');
-        $b = legacyCustomer($tenant->id, '2026-06-02 10:00:00+00');
+        $a = enforcedCustomer($tenant->id, '2026-06-01 10:00:00+00');
+        $b = enforcedCustomer($tenant->id, '2026-06-02 10:00:00+00');
 
         DB::table('customer_identities')->insert(typedIdentityRow($tenant->id, $a, 'phone', '+251900005555'));
 
@@ -72,16 +76,22 @@ it('refuses a direct-SQL duplicate (tenant, type, value) on the unique index its
     });
 });
 
-it('lets legacy NULL-typed rows coexist during the expand window (the C-12 posture, documented)', function (): void {
+it('REFUSES a legacy NULL-typed insert after enforce — the C-12 window is closed by physics (inverted at step 2, the ADR-0010 pattern)', function (): void {
+    // The expand-window characterisation test asserted NULL-typed rows could
+    // coexist; the enforce migration inverts it in the same commit, making
+    // the old behaviour's absence the regression proof.
     $tenant = createTenant();
 
     asTenant($tenant, function () use ($tenant): void {
-        $a = legacyCustomer($tenant->id, '2026-06-01 10:00:00+00');
-        legacyIdentity($tenant->id, $a, 'telegram', 'fixture-null-1', '2026-06-01 10:00:00+00');
-        legacyIdentity($tenant->id, $a, 'fake', 'fixture-null-2', '2026-06-01 10:00:00+00');
+        $a = enforcedCustomer($tenant->id, '2026-06-01 10:00:00+00');
 
-        // NULLs are distinct under the full unique index — the still-live S20
-        // resolver keeps working until step 2 rewires it, which is the point.
-        expect(DB::table('customer_identities')->whereNull('type')->count())->toBe(2);
+        try {
+            DB::transaction(function () use ($tenant, $a): void {
+                legacyIdentity($tenant->id, $a, 'telegram', 'fixture-null-1', '2026-06-01 10:00:00+00');
+            });
+            $this->fail('a NULL-typed legacy insert was ACCEPTED post-enforce');
+        } catch (QueryException $e) {
+            expect($e->getCode())->toBe('23502');
+        }
     });
 });

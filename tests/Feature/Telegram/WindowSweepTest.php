@@ -27,6 +27,7 @@ function sweepConversation(string $state, string $expiresSql): array
 
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Sweep Player', 'username' => '@fixture_sweep_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     $bot = 'bot-sweep';

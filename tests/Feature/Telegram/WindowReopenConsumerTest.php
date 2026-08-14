@@ -26,6 +26,7 @@ function reopenFixture(string $windowState): array
     $assignee = (string) App\Models\User::factory()->create()->getKey();
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Reopen Player', 'username' => '@fixture_reopen_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
     $conversationId = (string) Str::uuid7();
     $ticketId = (string) Str::uuid7();

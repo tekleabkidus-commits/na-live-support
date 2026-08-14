@@ -34,6 +34,7 @@ function ticketsFixture(): array
         'display_name' => 'Fixture Player',
         'username' => '@fixture_tickets',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversationId = (string) Str::uuid7();

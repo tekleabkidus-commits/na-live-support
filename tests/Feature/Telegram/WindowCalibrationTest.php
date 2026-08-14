@@ -27,6 +27,7 @@ function windowFixture(int $telegramDate = 1_600_000_000): array
 
     $customer = App\Models\Customer::query()->create([
         'display_name' => 'Window Player', 'username' => '@fixture_window_'.Str::random(6), 'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $conversationId = (string) Str::uuid7();

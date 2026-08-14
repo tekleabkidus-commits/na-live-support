@@ -33,8 +33,11 @@ national format + region code from the STORED value.
 
 - **(a) Pinned version.** Composer requires an EXACT version (no `^`/`~` drift);
   `composer.lock` carries the pin and this ADR records it at the install commit:
-  **installed version: _recorded at the step-2 install commit_.** A bump is a
-  deliberate change to this ADR, never a side effect of `composer update`.
+  **installed version: `9.0.36` (composer.json requires exactly `9.0.36`,
+  installed at the S08 step-2 commit).** A bump is a deliberate change to this
+  ADR, never a side effect of `composer update`. Install-time note: `composer
+  audit` flagged 6 advisories — all on the PRE-EXISTING transitive
+  `league/commonmark`, none on this package; filed to the Doc 18 notes.
 - **(b) Normalize once at write.** A stored `customer_identities.value` is written by
   exactly one normalization at save time and is NEVER silently re-normalized by a
   library/metadata upgrade. No code path re-parses stored values to rewrite them;

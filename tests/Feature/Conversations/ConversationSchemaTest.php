@@ -69,6 +69,7 @@ function conversationsFixture(): array
         'display_name' => 'Fixture Customer',
         'username' => '@fixture_customer',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     return [$tenant, $customer];

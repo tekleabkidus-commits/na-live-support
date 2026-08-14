@@ -43,6 +43,7 @@ function numberingConversations(string $tenantId, int $count): array
         'display_name' => 'Fixture Player',
         'username' => '@fixture_numbering',
         'is_shell' => true,
+        'created_source' => 'staff',
     ]);
 
     $ids = [];

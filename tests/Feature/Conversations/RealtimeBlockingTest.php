@@ -45,7 +45,7 @@ function realtimeFixture(): array
         )), 'webchat-in', 'webchat-out');
     }
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_rt', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_rt', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = app(ConversationRepository::class)
         ->findOrCreateForInbound('fakechan', 'bot-1', 'chat-rt-'.uniqid(), $customer->identifier());
 

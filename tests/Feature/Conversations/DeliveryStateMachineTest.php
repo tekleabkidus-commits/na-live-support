@@ -60,7 +60,7 @@ function deliveryFixture(): array
         )), 'webchat-in', 'webchat-out');
     }
 
-    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_dsm', 'is_shell' => true]);
+    $customer = Customer::query()->create(['display_name' => 'Fixture', 'username' => '@fixture_dsm', 'is_shell' => true, 'created_source' => 'staff']);
     $conversation = app(ConversationRepository::class)
         ->findOrCreateForInbound('fakechan', 'bot-1', 'chat-dsm-'.uniqid(), $customer->identifier());
 
