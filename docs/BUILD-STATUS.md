@@ -83,6 +83,23 @@ Doc 06's `ticket_merge_snapshots` already claims the namespace and symmetry beat
 matching the plan's text. Recorded here because the plan is a record: it stays honest
 by naming its own edits, not by being right the first time.
 
+### S08 RISKS (lettered at the step-1 checkpoint rulings, 2026-08-14)
+
+**0h. LETTERED (recurrence rule fired, checkpoint ruling 2) — the jsonb
+`?`-operator PDO-placeholder defect, SECOND sighting.** First: S07's `jsonb ?|`
+in the list projector (fixed `??|` at `301c725`, caught by a CI verdict).
+Second: S08 step 1b's backfill + drop gate both used `metadata ? 'username'`
+(fixed `??`). **THE MECHANICAL DETECTION RECIPE (read this before
+investigating a third):** SYMPTOM — a raw-SQL statement through PDO fails with
+"Invalid parameter number" or a syntax error pointing at `$1` where the SQL
+reads `?`, OR (nastier) the failure hides behind an unrelated 25P02 because a
+later cleanup ran on the aborted transaction. PROBE — re-run the failing body
+OUTSIDE any masking wrapper (the 1b unmasked-probe pattern:
+`docs/evidence/S08-step1/1b-debug-04.txt`) and read the FIRST SQLSTATE; if the
+reported SQL contains a bare `?` used as a jsonb/hstore operator, this is it.
+FIX — double it (`??`, `??|`, `??&`); PDO unescapes `??` to `?`. A THIRD
+sighting makes a CI grep gate the answer (ruling 2's own threshold); not yet.
+
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
 under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session

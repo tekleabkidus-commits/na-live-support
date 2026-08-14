@@ -31,25 +31,36 @@ use Illuminate\Support\Facades\DB;
 |   4. CUSTOMER SERVER NAMESPACES: zero /verif/i in app/Domain/Customers and
 |      app/Http/Controllers/Customers — no API field, no serializer key.
 |
-| PATTERN CALIBRATION (honest trail, first run): sweeps 3–4 started as
-| /verif/i and promptly caught THIS GUARD'S OWN IMPLEMENTATION — the drop
-| gate's verify() method and the backfill's "the drop gate verifies it"
-| comment. The concept BR-01 forbids is the STATUS ("verified",
-| "verification", "unverified", "is_verified", VerifiedBadge…), not the code
-| verb "verify/verifies"; the content pattern is therefore
-| /verified|verification/i — substring, so is_verified and unverified still
-| match — while the FILENAME sweep stays at the wider /verif/i.
+| PATTERN HISTORY (honest trail): the first run's /verif/i caught this
+| guard's own implementation (the drop gate's verify() method); the pattern
+| was then narrowed to /verified|verification/i — and the step-1 checkpoint
+| ruling 4 REVERTED that: the narrow form is blind to VerifyBadge,
+| verifiable, verify_badge — the next variant of exactly the concept BR-01
+| forbids. The sweep is BROAD /verif/i again; genuine exceptions live in
+| tests/Security/no-verified-allowlist.php, exact-match per (file, token)
+| with a reason each — the string-lint convention, so every exception stays
+| visible and reviewable instead of dissolving into the pattern.
 */
 
-const VERIFIED_CONCEPT = '/verified|verification/i';
+const VERIFIED_CONCEPT = '/verif/i';
 
-/** @return list<string> repo-relative offenders */
+/** @return array<string, list<string>> file => allowed lowercased tokens */
+function verifAllowlist(): array
+{
+    /** @var array<string, list<string>> $list */
+    $list = require __DIR__.'/no-verified-allowlist.php';
+
+    return $list;
+}
+
+/** @return list<string> repo-relative offenders as "file: token, token" */
 function verifSweepFiles(string $absoluteDir, string $pattern): array
 {
     if (! is_dir($absoluteDir)) {
         return []; // the namespace does not exist yet; sweeps 1–2 stay non-vacuous
     }
 
+    $allowlist = verifAllowlist();
     $offenders = [];
     $iterator = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($absoluteDir, FilesystemIterator::SKIP_DOTS)
@@ -60,9 +71,19 @@ function verifSweepFiles(string $absoluteDir, string $pattern): array
         if (! $file->isFile()) {
             continue;
         }
+        $relative = str_replace(base_path().'/', '', $file->getPathname());
         $contents = (string) file_get_contents($file->getPathname());
-        if (preg_match($pattern, $contents) === 1) {
-            $offenders[] = str_replace(base_path().'/', '', $file->getPathname());
+
+        if (preg_match_all('/verif\\w*/i', $contents, $matches) === 0 || preg_match($pattern, $contents) !== 1) {
+            continue;
+        }
+
+        $allowed = array_map('strtolower', $allowlist[$relative] ?? []);
+        $tokens = array_values(array_unique(array_map('strtolower', $matches[0])));
+        $disallowed = array_values(array_diff($tokens, $allowed));
+
+        if ($disallowed !== []) {
+            $offenders[] = $relative.': '.implode(', ', $disallowed);
         }
     }
 
@@ -104,8 +125,15 @@ it('keeps the customer UI namespaces and customers.* lang files free of the veri
 
     foreach (['en', 'am'] as $locale) {
         $path = lang_path($locale.'/customers.php');
-        if (is_file($path) && preg_match(VERIFIED_CONCEPT, (string) file_get_contents($path)) === 1) {
-            $offenders[] = 'lang/'.$locale.'/customers.php';
+        if (! is_file($path)) {
+            continue;
+        }
+        $relative = 'lang/'.$locale.'/customers.php';
+        $allowed = array_map('strtolower', verifAllowlist()[$relative] ?? []);
+        preg_match_all('/verif\\w*/i', (string) file_get_contents($path), $matches);
+        $disallowed = array_values(array_diff(array_map('strtolower', $matches[0]), $allowed));
+        if ($disallowed !== []) {
+            $offenders[] = $relative.': '.implode(', ', $disallowed);
         }
     }
 

@@ -116,11 +116,25 @@ function asTenant(Tenant|string $tenant, callable $callback): mixed
     } finally {
         $context->clear();
 
-        if ($previous !== null) {
-            $context->bind($previous, ResolutionSource::Console);
-            $rls->set($previous);
-        } else {
-            $rls->clear();
+        // RULED CORE EDIT (S08 step-1 checkpoint, ruling 3 — authorized
+        // narrowly): when the callback aborted the Postgres transaction, the
+        // RLS re-bind here raises 25P02 FROM THE FINALLY, which REPLACES the
+        // in-flight exception and masks every real failure as "current
+        // transaction is aborted" (it hid four real defects in S08 step 1b).
+        // ONLY that case is swallowed: the app-side context still restores,
+        // the harness rollback clears the session state, and the REAL error
+        // surfaces. Any other QueryException still throws.
+        try {
+            if ($previous !== null) {
+                $context->bind($previous, ResolutionSource::Console);
+                $rls->set($previous);
+            } else {
+                $rls->clear();
+            }
+        } catch (Illuminate\Database\QueryException $e) {
+            if ($e->getCode() !== '25P02') {
+                throw $e;
+            }
         }
     }
 }
