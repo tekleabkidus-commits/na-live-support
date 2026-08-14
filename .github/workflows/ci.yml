@@ -72,6 +72,12 @@ jobs:
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - name: Bring up the ephemeral stack (same compose as local — parity)
         run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # Visibility on bring-up failure: an "unhealthy" verdict without the
+      # container's own words cost three blind fix rounds on the relay
+      # (S07 step 14/15) — the crash-looping service's log IS the diagnosis.
+      - name: Dump service logs when the bring-up failed
+        if: failure()
+        run: docker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres
       # The MAIN stack database gets its schema the way a deploy would. The test
       # harness migrates only na_live_support_test (per process, migrator role);
       # StackSmokeTest inspects na_live_support itself — run 30608153474 failed
@@ -147,6 +153,12 @@ jobs:
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - name: Bring up the ephemeral stack (same compose as local — parity)
         run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # Visibility on bring-up failure: an "unhealthy" verdict without the
+      # container's own words cost three blind fix rounds on the relay
+      # (S07 step 14/15) — the crash-looping service's log IS the diagnosis.
+      - name: Dump service logs when the bring-up failed
+        if: failure()
+        run: docker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres
       - name: Provision the media bucket (same command as `make fresh`)
         run: docker compose -f docker/compose.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
       - name: The soak, alone, captured first (RISK 0b)
@@ -177,6 +189,9 @@ jobs:
           cp .env.example .env
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
       - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      - name: Dump service logs when the bring-up failed
+        if: failure()
+        run: docker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres
       # The browser stage brings up a FRESH stack, so its database is empty. The
       # session suite (Doc 02 step 6) logs in for real — it needs schema and an
       # account, and it cannot create one through a UI that does not exist yet.

@@ -73,7 +73,15 @@ final class RelayOutbox extends Command
                 // accepting connections yet when the relay booted).
                 $sqlstate = $e->errorInfo[0] ?? null;
                 $state = is_string($sqlstate) ? $sqlstate : (string) $e->getCode();
-                $notReadyYet = $state === '42P01' || str_starts_with($state, '08');
+                // The full "world is not ready" family, each met in the wild:
+                // 42P01 undefined table (pre-migrate — local first boot),
+                // 08xxx connection errors (postgres not accepting yet),
+                // 57P03 "the database system is starting up" and 3D000
+                // "database does not exist" (CI's FRESH initdb window — the
+                // states a warm local volume never shows, which is why two
+                // fixes shipped blind before this enumeration).
+                $notReadyYet = in_array($state, ['42P01', '57P03', '3D000'], true)
+                    || str_starts_with($state, '08');
                 if (! $notReadyYet || $once) {
                     throw $e;
                 }

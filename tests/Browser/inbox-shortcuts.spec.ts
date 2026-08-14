@@ -299,6 +299,11 @@ test('P sets priority through the door with the OPTIMISTIC patch (T-06); T adds 
     await page.getByTestId('action-palette-input').fill(fixtureTag);
     await expect(page.getByTestId('action-palette-empty')).toBeVisible();
     await page.keyboard.press('Enter');
+    // 30 s poll, cause NAMED (the step-15 recurrence's root cause): the
+    // row's tags reach the projection through the DURABLE relay path, and a
+    // full-battery backlog can hold the consume past 10 s — solo runs drain
+    // in under a second. The product covers the same lag with the staleness
+    // pill; the spec covers it by polling to relay-drain scale.
     await expect
         .poll(
             async () =>
@@ -308,7 +313,7 @@ test('P sets priority through the door with the OPTIMISTIC patch (T-06); T adds 
                         [],
                     target,
                 ),
-            { timeout: 10_000 },
+            { timeout: 30_000 },
         )
         .toContain(fixtureTag);
     await page.keyboard.press('t');

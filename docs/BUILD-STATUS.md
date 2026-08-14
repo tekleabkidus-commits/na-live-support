@@ -12,7 +12,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 04 | Conversations & Messaging Core (fake adapter) | **BUILT — S20 close-out below. Final 96-id audit at S20 close-out: 79 DONE / 17 PARTIAL / 0 NOT DONE (corrected at S22 close-out — the top table said 80/16 while the close-out's own PARTIAL list always enumerated 17; the prose was right). FR-24's ticket half closed at S22 step 8, so the STANDING figure is 80 DONE / 16 PARTIAL / 0 NOT DONE.** All 10 steps shipped; the 12th gate (adapter-conformance) runs two adapters; Doc 01 AC-03 and both halves of Doc 03 FR-06 CLOSED here | S20 | **AC-02/04/05/06/09 covered; AC-01/03/07/08 PARTIAL with stated reasons (AC-03's soak is flaky — RISK 0)** | Step 1: adapter contract + DeliverablePayload physics + fake adapter + conformance suite (12th gate); rulings R-15..R-17, A-4/A-5 filed; traceability flipped (ADR 0004). Step 2 (`a6c68e0`): storage layer — 5 migrations (partitioned messages + per-partition RLS + REVOKE DELETE), repositories, composite (created_at,id) cursor (T-08's first consumer), messages half of partitions:check/maintain + FS-04 pager test; step-9 discovery recorded: partition DROP blocked by revisions FK, detach-time FK verification is RLS-policed — retention must purge revisions cross-tenant BEFORE detach (MessagePartitions docblock). Step 3 (`c1211c3`): inbound pipeline — webhook edge (quota-gated, never inline), claimant-aware SETNX dedupe, Doc 08 identity seam, one-transaction persist+outbox, FR-11 quarantine (audit-only, no retro-fan-out), BR-05 ACK-but-summarize PROVEN through the pipeline, EC-01 batch-tail debounce; dedupe + quarantine sabotaged red→green. Step 4 (`0a9c1eb`): outbound pipeline — FR-13 machine as frozen contract (AC-02: 9 legal edges + all 33 illegal pairs enumerated; no sent→failed edge, EC-05 annotation instead), ComposeOutbound (T-03 idempotency, BR-02 refusal), redis-durable FIFO lanes + LaneWorker (§12 fairness structural, EC-04, 10-min head cap → lane_skipped event+audit per A-4), FR-16 rate gate on A-5 settings; messaging.* i18n en+am; sent→failed edge + head-block both sabotaged red→green. Step 5 (`466e74d`): media chain per ADR 0008 — egress-proxy service (tinyproxy allowlist = the SEC-03 control, mailpit as the deny fixture), streamed fetch with mid-stream cap (EC-02 → rejected + staff marker + customer notice), hand-rolled clamd INSTREAM client (real EICAR detection), EXIF strip via GD re-encode proven byte-level (BR-06), tenant-prefixed MinIO store + 10-min signed URLs with SEC-04 as an absence (no URL path for non-clean), ≤3 queued thumbnails, T-05 needs_transcript/needs_ocr hooks, EC-11 held→x3/15-min→quarantined_pending with data-resident clock; media.max_mb + 4 events registered; proxy-bypass sabotaged red→green. Step 6 (`3944334`): notes (one sanctioned writer, note.added+audit+note.mentioned per A-4; AC-04 runtime half proven through the real send door — sabotage showed guard red AND the row CHECK still refusing, two independent layers), typing (1-per-4s adapter signal capability-gated; EC-12 auto-expiry as TTL physics), drafts (LWW updated_at guard in DB time, EC-06 conflict signal + en/am toast, tombstone clear, draft.saved catalog-absent). Step 7 (`6f8f6e9`): revisions (customer edits via external-id match — one row ever; staff edit/delete capability+telegram.message.delete-gated; FR-23 AI refusal absolute; originals append-only), HistoryReader (conversations.history.full verdict + access AUDITED, AC-06; gate sabotaged red→green), TranscriptExporter (Doc 03 FR-06 export re-check FIRST CONSUMER — inherited row 1 closed at export time; notes excluded/double-confirm; watermark; dompdf + embedded Noto Sans Ethiopic per ADR 0009 — Amharic proven surviving the render). Step 8: blocking actions (events+audited reason), RealtimePusher (v:1, 32KB ceiling, SEC-06 emit fence), presence/user channels with T-06 scope-on-subscribe closing Doc 03 FR-06's Reverb half (inherited row 2; pre-Doc 06 scope FAIL-CLOSED — All only until assignment columns exist, Doc 06 re-proves), FR-26 catalog completeness proven by test; scope-check sabotaged red→green. Step 9a (`615446e`): retention with legal hold — hold storage carries revision history; cross-tenant revision purge BEFORE detach (step-2 discovery applied); AC-09 proven with real detach+drop, boundary partition surviving, held/unheld media split. **CI-proven on `1cfd0be`: run [30992317520](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/30992317520), Stages 1-6 green** — after two REAL parity defects the push+verify rule caught: the egress-proxy healthcheck resolved localhost to ::1 (IPv4-only tinyproxy → always unhealthy, masked locally by passing SEC-03 tests), and the media bucket existed only by local hand-creation (CI's ephemeral MinIO failed every media/retention write) — bucket provisioning is now the object store's migrate step in make fresh + CI. Step 9b (`b7ec21a`): FS-05 dead-letter parking + ops re-drive view (R-17 class-2 fill, A-6 filed). Step 9c (`b9fb15a` SS-02 + `d7ee65b` drills): FS-01 channel health + outage drain, FS-02/FS-03, SS-04 node-kill drill claiming Doc 01 AC-03, the AC-03 10k soak (green twice, later flaky — see RISK 0), SS-01 indicative budgets, SS-02 second adapter (zero-core-edits diff = tests/ only). Step 10: §13/§14 sweep (language detector + alt-text slot), the full 96-id audit, sabotage ledger reconciled (the checkpoint's eight were NOT the plan's first eight — two missing sabotages run here). **Two REAL defects found by the new drills: media silently lost on any storage blip, and an at-least-once redelivery treated as a customer edit (78 spurious revisions).** See the S20 close-out section for the audit, ledger, DESIGN-DEVIATIONS and risks |
 | 06 | Ticketing System | **CLOSED — advisor recount at `e49f5e2` (2026-08-09). Final 96-id self-audit: 84 DONE / 12 PARTIAL / 0 NOT DONE; all 12 plan sabotages executed and reconciled; CI run 31292481214 green on the close-out tree. Rulings R-20…R-22 + advisor ruling A-16; interpretations A-7…A-18 (+ two A-7 amendments); A-12…A-18 countersigned.** **Step 8 landed the remainder sweep** (commits `e44b551`…`d0eca63`): NFR-06/T-09 consumer contracts — per-consuming-document fixtures for ALL SEVEN consumers (07/11/12/14/15/16/17; 12/15/17 are T-09's named minimum) pinning schema_version + the read-slice per ticket.* event, with completeness (no uncontracted consumer can ship) and versioning teeth (a catalog bump goes red per document until reconciled deliberately); EC-07 both halves (identical-target no-op, raced-guard re-evaluation), EC-08 decomposed onto proven doors (send-and-reopen = the staff resolved→open door; customer branch = step 5's consumer; drafts untouched), EC-10 orthogonality (the unreachable flag changes ANSWERS, never state); the §14 sweep (every source-scanned refusal code has en+am copy; vocabularies complete; en/am structurally identical) + §13's consequence copy for all 8 statuses (interactive obligations → Doc 07's browser suite, recorded); **inherited row 1 CLOSED** — the ticket-range transcript export on Doc 04's exact gate/watermark/double-confirm, one shared render path, A-18 (anchors else lifetime window; audit carries ticket_id+range_basis, event stays v1), Doc 04's suite green on the refactor; §12 structure — NFR-01/02/04 as enforced budgets GREEN IN STRICT MODE on dev hardware (transition p99 12.4 ms/25; merge+unmerge round 37.7 ms/2000; bulk 200 at 918 ms/30 000 with a linearity tripwire; sweep 10k-armed/20-due 554 ms/5000 — O(due) demonstrated; autocomplete @5k real tags p99 24.1 ms/80), the 100k sweep + 50/s fleet + merge-preview read staying Doc 19/Doc 07 buckets. **Step 7 landed bulk + spam** (commits `c644438`…`8b32147`): FR-09 spam both doors (mark through the machine edge with the separately-confirmed Doc 04 block as a genuinely separate act; unmark ≤ 7 d restores the PRIOR status from event history — outbox-then-events so relay lag cannot block — and re-includes metrics; day 8+ spam_terminal, EC-09), N-14's exclusion as ONE predicate (MetricExclusion, status = spam, row and SQL forms from one constant — sabotage #5 proven red on exactly the three excluded-assertions), A-17's terminal-spam fresh-ticket rung in the reopen consumer (unlinked, automation, idempotent; while unmarkable a message takes no ticket action — filed, needs countersign), the A-13-rider golden landed as announced (merge-supersede-no-close: closed_at set, ticket.closed count 0) plus the AC-06 exclusion golden, driver extended (step reasons, a merge op, metrics_excluded + per-ticket event-count expectations); FR-25 bulk with SEC-04 STRUCTURAL (TicketBulkJob holds no verdicts — every item calls the owning operation's live check; sabotage #4's cached-verdict averaging red on exactly the EC-12 mid-batch-revocation test), per-item partial success with stable C-04 reasons, per-item Reverb user.{requester} progress, ONE ticket.bulk_completed {ok, failed[]} (A-8(ii)) + SEC-03 summary audit, crashed-job resume at pending items and completed-job re-drive publishing nothing (C-09), per-tenant WithoutOverlapping (T-06's cap, smallest honest reading), 200-item batch proven at 2.29 s dev-indicative (NFR-04's ≤30 s enforced with §12's perf structure, step 8); bulk-table state moved to BulkJobStore (the NFR-03 constraint its own gate names). **Step 6 landed the operations** (commits `2163a2a`…`042a226`): FR-20 merge under the SEC-06 same-customer hard rule (checked first, sabotage #8 proven) with SEC-01 target re-check, snapshot-first reversibility (T-04; sabotage #3 proven — the five restoring tests red without it, FS-04 green BY DESIGN via presence-is-authority), BR-02's link rewrite (anchors move, message rows never), followers/tags union, A-13's operation doors on the sole writer (closeForMerge / reopenFromUnmerge — the countersigned 15-edge matrix untouched, no ticket.closed on supersede, resolved sources' timers cancelled and restored byte-identically), A-14's frozen merged sources (merged_superseded + reopen-ladder exclusion), EC-03 transitive survivor resolution with per-link 24 h unmerge, FS-04 presence-is-authority with audited refusals, the platform pruner; FR-21 split with per-message anchors resolving a NON-CONTIGUOUS selection exactly (AC-05), EC-04's cap of 3 LIVE linked-work under conversation lock with demonstrated slot-freeing, the system-note voice (NotesWriter::addSystemNote, Doc 04's `system` author's first writer); FR-22 transfer with fail-closed pre-Doc 11 scope answers (destination + retention both; reset emits FR-15's ticket.assigned); FR-23 escalation ({path, reason, target, at, by} jsonb stamped in the statement's own clock_timestamp(), BR-06's ≥10 chars on the edge, auto-follow, named-target validation) + de-escalation with note, and EC-05's later-disabled fallback (supervisor_review in place, system note, ticket.escalation_rerouted → the escalator via the recorded `by` — A-15 + rider). Owner-ordered pin test executed (ReopenTicket's LogicException wall). Nine events catalogued (70 total; the md generator moved to the catalog's typed accessors when PHPStan's const inference degraded past 70). **Step 5 landed the clock-driven lifecycle** (committed `23da552`, proven across a machine restart — see the step-5 restart note): T-03's timer physics (auto_close_at column truth + redis-durable ZSET candidates at integer-microsecond scores; the 1-minute sweep closes ONLY after its in-transaction re-check — EC-01's cancel-wins proven with a persisted reply beating a due sweep, no ticket.closed ever emitted — drops stale candidates, defers lying scores to the column deadline, HOLDS BR-07 unreachable), FS-01's rebuild (delayed-never-premature, exact column deadlines), SS-03 (armed timers keep their value under a settings change, copy registered en+am), FR-06 ResolveTicket (substance: reply-or-note; AI reply counts per FR-24's definition), FR-07 arm/cancel riding EVERY door of the sole writer (SS-04), FR-08 ReopenTicket both doors (EC-02's inclusive boundary pinned to the second on both sides against the MESSAGE's created_at; beyond-window successor with previous_ticket_id, source=automation per A-12; active assignee retained, deactivated assignee handed back via ticket.assignee_deactivated), R-03 DST fixtures (168 h across both 2026 switches, one proven end-to-end), and ADR 0011's consumer path (OutboxConsumer type + ConsumerRegistry map + the relay dispatching TicketReopenConsumer with event id only; FS-02's kill/re-drive drill: mid-transaction death leaves no trace, re-drive reopens EXACTLY once, duplicate delivery changes nothing). Sabotage #6 red→green. **Step 4 landed the property surface**: FR-15 assignment with the as-if-assigned scope check, FR-16's claim race (`already_claimed {by}`), FR-05/BR-03's implicit claim on the R-04 toggle, FR-17 priority, FR-18 followers, FR-19 tags + T-07's chunked resumable rewrite (headless per R-22), EC-06's hand-back batch, and **Doc 04 T-06 RE-PROVEN in both directions against real assignment columns** (inherited row 2 — admit when assigned, refuse when not, Team/Dept still fail-closed pre-Doc 11). Step 3 landed the creation paths: FR-02 numbering (NFR-05 100-unique proven on ten real sessions; FS-03 backpressure bounded), the ONE validation path behind FR-12/13/14, FR-11's `createFromHandoff` + immutable packet (**AC-08**), FR-03's subject seam + EC-11, and **AC-02's concurrent half — the layer order was corrected so the service refuses with `open_ticket_exists` and the T-02 index is the backstop §21 intended**. Steps 1–2 landed: the six ticket tables with T-02's open-family index, BR-01 REVOKE DELETE, SEC-02 insert-only stores, R-19b DB-time physics, and **the FR-04 machine as data with `TicketTransitionService` as its sole writer** | S22 | **AC-01 COVERED** (all 64 cells of the 8x8 machine); **AC-02 COVERED** (BOTH halves — the direct-SQL/T-02-index half from step 1 and the concurrent-creates half from step 3, six real sessions racing one conversation; step 3 also corrected the LAYER ORDER so the service refuses with `open_ticket_exists` and the index is the backstop §21 intended, rather than the thing callers hit first); **AC-08 PARTIAL** (packet contract enforced pre-insert, immutability proven at the DB by grant, createFromHandoff seam driven from the Doc 09 fixture; the RENDERING half lands with Doc 07 — pre-agreed bucket); AC-09 PARTIAL (goldens proven; Doc 15's consuming assertions deferred); **AC-03 COVERED** (step 5 — EC-01 cancel-wins in the sweep's own transaction, EC-02's inclusive boundary fixture-pinned to the second on both sides, reopen re-notifies an active prior assignee via ticket.reopened and hands back from a deactivated one via ticket.assignee_deactivated); **AC-04 COVERED** (step 6 — snapshotShape applied twice, stored vs recomputed, diff = ∅ over status/pending_reason/assignee/armed-timer-column-and-candidate/merged_into/anchors/target-sets; chains transitive; per-link windows; both sabotages red→green); **AC-05 COVERED** (step 6 — linked_work + origin link + no slot, non-contiguous selection resolved exactly, live cap under lock, origin system note); **AC-06 COVERED** (step 7 — exclusion via the one predicate, operationally and as golden values; restoration on unmark ≤ 7 d with both prior statuses; terminality after, with the A-17 fresh-ticket path; Doc 15's consuming assertions stay the pre-agreed deferral — the goldens are the shared contract); **AC-07 COVERED** (step 7 — mixed batch exact per-item allow/deny in submission order, EC-12 mid-batch revocation live-checked, 200 items with 200 progress events observed at 2.29 s dev-indicative; the ≤30 s p95 enforcement lands with §12's perf structure in step 8) | Step 1 (`11c6724`): migrations `2026_08_07_1000*` (tickets, followers, handoff_packets, merge_snapshots, bulk_jobs+items, message_anchors), 4 `tickets.*` settings (R-21 tenant-editable), traceability flipped (ADR 0004). Step 2: the R-20 trigger (advisor-confirmed note + both strengthenings), `TransitionMatrix` (15 edges read off §4.2), `TicketTransitionService`, `TicketRepository` as the one status writer, the 13th gate `ticket-status-writer`, `ticket.status_changed` in the catalog, the shared Doc 15 golden fixtures, `tickets.*` i18n en+am, **Doc 03 EC-02 CLOSED on a real transition** (inherited row 7). Three sabotages red→green; one invalid sabotage attempt caught and redone — see the S22 section |
 | 05 | Telegram Channel (Business + Direct) | **CLOSED — ACCEPTED by the owner on the advisor's recount at `e62f204` (2026-08-10): 101 rows exact, families matching the independent enumeration, 84/17/0 verified, the PARTIAL set matching the bucket key id-for-id with every cite sanctioned, ledger 20/20 item-by-item; one recount correction (the second step-6 ruling line restored verbatim to RISKS) applied in the acceptance SHA itself. Rulings A-28/A-29 filed. Final 101-id self-audit: 84 DONE / 17 PARTIAL (every PARTIAL a pre-agreed bucket or an owner-assisted blocker) / 0 NOT DONE; sabotage ledger 20/20 reconciled item-by-item. The step-12 recount caught and CLOSED two silent drops and one untested edge (FR-26 deep links never built despite the step-5 plan row; FR-25's setMyCommands registration half; EC-06's compound convergence). Both interpretations RULED at the close-out review: A-28 countersigned (FR-30 write tools on telegram.bots.manage); A-29 approved with its three conditions discharged (FR-26 acquisitions table). Canonical suites 116/675; full suite 971/12,965; gates 13/13; browser 63/63; perf strict PASS ×2 — see the S23 step-12 section** | S23 | AC-01/02/05/06/09 covered; AC-03 + AC-08's live halves owner-assisted-BLOCKED (dedicated staging Business account, §21); AC-04/07 partial (pre-agreed Doc 07/12/14 buckets) | staging bot @nasupportstagingbot + Business account proven live (step 0); token interim storage per A-19; **token rotation MANDATORY before any reconnection or production traffic (owner ruling, verbatim in the close-out RISKS)**; dev has no public ingress — A-24 capture-replay strategy with the Doc 18 handoff row; Stage-4 first-attempt “flake” DIAGNOSED by the step-12 harness fix as a REAL seeder defect (random-uuid published_by, FK violation on fresh DBs, retry-masked) and FIXED; **CI-proven on `da335a8`: run [31382257865](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31382257865), all stages green, Stage 4 zero flakes** |
-| 07 | Unified Inbox & Agent Workspace | **IN PROGRESS (SESSION-07) — plan approved 2026-08-10 (101/101 family-exact, advisor-audited) and committed at approval per governance #9: `docs/SESSION-07-APPROVED-PLAN.md`. Rulings A-30/A-31/A-32 + corrections C1–C4 filed in ANSWERS. Design stack: Batch 1+2+12 frozen files (no pixel baselines — functional-state + a11y claims only)** | S07 | — | steps 1–15 running; canonical suites command defined below |
+| 07 | Unified Inbox & Agent Workspace | **BUILT — steps 1–15 complete; close-out 2026-08-14, PENDING the advisor's recount (the incident-#13 gate: the owner grounds the close-out SHA before the recount recommendation issues). Final 101-id self-audit: 92 DONE / 9 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed §12/Doc 19 or staging-operational bucket; sabotage ledger 22/22 reconciled item-by-item (+ the beyond-plan pairs); Doc 05 closing set 6/6 and Doc 06 closing set 6/6 CLOSED; B12-A01 nine/nine executed; rulings A-30…A-37 + the 2026-08-13 five-item stop ruling filed; ruled core edits #6 (retro-countersigned) and #7 (escalate-first) on the record. See the S07 STEP-15 CLOSE-OUT section** | S07 | AC-01…09 covered (functional-state + a11y, no pixel baselines — inherited row 12); AC-10 PARTIAL (Doc 19 halves stated) | plan `docs/SESSION-07-APPROVED-PLAN.md` (101/101 family-exact); canonical suites command defined below |
 | 08 | Customer Profiles & Identity | NOT STARTED | — | — | |
 | 09 | AI System (Chatbot, Copilot, Supervisor) | NOT STARTED | — | — | needs AI provider staging keys |
 | 10 | Knowledge Base | NOT STARTED | — | — | |
@@ -547,6 +547,296 @@ Honest-trail note for the close-out, as ruled: SS-01's arc — vacuous
 (row-left-view) → exposed (sixty claimed-unresolved at the database) →
 non-vacuous (sixty resolved AT the database, green in this battery) —
 "the old claim standing is the greater sin."
+
+## SESSION-07 (Doc 07) — STEP 15: THE CLOSE-OUT (2026-08-14)
+
+### The 101-id self-audit (families advisor-matched at plan approval: FR 31 · NFR 7 · US 7 · BR 6 · T 8 · SEC 6 · EC 12 · FS 5 · SS 4 · AC 10 · R 5)
+
+**Verdict: 92 DONE / 9 PARTIAL / 0 NOT DONE. Every PARTIAL cites its
+pre-agreed bucket (§12/Doc 19, or the staging-operational half). No id is
+claimed from a summary; each one-liner names its executed proof.**
+
+| Id | Status | One-line reason (proof) |
+|---|---|---|
+| FR-01 | DONE | Region sizes/collapse persist ACROSS SESSIONS (inbox-layout AC-01 clause, fresh context + fresh login) |
+| FR-02 | DONE | All four breakpoints render the specified region behavior (layout at 1440 both themes; mobile 1100/900/375 two-level) |
+| FR-03 | DONE | Health indicator = `channel.health.changed` v2's FIRST consumer (registry entry, C-09 proof, catch-up drill, first contract fixture); dot mirrors rollup, banner on degraded/down (Doc 05 FS-01 closing row) |
+| FR-04 | DONE | Tab-leader election proven BEFORE sounds shipped (sabotage #5); dual-tab convergence + draft LWW toast specs |
+| FR-05 | DONE | Seven system views, membership fixtures == direct queries member-for-member (AC-02, A-32 mention definition); queue-view TYPE against the Doc 11 fixture seam |
+| FR-06 | DONE | Saved views CRUD + `views.share` (verified in the catalog, never invented) + read-only shared with duplicate-to-edit round-trip |
+| FR-07 | DONE | Counts are server ZCARD pushed on delta (2 s debounce), 999+ cap, em-dash-until-first-value (CountingContractTest; sabotage #13) |
+| FR-08 | DONE | Four-section views sheet (B1-S03), user-arrangeable order persisted |
+| FR-09 | DONE | Full drawn row anatomy incl. EC-04 dual-channel badge + older-activity warning (Doc 05 closing row) and EC-11 subject-fallback snippet (Doc 06 closing row); WindowChip CONSUMED |
+| FR-10 | DONE | Unassigned ascending first-come (BR-04's encoded value — SystemViews::descending excludes it; the step-15 bulk spec learned this the empirical way) |
+| FR-11 | DONE | AC-03 executed: batched 5 s resort, rows-never-move-under-pointer (B12-A01 AC-04), enter/leave/reduced-motion; sabotage #6 |
+| FR-12 | DONE | Cursor pagination 50/page + scroll restoration (flaky row hardened with cause named at cc52cc1) |
+| FR-13 | DONE | Id-based selection surviving resorts, EC-02 tray, select-all mint with SERVER count; Unit D's id-based execute door closed the partial-selection gap |
+| FR-14 | DONE | Doc 04 §8/§9 rendered whole + boundaries + pinned handoff card (Doc 06 AC-08 closing row) + bulk-collapsed events + US-03 owner-phone marked (Doc 05 closing row) |
+| FR-15 | DONE | Deep links resolve anchored; EC-01 out-of-scope → the 404-pattern page with the C-10 metric (sabotage #15) |
+| FR-16 | DONE | Collision strip (draft never shown) + non-blocking send-race confirm, exactly one visible outcome (AC-06; sabotage #8) |
+| FR-17 | DONE | Reply/Note structural separation (separate routes to separate services, N-04), BR-02 contrast floor, AC-05's 50-sequence heuristic (sabotage #14) |
+| FR-18 | DONE | Live capability caps with the refusal naming the cap BEFORE upload (B12-A01 AC-06); `inbox.voice_recording` flag registered |
+| FR-19 | DONE | `/` macro palette UX from B12-S03 against fixtures + AI-actions slot with the violet accent; DEFINITIONS are Doc 12's seam, stated |
+| FR-20 | DONE | The composer as the SINGLE renderer of every Doc 05 §8 state + Doc 04 reasons (the Doc 05 closing rows) + step 14's closed/spam replacement and 'unreachable' note-only |
+| FR-21 | DONE | Send-and-set-status through TicketTransitionService ONLY; refused edge leaves the reply SENT with one-tap retry (B12-A01 AC-05) |
+| FR-22 | DONE | Drafts per Doc 04 FR-20 + chip + >20-char guard; EC-12 merge-survival EXECUTED (core edit #7's discovery pair); restore door wired at af6a824 |
+| FR-23 | DONE | ⌘K three sections; NO scope toggle anywhere (B2-S02 ruling holds) |
+| FR-24 | DONE | In-view filter bar composes within the view's base filters (filter-bar spec) |
+| FR-25 | DONE | Message hits deep-link anchored + highlighted (palette spec, step 12) |
+| FR-26 | DONE | Bell with the enumerated event set, deep links, mark-all-read, quick mute; categories REGISTERED |
+| FR-27 | DONE | Leader plays once (sabotage #5), OS-focus respected, FR-27 defaults; FS-04 silent downgrade + one-time hint |
+| FR-28 | DONE | Online/Away/Offline with registered `inbox.away.idle_minutes`, 60 s cancelable countdown, heartbeat-loss system-away, force WITH attribution; `agent.status_changed` emitted (Doc 11's seam) |
+| FR-29 | DONE | Amber pill ≤2 s, read-only cache, visible queued chips flushing IN ORDER with idempotency keys (AC-07 golden) |
+| FR-30 | DONE | Version skew → passive refresh toast, never forced mid-composition (build id in handshake) |
+| FR-31 | DONE | Every binding end-to-end + overlay parity FROM the one map + input guards + no-conflict set (AC-08) |
+| NFR-01 | **PARTIAL** | Lighthouse budget structure DELIVERED (`make lhci`, real authed login); script-size binds; **TTI measured 1977 ms vs the 1500 ms spec under simulated fast-3G on dev hardware — flagged, not hidden**; the number binds under ENFORCE on Doc 19's L1 profile (pre-agreed §12 bucket) |
+| NFR-02 | **PARTIAL** | The pipeline halves measured (projector recompute p99 ≤42 ms; realtime push through RealtimePusher); the 1.5 s p95 END-TO-END under L2 is the Doc 19 bucket (Doc 04 AC-07 shared measurement, stated at plan) |
+| NFR-03 | **PARTIAL** | The DOM stays bounded by cursor pagination (50/page) + Doc 04's thread virtualization; the 60 fps @ 10k-row profile is a Doc 19 L2 measurement — honest note: the LIST bounds by pagination, not a virtual scroller; the drawn budget is met by never mounting 10k rows |
+| NFR-04 | DONE | The BLOCKING `bundle-budget` gate (14th): manifest-walked initial = 125.1 KB gz vs 350; lazy set printed; falsification pair (unpiped) captured |
+| NFR-05 | **PARTIAL** | Leak-budget STRUCTURE delivered (inbox-soak.spec.ts, GC-forced series flat at dev duration); the 8 h/300 MB/5k-event p-values are Doc 19's (named in the file) |
+| NFR-06 | DONE | Every optimistic mutation is a command object with a rollback handler; reconcile-or-roll-back-visibly proven (priority rollback, refusal strips); sync goldens |
+| NFR-07 | DONE | The checker PRODUCTIZED (`inbox:consistency-check`), proven against replay (T-03), **scheduled hourly at step 15**, and used operationally TWICE this session (the ZSET-loss heals) |
+| US-01 | DONE | The 60-ticket keyboard-only shift executed with zero pointer calls in the core loop (inbox-keyboard-shift.spec) |
+| US-02 | DONE | Every Doc 05 composer state rendered per contract (the closing rows; banners spec asserts composer presence per shape) |
+| US-03 | DONE | Owner-phone replies render MARKED in the thread (Doc 05 closing row; bubble chip) |
+| US-04 | DONE | The Rescue view from `channel_unreachable` data + open-rescue path (Doc 05 closing row) |
+| US-05 | DONE | Views as definitions: personal saved views + shared read-only + duplicate-to-edit (AC-02 round-trip) |
+| US-06 | DONE | The offline golden: cut mid-composition, queue visibly, flush in order, drafts intact (AC-07) |
+| US-07 | DONE | Collision warned-never-blocked with the dismissible strip (AC-06) |
+| BR-01 | DONE | The inbox never lies: BR-01 postures throughout (D4 scope-lost honesty, D13 cached-truth note, rollback visibility, latest-live law) |
+| BR-02 | DONE | Mode differentiation not themeable below the floor; heuristic executed |
+| BR-03 | DONE | Scope is absence everywhere: no toggle, no hidden-row hints, per-viewer counts (EC-04, A-30) |
+| BR-04 | DONE | Unassigned first-come ascending is the encoded default |
+| BR-05 | DONE | Sounds/notifications per-user, never force-enabled (FR-27 defaults + FS-04) |
+| BR-06 | DONE | Status is routing truth: generous cancelable away, force with attribution; activity events emitted — metric FORMULAS are Doc 15's seam, stated |
+| T-01 | DONE | Per-view ZSETs + `ticket_list_items` hydration (Doc 06 T-08's row honored); per-scope variant decision made + documented (A-30) + EC-04-proven |
+| T-02 | DONE | v:1 delta protocol over tenant view channels; subscribe re-auth + scope-change resubscribe (sabotage #12); distinct-from-catalog stated as planned |
+| T-03 | DONE | Counting proven against EVENT REPLAY into a cold projector == direct query (ReplayCountingTest); pushed debounced; client never derives |
+| T-04 | DONE | Meilisearch's first real consumer: per-tenant physical indexes, server-injected scope filters, proxy sole path; dev-scale measured (§12 row); the 10 M profile → Doc 19 (named) |
+| T-05 | DONE | Selection tokens: view-hash + snapshot + TRUE count, user-bound, single-use, execution-time resolution with the drift report (sabotages #3/#4) |
+| T-06 | DONE | Normalized stores + command objects (the NFR-06 enforcement point) |
+| T-07 | DONE | `/inbox/sync` ordered `(occurred_at, id)` with the watermark + UUIDv7 tiebreak (A-33/B-4 golden; sabotage #10); bounded 5k + overflow instruction (A-31) |
+| T-08 | **PARTIAL** | Lighthouse stage + soak structure DELIVERED (step 15); the L2 event-stream replay harness at scale is Doc 19's (the bucket the plan named) |
+| SEC-01 | DONE | Channel auth with Doc 03 scope at subscribe + re-auth on change (ViewChannelAuthTest) |
+| SEC-02 | DONE | The proxy is the ONLY search path; client-sent scope has NO code path (sabotage #2 + the no-client-key assert) |
+| SEC-03 | DONE | Wide mutations audited: selection execution, id-based bulk submit + stop (step 14's registry rows), view share/unshare, force-status |
+| SEC-04 | DONE | Notification content = name + number only (NotificationContentTest; sabotage #19) |
+| SEC-05 | DONE | The print page: watermark, PUBLIC transcript, notes NEVER print (sabotage #20); tickets.export surface mounted (Doc 06 closing row) |
+| SEC-06 | DONE | Token single-use latch + user binding (sabotage #4); per-execution mint |
+| EC-01 | DONE | Out-of-scope deep link → 404-pattern page + security metric (sabotage #15) |
+| EC-02 | DONE | Selection survives by id; leaves-view → tray until deselected/executed; drift stays server truth |
+| EC-03 | DONE | Dual-tab drafts LWW + toast; typing never self-triggers |
+| EC-04 | DONE | Per-viewer counts under A-30's four conditions (PerViewerCountsTest); no hidden-row indication |
+| EC-05 | DONE | 1k intent chunks per Doc 06 caps (queued batches); **step 14's C15 drawer is the drawn progress surface, live-proven** |
+| EC-06 | DONE | Mid-view transition patches the panel live; composer re-evaluates to the EC-08-prompt (Doc 06 closing row) |
+| EC-07 | DONE | Server-now offset from handshake + sync refresh; renders never trust the client clock |
+| EC-08 | DONE | Reconnect jitter 0–10 s + 429-on-connect honored (the inbox-sync limiter — the step-15 budget clause RESPECTS it rather than clears it) |
+| EC-09 | DONE | Queue-removed → toast + My Open fallback (step 9's clause) |
+| EC-10 | DONE | 16 KB message clamps at 40 lines with show-more; search anchors still resolve |
+| EC-11 | DONE | Media-only snippet placeholders localized, never storage keys (Doc 06 closing row) |
+| EC-12 | DONE | The draft survives its ticket's merge (conversation-keyed) with the info chip — EXECUTED, and executing it found core edit #7's latent Doc 04 defect |
+| FS-01 | DONE | The projector-down drill kills the REAL relay (step 14's drill spec + the liveness pair); freeze correct-as-of, 30 s pill, backlog recovery, no action blocked |
+| FS-02 | DONE | ZSET-loss rebuild productized + system-views-first + fallback; **used operationally twice this session** — the drill is also lived experience |
+| FS-03 | DONE | Meilisearch down → inline unavailable, Actions/Views keep working, indexer catch-up |
+| FS-04 | DONE | Permission-denied → silent downgrade + one-time hint, no re-prompt loop |
+| FS-05 | DONE | Store corruption → reset + refetch with composer text preserved ABOVE ALL (B12-A01 AC-07's executed form; sabotage #17) |
+| SS-01 | DONE | Executed as the keyboard-shift spec (zero pointer calls, by construction) |
+| SS-02 | **PARTIAL** | The resort-affordance mechanics proven (AC-03); the 30 ev/s × 10 min burst with fleet-scale claims is Doc 19 L2 (pre-agreed) |
+| SS-03 | **PARTIAL** | The single-agent 90 s cut mechanics fully proven (AC-07 golden: in-order flush, zero dupes, drafts intact); the 40-agent fleet run is Doc 19 L2 (pre-agreed) |
+| SS-04 | **PARTIAL** | The checker exists, replay-proven, and NOW SCHEDULED (hourly, step 15); the "week with zero drift alerts" is a staging-operational measurement (runs from Doc 18's staging posture) |
+| AC-01 | DONE | Layout matrix + persistence executed (functional-state + a11y; NO pixel baselines — inherited row 12, stated) |
+| AC-02 | DONE | Membership fixtures exact, CRUD/share/duplicate round-trips, EC-04 per-viewer counts |
+| AC-03 | DONE | Scripted delta streams through the SAME store entry the feed drives; all FR-11 behaviors |
+| AC-04 | DONE | Composer states + send-and-set-status success AND partial-failure (row flipped at step 14's checkpoint with the real paths) |
+| AC-05 | DONE | The 50-sequence heuristic + zero note payloads at the outbox (structural) |
+| AC-06 | DONE | Dual-session collision + send-race + one visible ordering |
+| AC-07 | DONE | The offline golden end-to-end (compressed cut, mechanics duration-independent, stated in the spec) |
+| AC-08 | DONE | Every binding + overlay parity + no-conflict guards |
+| AC-09 | DONE | Scope-injection fixtures both layers + anchored-highlighted deep link |
+| AC-10 | **PARTIAL** | CI budgets ENFORCED (NFR-04 gate blocking; §12 suite strict-PASS on dev; lhci structure); the 8 h soak p-values + projector-lag SLO under L2 = Doc 19 (pre-agreed; traceability row carries the full honest split) |
+| R-01 | DONE | Checker + rebuild + fallback designed in from day one — and exercised in anger this very session |
+| R-02 | DONE | FR-11 batching shipped as the product commitment; resort-frequency telemetry is a beta-operational follow-on (noted) |
+| R-03 | DONE | Route budgets in CI (blocking gate + lhci); tabs lazy by manifest (the gate prints the lazy set every run) |
+| R-04 | DONE | Leader election + idempotent sends + EC-03 fixtures; dual-tab soak rides the structure (SOAK_TABS noted in the harness) |
+| R-05 | DONE | The two-level mobile contract is the deliberate scope; no native-shell creep |
+
+### The sabotage ledger — 22 items reconciled item-by-item against the plan's enumerated list (amendments #21 A-33, #22 A-35 — both FILED before shipping)
+
+| # | Guard sabotaged | Executed at | Evidence pair |
+|---|---|---|---|
+| 1 | Scope filter dropped from the list read model → cross-scope row appears | step 2 | `S07-step2/sabotage-1-RED-01/-RESTORED-01.txt` |
+| 2 | Search index fed without tenancy scope → scoped-search red | step 6 | `S07-step6/sabotage-2-RED-01/-RESTORED-01.txt` |
+| 3 | Selection-token cap/chunking removed → Doc 06 bulk-limit red | step 7 | `S07-step7/sabotage-3-RED-01/-RESTORED-01.txt` |
+| 4 | Single-use latch removed → SEC-06 reuse proof red | step 7 | `S07-step7/sabotage-4-RED-01/-RESTORED-01.txt` |
+| 5 | Tab-leader election disabled → duplicate-notification red | step 12 | `S07-step12/sabotage-5-RED-01/-RESTORED-01.txt` |
+| 6 | Resort batcher bypassed (instant rug-pull) → FR-11 affordance red | step 9 | `S07-step9/sabotage-6-RED-01/-RESTORED-01.txt` |
+| 7 | Delivered glyph rendered for telegram → AC-07 DOM red (= the Doc 05 closing proof) | step 10 | `S07-step10/sabotage-7-RED-01/-RESTORED-01.txt` |
+| 8 | Collision warning suppressed → FR-16 dual-session red | step 11 | `S07-step11/sabotage-8-RED-01/-RESTORED-01.txt` |
+| 9 | Projector made non-idempotent → C-09 replay red | step 2 | `S07-step2/sabotage-9-RED-01/-RESTORED-01.txt` |
+| 10 | Sync ordering broken → reconnect golden red | step 5 | `S07-step5/sabotage-10-RED-01/-RESTORED-01.txt` |
+| 11 | R-19b grant physics (new tables) → grant test red | step 1 | `S07-step1/sabotage-11-fresh-01/-RESTORED-01.txt` (migration-level per the S22 precedent) |
+| 12 | Subscribe re-auth removed → channel-auth red | step 3 | `S07-step3/sabotage-12-RESTORED-01.txt` + the honestly-named `-INVALID-helper-not-loaded-01.txt` first attempt |
+| 13 | Count pusher lies (client-derived) → counting contract red | step 3 | `S07-step3/sabotage-13-RED-01/-RESTORED-01.txt` |
+| 14 | Note routed through ComposeOutbound → outbox-zero proof red | step 11 | `S07-step11/sabotage-14-RED-01/-RESTORED-01.txt` |
+| 15 | 404-pattern replaced with 403 → EC-01 red | step 10 | `S07-step10/sabotage-15-RED-01/-RESTORED-01.txt` |
+| 16 | `events.occurred_at` direct-write guard dropped → red AT THE MIGRATION LEVEL | step 1 | `S07-step1/sabotage-16-RED-01/-RESTORED-01.txt` |
+| 17 | Store-recovery draft preservation dropped → FS-05 red | step 13 | `S07-step13/sabotage-17-RED-01/-RESTORED-01.txt` |
+| 18 | FS-01 drill's staleness detection disabled → drill red | step 4 | `S07-step4/sabotage-18-RED-01/-RESTORED-01.txt` |
+| 19 | Notification body carries message content → SEC-04 red | step 12 | `S07-step12/sabotage-19-RED-01/-RESTORED-01.txt` |
+| 20 | Print page renders the internal note → SEC-05 red | step 10 | `S07-step10/sabotage-20-RED-02/-RESTORED-01.txt` (first take re-run, both filed) |
+| 21 | Relay's `occurred_at` byte-copy broken → diff assertion red (A-33 amendment, filed 20→21) | step 1 | `S07-step1/sabotage-21-RED-01/-RESTORED-01.txt` |
+| 22 | A-35 middleware reverted to clear-not-restore → restore proof red (amendment 21→22, filed at `b727322`) | step 8 | `S07-step8/sabotage-22-RED-01/-RESTORED-01.txt` |
+
+Beyond the plan's 22 (falsified because built): Unit D's three (cancel
+observation / requester binding / DB-time windows — `S07-step14/unitD-sabotage*`),
+the refined gate's pair + the structural test's pair (`ruling-gate-*`,
+`condition4-finding1-*`), and the bundle gate's pair
+(`S07-step15/bundle-gate-falsification-*`, re-captured UNPIPED after the
+rule-11 lesson re-fired).
+
+### The closing-set outcomes (every row updates its owning document's record HERE)
+
+**Doc 05 (the [CO]/[PB] halves — all six closed):** §8 composer-state
+rendering → CLOSED (step 11 + step 14's unreachable/closed/spam shapes;
+FR-23/AC-04/US-02 render halves discharged). Rescue view → CLOSED (step 12,
+US-04/FR-10). FS-01 outage banner → CLOSED (FR-03's banner, step 3/8).
+EC-04 badge+grouping+older-activity → CLOSED (step 9, + R-04's grouping
+half). US-03 owner-phone render → CLOSED (step 10). **AC-07's DOM half →
+CLOSED (step 10, sabotage #7 IS the closing proof: no delivered state ever
+renders for a Telegram message, across all states).** The [OA] rows
+(AC-03/AC-08-live/US-01-live) remain owner-assisted-blocked on the staging
+Business account — untouched, as ordered.
+
+**Doc 06 (the Doc 07-bucketed PARTIALs — all six closed):** T-08 read
+models → CLOSED (`ticket_list_items` + ZSETs + durable projector, replay-
+proven). SEC-05 export surface → CLOSED (mounted with the views; print
+page's note gate + watermark). EC-08 resolved-prompt → CLOSED (composer
+re-evaluation + prompt, step 11). EC-11 snippet fallback → CLOSED (step 9).
+AC-08 handoff-card rendering → CLOSED (step 10). Merge banners/dialogs/
+preview + the preview READ → CLOSED (af6a824 client + step 14's C7 unmerge;
+**and the Doc 06 §12 merge-preview BUDGET row closed at step 15: 2×500-message
+preview p99 34 ms vs the 400 ms spec**).
+
+**Doc 03 EC-02 (the ruled stop item 1):** the mid-action revocation posture
+is delivered AT THE LEVEL THE REFUSAL PAYLOAD SUPPORTS — inline strips
+render the 403 detail naming the missing permission (D2 idiom; D4 covers
+mid-view scope loss). The GRANTER-NAMING half is a **bounded deferral**
+(payload carries `permission` only; naming the granter widens a Doc 03
+door) — the DESIGN-DEVIATIONS row carries it with its unblocker.
+
+**B12-A01 — the nine behaviour-acceptance dispositions:** AC-01 landmarks/
+skip-links → executed (§13, layout). AC-02 keyboard resize → executed
+(§13, layout). AC-03 forced-RTL snippet → executed (§14 render checks;
+bidi isolation at the snippet). AC-04 rows-never-move-under-pointer →
+executed (FR-11, live-list). AC-05 optimistic send states + one-tap retry →
+executed (FR-21, composer). AC-06 cap-named-before-upload → executed
+(FR-18, composer). AC-07 store-corruption composer-text-above-all →
+executed (FS-05, store-recovery + sabotage #17). AC-08 draft survives
+merge → executed (EC-12, the merge journey). AC-09 bulk progress at 25%
+increments → executed (step 14's C15 drawer: aria-live announcer proven in
+inbox-bulk.spec). **Nine of nine executed here; none deferred.**
+
+### Inherited rows 0–12 — outcomes
+
+0: rulings gate satisfied pre-plan; R-22 fill delivered as the filed
+class-2 row (cc52cc1). 1: Doc 05 closing set — six/six closed (above).
+2: Doc 06 closing set — six/six closed (above). 3: B12-A01 — nine/nine
+executed (above). 4: shared components CONSUMED only (WindowChip/
+ConnectionStatePill/HealthRollupPill/StepChecklist + Doc 04 glyph patterns
+— the bundle gate's chunk list shows them loading as shared chunks; no
+second implementation exists; the ONE second-implementation attempt of the
+session — the step-15 print CSS — was caught and reverted before commit).
+5: health v2 first consumer — done with registry entry + drill + fixture.
+6: projectors durable with C-09 + replay counting (NFR-07 productized).
+7: the `events.created_at` deferral FIRED and was discharged at step 1
+(A-33; record row 9 corrected). 8: R-19b on every new table (six
+migrations; sabotage #11/#16; **the grants REFUSED a step-14 spec fixture
+backdate — 42501 — the physics defending itself in the wild**). 9: every
+route mapped same-commit from the closed catalog (registry gate green all
+session). 10: standing PARTIALs — only the sanctioned closings touched;
+[OA] rows untouched. 11: RISK 0a/0d/0f acknowledged; no 0d red this
+session; no 0f firing; the two single-sighting notes stand (+ this
+session's own: the shortcuts T-palette poll under battery load — lettered
+on recurrence). 12: design-evidence honesty — functional-state + a11y
+claims only, NO pixel baselines for Batches 1/2, stated here and in every
+traceability row.
+
+### Edits to other documents' files — the complete enumeration
+
+Seven ruled core edits (+1 comment-only exception): **#1–#5** (S23, Doc 04/05
+files, each escalate→rule→land — see the S23 record), **#6** the
+pending-reason ride (`08036be`) — **landed-then-escalated (PROCESS BREACH),
+countersigned retroactively** with the full packet
+(`core-edit-6-escalation-packet.md`), **#7** the draft un-tombstone
+(af6a824) — **escalate-FIRST honored** (one line, red+green captured,
+sole-writer grep). The comment-only exception: the RelayOutbox docblock
+honesty correction (89c1d8a, recorded there). Step 15's relay pre-schema
+resilience (9d95956 + the errorInfo fix) is INFRA on the relay command whose
+process posture was ruled this step — enumerated here for completeness.
+
+### The honest trail (this document's, in full)
+
+A-33 (occurred_at premise corrected), A-34 (write-tier), A-35 (restore-
+what-you-found; sabotage #22), A-36 (grid conversion, class-1), A-37
+(documented-noop declaration); the RELAY DISCOVERY (no live process ever
+ran the outbox relay — C-06 held only inside tests until step 14) and its
+THREE-STAGE CI aftermath (unhealthy-in-CI root cause at the step-14
+checkpoint → the 42P01 fix → the errorInfo[0]-vs-getCode() second cause at
+step 15's opening); INCIDENT #13 (advisor-side acceptance divergence,
+caught and retracted); the reopen-reason defect (a door satisfying a
+mandatory reason with its own literal — closed, first caller given);
+Doc 07 restore-never-wired + core edit #7's latent Doc 04 defect (both
+found by EXECUTING EC-12); the gates-not-per-unit-commit miss and the
+verdicts-owed-forward miss (both filed at the step-14 checkpoint, both
+bitten by real reds); the traceability flips owed from step 11 (filed,
+flipped); rule 11 re-proven live at step 15 (a piped exit code branded a
+working gate broken — the unpiped re-capture is the filed pair); the
+step-15 print DETOUR (a redundant second implementation started against an
+already-delivered surface, caught by the existing suite's own record,
+reverted before commit); the 47969cf self-filed slip (advisor-noted at
+acceptance).
+
+### The step-15 final battery (captures under `docs/evidence/S07-step15/`)
+
+Full Pest **1097 passed / 16,815 assertions, 11 skipped, exit 0**
+(`final-make-test-01.txt`) → full browser **156 passed / 2 battery-context
+reds, both green solo and both dispositioned** (`final-browser-01.txt`):
+the shortcuts T-palette poll — **SECOND sighting → the recurrence rule
+fires: root-caused (the tag projection rides the DURABLE relay path; a
+full-battery backlog holds the consume past the old 10 s poll; solo drains
+<1 s) and HARDENED with the cause named in the spec (30 s, relay-drain
+scale)** — this is now lettered risk **0g**; the rbac §13 tri-state clause
+— first-ever sighting, solo 7/7 (`rbac-solo-01.txt`), a single-sighting
+timing note (lettered on recurrence) → canonical suites **116 passed /
+795 assertions** (`final-canonical-01.txt`) → gates **14/14**
+(`final-gates-01.txt`) → lint **exit 0** (`final-lint-01.txt`). §12 budget
+suite **strict-mode PASS** on dev hardware (`inbox-budgets-strict-01.txt`).
+
+**THE CI RELAY SAGA'S THIRD CAUSE (step-15 opening item i, discharged):**
+runs 31748210036/31762225739/31763744432 stayed red at bring-up — the
+warm local volume never showed postgres's FRESH-initdb window, where the
+driver serves SQLSTATE **57P03** ("the database system is starting up")
+and **3D000** (database not yet created): neither `42P01` nor `08xxx`, so
+two fixes shipped blind. The not-ready family is now ENUMERATED
+(42P01/57P03/3D000/08xxx) in RelayOutbox, and the CI workflow gained a
+failure-visibility step at ALL THREE bring-ups (`docker compose logs
+relay postgres` on failure) — an "unhealthy" verdict without the
+container's own words cost three blind rounds; the log IS the diagnosis.
+The close-out push's run is the CI verdict of record — taken once,
+owed forward if still running at report time. **Opening item (ii)
+confirmed: `git show 3162240 --name-only` carries NO Doc 06 file — the
+follow-up door lives in the Inbox HTTP layer over Doc 06's public services.**
+
+### R-14 totals (the standing native-review queue)
+
+~180 strings stood at session start; **S07 added ~420 machine-authored
+Amharic strings across `inbox.php`/`tickets.php`/`tags.php`** (the heaviest
+single-session addition of the project — said plainly, as the prompt
+required). Destructive-tier flagged for priority native review: the bulk
+execution confirms (the C16 typed phrases `ዝጋ/መድብ/መለያ/ቅድሚያ :count`),
+tag-merge/rename confirmations, discard-draft, spam/block consequence
+lines, the reopen-reason posture copy. The §14 parity test now holds the
+catalogs structurally identical both ways.
 
 ### STEP 14 CHECKPOINT (2026-08-14) — THE BATCH CLOSED: frames units A–D, the five-item ruling, the condition-4 relay-live battery, and the CI-red root cause
 
