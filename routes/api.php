@@ -314,8 +314,12 @@ Route::group([], function (): void {
                 ->middleware('permission:customers.notes.view')->name('customers.panel.notes');
             Route::get('customers/{customerId}/panel/files', [App\Http\Controllers\Customers\PanelController::class, 'files'])
                 ->middleware('permission:customers.view')->name('customers.panel.files');
-            Route::get('customers/{customerId}/panel/files/{messageId}/{index}/url', [App\Http\Controllers\Customers\PanelController::class, 'fileUrl'])
-                ->middleware('permission:customers.view')->whereNumber('index')->name('customers.panel.file_url');
+            // index rides the QUERY STRING: every path param stays uuid-shaped
+            // so Doc 03's RouteCoverageSweep exercises the 403 (a whereNumber
+            // param 404s at the router BEFORE the permission middleware —
+            // found by that sweep on CI, the held battery's cost again).
+            Route::get('customers/{customerId}/panel/files/{messageId}/url', [App\Http\Controllers\Customers\PanelController::class, 'fileUrl'])
+                ->middleware('permission:customers.view')->name('customers.panel.file_url');
             Route::patch('customers/{customerId}/profile', [App\Http\Controllers\Customers\ProfileController::class, 'update'])
                 ->middleware(['permission:customers.edit', 'audit:customer.updated'])->name('customers.profile.update');
             Route::post('customers/{customerId}/profile/apply-detected', [App\Http\Controllers\Customers\ProfileController::class, 'applyDetected'])

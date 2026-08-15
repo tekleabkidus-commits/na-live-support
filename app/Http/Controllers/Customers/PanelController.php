@@ -139,12 +139,16 @@ final class PanelController
         ));
     }
 
-    public function fileUrl(string $customerId, string $messageId, int $index, FilesGallery $gallery): JsonResponse
+    public function fileUrl(Request $request, string $customerId, string $messageId, FilesGallery $gallery): JsonResponse
     {
         Customer::query()->findOrFail($customerId);
 
+        /** @var array{index: int|string} $input */
+        $input = $request->validate(['index' => ['required', 'integer', 'min:0', 'max:50']]);
+
         try {
-            return new JsonResponse(['url' => $gallery->signedUrlFor($customerId, $messageId, $index)]);
+            // a query-string integer validates but arrives as a string
+            return new JsonResponse(['url' => $gallery->signedUrlFor($customerId, $messageId, (int) $input['index'])]);
         } catch (DomainException $e) {
             if ($e->getMessage() === 'media_not_found') {
                 return ProblemDetails::response(ErrorCode::ResourceNotFound, 404, __('customers.files.not_found'));

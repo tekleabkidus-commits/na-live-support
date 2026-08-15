@@ -96,12 +96,12 @@ it('FR-19 / closing row 4a: a CLEAN item signs through Doc 04\'s own MediaStore 
     ]);
 
     $clean = test()->actingAs($viewer, 'staff')
-        ->getJson("https://localhost/api/staff/customers/{$customerId}/panel/files/{$messageId}/0/url");
+        ->getJson("https://localhost/api/staff/customers/{$customerId}/panel/files/{$messageId}/url?index=0");
     $clean->assertOk();
     expect((string) $clean->json('url'))->toContain($cleanKey);
 
     $infected = test()->actingAs($viewer, 'staff')
-        ->getJson("https://localhost/api/staff/customers/{$customerId}/panel/files/{$messageId}/1/url");
+        ->getJson("https://localhost/api/staff/customers/{$customerId}/panel/files/{$messageId}/url?index=1");
     $infected->assertStatus(409);
     expect($infected->json('code'))->toBe('media_not_servable');
 
@@ -110,6 +110,6 @@ it('FR-19 / closing row 4a: a CLEAN item signs through Doc 04\'s own MediaStore 
     bindTenant($tenant);    // the request lifecycle cleared the RLS binding on its way out
     $other = enforcedCustomer($tenantId, '2026-06-01 11:00:00+00');
     test()->actingAs($viewer, 'staff')
-        ->getJson("https://localhost/api/staff/customers/{$other}/panel/files/{$messageId}/0/url")
+        ->getJson("https://localhost/api/staff/customers/{$other}/panel/files/{$messageId}/url?index=0")
         ->assertStatus(404);
 });
