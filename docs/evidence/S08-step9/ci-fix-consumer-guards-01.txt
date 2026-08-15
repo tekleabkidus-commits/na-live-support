@@ -1,0 +1,21 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m6.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\CustomerEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 08 durable con[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe rollup consumer is registered for the customer merge family — t[39m[90m…[39m [90m0.02s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (711 assertions)[39m
+  [90mDuration:[39m [39m7.72s[39m
+

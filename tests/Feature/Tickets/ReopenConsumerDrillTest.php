@@ -58,7 +58,11 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
     ])
         // S07/S08: ticket.created carries the projector + the Doc 08 rollup
         // maintainer — the "no silent growth" posture continues, new baseline pinned.
-        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class], 'ticket.created must map to exactly the projector + rollups (S07 step 2 / S08 step 3)')
+        // S08 step 8: CustomerSearchIndexer joins DELIBERATELY (T-04's scope
+        // arrays refresh on assignment change; contract fixtures
+        // doc08-events.json + doc08.json) — this guard fired on CI exactly as
+        // designed, and the pin moves WITH the registry change, again.
+        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class], 'ticket.created must map to exactly the projector + rollups + search indexer (S07 step 2 / S08 steps 3 and 8)')
         ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([], 'no other event has grown a consumer silently');
 });
 
