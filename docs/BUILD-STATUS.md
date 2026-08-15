@@ -140,9 +140,13 @@ datapoint in the ten-run window, not a fresh trip.** **DATAPOINT (the fold
 [31840668789](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31840668789)):
 RED at Stage 4 — `157 passed, 1 skipped, 1 flaky, 0 failed`; sole flaky =
 `inbox-mobile-interactions.spec.ts:105` (mobile swipe-claim), another of the
-three NAMED specs. Triage: flaky-only, retry-green, matches 0i. The window
-arithmetic stays on the advisor's ledger; the consequence is unchanged
-either way — the owner's runner decision, deadline BEFORE STEP 10.** INVESTIGATION HYPOTHESIS
+three NAMED specs. Triage: flaky-only, retry-green, matches 0i.**
+**THE REPLACED THRESHOLD IS A LIVE TRIP (advisor's arithmetic, confirmed at
+the escalation-#3 ruling): with 31840668789, THREE 0i-class reds sit inside
+the last ten completed runs — one for each named spec. Recorded as a TRIP,
+not a datapoint. The consequence is unchanged in kind but NO LONGER
+DEFERRED: the owner's runner decision is due NOW; the advisor has put it to
+him in those terms.** INVESTIGATION HYPOTHESIS
 (recorded for whoever picks it up, test FIRST): all three specs are
 timing-sensitive realtime paths and the relay is LIVE since S07 step 14 —
 the same family as 0g's relay-backlog root cause (a battery backlog holding
@@ -261,13 +265,23 @@ below when the box closes.
    the step-7 commit but this list was not appended in that commit — the
    same record-keeping drop as the traceability flips (honest trail, step-8
    checkpoint).
-6. **PENDING — escalation #3 part 1 (Doc 07, step 8):**
-   `app/Domain/Inbox/Search/SearchProxy.php` customers-section deepen onto
-   `customers_index` + `resources/js/Components/Inbox/CommandPalette.vue`
-   customers-row type/key. Diff PREPARED and quoted at the step-8
-   checkpoint; NOT LANDED — escalate-first honored (the #7 shape). Closing
-   row 3 (BUILD-STATUS's S07 step-6 line "deepens with Doc 08") completes
-   when this lands.
+6. `app/Domain/Inbox/Search/SearchProxy.php` +
+   `resources/js/Components/Inbox/CommandPalette.vue` +
+   `tests/Security/InboxSearchScopeTest.php` — escalation #3 part 1,
+   ESCALATE-FIRST HONORED (the #7 shape): diff quoted at the step-8
+   checkpoint, all four decision points RULED, landed after the owner's
+   grounding of `80828c2`. **Ruling D2 is a BEHAVIOR CHANGE, not just
+   wiring: the deepened customers section is gated on `customers.view`
+   (v1 derived names from ticket documents the viewer could already see;
+   the deepened section reads the customers index directly, and
+   customers.view is the key that governs customer data — absence for
+   non-holders). Ruling D3 is a BUG FIX, not a refactor: the palette's
+   customers-row `:key` was a NULLABLE display_name (duplicate names
+   collide, nulls key to nothing, Vue reuses the wrong node) — moved to
+   `id`.** Three per-ruling assertions added to InboxSearchScopeTest (the
+   section was UNPROTECTED before — the D4 finding); Doc 07 canonical +
+   palette spec green on the landing tree. Closing row 3 CLOSED (the S07
+   step-6 narrative line updated).
 
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
@@ -1879,6 +1893,15 @@ cold-index handling: an absent index answers zero hits for its section, an
 OUTAGE answers {unavailable:true} inline, never a 500), `GET /inbox/search`
 (tickets.view). FR-23's customer section v1 = customer-field matches from
 the tickets index, grouped (T-04 defines two indexes; deepens with Doc 08).
+**→ DEEPENED — S08 CLOSING ROW 3 CLOSED (escalation #3 part 1, ruled and
+landed): the customers section reads Doc 08's `customers_index` through
+`CustomerSearch` (customers-module scope, its own signature), gated on
+`customers.view` (ruling D2, a recorded behavior change), degraded answers
+routed into the palette's OWN unavailable state (ruling D1 — never an
+empty-list lie), row key moved display_name→id (ruling D3, a BUG FIX: a
+nullable, collidable key). The three per-ruling assertions live in
+InboxSearchScopeTest; Doc 07 canonical 119/800 + palette spec 6/6 green on
+the landing tree.**
 **AC-09's scope-injection proofs ran BEFORE search served real data** (the
 plan's ordered minimum): cross-tenant isolation with the positive control,
 Own-scope injection over tickets AND messages, FS-03 dead-port degrade +

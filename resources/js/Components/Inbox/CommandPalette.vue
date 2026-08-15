@@ -40,7 +40,7 @@ type SearchResult = {
     unavailable: boolean;
     tickets: { id: string; number: number | string; conversation_id: string; subject?: string }[];
     messages: { id: string; conversation_id: string; body?: string }[];
-    customers: { display_name: string; username?: string | null; ticket_ids: string[] }[];
+    customers: { id: string; display_name: string | null; username?: string | null }[];
 };
 
 const query = ref('');
@@ -385,7 +385,7 @@ function highlight(body: string): { pre: string; match: string; post: string } {
                             </p>
                             <p
                                 v-for="customer in searchResult.customers"
-                                :key="customer.display_name"
+                                :key="customer.id"
                                 data-role="search-customer"
                                 class="px-4 py-2 text-sm"
                                 :style="{ color: 'var(--ds-text-primary)', unicodeBidi: 'isolate' }"

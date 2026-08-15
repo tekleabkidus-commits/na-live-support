@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Inbox\Search;
 
+use App\Domain\Customers\Search\CustomerSearch;
 use App\Domain\Inbox\Realtime\ViewHash;
 use App\Models\User;
+use App\Support\Rbac\CapabilityMapProvider;
 use Meilisearch\Exceptions\ApiException;
 use Throwable;
 
@@ -33,6 +35,8 @@ final class SearchProxy
     public function __construct(
         private readonly SearchIndex $index,
         private readonly ViewHash $hashes,
+        private readonly CustomerSearch $customerSearch,
+        private readonly CapabilityMapProvider $verdicts,
     ) {}
 
     /**
@@ -47,6 +51,36 @@ final class SearchProxy
         }
 
         $filter = $this->filterFor($signature);
+
+        // FR-23's customer section — DEEPENED onto Doc 08's customers_index
+        // (T-04; S08 step 8, escalation #3 part 1). Ruling D2 (a BEHAVIOR
+        // change, recorded): the deepened section reads the customers index
+        // directly rather than deriving names from ticket documents the
+        // viewer could already see, so it is gated on customers.view —
+        // absence for non-holders, the house posture. CustomerSearch injects
+        // the CUSTOMERS-module scope itself (its own signature — roles are
+        // editable, the modules may diverge).
+        $customers = [];
+        if ($this->verdicts->mapFor($viewer)->allows('customers.view')) {
+            $customerResult = $this->customerSearch->search($query, $viewer);
+            if ($customerResult['degraded']) {
+                // Ruling D1: a degraded answer routes into the palette's OWN
+                // unavailable posture — an empty list would read "no
+                // customers match" when the truth is "search is down"
+                // (FS-03's lesson, inverted). FS-01's DB degrade belongs to
+                // the DIRECTORY door, never forked into a second outage
+                // behavior here.
+                return ['unavailable' => true, 'tickets' => [], 'messages' => [], 'customers' => []];
+            }
+            $customers = array_map(
+                static fn (array $hit): array => [
+                    'id' => $hit['id'],
+                    'display_name' => $hit['display_name'],
+                    'username' => $hit['usernames'][0] ?? null,
+                ],
+                $customerResult['hits'],
+            );
+        }
 
         try {
             $client = $this->index->client();
@@ -63,29 +97,11 @@ final class SearchProxy
             return ['unavailable' => true, 'tickets' => [], 'messages' => [], 'customers' => []];
         }
 
-        // FR-23's customer section, v1: customer-field matches from the
-        // tickets index (T-04 defines two indexes; customer identity search
-        // deepens with Doc 08), grouped by customer.
-        $customers = [];
-        foreach ($tickets['hits'] as $hit) {
-            $name = $hit['customer_display_name'] ?? null;
-            $username = is_string($hit['customer_username'] ?? null) ? $hit['customer_username'] : '';
-            $phone = is_string($hit['customer_phone'] ?? null) ? $hit['customer_phone'] : '';
-            if (is_string($name) && $name !== '' && stripos($name.' '.$username.' '.$phone, $query) !== false) {
-                $customers[$name] ??= [
-                    'display_name' => $name,
-                    'username' => $hit['customer_username'] ?? null,
-                    'ticket_ids' => [],
-                ];
-                $customers[$name]['ticket_ids'][] = $hit['id'];
-            }
-        }
-
         return [
             'unavailable' => false,
             'tickets' => $tickets['hits'],
             'messages' => $messages['hits'],
-            'customers' => array_values($customers),
+            'customers' => $customers,
         ];
     }
 

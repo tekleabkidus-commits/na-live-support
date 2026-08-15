@@ -175,3 +175,91 @@ it('FS-03: Meilisearch down → inline "unavailable", never a 500 — and the qu
     // silently drop documents forever.
     expect(fn () => indexTicketFor($ticket->identifier()))->toThrow(Meilisearch\Exceptions\CommunicationException::class);
 });
+
+/*
+|--------------------------------------------------------------------------
+| S08 step 8, escalation #3 part 1 (the ruled landing) — the deepened
+| customers section, one assertion per ruling. The section was UNPROTECTED
+| before this landing (no Doc 07 test asserted it at all — the D4 finding).
+|--------------------------------------------------------------------------
+*/
+
+/** A workspace actor who ALSO holds customers.view (the deepened section's gate). */
+function inboxCustomersActor(string $level, string $roleName): App\Models\User
+{
+    $role = App\Models\Role::query()->firstOrCreate(
+        ['name' => $roleName],
+        [
+            'color' => 'role-agent',
+            'permissions' => ['tickets.view', 'conversations.view', 'views.manage', 'customers.view'],
+            'scopes' => ['tickets' => $level, 'conversations' => $level, 'customers' => $level, 'reports' => $level],
+        ],
+    );
+    $user = App\Models\User::factory()->create();
+    $user->forceFill(['role_id' => $role->getKey()])->save();
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($user);
+
+    return $user;
+}
+
+it('RULING D1: Meilisearch down → the palette answers its OWN unavailable state, never an empty customers list that reads "no customers match"', function (): void {
+    createTenant();
+    legacyIdentityShapeEnforce();
+    $viewer = inboxCustomersActor('All', 'S08 Palette D1');
+
+    config()->set('services.meilisearch.host', 'http://127.0.0.1:59999');
+
+    $result = app(SearchProxy::class)->search('anything', $viewer);
+    expect($result['unavailable'])->toBeTrue('a degraded customers answer must surface as the palette\'s unavailable state (FS-03\'s lesson, inverted)')
+        ->and($result['customers'])->toBe([]);
+});
+
+it('RULING D2 (the recorded behavior change): a viewer WITHOUT customers.view gets an ABSENT customers section; the holder is the positive control', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    $tenantId = $tenant->identifier();
+    $without = inboxScopedActor('All', 'S08 Palette D2 Without');   // tickets.view only — no customers.view
+    $with = inboxCustomersActor('All', 'S08 Palette D2 With');
+
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    Illuminate\Support\Facades\DB::table('customers')->where('id', $customerId)->update(['display_name' => 'Kudufox Gate']);
+    indexCustomer($customerId);
+
+    try {
+        $proxy = app(SearchProxy::class);
+
+        expect($proxy->search('Kudufox', $without)['customers'])
+            ->toBe([], 'the deepened section leaked to a viewer without customers.view — ruling D2\'s gate is gone');
+
+        $hits = $proxy->search('Kudufox', $with)['customers'];
+        expect(array_column($hits, 'id'))->toBe([$customerId], 'the positive control failed — the section answers nobody');
+    } finally {
+        dropCustomersSearchIndex();
+    }
+});
+
+it('RULING D4/SCOPE: an Own-scoped viewer\'s palette shows ONLY their own customers — AC-07 layer 2 surfaced through the Doc 07 door', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    $tenantId = $tenant->identifier();
+    $own = inboxCustomersActor('Own', 'S08 Palette Scope Own');
+
+    $mine = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    Illuminate\Support\Facades\DB::table('customers')->where('id', $mine)->update(['display_name' => 'Sitatunga Mine']);
+    $convMine = anotherConversation($tenantId, 'palette-own', $mine);
+    inboxTicketRow($tenantId, $convMine, 'open', ['assignee_id' => $own->identifier()]);
+
+    $other = enforcedCustomer($tenantId, '2026-06-01 10:05:00+00');
+    Illuminate\Support\Facades\DB::table('customers')->where('id', $other)->update(['display_name' => 'Sitatunga Other']);
+    inboxTicketRow($tenantId, anotherConversation($tenantId, 'palette-other', $other), 'open');
+
+    indexCustomer($mine);
+    indexCustomer($other);
+
+    try {
+        $hits = app(SearchProxy::class)->search('Sitatunga', $own)['customers'];
+        expect(array_column($hits, 'id'))->toBe([$mine], 'an out-of-scope customer surfaced through the palette — the injected filter is gone');
+    } finally {
+        dropCustomersSearchIndex();
+    }
+});
