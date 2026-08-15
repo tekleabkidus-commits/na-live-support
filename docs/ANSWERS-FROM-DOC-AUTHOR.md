@@ -1942,6 +1942,42 @@ INDEX `(tenant_id, field_key, value)` for SEC-05's duplicate-player_id
 COUNT — the hint is counts + scope-checked links, never names (the count
 query is index-only; the link-out list rides CustomerScope).
 
+COUNTERSIGN CONDITION 1 — THE HISTORY QUESTION, CHECKED AGAINST THE FROZEN
+FILES BEFORE THE MIGRATION (the check and its result, not the conclusion
+alone): `B4-S01-customer-panel-v1.dc.html` and `B4-S02-profile-page-v1.dc.html`
+were swept for every history mention. Findings: the "History" heading in the
+panel order is the ROLLUPS section (its card reads "14 tickets · 2 open /
+4.6 of 5 · 9 ratings / 2h since last contact"); the only history AFFORDANCES
+drawn anywhere are the identity rows' "Username history" popover (frame A03,
+§9's pattern) and the profile page's "rating history". The betting-fields
+card, in BOTH files and all its viewports, draws: values, the
+"Staff-collected" micro-label, the told-to-us micro-copy, the
+duplicate-player_id chip, and (B4-S02) the retired field — NO edit-history
+affordance for any agent tier. THEREFORE the audit-only history reading
+STANDS: nothing renders a history list an ordinary agent could reach, so
+audit_log (audit.view-gated, per Doc 03 Appendix B outside the agent tier)
+is a lawful home for FR-16's "with history". REOPENER: if a later batch
+draws a betting-field history affordance for agents, the values need a
+panel-readable history at THAT point — this condition's check is the record
+a step-11 author consults first.
+
+COUNTERSIGN CONDITION 2 — THE TYPE DECISION AND ITS REOPENER: `value text`
+is a DELIBERATE choice for the seeded set (three string fields:
+betting_username, player_id, brand). Doc 12 owns field definitions and may
+define numeric/date/enum types; when it does, typed storage (or a typed
+sidecar column set) is DOC 12's REOPENER on this table — a later author
+should find this sentence, not the constraint, first.
+
+COUNTERSIGN CONDITION 3 — THE JUSTIFICATION, STATED PRECISELY (correcting
+the fused claim in the first filing): TWO separate facts. (a) EC-09 is
+about a DEFINITION being retired — the row survives that regardless, and
+keeps its last value ("the definition went, the fact stayed" — B4-S02's own
+retired-field caption); no delete is involved. (b) CLEARED fields keep
+their row with value NULL — a distinct choice made for churn visibility and
+audit continuity (the old/new chain stays anchored to one row). DELETE is
+revoked because NEITHER path needs it and grant physics beats discipline —
+not "for EC-09" alone.
+
 GRANT PHYSICS (ADR 0003): INSERT column-granted (id, tenant_id,
 customer_id, field_key, value, updated_by, created_at, updated_at); UPDATE
 granted to exactly (value, updated_by, updated_at) — key/customer/tenant

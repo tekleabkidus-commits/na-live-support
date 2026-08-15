@@ -41,4 +41,14 @@ return [
         'onboarding_title' => 'ማስታወሻዎች በመገለጫው ላይ ይቆያሉ',
         'onboarding_body' => 'የደንበኛ ማስታወሻዎች ውስጣዊ ናቸው። ወደ ደንበኛው በፍጹም አይደርሱም፣ ወደ ውይይትም አይዛወሩም።',
     ],
+    'fields' => [
+        'betting_username' => 'የውርርድ የተጠቃሚ ስም',
+        'player_id' => 'የተጫዋች መለያ',
+        'brand' => 'ብራንድ',
+        'loyalty_tier' => 'የታማኝነት ደረጃ',
+        'staff_collected' => 'በሠራተኛ የተመዘገበ',
+        'retired_refusal' => 'መስኩ :field ተቋርጧል — እሴቱ ለንባብ ብቻ ነው።',
+        'retired' => 'የተቋረጠ መስክ',
+        'duplicate_hint' => 'በሌሎች :count መገለጫዎች ላይም አለ',
+    ],
 ];

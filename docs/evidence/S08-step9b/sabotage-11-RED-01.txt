@@ -1,0 +1,55 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\DuplicateHintScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-05: the hint is COUNT + scope-checked links — All-scope gets[39m[90m…[39m [90m5.64s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-05 through the DOOR: the card's hint payload is {count, link[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no player_id on the customer → no hint at all (null, not a zero-[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\DuplicateHintScopeTest[22m [90m>[39m it SEC-05: the hint is CO…   
+[39;1m  a cross-scope link escaped — SEC-05's boundary is gone (sabotage #11's subject)
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '01a00553-88f8-7a09-af4c-c8dfbc22c58c',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/DuplicateHintScopeTest.php[39m:[32m67[39m
+     63▕     // boundary), and no name rides either way.
+     64▕     $narrow = $fields->duplicateHint($mine, $own);
+     65▕     expect($narrow)->not->toBeNull()
+     66▕         ->and($narrow['count'])->toBe(1)
+  ➜  67▕         ->and($narrow['links'])->toBe([], 'a cross-scope link escaped — SEC-05\'s boundary is gone (sabotage #11\'s subject)');
+     68▕ 
+     69▕     // The payload never carries a name, structurally: exactly {count, links}.
+     70▕     expect(array_keys($wide))->toBe(['count', 'links'])
+     71▕         ->and(json_encode($narrow))->not->toContain('Sensitive');
+
+  [33m1   [39m[39;1mtests/Security/DuplicateHintScopeTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\DuplicateHintScopeTest[22m [90m>[39m it SEC-05 through the DOO…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '01a00553-8976-7897-903f-cda905f58fa0',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/DuplicateHintScopeTest.php[39m:[32m86[39m
+     82▕     $card = test()->actingAs($own, 'staff')->getJson("https://localhost/api/staff/customers/{$mine}/panel/betting-fields");
+     83▕     $card->assertOk();
+     84▕ 
+     85▕     expect($card->json('duplicate_hint.count'))->toBe(1)
+  ➜  86▕         ->and($card->json('duplicate_hint.links'))->toBe([])
+     87▕         ->and($card->getContent())->not->toContain('Sensitive');
+     88▕ });
+     89▕ 
+     90▕ it('no player_id on the customer → no hint at all (null, not a zero-count chip)', function (): void {
+
+  [33m1   [39m[39;1mtests/Security/DuplicateHintScopeTest.php[39;22m:[39;1m86[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m5.97s[39m
+

@@ -121,6 +121,15 @@ return [
         'owning_doc' => 'Doc08',
     ],
     [
+        'action_key' => 'customer.fields_changed',
+        'entity' => 'customer',
+        // FR-16 (addition 9, condition 1): the audit trail IS the edit
+        // history — old/new per field, no second history table.
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
         'action_key' => 'customer.note.added',
         'entity' => 'customer',
         // FR-17: author + timestamp are the row's own columns; the entry

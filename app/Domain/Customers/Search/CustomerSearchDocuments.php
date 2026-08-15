@@ -92,7 +92,10 @@ final class CustomerSearchDocuments
             'usernames' => array_values(array_unique($usernames)),
             'phones' => $phones,
             'emails' => $emails,
-            'player_id' => null, // FR-16's storage lands at step 9 ([D12]); the field is contractual now
+            // FR-16's storage landed with amendment addition 9 (step 9b) —
+            // the contractual field now carries the stored value.
+            'player_id' => DB::table('customer_field_values')->where('customer_id', $customerId)
+                ->where('field_key', 'player_id')->value('value'),
             'assignee_ids' => $assigneeIds,
             'department_ids' => $departmentIds,
         ]]);

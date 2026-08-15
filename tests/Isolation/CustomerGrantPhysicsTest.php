@@ -38,6 +38,7 @@ beforeEach(function (): void {
 const DOC08_TABLES = [
     'customer_notes', 'customer_merge_snapshots', 'rg_flag_history',
     'customer_identity_conflicts', 'customer_block_cascade_items',
+    'customer_field_values',
 ];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). */
@@ -64,6 +65,13 @@ const DOC08_DENIED_COLUMNS = [
     'customer_block_cascade_items' => [
         'INSERT' => ['restored_at'],
         'UPDATE' => ['conversation_id', 'created_at', 'customer_id', 'id', 'tenant_id'],
+    ],
+    // Amendment addition 9 (step 9b): one CURRENT value per (customer, field);
+    // UPDATE reaches exactly (value, updated_by, updated_at) — key, customer
+    // and tenant never move by app; DELETE revoked (conditions 1-3 filed).
+    'customer_field_values' => [
+        'INSERT' => [],
+        'UPDATE' => ['created_at', 'customer_id', 'field_key', 'id', 'tenant_id'],
     ],
 ];
 

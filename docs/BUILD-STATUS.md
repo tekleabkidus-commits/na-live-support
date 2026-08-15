@@ -58,6 +58,12 @@ after the AC-03/04/05/06 flips lapsed silently at steps 4–7):** every step
 commit VERIFIES the traceability flip against the suite that landed in that
 same commit — a convention that held twice and then lapsed needs a check,
 not a resolution.
+**SECOND ROUTINE LINE (advisor's order at the step-9 acceptance, after the
+guard-pin omission recurred — step 3 and step 8, identical):** ANY
+consumer-registry addition moves ReopenConsumerDrillTest's pin AND the
+Doc 06 NFR-06 completeness fixture (`fixtures/tickets/consumers/<doc>.json`)
+IN THE SAME COMMIT. Two occurrences of an identical omission is a missing
+checklist line, not a lapse of care.
 
 ## SESSION-08 (Doc 08) — APPROVED PLAN RECORD (committed at approval per standing rule 12)
 

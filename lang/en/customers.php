@@ -44,4 +44,14 @@ return [
         'onboarding_title' => 'Notes stay on the profile',
         'onboarding_body' => 'Customer notes are internal. They never reach the customer and never move to a conversation.',
     ],
+    'fields' => [
+        'betting_username' => 'Betting username',
+        'player_id' => 'Player ID',
+        'brand' => 'Brand',
+        'loyalty_tier' => 'Loyalty tier',
+        'staff_collected' => 'Staff-collected',
+        'retired_refusal' => 'The field :field is retired — its value is read-only.',
+        'retired' => 'retired field',
+        'duplicate_hint' => 'also on :count other profiles',
+    ],
 ];

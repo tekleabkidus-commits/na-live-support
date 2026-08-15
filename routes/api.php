@@ -328,6 +328,13 @@ Route::group([], function (): void {
                 ->middleware('permission:customers.export')->name('customers.export.url');
             Route::post('customers/{customerId}/erasure', [App\Http\Controllers\Customers\ExportController::class, 'initiateErasure'])
                 ->middleware(['permission:customers.delete', 'audit:customer.erasure.initiated'])->name('customers.erasure.initiate');
+
+            // ── Doc 08 FR-16/SEC-05/EC-09 (S08 step 9b, amendment addition 9
+            //    countersigned): the betting-fields card + value writer.
+            Route::get('customers/{customerId}/panel/betting-fields', [App\Http\Controllers\Customers\FieldsController::class, 'card'])
+                ->middleware('permission:customers.view')->name('customers.panel.betting_fields');
+            Route::patch('customers/{customerId}/fields', [App\Http\Controllers\Customers\FieldsController::class, 'update'])
+                ->middleware(['permission:customers.edit', 'audit:customer.fields_changed'])->name('customers.fields.update');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.
