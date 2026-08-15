@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\CustomerNotesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit N-04 STRUCTURALLY (sabotage #15's subject): NOTHING in the outbo[39m[90m…[39m [90m5.69s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\CustomerNotesTest[22m [90m>[39m it N-04 STRUCTURALLY…    
+[39;1m  a deliverable-side file references customer notes — N-04's structural undeliverability is breached: /app/app/Domain/Conversations/Outbound/ComposeOutbound.php
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '/app/app/Domain/Conversations/Outbound/ComposeOutbound.php',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Customers/CustomerNotesTest.php[39m:[32m81[39m
+     77▕             }
+     78▕         }
+     79▕     }
+     80▕ 
+  ➜  81▕     expect($offenders)->toBe([], 'a deliverable-side file references customer notes — N-04\'s structural undeliverability is breached: '.implode(', ', $offenders));
+     82▕ 
+     83▕     // And the inverse: the notes namespace itself imports nothing deliverable.
+     84▕     $notesSource = (string) file_get_contents(app_path('Domain/Customers/Notes/CustomerNotes.php'));
+     85▕     expect(str_contains($notesSource, 'DeliverablePayload') || str_contains($notesSource, 'ComposeOutbound') || str_contains($notesSource, 'Adapter'))
+
+  [33m1   [39m[39;1mtests/Feature/Customers/CustomerNotesTest.php[39;22m:[39;1m81[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m5.75s[39m
+

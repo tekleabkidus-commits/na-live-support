@@ -36,6 +36,7 @@ return [
 
     'error' => [
         'identity_already_linked' => 'መለያው አስቀድሞ ተያይዟል',
+        'media_not_servable' => 'ሚዲያው ሊቀርብ አይችልም',
         'quota_exceeded' => 'የአጠቃቀም ገደብ ተደርሷል',
         'tenant_state_forbidden' => 'ለዚህ የሥራ ቦታ አይገኝም',
         'unregistered_setting' => 'ያልታወቀ ማስተካከያ',

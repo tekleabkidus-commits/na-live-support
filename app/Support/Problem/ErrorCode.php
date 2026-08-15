@@ -162,6 +162,10 @@ enum ErrorCode: string
      */
     case IdentityAlreadyLinked = 'identity_already_linked';
 
+    // ── Doc 08 FR-19 (S08 step 9): a non-clean media item has no download
+    //    path (Doc 04 SEC-04's guard, surfaced as a stable refusal).
+    case MediaNotServable = 'media_not_servable';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

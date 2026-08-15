@@ -136,3 +136,32 @@ it('NFR-04 indicatively: customers_index search round-trip at dev scale (150-cus
         dropCustomersSearchIndex();
     }
 });
+
+it('NFR-03/§12 indicatively: the T-07 header build (payload + identities + detected-language) inside the 120 ms p95 server budget [D19: formal profile]', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    bindTenant($tenant);
+    $tenantId = $tenant->identifier();
+
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $conversationId = anchoredConversation($tenantId, $customerId, 'tg-perf-panel');
+    foreach (range(1, 30) as $i) {
+        DB::table('customer_identities')->insert([
+            'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'customer_id' => $i === 1 ? $customerId : enforcedCustomer($tenantId, '2026-06-01 10:01:00+00'),
+            'channel' => 'phone', 'external_user_id' => '+2519000090'.str_pad((string) $i, 2, '0', STR_PAD_LEFT),
+            'type' => 'phone', 'value' => '+2519000090'.str_pad((string) $i, 2, '0', STR_PAD_LEFT), 'source' => 'staff',
+        ]);
+        reopenCustomerMessage($tenantId, $conversationId);
+    }
+
+    $payload = app(App\Domain\Customers\Panel\CustomerPayload::class);
+    $profile = app(App\Domain\Customers\Profile\CustomerProfile::class);
+    $stats = measure(static function () use ($payload, $profile, $customerId): void {
+        $payload->build($customerId, false);
+        DB::table('customer_identities')->where('customer_id', $customerId)->get();
+        $profile->detectedLanguage($customerId);
+    });
+
+    reportBudget('panel header build p99 (NFR-03/§12)', assertedBudget(120.0), $stats);
+    assertBudget('panel header build (NFR-03, spec ≤120 ms p95)', $stats, 120.0);
+});

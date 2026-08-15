@@ -1914,3 +1914,43 @@ MECHANICS (condition 3): a NEW migration, never editing a shipped one;
 R-19b: no ordering key or metric reads the index; grant physics unchanged
 (an index drop moves no column grants). This addition lives IN SCHEMA
 AMENDMENT 2 (the amendment stays the single source).
+
+### SCHEMA AMENDMENT 2 — ADDITION 9 (filed at S08 step 9, BEFORE any migration exists; needs advisor countersign at the checkpoint). `customer_field_values` — FR-16's value storage
+
+FR-16: the betting fields (`betting_username`, `player_id`, `brand`) are a
+custom-field SEEDED SET — Doc 12 owns definitions ([D12]; the defs are
+fixture-fed here), Doc 08 stores and renders the VALUES for
+entity=customer, free-editable with history, "staff-collected" labeled in
+every render. The countersigned amendment's five deliverables carry no
+value storage; without it FR-16, SEC-05's duplicate-player_id hint, and
+EC-09's retired-field render have nowhere to stand.
+
+THE TABLE: `customer_field_values` — `id` (UUIDv7 PK), `tenant_id`
+(non-null, C-02), `customer_id` (non-null), `field_key` (non-null text —
+the Doc 12 definition key; the seeded set's keys come from the fixture),
+`value` (text, nullable — a cleared field keeps its row so EC-09 can render
+a retired field's last value), `updated_by` (nullable uuid — staff actor),
+`created_at`/`updated_at` (now() hygiene). UNIQUE `(tenant_id, customer_id,
+field_key)` — one current value per field per customer; the EDIT HISTORY
+lives in audit_log old/new pairs (`customer.fields_changed` entries), never
+in a second table — FR-16's "free-editable with history" reads on the audit
+trail, the same reading as FR-01's profile attributes.
+
+R-19b: no ordering key or metric reads this table; no pinned-provenance
+copy needed (values are staff-collected facts, not event-ordered state).
+INDEX `(tenant_id, field_key, value)` for SEC-05's duplicate-player_id
+COUNT — the hint is counts + scope-checked links, never names (the count
+query is index-only; the link-out list rides CustomerScope).
+
+GRANT PHYSICS (ADR 0003): INSERT column-granted (id, tenant_id,
+customer_id, field_key, value, updated_by, created_at, updated_at); UPDATE
+granted to exactly (value, updated_by, updated_at) — key/customer/tenant
+never move by app; DELETE REVOKED (a cleared value is value=NULL, EC-09's
+retired render needs the row); FORCED RLS + tenant_isolation policy.
+`APP_WRITABLE_COLUMNS` split-comment discipline in the migration.
+
+Writer: `CustomerProfile`-adjacent `CustomerFieldValues` service — the ONE
+door; produces `customer.fields_changed` (payload: field_keys — names only,
+Q7) + `customer.fields_changed` audit entries with old/new; the
+duplicate-player_id hint recomputes from truth on read (no denormalized
+count to drift).

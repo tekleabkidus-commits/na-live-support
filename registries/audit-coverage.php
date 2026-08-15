@@ -111,6 +111,52 @@ return [
         'owning_doc' => 'Doc08',
     ],
     [
+        'action_key' => 'customer.updated',
+        'entity' => 'customer',
+        // FR-01/EC-11: every profile-attribute edit, old/new pairs in the
+        // entry (the event carries NAMES only, Q7). Both EC-11 writers land
+        // here — the LWW trail holds the full story.
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.note.added',
+        'entity' => 'customer',
+        // FR-17: author + timestamp are the row's own columns; the entry
+        // records the act (note bodies never ride the audit stream).
+        'actor_types' => ['staff'],
+        'required_fields' => ['note_id'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.export_requested',
+        'entity' => 'customer',
+        // SEC-04: the synchronous half — the door records WHO asked before
+        // the job runs; the completed artifact audits as customer.exported.
+        'actor_types' => ['staff'],
+        'required_fields' => ['export_id'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.exported',
+        'entity' => 'customer',
+        // SEC-04: written BY THE JOB at completion, after the SEC-06 re-check
+        // and the atomic put — an export with no artifact never audits here.
+        'actor_types' => ['staff'],
+        'required_fields' => ['export_id'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
+        'action_key' => 'customer.erasure.initiated',
+        'entity' => 'customer',
+        // A-38/[D17]: initiation only, reason mandatory — this entry IS the
+        // durable record Doc 17's approval workflow consumes.
+        'actor_types' => ['staff'],
+        'required_fields' => ['reason'],
+        'owning_doc' => 'Doc08',
+    ],
+    [
         'action_key' => 'tenant.provisioned',
         'entity' => 'tenant',
         'actor_types' => ['system', 'platform_admin'],

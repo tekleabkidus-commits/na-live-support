@@ -29,4 +29,19 @@ return [
         'merge_completed' => 'Customer merge completed',
         'export_ready' => 'Customer export ready',
     ],
+    'panel' => [
+        'not_found' => 'Customer not found.',
+    ],
+    'files' => [
+        'not_found' => 'File not found.',
+        'not_servable' => 'This file cannot be downloaded — it did not pass the malware scan.',
+    ],
+    'export' => [
+        'not_ready' => 'This export is not ready — no complete archive exists yet.',
+        'watermark' => 'Customer data export — requested by :requester at :at. Handle per data-protection policy.',
+    ],
+    'notes' => [
+        'onboarding_title' => 'Notes stay on the profile',
+        'onboarding_body' => 'Customer notes are internal. They never reach the customer and never move to a conversation.',
+    ],
 ];

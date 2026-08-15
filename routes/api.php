@@ -300,6 +300,34 @@ Route::group([], function (): void {
             Route::get('customers/search', [App\Http\Controllers\Customers\CustomerSearchController::class, 'search'])
                 ->middleware('permission:customers.view')
                 ->name('customers.search');
+
+            // ── Doc 08 T-07/FR-17/FR-19/SEC-04 (S08 step 9): the panel
+            //    aggregate + independent sections, the profile autosave
+            //    (A-37 noop declared at the service's own no-change branch),
+            //    notes, the gallery serve half, export and erasure
+            //    initiation. C-10 + curated payloads on every read door.
+            Route::get('customers/{customerId}/panel', [App\Http\Controllers\Customers\PanelController::class, 'panel'])
+                ->middleware('permission:customers.view')->name('customers.panel');
+            Route::get('customers/{customerId}/panel/tickets', [App\Http\Controllers\Customers\PanelController::class, 'recentTickets'])
+                ->middleware('permission:customers.view')->name('customers.panel.tickets');
+            Route::get('customers/{customerId}/panel/notes', [App\Http\Controllers\Customers\PanelController::class, 'notes'])
+                ->middleware('permission:customers.notes.view')->name('customers.panel.notes');
+            Route::get('customers/{customerId}/panel/files', [App\Http\Controllers\Customers\PanelController::class, 'files'])
+                ->middleware('permission:customers.view')->name('customers.panel.files');
+            Route::get('customers/{customerId}/panel/files/{messageId}/{index}/url', [App\Http\Controllers\Customers\PanelController::class, 'fileUrl'])
+                ->middleware('permission:customers.view')->whereNumber('index')->name('customers.panel.file_url');
+            Route::patch('customers/{customerId}/profile', [App\Http\Controllers\Customers\ProfileController::class, 'update'])
+                ->middleware(['permission:customers.edit', 'audit:customer.updated'])->name('customers.profile.update');
+            Route::post('customers/{customerId}/profile/apply-detected', [App\Http\Controllers\Customers\ProfileController::class, 'applyDetected'])
+                ->middleware(['permission:customers.edit', 'audit:customer.updated'])->name('customers.profile.apply_detected');
+            Route::post('customers/{customerId}/notes', [App\Http\Controllers\Customers\NotesController::class, 'add'])
+                ->middleware(['permission:customers.notes.add', 'audit:customer.note.added'])->name('customers.notes.add');
+            Route::post('customers/{customerId}/export', [App\Http\Controllers\Customers\ExportController::class, 'request'])
+                ->middleware(['permission:customers.export', 'audit:customer.export_requested'])->name('customers.export.request');
+            Route::get('customers/{customerId}/export/{exportId}', [App\Http\Controllers\Customers\ExportController::class, 'url'])
+                ->middleware('permission:customers.export')->name('customers.export.url');
+            Route::post('customers/{customerId}/erasure', [App\Http\Controllers\Customers\ExportController::class, 'initiateErasure'])
+                ->middleware(['permission:customers.delete', 'audit:customer.erasure.initiated'])->name('customers.erasure.initiate');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.
