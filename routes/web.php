@@ -52,6 +52,19 @@ Route::middleware([
         ->name('tags.rewrite');
 });
 
+// Doc 08 §8/§9 (S08 step 11) — the customer profile page and BR-05's
+// forever-resolving tombstone. Same staff chain as the admin pages.
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->group(function (): void {
+    Route::get('customers/{customerId}', [App\Http\Controllers\Customers\ProfilePageController::class, 'show'])
+        ->middleware('permission:customers.view')
+        ->name('customers.profile.page');
+});
+
 // Doc 05 §8/§9 — the Telegram admin surfaces (B6-S01/S02/S03). Same staff
 // chain as the RBAC screens; permission-gated with the seeded telegram.* keys.
 Route::middleware([

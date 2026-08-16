@@ -52,4 +52,14 @@ return [
     'resources/js/Components/Inbox/CommandPalette.vue' => [
         'Esc',
     ],
+
+    // S08 step 11: the typed confirm TOKENS are drawn LATIN in both layouts
+    // and both languages (B4-S04's own law; the plan's R-14 note: "the token
+    // itself stays Latin") — a translated token would break the typed-match
+    // and lie about what to type. The words are rendered beside their inputs
+    // as the thing to copy, not as prose.
+    'resources/js/Pages/Customers/Profile.vue' => [
+        'UNLINK',
+        'MERGE',
+    ],
 ];

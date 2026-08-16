@@ -1,0 +1,48 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/customers-profile.spec.ts:57:1 › B4-S04 + BR-05 + AC-03's UI ARC: merge B into A (radios with both values, checklist WITH counts, the MERGE token beside its input, reason required) → B's URL resolves as the TOMBSTONE → undo → B is a profile again (2.5s)
+  ✘  2 [chromium] › tests/Browser/customers-profile.spec.ts:98:1 › B4-S05 E04–E07: RG set with reason → history shows BOTH acts after clear — the record never deletes (30.0s)
+  ✓  3 [chromium] › tests/Browser/customers-profile.spec.ts:113:1 › B4-S05 F01/F04: block with mandatory reason (red family), then unblock as its own reasoned act (A-39) (2.4s)
+  ✓  4 [chromium] › tests/Browser/customers-profile.spec.ts:126:1 › B4-S03 C02: linking a phone already on ANOTHER profile refuses with the merge-instead offer — an id, never a name (1.8s)
+  ✓  5 [chromium] › tests/Browser/customers-profile.spec.ts:141:1 › B4-S03 C03/C04 + AC-04: the unlink dialog's content COMES FROM THE MOVE SET — counts rendered, the UNLINK token beside its input, the button repeating the count (2.2s)
+  ✓  6 [chromium] › tests/Browser/customers-profile.spec.ts:169:1 › [D17]: the Audit tab renders its seam for an audit.view holder — absent for this viewer without the key (1.6s)
+
+
+  1) [chromium] › tests/Browser/customers-profile.spec.ts:98:1 › B4-S05 E04–E07: RG set with reason → history shows BOTH acts after clear — the record never deletes 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('rg-clear')
+        - locator resolved to <button type="button" data-testid="rg-clear" class="rounded border px-2 py-1 text-xs">Clear RG flag</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        55 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      106 |
+      107 |     await page.getByTestId('rg-reason').fill('reviewed with lead, false positive');
+    > 108 |     await page.getByTestId('rg-clear').click();
+          |                                        ^
+      109 |     await expect(page.getByTestId('rg-history')).toContainText('cleared');
+      110 |     await expect(page.getByTestId('rg-history')).toContainText('set'); // E07: whole, forever
+      111 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-profile.spec.ts:108:40
+
+    Error Context: test-results/customers-profile-B4-S05-E-0b725--—-the-record-never-deletes-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/customers-profile.spec.ts:98:1 › B4-S05 E04–E07: RG set with reason → history shows BOTH acts after clear — the record never deletes 
+  5 passed (52.7s)

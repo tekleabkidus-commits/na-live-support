@@ -1,0 +1,47 @@
+
+Running 6 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/customers-profile.spec.ts:57:1 › B4-S04 + BR-05 + AC-03's UI ARC: merge B into A (radios with both values, checklist WITH counts, the MERGE token beside its input, reason required) → B's URL resolves as the TOMBSTONE → undo → B is a profile again (8.2s)
+  ✓  2 [chromium] › tests/Browser/customers-profile.spec.ts:96:1 › B4-S05 E04–E07: RG set with reason → history shows BOTH acts after clear — the record never deletes (2.5s)
+  ✓  3 [chromium] › tests/Browser/customers-profile.spec.ts:111:1 › B4-S05 F01/F04: block with mandatory reason (red family), then unblock as its own reasoned act (A-39) (2.3s)
+  ✓  4 [chromium] › tests/Browser/customers-profile.spec.ts:124:1 › B4-S03 C02: linking a phone already on ANOTHER profile refuses with the merge-instead offer — an id, never a name (2.2s)
+  ✓  5 [chromium] › tests/Browser/customers-profile.spec.ts:139:1 › B4-S03 C03/C04 + AC-04: the unlink dialog's content COMES FROM THE MOVE SET — counts rendered, the UNLINK token beside its input, the button repeating the count (2.3s)
+  ✓  6 [chromium] › tests/Browser/customers-profile.spec.ts:167:1 › [D17]: the Audit tab renders its seam for an audit.view holder — absent for this viewer without the key (1.7s)
+
+
+  1) [chromium] › tests/Browser/customers-profile.spec.ts:57:1 › B4-S04 + BR-05 + AC-03's UI ARC: merge B into A (radios with both values, checklist WITH counts, the MERGE token beside its input, reason required) → B's URL resolves as the TOMBSTONE → undo → B is a profile again 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('tombstone-page')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('tombstone-page')
+
+
+      83 |     // BR-05: the merged profile's URL RESOLVES — the tombstone surface.
+      84 |     await page.goto(`/customers/${sid('mergeB')}`);
+    > 85 |     await expect(page.getByTestId('tombstone-page')).toBeVisible();
+         |                                                      ^
+      86 |     await expect(page.getByTestId('tombstone-page')).toContainText('Merge Survivor');
+      87 |     await expect(page.getByTestId('tombstone-survivor-link')).toHaveAttribute('href', `/customers/${sid('mergeA')}`);
+      88 |
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-profile.spec.ts:85:54
+
+    Error Context: test-results/customers-profile-B4-S04-B-09733-undo-→-B-is-a-profile-again-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-profile-B4-S04-B-09733-undo-→-B-is-a-profile-again-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-profile-B4-S04-B-09733-undo-→-B-is-a-profile-again-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests/Browser/customers-profile.spec.ts:57:1 › B4-S04 + BR-05 + AC-03's UI ARC: merge B into A (radios with both values, checklist WITH counts, the MERGE token beside its input, reason required) → B's URL resolves as the TOMBSTONE → undo → B is a profile again 
+  5 passed (34.2s)

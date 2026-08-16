@@ -90,8 +90,14 @@ final class IdentityController
     {
         $this->moveSetFor($customerId, $identityId, $moveSet);   // C-10 shape first
 
-        /** @var array{reason: string} $input */
-        $input = $request->validate(['reason' => ['required', 'string', 'min:5', 'max:500']]);
+        /** @var array{reason: string, confirm: string} $input */
+        $input = $request->validate([
+            'reason' => ['required', 'string', 'min:5', 'max:500'],
+            // C03's confirm-phrase (B1-S04's pattern): the token is UNLINK —
+            // typed against the dialog whose content AC-04 pins to the move
+            // set (the preview and the move share UnlinkMoveSet).
+            'confirm' => ['required', 'in:UNLINK'],
+        ]);
 
         /** @var User $actor */
         $actor = $request->user();

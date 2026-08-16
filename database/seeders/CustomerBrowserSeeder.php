@@ -130,7 +130,34 @@ final class CustomerBrowserSeeder extends Seeder
         }
         $this->scene($tenantId, $blocked, 'chat-s08-blocked', 8804, ['subject' => 'Refund demand']);
 
-        foreach ([$abebe, $kidist, $rgCustomer, $blocked] as $customerId) {
+        // ── MERGE PAIR (B4-S04's arc: the spec merges B into A, then undoes
+        //    — the arc restores the scene itself). Both indexed so the merge
+        //    dialog's search can find the target.
+        $mergeA = $resolver->resolveInbound('telegram', new InboundSender('s08-panel-mergeA', 'Merge Survivor', '@fixture_merge_a'))->customerId;
+        // SELF-HEAL (corrected after its own first failure): a crashed arc
+        // leaves B TOMBSTONED and its identity MOVED TO A — so resolving B's
+        // external id returns A and a lookup "by B" is blind. The honest
+        // probe is the tombstone side: any customer merged INTO A is a
+        // crashed arc's leftover — undo its snapshot BEFORE resolving B.
+        /** @var list<string> $tombstones */
+        $tombstones = DB::table('customers')->where('merged_into_id', $mergeA)->pluck('id')->all();
+        foreach ($tombstones as $tombstoneId) {
+            /** @var ?string $staleSnap */
+            $staleSnap = DB::table('customer_merge_snapshots')->where('merged_id', $tombstoneId)->whereNull('undone_at')->orderByDesc('created_at')->value('id');
+            if (is_string($staleSnap)) {
+                app(\App\Domain\Customers\Merge\UnmergeCustomer::class)->undo($staleSnap, 'seed self-heal: restore the merge-pair scene', $rgViewer->identifier());
+            }
+        }
+        $mergeB = $resolver->resolveInbound('telegram', new InboundSender('s08-panel-mergeB', 'Merge Absorbed', '@fixture_merge_b'))->customerId;
+        app(CustomerProfile::class)->update($mergeA, ['display_name' => 'Merge Survivor'], $rgViewer->identifier());
+        app(CustomerProfile::class)->update($mergeB, ['display_name' => 'Merge Absorbed', 'language' => 'en'], $rgViewer->identifier());
+        $this->scene($tenantId, $mergeA, 'chat-s08-mergeA', 8805, ['subject' => 'Survivor side']);
+        $this->scene($tenantId, $mergeB, 'chat-s08-mergeB', 8806, ['subject' => 'Absorbed side']);
+        foreach ([$mergeA, $mergeB] as $id) {
+            app(\App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($id);
+        }
+
+        foreach ([$abebe, $kidist, $rgCustomer, $blocked, $mergeA, $mergeB] as $customerId) {
             app(CustomerRollups::class)->recompute($customerId);
         }
 
@@ -138,7 +165,7 @@ final class CustomerBrowserSeeder extends Seeder
         // rows) — ALL FOUR tickets project (the first run's second finding:
         // only abebe's row existed and the other deep links 404'd).
         /** @var list<string> $sceneTickets */
-        $sceneTickets = DB::table('tickets')->whereIn('number', [8801, 8802, 8803, 8804])->pluck('id')->all();
+        $sceneTickets = DB::table('tickets')->whereIn('number', [8801, 8802, 8803, 8804, 8805, 8806])->pluck('id')->all();
         foreach ($sceneTickets as $ticketId) {
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
         }
@@ -154,7 +181,9 @@ final class CustomerBrowserSeeder extends Seeder
                 'permissions' => [
                     'tickets.view', 'conversations.view', 'views.manage',
                     'customers.view', 'customers.edit', 'customers.notes.view', 'customers.notes.add',
-                    'customers.rg_flag.view',
+                    'customers.rg_flag.view', 'customers.rg_flag.set',
+                    'customers.merge', 'customers.block',
+                    'customers.identity.link', 'customers.identity.unlink',
                 ],
                 'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
             ],

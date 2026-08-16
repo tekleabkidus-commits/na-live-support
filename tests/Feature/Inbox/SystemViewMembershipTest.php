@@ -84,6 +84,15 @@ it('Unassigned: scope-visible base = assignee ∅ AND open-family — an assigne
 
     $cSecond = anotherConversation($tenantId, 'second-unassigned');
     [$tSecond] = inboxTicketRow($tenantId, $cSecond, 'new');
+    // 0j's deterministic fix (ruled at the S08 step-10 acceptance): a
+    // FIRST-COME contract tested with rows that can carry colliding db-time
+    // keys tests the collision, not the contract. created_at is db-time-only
+    // through the app grant (deliberate physics), so the FIXTURE separates
+    // the rows at the MIGRATOR level — fixture plumbing outside app/, the
+    // InboxBrowserSeeder status-write precedent. The collision itself is NOT
+    // the behavior under test.
+    DB::connection('pgsql_migrator')->statement("SELECT set_config('app.tenant_id', ?, false)", [$tenantId]);
+    DB::connection('pgsql_migrator')->statement("UPDATE tickets SET created_at = created_at + interval '2 seconds' WHERE id = ?", [$tSecond->identifier()]);
     $apply($tSecond, $cSecond);
 
     $zsets = app(ViewZsets::class);

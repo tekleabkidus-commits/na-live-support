@@ -126,7 +126,7 @@ it('AC-04: the typed confirmation and the executed move come from ONE source —
 
     // Execute through the real guarded door.
     $moved = test()->actingAs($actor, 'staff')
-        ->postJson('https://localhost/api/staff/customers/'.$customerId.'/identities/'.$identityId.'/unlink', ['reason' => 'fixture: separating a shared account'])
+        ->postJson('https://localhost/api/staff/customers/'.$customerId.'/identities/'.$identityId.'/unlink', ['reason' => 'fixture: separating a shared account', 'confirm' => 'UNLINK'])
         ->assertOk()->json();
 
     bindTenant($tenant);    // the request lifecycle cleared the RLS binding on its way out

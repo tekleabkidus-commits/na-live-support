@@ -163,12 +163,44 @@ the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
 surfaced during the ADR 0014 install, not introduced by it; dependency
 maintenance is Doc 18's.
 
+**0j. LETTERED (the S08 step-10 acceptance's own ruling) — the first-come
+ordering intermittent, distinct from 0d and NOT joining its set.** One
+sighting: `SystemViewMembershipTest > Unassigned … first-come order` red in
+the step-10 correctness battery (the first battery-power full run under the
+split), two fixture rows swapping order; solo re-run 7/7 green.
+DISCRIMINATOR: fixture rows whose ordering key (db-time created_at) can
+collide at clock granularity under host contention — plausibly the same
+host-contention family as the CONTENTION SYNTHESIS (linked, kept separate).
+**THE DESIGN QUESTION, ANSWERED IN THE FILING (as ordered):** a FIRST-COME
+contract tested with rows that can carry colliding db-time keys tests the
+collision, not the contract — and the collision is NOT the behavior under
+test. The fixture cannot seed distinct keys through the app grant
+(created_at is db-time-only, deliberate physics), so the fix separates the
+two rows AT THE MIGRATOR LEVEL (+2 s — fixture plumbing outside app/, the
+InboxBrowserSeeder status-write precedent), landed with the S08 step-11
+commit and proven 7/7 ×3. **0j should never fire again; a recurrence means
+the fix failed, not that the letter needs widening.**
+
 **0f RUNG-1 FIRING (S08 step 10, recorded per the ladder — nothing more):**
 run [31943627204](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31943627204)
 (`74a76d4`) RED at Stage 3 on `LockoutTest > throttles per IP` — a 429
 arrived INSIDE the per-minute budget under CI contention; 10/10 green
 locally on the same tree; the commit touched no auth code. 0f-class,
 ladder rung 1 executed: recorded.
+
+**DOC 18 NOTE (S08 step 10, the dev loop's STALENESS TRAPS — one note, one
+audience, per the step-10 acceptance):** two same-shaped traps cost repeated
+browser-run confusion this session. (1) OCTANE WORKERS cache the booted app:
+after ANY PHP edit, `php artisan octane:reload` must precede a browser run
+or stale workers serve the OLD route table — the failure wears C-10's 404
+mask ("route could not be found" under concurrency while sequential probes
+hit the one fresh worker). `make test` already depends on reload; browser
+runs invoked directly do not. (2) `public/build` is an ANON VOLUME pinned to
+the image (compose.dev delivers PHP/JS source live but deliberately NOT the
+build): a local `npm run build` changes nothing the container serves —
+either rebuild the image (`make up`) or `docker cp public/build/.` into the
+container. Both are dev-loop facts, not app defects; Doc 18 owns whatever
+tooling makes them impossible to forget.
 
 **DOC 18 NOTE (S08 escalation #3 part 2, filed by the advisor's decision-3
 observation — no action now):** the consumer-guard family catches silent
@@ -324,6 +356,14 @@ below when the box closes.
    behavior + one parallel-robustness hardening (toHaveCount over
    toBeVisible — a parallel worker's persisted rail collapse). Routine
    line applied: the registry addition moved doc07-events.json same-commit.
+**S08 DESIGN-DEVIATIONS (running record; the close-out reproduces it):**
+
+| # | Surface | Deviation | Class | Filing |
+|---|---|---|---|---|
+| 1 | Badge dot colour (ContextPanel) | `--ds-danger-strong` placeholder → `--ds-status-closed-fg` (B4-S05 E01's drawn slate, verified by hex #59636F/#9AA6B2 = the RG banner's own token) | **FRAME-MAPPING implementation, NOT a deviation** (ruled at the part-2 acceptance: the placeholder never rendered in production) | Part-2 landing `74a76d4`; recorded here so nobody re-files it as a violation |
+| 2 | Merge + unlink dialogs (B4-S04; B4-S03 C03) | REASON inputs rendered where the frames draw none | **1** — the DOCUMENT wins: SEC-02 "merge/unlink/high-risk actions require reasons and emit high-visibility audit" vs B4-S04/B4-S03's drawn dialogs (token + button only, no reason field). Both citations; forecast at step 6, landed step 11 | Step-11 commit |
+| 3 | Block / unblock / undo dialogs (D04–D06) | The frames assert only their own requirement text — no dialog drawn | **2** — design gap; the fill reuses B4-S05's OWN drawn Reason-Required pattern (E04's shape), the step-7 countersign's expected resolution | Step-11 commit |
+
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
 under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session

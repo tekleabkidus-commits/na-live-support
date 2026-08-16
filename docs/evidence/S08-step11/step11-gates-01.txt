@@ -1,0 +1,30 @@
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               FAIL
+      string-lint: resources/js/Pages/Customers/Profile.vue:31: hardcoded text node "phone"
+      string-lint: resources/js/Pages/Customers/Profile.vue:32: hardcoded text node "email"
+      string-lint: resources/js/Pages/Customers/Profile.vue:70: hardcoded text node "UNLINK"
+      string-lint: resources/js/Pages/Customers/Profile.vue:140: hardcoded text node "MERGE"
+      string-lint: FAIL (4 violation(s)). User-visible strings must be i18n keys (Doc 01 FR-09). Genuine exceptions go in ci/string-lint-allowlist.php with a reason.
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            FAIL
+      audit-coverage: FAIL mutating route without audit coverage: POST api/staff/customers/{customerId}/merge-preview (customers.merge.preview)
+      audit-coverage: FAIL (1 uncovered mutating route(s)).
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 12 passed, 2 failed, 0 skipped.
+FAILED: string-lint audit-coverage
+make: *** [Makefile:95: gates] Error 1

@@ -344,6 +344,29 @@ Route::group([], function (): void {
                 ->middleware('permission:customers.view')->name('customers.tab_badge');
             Route::patch('customers/{customerId}/fields', [App\Http\Controllers\Customers\FieldsController::class, 'update'])
                 ->middleware(['permission:customers.edit', 'audit:customer.fields_changed'])->name('customers.fields.update');
+
+            // ── Doc 08 FR-11/12/13, FR-14/15, FR-18 (S08 step 11): the merge
+            //    flow's FIRST HUMAN REACH (every guard falsified first —
+            //    §21's ordering), the RG doors on the no-cache path, and the
+            //    block/unblock pair (A-39). Services audit; doors declare.
+            Route::post('customers/{customerId}/merge-preview', [App\Http\Controllers\Customers\MergeController::class, 'preview'])
+                ->middleware('permission:customers.merge')->name('customers.merge.preview');
+            Route::post('customers/{customerId}/merge', [App\Http\Controllers\Customers\MergeController::class, 'merge'])
+                ->middleware(['permission:customers.merge', 'audit:customer.merged'])->name('customers.merge.execute');
+            Route::get('customers/{customerId}/unmerge/{snapshotId}', [App\Http\Controllers\Customers\MergeController::class, 'unmergePreview'])
+                ->middleware('permission:customers.merge')->name('customers.unmerge.preview');
+            Route::post('customers/{customerId}/unmerge/{snapshotId}', [App\Http\Controllers\Customers\MergeController::class, 'unmerge'])
+                ->middleware(['permission:customers.merge', 'audit:customer.unmerged'])->name('customers.unmerge.execute');
+            Route::get('customers/{customerId}/rg-flag', [App\Http\Controllers\Customers\RgController::class, 'show'])
+                ->middleware('permission:customers.rg_flag.view')->name('customers.rg.show');
+            Route::post('customers/{customerId}/rg-flag', [App\Http\Controllers\Customers\RgController::class, 'set'])
+                ->middleware(['permission:customers.rg_flag.set', 'audit:customer.rg_flag.set'])->name('customers.rg.set');
+            Route::post('customers/{customerId}/rg-flag/clear', [App\Http\Controllers\Customers\RgController::class, 'clear'])
+                ->middleware(['permission:customers.rg_flag.set', 'audit:customer.rg_flag.cleared'])->name('customers.rg.clear');
+            Route::post('customers/{customerId}/block', [App\Http\Controllers\Customers\BlockController::class, 'block'])
+                ->middleware(['permission:customers.block', 'audit:customer.blocked'])->name('customers.block');
+            Route::post('customers/{customerId}/unblock', [App\Http\Controllers\Customers\BlockController::class, 'unblock'])
+                ->middleware(['permission:customers.block', 'audit:customer.unblocked'])->name('customers.unblock');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.
