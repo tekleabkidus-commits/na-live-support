@@ -165,3 +165,29 @@ it('NFR-03/§12 indicatively: the T-07 header build (payload + identities + dete
     reportBudget('panel header build p99 (NFR-03/§12)', assertedBudget(120.0), $stats);
     assertBudget('panel header build (NFR-03, spec ≤120 ms p95)', $stats, 120.0);
 });
+
+it('THE RULED MEASUREMENT (escalation #3 part 2): the per-viewer no-cache badge read\'s cost on the workspace render path — printed against Doc 07 NFR-01\'s 1.5 s cold-load budget', function (): void {
+    $tenant = createTenant();
+    legacyIdentityShapeEnforce();
+    bindTenant($tenant);
+    $tenantId = $tenant->identifier();
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    DB::table('customers')->where('id', $customerId)->update(['rg_flag' => true, 'rg_flag_set_at' => '2026-06-01 12:00:00+00']);
+    $conversationId = anchoredConversation($tenantId, $customerId, 'tg-perf-badge');
+    $viewer = customersScopedActor('All', 'S08 Perf Badge');
+    App\Models\Role::query()->where('name', 'S08 Perf Badge')->update([
+        'permissions' => json_encode(['customers.view', 'customers.rg_flag.view']),
+    ]);
+    app(App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($viewer);
+
+    $badge = app(App\Domain\Customers\Rg\CustomerTabBadge::class);
+    $stats = measure(static function () use ($badge, $conversationId, $viewer): void {
+        $badge->for($conversationId, $viewer);
+    });
+
+    // NFR-06's correctness (no cache) versus Doc 07 NFR-01's latency budget:
+    // the owner sees the number — an add-on measured in single-digit ms
+    // against a 1500 ms cold-load budget is a tuning fact, not a conflict.
+    reportBudget('customer tab badge read p99 (vs Doc 07 NFR-01 1500 ms)', assertedBudget(1500.0), $stats);
+    assertBudget('customer tab badge read (escalation #3 part 2)', $stats, 1500.0);
+});

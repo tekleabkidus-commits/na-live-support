@@ -1,7 +1,7 @@
 {
   "doc": "Doc07",
-  "spec": "Doc 07 T-01/T-02/FR-03 \u2014 consumer contracts for the NON-ticket events Doc 07 consumes (S07 step 3; the ticket.* slices live in fixtures/tickets/consumers/doc07.json)",
-  "note": "The keys Doc 07's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately (InboxEventConsumerContractsTest enforces both). channel.health.changed's entry is the event's FIRST consumer contract (inherited row 5). telegram.window.reopened's assignee_id and the bell's wider slices join at step 12 with the FR-26 fanout \u2014 noted here so the tightening is deliberate.",
+  "spec": "Doc 07 T-01/T-02/FR-03 — consumer contracts for the NON-ticket events Doc 07 consumes (S07 step 3; the ticket.* slices live in fixtures/tickets/consumers/doc07.json)",
+  "note": "The keys Doc 07's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately (InboxEventConsumerContractsTest enforces both). channel.health.changed's entry is the event's FIRST consumer contract (inherited row 5). telegram.window.reopened's assignee_id and the bell's wider slices join at step 12 with the FR-26 fanout — noted here so the tightening is deliberate.",
   "entries": [
     {
       "event": "channel.health.changed",
@@ -85,6 +85,16 @@
       "reads": [
         "tenant_id",
         "connection_id"
+      ]
+    },
+    {
+      "event": "customer.merged",
+      "consumer": "Doc07/ListProjector",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "survivor_id",
+        "merged_id"
       ]
     }
   ]

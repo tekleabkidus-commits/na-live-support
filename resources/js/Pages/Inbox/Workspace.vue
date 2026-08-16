@@ -27,6 +27,7 @@ import BulkProgressDrawer from '../../Components/Inbox/BulkProgressDrawer.vue';
 import CoachMarks from '../../Components/Inbox/CoachMarks.vue';
 import CommandPalette from '../../Components/Inbox/CommandPalette.vue';
 import ContextPanel from '../../Components/Inbox/ContextPanel.vue';
+import CustomerPanel from '../../Components/Customers/CustomerPanel.vue';
 import MergeDialog from '../../Components/Inbox/MergeDialog.vue';
 import OperationDialog from '../../Components/Inbox/OperationDialog.vue';
 import SplitUnmergeDialog from '../../Components/Inbox/SplitUnmergeDialog.vue';
@@ -124,6 +125,7 @@ const props = defineProps<{
         tickets_close: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
+    tCustomers: Record<string, string>;
     transitions: Record<string, string[]>;
     queueViews: { id: string; name: string; count: number }[];
     agentStatus: { status: string; reason: string | null; set_by_name: string | null };
@@ -355,6 +357,36 @@ const activeView = ref('my_open');
 // FR-15: the open thread — deep links arrive resolved (initialThread),
 // list rows open it in place.
 const activeThread = ref<string | null>(props.initialThread?.conversation_id ?? null);
+
+// S08 escalation #3 part 2: the LIVE badge + the panel's customer anchor.
+// The initial values come from the server render (the same CustomerTabBadge
+// brain); every client-side thread switch re-asks through the badge door —
+// one derivation, two doors (E03: the unpermitted answer is false server-side).
+const liveBadges = ref<{ customer: boolean; copilot: boolean }>({ ...props.tabBadges });
+const panelCustomerId = ref<string | null>(null);
+watch(
+    activeThread,
+    async (conversationId) => {
+        if (conversationId === null) {
+            liveBadges.value = { ...liveBadges.value, customer: false };
+            panelCustomerId.value = null;
+            return;
+        }
+        try {
+            const answer = await fetch(
+                `/api/staff/customers/tab-badge?conversation_id=${conversationId}`,
+                { headers: { Accept: 'application/json' } },
+            );
+            if (!answer.ok) return;
+            const data = (await answer.json()) as { customer: boolean; customer_id: string | null };
+            liveBadges.value = { ...liveBadges.value, customer: data.customer };
+            panelCustomerId.value = data.customer_id;
+        } catch {
+            // a failed badge fetch leaves the previous honest state
+        }
+    },
+    { immediate: true },
+);
 
 const activeAnchor = ref<string | null>(null);
 const activeTicketMeta = ref<{ number: number | string } | null>(null);
@@ -1524,7 +1556,7 @@ function dismissCoach(): void {
                 :style="{ borderColor: 'var(--ds-border)' }"
                 tabindex="-1"
             >
-                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                <ContextPanel :badges="liveBadges" :t="{ tabs: t.tabs, shell: t.shell }">
                     <template #ticket>
                         <TicketPanel
                             :ticket="panelTicket"
@@ -1543,6 +1575,9 @@ function dismissCoach(): void {
                             @open-survivor="(cid) => (activeThread = cid)"
                         />
                     </template>
+                    <template #customer>
+                        <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
+                    </template>
                 </ContextPanel>
             </div>
             <div
@@ -1553,7 +1588,7 @@ function dismissCoach(): void {
                 :style="{ background: 'var(--ds-panel-bg)', borderColor: 'var(--ds-border)' }"
                 tabindex="-1"
             >
-                <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                <ContextPanel :badges="liveBadges" :t="{ tabs: t.tabs, shell: t.shell }">
                     <template #ticket>
                         <TicketPanel
                             :ticket="panelTicket"
@@ -1571,6 +1606,9 @@ function dismissCoach(): void {
                             @open-unmerge="onOpenUnmerge"
                             @open-survivor="(cid) => (activeThread = cid)"
                         />
+                    </template>
+                    <template #customer>
+                        <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
                     </template>
                 </ContextPanel>
             </div>
@@ -1799,7 +1837,7 @@ function dismissCoach(): void {
                                 :style="{ background: 'var(--ds-border-strong)' }"
                             ></span>
                         </div>
-                        <ContextPanel :badges="tabBadges" :t="{ tabs: t.tabs, shell: t.shell }">
+                        <ContextPanel :badges="liveBadges" :t="{ tabs: t.tabs, shell: t.shell }">
                             <template #ticket>
                                 <TicketPanel
                                     :ticket="panelTicket"
@@ -1817,6 +1855,9 @@ function dismissCoach(): void {
                                     @open-unmerge="onOpenUnmerge"
                                     @open-survivor="(cid) => (activeThread = cid)"
                                 />
+                            </template>
+                            <template #customer>
+                                <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
                             </template>
                         </ContextPanel>
                     </div>

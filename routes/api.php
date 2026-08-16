@@ -337,6 +337,11 @@ Route::group([], function (): void {
             //    countersigned): the betting-fields card + value writer.
             Route::get('customers/{customerId}/panel/betting-fields', [App\Http\Controllers\Customers\FieldsController::class, 'card'])
                 ->middleware('permission:customers.view')->name('customers.panel.betting_fields');
+            // ── escalation #3 part 2: the tab-badge door — the SAME
+            //    CustomerTabBadge brain the workspace render uses (E03: the
+            //    unpermitted answer is false, computed server-side).
+            Route::get('customers/tab-badge', [App\Http\Controllers\Customers\TabBadgeController::class, 'show'])
+                ->middleware('permission:customers.view')->name('customers.tab_badge');
             Route::patch('customers/{customerId}/fields', [App\Http\Controllers\Customers\FieldsController::class, 'update'])
                 ->middleware(['permission:customers.edit', 'audit:customer.fields_changed'])->name('customers.fields.update');
         });

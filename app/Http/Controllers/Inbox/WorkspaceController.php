@@ -89,6 +89,9 @@ final class WorkspaceController extends Controller
             // C-08: every visible string is an i18n key resolved server-side
             // (user language → tenant default → English).
             't' => __('inbox'),
+            // S08 escalation #3 part 2 (the slot fill): the Customer panel's
+            // own strings ride the same C-08 chain.
+            'tCustomers' => __('customers.panel'),
             'tenantName' => $tenantName,
             'views' => $views,
             'savedViews' => array_map(fn (object $row): array => [
@@ -166,7 +169,7 @@ final class WorkspaceController extends Controller
             // FR-31/T-06 (step 13): the optimistic claim patches the row with
             // the actor's own id before the server answers — it needs to know it.
             'userId' => $user->identifier(),
-            'tabBadges' => $this->tabBadges($request),
+            'tabBadges' => $this->tabBadges($request, $user, $initialThread['conversation_id'] ?? null),
             // Doc 11 SEAM (FR-05): the queue-view TYPE renders against the
             // fixture rows in the browser proof; membership/config are
             // Doc 11's. Empty everywhere else — the section hides itself.
@@ -252,22 +255,28 @@ final class WorkspaceController extends Controller
      *
      * @return array{customer: bool, copilot: bool}
      */
-    private function tabBadges(Request $request): array
+    private function tabBadges(Request $request, User $user, ?string $conversationId): array
     {
-        $badges = ['customer' => false, 'copilot' => false];
+        // S08 escalation #3 part 2 (ruled): the customer badge is REAL —
+        // Doc 08's CustomerTabBadge brain, per viewer, through the no-cache
+        // RG repository (E03: the unpermitted answer is false, server-side —
+        // the dot itself would be BR-03's inference channel). The customer
+        // half of the badge seam RETIRED with it (its fixture deleted);
+        // client-side thread switches re-ask through the same brain's door.
+        $badges = [
+            'customer' => app(\App\Domain\Customers\Rg\CustomerTabBadge::class)->for($conversationId, $user),
+            'copilot' => false,
+        ];
 
         if ($request->query('seam_badges') === '1' && app()->environment(['local', 'testing', 'ci'])) {
-            foreach (['doc08-customer-badge', 'doc09-copilot-badge'] as $fixture) {
-                /** @var array<string, mixed> $seam */
-                $seam = json_decode(
-                    (string) file_get_contents(base_path('fixtures/inbox/seams/'.$fixture.'.json')),
-                    true,
-                    8,
-                    JSON_THROW_ON_ERROR,
-                );
-                $badges['customer'] = (bool) ($seam['customer'] ?? $badges['customer']);
-                $badges['copilot'] = (bool) ($seam['copilot'] ?? $badges['copilot']);
-            }
+            /** @var array<string, mixed> $seam */
+            $seam = json_decode(
+                (string) file_get_contents(base_path('fixtures/inbox/seams/doc09-copilot-badge.json')),
+                true,
+                8,
+                JSON_THROW_ON_ERROR,
+            );
+            $badges['copilot'] = (bool) ($seam['copilot'] ?? false);
         }
 
         return $badges;

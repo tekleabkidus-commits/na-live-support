@@ -91,7 +91,11 @@ final class ConsumerRegistry
         // Doc 08 T-04 (S08 step 8): the search indexer joins — survivor
         //    reindexed, the tombstoned merged row REMOVED from the index
         //    (BR-05: tombstones redirect, they do not surface as results).
-        'customer.merged' => [RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        // S08 escalation #3 part 2 (T-03/EC-01): the Doc 07 projector joins —
+        //    the DECLARED consumer finally implemented; list rows carrying the
+        //    merged customer recompute from the survivor ROW (truth, never
+        //    payload). Routine line applied: doc07-events.json moved same-commit.
+        'customer.merged' => [RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, ListProjectorConsumer::class],
         'customer.unmerged' => [RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
 
         // Doc 08 T-04 (S08 step 8): the customers_index feed — the seven

@@ -532,6 +532,19 @@ final class ListProjector
             );
         }
 
+        // S08 escalation #3 part 2 (T-03/EC-01): a CUSTOMER merge re-pointed
+        // tickets to the survivor — every list row still carrying the MERGED
+        // customer id recomputes from truth (the survivor row), so open list
+        // rows never show a tombstone's name.
+        if ($name === 'customer.merged') {
+            /** @var list<string> $stale */
+            $stale = DB::table('ticket_list_items')
+                ->where('customer_id', self::str($payload, 'merged_id'))
+                ->pluck('ticket_id')->all();
+
+            return $stale;
+        }
+
         return array_values(array_filter(match ($name) {
             'ticket.merged', 'ticket.unmerged' => [self::str($payload, 'source_ticket_id'), self::str($payload, 'target_ticket_id')],
             'ticket.split' => [self::str($payload, 'origin_ticket_id'), self::str($payload, 'new_ticket_id')],

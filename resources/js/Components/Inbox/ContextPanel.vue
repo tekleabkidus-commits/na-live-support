@@ -51,11 +51,16 @@ const active = ref<(typeof TABS)[number]>('ticket');
             >
                 {{ t.tabs[tab] }}
                 <!-- §9 badge dots, with §13 labels. -->
+                <!-- S08 (frame-mapping row, B4-S05 E01): the dot's ONE state is
+                     RG-flagged-for-a-permitted-viewer, drawn SLATE — the token
+                     the RG banner's own foreground consumes, so the family
+                     moves together under a theme change. Blocked is NOT a dot
+                     state: no frame draws it; §8's red banner is that signal. -->
                 <span
                     v-if="tab === 'customer' && badges.customer"
                     data-testid="badge-customer"
                     class="absolute -mt-0.5 ms-0.5 inline-block h-1.5 w-1.5 rounded-full"
-                    :style="{ background: 'var(--ds-danger-strong)' }"
+                    :style="{ background: 'var(--ds-status-closed-fg)' }"
                     role="img"
                     :aria-label="t.tabs.customer_badge"
                 ></span>

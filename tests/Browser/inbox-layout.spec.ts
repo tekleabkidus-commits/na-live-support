@@ -166,19 +166,23 @@ test('§9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures 
     await expect(page.getByTestId('badge-customer')).toHaveCount(0);
     await expect(page.getByTestId('badge-copilot')).toHaveCount(0);
 
-    // Tab panels are SLOTS that state their seam honestly.
+    // The Customer slot is FILLED (S08 escalation #3 part 2) — with no thread
+    // open it states its empty contract honestly; Copilot still states its seam.
     await page.getByTestId('tab-customer').click();
-    await expect(page.getByTestId('panel-customer')).toContainText('Doc 08');
+    // toHaveCount, not toBeVisible: a parallel worker (AC-01, same user) may
+    // have server-persisted a collapsed context rail — presence is the claim.
+    await expect(page.getByTestId('customer-panel-fill')).toHaveCount(1);
+    await expect(page.getByTestId('panel-customer')).toContainText('Open a conversation');
     await page.getByTestId('tab-copilot').click();
     await expect(page.getByTestId('panel-copilot')).toContainText('Doc 09');
 
-    // With the seam fixtures loaded (local/ci override): both dots render,
-    // labelled, never colour alone.
+    // With the seam override (local/ci): ONLY the copilot dot is seam-driven
+    // now — the customer badge is REAL (per-viewer RG, the retired
+    // doc08-customer-badge fixture has no code path), so it stays absent here.
     await page.goto('/inbox?seam_badges=1');
-    await expect(page.getByTestId('badge-customer')).toBeVisible();
     await expect(page.getByTestId('badge-copilot')).toBeVisible();
-    await expect(page.getByRole('img', { name: 'Customer tab has an alert' })).toBeVisible();
     await expect(page.getByRole('img', { name: 'Copilot has a new suggestion' })).toBeVisible();
+    await expect(page.getByTestId('badge-customer')).toHaveCount(0);
 });
 
 test('AC-01: rail collapse, list width (keyboard resize — §13) and density persist, and RESTORE ACROSS SESSIONS', async ({

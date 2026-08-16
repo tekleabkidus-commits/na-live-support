@@ -163,6 +163,15 @@ the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
 surfaced during the ADR 0014 install, not introduced by it; dependency
 maintenance is Doc 18's.
 
+**DOC 18 NOTE (S08 escalation #3 part 2, filed by the advisor's decision-3
+observation — no action now):** the consumer-guard family catches silent
+consumer GROWTH (the drill pin + NFR-06 completeness) but not a
+DECLARED-but-unimplemented consumer — `customer.merged` carried
+`Doc07/ListProjector` in the catalog from S08 step 1 with no implementation
+until the part-2 landing, and nothing went red for it. Whoever builds the
+next guard should close that direction (catalog-declared ⇒ registry-mapped,
+per consuming document); do not build it inside Doc 08.
+
 **DOC 18 NOTE (S08 step 4, filed by the step-3 checkpoint's ruling D):** the
 0i flaky specs pass 15/15 locally and fail only on the 2-vCPU GitHub runner —
 **the cheapest candidate fix is a LARGER RUNNER (infrastructure), not a
@@ -289,6 +298,25 @@ below when the box closes.
    palette spec green on the landing tree. Closing row 3 CLOSED (the S07
    step-6 narrative line updated).
 
+7. `app/Http/Controllers/Inbox/WorkspaceController.php` +
+   `resources/js/Components/Inbox/ContextPanel.vue` +
+   `resources/js/Pages/Inbox/Workspace.vue` +
+   `app/Domain/Inbox/ReadModels/ListProjector.php` +
+   `app/Support/Events/ConsumerRegistry.php` (+ the Doc 07 fixtures
+   `fixtures/inbox/consumers/doc07-events.json`,
+   `tests/Browser/inbox-layout.spec.ts`) — escalation #3 part 2,
+   ESCALATE-FIRST HONORED: packet at
+   `docs/evidence/S08-step10/escalation-3-part2-proposed.md`, all four
+   decision points RULED, landed after grounding. Doc 07's placeholder dot
+   colour REPLACED by the drawn token (`--ds-danger-strong` →
+   `--ds-status-closed-fg`, B4-S05 E01's slate verified by hex) — a
+   FRAME-MAPPING implementation, NOT a deviation (the placeholder never
+   rendered in production; ruling decision 1's correction). The badge is a
+   BEHAVIOR addition: real per-viewer RG state where production always
+   answered false. The layout spec's seam assertions updated to the ruled
+   behavior + one parallel-robustness hardening (toHaveCount over
+   toBeVisible — a parallel worker's persisted rail collapse). Routine
+   line applied: the registry addition moved doc07-events.json same-commit.
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44
 under `uploads/`) against the "219" recorded in PROJECT-HANDOFF-v7 §7 and the session
@@ -1790,7 +1818,23 @@ load reveals; Enter lands in the list); §9 density toggle (64/52 via
 `--inbox-row-height`, persisted); Doc 08/09 SLOT panels stating their seams
 honestly + badge dots driven by the two SEAM FIXTURES
 (`fixtures/inbox/seams/doc0{8,9}-*.json`, local/ci `?seam_badges=1` — the
-?lang-override precedent). Pinia prefs store; ADR 0013 records the R-15
+?lang-override precedent). **→ S08 CLOSING ROW 2 CLOSED (escalation #3
+part 2, all four decision points ruled and landed): the Customer slot is
+FILLED (`CustomerPanel.vue`, Doc 08's own component, at all three render
+sites — B14's single shared fill), `tabBadges.customer` is REAL — the ONE
+CustomerTabBadge brain, per viewer, through the no-cache RG repository
+(E03/BR-03: the unpermitted answer is FALSE server-side — the dot itself
+would be the inference channel), with the badge door answering client-side
+thread switches; the `doc08-customer-badge` seam fixture RETIRED (doc09's
+stays); the dot recoloured to `--ds-status-closed-fg` — the token B4-S05's
+own RG surfaces consume, verified by hex (#59636F/#9AA6B2), recorded as a
+FRAME-MAPPING row not a deviation (the placeholder never rendered in
+production); BLOCKED IS NOT A DOT STATE — no frame draws it, §8's red
+banner is that signal (ruling decision 2, recorded here per its order);
+the projector consumes `customer.merged` (T-03/EC-01 — the DECLARED
+consumer finally implemented). The ruled measurement: badge read p50
+3.265 ms / p99 4.895 ms vs Doc 07 NFR-01's 1500 ms cold-load — a tuning
+fact, not a conflict.** Pinia prefs store; ADR 0013 records the R-15
 stack growth (pinia, @tanstack/vue-virtual, @lhci/cli) at first install.
 `InboxBrowserSeeder` (real services only; self-healing prefs reset by
 UPDATE — the first DELETE attempt was REFUSED by the step-1 R-19b grant
