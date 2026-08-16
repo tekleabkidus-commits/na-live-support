@@ -89,6 +89,20 @@ final class PanelController
             'identities' => $identities,
             // T-07's stubs: names only — each section is its own fetch.
             'sections' => self::SECTIONS,
+            // FR-21: "every field inline-editable PER PERMISSION" — the
+            // render-gates, DERIVED from the existing catalog keys (NFR-03;
+            // the T-04 page-capability manifest pattern, served by Doc 08's
+            // own door so the workspace shell stays untouched).
+            'can' => [
+                'edit' => $map->allows('customers.edit'),
+                'notes_view' => $map->allows('customers.notes.view'),
+                'notes_add' => $map->allows('customers.notes.add'),
+                'identity_link' => $map->allows('customers.identity.link'),
+                'identity_unlink' => $map->allows('customers.identity.unlink'),
+                'merge' => $map->allows('customers.merge'),
+                'block' => $map->allows('customers.block'),
+                'export' => $map->allows('customers.export'),
+            ],
         ]);
     }
 

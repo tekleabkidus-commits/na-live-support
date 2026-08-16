@@ -91,7 +91,7 @@ final class WorkspaceController extends Controller
             't' => __('inbox'),
             // S08 escalation #3 part 2 (the slot fill): the Customer panel's
             // own strings ride the same C-08 chain.
-            'tCustomers' => __('customers.panel'),
+            'tCustomers' => array_merge((array) __('customers.panel'), (array) __('customers.fields')),
             'tenantName' => $tenantName,
             'views' => $views,
             'savedViews' => array_map(fn (object $row): array => [

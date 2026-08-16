@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/customers-panel.spec.ts:270:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail (1.2s)
+
+
+  1) [chromium] › tests/Browser/customers-panel.spec.ts:270:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      294 |         { id: customerId },
+      295 |     );
+    > 296 |     expect(setupStatus).toBe(200); // the racing write must land or the scene is void
+          |                         ^
+      297 |
+      298 |     // Now the panel's own (stale-stamped) edit — it LANDS, and the toast tells.
+      299 |     await page.getByTestId('chip-country').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:296:25
+
+    Error Context: test-results/customers-panel-A16-two-ag-3f1dd-th-edits-in-the-audit-trail-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/customers-panel.spec.ts:270:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail 

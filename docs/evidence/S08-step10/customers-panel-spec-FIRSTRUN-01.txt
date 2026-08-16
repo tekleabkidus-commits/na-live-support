@@ -1,0 +1,277 @@
+
+Running 10 tests using 1 worker
+
+  ✘   1 [chromium] › tests/Browser/customers-panel.spec.ts:74:1 › A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections (7.1s)
+  ✘   2 [chromium] › tests/Browser/customers-panel.spec.ts:115:1 › A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note (30.3s)
+  ✓   3 [chromium] › tests/Browser/customers-panel.spec.ts:130:1 › A04: copy-on-click is a BUTTON and the confirmation is SPOKEN — the live region receives it, not only the chip (1.5s)
+  ✘   4 [chromium] › tests/Browser/customers-panel.spec.ts:182:1 › AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card (6.3s)
+  ✘   5 [chromium] › tests/Browser/customers-panel.spec.ts:189:1 › AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken (30.2s)
+  ✘   6 [chromium] › tests/Browser/customers-panel.spec.ts:203:1 › B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict (30.2s)
+  ✘   7 [chromium] › tests/Browser/customers-panel.spec.ts:226:1 › §8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded) (30.2s)
+  ✘   8 [chromium] › tests/Browser/customers-panel.spec.ts:237:1 › A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness (30.2s)
+  ✓   9 [chromium] › tests/Browser/customers-panel.spec.ts:253:1 › A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive (1.6s)
+  ✘  10 [chromium] › tests/Browser/customers-panel.spec.ts:269:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail (6.6s)
+
+
+  1) [chromium] › tests/Browser/customers-panel.spec.ts:74:1 › A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('pinned-note')
+    Expected substring: "confirm withdrawals by voice"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('pinned-note')
+
+
+      83 |     await expect(page.getByTestId('chip-country')).toContainText('Ethiopia');
+      84 |     await expect(page.getByTestId('tags-row')).toContainText('vip');
+    > 85 |     await expect(page.getByTestId('pinned-note')).toContainText('confirm withdrawals by voice');
+         |                                                   ^
+      86 |
+      87 |     // Identities with provenance ALWAYS (FR-05).
+      88 |     await expect(page.getByTestId('customer-panel-fill')).toContainText('@fixture_abebe_t');
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:85:51
+
+    Error Context: test-results/customers-panel-A01–A11-14-44045-8-s-order-and-lazy-sections-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-A01–A11-14-44045-8-s-order-and-lazy-sections-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-A01–A11-14-44045-8-s-order-and-lazy-sections-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/Browser/customers-panel.spec.ts:115:1 › A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.focus: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '2 earlier names' })
+
+
+      119 |
+      120 |     const trigger = page.getByRole('button', { name: '2 earlier names' });
+    > 121 |     await trigger.focus();
+          |                   ^
+      122 |     await page.keyboard.press('Enter');
+      123 |     const popover = page.locator('[data-testid^="history-popover-"]');
+      124 |     await expect(popover).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:121:19
+
+    Error Context: test-results/customers-panel-A03-the-us-03518--names-with-the-search-note-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-A03-the-us-03518--names-with-the-search-note-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-A03-the-us-03518--names-with-the-search-note-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/Browser/customers-panel.spec.ts:182:1 › AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('panel-announcer')
+    Expected substring: "Cancelled. Name is አበበ ታደሰ"
+    Received string:    "Editing Name"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('panel-announcer')
+        14 × locator resolved to <div role="status" class="sr-only" aria-live="polite" aria-label="Announcements" data-testid="panel-announcer">Editing Name</div>
+           - unexpected value "Editing Name"
+
+
+      154 |     // 3 — Escape cancels and says so.
+      155 |     await page.keyboard.press('Escape');
+    > 156 |     await expect(announcer(page)).toContainText('Cancelled. Name is አበበ ታደሰ');
+          |                                   ^
+      157 |
+      158 |     // 4 — saving announces outcome + the new provenance.
+      159 |     await field.focus();
+        at fiveMoments (/home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:156:35)
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:186:5
+
+    Error Context: test-results/customers-panel-AC-B4-03-1-62e88-without-re-reading-the-card-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-AC-B4-03-1-62e88-without-re-reading-the-card-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-AC-B4-03-1-62e88-without-re-reading-the-card-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/Browser/customers-panel.spec.ts:189:1 › AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('tab-customer')
+
+
+      194 |     // The mobile thread screen exposes the context sheet via its own control;
+      195 |     // the Customer tab lives inside the same shared ContextPanel fill.
+    > 196 |     await page.getByTestId('tab-customer').click();
+          |                                            ^
+      197 |     await expect(page.getByTestId('customer-panel-fill')).toBeVisible();
+      198 |     // Identical controls, not a reduced set (B14): betting card + tabs present.
+      199 |     await expect(page.getByTestId('betting-card')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:196:44
+
+    Error Context: test-results/customers-panel-AC-B4-03-3-143d6-ls-the-same-contract-spoken-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-AC-B4-03-3-143d6-ls-the-same-contract-spoken-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-AC-B4-03-3-143d6-ls-the-same-contract-spoken-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests/Browser/customers-panel.spec.ts:203:1 › B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.waitFor: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('inbox-workspace') to be visible
+
+
+       at support/coach.ts:21
+
+      19 |     // prefs, so once the root is attached the card is either present or
+      20 |     // never coming.
+    > 21 |     await page.getByTestId('inbox-workspace').waitFor();
+         |                                               ^
+      22 |     if (
+      23 |         await page
+      24 |             .getByTestId('coach-card')
+        at dismissCoachMarks (/home/kidus/projects/na-live-support/tests/Browser/support/coach.ts:21:47)
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:208:11
+
+    Error Context: test-results/customers-panel-B4-S05-E01-c12f5--viewer-without-the-verdict-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-B4-S05-E01-c12f5--viewer-without-the-verdict-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-B4-S05-E01-c12f5--viewer-without-the-verdict-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests/Browser/customers-panel.spec.ts:226:1 › §8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.waitFor: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('inbox-workspace') to be visible
+
+
+       at support/coach.ts:21
+
+      19 |     // prefs, so once the root is attached the card is either present or
+      20 |     // never coming.
+    > 21 |     await page.getByTestId('inbox-workspace').waitFor();
+         |                                               ^
+      22 |     if (
+      23 |         await page
+      24 |             .getByTestId('coach-card')
+        at dismissCoachMarks (/home/kidus/projects/na-live-support/tests/Browser/support/coach.ts:21:47)
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:230:11
+
+    Error Context: test-results/customers-panel-§8-the-BLO-3ced5-the-part-2-ruling-recorded--chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-§8-the-BLO-3ced5-the-part-2-ruling-recorded--chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-§8-the-BLO-3ced5-the-part-2-ruling-recorded--chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests/Browser/customers-panel.spec.ts:237:1 › A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.waitFor: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('inbox-workspace') to be visible
+
+
+       at support/coach.ts:21
+
+      19 |     // prefs, so once the root is attached the card is either present or
+      20 |     // never coming.
+    > 21 |     await page.getByTestId('inbox-workspace').waitFor();
+         |                                               ^
+      22 |     if (
+      23 |         await page
+      24 |             .getByTestId('coach-card')
+        at dismissCoachMarks (/home/kidus/projects/na-live-support/tests/Browser/support/coach.ts:21:47)
+        at openCustomerTab (/home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:65:11)
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:240:5
+
+    Error Context: test-results/customers-panel-A13-A14-a--2b819-files-state-their-emptiness-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-A13-A14-a--2b819-files-state-their-emptiness-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-A13-A14-a--2b819-files-state-their-emptiness-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests/Browser/customers-panel.spec.ts:269:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('conflict-toast')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('conflict-toast')
+
+
+      298 |     await page.keyboard.press('Enter');
+      299 |
+    > 300 |     await expect(page.getByTestId('conflict-toast')).toBeVisible();
+          |                                                      ^
+      301 |     await expect(page.getByTestId('conflict-toast')).toContainText('saved this field a second before you');
+      302 |     await expect(page.getByTestId('conflict-toast')).toContainText('audit trail');
+      303 |     await expect(page.getByTestId('chip-country')).toContainText('Ethiopia'); // the later write won
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:300:54
+
+    Error Context: test-results/customers-panel-A16-two-ag-3f1dd-th-edits-in-the-audit-trail-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-panel-A16-two-ag-3f1dd-th-edits-in-the-audit-trail-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-panel-A16-two-ag-3f1dd-th-edits-in-the-audit-trail-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8 failed
+    [chromium] › tests/Browser/customers-panel.spec.ts:74:1 › A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections 
+    [chromium] › tests/Browser/customers-panel.spec.ts:115:1 › A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note 
+    [chromium] › tests/Browser/customers-panel.spec.ts:182:1 › AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card 
+    [chromium] › tests/Browser/customers-panel.spec.ts:189:1 › AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken 
+    [chromium] › tests/Browser/customers-panel.spec.ts:203:1 › B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict 
+    [chromium] › tests/Browser/customers-panel.spec.ts:226:1 › §8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded) 
+    [chromium] › tests/Browser/customers-panel.spec.ts:237:1 › A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness 
+    [chromium] › tests/Browser/customers-panel.spec.ts:269:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail 
+  2 passed (3.5m)

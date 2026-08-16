@@ -45,7 +45,7 @@ final class CustomerProfile
 
     /**
      * @param  array<string, mixed>  $attributes  subset of EDITABLE
-     * @return array{changed: list<string>, conflict: bool, updated_at: string}|null null = the A-37 noop (nothing differed)
+     * @return array{changed: list<string>, conflict: bool, conflict_with: ?string, old: array<string, mixed>, updated_at: string}|null null = the A-37 noop (nothing differed)
      */
     public function update(string $customerId, array $attributes, string $actorId, ?string $expectedUpdatedAt = null): ?array
     {
@@ -106,6 +106,18 @@ final class CustomerProfile
                 return null; // the A-37 noop: no change, no event, no audit
             }
 
+            // A16 (EC-11's toast, the frame's own bar): the loser is told BY
+            // NAME — the previous writer's audit label, read BEFORE our own
+            // entry lands (server-side; no audit.view door is opened to the
+            // client, only the colleague's display label rides the response).
+            $isConflict = $expectedUpdatedAt !== null && $expectedUpdatedAt !== $current->updated_at;
+            $conflictWith = null;
+            if ($isConflict) {
+                /** @var ?string $conflictWith */
+                $conflictWith = DB::table('audit_log')->where('action_key', 'customer.updated')
+                    ->where('entity_id', $customerId)->orderByDesc('occurred_at')->value('actor_label');
+            }
+
             DB::table('customers')->where('id', $customerId)->update($writes + ['updated_at' => DB::raw('clock_timestamp()')]);
             /** @var object{updated_at: string} $after */
             $after = DB::selectOne('SELECT updated_at::text AS updated_at FROM customers WHERE id = ?', [$customerId]);
@@ -122,7 +134,9 @@ final class CustomerProfile
                 'changed' => $changed,
                 // EC-11: stale expectation = the caller overwrote someone —
                 // the write LANDED (last wins); this flag is the honest toast.
-                'conflict' => $expectedUpdatedAt !== null && $expectedUpdatedAt !== $current->updated_at,
+                'conflict' => $isConflict,
+                'conflict_with' => $conflictWith,
+                'old' => $old,
                 'updated_at' => $after->updated_at,
             ];
         });
@@ -132,7 +146,7 @@ final class CustomerProfile
      * EC-10's "detected: X — apply?" chip, server half: adopt the latest
      * detected message language; the source returns to 'detected' (un-sticky).
      *
-     * @return array{changed: list<string>, conflict: bool, updated_at: string}|null
+     * @return array{changed: list<string>, conflict: bool, conflict_with: ?string, old: array<string, mixed>, updated_at: string}|null
      */
     public function applyDetected(string $customerId, string $actorId): ?array
     {

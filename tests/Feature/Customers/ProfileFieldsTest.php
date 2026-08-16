@@ -92,6 +92,11 @@ it('EC-11: simultaneous edits are LAST-WRITE-WINS with the honest conflict flag 
     $second = $profile->update($customerId, ['display_name' => 'Agent B version'], $actorB, $sharedExpectation);
     expect($second)->not->toBeNull()
         ->and($second['conflict'])->toBeTrue('the overwrite was silent — EC-11\'s toast has no data')
+        // A16: the response CARRIES the previous writer's audit label slot
+        // (the label itself is session-derived — the browser A16 spec proves
+        // the name; service-level writes may carry null honestly).
+        ->and(array_key_exists('conflict_with', $second))->toBeTrue()
+        ->and($second['old']['display_name'])->toBe('Agent A version')
         ->and((string) DB::table('customers')->where('id', $customerId)->value('display_name'))->toBe('Agent B version')
         ->and(DB::table('audit_log')->where('action_key', 'customer.updated')->count())->toBe(2);
 });

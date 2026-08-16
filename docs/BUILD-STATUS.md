@@ -163,6 +163,13 @@ the pre-existing transitive `league/commonmark` (<2.9.0, DoS class) —
 surfaced during the ADR 0014 install, not introduced by it; dependency
 maintenance is Doc 18's.
 
+**0f RUNG-1 FIRING (S08 step 10, recorded per the ladder — nothing more):**
+run [31943627204](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31943627204)
+(`74a76d4`) RED at Stage 3 on `LockoutTest > throttles per IP` — a 429
+arrived INSIDE the per-minute budget under CI contention; 10/10 green
+locally on the same tree; the commit touched no auth code. 0f-class,
+ladder rung 1 executed: recorded.
+
 **DOC 18 NOTE (S08 escalation #3 part 2, filed by the advisor's decision-3
 observation — no action now):** the consumer-guard family catches silent
 consumer GROWTH (the drill pin + NFR-06 completeness) but not a

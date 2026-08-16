@@ -1,0 +1,39 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/customers-panel.spec.ts:75:1 › A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections (1.9s)
+  ✓   2 [chromium] › tests/Browser/customers-panel.spec.ts:116:1 › A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note (902ms)
+  ✓   3 [chromium] › tests/Browser/customers-panel.spec.ts:131:1 › A04: copy-on-click is a BUTTON and the confirmation is SPOKEN — the live region receives it, not only the chip (1.0s)
+  ✓   4 [chromium] › tests/Browser/customers-panel.spec.ts:183:1 › AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card (1.2s)
+  ✓   5 [chromium] › tests/Browser/customers-panel.spec.ts:190:1 › AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken (1.0s)
+  ✓   6 [chromium] › tests/Browser/customers-panel.spec.ts:205:1 › B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict (1.6s)
+  ✓   7 [chromium] › tests/Browser/customers-panel.spec.ts:228:1 › §8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded) (929ms)
+  ✓   8 [chromium] › tests/Browser/customers-panel.spec.ts:239:1 › A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness (944ms)
+  ✘   9 [chromium] › tests/Browser/customers-panel.spec.ts:255:1 › A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive (30.0s)
+  ✓  10 [chromium] › tests/Browser/customers-panel.spec.ts:271:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail (1.4s)
+
+
+  1) [chromium] › tests/Browser/customers-panel.spec.ts:255:1 › A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Email')
+
+
+      56 | async function login(page: Page, email: string): Promise<void> {
+      57 |     await page.goto('/login');
+    > 58 |     await page.getByLabel('Email').fill(email);
+         |                                    ^
+      59 |     await page.getByLabel('Password').fill(PASSWORD);
+      60 |     await page.getByTestId('login-submit').click();
+      61 |     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+        at login (/home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:58:36)
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-panel.spec.ts:256:5
+
+    Error Context: test-results/customers-panel-A15-one-se-c65f5-while-identities-stay-alive-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/customers-panel.spec.ts:255:1 › A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive 
+  9 passed (49.8s)

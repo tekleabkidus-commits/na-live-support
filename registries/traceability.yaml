@@ -1933,19 +1933,22 @@ entries:
       resolver's rename; Amharic first-word AND second-word hits on the seeded
       corpus (§14's Meilisearch Ethiopic tokenization validation).
   - ac_ref: "Doc08 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/customers-panel.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S08 step 10 to tests/Browser/customers-panel.spec.ts +
-      tests/Feature/Customers/PanelEndpointTest.php (header ≤ 300 ms dev-scale,
-      sections lazy per T-07, inline edits save with provenance, the Doc 07 slot
-      integration; AC-B4-03's SPOKEN announce cycle). Frame-mapped functional-state
-      + a11y only — NO pixel baselines exist for Batch 4 (stated per the mandate).
+      FLIPPED AT S08 STEP 10, same commit as the suite (the routine line). The
+      panel contract through the Doc 07 slot: header + identities immediate
+      with section stubs, sections fetch AND FAIL independently (A15), inline
+      edits save with provenance ("staff · you · just now"), all frame-mapped
+      (B4-S01 A01-A16 + B4-S05 E01/E03) at 1440 AND the 375 sheet (B14's one
+      fill) + axe. AC-B4-03's five spoken moments proven at BOTH viewports.
+      The ≤300 ms header p75 formal browser profile stays [D19]; the
+      server-side NFR-03 dev figure (p99 9.449 ms vs 120) is on record.
   - ac_ref: "Doc08 AC-09"
     suite_path: tests/Security/NoVerifiedAffordanceTest.php
     type: automated
