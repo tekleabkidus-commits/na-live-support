@@ -133,7 +133,10 @@ final class CustomerBrowserSeeder extends Seeder
         foreach ([['s08-dir-abel1', '@fixture_abel_t'], ['s08-dir-abel2', '@fixture_abel_c']] as $i => [$externalId, $username]) {
             $abel = $resolver->resolveInbound('telegram', new InboundSender($externalId, 'አቤል ተስፋዬ', $username))->customerId;
             app(CustomerProfile::class)->update($abel, ['display_name' => 'አቤል ተስፋዬ', 'tags' => ['name-collision']], $rgViewer->identifier());
-            $this->scene($tenantId, $abel, 'chat-s08-abel'.($i + 1), 8807 + $i, ['subject' => 'Collision fixture']);
+            // Assigned: an unassigned scene row would join the Unassigned view
+            // the Doc 07 keyboard-shift spec walks under a strict step budget
+            // (the b297769 CI red: 3 new residents = worked 57/60).
+            $this->scene($tenantId, $abel, 'chat-s08-abel'.($i + 1), 8807 + $i, ['subject' => 'Collision fixture', 'assignee_id' => $rgViewer->identifier()]);
             app(\App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($abel);
         }
 
@@ -142,7 +145,7 @@ final class CustomerBrowserSeeder extends Seeder
         //    so the apply-once chip has its scene (EC-10).
         $hanaSet = $resolver->resolveInbound('telegram', new InboundSender('s08-dir-h03', 'Selam Detected', '@fixture_selam_h3'))->customerId;
         app(CustomerProfile::class)->update($hanaSet, ['display_name' => 'Selam Detected', 'language' => 'am'], $rgViewer->identifier());
-        $this->scene($tenantId, $hanaSet, 'chat-s08-h03', 8809, ['subject' => 'Language fixture'], messageLanguage: 'en');
+        $this->scene($tenantId, $hanaSet, 'chat-s08-h03', 8809, ['subject' => 'Language fixture', 'assignee_id' => $rgViewer->identifier()], messageLanguage: 'en');
 
         // ── RG-FLAGGED (B4-S05 E01/E03 + the tab dot's one state).
         $rgCustomer = $resolver->resolveInbound('telegram', new InboundSender('s08-panel-dawit', 'Dawit Bekele', '@fixture_dawit_b'))->customerId;
