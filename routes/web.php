@@ -60,6 +60,10 @@ Route::middleware([
     'tenant.state:staff',
     App\Http\Middleware\ApplyUserLocale::class,
 ])->group(function (): void {
+    // The directory page BEFORE the {customerId} catch (a literal segment
+    // beats the param; declared first for the reader's sake).
+    Route::get('customers', [App\Http\Controllers\Customers\DirectoryController::class, 'page'])
+        ->middleware('permission:customers.view')->name('customers.directory.page');
     Route::get('customers/{customerId}', [App\Http\Controllers\Customers\ProfilePageController::class, 'show'])
         ->middleware('permission:customers.view')
         ->name('customers.profile.page');

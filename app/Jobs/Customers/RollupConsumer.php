@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs\Customers;
 
 use App\Domain\Customers\Rollups\CustomerRollups;
+use App\Domain\Customers\Rollups\CustomerRollupStatus;
 use App\Jobs\OutboxConsumer;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +51,11 @@ final class RollupConsumer extends OutboxConsumer
         foreach ($this->customerIds($event->name, $payload) as $customerId) {
             $rollups->recompute($customerId);
         }
+
+        // FS-03 (step 12): the staleness heartbeat — beaten on every APPLIED
+        // event, including ones that named no customer (the gap read by
+        // CustomerRollupStatus measures the handler, not the traffic).
+        app(CustomerRollupStatus::class)->beat();
     }
 
     /** @param array<string, mixed> $payload

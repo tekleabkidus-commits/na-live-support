@@ -59,9 +59,33 @@ final class ProfilePageController
             ]);
         }
 
+        // B4-S07 H06 (step 12): the erasure status SURFACE — this page
+        // reports, it does not decide ([D17] owns the workflow). The audit
+        // entry IS the durable record, so the status reads it: the latest
+        // initiation, with no reason echoed (the reason lives in the audit
+        // trail, behind audit.view).
+        /** @var object{id: string, actor_label: ?string, occurred_at: string}|null $erasure */
+        $erasure = DB::table('audit_log')
+            ->leftJoin('users', 'users.id', '=', 'audit_log.actor_id')
+            ->where('audit_log.action_key', 'customer.erasure.initiated')
+            ->where('audit_log.entity_id', $customerId)
+            ->orderByDesc('audit_log.occurred_at')
+            ->first([
+                'audit_log.id',
+                DB::raw('COALESCE(audit_log.actor_label, users.name) AS actor_label'),
+                DB::raw('audit_log.occurred_at::text AS occurred_at'),
+            ]);
+
         return Inertia::render('Customers/Profile', [
-            't' => array_merge((array) __('customers.panel'), (array) __('customers.fields'), (array) __('customers.profile')),
+            't' => array_merge((array) __('customers.panel'), (array) __('customers.fields'), (array) __('customers.profile'), (array) __('customers.honesty')),
             'customerId' => $customerId,
+            'erasure' => $erasure === null ? null : [
+                'requested_by' => $erasure->actor_label,
+                'requested_at' => $erasure->occurred_at,
+                // The drawn reference is a stable handle for "ask compliance
+                // about this one" — the audit entry id IS that handle.
+                'reference' => 'ERA-'.substr($erasure->id, -8),
+            ],
             'can' => [
                 'edit' => $map->allows('customers.edit'),
                 'notes_view' => $map->allows('customers.notes.view'),

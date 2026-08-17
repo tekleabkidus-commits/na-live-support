@@ -1,0 +1,25 @@
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\RbacBudgetsTest[22m [90m>[39m it meets NFR-01 indicatively:…   
+[39;1m  NFR-01 cached map + checks: p99 0.627 ms exceeds the asserted SPEC BUDGET of 0.300 ms (spec budget 0.3 ms; p50 0.132 ms, max 0.899 ms). Strict mode (`make perf`): this is the spec budget itself, on dev hardware.
+Failed asserting that 0.627236 is equal to 0.3 or is less than 0.3.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m873[39m
+    869▕ {
+    870▕     $ceiling = assertedBudget($specBudgetMs);
+    871▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+    872▕ 
+  ➜ 873▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+    874▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+    875▕         .'%s',
+    876▕         $name,
+    877▕         $stats['p99'],
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m873[39;22m
+  [33m2   [39m[39;1mtests/Performance/RbacBudgetsTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m25 passed[39;22m[90m (364 assertions)[39m
+  [90mDuration:[39m [39m121.25s[39m
+
+make: *** [Makefile:91: perf] Error 1

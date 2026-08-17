@@ -261,6 +261,14 @@ recorded at the step-7 acceptance's order): 1178/17,356 exit 0, ZERO reds —
 0d GREEN on a quiet full run. The tripwire's own logic arriving early: if the
 close-out battery agrees, "host-bound on this hardware" will stand on two
 independent observations, not one.**
+**WALL-POWER DATAPOINT (step-12 timing legs, BAT1 Charging, recorded — the
+decision still attaches to the close-out):** `make perf` strict = 25/27; the
+two reds are 0d itself (RbacBudgets 0.3 ms leg: p99 0.627, p50 0.132 — the
+p50 comfortably UNDER the floor this time, the p99 tail the whole excess)
+and FoundationBudgets' resolution leg (same microsecond family, same tail
+signature), immediately after a 424 s full battery on the same containers —
+consistent with host-tail, not code (no Doc 01/03 path was touched at step
+12). Doc 08's OWN leg (CustomerBudgetsTest) GREEN in the same strict run.
 
 **THE CONTENTION SYNTHESIS (recorded at the step-4 acceptance — one
 hypothesis linking three entries, so three test-rewrite efforts are not spent
@@ -363,6 +371,9 @@ below when the box closes.
 | 1 | Badge dot colour (ContextPanel) | `--ds-danger-strong` placeholder → `--ds-status-closed-fg` (B4-S05 E01's drawn slate, verified by hex #59636F/#9AA6B2 = the RG banner's own token) | **FRAME-MAPPING implementation, NOT a deviation** (ruled at the part-2 acceptance: the placeholder never rendered in production) | Part-2 landing `74a76d4`; recorded here so nobody re-files it as a violation |
 | 2 | Merge + unlink dialogs (B4-S04; B4-S03 C03) | REASON inputs rendered where the frames draw none | **1** — the DOCUMENT wins: SEC-02 "merge/unlink/high-risk actions require reasons and emit high-visibility audit" vs B4-S04/B4-S03's drawn dialogs (token + button only, no reason field). Both citations; forecast at step 6, landed step 11 | Step-11 commit |
 | 3 | Block / unblock / undo dialogs (D04–D06) | The frames assert only their own requirement text — no dialog drawn | **2** — design gap; the fill reuses B4-S05's OWN drawn Reason-Required pattern (E04's shape), the step-7 countersign's expected resolution | Step-11 commit |
+| 4 | Directory header + empty state (B4-S06 G01/G09) | The drawn **"New customer" button is NOT BUILT** | **PENDING RULING (flagged at step 12, put to the checkpoint):** the button has no backing FR — Doc 08 §4 defines no staff-create door, the approved 91/91 plan maps no row to one, and `customers.create` sits unused in the closed catalog. Building a door would invent a requirement's shape (fields? shell? identity?); omitting deviates from the drawing. The document-wins posture built NOTHING; a class-2-style fill on `customers.create` is owner-orderable | Step-12 commit |
+| 5 | Directory filter bar (B4-S06 G01) | Tag filter rendered as a free-text input where the frame draws a dropdown chip | **Frame-mapping note:** customer tags are an open `text[]` vocabulary with no enumeration source until Doc 12's definitions — a dropdown needs a vocabulary door no document defines. The input filters exactly (pg containment), proven in browser | Step-12 commit |
+| 6 | Directory bulk bar (B4-S06 G01) | Bulk **Export** issues one audited per-customer export request per selected row | **Frame-mapping note:** SEC-04's export contract is per-customer (watermark, per-customer audit, per-customer signed URL); no combined-archive door exists in any document. The drawn affordance maps onto N per-customer requests, each audited | Step-12 commit |
 
 **HONEST-TRAIL RECORD NOTES (filed at plan approval, advisor-confirmed):**
 (i) `design/frozen/` holds **217 files** on disk (`find -type f`: 173 top-level + 44

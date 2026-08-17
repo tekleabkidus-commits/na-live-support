@@ -8,6 +8,7 @@ use App\Domain\Customers\Notes\CustomerNotes;
 use App\Domain\Customers\Panel\CustomerPayload;
 use App\Domain\Customers\Panel\FilesGallery;
 use App\Domain\Customers\Profile\CustomerProfile;
+use App\Domain\Customers\Rollups\CustomerRollupStatus;
 use App\Models\Customer;
 use App\Models\User;
 use App\Support\Problem\ErrorCode;
@@ -89,6 +90,10 @@ final class PanelController
             'identities' => $identities,
             // T-07's stubs: names only — each section is its own fetch.
             'sections' => self::SECTIONS,
+            // FS-03 / B4-S07 H07 (step 12): the rollup staleness answer —
+            // stale only past threshold WITH pending rollup-family work
+            // ("the handler is behind", never "nothing happened").
+            'rollups_stale' => app(CustomerRollupStatus::class)->status(),
             // FR-21: "every field inline-editable PER PERMISSION" — the
             // render-gates, DERIVED from the existing catalog keys (NFR-03;
             // the T-04 page-capability manifest pattern, served by Doc 08's

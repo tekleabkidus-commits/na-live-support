@@ -156,3 +156,30 @@ it('A-38/[D17]: erasure INITIATION rides customers.delete with a mandatory reaso
     bindTenant($tenant);
     expect(DB::table('customers')->where('id', $customerId)->exists())->toBeTrue();
 });
+
+it('H06 (step 12): the profile page REPORTS a pending erasure — requested-by, stamp, and a stable reference read from the audit record; absent when none was raised', function (): void {
+    $tenant = createTenant();
+    $tenantId = $tenant->identifier();
+    activateTenant($tenant);
+    $customerId = enforcedCustomer($tenantId, '2026-06-01 10:00:00+00');
+    $initiator = exportActor('S08 Erasure Surface', ['customers.delete']);
+
+    // Before any request: the surface is silent.
+    $before = test()->actingAs($initiator, 'staff')->get("https://localhost/customers/{$customerId}");
+    $before->assertOk();
+    $before->assertInertia(fn ($assert) => $assert
+        ->component('Customers/Profile', shouldExist: false)
+        ->where('erasure', null));
+
+    test()->actingAs($initiator, 'staff')
+        ->postJson("https://localhost/api/staff/customers/{$customerId}/erasure", ['reason' => 'Customer asked by phone during a fixture ticket.'])
+        ->assertStatus(202);
+
+    $after = test()->actingAs($initiator, 'staff')->get("https://localhost/customers/{$customerId}");
+    $after->assertOk();
+    $after->assertInertia(fn ($assert) => $assert
+        ->component('Customers/Profile', shouldExist: false)
+        ->where('erasure.requested_by', fn ($value) => is_string($value) && $value !== '')
+        ->where('erasure.requested_at', fn ($value) => is_string($value) && $value !== '')
+        ->where('erasure.reference', fn ($value) => is_string($value) && str_starts_with($value, 'ERA-')));
+});

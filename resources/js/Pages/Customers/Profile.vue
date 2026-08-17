@@ -18,12 +18,30 @@
  */
 import { onMounted, ref } from 'vue';
 import CustomerPanel from '../../Components/Customers/CustomerPanel.vue';
+import ErasureRequestModal from '../../Components/Customers/ErasureRequestModal.vue';
+import ExportModal from '../../Components/Customers/ExportModal.vue';
+
+type ErasureStatus = {
+    requested_by: string | null;
+    requested_at: string | null;
+    reference: string;
+};
 
 const props = defineProps<{
     t: Record<string, string>;
     customerId: string;
     can: Record<string, boolean>;
+    erasure?: ErasureStatus | null;
 }>();
+
+// ── Export + erasure (B4-S07 H05/H06) ─────────────────────────
+const exportOpen = ref(false);
+const erasureOpen = ref(false);
+const erasureState = ref<ErasureStatus | null>(props.erasure ?? null);
+function erasureRequested(): void {
+    // The surface reports what the record now holds — re-read it.
+    window.location.reload();
+}
 
 function xsrf(): string {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
@@ -784,7 +802,79 @@ const tab = ref<'profile' | 'audit'>('profile');
                         {{ blockError }}
                     </p>
                 </div>
+
+                <!-- ── Export + erasure (B4-S07 H05/H06) ─────────────── -->
+                <div v-if="can.export || can.delete" data-testid="honesty-section">
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            v-if="can.export"
+                            type="button"
+                            data-testid="export-open"
+                            class="rounded border px-2 py-1 text-xs"
+                            :style="{ borderColor: 'var(--ds-border-strong)' }"
+                            @click="exportOpen = true"
+                        >
+                            {{ t.export_start }}
+                        </button>
+                        <button
+                            v-if="can.delete && erasureState === null"
+                            type="button"
+                            data-testid="erasure-open"
+                            class="rounded border px-2 py-1 text-xs"
+                            :style="{ borderColor: 'var(--ds-border-strong)' }"
+                            @click="erasureOpen = true"
+                        >
+                            {{ t.erasure_title }}
+                        </button>
+                    </div>
+
+                    <!-- H06 dark: the request, waiting — this surface
+                         reports; it does not decide. -->
+                    <div
+                        v-if="erasureState !== null"
+                        class="mt-2 rounded border px-3 py-2"
+                        :style="{ borderColor: 'var(--ds-border-strong)' }"
+                        data-testid="erasure-pending"
+                    >
+                        <p class="text-sm font-medium">
+                            {{ t.erasure_pending }}
+                            <span
+                                class="ms-1 text-xs font-normal"
+                                :style="{ color: 'var(--ds-text-muted)' }"
+                                >{{ t.erasure_awaiting }}</span
+                            >
+                        </p>
+                        <p class="mt-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                            {{
+                                fill(t.erasure_raised, {
+                                    name: erasureState.requested_by ?? '',
+                                    date: (erasureState.requested_at ?? '').slice(0, 10),
+                                })
+                            }}
+                        </p>
+                        <p class="mt-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                            {{ t.erasure_reference }}
+                            <span data-testid="erasure-reference">{{
+                                erasureState.reference
+                            }}</span>
+                        </p>
+                    </div>
+                </div>
             </section>
         </div>
+
+        <ExportModal
+            v-if="exportOpen"
+            :customer-id="customerId"
+            :t="t"
+            @close="exportOpen = false"
+        />
+        <ErasureRequestModal
+            v-if="erasureOpen"
+            :customer-id="customerId"
+            :t="t"
+            @close="erasureOpen = false"
+            @requested="erasureRequested"
+        />
     </main>
 </template>

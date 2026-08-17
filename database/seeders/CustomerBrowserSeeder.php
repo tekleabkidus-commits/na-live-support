@@ -98,6 +98,16 @@ final class CustomerBrowserSeeder extends Seeder
         app(CustomerFieldValues::class)->set($abebe, [
             'betting_username' => 'abebe_bet', 'player_id' => 'NB-40219', 'brand' => 'Na Bet',
         ], $rgViewer->identifier());
+        // H04 (step 12): the RETIRED fact that stays — the definition went
+        // (loyalty_tier, EC-09's fixture), the March value is still true
+        // about March. Written at the storage layer: the service rightly
+        // refuses retired writes, and this row predates the retirement.
+        if (DB::table('customer_field_values')->where('customer_id', $abebe)->where('field_key', 'loyalty_tier')->doesntExist()) {
+            DB::table('customer_field_values')->insert([
+                'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'customer_id' => $abebe,
+                'field_key' => 'loyalty_tier', 'value' => 'Gold', 'updated_by' => $rgViewer->identifier(),
+            ]);
+        }
         if (DB::table('customer_notes')->where('customer_id', $abebe)->count() === 0) {
             app(CustomerNotes::class)->add($abebe, 'VIP — always confirm withdrawals by voice before releasing.', $rgViewer->identifier(), pinned: true);
         }
@@ -115,6 +125,24 @@ final class CustomerBrowserSeeder extends Seeder
         // ── SHELL (A13): the resolver's own fresh mint, untouched.
         $kidist = $resolver->resolveInbound('telegram', new InboundSender('s08-panel-kidist', 'Kidist H', '@fixture_kidist_h'))->customerId;
         $this->scene($tenantId, $kidist, 'chat-s08-kidist', 8802, ['subject' => 'የመለያ ጥያቄ']);
+
+        // ── EC-08 COLLISION PAIR (S08 step 12; B4-S06 G01): two customers
+        //    named አቤል ተስፋዬ, told apart by identity values + short id —
+        //    a betting product has real name collisions and a directory
+        //    that hides them causes the wrong merge.
+        foreach ([['s08-dir-abel1', '@fixture_abel_t'], ['s08-dir-abel2', '@fixture_abel_c']] as $i => [$externalId, $username]) {
+            $abel = $resolver->resolveInbound('telegram', new InboundSender($externalId, 'አቤል ተስፋዬ', $username))->customerId;
+            app(CustomerProfile::class)->update($abel, ['display_name' => 'አቤል ተስፋዬ', 'tags' => ['name-collision']], $rgViewer->identifier());
+            $this->scene($tenantId, $abel, 'chat-s08-abel'.($i + 1), 8807 + $i, ['subject' => 'Collision fixture']);
+            app(\App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($abel);
+        }
+
+        // ── H03 (B4-S07, step 12): staff-set language vs a DETECTED one —
+        //    the one inbound message is English against a staff-set Amharic,
+        //    so the apply-once chip has its scene (EC-10).
+        $hanaSet = $resolver->resolveInbound('telegram', new InboundSender('s08-dir-h03', 'Selam Detected', '@fixture_selam_h3'))->customerId;
+        app(CustomerProfile::class)->update($hanaSet, ['display_name' => 'Selam Detected', 'language' => 'am'], $rgViewer->identifier());
+        $this->scene($tenantId, $hanaSet, 'chat-s08-h03', 8809, ['subject' => 'Language fixture'], messageLanguage: 'en');
 
         // ── RG-FLAGGED (B4-S05 E01/E03 + the tab dot's one state).
         $rgCustomer = $resolver->resolveInbound('telegram', new InboundSender('s08-panel-dawit', 'Dawit Bekele', '@fixture_dawit_b'))->customerId;
@@ -157,15 +185,19 @@ final class CustomerBrowserSeeder extends Seeder
             app(\App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($id);
         }
 
-        foreach ([$abebe, $kidist, $rgCustomer, $blocked, $mergeA, $mergeB] as $customerId) {
+        foreach ([$abebe, $kidist, $hanaSet, $rgCustomer, $blocked, $mergeA, $mergeB] as $customerId) {
             app(CustomerRollups::class)->recompute($customerId);
+            // Step 12 (B4-S06): the directory searches these scenes — every
+            // scene customer joins the index (only the merge pair did
+            // before, which was all the profile spec's search needed).
+            app(\App\Domain\Customers\Search\CustomerSearchDocuments::class)->writeFor($customerId);
         }
 
         // The spec deep-links every scene (FR-15 resolves through the list
         // rows) — ALL FOUR tickets project (the first run's second finding:
         // only abebe's row existed and the other deep links 404'd).
         /** @var list<string> $sceneTickets */
-        $sceneTickets = DB::table('tickets')->whereIn('number', [8801, 8802, 8803, 8804, 8805, 8806])->pluck('id')->all();
+        $sceneTickets = DB::table('tickets')->whereIn('number', [8801, 8802, 8803, 8804, 8805, 8806, 8807, 8808, 8809])->pluck('id')->all();
         foreach ($sceneTickets as $ticketId) {
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
         }
@@ -184,6 +216,8 @@ final class CustomerBrowserSeeder extends Seeder
                     'customers.rg_flag.view', 'customers.rg_flag.set',
                     'customers.merge', 'customers.block',
                     'customers.identity.link', 'customers.identity.unlink',
+                    // Step 12 (B4-S07 H05/H06): the honesty spec's arcs.
+                    'customers.export', 'customers.delete',
                 ],
                 'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
             ],
@@ -224,7 +258,7 @@ final class CustomerBrowserSeeder extends Seeder
      *
      * @param  array<string, mixed>  $ticket
      */
-    private function scene(string $tenantId, string $customerId, string $chatId, int $number, array $ticket = [], bool $media = false): string
+    private function scene(string $tenantId, string $customerId, string $chatId, int $number, array $ticket = [], bool $media = false, string $messageLanguage = 'am'): string
     {
         /** @var ?string $existing */
         $existing = DB::table('tickets')->where('number', $number)->value('id');
@@ -247,7 +281,7 @@ final class CustomerBrowserSeeder extends Seeder
         DB::table('messages')->insert([
             'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $conversationId,
             'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
-            'body' => 'fixture inbound for scene '.$number, 'is_internal' => false, 'language' => 'am',
+            'body' => 'fixture inbound for scene '.$number, 'is_internal' => false, 'language' => $messageLanguage,
         ]);
         if ($media) {
             DB::table('messages')->insert([

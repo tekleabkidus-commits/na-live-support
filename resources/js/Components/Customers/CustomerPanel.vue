@@ -83,6 +83,10 @@ const props = defineProps<{
 
 const loading = ref(false);
 const failed = ref(false);
+// H07 (FS-03): stale only means "the handler is behind" — served, never derived here.
+const rollupsStale = ref<{ stale_seconds: number | null; pending: boolean; stale: boolean } | null>(
+    null,
+);
 const header = ref<Header | null>(null);
 const identities = ref<Identity[]>([]);
 const can = ref<Can>({});
@@ -282,10 +286,16 @@ async function load(): Promise<void> {
             headers: { Accept: 'application/json' },
         });
         if (!panel.ok) throw new Error(String(panel.status));
-        const data = (await panel.json()) as { header: Header; identities: Identity[]; can: Can };
+        const data = (await panel.json()) as {
+            header: Header;
+            identities: Identity[];
+            can: Can;
+            rollups_stale?: { stale_seconds: number | null; pending: boolean; stale: boolean };
+        };
         header.value = data.header;
         identities.value = data.identities;
         can.value = data.can ?? {};
+        rollupsStale.value = data.rollups_stale ?? null;
         // A12: header instant, sections streaming (each its own fetch).
         void fetchSection('tickets');
         void fetchSection('betting');
@@ -850,6 +860,23 @@ const filesData = computed(
             <section :aria-label="t.history" data-testid="rollups-card">
                 <h4 class="text-xs font-semibold" :style="{ color: 'var(--ds-text-label)' }">
                     {{ t.history }}
+                    <!-- H07: counts that admit they are behind — the mark plus
+                         the WORD, never a colour alone (§13); the tooltip
+                         carries the recompute age from the server's answer. -->
+                    <span
+                        v-if="rollupsStale?.stale"
+                        data-testid="rollups-stale-chip"
+                        class="ms-1 font-normal"
+                        :style="{ color: 'var(--ds-text-muted)' }"
+                        :title="
+                            fill(t.stale_tooltip, {
+                                minutes: String(
+                                    Math.max(1, Math.round((rollupsStale.stale_seconds ?? 0) / 60)),
+                                ),
+                            })
+                        "
+                        >◷ {{ t.stale }}</span
+                    >
                 </h4>
                 <p class="mt-1 text-xs" :style="{ color: 'var(--ds-text-primary)' }">
                     {{

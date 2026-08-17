@@ -25,7 +25,19 @@ const V375 = { width: 375, height: 812 };
 function artisan(...args: string[]): string {
     return execFileSync(
         'docker',
-        ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml', 'exec', '-T', 'app', 'php', 'artisan', ...args],
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            '-f',
+            'docker/compose.dev.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            ...args,
+        ],
         { stdio: 'pipe' },
     ).toString();
 }
@@ -75,7 +87,9 @@ function announcer(page: Page) {
     return page.getByTestId('panel-announcer');
 }
 
-test('A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08\'s order and lazy sections', async ({ page }) => {
+test("A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections", async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await openCustomerTab(page, conv('chat-s08-abebe'));
@@ -112,11 +126,16 @@ test('A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned
     await expect(page.getByTestId('files-section')).toContainText('infected');
 
     // §13: axe over the filled panel.
-    const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).include('[data-testid="customer-panel-fill"]').analyze();
+    const axe = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa'])
+        .include('[data-testid="customer-panel-fill"]')
+        .analyze();
     expect(axe.violations).toEqual([]);
 });
 
-test('A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note', async ({ page }) => {
+test('A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await openCustomerTab(page, conv('chat-s08-abebe'));
@@ -131,7 +150,10 @@ test('A03: the username-history popover is keyboard-reachable and lists both ear
     await expect(popover).toContainText('Search finds this customer');
 });
 
-test('A04: copy-on-click is a BUTTON and the confirmation is SPOKEN — the live region receives it, not only the chip', async ({ page, context }) => {
+test('A04: copy-on-click is a BUTTON and the confirmation is SPOKEN — the live region receives it, not only the chip', async ({
+    page,
+    context,
+}) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
@@ -183,14 +205,18 @@ async function fiveMoments(page: Page): Promise<void> {
     await page.keyboard.press('Enter');
 }
 
-test('AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card', async ({ page }) => {
+test('AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await openCustomerTab(page, conv('chat-s08-abebe'));
     await fiveMoments(page);
 });
 
-test('AC-B4-03 (375): the SAME cycle in the sheet — B14\'s identical controls, the same contract spoken', async ({ page }) => {
+test("AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken", async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V375);
     await page.goto(`/inbox/c/${conv('chat-s08-abebe')}`);
@@ -205,7 +231,9 @@ test('AC-B4-03 (375): the SAME cycle in the sheet — B14\'s identical controls,
     await fiveMoments(page);
 });
 
-test('B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict', async ({ page }) => {
+test('B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict', async ({
+    page,
+}) => {
     // E01: the permitted viewer sees the slate banner and the tab dot.
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
@@ -228,7 +256,9 @@ test('B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE 
     await expect(page.getByTestId('customer-rg-banner')).toHaveCount(0);
 });
 
-test('§8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded)', async ({ page }) => {
+test('§8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded)', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await page.goto(`/inbox/c/${conv('chat-s08-blocked')}`);
@@ -239,7 +269,9 @@ test('§8: the BLOCKED banner is drawn (red family) and the tab dot stays dark �
     await expect(page.getByTestId('customer-blocked-banner')).toContainText('blocked');
 });
 
-test('A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness', async ({ page }) => {
+test('A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await openCustomerTab(page, conv('chat-s08-kidist'));
@@ -255,14 +287,18 @@ test('A13/A14: a shell is a real customer — short-id head, guidance not apolog
     await expect(page.getByTestId('notes-empty')).toBeVisible();
 });
 
-test('A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive', async ({ page }) => {
+test('A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await page.route('**/panel/tickets', (route) => route.abort());
     await openCustomerTab(page, conv('chat-s08-abebe'));
 
     await expect(page.getByTestId('section-error-tickets')).toContainText("Couldn't load");
-    await expect(page.getByTestId('section-error-tickets')).toContainText('Everything else on this profile is fine.');
+    await expect(page.getByTestId('section-error-tickets')).toContainText(
+        'Everything else on this profile is fine.',
+    );
     await expect(page.getByTestId('customer-panel-fill')).toContainText('@fixture_abebe_t'); // the rest survived
 
     // Retry heals exactly this section.
@@ -271,7 +307,9 @@ test('A15: one section fails, the rest survive — the tickets section shows its
     await expect(page.getByTestId('tickets-card')).toContainText('#8801');
 });
 
-test('A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail', async ({ page }) => {
+test('A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail', async ({
+    page,
+}) => {
     await login(page, RG_VIEWER);
     await page.setViewportSize(V1440);
     await openCustomerTab(page, conv('chat-s08-abebe'));
@@ -281,10 +319,16 @@ test('A16: two agents, one field — the later write LANDS and the loser is told
     const customerId = conv('chat-s08-abebe-customer');
     const setupStatus = await page.evaluate(
         async ({ id }) => {
-            const token = decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '');
+            const token = decodeURIComponent(
+                document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '',
+            );
             const r = await fetch(`/api/staff/customers/${id}/profile`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-XSRF-TOKEN': token },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-XSRF-TOKEN': token,
+                },
                 body: JSON.stringify({ country: 'KE' }),
             });
             return r.status;
@@ -299,7 +343,9 @@ test('A16: two agents, one field — the later write LANDS and the loser is told
     await page.keyboard.press('Enter');
 
     await expect(page.getByTestId('conflict-toast')).toBeVisible();
-    await expect(page.getByTestId('conflict-toast')).toContainText('saved this field a second before you');
+    await expect(page.getByTestId('conflict-toast')).toContainText(
+        'saved this field a second before you',
+    );
     await expect(page.getByTestId('conflict-toast')).toContainText('audit trail');
     await expect(page.getByTestId('chip-country')).toContainText('Ethiopia'); // the later write won
 });

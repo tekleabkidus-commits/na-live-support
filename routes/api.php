@@ -367,6 +367,11 @@ Route::group([], function (): void {
                 ->middleware(['permission:customers.block', 'audit:customer.blocked'])->name('customers.block');
             Route::post('customers/{customerId}/unblock', [App\Http\Controllers\Customers\BlockController::class, 'unblock'])
                 ->middleware(['permission:customers.block', 'audit:customer.unblocked'])->name('customers.unblock');
+
+            // ── Doc 08 FR-20 (S08 step 12): the directory table door — the
+            //    ONE scope brain; G03's rg-filter absence is query-level.
+            Route::get('customers/directory', [App\Http\Controllers\Customers\DirectoryController::class, 'list'])
+                ->middleware('permission:customers.view')->name('customers.directory');
         });
 
     // ── Public API surface (FR-03b). Outbound-capable, so suspension blocks it.

@@ -51,12 +51,14 @@ final class CustomerSearchDocuments
         $usernames = [];
         $phones = [];
         $emails = [];
+        $nameFacts = [];
         /** @var list<object{type: ?string, value: ?string, metadata: ?string}> $identities */
         $identities = DB::table('customer_identities')->where('customer_id', $customerId)
             ->whereNotNull('type')->get(['type', 'value', 'metadata'])->all();
         foreach ($identities as $identity) {
             /** @var array<string, mixed> $metadata */
             $metadata = $identity->metadata !== null ? (array) json_decode($identity->metadata, true) : [];
+            $nameFacts[] = \App\Domain\Customers\Profile\DisplayName::factsFromMetadata($identity->metadata);
             if (is_string($metadata['username'] ?? null) && $metadata['username'] !== '') {
                 $usernames[] = $metadata['username'];
             }
@@ -69,6 +71,17 @@ final class CustomerSearchDocuments
             }
             if ($identity->type === 'phone' && is_string($identity->value)) {
                 $phones[] = $identity->value;
+                // G02/§14 (step 12): "typed as it was dialled, matched
+                // against the stored international form" — the NATIONAL
+                // digit form joins the document so 0912… finds +2519….
+                try {
+                    $national = preg_replace('/\D+/', '', \App\Domain\Customers\Identity\PhoneNumber::national($identity->value));
+                    if (is_string($national) && $national !== '') {
+                        $phones[] = $national;
+                    }
+                } catch (\libphonenumber\NumberParseException) {
+                    // a pre-ADR-0014 value indexes as stored, nothing more
+                }
             }
             if ($identity->type === 'email' && is_string($identity->value)) {
                 $emails[] = $identity->value;
@@ -88,7 +101,9 @@ final class CustomerSearchDocuments
         /** @var array{taskUid: int} $task */
         $task = $customers->addDocuments([[
             'id' => $customer->id,
-            'display_name' => $customer->display_name,
+            // FR-01's derivation (DisplayName, the one brain) — a customer
+            // named only by their channel is still findable by that name.
+            'display_name' => \App\Domain\Customers\Profile\DisplayName::derive($customer->display_name, $nameFacts),
             'usernames' => array_values(array_unique($usernames)),
             'phones' => $phones,
             'emails' => $emails,

@@ -1,0 +1,40 @@
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('directory-table')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByTestId('directory-table')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      181 |     // Cards, not the seven-column table.
+      182 |     await expect(page.getByTestId('directory-cards')).toBeVisible();
+    > 183 |     await expect(page.getByTestId('directory-table')).toHaveCount(0);
+          |                                                       ^
+      184 |     const abebeCard = page
+      185 |         .getByTestId('directory-cards')
+      186 |         .locator('li', { hasText: 'አበበ ታደሰ' })
+        at /home/kidus/projects/na-live-support/tests/Browser/customers-directory.spec.ts:183:55
+
+    Error Context: test-results/customers-directory-G02-37-186d0-AS-DIALLED-finds-its-holder-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/customers-directory-G02-37-186d0-AS-DIALLED-finds-its-holder-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/customers-directory-G02-37-186d0-AS-DIALLED-finds-its-holder-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [chromium] › tests/Browser/customers-directory.spec.ts:46:1 › G01/EC-08: the table — scope count in the header, the collision pair told apart by short id, the blocked badge, identities with @username and the NATIONAL phone, the bulk bar limited to tags and export 
+    [chromium] › tests/Browser/customers-directory.spec.ts:92:1 › G03: the viewer WITHOUT customers.rg_flag.view gets FIVE filters — no RG control, no gap, no dot anywhere — and the SAME header count 
+    [chromium] › tests/Browser/customers-directory.spec.ts:114:1 › G04: searching an old username finds the customer AND says which name matched — 'now' naming the current one 
+    [chromium] › tests/Browser/customers-directory.spec.ts:127:1 › G05: Amharic search matches on its own terms — the first part of a name finds its holder 
+    [chromium] › tests/Browser/customers-directory.spec.ts:176:1 › G02 (375): the table becomes cards — who, how to reach them, open count, how long ago — and a phone typed AS DIALLED finds its holder 
+  2 passed (1.2m)
