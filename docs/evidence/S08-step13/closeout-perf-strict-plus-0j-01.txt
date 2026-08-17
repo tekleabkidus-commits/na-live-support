@@ -1,0 +1,114 @@
+  [dev-hardware-indicative] NFR-01 webhook ACK (burst)   p50   1.287 ms   p99   2.718 ms   max   3.058 ms   budget(p99) 250.0 ms   WITHIN
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] §12 thread page (50 msgs)   p50   0.834 ms   p99   2.424 ms   max   2.543 ms   budget(p99) 120.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\ConversationsBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-01/NFR-01 indicatively: the webhook edge ACKs within budget unde[39m[90m…[39m [90m4.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12 indicatively: a 50-message thread page reads within the paginat[39m[90m…[39m [90m0.45s[39m  
+  [dev-hardware-indicative] resolver hit p99 (NFR-01)    p50   0.350 ms   p99   1.108 ms   max   1.952 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] rollup HANDLER p99 (§12 line) p50   1.926 ms   p99   4.635 ms   max  16.162 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute (repair unit, no §12 budget) p50   1.169 ms   p99   2.703 ms   max   8.932 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] cascade 50 conversations: 206 ms (spec ≤3000 ms)
+  [dev-hardware-indicative] customers_index search p99 (NFR-04 dev-scale) p50   2.772 ms   p99   5.698 ms   max  20.636 ms   budget(p99) 150.0 ms   WITHIN
+  [dev-hardware-indicative] panel header build p99 (NFR-03/§12) p50   1.646 ms   p99   3.890 ms   max   9.296 ms   budget(p99) 120.0 ms   WITHIN
+  [dev-hardware-indicative] customer tab badge read p99 (vs Doc 07 NFR-01 1500 ms) p50   0.700 ms   p99   2.043 ms   max   4.699 ms   budget(p99) 1500.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\CustomerBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01 indicatively: the resolver HIT path (every inbound messag[39m[90m…[39m [90m0.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the per-event HANDLER inside 5 ms×tier, and th[39m[90m…[39m [90m7.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the blocking cascade over 50 conversations ins[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04 indicatively: customers_index search round-trip at dev s[39m[90m…[39m [90m50.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-03/§12 indicatively: the T-07 header build (payload + identi[39m[90m…[39m [90m3.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE RULED MEASUREMENT (escalation #3 part 2): the per-viewer no-[39m[90m…[39m [90m1.75s[39m  
+  [dev-hardware-indicative] tenant resolution (NFR-02)   p50   0.222 ms   p99   0.849 ms   max   1.800 ms   budget(p99) 1.0 ms   WITHIN
+  [dev-hardware-indicative] settings cached read (NFR-03) p50   0.044 ms   p99   0.240 ms   max   1.032 ms   budget(p99) 0.5 ms   WITHIN
+  [dev-hardware-indicative] events table insert (§12)   p50   0.259 ms   p99   0.997 ms   max   5.693 ms   budget(p99) 1.0 ms   WITHIN
+  [dev-hardware-indicative] outbox publish (NFR-04)      p50   0.343 ms   p99   1.607 ms   max  12.075 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] registry cold-load (§12)    once   0.179 ms   budget 50.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\FoundationBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit meets the §12 budgets on dev hardware: resolution ≤1ms, settings[39m[90m…[39m [90m2.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cold-loads the settings registry within 50 ms (§12)[39m[90m              [39m [90m0.03s[39m  
+  [dev-hardware-indicative] §12 projector recompute (≤500ms p95; +200ms publish rides the same call) p50   7.288 ms   p99  15.597 ms   max  18.514 ms   budget(p99) 500.0 ms   WITHIN
+  [dev-hardware-indicative] §12 view recompute, 300 candidates (spec: 50k ≤ 5000ms — Doc 19 at scale) p50   0.534 ms   p99   0.625 ms   max   0.625 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 search tickets+messages via proxy (tickets ≤150ms / messages ≤300ms) p50   8.583 ms   p99  12.735 ms   max  12.735 ms   budget(p99) 300.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sync 500-event replay via SyncReader (≤250ms p95) p50   2.341 ms   p99   3.959 ms   max   3.959 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] Doc 06 §12 merge preview, 2x500 messages (≤400ms) p50   8.510 ms   p99  12.680 ms   max  12.680 ms   budget(p99) 400.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\InboxBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§12: projector lag — one event-driven recompute (row rebuild from t[39m[90m…[39m [90m1.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: saved-view recompute at in-suite scale completes within the 5[39m[90m… [39m [90m3.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: search p95 through the ONE proxy path — tickets ≤ 150 ms, mess[39m[90m…[39m [90m1.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: the sync endpoint replays a 500-event backlog ≤ 250 ms p95 — T[39m[90m…[39m [90m2.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDoc 06 §12 BUCKET CLOSED: merge preview over two 500-message timeli[39m[90m…[39m [90m0.75s[39m  
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.111 ms   p99   0.440 ms   max   0.730 ms   budget(p99) 0.3 ms   OVER
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Performance\RbacBudgetsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil[39m[90m…[39m [90m0.12s[39m  
+  [dev-hardware-indicative] CONTROL trivial SELECT       p50   0.149 ms   p99   0.639 ms   max   1.232 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @   5 tickets+msgs p50   1.073 ms   p99   2.622 ms   max   5.330 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @  20 tickets+msgs p50   1.106 ms   p99   2.561 ms   max   3.769 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @  80 tickets+msgs p50   1.326 ms   p99   3.101 ms   max   6.291 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @ 320 tickets+msgs p50   1.387 ms   p99   3.292 ms   max  11.499 ms   budget(p99) 5.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\RollupTailCharacterizationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULING 1: trivial-statement control + volume sweep, printed sid[39m[90m…[39m [90m11.66s[39m  
+  [dev-hardware-indicative] NFR-01 normalization         p50   0.004 ms   p99   0.011 ms   max   0.069 ms   budget(p99) 30.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 send (our half)       p50   0.001 ms   p99   0.008 ms   max   0.014 ms   budget(p99) 80.0 ms   WITHIN
+  [dev-hardware-indicative] §12 webhook ACK             p50   5.728 ms   p99  15.554 ms   max  15.554 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep 10k-armed/20-due: 32 ms (pro-rated budget 2000 ms from 50k ≤ 10 s) WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TelegramBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: adapter normalization overhead ≤30 ms (dev-hardware-indi[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: adapter send overhead (our half) ≤80 ms (dev-hardware-in[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12: webhook ACK single-request cost p99 ≤250 ms on the REAL rou[39m[90m…[39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-03/§12: sweep at 10k armed / 20 due inside the pro-rated bud[39m[90m…[39m [90m0.10s[39m  
+  [dev-hardware-indicative] NFR-01 transition            p50   5.524 ms   p99  11.800 ms   max  22.027 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-02 merge+unmerge round   p50  25.707 ms   p99  40.627 ms   max  40.627 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-04 bulk 200              p50 843.521 ms   p99 843.521 ms   max 843.521 ms   budget(p99) 30000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep (10k armed/20 due) p50 232.545 ms   p99 232.545 ms   max 232.545 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 tag autocomplete @5k    p50   8.136 ms   p99  15.304 ms   max  19.491 ms   budget(p99) 80.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TicketsBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-01: a single transition commits within budget (p99 ≤ 25 ms)[39m[90m     [39m [90m2.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-02: a merge + unmerge ROUND completes within the single-operati[39m[90m…[39m [90m0.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-04: a 200-item bulk batch completes within budget (≤ 30 s), lin[39m[90m…[39m [90m1.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: the timer sweep is O(due), not O(armed) — 10k armed candidates[39m[90m…[39m [90m1.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: tag autocomplete answers within budget at 5k distinct tags (p9[39m[90m…[39m [90m2.16s[39m  
+  [dev-hardware-indicative] NFR-01 TOTP verify           p50   0.009 ms   p99   0.051 ms   max   0.434 ms   budget(p99) 150.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 recovery-code verify  p50  94.301 ms   p99 118.773 ms   max 118.773 ms   budget(p99) 150.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TwoFactorBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit verifies 2FA within NFR-01's 150 ms p99 (dev-hardware-indicative[39m[90m…[39m [90m8.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\SystemViewMembershipTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit My Open: assignee=me AND open-family — a resolved assignment and[39m[90m…[39m [90m1.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Unassigned: scope-visible base = assignee ∅ AND open-family — an[39m[90m…[39m [90m1.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Mentions (A-32 as ruled): unresolved from note.mentioned until t[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Following: ticket_followers truth, any status; unfollow EXCLUDES[39m[90m…[39m [90m1.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SLA at risk: warned/breached AND open-family (FR-05) — a breache[39m[90m…[39m [90m1.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0[39m[90m…[39m [90m2.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing[39m[90m…[39m [90m0.82s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\RbacBudgetsTest[22m [90m>[39m it meets NFR-01 indicatively:…   
+[39;1m  NFR-01 cached map + checks: p99 0.440 ms exceeds the asserted SPEC BUDGET of 0.300 ms (spec budget 0.3 ms; p50 0.111 ms, max 0.730 ms). Strict mode (`make perf`): this is the spec budget itself, on dev hardware.
+Failed asserting that 0.43978 is equal to 0.3 or is less than 0.3.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m873[39m
+    869▕ {
+    870▕     $ceiling = assertedBudget($specBudgetMs);
+    871▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+    872▕ 
+  ➜ 873▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+    874▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+    875▕         .'%s',
+    876▕         $name,
+    877▕         $stats['p99'],
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m873[39;22m
+  [33m2   [39m[39;1mtests/Performance/RbacBudgetsTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m33 passed[39;22m[90m (401 assertions)[39m
+  [90mDuration:[39m [39m121.24s[39m
+
