@@ -1,28 +1,79 @@
-# SESSION-PROMPT-SPEC (v7 — for SESSION-08, Doc 08: Customer Profiles & Identity)
+# SESSION-PROMPT-SPEC (v8) — how to write SESSION-09
 
-The advisor writes prompts/SESSION-08-doc08-customers.md to this spec. **Exemplar: prompts/SESSION-07-doc07-inbox.md** (654 lines, 6 PROTOCOL steps) — mirror its structure, discipline density, and its exact closing line: `Then STOP.` (the session's integrity check counts the PROTOCOL steps and verifies that final line verbatim).
+SESSION-09 is a single markdown file, committed to prompts/, that a fresh solo Claude
+Code session reads FROM DISK and follows completely. The exemplar is
+prompts/SESSION-08-doc08-customers.md (687 lines): mirror its structure, not its
+content. Content comes from Doc 09's own text, which you (the advisor) read first and
+verify every claim against.
 
-## §A — Prerequisites gate (STEP 0 territory)
+## REQUIRED STRUCTURE, IN ORDER
 
-- **A.0 Credentials:** Doc 08 requires NO external credentials — state that explicitly so the session never invents a gate. In the same breath, the prompt instructs the session to remind the owner ONCE that **Doc 09 requires AI-provider API keys (staging-grade)** — acquisition starts now, in parallel.
-- **A.1 Rulings-filed proof:** before building, the session proves in the repo that every Doc 08-relevant standing ruling is filed (ANSWERS A-30…A-37, R-26 + the generalized views.manage principle, ADR 0011/0013, SCHEMA AMENDMENT 1) and that the plan-approval commit exists. Missing filing = STOP.
-- **A.2 Inherited rows 0–11** from PROJECT-HANDOFF-v7 §4 reproduced as the prompt's opening table; each gets a disposition in the plan (carry / discharge-at-step-N / owner-action).
+1. **ROLE + VERIFICATION CONTRACT** — principal engineer framing; the owner is not a
+   programmer; nothing claimed working without pasted executed output; ambiguity = STOP
+   and ask.
+2. **SOLO-PROCESS GUARD** — before ANY work including reading; raw process list, own
+   PID by ancestry; repeats at every resume; the stale-vs-transport discriminator.
+3. **PROMPT INTEGRITY CHECK** — read from disk at its exact path; state the PROTOCOL
+   step count; confirm the last line is exactly `Then STOP.` All three or stop.
+4. **THE STANDING RULES CARRIED FROM MINUTE ONE** — at minimum rules 15 (CI once,
+   never polled), 17 (evidence as pasted text/screenshots), 18 (the grounding rhythm,
+   verify-the-advisor's-SHA included — incidents #14/#15 are the reason).
+5. **STEP 0 — THE CREDENTIALS GATE (hard for Doc 09)** — the Addis AI staging key:
+   a real authenticated call executed, output pasted, BEFORE the rulings-filed proof.
+   Then the rulings-filed proof: A-38…A-42, ADR 0014, SCHEMA AMENDMENT 2 + additions,
+   each cited to its commit. A missing filing is a STOP. Include the provider
+   CAPABILITY CHECK as step 0's second half: fixture conversations through Addis AI,
+   scored on structured output, English, Amharic; Gemini free tier is the named
+   fallback; the result decides the plan's provider rows.
+6. **READING LIST** — each file with WHY; no plan row from memory or from this
+   prompt's summaries; the substrate Doc 09 consumes read as CODE (the Doc 08 RG seam,
+   ChannelIdentityMap, ConsumerRegistry, the live relay, the outbox).
+7. **ESCALATE-FIRST, stated BEFORE the scope** — Docs 01–08 all core; name the
+   predictable pressure points you found while reading Doc 09; cite core edits #6 vs
+   #7 as the contrast (be #7).
+8. **SCOPE** — implement all of Doc 09; the session enumerates every id family from
+   the document itself and STATES ITS COUNT BY FAMILY (you reconcile privately);
+   out-of-scope handoffs named per document; pre-agreed closure buckets in a table,
+   each with its unblocker; the [D09] CLOSING SET the session enumerates from
+   BUILD-STATUS itself.
+9. **INHERITED ROWS** — handoff v8 §4 rows 0a–12, each a mandatory plan row with a
+   disposition (carry / discharge-at-step-N / owner-action).
+10. **THE SUBTLE PARTS** — the traps you verified against Doc 09's text, each citing
+    its id. Write these only after reading the document; never inherit them from this
+    spec.
+11. **PROTOCOL — exactly 6 steps**, the S08 lineage: (1) plan-first with safety tests
+    sequenced BEFORE the features they constrain, canonical suites command defined at
+    plan time, WAIT for approval, approved plan committed at approval; (2) one commit
+    per step, registries as you go, gates every commit, enumerated lists grow only by
+    filed amendment, schema changes = R-19b + grant physics + filed amendment
+    countersigned BEFORE the migration; (3) sabotage with a floor of TEN (list them,
+    verified against Doc 09's text — include at least one prompt-injection-shaped
+    falsification), positive control per assertion, captures first, no pipes on gates;
+    (4) i18n en+am, R-14 queue, destructive-tier flags; (5) full correctness battery
+    every step-commit regardless of BAT1 (the split is owner law), timing legs on wall
+    power only, CI once per checkpoint; (6) the close-out: full self-audit table, ledger
+    item-by-item, closing-set outcomes, deviations, inherited outcomes, core-edit
+    enumeration, honest trail, the close-out SHA grounded by the owner BEFORE the
+    advisor recount.
+12. **CADENCE** — batches, one checkpoint per batch, the seven mandatory mid-batch
+    stops (ruling needed; guard conflict; red battery; core-edit boundary; enumeration
+    amendment; schema countersign; design conflict/gap).
+13. **DESIGN FIDELITY** — the mandate binds; the Doc 09 batch file list DERIVED
+    INDEPENDENTLY from PROGRAM-REPORT-v1 and cross-checked both directions; frame-
+    mapping rows mandatory; deviations in exactly three classes, all filed.
+14. **HARD PROHIBITIONS** — no secrets/PII in prompts, commits, or captures (and for
+    Doc 09: NO REAL CUSTOMER TEXT TO THE PROVIDER outside production — the Doc 05
+    incident at higher stakes); no invented permission keys (catalog closed at 113);
+    no document edits without escalate-first; no green without pasted output; no CI
+    polling; no second Claude process; no second implementation of an existing check;
+    no PARTIAL outside a named bucket; a false DONE is a Sev-1.
+15. **LAST LINE, exactly:** `Then STOP.`
 
-## §B — Prompt anatomy (in this order)
+## RULES FOR YOU WHILE WRITING IT
 
-1. **Identity & solo law:** fresh session, reads this prompt FROM DISK, prompt-integrity check, raw-ps solo-process proof (PID by ancestry) at start and at every resume/takeover (§5). Account takeovers per the SESSION-22/Doc-07 precedent.
-2. **The law stack:** the 19 documents; registries normative; DESIGN-FIDELITY-MANDATE binds every surface; **escalate-FIRST for any Docs 01–07 file** (Doc 07 is core now — its doors, stores, panel slots, and DeclareAuditAction included); the 18 standing rules by number, rule 18's report shape spelled out (every checkpoint report ends with its commit SHA).
-3. **Scope:** Doc 08's own enumeration (the session builds its plan table with every id, family-exact — the advisor audits against a private count). The Customer panel FILLS the step-8 slot (ContextPanel Customer tab + seam fixtures + tabBadges.customer); B14's identical-controls law binds it at 375. Identity: hybrid resolution, **staff-collected-never-verified** rendered as provenance (the B13 subject-source idiom), no betting-account access anywhere. RG-flag surfaces per the document's SEC rows. Closing set: Doc 07's panel-internal PARTIALs that Doc 08 owns, each cited by row.
-4. **Build order:** plan of ~N steps, one commit per step (batch cadence allowed by advisor amendment; per-unit commits regardless), full battery + gates (14) + lint green per step-commit, `make gates` per commit (the Doc 07 miss is filed — don't repeat it), sabotage list with a floor of ≥10 (grown only by filed amendment BEFORE running).
-5. **Engineering laws to restate in the prompt:** DB-time only (C-11); R-19b per-column analysis + grant physics + filed schema amendments for any new tables/columns (customer/identity tables are certain — the amendment goes to the advisor for countersign BEFORE the migration ships); pinned-provenance copies for ordering-relevant columns; ConsumerRegistry + contract fixture for every durable consumer (the relay is LIVE — deliveries are real, C-09 is exercised by reality); relay-live spec law (no shared mutated rows; seeder self-heals scene canon); A-37 causal noop declarations on audit-declared noop paths at design time; the shouldRenderJsonWhen per-door interim + evidence filing; C-10 404-pattern + curated payload allowlists on every read door (PII-heaviest document yet — the Doc 05 incident is precedent: real customer data behind a "staging" label = STOP).
-6. **Evidence & reporting:** captures unfiltered under docs/evidence/S08-*/; verdicts from capture summary + exit code; no pipes on gates; sabotage fail+restored pairs; checkpoint reports as plain text ending with the SHA; batteries only on `BAT1: Charging`; CI one look per checkpoint, owed forward; **STOP at every checkpoint until the advisor's grounded acceptance returns.**
-7. **Close-out (PROTOCOL step 6):** the full-id self-audit (false DONE = Sev-1; PARTIALs only in buckets pre-agreed in the plan), ledger item-by-item, closing-set outcomes, deviations, core-edit enumeration, honest trail, R-14 totals, §9 report, final battery + CI once, the close SHA for the owner's grounding.
-
-## §C — Hard prohibitions
-No secrets/tokens/PII in the prompt, artifacts, commits, or captures. No invented permission keys (catalog CLOSED at 113; render-gates are derivations). No document-file edits without escalate-first. No green claimed without pasted output. No CI polling. No second Claude process.
-
-## §D — Notes for the advisor writing this prompt
-- Derive the fidelity file list yourself from PROGRAM-REPORT-v1 (Batch-4 customer files primarily); frozen record only.
-- Expect design-vs-document conflicts: the document wins; cite both texts; stale frame references get struck, gaps become owner-ruled class-2 fills (the R-22/cc52cc1 precedent shape).
-- Budget rows: dev-scale indicative + Doc 19 bucket named per row; never faked numbers; flag misses plainly (the TTI precedent).
-- The Doc 07 endgame cadence (one batch → one checkpoint + one `git log -N` grounding) is the owner's preferred shape — write it into the prompt from the start.
+- Every factual claim in the prompt traces to the document, the repo, or a filed
+  ruling. If you cannot cite it, cut it.
+- The prompt states integrity facts about itself (line count is checked by the session;
+  keep the step count at 6 and the last line exact).
+- Deliver it to the owner's machine directly (Filesystem tools), give him a rename-safe
+  copy command, and require the commit + git-verify BEFORE any session reads it.
