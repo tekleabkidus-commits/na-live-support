@@ -1968,3 +1968,166 @@ entries:
       the repo-wide filename check and the schema check, and every later step
       builds under it. Sabotage #10 (a verified variant added → red) executes when
       the identity component exists (step 10). §21: this test is kept forever.
+
+  # ── Doc 09 (AI System) — S09. Seeded at plan approval per ADR 0004: the
+  #    BUILD-STATUS row leaves NOT STARTED in the plan-approval commit, which
+  #    arms this gate, so the ten AC rows are seeded HONESTLY in the same
+  #    commit (the Doc 05/Doc 08 step-1 idiom, pulled forward to approval
+  #    because the top-table flip rides the approval commit). Every row names
+  #    its planned suite and step from docs/SESSION-09-APPROVED-PLAN.md §8 and
+  #    says so in `gap`. A row flips to automated/covered ONLY with executed
+  #    output on record (a false flip is a Sev-1).
+  - ac_ref: "Doc09 AC-01"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 5): the golden-conversation suite (tests/Golden) at
+      pinned configs, en + am, across all action types, including batch-tail
+      (EC-01) and post-resolution (EC-08) flows, against the record/replay
+      provider mock. Seeded before any suite exists; flips to automated in the
+      step-5 commit with executed output.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-02"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 9): the grounding rule — policy/money fixtures without
+      retrieval hits always hand off (no_grounding); every answer action
+      carries >=1 valid citation, schema-enforced (ActionSchema + RetrievalTest
+      AC-02 clauses). Flips to automated in the step-9 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-03"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 9): SimulationParityTest — for a seeded decision-log
+      day, slider changes produce exactly the recomputed outcomes the engine
+      would produce (simulation-vs-replay parity). Flips to automated in the
+      step-9 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-04"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 steps 6-7): RgEvalHarnessTest (NFR-07 precision at the
+      shipped threshold, labeled fixture set) + RgOverrideTest (mid-form
+      preemption; template-only output byte-verified; flag + excerpt +
+      suppression through the built Doc 08 path — the [D09] FR-14 close).
+      Flips to automated in the step-7 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-05"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 steps 3/12): HonestyTest (disclosure in first greeting
+      across personas/languages; transaction-fact trap fixtures) + the
+      ai-honesty browser spec's DOM assertions for AI marking on every staff
+      surface. Backend half flips at step 3's commit; the DOM half at step 12.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-06"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 10): CopilotNeverAutoSendTest — no code path from
+      suggestion to adapter without the composer send action, proven static AND
+      runtime (BR-01) — plus ArtifactOutcomeTest capturing all three FR-16
+      outcomes. Flips to automated in the step-10 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-07"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 5): AiInjectionRedTeamTest — all shipped red-team
+      fixtures neutralized (blocked topics hold, no system-prompt leakage, no
+      out-of-enum actions executed), required in CI against the record/replay
+      mock. Flips to automated in the step-5 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-08"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 8): KillSwitchTest — each scope combination silences
+      exactly its blast radius <=10 s, both directions (off where told, on
+      everywhere else), evented, bannered. Flips to automated in the step-8
+      commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-09"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 8): FailoverDrillTest — the scripted provider-failure
+      drill produces the FS-01 ladder exactly (breaker, chain, bypass-to-
+      handoff, degraded Copilot card, Supervisor pause, auto-resume, evented)
+      with zero unanswered customers. Flips to automated in the step-8 commit.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+  - ac_ref: "Doc09 AC-10"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: release
+    environment: staging
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (S09 step 8): MeteringTest + QuotaEnforcementTest prove the
+      quota/metering half (pre-call enforcement, EC-12 reserve, FS-05
+      reconcile). The invoice-reconciliation half (tokens vs provider invoice
+      within 2%) is [OA] — it needs a real invoice month (owner/calendar), the
+      pre-agreed bucket named in the approved plan.
+    gap: >-
+      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      The invoice half stays [OA] even at close.

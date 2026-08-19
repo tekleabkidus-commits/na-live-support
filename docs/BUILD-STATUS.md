@@ -14,7 +14,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 05 | Telegram Channel (Business + Direct) | **CLOSED — ACCEPTED by the owner on the advisor's recount at `e62f204` (2026-08-10): 101 rows exact, families matching the independent enumeration, 84/17/0 verified, the PARTIAL set matching the bucket key id-for-id with every cite sanctioned, ledger 20/20 item-by-item; one recount correction (the second step-6 ruling line restored verbatim to RISKS) applied in the acceptance SHA itself. Rulings A-28/A-29 filed. Final 101-id self-audit: 84 DONE / 17 PARTIAL (every PARTIAL a pre-agreed bucket or an owner-assisted blocker) / 0 NOT DONE; sabotage ledger 20/20 reconciled item-by-item. The step-12 recount caught and CLOSED two silent drops and one untested edge (FR-26 deep links never built despite the step-5 plan row; FR-25's setMyCommands registration half; EC-06's compound convergence). Both interpretations RULED at the close-out review: A-28 countersigned (FR-30 write tools on telegram.bots.manage); A-29 approved with its three conditions discharged (FR-26 acquisitions table). Canonical suites 116/675; full suite 971/12,965; gates 13/13; browser 63/63; perf strict PASS ×2 — see the S23 step-12 section** | S23 | AC-01/02/05/06/09 covered; AC-03 + AC-08's live halves owner-assisted-BLOCKED (dedicated staging Business account, §21); AC-04/07 partial (pre-agreed Doc 07/12/14 buckets) | staging bot @nasupportstagingbot + Business account proven live (step 0); token interim storage per A-19; **token rotation MANDATORY before any reconnection or production traffic (owner ruling, verbatim in the close-out RISKS)**; dev has no public ingress — A-24 capture-replay strategy with the Doc 18 handoff row; Stage-4 first-attempt “flake” DIAGNOSED by the step-12 harness fix as a REAL seeder defect (random-uuid published_by, FK violation on fresh DBs, retry-masked) and FIXED; **CI-proven on `da335a8`: run [31382257865](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31382257865), all stages green, Stage 4 zero flakes** |
 | 07 | Unified Inbox & Agent Workspace | **CLOSED — ACCEPTED by the owner on the advisor's recount at `429a754` (2026-08-14): 101/101 family-exact, 92 DONE / 9 PARTIAL / 0 NOT DONE with no false DONE and every PARTIAL bucket-sanctioned, ledger 22/22 item-by-item, closing sets and core-edit enumeration verified. CI verdict of record: run [31772609440](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31772609440) GREEN on `a58b42f` — the first green run since the relay service landed, closing the four-cause relay saga (crash-loop vs --wait; getCode vs errorInfo[0]; fresh-initdb 57P03/3D000; the tool-less healthcheck floor). Was: steps 1–15 complete; close-out (the incident-#13 gate: the owner grounds the close-out SHA before the recount recommendation issues). Final 101-id self-audit: 92 DONE / 9 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed §12/Doc 19 or staging-operational bucket; sabotage ledger 22/22 reconciled item-by-item (+ the beyond-plan pairs); Doc 05 closing set 6/6 and Doc 06 closing set 6/6 CLOSED; B12-A01 nine/nine executed; rulings A-30…A-37 + the 2026-08-13 five-item stop ruling filed; ruled core edits #6 (retro-countersigned) and #7 (escalate-first) on the record. See the S07 STEP-15 CLOSE-OUT section** | S07 | AC-01…09 covered (functional-state + a11y, no pixel baselines — inherited row 12); AC-10 PARTIAL (Doc 19 halves stated) | plan `docs/SESSION-07-APPROVED-PLAN.md` (101/101 family-exact); canonical suites command defined below |
 | 08 | Customer Profiles & Identity | **CLOSED — ACCEPTED by the owner on the advisor's recount at `7e69094` (2026-08-17): 91/91 family-exact, no false DONE, ledger 16/16 item-by-item, closing rows + core edits verified. Final 91-id self-audit: 78 DONE / 11 PARTIAL / 2 NOT DONE — every PARTIAL a pre-agreed bucket cited BY NAME; the 2 NOT DONE are SANCTIONED CARRIES (owner's closure ruling at acceptance): SEC-03 (Doc 02 scrubber extension — the filed escalation is the inter-document window's FIRST item) and EC-03's heuristic-chip half (named debt), both riding at the TOP of PROJECT-HANDOFF-v8 §4 as inherited rows. Governance incidents #14 AND #15 caught at this close by verify-before-building (a transit-mangled SHA, then transit-mangled figures — both advisor-side, both stopped). Was: BUILT —** Final 91-id self-audit: **78 DONE / 11 PARTIAL / 2 NOT DONE** — every PARTIAL a pre-agreed bucket cited BY NAME; the 2 NOT DONE are recount catches (SEC-03 scrubber extension — a Doc 02 core edit, escalated; EC-03's heuristic-chip half), filed honestly with proposals. Sabotage ledger **16/16 item-by-item**; close-out battery 1239/18,806 zero reds + strict §12 legs green except 0d's own leg (host-bound RECORDED on the tripwire's terms); 0j fixed and 7/7 in the close-out run; governance incident #14 filed (advisor-side phantom SHA, caught by the tree check). Steps 11+12 accepted at `b649704` (incl. the fold-kept dirty start, owned; FR-01's DisplayName derivation find; G03 proven at the SQL). Plan approved+committed `8f85b3c` (91/91 family-exact); SCHEMA AMENDMENT 2 countersigned with four rulings | S08 | AC-01…09 ALL covered (traceability automated rows; AC-08/AC-B4-03 browser-proven both viewports) | canonical DOC 08 SUITES command defined below; traceability rows seeded at 1a (AC-09 automated same-commit; AC-01…08 planned-manual, flipping as their suites land) |
-| 09 | AI System (Chatbot, Copilot, Supervisor) | NOT STARTED | — | — | needs AI provider staging keys |
+| 09 | AI System (Chatbot, Copilot, Supervisor) | **IN PROGRESS — S09 plan APPROVED (advisor recount 94/94 family-exact, events 6/6, [D09] 2/2) and committed per standing rule 12; STEP 0 credentials gate DISCHARGED (Addis AI key live: HTTP 200, model `addis-አሌፍ-፩`; capability check pasted; embeddings NOT SERVED → pinned-local-model ruling). Build not yet begun — step 1 awaits the owner's grounding of the approval commit** | S09 | — | plan `docs/SESSION-09-APPROVED-PLAN.md`; canonical DOC 09 SUITES command defined below; governance incident #16 filed (key pasted into session chat; owner ruled the test key stays in service; ROTATE before production) |
 | 10 | Knowledge Base | NOT STARTED | — | — | |
 | 11 | Departments, Teams, Queues & Routing | NOT STARTED | — | — | |
 | 12 | Automation, SLA, Forms & Custom Fields | NOT STARTED | — | — | |
@@ -32,6 +32,81 @@ SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
 mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
+
+## SESSION-09 (Doc 09) — "DOC 09 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
+
+**Every S09 checkpoint figure and the close-out recount use this and only this:**
+
+```
+./vendor/bin/pest tests/Feature/Ai \
+                  tests/Golden \
+                  tests/Contract/AiEventConsumerContractsTest.php \
+                  tests/Isolation/AiGrantPhysicsTest.php \
+                  tests/Security/AiEgressGuardTest.php \
+                  tests/Security/AiContextAllowlistTest.php \
+                  tests/Security/AiInjectionRedTeamTest.php \
+                  tests/Security/CopilotNeverAutoSendTest.php
+```
+
+Performance suites run under `make perf` / the dedicated CI stage; browser proofs under
+`make browser`; any new Doc 09 file at another tier joins this command in the same commit
+that creates it. RECORD NOTE (the S23/S07/S08 precedent, applied at definition time): the
+command names files later steps create — figures cited before a named file exists come
+from the extant paths, stated as such.
+
+Both S08 per-step routine lines CARRY: (1) every step commit verifies its traceability
+flip against the suite that landed in that same commit; (2) ANY consumer-registry
+addition moves ReopenConsumerDrillTest's pin AND the Doc 06 NFR-06 completeness fixture
+(`fixtures/tickets/consumers/<doc>.json`) IN THE SAME COMMIT.
+
+## SESSION-09 (Doc 09) — APPROVED PLAN RECORD (committed at approval per standing rule 12)
+
+**Approved by the owner on the advisor's recount, 2026-08-19: 94/94 family-exact**
+(FR 21 / NFR 7 / US 7 / BR 7 / T 9 / SEC 6 / EC 12 / FS 5 / SS 4 / AC 10 / R 6),
+events 6/6, [D09] closing set 2/2 (Doc 08 FR-14 + EC-06). **The full plan table — every
+id → file → proving test, the 14 steps with safety-first ordering, the inherited rows
+0a–12, the [D09] closing set, the 15-item sabotage enumeration, the buckets, and the
+risk rows — is committed at `docs/SESSION-09-APPROVED-PLAN.md`** (this section is the
+pointer of record, not a summary that could drift). RECORD NOTE (the incident-#14/#15
+channel again): the chat transmission of the plan table arrived GARBLED at the advisor
+(duplicated rows, table broken midway); the committed file is the plan of record and
+carries exactly one clean row per id — approved on the advisor's own recount of the
+enumeration, not the garbled paste.
+
+**Stack growth approved with the plan (ADRs written before the code they cover):**
+0015 pgvector · 0016 in-house thin OpenAI-compatible LLM client · 0017 Horizon `ai`
+queue family · 0018 local embeddings sidecar with pinned model (bge-m3 or equivalent —
+owner ruling; Addis AI serves no embeddings endpoint, proven 404 at STEP 0.2d) ·
+0019 Addis AI provider + data-use terms record ([D18] interim). **`ai.providers.manage`
+enters as the addition-of-record at its step** (registry header note + Q9/R-12;
+owner-confirmed sign-off row; catalog 113→114, snapshot pins move same-commit).
+SCHEMA AMENDMENT 3 is filed and countersigned BEFORE any migration ships (B1 precedent).
+
+**Provider capability record (STEP 0.2, evidence `docs/evidence/S09-step0-capability/`,
+credential-clean):** structured output 0/23 malformed (17 classification EN+AM + 6
+FR-08 action turns; RG fixtures rg=0.95 both languages; transaction-fact trap →
+`handoff/no_grounding`); English PASS WITH CONDITIONS — a hidden provider preamble
+defaults replies to Amharic and self-identifies as "Addis Assistant (አዲስ) from Addis
+AI" unless HARDENED identity/language rules ride the system layer (proven controlling;
+ruled accepted as T-02 build requirements, pinned in the golden suite); Amharic outputs
+captured verbatim for R-14 native review; embeddings NOT SERVED. Latency p50 ≈2.4 s on
+tiny outputs (NFR-01 risk row); ~270–420 fixed prompt-token preamble overhead (T-07
+rate-card fact). Single-model catalog: fast/strong tiers are config-routing until the
+provider grows.
+
+### GOVERNANCE INCIDENT #16 — credential pasted into the session chat (owner-side; filed at S09 plan approval)
+
+At the STEP 0.1 credentials gate the owner's chat message included the full Addis AI
+staging key verbatim (while asking for a hidden-prompt filing command). The session
+flagged it immediately as a Sev-1-class exposure, refused to file the pasted key, and
+instructed revoke-and-rotate with a `read -s` hidden-prompt one-liner. **The owner ruled
+the exposed key STAYS IN SERVICE** — it is a test key on a test account, used only for
+the staging capability checks; risk accepted on the record. Defenses that held: the key
+was never echoed by the session, never landed in a commit or a capture (the evidence dir
+greps clean for `sk_`/`Authorization`/`Bearer`), and lives only in the interim vault
+(`~/.na-vault/addis-ai.env`, 700/600, outside the repo). **Standing consequence: the
+exposed key is ROTATED before any production key exists — an owner-action row carried at
+every S09 checkpoint until done.** (Numbering follows #14/#15 in the S08 close section.)
 
 ## SESSION-08 (Doc 08) — "DOC 08 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 
