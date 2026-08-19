@@ -1990,3 +1990,170 @@ door; produces `customer.fields_changed` (payload: field_keys — names only,
 Q7) + `customer.fields_changed` audit entries with old/new; the
 duplicate-player_id hint recomputes from truth on read (no denormalized
 count to drift).
+
+---
+
+## S09 (Doc 09) — SCHEMA AMENDMENT 3 (filed at step 2a, BEFORE any migration exists — the B1-split law; needs advisor countersign)
+
+The Doc 09 schema, complete: five tables + one extension, every column
+R-19b-analyzed, ADR-0003 grant physics throughout, `APP_WRITABLE_COLUMNS`
+split-comment discipline, DB time only (C-11), FORCED RLS + tenant_isolation +
+`REVOKE DELETE` on every new table. Interpretations are FLAGGED inline (⚑) for the
+countersign rather than chosen silently. No migration ships until this amendment
+returns countersigned. pgvector's `CREATE EXTENSION` is migrator-owned DDL
+(ADR 0015); the compose postgres image moves to `pgvector/pgvector:pg16` in the same
+commit (drop-in Postgres 16 + the extension; no volume-format change).
+
+⚑ **FLAG 0 — the "(Doc 01 schema)" reading.** FR-20 says "writes ai_decisions
+(Doc 01 schema)". Doc 01 defines no such table (verified: zero hits in
+Doc01-Platform-Foundation-Multitenancy.md and in the migrations). Reading: the
+phrase names Doc 01's schema CONVENTIONS (UUIDv7, tenant_id, timestamptz UTC,
+partitioning for high-volume tables, RLS, grant physics) — Q9's prose-descriptive
+law. Countersign confirms or corrects.
+
+**1. `ai_decisions` (FR-20, T-08, NFR-05, SEC-06, EC-05/EC-11, AC-03) — PARTITIONED
+MONTHLY (the messages/events/audit precedent; high-volume by FR-21's own "sampled"
+admission; joins partitions:check/maintain in the same commit).**
+
+- `id` (UUIDv7, C-01), `tenant_id` (C-02).
+- `surface` text CHECK (chatbot|copilot|supervisor); `task` text CHECK — the twelve
+  FR-01 v1 task names, a closed enum grown only by migration.
+- `provider` text NOT NULL, `model` text NOT NULL; `config_version_id` uuid nullable
+  (the published `ai_config_versions` row consulted — FR-04's "every decision logs
+  the exact config_version").
+- `layer_hashes` jsonb NOT NULL — T-02: every prompt layer's version hash INCLUDING
+  the immutable honesty layer's; the T-02 test asserts the immutable hash is present
+  and matches the code-shipped layer.
+- Join identifiers, all nullable uuids: `conversation_id`, `ticket_id`,
+  `customer_id`, `message_id` (outcome enrichment joins on these + `id`; the handoff
+  packet embeds decision_id per T-08). `endpoint_ref` text nullable (EC-07);
+  `language` text nullable.
+- Decision fields (FR-20): `intent` text nullable, `confidence` numeric nullable,
+  `action` text nullable (the FR-08 closed enum + copilot/supervisor task outputs),
+  `rg_risk` numeric nullable, `tokens_in` int NOT NULL default 0, `tokens_out` int
+  NOT NULL default 0 (AC-10's reconcile needs both halves), `latency_ms` int
+  NOT NULL default 0, `error_category` text nullable (closed reason categories:
+  invalid_action, provider_refusal, timeout, quota_exhausted, …).
+- `outcome` text nullable + `outcome_meta` jsonb nullable — the ENRICHMENT half,
+  written after the fact by durable consumers (identifiers and categories only, Q7).
+- Payload pair (SEC-06's 30-day schedule): `request_payload` jsonb nullable,
+  `response_payload` jsonb nullable, `payload_hash` text nullable,
+  `payloads_reduced_at` timestamptz nullable. The REDUCTION JOB (platform role — the
+  Doc 01 SEC-02 retention-job class, its second sanctioned use, not a widening)
+  nulls both payloads, stamps hash + reduced_at, daily, for rows older than 30 days.
+- `created_at` — **ORDERING-RELEVANT** (the log renders in order; AC-03's simulation
+  reads a day; weekly outputs window on it): clock_timestamp() default + the R-19a
+  column grant (app INSERT and UPDATE both denied on it).
+- GRANTS: app INSERT column-granted (everything EXCEPT `created_at`,
+  `payload_hash`, `payloads_reduced_at` — the reduction columns are
+  platform-role-only in BOTH directions); app UPDATE column-granted to exactly
+  (`outcome`, `outcome_meta`, `updated_at`) — enrichment is the one legal mutation;
+  REVOKE DELETE (retention = partition detach, platform work).
+- ⚑ **FLAG 1 — sampled-event split**: `ai.decision.logged` is SAMPLED to the bus
+  (FR-21); the table is the full-fidelity record. The sampling RATE is a registered
+  platform setting (named per conventions at step 4), not a config-version record —
+  it is operational, not operator policy. Countersign confirms.
+
+**2. `ai_config_versions` (FR-04, FR-18, FR-02's routing, T-02's tenant layers,
+T-06's RG config).** One table for every versioned operator-config kind.
+
+- `id`, `tenant_id`; `kind` text CHECK (persona|thresholds|guardrails|
+  provider_routing|prompt_template|rg_classifier); `key` text NOT NULL (persona
+  name / endpoint_ref / task name; 'default' for singletons); `version` int NOT NULL.
+- `payload` jsonb NOT NULL — **IMMUTABLE once written** (no UPDATE grant on it):
+  FR-04's rollback correctness depends on old versions never mutating; a rollback
+  REPUBLISHES an older payload as a NEW version row, so history is append-only in
+  substance.
+- `status` text CHECK (draft|published|superseded); `published_at` timestamptz
+  nullable + `published_by` uuid nullable (stamped by the publish door);
+  `created_by` uuid NOT NULL.
+- UNIQUE (tenant_id, kind, key, version) + partial UNIQUE (tenant_id, kind, key)
+  WHERE status = 'published' — exactly one active version per config. ⚑ **FLAG 2 —
+  two unique indexes beside the PK**: the ON CONFLICT arbiter law (0h/addition-8
+  class) is about upsert paths; NO writer upserts this table (plain INSERT +
+  guarded status UPDATE inside one transaction), stated here so the next reader
+  finds the reasoning, not the index count. Countersign confirms.
+- `created_at` — hygiene (version int is the ordering key, not the clock):
+  clock_timestamp() default, app INSERT-denied on it (the R-19b default posture for
+  new tables).
+- GRANTS: app INSERT column-granted (minus created_at); app UPDATE column-granted to
+  exactly (`status`, `published_at`, `published_by`, `updated_at`); REVOKE DELETE.
+- `published_at` is display provenance, not an ordering key; written by the publish
+  door from the SAME statement's DB clock (`clock_timestamp()` in the UPDATE), never
+  an app clock — stated for R-19b completeness.
+
+**3. `ai_kill_switches` (FR-18, US-07, AC-08, SEC-05).**
+
+- `id`, `tenant_id`; `surface` text CHECK (chatbot|copilot|supervisor); `channel`
+  text nullable (telegram|web; NULL = all channels); `endpoint_ref` text nullable
+  (bot/widget id; NULL = all endpoints) — the scope grid, one row per combination.
+- UNIQUE NULLS NOT DISTINCT (tenant_id, surface, channel, endpoint_ref) — PG16's
+  form, so the NULL-scoped rows are singletons too.
+- `is_off` bool NOT NULL default false; `reason` text nullable; `flipped_by` uuid
+  nullable; `flipped_at` timestamptz nullable — **PINNED-PROVENANCE** (the S08
+  blocked_at idiom): a byte-copy of the flip's own audit-entry DB stamp, never a
+  fresh clock read (AC-08's "OFF since {time} by {actor}" caption renders it; an app
+  clock here would let skew contradict the audit trail). The writer's
+  inverted-R-19 byte-equality control lands with the writer (step 8) — the
+  sabotage-16-class control, filed now.
+- `created_at` hygiene (clock_timestamp() default, app INSERT-denied).
+- GRANTS: app INSERT column-granted (minus created_at); UPDATE column-granted to
+  exactly (`is_off`, `reason`, `flipped_by`, `flipped_at`, `updated_at`);
+  REVOKE DELETE (a switch row is a scope's history anchor).
+
+**4. `kb_chunks` (T-05, T-03's index-time stripping, FR-10; [D10] fixture-fed).**
+
+- `id`, `tenant_id`; `article_ref` uuid NOT NULL — Doc 10's article id space,
+  **NO FK** (the MembershipSource seam precedent; Doc 10 owns articles);
+  `chunk_index` int NOT NULL; UNIQUE (tenant_id, article_ref, chunk_index).
+- `language` text NOT NULL (T-05's language filter); `audience` text CHECK
+  (public|internal) — FR-10: internal chunks retrievable for Copilot tasks ONLY,
+  never the chatbot (the retriever enforces; the column carries the fact).
+- ⚑ **FLAG 3 — `ai_usable` bool NOT NULL default false ON THE CHUNK**: FR-10 scopes
+  retrieval to "categories the operator marked AI-usable", but the category model is
+  Doc 10's and does not exist. The chunk-level flag is the honest interim (fixture
+  seeding sets it; Doc 10's category flag re-derives it on arrival — a [D10]
+  reopener stated here so the later author finds the sentence first). Countersign
+  confirms.
+- `content` text NOT NULL — instruction-stripped AT INDEX TIME (T-03's sanitizer;
+  the stripping happens in the indexer, the column stores the stripped text);
+  `provenance` jsonb NOT NULL (article ref, source version, stripped-pattern count —
+  T-03's provenance requirement); `content_tsv` tsvector GENERATED (hybrid keyword
+  half) + GIN index.
+- `embedding` vector(1024) nullable (ADR 0018's bge-m3 dims; nullable so a chunk can
+  exist awaiting its embedding) + HNSW index.
+- `retrievable` bool NOT NULL default true — unpublish/tombstone (EC-06) FLIPS this,
+  never deletes (Doc 01's nothing-hard-deletes posture); REVOKE DELETE enforces.
+- `created_at` hygiene (retrieval never orders by it); app INSERT-denied on it.
+- GRANTS: app INSERT column-granted (minus created_at); UPDATE column-granted to
+  (`content`, `content_tsv` excluded — generated, `provenance`, `embedding`,
+  `language`, `audience`, `ai_usable`, `retrievable`, `updated_at`) — re-indexing
+  rewrites in place; REVOKE DELETE.
+
+**5. `ai_ticket_summaries` (T-05's similar-tickets half; summaries fixture-fed until
+the nightly summarize job lands).**
+
+- `id`, `tenant_id`; `ticket_id` uuid NOT NULL, UNIQUE (tenant_id, ticket_id) — one
+  living summary per resolved ticket, re-embedded nightly.
+- `summary` text NOT NULL; `language` text NOT NULL; `embedding` vector(1024)
+  nullable; `embedded_at` timestamptz nullable — maintenance metadata (job stamp,
+  not ordering); `created_at` hygiene (app INSERT-denied).
+- Doc 03 scope filtering happens AT QUERY TIME (T-05's own words) by joining ticket
+  visibility — no scope columns are stored (a stored scope would go stale on
+  reassignment; the S08 CustomerSearchIndexer taught this).
+- GRANTS: app INSERT column-granted (minus created_at); UPDATE column-granted to
+  (`summary`, `language`, `embedding`, `embedded_at`, `updated_at`); REVOKE DELETE.
+
+**DELIBERATE NON-TABLES (stated so the countersign can refuse them if wrong):**
+
+- **Calibration (EC-06, the [D09] close)**: consumed from `rg_flag_history` cleared
+  rows JOINed with `ai_decisions` — no new table; the FR-20 RG precision review
+  queue is a read model computed from the two existing stores.
+- **Metering (T-07, NFR-06, AC-10)**: rides the EXISTING `Quota::AiTokensPerDay` +
+  `tenant_quota_usage` reconcile machinery (Doc 01 FS-05) — consumed, never forked.
+  Per-task token attribution lives on `ai_decisions` rows (tokens_in/out), which is
+  what the AC-10 monthly reconcile aggregates. Cost = tokens × the rate-card config
+  (a registered setting), computed at read.
+- **Kill-switch/audit history**: the audit log IS the history (SEC-05
+  high-visibility entries with actor + old/new); the switch table stores only
+  current state + its provenance stamps.
