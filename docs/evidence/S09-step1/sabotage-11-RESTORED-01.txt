@@ -1,0 +1,14 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m7.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m7 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m7.65s[39m
+

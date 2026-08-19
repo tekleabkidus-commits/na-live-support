@@ -1,0 +1,65 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\PhoneEmailScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: near-miss controls survive to the sink — the scanner and[39m[90m…[39m [90m7.18s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: phone and email VALUES under innocent keys never reach t[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: phone and email VALUES inside the message string itself[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: benign context survives — UUIDs, timezone offsets, _id k[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: the four DB sinks — per-sink plant→detect→rollback contr[39m[90m…[39m [90m0.16s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\PhoneEmailScrubberPatternsTest[22m [90m>[39m it SEC-03: phone…    
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Security/PhoneEmailScrubberPatternsTest.php[39m:[32m100[39m
+     96▕         Log::info('pe innocent-key probe '.$name, ['detail' => $value, 'note' => 'ref '.$value, 'url' => 'callback?to='.$value]);
+     97▕     }
+     98▕ 
+     99▕     expect(peSinkContains($path, 'pe innocent-key probe'))->toBeTrue('probes never reached the sink');
+  ➜ 100▕     expect(peSinkContains($path, ScrubSecrets::REDACTED))->toBeTrue();
+    101▕ 
+    102▕     foreach (PE_SENTINELS as $name => $value) {
+    103▕         expect(peSinkContains($path, $value))->toBeFalse(
+    104▕             sprintf('sentinel "%s" (%s) reached the rendered sink under an innocent key (SEC-03)', $name, $value),
+
+  [33m1   [39m[39;1mtests/Security/PhoneEmailScrubberPatternsTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\PhoneEmailScrubberPatternsTest[22m [90m>[39m it SEC-03: phone…    
+[39;1m  a local-format phone survived in the message string
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/PhoneEmailScrubberPatternsTest.php[39m:[32m115[39m
+    111▕ 
+    112▕     Log::warning('provider turn context: [FIXTURE] my withdrawal to 0900001234 failed, reach me at fixture-customer@example.et or +251-900001234, ref TX-FIXTURE-1');
+    113▕ 
+    114▕     expect(peSinkContains($path, 'provider turn context'))->toBeTrue('the message never reached the sink');
+  ➜ 115▕     expect(peSinkContains($path, '0900001234'))->toBeFalse('a local-format phone survived in the message string');
+    116▕     expect(peSinkContains($path, 'fixture-customer@example.et'))->toBeFalse('an email survived in the message string');
+    117▕     expect(peSinkContains($path, '+251-900001234'))->toBeFalse('an E.164 phone survived in the message string');
+    118▕     expect(peSinkContains($path, 'TX-FIXTURE-1'))->toBeTrue('benign reference eaten — over-scrubbing broke the log SEC-08 wants kept useful');
+    119▕ });
+
+  [33m1   [39m[39;1mtests/Security/PhoneEmailScrubberPatternsTest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\PhoneEmailScrubberPatternsTest[22m [90m>[39m it SEC-03: the fo…   
+[39;1m  log-bound sentinel "+251-900007777" reached the rendered sink (SEC-03)
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/PhoneEmailScrubberPatternsTest.php[39m:[32m209[39m
+    205▕     // first (the scrubber's job), then the four serialization sinks (no flow
+    206▕     // may carry log-bound context into them; the controls above prove the
+    207▕     // scanners would see it if one did).
+    208▕     foreach ([$sweepPhone, $sweepLocal, $sweepEmail] as $value) {
+  ➜ 209▕         expect(peSinkContains($path, $value))->toBeFalse(
+    210▕             sprintf('log-bound sentinel "%s" reached the rendered sink (SEC-03)', $value),
+    211▕         );
+    212▕ 
+    213▕         foreach ($sinks as $name => $content) {
+
+  [33m1   [39m[39;1mtests/Security/PhoneEmailScrubberPatternsTest.php[39;22m:[39;1m209[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m7.61s[39m
+

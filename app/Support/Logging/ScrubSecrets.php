@@ -80,11 +80,55 @@ final class ScrubSecrets implements ProcessorInterface
      * issues, and the file-download URL that embeds it (T-07). File-URL first:
      * scrubbing the whole URL beats leaving `api.telegram.org/file/[scrubbed]`
      * fragments behind.
+     *
+     * SEC-03 DISCHARGE (Doc 08 carry; ruling R-D09-1, S09 step 1): phone and
+     * email VALUE patterns join the roster BEFORE the platform's first
+     * external egress of conversation text (Doc 09) starts logging provider
+     * request/response context — exactly where phone/email values begin to
+     * flow. Key-shape scrubbing cannot catch a phone under `detail` or an
+     * email inside the message string; these patterns must. Order matters:
+     * email before phones, so an address whose local part is phone-shaped is
+     * scrubbed WHOLE, never left as `[scrubbed]@domain`.
+     *
+     * BROAD PATTERN + EXPLICIT ALLOWLIST (the platform-notes law — never a
+     * sweep narrowed to survive its own guard). Over-scrubbing is the safe
+     * direction (this file's own header): the phone patterns tolerate
+     * space/dash separators and will occasionally eat a phone-shaped digit
+     * run that was not a phone; that trade is deliberate and documented.
      */
     private const VALUE_PATTERNS = [
         '~https?://api\.telegram\.org/file/\S+~i',
         '/\b\d{6,12}:[A-Za-z0-9_-]{30,}(?![A-Za-z0-9_-])/',
+        // Email addresses — the standard shape, every depth + the message.
+        '/[A-Za-z0-9._%+-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?\.[A-Za-z]{2,}/u',
+        // E.164 phones, separator-tolerant: "+251912345678", "+251-900001234",
+        // "+251 91 234 5678" — 7..15 total digits per the ITU bound.
+        '/\+\d{1,3}(?:[\s-]?\d){6,12}(?!\d)/',
+        // Local Ethiopian format: 09/07 + 8 digits, separator-tolerant
+        // (R-D09-1 names both formats; 07 covers the 7-series mobiles).
+        '/(?<!\d)0[79](?:[\s-]?\d){8}(?!\d)/',
     ];
+
+    /**
+     * Explicit allowlist consulted BEFORE value-pattern redaction: a match
+     * survives only if one of these patterns accepts the WHOLE matched
+     * string. Ships EMPTY — nothing benign is known to wear the shapes
+     * above in a log record. Every future entry carries a citation to the
+     * ruling or evidence that admitted it; narrowing a VALUE_PATTERN to
+     * dodge a false positive is FORBIDDEN (the sweep-narrowed-to-survive-
+     * its-own-guard law) — this allowlist is the only sanctioned relief,
+     * and every addition re-plants the exact variant it exempts.
+     *
+     * A typed method rather than a const: the declared return type is the
+     * extension point's contract, so the empty mechanism analyses as what
+     * it is instead of as dead code.
+     *
+     * @return list<non-empty-string> regex patterns
+     */
+    private function valueAllowlist(): array
+    {
+        return [];
+    }
 
     public function __invoke(LogRecord $record): LogRecord
     {
@@ -128,10 +172,28 @@ final class ScrubSecrets implements ProcessorInterface
         return $values;
     }
 
-    /** NFR-06: redact Telegram token/file-URL shapes wherever they appear. */
+    /** NFR-06 + SEC-03: redact secret/PII value shapes wherever they appear. */
     private function scrubValue(string $value): string
     {
-        return (string) preg_replace(self::VALUE_PATTERNS, self::REDACTED, $value);
+        $allowlist = $this->valueAllowlist();
+
+        foreach (self::VALUE_PATTERNS as $pattern) {
+            $value = (string) preg_replace_callback(
+                $pattern,
+                static function (array $match) use ($allowlist): string {
+                    foreach ($allowlist as $allowed) {
+                        if (preg_match($allowed, $match[0]) === 1) {
+                            return $match[0];
+                        }
+                    }
+
+                    return self::REDACTED;
+                },
+                $value,
+            );
+        }
+
+        return $value;
     }
 
     private function isSecretShaped(string $key): bool

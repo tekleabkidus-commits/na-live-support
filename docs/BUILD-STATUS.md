@@ -45,7 +45,8 @@ this note. All subsequent S19 work is single-session.
                   tests/Security/AiEgressGuardTest.php \
                   tests/Security/AiContextAllowlistTest.php \
                   tests/Security/AiInjectionRedTeamTest.php \
-                  tests/Security/CopilotNeverAutoSendTest.php
+                  tests/Security/CopilotNeverAutoSendTest.php \
+                  tests/Security/PhoneEmailScrubberPatternsTest.php
 ```
 
 Performance suites run under `make perf` / the dedicated CI stage; browser proofs under

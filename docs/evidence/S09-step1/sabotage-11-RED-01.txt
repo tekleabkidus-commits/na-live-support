@@ -1,0 +1,82 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m7.27s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiEgressGuardTest[22m [90m>[39m it refuses a non-fixture user…    
+[39;1m  Exception "App\Domain\Ai\Guards\NonFixturePayloadRefused" not thrown.[39;22m
+
+  at [32mtests/Security/AiEgressGuardTest.php[39m:[32m41[39m
+     37▕ it('refuses a non-fixture user payload outside production — the plant control (sabotage #11 subject)', function (): void {
+     38▕     config(['app.env' => 'testing']);
+     39▕ 
+     40▕     expect(fn () => egressGuard()->assertAllowed(chatPayload(REAL_TEXT_PLANT)))
+  ➜  41▕         ->toThrow(NonFixturePayloadRefused::class);
+     42▕ });
+     43▕ 
+     44▕ it('the refusal is leak-proof: the exception message never carries the payload text', function (): void {
+     45▕     config(['app.env' => 'testing']);
+
+  [33m1   [39m[39;1mtests/Security/AiEgressGuardTest.php[39;22m:[39;1m41[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiEgressGuardTest[22m [90m>[39m it the r… [41;1m AssertionFailedError [49;22m  
+[39;1m  the guard did not refuse — the leak-proof assertion below would be vacuous[39;22m
+
+  at [32mtests/Security/AiEgressGuardTest.php[39m:[32m49[39m
+     45▕     config(['app.env' => 'testing']);
+     46▕ 
+     47▕     try {
+     48▕         egressGuard()->assertAllowed(chatPayload(REAL_TEXT_PLANT));
+  ➜  49▕         $this->fail('the guard did not refuse — the leak-proof assertion below would be vacuous');
+     50▕     } catch (NonFixturePayloadRefused $e) {
+     51▕         expect($e->getMessage())->not->toContain('0900001234')
+     52▕             ->and($e->getMessage())->not->toContain('withdrawal')
+     53▕             ->and($e->getMessage())->toContain('messages[1]');
+
+  [33m1   [39m[39;1mtests/Security/AiEgressGuardTest.php[39;22m:[39;1m49[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiEgressGuardTest[22m [90m>[39m it refuses an untagged embeddi…   
+[39;1m  Exception "App\Domain\Ai\Guards\NonFixturePayloadRefused" not thrown.[39;22m
+
+  at [32mtests/Security/AiEgressGuardTest.php[39m:[32m80[39m
+     76▕ it('refuses an untagged embeddings input and allows a tagged one', function (): void {
+     77▕     config(['app.env' => 'testing']);
+     78▕ 
+     79▕     expect(fn () => egressGuard()->assertAllowed(['model' => 'embed', 'input' => REAL_TEXT_PLANT]))
+  ➜  80▕         ->toThrow(NonFixturePayloadRefused::class);
+     81▕ 
+     82▕     egressGuard()->assertAllowed(['model' => 'embed', 'input' => [FixturesOnlyEgress::TAG.' how to deposit']]);
+     83▕ 
+     84▕     expect(true)->toBeTrue();
+
+  [33m1   [39m[39;1mtests/Security/AiEgressGuardTest.php[39;22m:[39;1m80[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiEgressGuardTest[22m [90m>[39m it refuses non-string user con…   
+[39;1m  Exception "App\Domain\Ai\Guards\NonFixturePayloadRefused" not thrown.[39;22m
+
+  at [32mtests/Security/AiEgressGuardTest.php[39m:[32m94[39m
+     90▕     $payload = chatPayload('replaced below');
+     91▕     $payload['messages'][1]['content'] = [['type' => 'text', 'text' => REAL_TEXT_PLANT]];
+     92▕ 
+     93▕     expect(fn () => egressGuard()->assertAllowed($payload))
+  ➜  94▕         ->toThrow(NonFixturePayloadRefused::class);
+     95▕ });
+     96▕ 
+     97▕ it('production is the carve-out: untagged payloads flow (the only environment where real text is lawful)', function (): void {
+     98▕     config(['app.env' => 'production']);
+
+  [33m1   [39m[39;1mtests/Security/AiEgressGuardTest.php[39;22m:[39;1m94[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (7 assertions)[39m
+  [90mDuration:[39m [39m7.58s[39m
+
