@@ -636,4 +636,16 @@ return [
         'tenant_editable' => true,
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 09 FR-03/§12: the per-tenant concurrent-AI-turn semaphore cap
+        // (default 20 per §12's own figure; "tunable"). Platform-maximum
+        // validation per the conventions; tenant_editable false — capacity
+        // is platform policy, not operator policy.
+        'key' => 'ai.concurrency.per_tenant',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:1|max:100',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

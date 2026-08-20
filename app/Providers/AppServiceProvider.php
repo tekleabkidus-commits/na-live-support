@@ -27,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
         // container on every call and caches nothing, so a long-lived instance
         // cannot serve one request's tenant to the next. See the class docblock
         // for the bug that produced this design.
+        // Doc 09 (S09 step 3): one registry instance per process, so the
+        // test seam (swap a scripted driver) and the memoized real drivers
+        // agree on identity.
+        $this->app->singleton(\App\Domain\Ai\Providers\ProviderRegistry::class);
+
         $this->app->singleton(TenantHint::class, fn (Application $app): TenantHint => new TenantHint($app));
 
         // THE T-05 SEAM (Doc 02 ↔ Doc 03), CLOSED at S19 step 7: the real

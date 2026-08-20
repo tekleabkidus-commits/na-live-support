@@ -292,6 +292,12 @@ return [
         ],
         'ai' => [
             'connection' => 'redis',
+            // ADR 0017 (amended at S09 step 3): the customer-blocking lane.
+            // Doc 04 FS-03's supervisor physics pins ONE family per
+            // supervisor (FailureScenariosTest caught the two-queue draft),
+            // so background AI work rides its OWN supervisor below —
+            // stronger than lane priority: a digest flood cannot eat
+            // chatbot workers at all (FR-03).
             'queue' => ['ai'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
@@ -302,6 +308,21 @@ return [
             'tries' => 1,
             'timeout' => 120,
             'nice' => 0,
+        ],
+        'ai-background' => [
+            'connection' => 'redis',
+            // ADR 0017: digests, QA pre-scores, anomaly scans, nightly
+            // embeddings — work that must never delay a customer turn.
+            'queue' => ['ai-background'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 300,
+            'nice' => 10,
         ],
         'sms' => [
             'connection' => 'redis',

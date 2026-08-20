@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Ai\Config;
 
+use App\Support\Audit\AuditActor;
+use App\Support\Audit\AuditLogger;
+use App\Support\Events\EventPublisher;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +33,11 @@ use Symfony\Component\Uid\UuidV7;
  */
 final class ConfigVersions
 {
-    public function __construct(private readonly TenantContext $context) {}
+    public function __construct(
+        private readonly TenantContext $context,
+        private readonly EventPublisher $events,
+        private readonly AuditLogger $audit,
+    ) {}
 
     /** @param array<string, mixed> $payload
      * @return string the new draft version's id */
@@ -70,7 +77,7 @@ final class ConfigVersions
     {
         try {
             DB::transaction(function () use ($versionId, $publishedBy): void {
-                /** @var object{kind: string, key: string, status: string}|null $target */
+                /** @var object{kind: string, key: string, status: string, version: int|string}|null $target */
                 $target = DB::table('ai_config_versions')->where('id', $versionId)->first();
 
                 if ($target === null) {
@@ -100,6 +107,25 @@ final class ConfigVersions
                     SQL,
                     [$publishedBy, $versionId],
                 );
+
+                // FR-21 + SEC-05, inside the transaction (the outbox makes
+                // the event transactional; a rolled-back publish emits
+                // nothing) — the RgFlagService pattern.
+                $this->events->publish('ai.config.published', [
+                    'tenant_id' => $this->context->tenantId(),
+                    'kind' => $target->kind,
+                    'key' => $target->key,
+                    'version' => (int) $target->version,
+                    'config_version_id' => $versionId,
+                ]);
+                $this->audit->record(
+                    'ai.config.published',
+                    'ai_config_version',
+                    $versionId,
+                    AuditActor::Staff,
+                    ['kind' => $target->kind, 'key' => $target->key, 'version' => (int) $target->version],
+                    actorId: $publishedBy,
+                );
             });
         } catch (UniqueConstraintViolationException) {
             throw ConfigVersionRace::onPublish($versionId);
@@ -126,16 +152,57 @@ final class ConfigVersions
         $newId = $this->draft($old->kind, $old->key, $payload, $actorId);
         $this->publish($newId, $actorId);
 
+        // SEC-05: the trail reads "rolled back", not "published again".
+        $this->audit->record(
+            'ai.config.rolled_back',
+            'ai_config_version',
+            $newId,
+            AuditActor::Staff,
+            [
+                'kind' => $old->kind,
+                'key' => $old->key,
+                'version' => (function () use ($newId): int {
+                    $v = DB::table('ai_config_versions')->where('id', $newId)->value('version');
+
+                    return is_numeric($v) ? (int) $v : 0;
+                })(),
+                'republished_version_of' => $versionId,
+            ],
+            actorId: $actorId,
+        );
+
         return $newId;
     }
 
-    /** The active (published) version row for a config, if any. */
+    /**
+     * The active (published) version row for a config, if any.
+     *
+     * @return object{id: string, tenant_id: string, kind: string, key: string, version: int, payload: string, status: string, published_at: ?string, published_by: ?string, created_by: string}|null
+     */
     public function published(string $kind, string $key): ?object
     {
-        return DB::table('ai_config_versions')
+        $row = DB::table('ai_config_versions')
             ->where('kind', $kind)
             ->where('key', $key)
             ->where('status', 'published')
             ->first();
+
+        if ($row === null) {
+            return null;
+        }
+
+        /** @var object{id: string, tenant_id: string, kind: string, key: string, version: int|string, payload: string, status: string, published_at: ?string, published_by: ?string, created_by: string} $row */
+        return (object) [
+            'id' => $row->id,
+            'tenant_id' => $row->tenant_id,
+            'kind' => $row->kind,
+            'key' => $row->key,
+            'version' => is_numeric($row->version) ? (int) $row->version : 0,
+            'payload' => $row->payload,
+            'status' => $row->status,
+            'published_at' => $row->published_at,
+            'published_by' => $row->published_by,
+            'created_by' => $row->created_by,
+        ];
     }
 }

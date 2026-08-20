@@ -25,3 +25,14 @@ into two queues:
   (CLAUDE.md §3 hard rule); the only inline AI-adjacent work is enqueueing.
 - Depth/failure visibility: Horizon's per-family metrics; FS-04's decision-log
   backlog staleness pattern applies to the log writer, not to turn jobs.
+
+## Amendment (S09 step 3, caught by Doc 04's own guard)
+
+The first text put both queues on ONE supervisor with list-order priority.
+Doc 04 FS-03's supervisor-isolation physics pins **one family per
+supervisor** (`FailureScenariosTest` — "supervisor ai must own exactly one
+family", which went red on the draft), so the shape is TWO supervisors:
+`ai` → `['ai']` and `ai-background` → `['ai-background']`. This is stronger
+than lane priority: background load cannot consume customer-lane workers at
+all. FR-03's priority requirement is satisfied by dedicated capacity, not
+ordering.

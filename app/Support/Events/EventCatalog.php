@@ -742,6 +742,15 @@ final class EventCatalog
         // ── Doc 07 (Unified Inbox) — the S07 plan's enumeration: ONE new
         //    event (rule 16; view deltas and count pushes are realtime
         //    protocol v:1, NOT catalog events — the RealtimePusher line).
+        'ai.config.published' => [
+            'schema_version' => 1,
+            // Q7 split: identifiers and categories only — payload CONTENT
+            // lives on the immutable ai_config_versions row.
+            'payload' => ['tenant_id', 'kind', 'key', 'version', 'config_version_id'],
+            'producers' => ['Doc09/ConfigVersions'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-04/FR-21: an AI config version (persona, thresholds, guardrails, provider routing, prompt template, RG classifier) was published — instant, zero-deploy, with rollback as republish. SEC-05 high-visibility; the audit entry carries actor + old/new.',
+        ],
         'agent.status_changed' => [
             'schema_version' => 1,
             // FR-28's routing contract: Online = routable; Away keeps

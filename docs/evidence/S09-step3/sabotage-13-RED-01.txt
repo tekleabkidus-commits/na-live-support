@@ -1,0 +1,30 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m5.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PromptAssemblyTest[22m [90m>[39m it SEC-02: user-turn PII is…   
+[39;1m  Expecting '<<[39;22m[39;1m<customer_message>[39;22m[39;1m>>[FIXT…end>>>' not to contain '0900001234'.[39;22m
+
+  at [32mtests/Feature/Ai/PromptAssemblyTest.php[39m:[32m120[39m
+    116▕         'window' => [['role' => 'user', 'content' => '[FIXTURE] call me at 0900001234 or fixture-a@example.et']],
+    117▕     ]));
+    118▕ 
+    119▕     $userContent = $assembled['messages'][1]['content'];
+  ➜ 120▕     expect($userContent)->not->toContain('0900001234')
+    121▕         ->and($userContent)->not->toContain('fixture-a@example.et')
+    122▕         ->and($userContent)->toContain('[masked:phone-1]')
+    123▕         ->and($assembled['masking_map'])->toHaveKey('[masked:phone-1]')
+    124▕         ->and($assembled['masking_map'])->toHaveKey('[masked:email-1]');
+
+  [33m1   [39m[39;1mtests/Feature/Ai/PromptAssemblyTest.php[39;22m:[39;1m120[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (75 assertions)[39m
+  [90mDuration:[39m [39m5.46s[39m
+

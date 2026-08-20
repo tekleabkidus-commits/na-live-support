@@ -1,0 +1,27 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\AiContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-04/BR-06: planted RG flag content and staff notes NEVER ente[39m[90m…[39m [90m6.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the exclusion holds through the FULL assembled prompt, a[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the allowlist is honest in the OTHER direction: language, prior-[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiContextAllowlistTest[22m [90m>[39m it SEC-04/BR-06: planted…    
+[39;1m  Expecting '{"language":"en","prior_topic…ult"]}' not to contain 'FAKESENSITIVE-rg-reason-self-…equest'.[39;22m
+
+  at [32mtests/Security/AiContextAllowlistTest.php[39m:[32m47[39m
+     43▕         ['role' => 'user', 'content' => '[FIXTURE] where is my withdrawal?'],
+     44▕     ]);
+     45▕ 
+     46▕     $serialized = json_encode($context, JSON_THROW_ON_ERROR);
+  ➜  47▕     expect($serialized)->not->toContain(RG_PLANT)
+     48▕         ->and($serialized)->not->toContain(NOTE_PLANT)
+     49▕         ->and($serialized)->not->toContain('rg_flag');
+     50▕ });
+     51▕
+
+  [33m1   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m47[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m6.27s[39m
+

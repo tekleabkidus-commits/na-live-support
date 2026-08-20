@@ -1040,4 +1040,21 @@ return [
         'required_fields' => ['status'],
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 09 SEC-05: config publishes are the high-visibility class.
+        'action_key' => 'ai.config.published',
+        'entity' => 'ai_config_version',
+        'actor_types' => ['staff'],
+        'required_fields' => ['kind', 'key', 'version'],
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        // FR-04's rollback = a republish, audited under its own name so the
+        // trail reads "rolled back", not "published again" (SEC-05).
+        'action_key' => 'ai.config.rolled_back',
+        'entity' => 'ai_config_version',
+        'actor_types' => ['staff'],
+        'required_fields' => ['kind', 'key', 'version', 'republished_version_of'],
+        'owning_doc' => 'Doc09',
+    ],
 ];

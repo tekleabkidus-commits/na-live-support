@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-96 event(s).
+97 event(s).
 
 ## `agent.status_changed`
 
@@ -22,6 +22,15 @@ FR-28: an agent's availability changed (online|away|offline; reason manual|auto_
 - **Payload:** `tenant_id`, `user_id`, `status`, `reason`, `set_by_user_id`
 - **Producers:** Doc07/AgentStatus
 - **Consumers:** Doc11/Routing, Doc15/Reporting
+
+## `ai.config.published`
+
+FR-04/FR-21: an AI config version (persona, thresholds, guardrails, provider routing, prompt template, RG classifier) was published — instant, zero-deploy, with rollback as republish. SEC-05 high-visibility; the audit entry carries actor + old/new.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `kind`, `key`, `version`, `config_version_id`
+- **Producers:** Doc09/ConfigVersions
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `auth.2fa.challenge_failed`
 

@@ -1,0 +1,78 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m5.29s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ActionSchemaTest[22m [90m>[39m it EC-05: an action outside t…   
+[39;1m  Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Feature/Ai/ActionSchemaTest.php[39m:[32m22[39m
+     18▕ 
+     19▕ it('EC-05: an action outside the closed enum is DISCARDED, never executed (injection-shaped #1)', function (): void {
+     20▕     $result = schema()->validate(['action' => 'transfer_funds', 'amount' => 5000]);
+     21▕ 
+  ➜  22▕     expect($result)->toBeInstanceOf(DiscardedAction::class)
+     23▕         ->and($result->category)->toBe('out_of_enum');
+     24▕ });
+     25▕ 
+     26▕ it('EC-05: malformed output (non-object, or missing required fields) is discarded with its category', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ActionSchemaTest.php[39;22m:[39;1m22[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ActionSchemaTest[22m [90m>[39m it EC-05: mal… [41;1m ErrorException [49;22m  
+[39;1m  Undefined property: App\Domain\Ai\Chatbot\ValidatedAction::$category[39;22m
+
+  at [32mtests/Feature/Ai/ActionSchemaTest.php[39m:[32m29[39m
+     25▕ 
+     26▕ it('EC-05: malformed output (non-object, or missing required fields) is discarded with its category', function (): void {
+     27▕     expect(schema()->validate('just prose'))->toBeInstanceOf(DiscardedAction::class)
+     28▕         ->and(schema()->validate('just prose')->category)->toBe('malformed')
+  ➜  29▕         ->and(schema()->validate(['action' => 'run_form'])->category)->toBe('missing_field')
+     30▕         ->and(schema()->validate(['action' => 'resolve', 'closing_text' => '  '])->category)->toBe('missing_field');
+     31▕ });
+     32▕ 
+     33▕ it('BR-02/AC-02: an answer WITHOUT a citation is refused by the schema itself — never sent', function (): void {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ActionSchemaTest[22m [90m>[39m it BR-02/AC-02: an answer WIT…   
+[39;1m  Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Feature/Ai/ActionSchemaTest.php[39m:[32m35[39m
+     31▕ });
+     32▕ 
+     33▕ it('BR-02/AC-02: an answer WITHOUT a citation is refused by the schema itself — never sent', function (): void {
+     34▕     $uncited = schema()->validate(['action' => 'answer', 'text' => 'Deposits settle within 30 minutes.']);
+  ➜  35▕     expect($uncited)->toBeInstanceOf(DiscardedAction::class)
+     36▕         ->and($uncited->detail)->toContain('citation');
+     37▕ 
+     38▕     $emptyCitations = schema()->validate(['action' => 'answer', 'text' => 'x', 'citations' => []]);
+     39▕     expect($emptyCitations)->toBeInstanceOf(DiscardedAction::class);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ActionSchemaTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ActionSchemaTest[22m [90m>[39m it FR-12/Q7: handoff reasons…    
+[39;1m  Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Feature/Ai/ActionSchemaTest.php[39m:[32m47[39m
+     43▕ });
+     44▕ 
+     45▕ it('FR-12/Q7: handoff reasons come from the CLOSED category list — free prose is refused (the STEP-0 observation, mechanized)', function (): void {
+     46▕     $prose = schema()->validate(['action' => 'handoff', 'reason' => 'The user is expressing a gambling addiction and needs specialized help']);
+  ➜  47▕     expect($prose)->toBeInstanceOf(DiscardedAction::class);
+     48▕ 
+     49▕     $category = schema()->validate(['action' => 'handoff', 'reason' => 'rg_risk']);
+     50▕     expect($category)->toBeInstanceOf(ValidatedAction::class);
+     51▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ActionSchemaTest.php[39;22m:[39;1m47[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m5.43s[39m
+
