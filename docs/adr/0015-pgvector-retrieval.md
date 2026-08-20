@@ -35,3 +35,19 @@ Postgres the platform already operates.
   AI-usable scope filtering).
 - **External vector DB** (new infrastructure, new egress surface) — nothing in the
   document asks for it.
+
+## Correction of record (S09 step 2b, executed against the real image)
+
+The first text above claimed the migrator's CREATE right suffices because
+pgvector is trusted. **The pgvector/pgvector:pg16 image ships `vector` with
+`trusted = false`** (verified via `pg_available_extension_versions` after the
+swap), so only a superuser can install it. The install therefore lives in
+`docker/postgres/init/02-extensions.sql` (superuser at provision time — fresh
+volumes and CI both); the migration keeps `CREATE EXTENSION IF NOT EXISTS
+vector` as documentation and as a loud failure on any database never
+provisioned with it. The migrator's `GRANT CREATE ON DATABASE` (added in the
+same commit) stands — harmless and correct for trusted extensions. One more
+operational fact recorded: swapping images across base distributions surfaced
+a collation-version mismatch on the warm dev volume (glibc 2.41 → 2.36);
+resolved by `REFRESH COLLATION VERSION` + full `REINDEX` of both databases —
+fresh volumes (CI, `make fresh`) never see it.

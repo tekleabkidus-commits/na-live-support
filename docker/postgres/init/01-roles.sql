@@ -93,6 +93,9 @@ GRANT USAGE ON SCHEMA public TO app, platform_admin, key_resolver;
 -- and that function's body is a single SELECT.
 GRANT CREATE ON SCHEMA public TO key_resolver;
 GRANT CONNECT ON DATABASE na_live_support TO app, platform_admin;
+-- ADR 0015 (Doc 09): pgvector is a TRUSTED extension; CREATE on the database is
+-- what lets the MIGRATOR install it inside the migration path (no superuser step).
+GRANT CREATE ON DATABASE na_live_support TO migrator;
 
 -- Tables migrator creates from here on: app gets DML, never ownership.
 -- DELETE is granted here and then REVOKEd per-table on tenant business tables
@@ -126,6 +129,7 @@ GRANT USAGE ON SCHEMA public TO app, platform_admin, key_resolver;
 -- and that function's body is a single SELECT.
 GRANT CREATE ON SCHEMA public TO key_resolver;
 GRANT CONNECT ON DATABASE na_live_support_test TO app, platform_admin;
+GRANT CREATE ON DATABASE na_live_support_test TO migrator; -- ADR 0015, same as above
 
 ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public
     GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app;

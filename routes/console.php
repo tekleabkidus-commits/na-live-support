@@ -69,3 +69,4 @@ Schedule::command('inbox:consistency-check')->hourly()->withoutOverlapping();
 // alerts; contacts_30d_count window decay heals silently — the command's
 // docblock carries the reasoning).
 Schedule::command('customers:consistency-check')->weekly()->withoutOverlapping();
+Schedule::command('ai:partitions-maintain')->monthlyOn(1, '02:10')->timezone('UTC'); // Doc 09 (SCHEMA AMENDMENT 3): the ai_decisions window

@@ -229,6 +229,10 @@ function cleanupTenants(array $tenantIds): void
     $platform = DB::connection('pgsql_platform');
 
     foreach ([
+        // Doc 09 (SCHEMA AMENDMENT 3): nothing references the ai tables, and
+        // ai_ticket_summaries references tickets — so all five go first.
+        'ai_decisions', 'ai_config_versions', 'ai_kill_switches', 'kb_chunks',
+        'ai_ticket_summaries',
         // Doc 06: everything references tickets, tickets reference conversations —
         // so ticket children first, tickets before conversations. Self-FKs inside
         // tickets (merged_into, origin/previous/parent) are fine in one statement:

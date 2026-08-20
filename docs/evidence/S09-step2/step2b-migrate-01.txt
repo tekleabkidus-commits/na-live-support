@@ -1,0 +1,31 @@
+
+   INFO  Running migrations.  
+
+  2026_08_20_000200_create_ai_decisions_table .................. 274.89ms DONE
+  2026_08_20_000300_create_ai_config_versions_table ............. 14.31ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42704]: Undefined object: 7 ERROR:  unrecognized configuration parameter "app.tenant_id"
+CONTEXT:  SQL statement "SELECT fk."tenant_id" FROM ONLY "public"."ai_config_versions" fk LEFT OUTER JOIN ONLY "public"."tenants" pk ON ( pk."id" OPERATOR(pg_catalog.=) fk."tenant_id") WHERE pk."id" IS NULL AND (fk."tenant_id" IS NOT NULL)" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support, SQL: alter table "ai_config_versions" add constraint "ai_config_versions_tenant_id_foreign" foreign key ("tenant_id") references "tenants" ("id"))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:857
+    853▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    854▕                 ? UniqueConstraintViolationException::class
+    855▕                 : QueryException::class;
+    856▕ 
+  ➜ 857▕             $exception = new $exceptionType(
+    858▕                 $this->getNameWithReadWriteType(),
+    859▕                 $query,
+    860▕                 $this->prepareBindings($bindings),
+    861▕                 $e,
+
+      [2m+9 vendor frames [22m
+
+  10  database/migrations/2026_08_20_000300_create_ai_config_versions_table.php:36
+      Illuminate\Support\Facades\Facade::__callStatic("create")
+      [2m+27 vendor frames [22m
+
+  38  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+

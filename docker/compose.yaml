@@ -122,7 +122,7 @@ services:
       start_period: 15s
 
   postgres:
-    image: postgres:16
+    image: pgvector/pgvector:pg16 # ADR 0015: drop-in Postgres 16 + the vector extension (Doc 09 T-05)
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_local_password

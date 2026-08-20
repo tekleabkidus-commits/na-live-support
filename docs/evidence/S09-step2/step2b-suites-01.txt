@@ -1,0 +1,60 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\AiGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m4.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003: app holds no DELETE on any Doc 09 table[39m[90m                [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 09 table is FORCED row-level security with the t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the messages lesson: EVERY ai_decisions partition carries its ow[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AiDecisionPartitions: the window is idempotent and a created mon[39m[90m…[39m [90m0.29s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit flag 2 (countersigned): no ON CONFLICT statement ever targets ai[39m[90m…[39m [90m0.21s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m1.33s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it flag 2 (countersigned): n…   
+[39;1m  a file touching ai_config_versions carries an upsert/ON CONFLICT: /app/app/Domain/Ai/Config/ConfigVersionRace.php
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '/app/app/Domain/Ai/Config/ConfigVersionRace.php',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/AiGrantPhysicsTest.php[39m:[32m192[39m
+    188▕             $offenders[] = $file->getPathname();
+    189▕         }
+    190▕     }
+    191▕ 
+  ➜ 192▕     expect($offenders)->toBe([], 'a file touching ai_config_versions carries an upsert/ON CONFLICT: '.implode(', ', $offenders));
+    193▕ });
+    194▕
+
+  [33m1   [39m[39;1mtests/Isolation/AiGrantPhysicsTest.php[39;22m:[39;1m192[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ConfigVersioningTest[22m [90m>[39m it flag 2… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  update or delete on table "tenants" violates foreign key constraint "ai_config_versions_tenant_id_foreign" on table "ai_config_versions"
+DETAIL:  Key (id)=(01a01e50-09ea-72e4-b5c0-5e91ace1d669) is still referenced from table "ai_config_versions". (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "tenants" where "id" in (01a01e50-09ea-72e4-b5c0-5e91ace1d669))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Pest.php[39;22m:[39;1m253[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ConfigVersioningTest.php[39;22m:[39;1m157[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (82 assertions)[39m
+  [90mDuration:[39m [39m6.97s[39m
+
