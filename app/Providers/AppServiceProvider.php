@@ -36,13 +36,15 @@ class AppServiceProvider extends ServiceProvider
         // unreachable and no route executes until the owning steps bind the
         // real implementations (step 8: enablement; steps 7/9: executors).
         $this->app->bind(\App\Domain\Ai\Pipeline\ChatbotEnablement::class, \App\Domain\Ai\KillSwitch\SwitchesAndFlags::class); // step 8: switches + scope config (default OFF)
-        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\RouteDispatcher::class); // step 7: rg_override bound; step 9 extends
+        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\RouteDispatcher::class); // steps 7+9: all routes bound
+        $this->app->bind(\App\Domain\Ai\Pipeline\FlowStateProvider::class, \App\Domain\Ai\Pipeline\NullFlowState::class); // Doc 05 menus / Doc 12 forms bind theirs
 
         // Doc 09 seam defaults (S09 step 6): the chatbot is structurally
         // unreachable and no route executes until the owning steps bind the
         // real implementations (step 8: enablement; steps 7/9: executors).
         $this->app->bind(\App\Domain\Ai\Pipeline\ChatbotEnablement::class, \App\Domain\Ai\KillSwitch\SwitchesAndFlags::class); // step 8: switches + scope config (default OFF)
-        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\RouteDispatcher::class); // step 7: rg_override bound; step 9 extends
+        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\RouteDispatcher::class); // steps 7+9: all routes bound
+        $this->app->bind(\App\Domain\Ai\Pipeline\FlowStateProvider::class, \App\Domain\Ai\Pipeline\NullFlowState::class); // Doc 05 menus / Doc 12 forms bind theirs
 
         $this->app->singleton(TenantHint::class, fn (Application $app): TenantHint => new TenantHint($app));
 

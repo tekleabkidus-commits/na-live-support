@@ -8,6 +8,7 @@ use App\Jobs\Ai\PersistAiDecisions;
 use App\Support\Events\EventPublisher;
 use App\Support\Settings\SettingsRepository;
 use App\Support\Tenancy\TenantContext;
+use Illuminate\Support\Facades\DB;
 
 /**
  * FR-20/T-08/NFR-05: the decision log's ASYNC BATCHED writer.
@@ -53,23 +54,29 @@ final class DecisionWriter
 
         $tenantId = $this->context->tenantId();
 
-        foreach ($rows as $record) {
-            if ($this->sampled()) {
-                $this->events->publish('ai.decision.logged', [
-                    'tenant_id' => $tenantId,
-                    'decision_id' => $record->id,
-                    'surface' => $record->surface,
-                    'task' => $record->task,
-                    'action' => $record->action ?? 'none',
-                    'error_category' => $record->errorCategory ?? 'none',
-                ]);
+        // Self-transactional: the sampled event needs the outbox's transaction
+        // (Doc 01 T-03); inside a caller's transaction this is a savepoint and
+        // the event commits with the caller's write, outside one it is its own
+        // short transaction. Either way the dispatch is afterCommit (C-06).
+        DB::transaction(function () use ($rows, $tenantId): void {
+            foreach ($rows as $record) {
+                if ($this->sampled()) {
+                    $this->events->publish('ai.decision.logged', [
+                        'tenant_id' => $tenantId,
+                        'decision_id' => $record->id,
+                        'surface' => $record->surface,
+                        'task' => $record->task,
+                        'action' => $record->action ?? 'none',
+                        'error_category' => $record->errorCategory ?? 'none',
+                    ]);
+                }
             }
-        }
 
-        PersistAiDecisions::dispatch($tenantId, array_map(
-            static fn (DecisionRecord $record): array => PersistAiDecisions::rowFor($record),
-            $rows,
-        ));
+            PersistAiDecisions::dispatch($tenantId, array_map(
+                static fn (DecisionRecord $record): array => PersistAiDecisions::rowFor($record),
+                $rows,
+            ));
+        });
     }
 
     private function sampled(): bool

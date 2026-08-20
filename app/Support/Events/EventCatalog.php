@@ -626,7 +626,7 @@ final class EventCatalog
             // as Doc 14's `ticket_resolved` signal — no separate event exists.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/TicketTransitionService'],
-            'consumers' => ['Doc12/CsatFlow', 'Doc14/Sms', 'Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc12/CsatFlow', 'Doc14/Sms', 'Doc07/Inbox', 'Doc09/OutcomeEnrichment', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in the same transaction), the Doc 12 CSAT flow and Doc 14\'s ticket_resolved SMS.',
         ],
         'ticket.closed' => [
@@ -643,7 +643,7 @@ final class EventCatalog
             // they were inactive and the ticket went back to Doc 11's queue.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'from_status', 'reopened_count', 'assignee_id', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/TicketTransitionService'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'consumers' => ['Doc07/Inbox', 'Doc09/OutcomeEnrichment', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
             'description' => 'FR-08: a resolved or closed ticket returned to `open` — a customer message within the window (actor_type=system) or a staff reopen with reason (actor_type=staff). reopened_count has already been incremented.',
         ],
         'ticket.merged' => [
@@ -781,6 +781,13 @@ final class EventCatalog
             'producers' => ['Doc09/Orchestrator'],
             'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'T-01/FS-01: an AI provider\'s health transitioned for this tenant — healthy | degraded (a breaker tripped, the chain still has a hop) | down (all exhausted → bypass-to-handoff). The Doc 07 banner consumption is a separate future escalation.',
+        ],
+        'ai.resolved' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'conversation_id', 'decision_id'],
+            'producers' => ['Doc09/ChatbotTurn'],
+            'consumers' => ['Doc12/Csat', 'Doc15/Reporting'],
+            'description' => 'FR-09/FR-21: the chatbot marked a conversation AI-resolved (no ticket); Doc 12 sends the 1-tap CSAT prompt; a customer reply within 24 h reopens the AI turn flagged post_resolution (EC-08: ×2 then mandatory handoff).',
         ],
         'ai.rg.flagged' => [
             'schema_version' => 1,

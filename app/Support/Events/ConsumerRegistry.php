@@ -84,8 +84,12 @@ final class ConsumerRegistry
         'ticket.split' => [ListProjectorConsumer::class],
         'ticket.spam_marked' => [ListProjectorConsumer::class, RollupConsumer::class],
         'ticket.spam_unmarked' => [ListProjectorConsumer::class, RollupConsumer::class],
-        'ticket.reopened' => [ListProjectorConsumer::class],
-        'ticket.resolved' => [ListProjectorConsumer::class],
+        // Doc 09 T-08 (S09 step 9): outcome enrichment joins ticket events to
+        //    the AI decisions that created the ticket (ai_decisions.ticket_id);
+        //    contract fixture fixtures/tickets/consumers/doc09.json; the
+        //    ReopenConsumerDrillTest pin moves in THIS commit.
+        'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
+        'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
         'ticket.closed' => [ListProjectorConsumer::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],
         'ticket.follower_removed' => [ListProjectorConsumer::class],

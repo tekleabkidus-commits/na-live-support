@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Domain\Ai\DecisionLog\DecisionRecord;
 use App\Domain\Ai\DecisionLog\DecisionWriter;
 use App\Domain\Ai\DecisionLog\OutcomeEnrichment;
 use App\Domain\Ai\Prompt\ImmutableLayer;
@@ -15,20 +14,6 @@ use Illuminate\Support\Str;
  * (amendment flag 1), and the enrichment pen — the product's memory,
  * proven before any surface exists (§21's head order).
  */
-function decisionFixture(array $overrides = []): DecisionRecord
-{
-    $defaults = [
-        'id' => (string) Str::uuid7(),
-        'surface' => 'chatbot',
-        'task' => 'classify_message',
-        'provider' => 'fake',
-        'model' => 'fixture-model',
-        'layerHashes' => ['immutable' => ImmutableLayer::hash(), 'task_template' => 'abc'],
-    ];
-
-    return new DecisionRecord(...array_merge($defaults, $overrides));
-}
-
 it('FR-20: record + flush lands the row with layer_hashes carrying the immutable hash (T-02 asserted in decisions)', function (): void {
     $tenant = createTenant();
     bindTenant($tenant);

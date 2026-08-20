@@ -1,0 +1,25 @@
+{
+  "doc": "Doc09",
+  "spec": "Doc 09 FR-21 / Doc 06 NFR-06 — consumer contracts for Doc 09's NON-ticket durable consumption (S09 step 9; ADR 0011). The ticket.* slices live in fixtures/tickets/consumers/doc09.json.",
+  "note": "Every consumer reads identifiers only and re-fetches content under its own tenancy (SEC-07/Q7). ClassifyInboundMessage reads message_id and consults BatchTailHint (EC-01) — the body is re-read from the messages row. The media consumers read message_id + index + storage_key and write transcript_ref/ocr_ref back to the media item.",
+  "entries": [
+    {
+      "event": "message.received",
+      "consumer": "Doc09/AiTurnDecision",
+      "schema_version": 1,
+      "reads": ["tenant_id", "message_id"]
+    },
+    {
+      "event": "media.needs_transcript",
+      "consumer": "Doc09/Transcription",
+      "schema_version": 1,
+      "reads": ["tenant_id", "message_id", "index", "storage_key"]
+    },
+    {
+      "event": "media.needs_ocr",
+      "consumer": "Doc09/Ocr",
+      "schema_version": 1,
+      "reads": ["tenant_id", "message_id", "index", "storage_key"]
+    }
+  ]
+}

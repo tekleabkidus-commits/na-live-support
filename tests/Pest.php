@@ -1458,3 +1458,38 @@ function dropCustomersSearchIndex(): void
         // absent index on a cold tenant — nothing to drop
     }
 }
+
+/**
+ * Doc 09 (S09 step 7): the fake channel the AI pipeline sends through in
+ * tests — registered once per process (the OutboundPipelineTest shape).
+ */
+function registerFakeChannel(): void
+{
+    $registry = app(App\Domain\Conversations\Adapters\AdapterRegistry::class);
+    if (! in_array('fakechan', $registry->channels(), true)) {
+        $registry->register('fakechan', new Tests\Support\Adapters\FakeChannelAdapter(new App\Domain\Conversations\Adapters\Capabilities(
+            maxText: 4096, mediaTypes: ['photo'], supportsTyping: false, supportsEdit: false,
+            supportsDelete: false, supportsButtons: false, replyWindow: App\Domain\Conversations\Adapters\ReplyWindow::none(),
+        )), 'webchat-in', 'webchat-out');
+    }
+}
+
+/**
+ * Doc 09 decision-record fixture (shared by DecisionLogTest and DecisionAccessTest —
+ * moved here at S09 step 9 so neither file depends on the other's load order).
+ *
+ * @param  array<string, mixed>  $overrides
+ */
+function decisionFixture(array $overrides = []): App\Domain\Ai\DecisionLog\DecisionRecord
+{
+    $defaults = [
+        'id' => (string) Str::uuid7(),
+        'surface' => 'chatbot',
+        'task' => 'classify_message',
+        'provider' => 'fake',
+        'model' => 'fixture-model',
+        'layerHashes' => ['immutable' => App\Domain\Ai\Prompt\ImmutableLayer::hash(), 'task_template' => 'abc'],
+    ];
+
+    return new App\Domain\Ai\DecisionLog\DecisionRecord(...array_merge($defaults, $overrides));
+}

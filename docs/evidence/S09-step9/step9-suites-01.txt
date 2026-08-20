@@ -1,0 +1,16 @@
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  Cannot redeclare function action() (previously declared in /app/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php:117)[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m73[39m
+     69▕ 
+     70▕     return $id;
+     71▕ }
+     72▕ 
+  ➜  73▕ function action(string $action, array $extra = []): ProviderResponse
+     74▕ {
+     75▕     return new ProviderResponse((string) json_encode(['action' => $action] + $extra), 500, 60);
+     76▕ }
+     77▕
+

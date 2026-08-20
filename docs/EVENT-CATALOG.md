@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-102 event(s).
+103 event(s).
 
 ## `agent.status_changed`
 
@@ -67,6 +67,15 @@ T-01/FS-01: an AI provider's health transitioned for this tenant — healthy | d
 - **Payload:** `tenant_id`, `provider`, `status`
 - **Producers:** Doc09/Orchestrator
 - **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `ai.resolved`
+
+FR-09/FR-21: the chatbot marked a conversation AI-resolved (no ticket); Doc 12 sends the 1-tap CSAT prompt; a customer reply within 24 h reopens the AI turn flagged post_resolution (EC-08: ×2 then mandatory handoff).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `decision_id`
+- **Producers:** Doc09/ChatbotTurn
+- **Consumers:** Doc12/Csat, Doc15/Reporting
 
 ## `ai.rg.flagged`
 
@@ -831,7 +840,7 @@ FR-08: a resolved or closed ticket returned to `open` — a customer message wit
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `from_status`, `reopened_count`, `assignee_id`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+- **Consumers:** Doc07/Inbox, Doc09/OutcomeEnrichment, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
 
 ## `ticket.resolved`
 
@@ -840,7 +849,7 @@ FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in 
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
-- **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc09/OutcomeEnrichment, Doc15/Reporting, Doc17/Audit
 
 ## `ticket.spam_marked`
 

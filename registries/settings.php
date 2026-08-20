@@ -681,4 +681,14 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 FR-08: the conversation window the chatbot sees (last N
+        // customer/AI messages; notes never — SEC-04). Platform-max validation.
+        'key' => 'ai.chatbot.window_messages',
+        'type' => 'int',
+        'default' => 12,
+        'validation' => 'required|integer|min:2|max:50',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

@@ -1,0 +1,100 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m5.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01 (AC-01's pipeline clause): a six-message burst yields ONE[39m[90m… [39m [90m0.19s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it AC-02/BR-02 (sabotage #8 ta…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Thanks for your message. A member of our team will be with you shortly.'[39m[39;1m
+  [39;22m[32m+'The maximum withdrawal fee is 2%.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m120[39m
+    116▕     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] what is the maximum withdrawal fee policy?');
+    117▕ 
+    118▕     $out = outboundBodies($conversation);
+    119▕     expect($out)->toHaveCount(1, 'expected exactly the handoff template')
+  ➜ 120▕         ->and($out[0])->toBe(__('ai.handoff.template', [], 'en'))
+    121▕         ->and(implode(' ', $out))->not->toContain('2%');
+    122▕     $ticket = DB::table('tickets')->where('conversation_id', $conversation->identifier())->where('source', 'ai_handoff')->first();
+    123▕     expect($ticket)->not->toBeNull();
+    124▕     $packet = json_decode((string) DB::table('ticket_handoff_packets')->where('ticket_id', $ticket->id)->value('payload'), true);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m120[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ActionSchemaTest[22m [90m>[39m it BR-02/AC-02: an answer WIT…   
+[39;1m  Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Feature/Ai/ActionSchemaTest.php[39m:[32m35[39m
+     31▕ });
+     32▕ 
+     33▕ it('BR-02/AC-02: an answer WITHOUT a citation is refused by the schema itself — never sent', function (): void {
+     34▕     $uncited = schema()->validate(['action' => 'answer', 'text' => 'Deposits settle within 30 minutes.']);
+  ➜  35▕     expect($uncited)->toBeInstanceOf(DiscardedAction::class)
+     36▕         ->and($uncited->detail)->toContain('citation');
+     37▕ 
+     38▕     $emptyCitations = schema()->validate(['action' => 'answer', 'text' => 'x', 'citations' => []]);
+     39▕     expect($emptyCitations)->toBeInstanceOf(DiscardedAction::class);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ActionSchemaTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Golden\AiGoldenConversationTest[22m [90m>[39m it AC-01: every golden di…   
+[39;1m  money-no-grounding-en.json: the schema net let the case through
+Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Golden/AiGoldenConversationTest.php[39m:[32m135[39m
+    131▕ 
+    132▕         $expected = is_array($fixture['expect'] ?? null) ? $fixture['expect'] : [];
+    133▕ 
+    134▕         if (($expected['discarded'] ?? false) === true) {
+  ➜ 135▕             expect($validated)->toBeInstanceOf(DiscardedAction::class, $case['file'].': the schema net let the case through')
+    136▕                 ->and($validated instanceof DiscardedAction ? $validated->detail : '')->toContain(
+    137▕                     is_string($expected['detail_contains'] ?? null) ? $expected['detail_contains'] : '',
+    138▕                 );
+    139▕
+
+  [33m1   [39m[39;1mtests/Golden/AiGoldenConversationTest.php[39;22m:[39;1m135[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Golden\AiGoldenConversationTest[22m [90m>[39m it AC-05 (the trap clause…   
+[39;1m  trap-deposit-confirm-am.json: the trap produced a sendable answer
+Failed asserting that an instance of class App\Domain\Ai\Chatbot\ValidatedAction is an instance of class App\Domain\Ai\Chatbot\DiscardedAction.[39;22m
+
+  at [32mtests/Golden/AiGoldenConversationTest.php[39m:[32m201[39m
+    197▕ 
+    198▕         // The recorded output DOES try to confirm ("Yes, your deposit was
+    199▕         // received") — the schema net catches it: uncited answer, discarded,
+    200▕         // and the step-9 turn maps this to no_grounding handoff (BR-02).
+  ➜ 201▕         expect($validated)->toBeInstanceOf(DiscardedAction::class, $case['file'].': the trap produced a sendable answer');
+    202▕     }
+    203▕ });
+    204▕
+
+  [33m1   [39m[39;1mtests/Golden/AiGoldenConversationTest.php[39;22m:[39;1m201[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m13 passed[39;22m[90m (78 assertions)[39m
+  [90mDuration:[39m [39m7.41s[39m
+

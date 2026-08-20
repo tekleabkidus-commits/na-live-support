@@ -7,6 +7,8 @@ namespace App\Domain\Ai\Pipeline;
 use App\Domain\Ai\DecisionLog\DecisionRecord;
 use App\Domain\Ai\DecisionLog\DecisionWriter;
 use App\Domain\Ai\Orchestrator\AiOrchestrator;
+use App\Domain\Ai\Providers\AllProvidersExhausted;
+use App\Domain\Ai\Quota\AiQuotaExhausted;
 use App\Domain\Ai\Rg\RgClassifier;
 use App\Domain\Conversations\Inbound\BatchTailHint;
 use App\Domain\Conversations\Messages\LanguageDetector;
@@ -40,6 +42,7 @@ final class InboundClassification
         private readonly AiOrchestrator $orchestrator,
         private readonly RgClassifier $rg,
         private readonly TurnDecision $decide,
+        private readonly Thresholds $thresholds,
         private readonly DecisionWriter $decisions,
         private readonly RouteExecutor $executor,
     ) {}
@@ -75,10 +78,30 @@ final class InboundClassification
             : ($this->language->detect($message->body) ?? 'en');
 
         $started = microtime(true);
-        $result = $this->orchestrator->execute('classify_message', [
-            ['role' => 'system', 'content' => self::TEMPLATE],
-            ['role' => 'user', 'content' => $burst],
-        ]);
+        try {
+            $result = $this->orchestrator->execute('classify_message', [
+                ['role' => 'system', 'content' => self::TEMPLATE],
+                ['role' => 'user', 'content' => $burst],
+            ]);
+        } catch (AiQuotaExhausted|AllProvidersExhausted $refused) {
+            // EC-12 / FS-01 AT THE CLASSIFY STAGE: the gate (or a dead chain)
+            // refused before any model call — the customer still goes
+            // STRAIGHT TO A HUMAN within this turn, never stranded on a
+            // failed job (the first ChatbotTurnTest draft proved this gap).
+            $reason = $refused instanceof AiQuotaExhausted ? 'quota_exhausted' : 'degraded';
+            $fallbackId = (string) new UuidV7;
+            $this->decisions->record(new DecisionRecord(
+                id: $fallbackId, surface: 'chatbot', task: 'classify_message', provider: 'none', model: 'none',
+                layerHashes: ['immutable' => \App\Domain\Ai\Prompt\ImmutableLayer::hash()],
+                conversationId: $message->conversation_id, customerId: $message->author_id, messageId: $messageId,
+                endpointRef: $conversation->channel_ref_id, language: $language, action: 'bypass_handoff',
+                errorCategory: $reason === 'quota_exhausted' ? 'quota_exhausted' : 'provider_error',
+            ));
+            $this->decisions->flush();
+            $this->executor->execute('bypass_handoff:'.$reason, $fallbackId, $message->conversation_id, $messageId, $language, ['intent' => 'other', 'confidence' => 0.0, 'sentiment' => 0, 'urgency' => 2, 'spam' => 0.0, 'rg_risk' => 0.0]);
+
+            return $fallbackId;
+        }
 
         $decoded = json_decode((string) $result['response']->content, true);
         $classification = $this->normalize(is_array($decoded) ? $decoded : []);
@@ -115,7 +138,19 @@ final class InboundClassification
             tokensOut: $result['response']->tokensOut + $rg['tokens_out'],
             latencyMs: (int) round((microtime(true) - $started) * 1000),
             requestPayload: ['burst' => $burst],
-            responsePayload: ['classification' => $classification],
+            // The RoutePolicy outcome under the thresholds IN FORCE — AC-03's
+            // replay anchor: the simulation recomputes exactly this.
+            responsePayload: ['classification' => $classification, 'policy' => RoutePolicy::outcomeFor(
+                $classification['confidence'],
+                $classification['rg_risk'],
+                $classification['spam'],
+                [
+                    'rg_min' => $this->thresholds->value('rg_min', $conversation->channel_ref_id),
+                    'spam_min' => $this->thresholds->value('spam_min', $conversation->channel_ref_id),
+                    'handoff_below' => $this->thresholds->value('handoff_below', $conversation->channel_ref_id),
+                    'auto_resolve_min' => $this->thresholds->value('auto_resolve_min', $conversation->channel_ref_id),
+                ],
+            )],
         ));
         $this->decisions->flush();
 

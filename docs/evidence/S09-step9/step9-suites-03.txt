@@ -1,0 +1,72 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m4.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.30s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.11s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-08/FR-10… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "kb-dep-001"
+CONTEXT:  unnamed portal parameter $1 = '...' (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "id" from "kb_chunks" where "article_ref" = kb-dep-001 and "chunk_index" = 0 limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Retrieval/KbIndexer.php[39;22m:[39;1m54[39;22m
+  [33m10  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m93[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it F… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Action resolve not defined.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php[39m:[32m573[39m
+    569▕      */
+    570▕     public function action($action, $parameters = [], $absolute = true)
+    571▕     {
+    572▕         if (is_null($route = $this->routes->getByAction($action = $this->formatAction($action)))) {
+  ➜ 573▕             throw new InvalidArgumentException("Action {$action} not defined.");
+    574▕         }
+    575▕ 
+    576▕         return $this->toRoute($route, $parameters, $absolute);
+    577▕     }
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m177[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-12/EC-… [41;1m AiQuotaExhausted [49;22m  
+[39;1m  daily AI token quota exhausted (reserve mode) — route to a human (EC-12)[39;22m
+
+  at [32mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39m:[32m50[39m
+     46▕ 
+     47▕         // NFR-06/EC-12: the quota gate runs BEFORE any provider call (SEC-05's
+     48▕         // posture). Sabotage #12 moves this below the call.
+     49▕         if ($this->quota->admit() === 'exhausted') {
+  ➜  50▕             throw new AiQuotaExhausted('daily AI token quota exhausted (reserve mode) — route to a human (EC-12)');
+     51▕         }
+     52▕ 
+     53▕         $chain = $this->routingFor($definition['tier']);
+     54▕         $lastFailure = null;
+
+  [33m1   [39m[39;1mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39;22m:[39;1m50[39;22m
+  [33m2   [39m[39;1mapp/Domain/Ai/Pipeline/InboundClassification.php[39;22m:[39;1m79[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (34 assertions)[39m
+  [90mDuration:[39m [39m6.47s[39m
+

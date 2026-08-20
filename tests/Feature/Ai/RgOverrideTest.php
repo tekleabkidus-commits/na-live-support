@@ -23,17 +23,6 @@ use Illuminate\Support\Str;
  * preemption order, suppression engagement, calibration read-back.
  * Sabotages #5 (preemption) and #6 (template -> generated) target this file.
  */
-function registerFakeChannel(): void
-{
-    $registry = app(App\Domain\Conversations\Adapters\AdapterRegistry::class);
-    if (! in_array('fakechan', $registry->channels(), true)) {
-        $registry->register('fakechan', new Tests\Support\Adapters\FakeChannelAdapter(new App\Domain\Conversations\Adapters\Capabilities(
-            maxText: 4096, mediaTypes: ['photo'], supportsTyping: false, supportsEdit: false,
-            supportsDelete: false, supportsButtons: false, replyWindow: App\Domain\Conversations\Adapters\ReplyWindow::none(),
-        )), 'webchat-in', 'webchat-out');
-    }
-}
-
 function rgFixture(float $screen = 0.95, float $confirm = 0.95, string $language = 'en'): array
 {
     $tenant = activateTenant(createTenant());

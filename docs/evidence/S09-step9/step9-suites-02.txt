@@ -1,0 +1,178 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m5.46s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-08/FR-10/AC-02 (p… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m92[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it AC-02/BR-02 (sabotag… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m106[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it EC-05: an out-of-enu… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m129[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-12: customer requ… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m143[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-09/EC-08: resolve… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m166[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it EC-04: betting advic… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m192[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-12/EC-02/EC-11/EC… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m214[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-07 handoff_path:…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m257[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it AC-04 MID-FORM PREEM… [41;1m Error [49;22m  
+[39;1m  Call to undefined function registerFakeChannel()[39;22m
+
+  at [32mtests/Feature/Ai/ChatbotTurnTest.php[39m:[32m31[39m
+     27▕     $tenant = activateTenant(createTenant());
+     28▕     bindTenant($tenant);
+     29▕     $tenantId = $tenant->identifier();
+     30▕     Cache::flush();
+  ➜  31▕     registerFakeChannel();
+     32▕ 
+     33▕     $actor = (string) Str::uuid7();
+     34▕     $configs = app(ConfigVersions::class);
+     35▕     $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => $chatbotEnabled, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], $actor);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m31[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m268[39;22m
+
+
+  [90mTests:[39m    [31;1m9 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m5.89s[39m
+

@@ -105,6 +105,43 @@ final class AiOrchestrator
         );
     }
 
+    /**
+     * T-05: embeddings through the same seam (ADR 0018's sidecar is just a
+     * provider on the 'embeddings' tier) — same guard, same breakers, same
+     * quota accounting.
+     *
+     * @param  list<string>  $inputs
+     * @return list<list<float>>
+     */
+    public function executeEmbeddings(array $inputs): array
+    {
+        if ($this->quota->admit() === 'exhausted') {
+            throw new AiQuotaExhausted('daily AI token quota exhausted (reserve mode) — no embeddings (EC-12)');
+        }
+
+        $lastFailure = null;
+        foreach ($this->routingFor('embeddings') as $hop) {
+            if ($this->breaker->isOpen($hop['provider'])) {
+                continue;
+            }
+            try {
+                $response = $this->providers->driver($hop['provider'], 30)->embeddings([
+                    'model' => $hop['model'],
+                    'input' => $inputs,
+                ]);
+                $this->breaker->recordSuccess($hop['provider']);
+                $this->quota->record($response->tokensIn);
+
+                return $response->vectors;
+            } catch (Throwable $failure) {
+                $this->breaker->recordFailure($hop['provider']);
+                $lastFailure = $failure;
+            }
+        }
+
+        throw new AllProvidersExhausted('every embeddings provider failed or sits tripped', previous: $lastFailure);
+    }
+
     /** @return list<array{provider: string, model: string}> */
     private function routingFor(string $tier): array
     {

@@ -1,0 +1,47 @@
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    FAIL   .......................................... 968 files, 1 style issue  
+  ⨯ tests/Feature/Ai/ChatbotTurnTest.php class_attributes_separation, braces_…  
+
+PINT EXIT 1
+         $thresholds with no value type specified in iterable type array.       
+         🪪  missingType.iterableValue                                          
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+         terable-type                                                           
+  24     Cannot cast mixed to float.                                            
+         🪪  cast.double                                                        
+  27     Cannot cast mixed to float.                                            
+         🪪  cast.double                                                        
+  30     Cannot cast mixed to float.                                            
+         🪪  cast.double                                                        
+  34     Cannot cast mixed to float.                                            
+         🪪  cast.double                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Domain/Ai/Simulation/SimulationEngine.php                          
+ ------ ----------------------------------------------------------------------- 
+  39     Cannot cast mixed to string.                                           
+         🪪  cast.string                                                        
+  67     Method App\Domain\Ai\Simulation\SimulationEngine::tokenFor() has       
+         parameter $thresholds with no value type specified in iterable type    
+         array.                                                                 
+         🪪  missingType.iterableValue                                          
+         💡  See:                                                               
+         https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-i  
+         terable-type                                                           
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ------------------------------------------------- 
+  Line   app/Domain/Ai/Simulation/ThresholdPublisher.php  
+ ------ ------------------------------------------------- 
+  29     Cannot cast mixed to string.                     
+         🪪  cast.string                                  
+  31     Cannot cast mixed to string.                     
+         🪪  cast.string                                  
+ ------ ------------------------------------------------- 
+
+ [ERROR] Found 47 errors                                                        
+
+PHPSTAN EXIT 1

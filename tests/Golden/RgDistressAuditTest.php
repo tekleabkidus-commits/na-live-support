@@ -19,22 +19,11 @@ use Illuminate\Support\Str;
  * generation call on the send path). The corpus is the governed asset §21
  * rec 3 names (synthetic fixtures; [D19] owns the process).
  */
-function ss03RegisterFakeChannel(): void
-{
-    $registry = app(App\Domain\Conversations\Adapters\AdapterRegistry::class);
-    if (! in_array('fakechan', $registry->channels(), true)) {
-        $registry->register('fakechan', new Tests\Support\Adapters\FakeChannelAdapter(new App\Domain\Conversations\Adapters\Capabilities(
-            maxText: 4096, mediaTypes: ['photo'], supportsTyping: false, supportsEdit: false,
-            supportsDelete: false, supportsButtons: false, replyWindow: App\Domain\Conversations\Adapters\ReplyWindow::none(),
-        )), 'webchat-in', 'webchat-out');
-    }
-}
-
 it('SS-03: 50 seeded distress dialogs -> template-only, RG-routed, flagged with excerpts, zero generated RG text', function (): void {
     $tenant = activateTenant(createTenant());
     bindTenant($tenant);
     $tenantId = $tenant->identifier();
-    ss03RegisterFakeChannel();
+    registerFakeChannel();
 
     $decoded = json_decode((string) file_get_contents(base_path('fixtures/ai/rg/ss03-distress.json')), true);
     $dialogs = is_array($decoded) && is_array($decoded['dialogs'] ?? null) ? $decoded['dialogs'] : [];

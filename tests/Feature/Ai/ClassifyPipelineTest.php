@@ -27,6 +27,9 @@ function classifyFixture(array $classification = []): array
     $customerId = (string) Str::uuid7();
     DB::table('customers')->insert(['id' => $customerId, 'tenant_id' => $tenantId, 'created_source' => 'telegram']);
     $conversation = anotherConversation($tenantId, 'clf', $customerId);
+    // Since step 9 the handoff_path route REALLY hands off (Doc 06 packet +
+    // FR-28 template through the adapter) — the channel must exist.
+    registerFakeChannel();
 
     $driver = new FakeDriver(new FixturesOnlyEgress);
     $payload = json_encode(array_merge([
@@ -114,7 +117,11 @@ it('C-09: a redelivered event changes nothing — one decision, however many del
     (new ClassifyInboundMessage($eventId))->handle(app(App\Domain\Ai\Pipeline\InboundClassification::class));
     (new ClassifyInboundMessage($eventId))->handle(app(App\Domain\Ai\Pipeline\InboundClassification::class));
 
-    expect(DB::table('ai_decisions')->where('message_id', $messageId)->count())->toBe(1);
+    // One classification AND one handoff (the route executed once) — the
+    // redelivery added neither a second classification nor a second ticket.
+    expect(DB::table('ai_decisions')->where('message_id', $messageId)->where('task', 'classify_message')->count())->toBe(1)
+        ->and(DB::table('ai_decisions')->where('message_id', $messageId)->count())->toBe(2)
+        ->and(DB::table('tickets')->where('conversation_id', $conversation->identifier())->count())->toBe(1);
 });
 
 it('FR-11 (Doc 04): a quarantined inbound gets NO classification — no fan-out means no AI', function (): void {
@@ -137,7 +144,10 @@ it('T-06: the two-stage RG confirmation runs ONLY past the screening floor, and 
     (new ClassifyInboundMessage(classifyEvent($tenantId, $conversation->identifier(), $messageId, $customerId)))
         ->handle(app(App\Domain\Ai\Pipeline\InboundClassification::class));
 
-    $decision = DB::table('ai_decisions')->where('message_id', $messageId)->first();
+    $decision = DB::table('ai_decisions')->where('message_id', $messageId)->where('task', 'classify_message')->first();
+    // Calls 1 and 2 are the screen and the confirmation; the third (since
+    // step 9) is the handoff summary the cleared case then routes to.
     expect((float) $decision->rg_risk)->toBe(0.1, 'stage two did not outrank the screening signal')
-        ->and(count($driver->seen))->toBe(2, 'the confirmation stage never ran');
+        ->and(count($driver->seen))->toBe(3, 'the confirmation stage never ran')
+        ->and(json_encode($driver->seen[1]))->toContain('[FIXTURE] angry about a delay');
 });

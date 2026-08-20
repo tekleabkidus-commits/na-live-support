@@ -1992,40 +1992,53 @@ entries:
       persona v1 — every action type, the transaction-fact traps (en + am,
       both die on BR-02's citation net), and the money-no-grounding case.
       Executed 8/46 with the red-team suite (step5-suites-03.txt).
+      STEP 9: the pipeline-level clauses landed in ChatbotTurnTest — EC-01
+      (a six-message burst -> ONE classification, ONE turn addressing the
+      whole burst) and EC-08 (resolve -> reopen with post_resolution context
+      -> third reply hands off), both through the REAL consumer + turn.
     gap: >-
-      PARTIAL until the pipeline-level clauses join: batch-tail (EC-01,
-      step 6) and post-resolution (EC-08, step 9) run through the same suite
-      when their flows exist. The fixtures stay; the suite grows.
+      PARTIAL only for the LIVE-provider variance residual accepted at
+      checkpoint B (nightly ai-nightly.yml, AI_GOLDEN_LIVE=1, is the
+      indicative run; the replay suite is the every-push proof).
   - ac_ref: "Doc09 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/ChatbotTurnTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: automated
     justification: >-
-      PLANNED (S09 step 9): the grounding rule — policy/money fixtures without
-      retrieval hits always hand off (no_grounding); every answer action
-      carries >=1 valid citation, schema-enforced (ActionSchema + RetrievalTest
-      AC-02 clauses). Flips to automated in the step-9 commit.
-    gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      FLIPPED AT S09 STEP 9, same commit as the suite: the grounding rule as
+      physics — an answer validates ONLY with >=1 citation AND every citation
+      a member of the refs actually retrieved for that turn (ActionSchema; the
+      checkpoint-B strengthening against invented citations); a money question
+      with no retrieval hit answered uncited twice -> EC-05 retry -> handoff
+      no_grounding (the template, the packet, the decision rows). The positive
+      half: a grounded answer goes out WITH its citation rendered per channel
+      capability. Retrieval itself: RetrievalTest (hybrid rank, internal never
+      reaches the chatbot, retire flips retrievable, keyword-only degrade).
+      Sabotage #8 executed: citation requirement dropped -> 4 red on exactly
+      the citation tests (sabotage-8-RED-01.txt) -> restored byte-identical
+      -> 17/17 green. Golden traps (en + am) in AiGoldenConversationTest.
   - ac_ref: "Doc09 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/SimulationParityTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: automated
     justification: >-
-      PLANNED (S09 step 9): SimulationParityTest — for a seeded decision-log
-      day, slider changes produce exactly the recomputed outcomes the engine
-      would produce (simulation-vs-replay parity). Flips to automated in the
-      step-9 commit.
-    gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      FLIPPED AT S09 STEP 9, same commit as the suite: the two-halves form —
+      a day of REAL decisions through the live consumer at thresholds T1,
+      sim(T1) == live(T1) outcome-for-outcome; raise handoff_below to T2,
+      sim(T2) predicts exactly what the live pipeline then produces on
+      identical inputs (one more handoff, one fewer eligible). Parity is
+      structural: ONE RoutePolicy class serves both the live pipeline and the
+      engine (no second implementation). BR-07 as physics: a thresholds draft
+      publishes ONLY with the token of a simulation run for exactly its values
+      (ThresholdPublisher). Executed step9-suites-06.txt (6 passed).
   - ac_ref: "Doc09 AC-04"
     suite_path: tests/Feature/Ai/RgOverrideTest.php
     type: automated
@@ -2047,9 +2060,10 @@ entries:
       SS-03's 50-dialog audit (tests/Golden/RgDistressAuditTest.php) green.
       Sabotages #5 and #6 executed red->restored.
     gap: >-
-      PARTIAL: the mid-FORM preemption clause re-proves at step 9 when flow
-      state exists (today no flow is consulted at all — the stronger fact);
-      the live RG-queue delivery is [D11]; the governed corpus process [D19].
+      PARTIAL: the mid-FORM preemption clause RE-PROVED at step 9
+      (ChatbotTurnTest: an active form + rg_risk >= rg_min -> the RG path,
+      the form is NOT continued); remaining: the live RG-queue delivery is
+      [D11]; the governed corpus process [D19].
   - ac_ref: "Doc09 AC-05"
     suite_path: manual
     type: manual
@@ -2097,8 +2111,11 @@ entries:
       the fenced user turn, uncited advice dies on BR-02's net. The Sev-2
       runbook is docs/runbooks/ai-injection-sev2.md.
     gap: >-
-      PARTIAL until the chatbot-level consequences join at step 9 (deflection
-      template, EC-05 retry -> invalid_action handoff) — same suite, grown.
+      PARTIAL: the chatbot-level consequences landed at step 9 in
+      ChatbotTurnTest (EC-04 deflection TEMPLATE never generated + third-strike
+      handoff; EC-05 one repair retry -> invalid_action handoff, both logged);
+      the red-team suite itself grows with step 10/11's surfaces (copilot and
+      supervisor inputs are their own injection seams).
   - ac_ref: "Doc09 AC-08"
     suite_path: tests/Feature/Ai/KillSwitchTest.php
     type: automated
@@ -2119,22 +2136,29 @@ entries:
     gap: >-
       PARTIAL: the BANNER clause ("bannered") is step 12's inbox-header
       mirror ([B8]); the enablement composition with scope config is proven
-      (SwitchesAndFlags), the chatbot's live reaction rides step 9.
+      (SwitchesAndFlags); the chatbot's live reaction PROVED at step 9
+      (ChatbotTurnTest FR-07 handoff_path: chatbot disabled -> straight to a
+      human, packet + template, no model call).
   - ac_ref: "Doc09 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/FailoverDrillTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 step 8): FailoverDrillTest — the scripted provider-failure
-      drill produces the FS-01 ladder exactly (breaker, chain, bypass-to-
-      handoff, degraded Copilot card, Supervisor pause, auto-resume, evented)
-      with zero unanswered customers. Flips to automated in the step-8 commit.
+      FLIPPED AT S09 STEP 9 (the suite landed at step 8; the customer side at
+      step 9): FailoverDrillTest — primary fails -> breaker trips -> DEGRADED
+      (transition-only ai.provider.health_changed) -> chain falls through;
+      every provider exhausted -> DOWN + the degraded-mode sentinel within
+      NFR-04's bound; auto-resume publishes HEALTHY once; EC-11 refusal
+      detection. ChatbotTurnTest (AC-09 customer side): quota_exhausted and
+      provider exhaustion at classify OR at the turn -> bypass_handoff / the
+      handoff template — zero unanswered customers in every branch.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      PARTIAL: the degraded Copilot card (step 10) and the Supervisor pause
+      (step 11) are the two ladder rungs whose surfaces do not exist yet.
   - ac_ref: "Doc09 AC-10"
     suite_path: manual
     type: manual

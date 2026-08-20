@@ -1,0 +1,44 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m4.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\SimulationParityTest[39m
+  [33;1m-[39;22m[90m [39m[90mit AC-03: simulation == live replay under the thresholds in force,[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)[39m[90m… [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\SimulationParityTest[22m [90m>[39m it AC-03 (the two-halves…    
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m+    'rg_override' => 2,[39m[39;1m
+  [39;22m[32m+    'spam' => 1,[39m[39;1m
+  [39;22m[32m+    'handoff_low_confidence' => 2,[39m[39;1m
+  [39;22m[32m     'eligible_auto_resolve' => 2,[39m[39;1m
+  [39;22m[32m     'eligible' => 1,[39m[39;1m
+  [39;22m[31m-    'handoff_low_confidence' => 2,[39m[39;1m
+  [39;22m[31m-    'rg_override' => 1,[39m[39;1m
+  [39;22m[31m-    'spam' => 1,[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/SimulationParityTest.php[39m:[32m116[39m
+    112▕     [$tenantId, $customerId] = parityFixture();
+    113▕     $t1 = ['rg_min' => 0.8, 'spam_min' => 0.9, 'handoff_below' => 0.6, 'auto_resolve_min' => 0.85];
+    114▕     $live1 = runDay($tenantId, $customerId, $cases);
+    115▕     $sim1 = app(SimulationEngine::class)->simulateDay($today, $t1);
+  ➜ 116▕     expect($normalize($sim1['outcomes']))->toBe($normalize($live1 + ['rg_override' => 0, 'spam' => 0, 'handoff_low_confidence' => 0, 'eligible_auto_resolve' => 0, 'eligible' => 0]));
+    117▕     expect($live1['rg_override'] ?? 0)->toBe(1)->and($live1['spam'] ?? 0)->toBe(1)->and($live1['handoff_low_confidence'] ?? 0)->toBe(2);
+    118▕ 
+    119▕     // Half 2 — T2 published (BR-07: with its simulation token), a FRESH
+    120▕     // tenant replays the identical inputs; the prediction made from
+
+  [33m1   [39m[39;1mtests/Feature/Ai/SimulationParityTest.php[39;22m:[39;1m116[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (16 assertions)[39m
+  [90mDuration:[39m [39m5.69s[39m
+

@@ -27,4 +27,10 @@ return [
         'killswitch_changed' => 'AI kill switch changed',
         'quota_80' => 'AI daily token quota at 80%',
     ],
+    'deflection' => [
+        'template' => 'I can\'t help with betting advice or predictions — every outcome is uncertain, and the choice is always yours. If you\'d like, I can share how to set limits or point you to our responsible-play resources.',
+    ],
+    'unsupported_language' => [
+        'template' => 'Sorry, I can only help in English or Amharic right now. I\'m connecting you with a member of our team.',
+    ],
 ];
