@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-97 event(s).
+98 event(s).
 
 ## `agent.status_changed`
 
@@ -31,6 +31,15 @@ FR-04/FR-21: an AI config version (persona, thresholds, guardrails, provider rou
 - **Payload:** `tenant_id`, `kind`, `key`, `version`, `config_version_id`
 - **Producers:** Doc09/ConfigVersions
 - **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `ai.decision.logged`
+
+FR-20/FR-21: an AI task invocation was logged (SAMPLED to the bus — the table is the record; the stream is a signal).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `decision_id`, `surface`, `task`, `action`, `error_category`
+- **Producers:** Doc09/DecisionWriter
+- **Consumers:** Doc15/Reporting
 
 ## `auth.2fa.challenge_failed`
 

@@ -742,6 +742,18 @@ final class EventCatalog
         // ── Doc 07 (Unified Inbox) — the S07 plan's enumeration: ONE new
         //    event (rule 16; view deltas and count pushes are realtime
         //    protocol v:1, NOT catalog events — the RealtimePusher line).
+        'ai.decision.logged' => [
+            'schema_version' => 1,
+            // HIGH-VOLUME AND SAMPLED (FR-21; the Q7 payload-split law
+            // generalized): identifiers + closed categories only — never
+            // prompt/output text; full fidelity is the ai_decisions table.
+            // The sample rate is the ai.decisions.event_sample_permille
+            // platform setting.
+            'payload' => ['tenant_id', 'decision_id', 'surface', 'task', 'action', 'error_category'],
+            'producers' => ['Doc09/DecisionWriter'],
+            'consumers' => ['Doc15/Reporting'],
+            'description' => 'FR-20/FR-21: an AI task invocation was logged (SAMPLED to the bus — the table is the record; the stream is a signal).',
+        ],
         'ai.config.published' => [
             'schema_version' => 1,
             // Q7 split: identifiers and categories only — payload CONTENT

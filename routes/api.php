@@ -301,6 +301,15 @@ Route::group([], function (): void {
                 ->middleware('permission:customers.view')
                 ->name('customers.search');
 
+            // ── Doc 09 SEC-06/FR-20 (S09 step 4): the decision-log read door
+            //    — ai.decisions.view, curated allowlist (the payload pair is
+            //    STRUCTURALLY absent; raw payloads have NO tenant door at
+            //    all — the platform-debug tier is the console's). C-05
+            //    cursor; read door, no audit middleware.
+            Route::get('ai/decisions', [App\Http\Controllers\Ai\AiDecisionsController::class, 'index'])
+                ->middleware('permission:ai.decisions.view')
+                ->name('ai.decisions.index');
+
             // ── Doc 08 T-07/FR-17/FR-19/SEC-04 (S08 step 9): the panel
             //    aggregate + independent sections, the profile autosave
             //    (A-37 noop declared at the service's own no-change branch),

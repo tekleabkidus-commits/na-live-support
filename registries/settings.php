@@ -648,4 +648,16 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 FR-21 (amendment flag 1, countersigned): ai.decision.logged
+        // reaches the bus SAMPLED; the rate is operational platform policy
+        // (per-mille — the settings registry carries no float type), never a
+        // config version. Full fidelity lives in ai_decisions.
+        'key' => 'ai.decisions.event_sample_permille',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:0|max:1000',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

@@ -1,0 +1,53 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.012 ms   max   4.846 ms   budget(p99) 3.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m5.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.16s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it SEC-06: the door serves…    
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Ai/DecisionAccessTest.php[39m:[32m33[39m
+     29▕ 
+     30▕     $viewer = ticketActor(['ai.decisions.view']);
+     31▕     $response = test()->actingAs($viewer, 'staff')->getJson('https://localhost/api/staff/ai/decisions');
+     32▕ 
+  ➜  33▕     $response->assertOk();
+     34▕     $data = $response->json('data');
+     35▕     expect($data)->toHaveCount(3);
+     36▕     foreach ($data as $row) {
+     37▕         expect($row)->toHaveKeys(['id', 'surface', 'task', 'tokens_in', 'created_at'])
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it C-05: the cursor walks t…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Ai/DecisionAccessTest.php[39m:[32m60[39m
+     56▕     seedDecisions(5);
+     57▕ 
+     58▕     $viewer = ticketActor(['ai.decisions.view']);
+     59▕     $first = test()->actingAs($viewer, 'staff')->getJson('https://localhost/api/staff/ai/decisions?limit=3');
+  ➜  60▕     $first->assertOk();
+     61▕     $cursor = $first->json('next_cursor');
+     62▕     expect($first->json('data'))->toHaveCount(3)->and($cursor)->not->toBeNull();
+     63▕ 
+     64▕     $second = test()->actingAs($viewer, 'staff')->getJson('https://localhost/api/staff/ai/decisions?limit=3&cursor='.urlencode((string) $cursor));
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (28 assertions)[39m
+  [90mDuration:[39m [39m6.71s[39m
+

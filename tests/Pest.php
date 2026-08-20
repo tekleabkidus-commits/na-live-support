@@ -777,7 +777,7 @@ function grantAllPermissions(User $user): User
         [
             'color' => 'role-super-admin',
             'permissions' => array_keys(app(App\Support\Rbac\PermissionCatalog::class)->all()),
-            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
+            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All', 'ai' => 'All'],
         ],
     );
     $user->forceFill(['role_id' => $role->getKey()])->save();
@@ -799,7 +799,7 @@ function grantPermissions(User $user, array $permissions, string $roleName = 'Fi
         [
             'color' => 'role-agent',
             'permissions' => $permissions,
-            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All'],
+            'scopes' => ['tickets' => 'All', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All', 'ai' => 'All'],
         ],
     );
     $user->forceFill(['role_id' => $role->getKey()])->save();
