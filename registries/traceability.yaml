@@ -2100,20 +2100,26 @@ entries:
       PARTIAL until the chatbot-level consequences join at step 9 (deflection
       template, EC-05 retry -> invalid_action handoff) — same suite, grown.
   - ac_ref: "Doc09 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/KillSwitchTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 step 8): KillSwitchTest — each scope combination silences
-      exactly its blast radius <=10 s, both directions (off where told, on
-      everywhere else), evented, bannered. Flips to automated in the step-8
-      commit.
+      FLIPPED AT S09 STEP 8, same commit as the suite: exact blast radii
+      BOTH directions (endpoint / channel-wide / all-switch; siblings, other
+      channels and other surfaces stay ON; flip-back restores); instant
+      (direct reads, no cache); SEC-05 audit with actor + old/new; the
+      ai.killswitch.changed event; flipped_at a byte-copy of the audit stamp
+      (sabotage #16 — first attempt INVALID-GREEN at second granularity, the
+      control hardened with the A-33 static pin + a forced second boundary,
+      then RED -> restored). Sabotage #9 (scope leak) red -> restored.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      PARTIAL: the BANNER clause ("bannered") is step 12's inbox-header
+      mirror ([B8]); the enablement composition with scope config is proven
+      (SwitchesAndFlags), the chatbot's live reaction rides step 9.
   - ac_ref: "Doc09 AC-09"
     suite_path: manual
     type: manual

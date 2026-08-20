@@ -1,0 +1,129 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m5.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiQueueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0017 (amended): ai and ai-background are SEPARATE supervisor[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the per-tenant semaphore admits to the registered cap and[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the semaphore is per-tenant — one tenant at cap starves n[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the ai.concurrency.per_tenant setting is registered with platfor[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ClassifyPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/FR-07: the consumer classifies the burst and records the d[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: only the confirmed batch TAIL classifies — a superseded a[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event changes nothing — one decision, howeve[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 (Doc 04): a quarantined inbound gets NO classification — n[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06: the two-stage RG confirmation runs ONLY past the screening[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m1.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.13s[39m  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.009 ms   max   0.070 ms   budget(p99) 3.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m1.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\NormalizeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the guard extends to MEDIA egress: outside production a real med[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a voice note gains its transcript_ref through the Doc 04[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a receipt image gains ocr_ref with per-field confidence[39m[90m   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a provider outage leaves the media item UNTOUCHED and the[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\OrchestratorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: the task catalog is CLOSED at twelve, matching the ai_dec[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: the fallback chain falls through a failing provider to the[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: an OPEN breaker skips its provider without spending a call[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE STEP-3 ASSERTION: no egress path skips the guard — every Pro[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a PUBLISHED provider_routing config overrides the seed —[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.04s[39m  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgEvalHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the corpus is the shipped 50: half risk, half healthy, both lang[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-07: at the shipped rg_min the scripted realistic scorer meet[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the harness CAN fail: a miscalibrated threshold drops precision[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m3.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m84 passed[39;22m[90m (875 assertions)[39m
+  [90mDuration:[39m [39m15.53s[39m
+

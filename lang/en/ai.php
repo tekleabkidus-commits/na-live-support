@@ -23,4 +23,8 @@ return [
     'handoff' => [
         'template' => 'Thanks for your message. A member of our team will be with you shortly.',
     ],
+    'notify' => [
+        'killswitch_changed' => 'AI kill switch changed',
+        'quota_80' => 'AI daily token quota at 80%',
+    ],
 ];

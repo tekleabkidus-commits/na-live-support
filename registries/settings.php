@@ -660,4 +660,25 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 EC-12: the reserve band the CURRENT turn may finish inside
+        // (5% = 50 permille, the document's own figure); platform policy.
+        'key' => 'ai.quota.reserve_permille',
+        'type' => 'int',
+        'default' => 50,
+        'validation' => 'required|integer|min:0|max:200',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        // Doc 09 T-07/AC-10: the provider rate card — {provider:
+        // {input_per_1k, output_per_1k, currency}}; cost = tokens × card.
+        // Empty until the owner supplies the current sheet (ADR 0019).
+        'key' => 'ai.rate_card',
+        'type' => 'json',
+        'default' => [],
+        'validation' => 'array',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

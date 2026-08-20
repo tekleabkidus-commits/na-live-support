@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-100 event(s).
+102 event(s).
 
 ## `agent.status_changed`
 
@@ -49,6 +49,24 @@ FR-12/FR-13/FR-21: the AI handed a conversation to humans — the Doc 06 FR-11 p
 - **Payload:** `tenant_id`, `conversation_id`, `ticket_id`, `decision_id`, `reason`
 - **Producers:** Doc09/RgOverride, Doc09/ChatbotTurn
 - **Consumers:** Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `ai.killswitch.changed`
+
+FR-18/FR-21/SEC-05: a kill switch flipped — exact blast radius (surface × channel × endpoint), instant, high-visibility; the inbox header banner mirrors it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `surface`, `channel`, `endpoint_ref`, `is_off`, `actor_id`
+- **Producers:** Doc09/KillSwitches
+- **Consumers:** Doc07/HealthBanner, Doc15/Reporting, Doc17/Audit
+
+## `ai.provider.health_changed`
+
+T-01/FS-01: an AI provider's health transitioned for this tenant — healthy | degraded (a breaker tripped, the chain still has a hop) | down (all exhausted → bypass-to-handoff). The Doc 07 banner consumption is a separate future escalation.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `provider`, `status`
+- **Producers:** Doc09/Orchestrator
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `ai.rg.flagged`
 

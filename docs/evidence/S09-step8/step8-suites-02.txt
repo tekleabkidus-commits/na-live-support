@@ -1,0 +1,75 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m5.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it EC-12 (sabotage #12 ta…   
+[39;1m  reserve spend was not recorded
+Failed asserting that 1000 is identical to 1300.[39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m79[39m
+     75▕     // 900 used now; one more turn spends INTO the band (to 1300) and is
+     76▕     // allowed to COMPLETE — EC-12's "completes the current turn".
+     77▕     app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] second']]);
+     78▕     expect(count($driver->seen))->toBe(2)
+  ➜  79▕         ->and($meter->headroom(Quota::AiTokensPerDay)['used'])->toBe(1300, 'reserve spend was not recorded');
+     80▕ 
+     81▕     // Past the cap: the NEXT turn is refused BEFORE any call — straight to a human.
+     82▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] third']]))
+     83▕         ->toThrow(AiQuotaExhausted::class);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m79[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it COUNTERSIGN-REQUIRED F…   
+[39;1m  unknown headroom was treated as open throttle
+Failed asserting that two strings are identical.
+  [39;22m[31m-'exhausted'[39m[39;1m
+  [39;22m[32m+'allowed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m107[39m
+    103▕     app('redis')->purge('volatile');
+    104▕     app('cache')->forgetDriver(); // the cache store held the earlier live connection
+    105▕ 
+    106▕     try {
+  ➜ 107▕         expect(app(AiQuotaGate::class)->admit())->toBe('exhausted', 'unknown headroom was treated as open throttle');
+    108▕         expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] y']]))
+    109▕             ->toThrow(AiQuotaExhausted::class);
+    110▕         expect($driver->seen)->toBe([], 'a call was billed blind during the metering outage');
+    111▕     } finally {
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m107[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m21 passed[39;22m[90m (73 assertions)[39m
+  [90mDuration:[39m [39m6.34s[39m
+

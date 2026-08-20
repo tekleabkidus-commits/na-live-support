@@ -90,6 +90,48 @@ final class QuotaMeter
     }
 
     /**
+     * READ-ONLY headroom for the current window (RULED CORE EDIT, S09 step 8 —
+     * Doc 09 EC-12/NFR-06's 5% reserve semantics): {used, limit} in the quota's
+     * own units. NEVER increments, NEVER refuses — the gate that refuses stays
+     * allow(), SEC-05's pre-call posture unchanged. Cumulative quotas answer
+     * from the ledger exactly as allowCumulative() reads it. A metering
+     * outage PROPAGATES (the AI gate treats "unknown headroom" as reserve
+     * mode — refuse new turns, never bill blind); allow()'s per-surface
+     * degrade policy is untouched because this method is not a gate.
+     *
+     * @return array{used: int, limit: int}
+     */
+    public function headroom(Quota $quota): array
+    {
+        $limit = $this->limit($quota);
+        $window = $quota->windowSeconds();
+
+        if ($window === null) {
+            $used = (int) DB::table('tenant_quota_usage')
+                ->where('tenant_id', $this->context->tenantId())
+                ->where('quota', $quota->value)
+                ->sum('used');
+
+            return ['used' => $used, 'limit' => $limit * $quota->limitUnitMultiplier()];
+        }
+
+        $bucket = intdiv(time(), $window) * $window;
+        // increment-by-ZERO, not get(): the cache client's get() is FAIL-SOFT
+        // on a dead connection (null, no throw — proven by probe at S09
+        // step 8), while the add/increment path THROWS — and "outage
+        // propagates" is this method's contract. Same key, same TTL as
+        // allow(); a zero increment creates nothing allow() would not.
+        $counted = $this->cache->increment(
+            sprintf('quota:%s:%d', $quota->value, $bucket),
+            0,
+            $window * 2,
+            'quota.window_expired',
+        );
+
+        return ['used' => $counted, 'limit' => $limit];
+    }
+
+    /**
      * Cumulative quotas (storage) check the durable ledger — there is no window to reset,
      * so the database row IS the counter and Redis is not involved. The writers arrive
      * with the modules that store bytes (Doc 04 media onward); until then the ledger rows

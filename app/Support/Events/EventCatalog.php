@@ -762,6 +762,26 @@ final class EventCatalog
             'consumers' => ['Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-12/FR-13/FR-21: the AI handed a conversation to humans — the Doc 06 FR-11 packet is pinned on the ticket; decision_id is T-08\'s enrichment join key; Doc 11 routes (rg_risk -> the RG queue).',
         ],
+        'ai.killswitch.changed' => [
+            'schema_version' => 1,
+            // 'all' stands in for a NULL scope axis so the closed payload stays
+            // string-typed; the audit entry carries reason + old/new.
+            'payload' => ['tenant_id', 'surface', 'channel', 'endpoint_ref', 'is_off', 'actor_id'],
+            'producers' => ['Doc09/KillSwitches'],
+            'consumers' => ['Doc07/HealthBanner', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-18/FR-21/SEC-05: a kill switch flipped — exact blast radius (surface × channel × endpoint), instant, high-visibility; the inbox header banner mirrors it.',
+        ],
+        'ai.provider.health_changed' => [
+            'schema_version' => 1,
+            // RULE-16 AMENDMENT (filed + approved at the S09 step-8 stop; the
+            // A-4/A-15 mechanism): T-01/FS-01 require degraded-mode events
+            // FR-21's six do not name. Tenant-scoped by construction,
+            // TRANSITION-ONLY, tri-state (the A-22 shape).
+            'payload' => ['tenant_id', 'provider', 'status'],
+            'producers' => ['Doc09/Orchestrator'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'T-01/FS-01: an AI provider\'s health transitioned for this tenant — healthy | degraded (a breaker tripped, the chain still has a hop) | down (all exhausted → bypass-to-handoff). The Doc 07 banner consumption is a separate future escalation.',
+        ],
         'ai.rg.flagged' => [
             'schema_version' => 1,
             // The excerpt and reason live on the insert-only rg_flag_history

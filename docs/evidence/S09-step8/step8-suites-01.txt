@@ -1,0 +1,122 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m5.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it EC-12 (sabotage #12 ta…   
+[39;1m  reserve spend was not recorded
+Failed asserting that 900 is identical to 1300.[39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m79[39m
+     75▕     // 900 used now; one more turn spends INTO the band (to 1300) and is
+     76▕     // allowed to COMPLETE — EC-12's "completes the current turn".
+     77▕     app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] second']]);
+     78▕     expect(count($driver->seen))->toBe(2)
+  ➜  79▕         ->and($meter->headroom(Quota::AiTokensPerDay)['used'])->toBe(1300, 'reserve spend was not recorded');
+     80▕ 
+     81▕     // Past the cap: the NEXT turn is refused BEFORE any call — straight to a human.
+     82▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] third']]))
+     83▕         ->toThrow(AiQuotaExhausted::class);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m79[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it COUNTERSIGN-REQUIRED F…   
+[39;1m  unknown headroom was treated as open throttle
+Failed asserting that two strings are identical.
+  [39;22m[31m-'exhausted'[39m[39;1m
+  [39;22m[32m+'allowed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m106[39m
+    102▕     config(['database.redis.volatile.host' => '127.0.0.1', 'database.redis.volatile.port' => 1]);
+    103▕     app('redis')->purge('volatile');
+    104▕ 
+    105▕     try {
+  ➜ 106▕         expect(app(AiQuotaGate::class)->admit())->toBe('exhausted', 'unknown headroom was treated as open throttle');
+    107▕         expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] y']]))
+    108▕             ->toThrow(AiQuotaExhausted::class);
+    109▕         expect($driver->seen)->toBe([], 'a call was billed blind during the metering outage');
+    110▕     } finally {
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m106[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\FailoverDrillTest[22m [90m>[39m it FS-01: primary fails → br…   
+[39;1m  expected exactly ONE degraded transition for the primary (transition-only)
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'degraded',[39m[39;1m
+  [39;22m[32m+    0 => 'healthy',[39m[39;1m
+  [39;22m[32m+    1 => 'degraded',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/FailoverDrillTest.php[39m:[32m56[39m
+     52▕     }
+     53▕ 
+     54▕     $events = healthEvents();
+     55▕     $primaryEvents = array_values(array_filter($events, fn (array $e): bool => $e['provider'] === 'fake-primary'));
+  ➜  56▕     expect(array_column($primaryEvents, 'status'))->toBe(['degraded'], 'expected exactly ONE degraded transition for the primary (transition-only)')
+     57▕         ->and(array_column(array_values(array_filter($events, fn (array $e): bool => $e['provider'] === 'fake-secondary')), 'status'))->toBe(['healthy']);
+     58▕ });
+     59▕ 
+     60▕ it('FS-01/NFR-04: every provider exhausted → DOWN for this tenant, the orchestrator throws the degraded-mode sentinel within the turn', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Ai/FailoverDrillTest.php[39;22m:[39;1m56[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\FailoverDrillTest[22m [90m>[39m it FS-01/NFR-04: every provi…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'down',[39m[39;1m
+  [39;22m[32m+    0 => 'healthy',[39m[39;1m
+  [39;22m[32m+    1 => 'down',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/FailoverDrillTest.php[39m:[32m71[39m
+     67▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] z']]))
+     68▕         ->toThrow(AllProvidersExhausted::class);
+     69▕ 
+     70▕     $statuses = array_column(array_filter(healthEvents(), fn (array $e): bool => $e['provider'] === 'fake-dead'), 'status');
+  ➜  71▕     expect($statuses)->toBe(['down']);
+     72▕ });
+     73▕ 
+     74▕ it('FS-01: auto-resume — a success after DOWN publishes HEALTHY once; repeats publish nothing', function (): void {
+     75▕     $tenant = createTenant();
+
+  [33m1   [39m[39;1mtests/Feature/Ai/FailoverDrillTest.php[39;22m:[39;1m71[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m19 passed[39;22m[90m (72 assertions)[39m
+  [90mDuration:[39m [39m6.99s[39m
+

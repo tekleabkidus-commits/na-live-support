@@ -7,8 +7,11 @@ namespace App\Domain\Ai\Orchestrator;
 use App\Domain\Ai\Config\ConfigVersions;
 use App\Domain\Ai\Providers\AllProvidersExhausted;
 use App\Domain\Ai\Providers\CircuitBreaker;
+use App\Domain\Ai\Providers\ProviderHealth;
 use App\Domain\Ai\Providers\ProviderRegistry;
 use App\Domain\Ai\Providers\ProviderResponse;
+use App\Domain\Ai\Quota\AiQuotaExhausted;
+use App\Domain\Ai\Quota\AiQuotaGate;
 use Throwable;
 
 /**
@@ -29,6 +32,8 @@ final class AiOrchestrator
         private readonly ProviderRegistry $providers,
         private readonly CircuitBreaker $breaker,
         private readonly ConfigVersions $configs,
+        private readonly AiQuotaGate $quota,
+        private readonly ProviderHealth $health,
     ) {}
 
     /**
@@ -38,6 +43,13 @@ final class AiOrchestrator
     public function execute(string $task, array $messages): array
     {
         $definition = TaskCatalog::definition($task);
+
+        // NFR-06/EC-12: the quota gate runs BEFORE any provider call (SEC-05's
+        // posture). Sabotage #12 moves this below the call.
+        if ($this->quota->admit() === 'exhausted') {
+            throw new AiQuotaExhausted('daily AI token quota exhausted (reserve mode) — route to a human (EC-12)');
+        }
+
         $chain = $this->routingFor($definition['tier']);
         $lastFailure = null;
 
@@ -60,6 +72,9 @@ final class AiOrchestrator
                 ]);
 
                 $this->breaker->recordSuccess($provider);
+                $this->health->observe($provider, 'healthy');
+                // T-07: ACTUAL tokens accumulate post-call (the reconciled counter).
+                $this->quota->record($response->tokensIn + $response->tokensOut);
 
                 return [
                     'response' => $response,
@@ -69,8 +84,19 @@ final class AiOrchestrator
                 ];
             } catch (Throwable $failure) {
                 $this->breaker->recordFailure($provider);
+                // FS-01: a TRIPPED provider = degraded (a failure below the
+                // trip threshold is not a transition — nothing publishes).
+                if ($this->breaker->isOpen($provider)) {
+                    $this->health->observe($provider, 'degraded');
+                }
                 $lastFailure = $failure;
             }
+        }
+
+        // FS-01: the chain is exhausted — DOWN for this tenant; the caller
+        // bypasses to handoff within the same message turn (§12).
+        foreach ($chain as $hop) {
+            $this->health->observe($hop['provider'], 'down');
         }
 
         throw new AllProvidersExhausted(

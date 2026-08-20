@@ -1,0 +1,65 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m4.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it… [41;1m AllProvidersExhausted [49;22m  
+[39;1m  every provider in the chain failed or sits tripped (T-01 degraded mode)[39;22m
+
+  at [32mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39m:[32m75[39m
+     71▕                 $this->health->observe($provider, 'healthy');
+     72▕                 // T-07: ACTUAL tokens accumulate post-call (the reconciled counter).
+     73▕                 $this->quota->record($response->tokensIn + $response->tokensOut);
+     74▕                 if ($this->quota->admit() === 'exhausted') { // SABOTAGE #12: post-call — the call was already billed
+  ➜  75▕                     throw new AiQuotaExhausted('post-call exhausted');
+     76▕                 }
+     77▕ 
+     78▕                 return [
+     79▕                     'response' => $response,
+
+  [33m1   [39m[39;1mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39;22m:[39;1m75[39;22m
+  [33m2   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m77[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it EC-12: the band itself…   
+[39;1m  Failed asserting that an instance of class App\Domain\Ai\Providers\AllProvidersExhausted is an instance of class App\Domain\Ai\Quota\AiQuotaExhausted.[39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m98[39m
+     94▕     app(QuotaMeter::class)->allow(Quota::AiTokensPerDay, 960, App\Support\Quota\QuotaSurface::Staff);
+     95▕ 
+     96▕     expect(app(AiQuotaGate::class)->admit())->toBe('exhausted');
+     97▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] x']]))
+  ➜  98▕         ->toThrow(AiQuotaExhausted::class);
+     99▕     expect($driver->seen)->toBe([]);
+    100▕ });
+    101▕ 
+    102▕ it('COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE MODE — unknown headroom refuses new turns, never open-throttle', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\QuotaEnforcementTest[22m [90m>[39m it COUNTERSIGN-REQUIRED F…   
+[39;1m  Failed asserting that an instance of class RedisException is an instance of class App\Domain\Ai\Quota\AiQuotaExhausted.[39;22m
+
+  at [32mtests/Feature/Ai/QuotaEnforcementTest.php[39m:[32m117[39m
+    113▕ 
+    114▕     try {
+    115▕         expect(app(AiQuotaGate::class)->admit())->toBe('exhausted', 'unknown headroom was treated as open throttle');
+    116▕         expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] y']]))
+  ➜ 117▕             ->toThrow(AiQuotaExhausted::class);
+    118▕         expect($driver->seen)->toBe([], 'a call was billed blind during the metering outage');
+    119▕     } finally {
+    120▕         config([
+    121▕             'database.redis.volatile.host' => env('REDIS_VOLATILE_HOST', 'redis-volatile'),
+
+  [33m1   [39m[39;1mtests/Feature/Ai/QuotaEnforcementTest.php[39;22m:[39;1m117[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (12 assertions)[39m
+  [90mDuration:[39m [39m5.08s[39m
+

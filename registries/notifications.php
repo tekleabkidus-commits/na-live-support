@@ -167,4 +167,23 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 09 FR-18/SEC-05: kill-switch state changes are HIGH-VISIBILITY —
+        // every admin sees the banner and the notification (the in-app
+        // mirror of the audit entry).
+        'category_key' => 'notify.ai.killswitch_changed',
+        'label_i18n_key' => 'ai.notify.killswitch_changed',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        // Doc 09 NFR-06/EC-12: the 80% daily-token alert (Doc 01's
+        // quota.warning_80 metric surfaced as a notification to admins).
+        'category_key' => 'notify.ai.quota_80',
+        'label_i18n_key' => 'ai.notify.quota_80',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc09',
+    ],
 ];

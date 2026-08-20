@@ -1057,4 +1057,13 @@ return [
         'required_fields' => ['kind', 'key', 'version', 'republished_version_of'],
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 FR-18/SEC-05: kill-switch flips are the high-visibility class —
+        // actor + old/new always.
+        'action_key' => 'ai.killswitch.changed',
+        'entity' => 'ai_kill_switch',
+        'actor_types' => ['staff'],
+        'required_fields' => ['surface', 'old', 'new'],
+        'owning_doc' => 'Doc09',
+    ],
 ];

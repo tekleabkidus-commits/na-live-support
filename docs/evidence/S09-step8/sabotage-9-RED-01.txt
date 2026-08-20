@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m5.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it AC-08 BOTH DIRECTIONS: an en…   
+[39;1m  the sibling bot was silenced — blast radius leaked
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Feature/Ai/KillSwitchTest.php[39m:[32m31[39m
+     27▕ 
+     28▕     switches()->flip('chatbot', 'telegram', 'bot-a', true, '[FIXTURE] incident', $actor);
+     29▕ 
+     30▕     expect(switches()->isOff('chatbot', 'telegram', 'bot-a'))->toBeTrue('the target stayed ON')
+  ➜  31▕         ->and(switches()->isOff('chatbot', 'telegram', 'bot-b'))->toBeFalse('the sibling bot was silenced — blast radius leaked')
+     32▕         ->and(switches()->isOff('chatbot', 'web', 'widget-1'))->toBeFalse('another channel was silenced')
+     33▕         ->and(switches()->isOff('copilot', 'telegram', 'bot-a'))->toBeFalse('another surface was silenced')
+     34▕         ->and(switches()->isOff('supervisor', null, null))->toBeFalse();
+     35▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Ai/KillSwitchTest.php[39;22m:[39;1m31[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m5.39s[39m
+
