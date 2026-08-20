@@ -29,6 +29,11 @@
         <testsuite name="Performance">
             <directory>tests/Performance</directory>
         </testsuite>
+        <testsuite name="Golden">
+            <!-- Doc 09 T-09: the golden-conversation + red-team corpus's home
+                 (replay driver in CI; AI_GOLDEN_LIVE=1 for the nightly leg). -->
+            <directory>tests/Golden</directory>
+        </testsuite>
     </testsuites>
     <php>
         <!--

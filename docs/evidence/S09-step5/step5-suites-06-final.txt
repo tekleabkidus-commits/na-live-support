@@ -1,0 +1,67 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m4.90s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiQueueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0017 (amended): ai and ai-background are SEPARATE supervisor[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the per-tenant semaphore admits to the registered cap and[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the semaphore is per-tenant — one tenant at cap starves n[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the ai.concurrency.per_tenant setting is registered with platfor[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m1.38s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.14s[39m  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.008 ms   max   4.043 ms   budget(p99) 3.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\OrchestratorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: the task catalog is CLOSED at twelve, matching the ai_dec[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: the fallback chain falls through a failing provider to the[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: an OPEN breaker skips its provider without spending a call[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE STEP-3 ASSERTION: no egress path skips the guard — every Pro[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a PUBLISHED provider_routing config overrides the seed —[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.04s[39m  
+
+  [90mTests:[39m    [32;1m41 passed[39;22m[90m (271 assertions)[39m
+  [90mDuration:[39m [39m8.32s[39m
+

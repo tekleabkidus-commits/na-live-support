@@ -1,0 +1,35 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or[39m[90m… [39m [90m12.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m6.56s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Golden\AiGoldenConversationTest[22m [90m>[39m it AC-01: every golden di…   
+[39;1m  deposit-question-en.json: expected a valid action, got a discard (missing_field: answer requires >=1 citation (BR-02))
+Failed asserting that an instance of class App\Domain\Ai\Chatbot\DiscardedAction is an instance of class App\Domain\Ai\Chatbot\ValidatedAction.[39;22m
+
+  at [32mtests/Golden/AiGoldenConversationTest.php[39m:[32m143[39m
+    139▕ 
+    140▕             continue;
+    141▕         }
+    142▕ 
+  ➜ 143▕         expect($validated)->toBeInstanceOf(ValidatedAction::class, sprintf(
+    144▕             '%s: expected a valid action, got a discard (%s: %s)',
+    145▕             $case['file'],
+    146▕             $validated instanceof App\Domain\Ai\Chatbot\DiscardedAction ? $validated->category : '?',
+    147▕             $validated instanceof App\Domain\Ai\Chatbot\DiscardedAction ? $validated->detail : '?',
+
+  [33m1   [39m[39;1mtests/Golden/AiGoldenConversationTest.php[39;22m:[39;1m143[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (24 assertions)[39m
+  [90mDuration:[39m [39m19.57s[39m
+

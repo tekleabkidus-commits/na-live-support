@@ -1978,21 +1978,24 @@ entries:
   #    says so in `gap`. A row flips to automated/covered ONLY with executed
   #    output on record (a false flip is a Sev-1).
   - ac_ref: "Doc09 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Golden/AiGoldenConversationTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 step 5): the golden-conversation suite (tests/Golden) at
-      pinned configs, en + am, across all action types, including batch-tail
-      (EC-01) and post-resolution (EC-08) flows, against the record/replay
-      provider mock. Seeded before any suite exists; flips to automated in the
-      step-5 commit with executed output.
+      FLIPPED AT S09 STEP 5, same commit as the suite (the routine line):
+      nine golden dialogs (en + am both asserted) through the REAL assembly ->
+      orchestrator (replay driver) -> closed-schema validation at the PINNED
+      persona v1 — every action type, the transaction-fact traps (en + am,
+      both die on BR-02's citation net), and the money-no-grounding case.
+      Executed 8/46 with the red-team suite (step5-suites-03.txt).
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      PARTIAL until the pipeline-level clauses join: batch-tail (EC-01,
+      step 6) and post-resolution (EC-08, step 9) run through the same suite
+      when their flows exist. The fixtures stay; the suite grows.
   - ac_ref: "Doc09 AC-02"
     suite_path: manual
     type: manual
@@ -2070,20 +2073,24 @@ entries:
     gap: >-
       No Doc 09 code exists yet — the plan-approval commit precedes step 1.
   - ac_ref: "Doc09 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/AiInjectionRedTeamTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 step 5): AiInjectionRedTeamTest — all shipped red-team
-      fixtures neutralized (blocked topics hold, no system-prompt leakage, no
-      out-of-enum actions executed), required in CI against the record/replay
-      mock. Flips to automated in the step-5 commit.
+      FLIPPED AT S09 STEP 5, same commit as the suite: every shipped fixture
+      neutralized at the layer that owns it — out-of-enum discarded, poisoned
+      chunk defused at index time (sabotage #3 executed: stripper disabled ->
+      exactly that fixture red -> restored), system-prompt echo flagged by
+      OutputGuard with the honest-answer mirror control, fence escape stays in
+      the fenced user turn, uncited advice dies on BR-02's net. The Sev-2
+      runbook is docs/runbooks/ai-injection-sev2.md.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      PARTIAL until the chatbot-level consequences join at step 9 (deflection
+      template, EC-05 retry -> invalid_action handoff) — same suite, grown.
   - ac_ref: "Doc09 AC-08"
     suite_path: manual
     type: manual

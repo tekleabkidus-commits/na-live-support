@@ -32,8 +32,15 @@ final class ActionSchema
 
     /**
      * @param  mixed  $decoded  the model's decoded output (untrusted)
+     * @param  list<string>|null  $allowedCitationRefs  when given (any retrieval
+     *                                                  ran, even empty), an answer's citations must RESOLVE to this
+     *                                                  set — AC-02's "valid citation" is set membership, not shape:
+     *                                                  the first LIVE nightly run proved a model will INVENT a
+     *                                                  citation to launder an ungrounded answer, and shape-only
+     *                                                  validation waved it through. null = no retrieval context
+     *                                                  (non-answer tasks).
      */
-    public function validate(mixed $decoded): ValidatedAction|DiscardedAction
+    public function validate(mixed $decoded, ?array $allowedCitationRefs = null): ValidatedAction|DiscardedAction
     {
         if (! is_array($decoded)) {
             return new DiscardedAction('malformed', 'output is not a JSON object');
@@ -53,7 +60,7 @@ final class ActionSchema
         }
 
         $problem = match ($action) {
-            'answer' => $this->validateAnswer($data),
+            'answer' => $this->validateAnswer($data, $allowedCitationRefs),
             'run_form' => $this->requireNonEmptyString($data, 'form_id', 'run_form requires form_id'),
             'continue_flow' => $this->requireNonEmptyString($data, 'state', 'continue_flow requires state'),
             'handoff' => $this->validateHandoff($data),
@@ -75,8 +82,11 @@ final class ActionSchema
         return is_string($value) && trim($value) !== '' ? null : $problem;
     }
 
-    /** @param array<string, mixed> $data */
-    private function validateAnswer(array $data): ?string
+    /**
+     * @param  array<string, mixed>  $data
+     * @param  list<string>|null  $allowedCitationRefs
+     */
+    private function validateAnswer(array $data, ?array $allowedCitationRefs = null): ?string
     {
         if ($this->requireNonEmptyString($data, 'text', 'answer requires text') !== null) {
             return 'answer requires text';
@@ -93,6 +103,12 @@ final class ActionSchema
         foreach ($citations as $citation) {
             if (! is_string($citation) || trim($citation) === '') {
                 return 'citations must be non-empty article ids';
+            }
+            if ($allowedCitationRefs !== null && ! in_array($citation, $allowedCitationRefs, true)) {
+                // The invented-citation laundering path the first live
+                // nightly run exposed: a citation that resolves to nothing
+                // grounds nothing (AC-02's VALID citation = membership).
+                return 'citation does not resolve to a retrieved article (BR-02)';
             }
         }
 

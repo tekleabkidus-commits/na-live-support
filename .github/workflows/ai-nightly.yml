@@ -1,0 +1,35 @@
+# Doc 09 T-09's NIGHTLY LIVE-STAGING LEG (S09 step 5): the same golden +
+# red-team corpus CI runs against the replay driver runs here against the
+# LIVE provider (AI_GOLDEN_LIVE=1). Fixtures are [FIXTURE]-tagged, so the
+# FixturesOnlyEgress guard admits them by mechanism — real customer text
+# cannot ride this workflow by construction.
+#
+# A red here is DRIFT SIGNAL (provider behavior moved), not a build blocker:
+# it never gates merges; it files an issue for triage against the golden
+# corpus. Secret: ADDIS_AI_API_KEY (repo secret; the staging key — rotate
+# before any production key exists, incident #16's standing row).
+name: ai-nightly-live
+on:
+  schedule:
+    - cron: '30 2 * * *'  # 02:30 UTC nightly
+  workflow_dispatch: {}
+jobs:
+  golden-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bring up the stack
+        run: |
+          cp .env.example .env
+          docker compose -f docker/compose.yaml up -d --build --wait postgres redis-volatile redis-durable app
+      - name: Run the golden + red-team corpus against the LIVE provider
+        env:
+          ADDIS_AI_API_KEY: ${{ secrets.ADDIS_AI_API_KEY }}
+        run: |
+          docker compose -f docker/compose.yaml exec -T \
+            -e AI_GOLDEN_LIVE=1 -e ADDIS_AI_API_KEY \
+            app ./vendor/bin/pest tests/Golden tests/Security/AiInjectionRedTeamTest.php
+      - name: Stack logs on failure
+        if: failure()
+        run: docker compose -f docker/compose.yaml logs --tail=100 app postgres

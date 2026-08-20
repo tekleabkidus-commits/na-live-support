@@ -15,3 +15,7 @@
 # ADR 0008 — all Bot API traffic (getMe, setWebhook, sendMessage, getFile)
 # goes through this proxy; a direct call to api.telegram.org is a violation.
 ^api\.telegram\.org$
+# Doc 09 (S09 step 5, ADR 0016/0019): the AI provider host — every LLM call
+# rides this proxy; the fixtures-only guard polices WHAT leaves, this file
+# polices WHERE it may go.
+^api\.addisassistant\.com$
