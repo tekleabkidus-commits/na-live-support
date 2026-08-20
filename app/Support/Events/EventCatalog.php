@@ -754,6 +754,23 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting'],
             'description' => 'FR-20/FR-21: an AI task invocation was logged (SAMPLED to the bus — the table is the record; the stream is a signal).',
         ],
+        'ai.handoff.created' => [
+            'schema_version' => 1,
+            // Q7: identifiers + the closed handoff reason category only.
+            'payload' => ['tenant_id', 'conversation_id', 'ticket_id', 'decision_id', 'reason'],
+            'producers' => ['Doc09/RgOverride', 'Doc09/ChatbotTurn'],
+            'consumers' => ['Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-12/FR-13/FR-21: the AI handed a conversation to humans — the Doc 06 FR-11 packet is pinned on the ticket; decision_id is T-08\'s enrichment join key; Doc 11 routes (rg_risk -> the RG queue).',
+        ],
+        'ai.rg.flagged' => [
+            'schema_version' => 1,
+            // The excerpt and reason live on the insert-only rg_flag_history
+            // row (Doc 08 T-05); the stream carries identifiers only.
+            'payload' => ['tenant_id', 'customer_id', 'conversation_id', 'decision_id', 'history_id'],
+            'producers' => ['Doc09/RgOverride'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-13/FR-21: the AI RG override fired — flag set through Doc 08\'s path (source=ai, mandatory excerpt), template sent, RG handoff created. FR-15\'s suppression contracts engage via customer.rg_flag.set, which the same path emits.',
+        ],
         'ai.config.published' => [
             'schema_version' => 1,
             // Q7 split: identifiers and categories only — payload CONTENT

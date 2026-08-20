@@ -1,0 +1,59 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m4.68s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.09s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RgOverrideTest[22m [90m>[39m it BR-03/AC-04: the customer re…   
+[39;1m  the en body is not the template byte for byte (BR-03)
+Failed asserting that two strings are identical.
+  [39;22m[31m-'Thank you for telling us how you feel — that took courage. We are connecting you with a member of our team right now who can help. If you would like to take a break, you can set deposit limits or pause your account at any time, and free, confidential support is available from your local gambling-help line. You are not alone in this.'[39m[39;1m
+  [39;22m[32m+'Thank you for telling us how you feel — that took courage. We are connecting you with a member of our team right now who can help. If you would like to take a break, you can set deposit limits or pause your account at any time, and free, confidential support is available from your local gambling-help line. You are not alone in this. We noticed you mentioned losses — want tips on getting it back?'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/RgOverrideTest.php[39m:[32m103[39m
+     99▕ 
+    100▕         $sent = DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->first();
+    101▕         expect($sent)->not->toBeNull("no template was sent ({$language})")
+    102▕             ->and($sent->author_type)->toBe('ai')
+  ➜ 103▕             ->and($sent->body)->toBe(__('ai.rg.template', [], $language), "the {$language} body is not the template byte for byte (BR-03)")
+    104▕             ->and(count($driver->seen))->toBe(2, 'the RG send path spent a generation call — only classify + confirm may touch the provider');
+    105▕     }
+    106▕ });
+    107▕
+
+  [33m1   [39m[39;1mtests/Feature/Ai/RgOverrideTest.php[39;22m:[39;1m103[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Golden\RgDistressAuditTest[22m [90m>[39m it SS-03: 50 seeded distress d…   
+[39;1m  dialog 0: generated or altered RG text
+Failed asserting that two strings are identical.
+  [39;22m[31m-'Thank you for telling us how you feel — that took courage. We are connecting you with a member of our team right now who can help. If you would like to take a break, you can set deposit limits or pause your account at any time, and free, confidential support is available from your local gambling-help line. You are not alone in this.'[39m[39;1m
+  [39;22m[32m+'Thank you for telling us how you feel — that took courage. We are connecting you with a member of our team right now who can help. If you would like to take a break, you can set deposit limits or pause your account at any time, and free, confidential support is available from your local gambling-help line. You are not alone in this. We noticed you mentioned losses — want tips on getting it back?'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Golden/RgDistressAuditTest.php[39m:[32m77[39m
+     73▕ 
+     74▕         // Template ONLY, byte for byte, in the dialog's language.
+     75▕         $outbound = DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->get();
+     76▕         expect($outbound)->toHaveCount(1, "dialog {$audited}: expected exactly one outbound");
+  ➜  77▕         expect($outbound->first()->body)->toBe(__('ai.rg.template', [], $language), "dialog {$audited}: generated or altered RG text");
+     78▕         expect($outbound->first()->author_type)->toBe('ai');
+     79▕ 
+     80▕         // Routed: the RG handoff ticket exists with the packet's reasons.
+     81▕         $ticket = DB::table('tickets')->where('conversation_id', $conversation->identifier())->where('source', 'ai_handoff')->first();
+
+  [33m1   [39m[39;1mtests/Golden/RgDistressAuditTest.php[39;22m:[39;1m77[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (32 assertions)[39m
+  [90mDuration:[39m [39m5.28s[39m
+

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-98 event(s).
+100 event(s).
 
 ## `agent.status_changed`
 
@@ -40,6 +40,24 @@ FR-20/FR-21: an AI task invocation was logged (SAMPLED to the bus — the table 
 - **Payload:** `tenant_id`, `decision_id`, `surface`, `task`, `action`, `error_category`
 - **Producers:** Doc09/DecisionWriter
 - **Consumers:** Doc15/Reporting
+
+## `ai.handoff.created`
+
+FR-12/FR-13/FR-21: the AI handed a conversation to humans — the Doc 06 FR-11 packet is pinned on the ticket; decision_id is T-08's enrichment join key; Doc 11 routes (rg_risk -> the RG queue).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `conversation_id`, `ticket_id`, `decision_id`, `reason`
+- **Producers:** Doc09/RgOverride, Doc09/ChatbotTurn
+- **Consumers:** Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `ai.rg.flagged`
+
+FR-13/FR-21: the AI RG override fired — flag set through Doc 08's path (source=ai, mandatory excerpt), template sent, RG handoff created. FR-15's suppression contracts engage via customer.rg_flag.set, which the same path emits.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `conversation_id`, `decision_id`, `history_id`
+- **Producers:** Doc09/RgOverride
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `auth.2fa.challenge_failed`
 

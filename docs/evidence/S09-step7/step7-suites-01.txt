@@ -1,0 +1,82 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m4.94s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RgOverrideTest[22m [90m>[39m it FR-13 + [D0… [41;1m DomainException [49;22m  
+[39;1m  channel 'fakechan' is not registered.[39;22m
+
+  at [32mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39m:[32m65[39m
+     61▕     /** @return array{adapter: ChannelAdapter, in_family: string, out_family: string} */
+     62▕     private function entry(string $channel): array
+     63▕     {
+     64▕         return $this->channels[$channel]
+  ➜  65▕             ?? throw new DomainException("channel '{$channel}' is not registered.");
+     66▕     }
+     67▕ }
+     68▕
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m65[39;22m
+  [33m2   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RgOverrideTest[22m [90m>[39m it BR-03/AC-04… [41;1m DomainException [49;22m  
+[39;1m  channel 'fakechan' is not registered.[39;22m
+
+  at [32mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39m:[32m65[39m
+     61▕     /** @return array{adapter: ChannelAdapter, in_family: string, out_family: string} */
+     62▕     private function entry(string $channel): array
+     63▕     {
+     64▕         return $this->channels[$channel]
+  ➜  65▕             ?? throw new DomainException("channel '{$channel}' is not registered.");
+     66▕     }
+     67▕ }
+     68▕
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m65[39;22m
+  [33m2   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RgOverrideTest[22m [90m>[39m it C-09: a red… [41;1m DomainException [49;22m  
+[39;1m  channel 'fakechan' is not registered.[39;22m
+
+  at [32mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39m:[32m65[39m
+     61▕     /** @return array{adapter: ChannelAdapter, in_family: string, out_family: string} */
+     62▕     private function entry(string $channel): array
+     63▕     {
+     64▕         return $this->channels[$channel]
+  ➜  65▕             ?? throw new DomainException("channel '{$channel}' is not registered.");
+     66▕     }
+     67▕ }
+     68▕
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m65[39;22m
+  [33m2   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RgOverrideTest[22m [90m>[39m it [D09] EC-06… [41;1m DomainException [49;22m  
+[39;1m  channel 'fakechan' is not registered.[39;22m
+
+  at [32mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39m:[32m65[39m
+     61▕     /** @return array{adapter: ChannelAdapter, in_family: string, out_family: string} */
+     62▕     private function entry(string $channel): array
+     63▕     {
+     64▕         return $this->channels[$channel]
+  ➜  65▕             ?? throw new DomainException("channel '{$channel}' is not registered.");
+     66▕     }
+     67▕ }
+     68▕
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m65[39;22m
+  [33m2   [39m[39;1mapp/Domain/Conversations/Adapters/AdapterRegistry.php[39;22m:[39;1m52[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (9 assertions)[39m
+  [90mDuration:[39m [39m5.49s[39m
+

@@ -2027,21 +2027,29 @@ entries:
     gap: >-
       No Doc 09 code exists yet — the plan-approval commit precedes step 1.
   - ac_ref: "Doc09 AC-04"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/RgOverrideTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 steps 6-7): RgEvalHarnessTest (NFR-07 precision at the
-      shipped threshold, labeled fixture set) + RgOverrideTest (mid-form
-      preemption; template-only output byte-verified; flag + excerpt +
-      suppression through the built Doc 08 path — the [D09] FR-14 close).
-      Flips to automated in the step-7 commit.
+      FLIPPED AT S09 STEP 7, same commit as the suite: the override through
+      the REAL pipeline — flag via Doc 08's door (source=ai, NULL actor by
+      CHECK, mandatory excerpt — the [D09] FR-14 close), template BYTE-
+      VERIFIED en+am, N-10 structural (no generation dependency in the
+      override's source), FR-07 decides RG first (preemption over an open
+      assigned ticket), FR-15 suppression engaged via customer.rg_flag.set,
+      C-09 once-only, calibration read-back ([D09] EC-06 close). Precision:
+      RgEvalHarnessTest (mechanism + fail control) and the LIVE figure 0.926
+      at rg_min 0.8 over the 50-case corpus (step6-rg-live-precision-02.txt);
+      SS-03's 50-dialog audit (tests/Golden/RgDistressAuditTest.php) green.
+      Sabotages #5 and #6 executed red->restored.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      PARTIAL: the mid-FORM preemption clause re-proves at step 9 when flow
+      state exists (today no flow is consulted at all — the stronger fact);
+      the live RG-queue delivery is [D11]; the governed corpus process [D19].
   - ac_ref: "Doc09 AC-05"
     suite_path: manual
     type: manual
