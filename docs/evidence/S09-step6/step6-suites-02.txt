@@ -1,0 +1,30 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ClassifyPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/FR-07: the consumer classifies the burst and records the d[39m[90m…[39m [90m5.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: only the confirmed batch TAIL classifies — a superseded a[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event changes nothing — one decision, howeve[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 (Doc 04): a quarantined inbound gets NO classification — n[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06: the two-stage RG confirmation runs ONLY past the screening[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\NormalizeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the guard extends to MEDIA egress: outside production a real med[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a voice note gains its transcript_ref through the Doc 04[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a receipt image gains ocr_ref with per-field confidence[39m[90m   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a provider outage leaves the media item UNTOUCHED and the[39m[90m…[39m [90m0.05s[39m  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgEvalHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the corpus is the shipped 50: half risk, half healthy, both lang[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-07: at the shipped rg_min the scripted realistic scorer meet[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the harness CAN fail: a miscalibrated threshold drops precision[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.33s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (59 assertions)[39m
+  [90mDuration:[39m [39m6.63s[39m
+

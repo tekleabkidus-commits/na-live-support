@@ -41,7 +41,18 @@ final class ConsumerRegistry
         // Doc 08 FR-03 (S08 step 3): RollupConsumer joins the fan-out —
         //    an event names WHICH customer to recompute; values from truth
         //    (C-09 by construction; contract fixture doc08-events.json).
-        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class],
+        // Doc 09 FR-06/FR-10-step-6 (S09 step 6): ClassifyInboundMessage —
+        //    the AI turn decision consumes the EVENT as a subscriber
+        //    (Doc 04's fan-out contract; batch-tail debounced; idempotent on
+        //    the message's existing classify decision). The ReopenConsumerDrillTest
+        //    pin moves in THIS commit (the routine line).
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class],
+
+        // Doc 09 FR-05 (S09 step 6): the T-05 media hooks' subscribers —
+        //    transcript/OCR write-back through the Doc 04 repository door;
+        //    FS-03 leaves items untouched on provider outage.
+        'media.needs_transcript' => [\App\Jobs\Ai\TranscribeVoiceConsumer::class],
+        'media.needs_ocr' => [\App\Jobs\Ai\OcrReceiptConsumer::class],
 
         // ── Doc 07 T-01 (S07 step 2): the list-projector's durable
         //    subscriptions — 29 events total, each a TRIGGER naming which

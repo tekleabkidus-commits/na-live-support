@@ -55,6 +55,10 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // contract fixtures doc08-events.json + doc08.json) — the pin moves
         // WITH the registry change, which is this guard doing its job.
         App\Jobs\Customers\RollupConsumer::class,
+        // Doc 09 (S09 step 6): ClassifyInboundMessage joined DELIBERATELY —
+        // the FR-10 step-6 subscriber; the pin moves WITH the registry
+        // change, again (the routine line's fourth application).
+        App\Jobs\Ai\ClassifyInboundMessage::class,
     ])
         // S07/S08: ticket.created carries the projector + the Doc 08 rollup
         // maintainer — the "no silent growth" posture continues, new baseline pinned.

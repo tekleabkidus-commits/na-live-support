@@ -32,6 +32,18 @@ class AppServiceProvider extends ServiceProvider
         // agree on identity.
         $this->app->singleton(\App\Domain\Ai\Providers\ProviderRegistry::class);
 
+        // Doc 09 seam defaults (S09 step 6): the chatbot is structurally
+        // unreachable and no route executes until the owning steps bind the
+        // real implementations (step 8: enablement; steps 7/9: executors).
+        $this->app->bind(\App\Domain\Ai\Pipeline\ChatbotEnablement::class, \App\Domain\Ai\Pipeline\DisabledEverywhere::class);
+        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\NullRouteExecutor::class);
+
+        // Doc 09 seam defaults (S09 step 6): the chatbot is structurally
+        // unreachable and no route executes until the owning steps bind the
+        // real implementations (step 8: enablement; steps 7/9: executors).
+        $this->app->bind(\App\Domain\Ai\Pipeline\ChatbotEnablement::class, \App\Domain\Ai\Pipeline\DisabledEverywhere::class);
+        $this->app->bind(\App\Domain\Ai\Pipeline\RouteExecutor::class, \App\Domain\Ai\Pipeline\NullRouteExecutor::class);
+
         $this->app->singleton(TenantHint::class, fn (Application $app): TenantHint => new TenantHint($app));
 
         // THE T-05 SEAM (Doc 02 ↔ Doc 03), CLOSED at S19 step 7: the real
