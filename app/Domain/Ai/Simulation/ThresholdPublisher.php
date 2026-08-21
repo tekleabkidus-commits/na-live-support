@@ -35,6 +35,12 @@ final class ThresholdPublisher
             throw new InvalidArgumentException('BR-07: publish refused — no simulation was run for exactly these threshold values');
         }
 
+        // §14's hard rule (S09 step 13): the languages this record enables
+        // must each have their RG/handoff/disclosure templates — inside the
+        // ONE thresholds publish door, so no surface routes around it.
+        $languages = is_array($values['languages'] ?? null) ? array_values(array_filter($values['languages'], 'is_string')) : \App\Domain\Ai\Language\LanguageGate::LAUNCH_LANGUAGES;
+        app(\App\Domain\Ai\Language\LanguageGate::class)->assertEnableable($languages);
+
         $this->configs->publish($versionId, $publishedBy);
     }
 }

@@ -211,12 +211,14 @@ final class AiBackofficeController extends Controller
     public function thresholdsPublish(Request $request): JsonResponse
     {
         try {
-            /** @var array{endpoint?: string, day: string, token: string, chatbot_enabled: bool, rg_min: float, spam_min: float, handoff_below: float, auto_resolve_min: float} $input */
+            /** @var array{endpoint?: string, day: string, token: string, chatbot_enabled: bool, languages?: list<string>, rg_min: float, spam_min: float, handoff_below: float, auto_resolve_min: float} $input */
             $input = $request->validate([
                 'endpoint' => ['sometimes', 'nullable', 'string', 'max:80'],
                 'day' => ['required', 'string', 'max:40'],
                 'token' => ['required', 'string', 'size:64'],
                 'chatbot_enabled' => ['required', 'boolean'],
+                'languages' => ['sometimes', 'array', 'min:1', 'max:10'],
+                'languages.*' => ['string', 'size:2'],
                 'rg_min' => ['required', 'numeric', 'min:0', 'max:1'],
                 'spam_min' => ['required', 'numeric', 'min:0', 'max:1'],
                 'handoff_below' => ['required', 'numeric', 'min:0', 'max:1'],
@@ -231,7 +233,8 @@ final class AiBackofficeController extends Controller
         /** @var User $user */
         $user = $request->user();
         $endpointKey = isset($input['endpoint']) && $input['endpoint'] !== '' ? $input['endpoint'] : 'default';
-        $payload = ['chatbot_enabled' => $input['chatbot_enabled'], 'rg_min' => (float) $input['rg_min'], 'spam_min' => (float) $input['spam_min'], 'handoff_below' => (float) $input['handoff_below'], 'auto_resolve_min' => (float) $input['auto_resolve_min']];
+        $languages = $input['languages'] ?? \App\Domain\Ai\Language\LanguageGate::LAUNCH_LANGUAGES;
+        $payload = ['chatbot_enabled' => $input['chatbot_enabled'], 'languages' => $languages, 'rg_min' => (float) $input['rg_min'], 'spam_min' => (float) $input['spam_min'], 'handoff_below' => (float) $input['handoff_below'], 'auto_resolve_min' => (float) $input['auto_resolve_min']];
         $versionId = $this->configs->draft('thresholds', $endpointKey, $payload, $user->identifier());
         try {
             $this->thresholdPublisher->publish($versionId, $input['token'], $input['day'], $user->identifier());

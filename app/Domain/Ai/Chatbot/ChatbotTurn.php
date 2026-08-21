@@ -83,6 +83,7 @@ final class ChatbotTurn
         private readonly AdapterRegistry $adapters,
         private readonly SettingsRepository $settings,
         private readonly FirstGreeting $greeting,
+        private readonly \App\Domain\Ai\Language\LanguageGate $languageGate,
     ) {}
 
     /** @param array<string, mixed> $classification
@@ -136,9 +137,11 @@ final class ChatbotTurn
             return $this->recordOnly($classificationDecisionId, $conversation, $messageId, $language, $classification, 'deflect', ['blocked_topic' => $topic]);
         }
 
-        if (! in_array($language, ['en', 'am'], true)) {
-            // EC-02: a third language with no KB coverage — the capability
-            // template (English fallback) + unsupported_language handoff.
+        if (! in_array($language, $this->languageGate->enabledFor($endpointRef), true)) {
+            // EC-02 + §14: a language this endpoint does not speak (the launch
+            // pair by default; a third language only once its templates exist
+            // and the record enables it) — the capability template (English
+            // fallback) + unsupported_language handoff.
             $template = __('ai.unsupported_language.template', [], 'en');
             $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, 'en', (string) $template), 'unsupported:'.$classificationDecisionId);
 
