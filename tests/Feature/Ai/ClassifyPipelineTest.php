@@ -151,3 +151,25 @@ it('T-06: the two-stage RG confirmation runs ONLY past the screening floor, and 
         ->and(count($driver->seen))->toBe(3, 'the confirmation stage never ran')
         ->and(json_encode($driver->seen[1]))->toContain('[FIXTURE] angry about a delay');
 });
+
+it('FR-07 (filed interpretation, S09 step 14): a second customer message while the handoff ticket waits UNASSIGNED does NOT hand off again — ONE ticket, the classification rides as copilot_context, no exception (the NFR-02 perf leg found the crash)', function (): void {
+    [$tenant, $tenantId, $conversation, $ticket, $actor] = copilotScene();
+    // A fresh conversation with no ticket; chatbot OFF (copilotScene's default record).
+    $customerId = (string) Str::uuid7();
+    DB::table('customers')->insert(['id' => $customerId, 'tenant_id' => $tenantId, 'created_source' => 'telegram', 'language' => 'en']);
+    $c = anotherConversation($tenantId, 'twice', $customerId);
+    $classification = new ProviderResponse((string) json_encode(['intent' => 'deposits', 'sentiment' => 0, 'urgency' => 1, 'spam' => 0.0, 'rg_risk' => 0.05, 'confidence' => 0.8]), 10, 10);
+    copilotDriver($classification, new ProviderResponse('[FIXTURE] summary.', 10, 10), $classification, $classification);
+
+    foreach (['[FIXTURE] my deposit is missing', '[FIXTURE] hello? anyone there?'] as $body) {
+        $id = (string) Str::uuid7();
+        DB::table('messages')->insert(['id' => $id, 'tenant_id' => $tenantId, 'conversation_id' => $c->identifier(), 'direction' => 'in', 'author_type' => 'customer', 'author_id' => $customerId, 'kind' => 'text', 'body' => $body, 'language' => 'en']);
+        $eventId = (string) Str::uuid7();
+        DB::table('events')->insert(['id' => $eventId, 'tenant_id' => $tenantId, 'name' => 'message.received', 'payload' => json_encode(['tenant_id' => $tenantId, 'message_id' => $id, 'conversation_id' => $c->identifier(), 'customer_id' => $customerId, 'kind' => 'text'])]);
+        (new ClassifyInboundMessage($eventId))->handle(app(App\Domain\Ai\Pipeline\InboundClassification::class));
+    }
+
+    expect(DB::table('tickets')->where('conversation_id', $c->identifier())->count())->toBe(1, 'a second handoff duplicated the ticket');
+    $routes = DB::table('ai_decisions')->where('conversation_id', $c->identifier())->where('task', 'classify_message')->orderBy('created_at')->pluck('action')->all();
+    expect($routes)->toBe(['handoff_path', 'copilot_context']);
+});

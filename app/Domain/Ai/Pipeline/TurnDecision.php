@@ -39,10 +39,20 @@ final class TurnDecision
             return 'rg_override';
         }
 
+        // FILED INTERPRETATION (S09 step 14, found by the NFR-02 perf leg):
+        // FR-07 says "open ASSIGNED ticket -> Copilot context". Read literally,
+        // an open UNASSIGNED ticket (the one the handoff path itself just
+        // created, waiting in the queue) sent the customer's NEXT message down
+        // the handoff path AGAIN -> createFromHandoff -> OpenTicketExists ->
+        // the consumer crashed and retried on every further message (BR-05's
+        // "transition it, do not duplicate" refusing correctly). ANY open
+        // ticket means a human owns the conversation: no second handoff, no
+        // chatbot turn — the classification rides to the Copilot, and the
+        // queue's own assignment delivers it. Assignment is not the predicate;
+        // an open ticket is.
         $openTicket = DB::table('tickets')
             ->where('conversation_id', $conversationId)
             ->whereIn('status', ['new', 'open', 'pending_customer', 'pending_internal', 'escalated'])
-            ->whereNotNull('assignee_id')
             ->exists();
 
         if ($openTicket) {

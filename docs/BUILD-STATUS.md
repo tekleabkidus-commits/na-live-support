@@ -14,7 +14,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 05 | Telegram Channel (Business + Direct) | **CLOSED — ACCEPTED by the owner on the advisor's recount at `e62f204` (2026-08-10): 101 rows exact, families matching the independent enumeration, 84/17/0 verified, the PARTIAL set matching the bucket key id-for-id with every cite sanctioned, ledger 20/20 item-by-item; one recount correction (the second step-6 ruling line restored verbatim to RISKS) applied in the acceptance SHA itself. Rulings A-28/A-29 filed. Final 101-id self-audit: 84 DONE / 17 PARTIAL (every PARTIAL a pre-agreed bucket or an owner-assisted blocker) / 0 NOT DONE; sabotage ledger 20/20 reconciled item-by-item. The step-12 recount caught and CLOSED two silent drops and one untested edge (FR-26 deep links never built despite the step-5 plan row; FR-25's setMyCommands registration half; EC-06's compound convergence). Both interpretations RULED at the close-out review: A-28 countersigned (FR-30 write tools on telegram.bots.manage); A-29 approved with its three conditions discharged (FR-26 acquisitions table). Canonical suites 116/675; full suite 971/12,965; gates 13/13; browser 63/63; perf strict PASS ×2 — see the S23 step-12 section** | S23 | AC-01/02/05/06/09 covered; AC-03 + AC-08's live halves owner-assisted-BLOCKED (dedicated staging Business account, §21); AC-04/07 partial (pre-agreed Doc 07/12/14 buckets) | staging bot @nasupportstagingbot + Business account proven live (step 0); token interim storage per A-19; **token rotation MANDATORY before any reconnection or production traffic (owner ruling, verbatim in the close-out RISKS)**; dev has no public ingress — A-24 capture-replay strategy with the Doc 18 handoff row; Stage-4 first-attempt “flake” DIAGNOSED by the step-12 harness fix as a REAL seeder defect (random-uuid published_by, FK violation on fresh DBs, retry-masked) and FIXED; **CI-proven on `da335a8`: run [31382257865](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31382257865), all stages green, Stage 4 zero flakes** |
 | 07 | Unified Inbox & Agent Workspace | **CLOSED — ACCEPTED by the owner on the advisor's recount at `429a754` (2026-08-14): 101/101 family-exact, 92 DONE / 9 PARTIAL / 0 NOT DONE with no false DONE and every PARTIAL bucket-sanctioned, ledger 22/22 item-by-item, closing sets and core-edit enumeration verified. CI verdict of record: run [31772609440](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31772609440) GREEN on `a58b42f` — the first green run since the relay service landed, closing the four-cause relay saga (crash-loop vs --wait; getCode vs errorInfo[0]; fresh-initdb 57P03/3D000; the tool-less healthcheck floor). Was: steps 1–15 complete; close-out (the incident-#13 gate: the owner grounds the close-out SHA before the recount recommendation issues). Final 101-id self-audit: 92 DONE / 9 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed §12/Doc 19 or staging-operational bucket; sabotage ledger 22/22 reconciled item-by-item (+ the beyond-plan pairs); Doc 05 closing set 6/6 and Doc 06 closing set 6/6 CLOSED; B12-A01 nine/nine executed; rulings A-30…A-37 + the 2026-08-13 five-item stop ruling filed; ruled core edits #6 (retro-countersigned) and #7 (escalate-first) on the record. See the S07 STEP-15 CLOSE-OUT section** | S07 | AC-01…09 covered (functional-state + a11y, no pixel baselines — inherited row 12); AC-10 PARTIAL (Doc 19 halves stated) | plan `docs/SESSION-07-APPROVED-PLAN.md` (101/101 family-exact); canonical suites command defined below |
 | 08 | Customer Profiles & Identity | **CLOSED — ACCEPTED by the owner on the advisor's recount at `7e69094` (2026-08-17): 91/91 family-exact, no false DONE, ledger 16/16 item-by-item, closing rows + core edits verified. Final 91-id self-audit: 78 DONE / 11 PARTIAL / 2 NOT DONE — every PARTIAL a pre-agreed bucket cited BY NAME; the 2 NOT DONE are SANCTIONED CARRIES (owner's closure ruling at acceptance): SEC-03 (Doc 02 scrubber extension — the filed escalation is the inter-document window's FIRST item) and EC-03's heuristic-chip half (named debt), both riding at the TOP of PROJECT-HANDOFF-v8 §4 as inherited rows. Governance incidents #14 AND #15 caught at this close by verify-before-building (a transit-mangled SHA, then transit-mangled figures — both advisor-side, both stopped). Was: BUILT —** Final 91-id self-audit: **78 DONE / 11 PARTIAL / 2 NOT DONE** — every PARTIAL a pre-agreed bucket cited BY NAME; the 2 NOT DONE are recount catches (SEC-03 scrubber extension — a Doc 02 core edit, escalated; EC-03's heuristic-chip half), filed honestly with proposals. Sabotage ledger **16/16 item-by-item**; close-out battery 1239/18,806 zero reds + strict §12 legs green except 0d's own leg (host-bound RECORDED on the tripwire's terms); 0j fixed and 7/7 in the close-out run; governance incident #14 filed (advisor-side phantom SHA, caught by the tree check). Steps 11+12 accepted at `b649704` (incl. the fold-kept dirty start, owned; FR-01's DisplayName derivation find; G03 proven at the SQL). Plan approved+committed `8f85b3c` (91/91 family-exact); SCHEMA AMENDMENT 2 countersigned with four rulings | S08 | AC-01…09 ALL covered (traceability automated rows; AC-08/AC-B4-03 browser-proven both viewports) | canonical DOC 08 SUITES command defined below; traceability rows seeded at 1a (AC-09 automated same-commit; AC-01…08 planned-manual, flipping as their suites land) |
-| 09 | AI System (Chatbot, Copilot, Supervisor) | **IN PROGRESS — S09 plan APPROVED (advisor recount 94/94 family-exact, events 6/6, [D09] 2/2) and committed per standing rule 12; STEP 0 credentials gate DISCHARGED (Addis AI key live: HTTP 200, model `addis-አሌፍ-፩`; capability check pasted; embeddings NOT SERVED → pinned-local-model ruling). Build not yet begun — step 1 awaits the owner's grounding of the approval commit** | S09 | — | plan `docs/SESSION-09-APPROVED-PLAN.md`; canonical DOC 09 SUITES command defined below; governance incident #16 filed (key pasted into session chat; owner ruled the test key stays in service; ROTATE before production) |
+| 09 | AI System (Chatbot, Copilot, Supervisor) | **BUILT — S09 close-out below (steps 1–14, commits `b5feecf`…`78349a1`). Final 94-id self-audit: 71 DONE / 23 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed bucket cited BY NAME ([D10]/[D11]/[D12]/[D13]/[D15]/[D18]/[D19]/[B8]/[OA]); sabotage ledger 16/16 item-by-item; [D09] Doc 08 FR-14 + EC-06 CLOSED, SEC-03 + EC-03 carries DISCHARGED; FR-21 family 7→9 by filed amendment; five countersigned core-edit packets landed (SEC-03 scrubber, SCHEMA AMENDMENT 3, QuotaMeter::headroom, FR-15 metadata, Doc 07 slot fills + Doc 08 chip + Doc 07 bell arms). `ai.providers.manage` NOT seeded — awaits the owner's sign-off row (this section).** | S09 | **AC-01 PARTIAL [D12/D19]; AC-02/03/04/05/06/07/08/09 COVERED; AC-10 PARTIAL [OA]** (traceability rows, all automated) | canonical DOC 09 SUITES command below; governance incident #16 (key stays in service by owner ruling; ROTATE before production — standing row) |
 | 10 | Knowledge Base | NOT STARTED | — | — | |
 | 11 | Departments, Teams, Queues & Routing | NOT STARTED | — | — | |
 | 12 | Automation, SLA, Forms & Custom Fields | NOT STARTED | — | — | |
@@ -32,6 +32,125 @@ SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
 mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
+
+## SESSION-09 (Doc 09) — CLOSE-OUT (step 14; the 94-id self-audit, the ledger, the core edits, §12 with the token-cost axis)
+
+**Commits of record (grounded by the owner at each checkpoint):** step 1 `b5feecf` · 2a `560a3d4` · 2b `d1b8ae4` · 3 `043083e` · 4 `6f95a4f` · 5 `c48edfc` · 6 `8ecfc50` · 7 `98a6c27` · 8 `86954d9` · 9 `8b7982a` · 10 `e8df378` · 10b `21ee127` · 11 `c90a534` · 11b `5b457c0` · 12a `ac7e6fe` · 12b+c `7757b22` · 12d `fea8d00` · 13 `78349a1` · 14 (this section's commit).
+
+**Canonical verdicts at the close (`docs/evidence/S09-step14/`, every figure read off its capture):** DOC 09 SUITES 188 passed / 2616 assertions exit 0; FULL battery 1434 passed / 22,382 assertions / 11 standing skips / ZERO reds exit 0; gates 14/14 exit 0; lint exit 0 (pint, phpstan max 0, eslint 0 errors, vue-tsc). Browser proofs (make browser, octane:reload first, build copied into the anon volume): 8/8 (`S09-step12/step12d-browser-07.txt`).
+
+**Commit-body corrections (captures over prose):** `ac7e6fe` states 21,472 assertions — the capture reads **21,493**; `7757b22` states 21,594 — the capture reads **22,140**; `78349a1`'s body lost the backticked word `languages` twice to a shell heredoc (the thresholds record's field is `languages`). Test counts, exit codes and captures are correct in all three.
+
+### The 94-id self-audit (DONE / PARTIAL-with-bucket / NOT DONE)
+
+| Id | Status | Proof |
+|---|---|---|
+| FR-01 | DONE | TaskCatalog (12 closed tasks, tiers/timeouts/retries/customer-visible) — OrchestratorTest |
+| FR-02 | PARTIAL **[OA]** | ProviderRegistry + drivers + published provider_routing zero-deploy (OrchestratorTest FR-02); the Backoffice provider PAGE waits on `ai.providers.manage` (owner sign-off row below) |
+| FR-03 | DONE | ai / ai-background families (ADR 0017), TenantSemaphore (AiQueueTest), pre-call quota (QuotaEnforcementTest); every task a queued job |
+| FR-04 | DONE | ConfigVersions publish/rollback + config_version on decisions — ConfigVersioningTest; Backoffice doors (BackofficeConfigTest) |
+| FR-05 | DONE | NormalizeTest (transcript_ref, OCR fields + confidences, language persist) |
+| FR-06 | DONE | ClassifyPipelineTest (taxonomy, batch-tail, persist-first) |
+| FR-07 | DONE | TurnDecision — ClassifyPipelineTest incl. the step-14 filed interpretation (any open ticket → no second handoff) |
+| FR-08 | DONE | ChatbotTurnTest + ActionSchemaTest (closed enum, context layers, FR-27 render) |
+| FR-09 | PARTIAL **[D12]** | resolve + 24 h post_resolution (ChatbotTurnTest); the 1-tap CSAT prompt is Doc 12's survey (seam recorded on the decision row) |
+| FR-10 | PARTIAL **[D10]** | RetrievalTest + AC-02 over fixture-seeded chunks (published-only, AI-usable, language chain, internal = Copilot-only); live Doc 10 articles + publish-event index maintenance are Doc 10's |
+| FR-11 | DONE | SimulationParityTest (AC-03) + ThresholdPublisher (BR-07) + the Backoffice sliders/simulation (BackofficeConfigTest, ai-backoffice.spec) |
+| FR-12 | PARTIAL **[D11]** | every trigger (ChatbotTurnTest) + the FR-11 packet via createFromHandoff + FR-28 template + decision_id; the live queue-wait estimate is Doc 11 data |
+| FR-13 | PARTIAL **[D11]** | RgOverrideTest + RgDistressAuditTest (template byte-verified, flag source=ai, suppression via the event path); live RG-queue delivery is Doc 11's |
+| FR-14 | PARTIAL **[B8]** | CopilotPanelTest + CopilotTab.vue + ai-copilot.spec (chips, debounced summary, card, KB top-3, similar tickets scope-checked, notices, low-confidence banner); pixel fidelity at the Batch 8 freeze; client token-streaming waits on Doc 07's Reverb client seam (server streaming proven, StreamingTest) |
+| FR-15 | DONE | ComposerActionsTest + TranslateTest + TranslateSendTest (original in message metadata through the countersigned 10b packet) + the composer actions UI (ai-copilot.spec) |
+| FR-16 | DONE | ArtifactOutcomeTest (all three outcomes, diff_ref identifiers + numeric metrics) |
+| FR-17 | PARTIAL **[D15]/[D12]/[D16]** | SupervisorTest (anomaly arithmetic, sentiment watch, advisory qa_prescore on the fixture rubric, localized 6-bullet digest); notifications delivered via the three bell arms (AiBellDeliveryTest); dashboards render in Doc 15; rubric content Doc 12/16 |
+| FR-18 | PARTIAL **[B8]/[OA]** | BackofficeConfigTest + ai-backoffice.spec (persona w/ 5-conversation preview, guardrails, thresholds+scope, kill-switch grid + confirmation, decisions); provider switch page = `ai.providers.manage` sign-off; pixel fidelity [B8] |
+| FR-19 | DONE | HonestyTest (a: gate + first greeting; b: trap fixtures; c: author_type=ai + the AI marker DOM in ai-honesty.spec; d: Doc 04 FR-23 re-asserted) |
+| FR-20 | PARTIAL **[D10]/[D15]** | DecisionLogTest + OutcomeEnrichment + WeeklyOutputsTest (top-10 unanswerable ids-only seam, calibration curve, RG queue); the one-click KB draft is Doc 10's; rendering Doc 15's |
+| FR-21 | DONE | AiEventConsumerContractsTest — the family CLOSED at NINE after the filed amendments (ai.provider.health_changed at step 8; ai.anomaly.detected + ai.digest.ready at step 11b) |
+| NFR-01 | PARTIAL **[D19]/[OA]** | provider-bound; streaming landed (StreamingTest); STEP 0.2's live p50 ≈ 2.4 s is the standing §9 row; the nightly live leg observes real tokens |
+| NFR-02 | PARTIAL **[D19]** | persist-first proven (ClassifyPipelineTest); pipeline OVERHEAD p99 38.9 ms dev-indicative (AiBudgetsTest) — the spec's 1.2 s contains the provider's own latency |
+| NFR-03 | PARTIAL **[D19]/[OA]** | provider-bound in-panel first token — the same observation as NFR-01 |
+| NFR-04 | DONE | FailoverDrillTest (≤10 s trip, one-turn degrade) |
+| NFR-05 | DONE (dev-indicative) | AiBudgetsTest: decision write p99 3.000 ms vs the 3 ms budget (at the line; the INSERT rides the batch job) |
+| NFR-06 | DONE | QuotaEnforcementTest (pre-call, 80% metric, reserve, turn cap) |
+| NFR-07 | PARTIAL **[D19]** | RgEvalHarnessTest precision ≥ 0.9 on the labeled fixture set, printed; the corpus PROCESS is Doc 19's |
+| US-01…US-07 | DONE | golden am receipt journey (Golden), RG path, packet summary, translate-with-original, +240% anomaly (SupervisorTest), simulation (SimulationParityTest), one red button (KillSwitchTest + ai-backoffice.spec) |
+| BR-01 | DONE | CopilotNeverAutoSendTest (static + runtime; sabotage #7) |
+| BR-02 | DONE | AC-02 test (sabotage #8) |
+| BR-03 | DONE | RgOverrideTest byte-verify + SS-03 audit (sabotage #6) |
+| BR-04 | DONE | RgEvalHarnessTest + the rationale in the rg_classifier config |
+| BR-05 | DONE | HonestyTest N-08 absence (sabotage #10) |
+| BR-06 | DONE | AiContextAllowlistTest (sabotage #4) |
+| BR-07 | DONE | ThresholdPublisher token physics (SimulationParityTest; BackofficeConfigTest stale-token refusal) |
+| T-01 | DONE | OrchestratorTest + FailoverDrillTest |
+| T-02 | DONE | PromptAssemblyTest (hash asserted; sabotage #1) |
+| T-03 | DONE | AiInjectionRedTeamTest (sabotages #2/#3) |
+| T-04 | PARTIAL **[D13]** | StreamingTest (SSE client, sentence relay, job → card); Telegram completed-message; the widget half is Doc 13's; the client socket wiring is Doc 07's Reverb seam |
+| T-05 | PARTIAL **[D10]** | RetrievalTest + SimilarTicketsTest (HNSW cosine, hybrid, language filter, scope at query, nightly embedder); publish-event maintenance Doc 10's |
+| T-06 | DONE | RgEvalHarnessTest + ThresholdPublisher precision readout |
+| T-07 | DONE | QuotaEnforcementTest metering (FS-05 pattern) + CostCard |
+| T-08 | PARTIAL **[D12]** | DecisionLogTest + AiOutcomeEnrichmentConsumer + ArtifactOutcomeTest; the CSAT join waits on Doc 12 |
+| T-09 | DONE | Golden + red-team suites in CI; nightly live leg configured (first run pasted at step 5; live variance is the standing observation) |
+| SEC-01 | PARTIAL **[D18]** | vault ref at call time (OrchestratorTest); ADR 0019 is the interim vendor record |
+| SEC-02 | DONE | PiiRedactionTest + the staff-text variant (TranslateTest; sabotage #13) |
+| SEC-03 | DONE | AiInjectionRedTeamTest in CI + docs/runbooks/ai-injection-sev2.md |
+| SEC-04 | DONE | AiContextAllowlistTest |
+| SEC-05 | DONE | audit-coverage rows + BackofficeConfigTest (actor + old/new on publish/rollback/flip) |
+| SEC-06 | DONE | DecisionAccessTest + PayloadReductionJobTest + AiGrantPhysicsTest |
+| EC-01 | DONE | ChatbotTurnTest pipeline clause + golden pin |
+| EC-02 | DONE | ChatbotTurnTest + LanguageGateTest |
+| EC-03 | DONE | Golden OCR trap fixture (claim restated; credit decision human) |
+| EC-04 | DONE | ChatbotTurnTest deflection ×3 |
+| EC-05 | DONE | ActionSchemaTest + ChatbotTurnTest |
+| EC-06 | PARTIAL **[D10]** | tombstone citation + cache invalidation are Doc 10's; the retrievable flag + fixture-fed render here |
+| EC-07 | DONE | SimulationParityTest per-endpoint + the packet's endpoint note |
+| EC-08 | DONE | ChatbotTurnTest post_resolution ×2 |
+| EC-09 | DONE | CopilotPanelTest (lock + telemetry row + cooldown) |
+| EC-10 | DONE | TranslateTest mixed-language |
+| EC-11 | DONE | RefusalDetector (FailoverDrillTest) + the handoff mapping (ChatbotTurnTest) |
+| EC-12 | DONE | QuotaEnforcementTest + ChatbotTurnTest quota_exhausted |
+| FS-01 | DONE | FailoverDrillTest + ChatbotTurnTest (bypass) + CopilotPanelTest (degraded card) + SupervisorTest (pause/resume) |
+| FS-02 | DONE | ChatbotTurnTest no_grounding mode (retrieval failure → no answer) — the IndexCorruption name was folded there; rebuild is Doc 10's |
+| FS-03 | DONE | NormalizeTest (outage leaves the item untouched; retry path) |
+| FS-04 | DONE | DecisionLogTest async batching (completion unaffected); the staleness pattern is Doc 15's rendering |
+| FS-05 | DONE | ConfigVersioningTest rollback + BR-07 prevention + the digest surfaces anomalies (SupervisorTest) |
+| SS-01 | PARTIAL **[D15]/[OA]** | the data products exist (decision log, WeeklyOutputs); the 60-day KPI needs live time |
+| SS-02 | PARTIAL **[D10]** | top-10 unanswerable → the one-click draft seam (ids only) |
+| SS-03 | DONE | RgDistressAuditTest — 50 dialogs |
+| SS-04 | PARTIAL **[D15]** | FailoverDrillTest (zero stranded; evented); the events-only post-incident REPORT is Doc 15's |
+| AC-01 | PARTIAL **[D12]/[D19]** | Golden suite en+am at pinned configs; run_form execution + the CSAT join are Doc 12's |
+| AC-02 … AC-09 | COVERED | traceability rows (all automated, every one flipped in its step) |
+| AC-10 | PARTIAL **[OA]** | metering + quota proven (QuotaEnforcementTest); the monthly invoice reconciliation is the owner's calendar |
+| R-01 … R-06 | DONE (mitigations) | trap fixtures, calibration loop, red-team + runbook, ladder + AI-off operability, quotas + caps, the triad's data products ([D15] renders) |
+
+**Count: 71 DONE / 23 PARTIAL / 0 NOT DONE** — the 23 PARTIAL ids, each in a pre-agreed bucket: FR-02 [OA], FR-09 [D12], FR-10 [D10], FR-12 [D11], FR-13 [D11], FR-14 [B8], FR-17 [D15/D12/D16], FR-18 [B8/OA], FR-20 [D10/D15], NFR-01 [D19/OA], NFR-02 [D19], NFR-03 [D19/OA], NFR-07 [D19], T-04 [D13], T-05 [D10], T-08 [D12], SEC-01 [D18], EC-06 [D10], SS-01 [D15/OA], SS-02 [D10], SS-04 [D15], AC-01 [D12/D19], AC-10 [OA]. No PARTIAL without a bucket; no NOT DONE.
+
+### Sabotage ledger — 16/16 item-by-item (captures under `docs/evidence/S09-step*/sabotage-*`)
+1 hash unasserted → step 3 red · 2 enum validation removed → step 3 red · 3 index-time strip disabled → step 5 red · 4 allowlist widened → step 3 red · 5 preemption de-prioritized → step 7 red · 6 RG generated text → step 7 red · 7 Copilot auto-send → step 10 red · 8 citation dropped → step 9 red · 9 switch scope leak → step 8 red · 10 disclosure exempted for one language → step 12a red · 11 egress guard removed → step 1 red · 12 quota post-call → step 8 red · 13 redaction bypassed → step 3 red · 14 digit validator disabled → step 10 red · 15 scrubber stubbed → step 1 red · 16 flipped_at wall-clock → step 8 red after the hardened control (the first attempt stayed green and is filed as INVALID-GREEN-01).
+
+### Core edits (every one countersigned before landing; each with its own proving obligations met)
+SEC-03 scrubber (Doc 02, step 1) · SCHEMA AMENDMENT 3 (step 2) · QuotaMeter::headroom (Doc 01, step 8, with the disclosed increment-by-zero correction) · persistOutbound/ComposeOutbound `$channelMeta` + ComposerController `ai_artifact_id` (Doc 04/07, step 10b) · InactiveHint + panel key + chip (Doc 08, 11b) · ListProjector three bell arms + CapabilityMapProvider (Doc 07, 11b) · Workspace/ComposerPane/ThreadPane/MessageBubble slot fills (Doc 07, 12d). Routine-line moves: ConsumerRegistry +3 + drill pins + consumer fixtures + catalog regenerations, same-commit every time.
+
+### §12 budget table — dev-hardware-indicative (AiBudgetsTest, `S09-step14/step14-ai-budgets-01.txt`) WITH THE TOKEN-COST AXIS
+| Leg | Spec | Measured (p50 / p99) | Standing |
+|---|---|---|---|
+| NFR-05 decision write | ≤ 3 ms | 2.26 / 3.00 ms | at the line; INSERT rides the batch job |
+| §12 retrieval (2k chunks) | ≤ 120 ms p95 @50k | 13.96 / 23.99 ms | 50k profile [D19] |
+| §12 simulation (2k decisions) | ≤ 5 s @10k | 10.4 / 12.2 ms | linear cursor; 10k [D19] |
+| NFR-02 pipeline overhead | ≤ 1.2 s p95 incl. provider | 29.3 / 38.9 ms | provider latency is the §9 row (live p50 ≈ 2.4 s at STEP 0.2) |
+| NFR-01 / NFR-03 first token | 2.5 s / 2 s p90 | NOT MEASURED against a fake — provider-bound | nightly live leg + [D19] |
+| **Token cost (the axis)** | rate card × tokens (T-07) | STEP 0.2 live: prompt p50 319 (max 461), completion p50 11 (max 246) tokens per call across 70 calls; the immutable layer + persona + template are ~270–420 tokens of FIXED overhead per call | metered per call into `quota:` counters + `ai_decisions.tokens_*`; cost = CostCard(ai.rate_card); AC-10's invoice reconciliation [OA] |
+
+### Findings of this session (real defects, all fixed unless marked filed)
+guard refusal treated as provider failure (tripping breakers/health) · meter compensation re-admitting past the band · `flushSync` for Copilot artifacts (FR-16 race) · FR-07's open-unassigned second handoff crash · DecisionWriter's 1% T-03 flake · `cleanupTenants` blind to Doc 07/08 tables · jsonb `?` vs PDO (0h, twice) · the test harness's `Cache::flush()` wiping the dev workspace's view ZSETs (dev-loop trap, filed for Doc 18 with the Octane/anon-volume pair) · `Doc 01 QuotaTest` order-dependence (FILED, Doc 01's window) · `RgStorageTest` depends on `rgScene()` from a Security file (FILED, Doc 08's window) · the Doc 02 queued-mail CI flake class (FILED as risk row 0k, 3-in-10 threshold).
+
+### Carries (named, with their unblocker)
+- **`ai.providers.manage` — OWNER SIGN-OFF ROW (not seeded):** the catalog stays at 113; the provider switch page and its route land in one commit with CatalogSnapshotTest/RoleSeederTest pin moves the moment the owner signs.
+- **`notify.ai.quota_80` delivery:** Doc 01's 80% alert is a log metric; a `quota.warning_80` event (Doc 01 enumeration) is the unblocker for a one-line projector arm.
+- **Client-side token streaming** (Copilot card / widget): Doc 07's Reverb client seam + Doc 13.
+- **Batch 8 design freeze** → pixel fidelity for every Doc 09 staff surface [B8].
+- **R-14 queue:** `fixtures/i18n/r14-queue-doc09.json` (163 Amharic keys, 10 destructive-tier) joins the native-review queue.
+- **Key rotation** before any production key exists (incident #16, owner action).
+- **[OA] production egress decision** (ADR 0019) and the live-variance nightly (indicative, replay is the proof).
 
 ## SESSION-09 (Doc 09) — "DOC 09 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan time)
 
@@ -515,7 +634,7 @@ dev-hardware-indicative caveat's exact content — the formal profile is
 | FR-11 | DONE | MergeFlowTest (per-field choice inside the matrix) + the step-11 radio UI |
 | FR-12 | DONE | MergeFlowTest + MergeCollisionTest (re-point; linked_work via Doc 06's sanctioned path) |
 | FR-13 | DONE | MergeUndoTest (AC-03 byte-identical restore; 30 d window) |
-| FR-14 | **PARTIAL [D09]** | storage + excerpt-ref + visibility built (RgVisibilityTest/RgStorageTest); the `source=ai` PRODUCER is Doc 09's |
+| FR-14 | DONE — **[D09] CLOSED at S09 step 7 (`98a6c27`)** | storage + excerpt-ref + visibility (RgVisibilityTest/RgStorageTest); the `source=ai` PRODUCER = Doc 09's RgOverride through RgFlagService::set (actor NULL by the CHECK, excerpt mandatory) — RgOverrideTest + RgDistressAuditTest (50 dialogs) |
 | FR-15 | **PARTIAL [D11]/[D12]** | contracts via event payloads; RG-queue routing is Doc 11's, automation suppression Doc 12's, SMS suppression Doc 14's seam; clear=perm+reason + forever-history built (RgStorageTest) |
 | FR-16 | DONE | BettingFieldsTest + DuplicateHintScopeTest (staff-collected label; hint = counts) |
 | FR-17 | DONE | CustomerNotesTest (one pinned; N-04 structural undeliverability) |
@@ -554,16 +673,16 @@ dev-hardware-indicative caveat's exact content — the formal profile is
 | T-08 | DONE | the three named suites (ResolverMatrix / MergeSaga chaos / RG per-role) |
 | SEC-01 | DONE | RgVisibilityTest + sabotage #1 (query-level, columns never loaded) |
 | SEC-02 | DONE | audit-coverage registry + reasons on merge/unlink/high-risk (deviation row 2's class-1 upgrade RULED standing) |
-| SEC-03 | **NOT DONE — SANCTIONED CARRY, owner-accepted at close** | silent drop caught by this recount: no S08 commit, test, or scrubber pattern extends Doc 02 SEC-08's roster with phone/email value shapes; the plant→detect→remove control never ran. The fix edits `app/Support/Logging/ScrubSecrets.php` (a Doc 02 file) — the filed escalation proposal (diff quoted in the close-out report) awaits the OWNER'S ruling as the FIRST ITEM of the inter-document window (the 0i precedent's reasoning at the close: cross-document repair is not folded into this document). Rides at the TOP of PROJECT-HANDOFF-v8 §4 as an inherited row |
+| SEC-03 | DONE — **carry DISCHARGED at S09 step 1 (`b5feecf`, R-D09-1)** | the Doc 02 scrubber extended with phone (E.164 + local-Ethiopian) and email VALUE patterns (countersigned diff): plant→detect→remove across all five sinks — PhoneEmailScrubberPatternsTest + the `log-scrubber` gate; Doc 02's canonical suites green on the edit |
 | SEC-04 | DONE | CustomerExportTest (async, watermarked, signed-at-completion; A-38 initiation-only) |
 | SEC-05 | DONE | DuplicateHintScopeTest + sabotage #11 (counts + scope-checked links) |
 | SEC-06 | DONE | CustomerExportTest (verdict re-checked IN the job) |
 | EC-01 | DONE | MergeFlowTest + the merge browser arc (live objects; thread re-points) |
 | EC-02 | DONE | LinkUnlinkTest FR-09 block + `customers.identity.duplicate` copy + the notes pattern (the documented reality) |
-| EC-03 | **NOT DONE — SANCTIONED CARRY, owner-accepted at close** | silent drop caught by this recount: the identity-remains half is structural (identities never auto-delete) and send failures are Doc 04/05's — the proven clauses STAND AS PROVEN — but the "inactive hint from repeated hard failures" heuristic chip was never built and no test asserts it (the plan's IdentityInvariantsTest citation covers the row's other clauses). A NAMED DEBT carried to the v8 kit as an inherited row for the Doc 09 session or an owner-ordered follow-up, whichever comes first (proposal filed in the close-out report) |
+| EC-03 | DONE — **carry DISCHARGED at S09 step 11b (`5b457c0`, R-D09-3, countersigned packet)** | the heuristic chip: `App\Domain\Customers\Panel\InactiveHint` (last three sends on a channel all failed_final/blocked_by_user, no later success) → `header.inactive_hint` on the panel door + the calm text-labelled chip in CustomerPanel.vue — InactiveHintTest (fires for the deleted-account fixture and ONLY there: 2 failures / later sent / transient reason / mixed run / other customer all null) + the ai-honesty browser spec's DOM assertion (present for the fixture, absent for the live control) |
 | EC-04 | DONE | MergeUndoTest (outermost-first; D10 order explanation in the UI) |
 | EC-05 | DONE | LinkUnlinkTest (zero-identity profile + unreachable chip; shell carries conversations) |
-| EC-06 | **PARTIAL [D09]** | clear-reasons stored consumable (RgStorageTest); Doc 09's calibration consumes |
+| EC-06 | DONE — **[D09] CLOSED at S09 step 7 (`98a6c27`)** | clear-reasons stored consumable (RgStorageTest); Doc 09's RgCalibration READS them (the FR-20 RG precision review queue: AI fires LATERAL-joined to the next human clear WITH its reason) — RgOverrideTest's calibration case; WeeklyOutputs::rgPrecisionQueue delegates to it |
 | EC-07 | DONE | BlockingCascadeTest (evasion shell NOT blocked — the documented limitation, built as documented) |
 | EC-08 | DONE | DirectoryTest + customers-directory.spec (collision pair told apart in place; step 12) |
 | EC-09 | **PARTIAL [D12]** | retired read-only render + refusal built (BettingFieldsTest; H04 browser); the rule's ownership is Doc 12's |

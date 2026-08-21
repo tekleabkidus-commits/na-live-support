@@ -1,0 +1,33 @@
+  [dev-hardware-indicative] NFR-05 decision write        p50   2.021 ms   p99   3.790 ms   max   5.095 ms   budget(p99) 3.0 ms   OVER
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] §12 retrieval p95-class (2k chunks) p50  12.867 ms   p99  20.871 ms   max  20.951 ms   budget(p99) 120.0 ms   WITHIN
+  [dev-hardware-indicative] §12 simulation (2k decisions) p50  10.740 ms   p99  11.688 ms   max  11.688 ms   budget(p99) 5000.0 ms   WITHIN
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Performance\AiBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-05: staging + flushing one decision record costs ≤ 3 ms p99 (th[39m[90m…[39m [90m5.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12 retrieval: hybrid (vector + keyword) top-5 over 2k fixture chu[39m[90m…[39m [90m10.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12 simulation: one day of 2k classification decisions recomputes ≤[39m[90m…[39m [90m1.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mNFR-02 pipeline OVERHEAD: persist-first → consumer → classification[39m[90m…[39m [90m0.17s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Performance\AiBudgetsTest[22m [90m>[39m NFR-02 pipeli… [41;1m OpenTicketExists [49;22m  
+[39;1m  conversation 01a024cb-c41b-70cb-aaad-22e10ce7cb06 already has open ticket 01a024cb-c452-7069-a524-dd7212f5d29b ('open_ticket_exists') — transition it, do not duplicate (BR-05).[39;22m
+
+  at [32mapp/Domain/Conversations/Storage/ConversationRepository.php[39m:[32m101[39m
+     97▕ 
+     98▕         $current = Conversation::query()->whereKey($conversation->identifier())->first();
+     99▕         $existing = $current?->open_ticket_id;
+    100▕ 
+  ➜ 101▕         throw new OpenTicketExists(
+    102▕             $conversation->identifier(),
+    103▕             is_string($existing) ? $existing : 'unknown',
+    104▕         );
+    105▕     }
+
+  [33m1   [39m[39;1mapp/Domain/Conversations/Storage/ConversationRepository.php[39;22m:[39;1m101[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Creation/CreateTicket.php[39;22m:[39;1m105[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (6 assertions)[39m
+  [90mDuration:[39m [39m17.85s[39m
+
+exit 2
