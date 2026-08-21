@@ -48,6 +48,8 @@ type Header = Record<string, unknown> & {
     country_source?: string | null;
     tags?: string | string[] | null;
     detected_language?: string | null;
+    // Doc 08 EC-03 (S09 side-row): informational inactive hint, heuristic, null unless the run of hard failures holds.
+    inactive_hint?: { channel: string; hard_failures: number; since: string } | null;
     blocked?: boolean;
     blocked_reason?: string | null;
     rg_flag?: boolean;
@@ -422,6 +424,21 @@ const filesData = computed(
                                 {{ (t.no_name ?? '').replace(':short', shortId) }}
                             </p>
                         </template>
+                        <!-- EC-03 (S09 side-row): the calm, text-labelled inactive chip — informational, never color-only. -->
+                        <span
+                            v-if="header.inactive_hint"
+                            data-testid="chip-inactive"
+                            role="status"
+                            class="mt-0.5 inline-block rounded border px-1.5 py-0.5 text-[10.5px]"
+                            :style="{ borderColor: 'var(--ds-border-strong)', color: 'var(--ds-text-muted)' }"
+                            :title="
+                                fill(t.inactive_hint_title, {
+                                    n: String(header.inactive_hint.hard_failures),
+                                    channel: header.inactive_hint.channel,
+                                })
+                            "
+                            >{{ t.inactive_hint }}</span
+                        >
                         <p
                             v-if="savedField"
                             data-testid="provenance-now"

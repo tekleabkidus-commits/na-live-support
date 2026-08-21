@@ -60,6 +60,12 @@ final class ConsumerRegistry
         //    payloads). C-09 proof + kill/re-drive drill: ListProjectorTest;
         //    replay-counting proof: ReplayCountingTest; the doc07.json
         //    consumer-contract fixture was tightened in this same commit.
+        // S09 packet 2 (countersigned): Doc 09's notification categories reach the bell
+        // through Doc 07's projector — kill-switch flips, anomaly alerts, digests.
+        // ai.provider.health_changed is DELIBERATELY NOT projected (Doc 07's banner reads it).
+        'ai.killswitch.changed' => [ListProjectorConsumer::class],
+        'ai.anomaly.detected' => [ListProjectorConsumer::class],
+        'ai.digest.ready' => [ListProjectorConsumer::class],
         'message.sent' => [ListProjectorConsumer::class],
         'note.mentioned' => [ListProjectorConsumer::class],
         // Doc 08 T-04 (S08 step 8): CustomerSearchIndexer rides the ticket

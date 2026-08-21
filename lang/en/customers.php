@@ -48,6 +48,9 @@ return [
         'blocked_banner' => 'This customer is blocked. :reason',
         'rg_banner' => 'Responsible-gambling flag is set.',
         'unreachable' => 'unreachable',
+        // Doc 08 EC-03 (S09 side-row, R-D09-3): the informational inactive chip.
+        'inactive_hint' => 'possibly inactive',
+        'inactive_hint_title' => 'The last :n sends on :channel failed as blocked or deleted — informational, based on delivery failures only',
         'from_channel' => 'from :channel',
         'by_staff' => 'added by staff',
         'save' => 'Save',

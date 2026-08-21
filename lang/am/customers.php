@@ -45,6 +45,9 @@ return [
         'blocked_banner' => 'ይህ ደንበኛ ታግዷል። :reason',
         'rg_banner' => 'የኃላፊነት ውርርድ ምልክት ተቀምጧል።',
         'unreachable' => 'ሊደረስበት አይችልም',
+        // Doc 08 EC-03 (S09 side-row, R-D09-3): the informational inactive chip.
+        'inactive_hint' => 'ምናልባት ንቁ ያልሆነ',
+        'inactive_hint_title' => 'በ:channel ላይ የመጨረሻዎቹ :n መላኮች እንደታገደ ወይም እንደተሰረዘ አልተሳኩም — በመላኪያ ውድቀቶች ላይ ብቻ የተመሠረተ መረጃ',
         'from_channel' => 'ከ:channel',
         'by_staff' => 'በሠራተኛ የተጨመረ',
         'save' => 'አስቀምጥ',

@@ -768,7 +768,7 @@ final class EventCatalog
             // string-typed; the audit entry carries reason + old/new.
             'payload' => ['tenant_id', 'surface', 'channel', 'endpoint_ref', 'is_off', 'actor_id'],
             'producers' => ['Doc09/KillSwitches'],
-            'consumers' => ['Doc07/HealthBanner', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc07/HealthBanner', 'Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-18/FR-21/SEC-05: a kill switch flipped — exact blast radius (surface × channel × endpoint), instant, high-visibility; the inbox header banner mirrors it.',
         ],
         'ai.provider.health_changed' => [
@@ -797,6 +797,25 @@ final class EventCatalog
             'producers' => ['Doc09/RgOverride'],
             'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-13/FR-21: the AI RG override fired — flag set through Doc 08\'s path (source=ai, mandatory excerpt), template sent, RG handoff created. FR-15\'s suppression contracts engage via customer.rg_flag.set, which the same path emits.',
+        ],
+        'ai.anomaly.detected' => [
+            'schema_version' => 1,
+            // FR-21 AMENDMENT 7->9 (countersigned at the S09 step-11 stop): one
+            // event per anomaly alert; the numbers live on the supervisor
+            // decision row (decision_id) — identifiers + categories only.
+            'payload' => ['tenant_id', 'decision_id', 'kind', 'intent'],
+            'producers' => ['Doc09/AnomalyScan'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'FR-17/FR-21: the hourly anomaly scan raised an alert (kind volume|intent|sentiment; intent when kind=intent, else "all"). Doc 07 mints the notify.ai.anomaly bell rows for reports.supervisor.live holders; Doc 15 renders the feed.',
+        ],
+        'ai.digest.ready' => [
+            'schema_version' => 1,
+            // FR-21 AMENDMENT 7->9: one event per recipient digest; the
+            // bullets live on the decision row.
+            'payload' => ['tenant_id', 'decision_id', 'recipient_id'],
+            'producers' => ['Doc09/DailyDigest'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting'],
+            'description' => 'FR-17/FR-21: a manager\'s daily digest was written — Doc 07 mints exactly one notify.ai.digest bell row for recipient_id.',
         ],
         'ai.config.published' => [
             'schema_version' => 1,

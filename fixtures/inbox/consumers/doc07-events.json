@@ -1,7 +1,7 @@
 {
   "doc": "Doc07",
   "spec": "Doc 07 T-01/T-02/FR-03 — consumer contracts for the NON-ticket events Doc 07 consumes (S07 step 3; the ticket.* slices live in fixtures/tickets/consumers/doc07.json)",
-  "note": "The keys Doc 07's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately (InboxEventConsumerContractsTest enforces both). channel.health.changed's entry is the event's FIRST consumer contract (inherited row 5). telegram.window.reopened's assignee_id and the bell's wider slices join at step 12 with the FR-26 fanout — noted here so the tightening is deliberate.",
+  "note": "The keys Doc 07's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately (InboxEventConsumerContractsTest enforces both). channel.health.changed's entry is the event's FIRST consumer contract (inherited row 5). telegram.window.reopened's assignee_id and the bell's wider slices join at step 12 with the FR-26 fanout — noted here so the tightening is deliberate. S09 packet 2 (countersigned): the three ai.* bell arms — killswitch -> ai.killswitch holders (actor excluded), anomaly -> reports.supervisor.live holders, digest -> recipient_id only.",
   "entries": [
     {
       "event": "channel.health.changed",
@@ -95,6 +95,40 @@
         "tenant_id",
         "survivor_id",
         "merged_id"
+      ]
+    },
+    {
+      "event": "ai.killswitch.changed",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "surface",
+        "channel",
+        "endpoint_ref",
+        "is_off",
+        "actor_id"
+      ]
+    },
+    {
+      "event": "ai.anomaly.detected",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "decision_id",
+        "kind",
+        "intent"
+      ]
+    },
+    {
+      "event": "ai.digest.ready",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "decision_id",
+        "recipient_id"
       ]
     }
   ]

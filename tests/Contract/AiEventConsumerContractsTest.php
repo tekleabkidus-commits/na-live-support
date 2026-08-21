@@ -52,8 +52,11 @@ function aiDurableEvents(): array
 }
 
 const AI_EVENT_FAMILY = [
+    // FR-21 AMENDMENT 7->9 (countersigned, S09 step 11 stop): ai.anomaly.detected + ai.digest.ready.
+    'ai.anomaly.detected',
     'ai.config.published',
     'ai.decision.logged',
+    'ai.digest.ready',
     'ai.handoff.created',
     'ai.killswitch.changed',
     'ai.provider.health_changed',

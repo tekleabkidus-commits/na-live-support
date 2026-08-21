@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Ai\Supervisor;
 
+use App\Support\Events\EventPublisher;
 use App\Support\Settings\SettingsRepository;
+use App\Support\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -26,6 +28,8 @@ final class AnomalyScan
         private readonly SupervisorLog $log,
         private readonly SettingsRepository $settings,
         private readonly SupervisorGate $gate,
+        private readonly EventPublisher $events,
+        private readonly TenantContext $context,
     ) {}
 
     /**
@@ -117,6 +121,20 @@ final class AnomalyScan
             'since' => $since, 'volume' => ['current' => $volumeCurrent, 'baseline' => round($volumeBaseline, 1)],
             'alerts' => $alerts, 'thresholds' => ['min_volume' => $minVolume, 'delta_pct' => $deltaPct],
         ]);
+
+        // FR-21 (amendment 7->9): one ai.anomaly.detected per alert — identifiers
+        // + categories only; T-03: published inside a transaction.
+        if ($alerts !== []) {
+            $tenantId = $this->context->tenantId();
+            DB::transaction(function () use ($alerts, $decisionId, $tenantId): void {
+                foreach ($alerts as $alert) {
+                    $this->events->publish('ai.anomaly.detected', [
+                        'tenant_id' => $tenantId, 'decision_id' => $decisionId,
+                        'kind' => $alert['kind'], 'intent' => is_string($alert['intent'] ?? null) ? $alert['intent'] : 'all',
+                    ]);
+                }
+            });
+        }
 
         return ['paused' => null, 'alerts' => $alerts, 'decision_id' => $decisionId];
     }

@@ -12,8 +12,10 @@ use App\Domain\Ai\Quota\AiQuotaExhausted;
 use App\Domain\Inbox\ReadModels\ListReadModel;
 use App\Models\TicketListItem;
 use App\Models\User;
+use App\Support\Events\EventPublisher;
 use App\Support\Rbac\CapabilityMapProvider;
 use App\Support\Rbac\Scopes\ScopeSets;
+use App\Support\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -49,6 +51,8 @@ final class DailyDigest
         private readonly SupervisorGate $gate,
         private readonly CapabilityMapProvider $verdicts,
         private readonly ScopeSets $scopes,
+        private readonly EventPublisher $events,
+        private readonly TenantContext $context,
     ) {}
 
     /** @return array{paused: ?string, digests: list<array{user_id: string, language: string, decision_id: string, source: string}>} */
@@ -119,6 +123,12 @@ final class DailyDigest
             (int) round((microtime(true) - $started) * 1000),
             ['messages' => $assembled['messages'], 'masking_map' => $assembled['masking_map']],
         );
+
+        // FR-21 (amendment 7->9): ai.digest.ready → Doc 07 mints the one bell row.
+        $tenantId = $this->context->tenantId();
+        DB::transaction(fn () => $this->events->publish('ai.digest.ready', [
+            'tenant_id' => $tenantId, 'decision_id' => $decisionId, 'recipient_id' => $user->identifier(),
+        ]));
 
         return ['user_id' => $user->identifier(), 'language' => $language, 'decision_id' => $decisionId, 'source' => $source];
     }

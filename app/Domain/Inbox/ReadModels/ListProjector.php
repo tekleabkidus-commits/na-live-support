@@ -47,6 +47,9 @@ final class ListProjector
         private readonly CountPusher $counts,
         private readonly ViewVariants $variants,
         private readonly SavedViews $savedViews,
+        // S09 packet 2 (countersigned core edit): the ai.* bell arms resolve
+        // their recipients by live verdict — never a cached holder list.
+        private readonly \App\Support\Rbac\CapabilityMapProvider $verdicts,
     ) {}
 
     /**
@@ -365,6 +368,31 @@ final class ListProjector
                     'failed' => is_array($payload['failed'] ?? null) ? count($payload['failed']) : 0,
                 ]]]
                 : [],
+            // ── S09 packet 2 (countersigned): Doc 09's notification categories.
+            //    Kill-switch flip → every live ai.killswitch holder EXCEPT the
+            //    actor (SEC-05's in-app mirror of the audit entry); identifiers
+            //    + the closed scope axes only.
+            'ai.killswitch.changed' => array_map(
+                fn (string $userId): array => [$userId, 'notify.ai.killswitch_changed', null, [
+                    'surface' => self::strOr($payload, 'surface'), 'channel' => self::strOr($payload, 'channel'),
+                    'endpoint_ref' => self::strOr($payload, 'endpoint_ref'), 'is_off' => (bool) ($payload['is_off'] ?? false),
+                ]],
+                $this->holdersOf('ai.killswitch', [self::strOr($payload, 'actor_id')]),
+            ),
+            // Anomaly alert → every live reports.supervisor.live holder; the
+            // numbers stay on the decision row (decision_id).
+            'ai.anomaly.detected' => array_map(
+                fn (string $userId): array => [$userId, 'notify.ai.anomaly', null, [
+                    'decision_id' => self::strOr($payload, 'decision_id'), 'kind' => self::strOr($payload, 'kind'), 'intent' => self::strOr($payload, 'intent'),
+                ]],
+                $this->holdersOf('reports.supervisor.live', []),
+            ),
+            // Digest → its ONE recipient, and only if they still hold the key.
+            'ai.digest.ready' => ($to = self::strOr($payload, 'recipient_id')) !== '' && in_array($to, $this->holdersOf('reports.supervisor.live', []), true)
+                ? [[$to, 'notify.ai.digest', null, ['decision_id' => self::strOr($payload, 'decision_id')]]]
+                : [],
+            // ai.provider.health_changed is DELIBERATELY not an arm: Doc 07's
+            // health banner reads it live; a bell row per flap would be noise.
             default => [],
         };
 
@@ -379,6 +407,30 @@ final class ListProjector
                 'payload' => json_encode(['event_id' => $eventId] + $extra, JSON_THROW_ON_ERROR),
             ]);
         }
+    }
+
+    /**
+     * Live permission holders (active staff whose verdict allows $key),
+     * minus $excluded — resolved at projection time through the one verdict
+     * door (no cached holder list goes stale on a role change).
+     *
+     * @param  list<string>  $excluded
+     * @return list<string>
+     */
+    private function holdersOf(string $key, array $excluded): array
+    {
+        $holders = [];
+        foreach (\App\Models\User::query()->whereNull('disabled_at')->get() as $user) {
+            $id = $user->identifier();
+            if (in_array($id, $excluded, true)) {
+                continue;
+            }
+            if ($this->verdicts->verdictFor($user, $key)->allowed) {
+                $holders[] = $id;
+            }
+        }
+
+        return $holders;
     }
 
     /**

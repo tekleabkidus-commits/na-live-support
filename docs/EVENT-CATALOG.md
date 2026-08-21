@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-103 event(s).
+105 event(s).
 
 ## `agent.status_changed`
 
@@ -22,6 +22,15 @@ FR-28: an agent's availability changed (online|away|offline; reason manual|auto_
 - **Payload:** `tenant_id`, `user_id`, `status`, `reason`, `set_by_user_id`
 - **Producers:** Doc07/AgentStatus
 - **Consumers:** Doc11/Routing, Doc15/Reporting
+
+## `ai.anomaly.detected`
+
+FR-17/FR-21: the hourly anomaly scan raised an alert (kind volume|intent|sentiment; intent when kind=intent, else "all"). Doc 07 mints the notify.ai.anomaly bell rows for reports.supervisor.live holders; Doc 15 renders the feed.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `decision_id`, `kind`, `intent`
+- **Producers:** Doc09/AnomalyScan
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `ai.config.published`
 
@@ -41,6 +50,15 @@ FR-20/FR-21: an AI task invocation was logged (SAMPLED to the bus — the table 
 - **Producers:** Doc09/DecisionWriter
 - **Consumers:** Doc15/Reporting
 
+## `ai.digest.ready`
+
+FR-17/FR-21: a manager's daily digest was written — Doc 07 mints exactly one notify.ai.digest bell row for recipient_id.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `decision_id`, `recipient_id`
+- **Producers:** Doc09/DailyDigest
+- **Consumers:** Doc07/Inbox, Doc15/Reporting
+
 ## `ai.handoff.created`
 
 FR-12/FR-13/FR-21: the AI handed a conversation to humans — the Doc 06 FR-11 packet is pinned on the ticket; decision_id is T-08's enrichment join key; Doc 11 routes (rg_risk -> the RG queue).
@@ -57,7 +75,7 @@ FR-18/FR-21/SEC-05: a kill switch flipped — exact blast radius (surface × cha
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `surface`, `channel`, `endpoint_ref`, `is_off`, `actor_id`
 - **Producers:** Doc09/KillSwitches
-- **Consumers:** Doc07/HealthBanner, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc07/HealthBanner, Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `ai.provider.health_changed`
 

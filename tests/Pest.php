@@ -1590,3 +1590,66 @@ function copilotEmbedding(int $hot): App\Domain\Ai\Providers\ProviderResponse
 {
     return new App\Domain\Ai\Providers\ProviderResponse('', 0, 0, [], [copilotVector($hot)]);
 }
+
+/*
+|--------------------------------------------------------------------------
+| Doc 09 step 11 — backdated decision-row helpers (shared by SupervisorTest and
+| AiBellDeliveryTest; moved here so either file runs alone).
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Backdated decision rows need created_at (R-19a: platform-only) → the
+ * platform connection over COMMITTED fixtures (the PayloadReductionJobTest
+ * pattern); every test here cleans its tenant up in a finally.
+ */
+function supervisorScene(): array
+{
+    $scene = copilotScene();
+    commitFixtures();
+    bindTenant($scene[0]);
+
+    return $scene;
+}
+
+function platformDecisionRow(string $tenantId, array $columns, string $createdAtSql): void
+{
+    $cols = array_keys($columns);
+    $placeholders = array_map(static fn (string $c): string => in_array($c, ['layer_hashes', 'response_payload'], true) ? '?::jsonb' : '?', $cols);
+    asPlatformWorker(fn () => DB::connection('pgsql_platform')->statement(
+        sprintf('INSERT INTO ai_decisions (%s, created_at) VALUES (%s, %s)', implode(', ', $cols), implode(', ', $placeholders), $createdAtSql),
+        array_values($columns),
+    ));
+    bindTenant($tenantId);
+}
+
+function classifyRow(string $tenantId, string $conversationId, string $intent, int $sentiment, string $createdAtSql): void
+{
+    platformDecisionRow($tenantId, [
+        'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'surface' => 'chatbot', 'task' => 'classify_message', 'provider' => 'fake', 'model' => 'm',
+        'layer_hashes' => '{}', 'conversation_id' => $conversationId, 'intent' => $intent, 'confidence' => 0.9, 'action' => 'copilot_context',
+        'response_payload' => json_encode(['classification' => ['intent' => $intent, 'sentiment' => $sentiment, 'urgency' => 1, 'spam' => 0.0, 'rg_risk' => 0.0, 'confidence' => 0.9]]),
+    ], $createdAtSql);
+}
+
+/**
+ * The relay's EFFECT for one published event, in-harness: copy the newest
+ * outbox row of $name into `events` (same id, same payload) and return its
+ * id — so a consumer test drives the REAL published payload, not a hand-made
+ * one. (The relay itself runs on the platform connection and cannot see the
+ * harness transaction.)
+ */
+function relayOutboxRow(string $name): string
+{
+    /** @var object{id: string, tenant_id: string, name: string, payload: string, schema_version?: int}|null $row */
+    $row = DB::table('outbox')->where('name', $name)->orderByDesc('id')->first();
+    if ($row === null) {
+        throw new RuntimeException("no outbox row named {$name} was published");
+    }
+    DB::table('events')->insertOrIgnore([
+        'id' => $row->id, 'tenant_id' => $row->tenant_id, 'name' => $row->name,
+        'schema_version' => $row->schema_version ?? 1, 'payload' => $row->payload,
+    ]);
+
+    return $row->id;
+}

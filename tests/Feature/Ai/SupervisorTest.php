@@ -20,40 +20,6 @@ use Illuminate\Support\Str;
  * rows (surface supervisor) read through the decision-log door's surface
  * filter.
  */
-/**
- * Backdated decision rows need created_at (R-19a: platform-only) → the
- * platform connection over COMMITTED fixtures (the PayloadReductionJobTest
- * pattern); every test here cleans its tenant up in a finally.
- */
-function supervisorScene(): array
-{
-    $scene = copilotScene();
-    commitFixtures();
-    bindTenant($scene[0]);
-
-    return $scene;
-}
-
-function platformDecisionRow(string $tenantId, array $columns, string $createdAtSql): void
-{
-    $cols = array_keys($columns);
-    $placeholders = array_map(static fn (string $c): string => in_array($c, ['layer_hashes', 'response_payload'], true) ? '?::jsonb' : '?', $cols);
-    asPlatformWorker(fn () => DB::connection('pgsql_platform')->statement(
-        sprintf('INSERT INTO ai_decisions (%s, created_at) VALUES (%s, %s)', implode(', ', $cols), implode(', ', $placeholders), $createdAtSql),
-        array_values($columns),
-    ));
-    bindTenant($tenantId);
-}
-
-function classifyRow(string $tenantId, string $conversationId, string $intent, int $sentiment, string $createdAtSql): void
-{
-    platformDecisionRow($tenantId, [
-        'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'surface' => 'chatbot', 'task' => 'classify_message', 'provider' => 'fake', 'model' => 'm',
-        'layer_hashes' => '{}', 'conversation_id' => $conversationId, 'intent' => $intent, 'confidence' => 0.9, 'action' => 'copilot_context',
-        'response_payload' => json_encode(['classification' => ['intent' => $intent, 'sentiment' => $sentiment, 'urgency' => 1, 'spam' => 0.0, 'rg_risk' => 0.0, 'confidence' => 0.9]]),
-    ], $createdAtSql);
-}
-
 it('FR-17/US-05: withdrawal complaints tripling in the last hour vs the same hour\'s 7-day baseline raises an intent alert (+240%) with a template key + params; below the noise floor nothing fires; spam never counts (N-14)', function (): void {
     [$tenant, $tenantId, $conversation, $ticket, $actor] = supervisorScene();
     try {

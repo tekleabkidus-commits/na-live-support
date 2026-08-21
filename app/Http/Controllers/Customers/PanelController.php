@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Customers;
 use App\Domain\Customers\Notes\CustomerNotes;
 use App\Domain\Customers\Panel\CustomerPayload;
 use App\Domain\Customers\Panel\FilesGallery;
+use App\Domain\Customers\Panel\InactiveHint;
 use App\Domain\Customers\Profile\CustomerProfile;
 use App\Domain\Customers\Rollups\CustomerRollupStatus;
 use App\Models\Customer;
@@ -86,6 +87,9 @@ final class PanelController
             'header' => $header + [
                 'updated_at' => $stamp->updated_at, // EC-11's LWW expectation stamp
                 'detected_language' => $this->profile->detectedLanguage($customerId), // EC-10's chip data
+                // EC-03 (S09 side-row, R-D09-3, countersigned): the informational
+                // inactive hint — a heuristic over hard delivery failures, null otherwise.
+                'inactive_hint' => app(InactiveHint::class)->for($customerId),
             ],
             'identities' => $identities,
             // T-07's stubs: names only — each section is its own fetch.
