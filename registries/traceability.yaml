@@ -2065,20 +2065,31 @@ entries:
       the form is NOT continued); remaining: the live RG-queue delivery is
       [D11]; the governed corpus process [D19].
   - ac_ref: "Doc09 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Ai/HonestyTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (S09 steps 3/12): HonestyTest (disclosure in first greeting
-      across personas/languages; transaction-fact trap fixtures) + the
-      ai-honesty browser spec's DOM assertions for AI marking on every staff
-      surface. Backend half flips at step 3's commit; the DOM half at step 12.
+      FLIPPED AT S09 STEP 12a (backend half). HonestyTest: the disclosure
+      PRESENCE gate inside ConfigVersions::publish (a persona publishes only if
+      every declared greeting carries its language's disclosure — the offending
+      language named; no greeting = the platform greeting, disclosing by
+      construction); wording is guardrails-overridable per language, a blank
+      override is ignored (never a removal); the FIRST AI message of a
+      conversation is prefixed with the greeting through the real turn (answer /
+      resolve / deflection / unsupported-language / handoff template — the RG
+      template alone stays byte-exact, BR-03); N-08's absence (no setting key,
+      no config kind, no method can switch presence off; the immutable layer
+      states the rule); FR-19c author_type=ai; FR-19d Doc 04 FR-23's refusal
+      re-asserted. Transaction-fact traps: AiGoldenConversationTest's AC-05
+      trap clause (en + am). Sabotage #10 (one language exempted from the gate)
+      -> the gate test red (sabotage-10-RED-01.txt), restored byte-identical.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      The DOM half ("AI marking present on every surface") is the step-12d
+      ai-honesty browser spec under make browser [B8].
   - ac_ref: "Doc09 AC-06"
     suite_path: tests/Security/CopilotNeverAutoSendTest.php
     type: automated

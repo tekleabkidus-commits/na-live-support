@@ -10,6 +10,13 @@ return [
     'rg' => [
         'template' => 'ስሜትዎን ስለነገሩን እናመሰግናለን — ይህ ድፍረት ይጠይቃል። አሁኑኑ ሊረዳዎ ከሚችል የቡድናችን አባል ጋር እያገናኘንዎ ነው። እረፍት መውሰድ ከፈለጉ በማንኛውም ጊዜ የተቀማጭ ገደብ ማስቀመጥ ወይም አካውንትዎን ማቆም ይችላሉ፤ እንዲሁም ከአካባቢዎ የቁማር ድጋፍ መስመር ነፃ እና ሚስጥራዊ ድጋፍ ማግኘት ይችላሉ። በዚህ ውስጥ ብቻዎን አይደሉም።',
     ],
+    // FR-19a/BR-05: disclosure WORDING (operator-overridable via guardrails.disclosure.<lang>); PRESENCE is code (Disclosure gate).
+    'disclosure' => [
+        'sentence' => 'እኔ የAI ረዳት ነኝ',
+    ],
+    'greeting' => [
+        'first' => 'ሰላም! :disclosure — ለዚህ የድጋፍ ቡድን። በፈለጉበት ጊዜ የሰው ባልደረባ በአንድ መልእክት ርቀት ላይ ነው።',
+    ],
     'handoff' => [
         'template' => 'ስለመልእክትዎ እናመሰግናለን። የቡድናችን አባል በቅርቡ ያነጋግርዎታል።',
     ],

@@ -75,6 +75,12 @@ function modelAction(string $action, array $extra = []): ProviderResponse
     return new ProviderResponse((string) json_encode(['action' => $action] + $extra), 500, 60);
 }
 
+/** FR-19a (S09 step 12): the FIRST AI message in a conversation = greeting + text. */
+function firstAi(string $text, string $language = 'en'): string
+{
+    return app(App\Domain\Ai\Honesty\Disclosure::class)->greeting($language)."\n\n".$text;
+}
+
 function outboundBodies(object $conversation): array
 {
     return DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->orderBy('created_at')->pluck('body')->all();
@@ -116,8 +122,9 @@ it('AC-02/BR-02 (sabotage #8 target): a money question with NO retrieval hit —
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] what is the maximum withdrawal fee policy?');
 
     $out = outboundBodies($conversation);
+    // FR-19a (S09 step 12): the FIRST AI message carries the disclosing greeting, then the template.
     expect($out)->toHaveCount(1, 'expected exactly the handoff template')
-        ->and($out[0])->toBe(__('ai.handoff.template', [], 'en'))
+        ->and($out[0])->toBe(app(App\Domain\Ai\Honesty\Disclosure::class)->greeting('en')."\n\n".__('ai.handoff.template', [], 'en'))
         ->and(implode(' ', $out))->not->toContain('2%');
     $ticket = DB::table('tickets')->where('conversation_id', $conversation->identifier())->where('source', 'ai_handoff')->first();
     expect($ticket)->not->toBeNull();
@@ -149,7 +156,7 @@ it('FR-12: customer requests a human → the FR-11 packet via Doc 06\'s door, th
 
     $ticket = DB::table('tickets')->where('conversation_id', $conversation->identifier())->where('source', 'ai_handoff')->first();
     expect($ticket)->not->toBeNull()
-        ->and(outboundBodies($conversation))->toBe([__('ai.handoff.template', [], 'en')])
+        ->and(outboundBodies($conversation))->toBe([firstAi(__('ai.handoff.template', [], 'en'))])
         ->and(DB::table('outbox')->where('name', 'ai.handoff.created')->count())->toBe(1);
 
     $decision = DB::table('ai_decisions')->where('ticket_id', $ticket->id)->first();
@@ -170,7 +177,7 @@ it('FR-09/EC-08: resolve sends the closing text + ai.resolved; a reply reopens w
         new ProviderResponse('', 0, 0, [], [unitVector(4)]), modelAction('resolve', ['closing_text' => 'Glad that solved it!']),
     );
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] thanks that fixed it');
-    expect(outboundBodies($conversation))->toBe(['Glad that solved it!'])
+    expect(outboundBodies($conversation))->toBe([firstAi('Glad that solved it!')])
         ->and(DB::table('outbox')->where('name', 'ai.resolved')->count())->toBe(1);
 
     // Reply 1 after resolve: the turn runs WITH post_resolution context and resolves again.
@@ -203,8 +210,8 @@ it('EC-04: betting advice → the deflection TEMPLATE (never generated), third s
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] come on, who should I bet on?');
 
     $out = outboundBodies($conversation);
-    expect($out[0])->toBe(__('ai.deflection.template', [], 'en'))
-        ->and($out[1])->toBe(__('ai.deflection.template', [], 'en'))
+    expect($out[0])->toBe(app(App\Domain\Ai\Honesty\Disclosure::class)->greeting('en')."\n\n".__('ai.deflection.template', [], 'en')) // first message: greeting + template (FR-19a)
+        ->and($out[1])->toBe(__('ai.deflection.template', [], 'en'))                                                                  // later messages: the template alone
         ->and($out[2])->toBe(__('ai.handoff.template', [], 'en'));
     expect(DB::table('ai_decisions')->where('conversation_id', $conversation->identifier())->where('action', 'deflect')->count())->toBe(2);
     $handoff = DB::table('ai_decisions')->where('conversation_id', $conversation->identifier())->where('action', 'handoff')->first();
@@ -227,7 +234,8 @@ it('FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_limit, unsuppor
     turnDriver([], new ProviderResponse('One. Two. Three.', 10, 10));
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] bonjour, où est mon dépôt?', 'fr');
     expect($reason($conversation))->toBe('unsupported_language')
-        ->and(outboundBodies($conversation)[0])->toBe(__('ai.unsupported_language.template', [], 'en'));
+        ->and(outboundBodies($conversation)[0])->toEndWith(__('ai.unsupported_language.template', [], 'en'))
+        ->and(outboundBodies($conversation)[0])->toContain(__('ai.disclosure.sentence', [], 'en')); // FR-19a even for an unsupported language (English greeting)
 
     // provider_refusal (EC-11): raw refusal never reaches the customer
     [$tenantId, $customerId, $conversation] = turnTenant();
@@ -241,7 +249,7 @@ it('FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_limit, unsuppor
     $driver = turnDriver([]); // classify answered; the turn's calls all throw
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] where is my withdrawal?');
     expect($reason($conversation))->toBe('degraded')
-        ->and(outboundBodies($conversation))->toBe([__('ai.handoff.template', [], 'en')]);
+        ->and(outboundBodies($conversation))->toBe([firstAi(__('ai.handoff.template', [], 'en'))]);
 
     // quota_exhausted (EC-12)
     [$tenantId, $customerId, $conversation] = turnTenant();
@@ -253,7 +261,7 @@ it('FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_limit, unsuppor
     // straight to a human within the turn (the stranded-customer gap the first
     // draft of this test exposed and the classify stage now closes).
     expect($reason($conversation))->toBe('quota_exhausted')
-        ->and(outboundBodies($conversation))->toBe([__('ai.handoff.template', [], 'en')])
+        ->and(outboundBodies($conversation))->toBe([firstAi(__('ai.handoff.template', [], 'en'))])
         ->and($driver->seen)->toBe([], 'a provider call was billed with the quota exhausted');
 });
 
@@ -264,7 +272,7 @@ it('FR-07 handoff_path: with the chatbot DISABLED (default OFF) an inbound goes 
     turnInbound($tenantId, $conversation, $customerId, '[FIXTURE] where is my withdrawal?');
 
     expect(DB::table('tickets')->where('conversation_id', $conversation->identifier())->where('source', 'ai_handoff')->count())->toBe(1)
-        ->and(outboundBodies($conversation))->toBe([__('ai.handoff.template', [], 'en')])
+        ->and(outboundBodies($conversation))->toBe([firstAi(__('ai.handoff.template', [], 'en'))])
         ->and(DB::table('ai_decisions')->where('conversation_id', $conversation->identifier())->where('task', 'chatbot_turn')->whereNotNull('request_payload')->count())->toBe(0, 'a model turn ran while the chatbot was disabled');
 });
 

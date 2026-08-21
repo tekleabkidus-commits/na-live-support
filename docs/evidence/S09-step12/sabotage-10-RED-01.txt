@@ -1,0 +1,29 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\HonestyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-05 (sabotage #10 target): a persona publishes ONLY if every d[39m[90m…[39m [90m5.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19a wording vs presence: guardrails may REWORD the disclosure[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-08 / BR-05 ABSENCE: no registered setting, no config kind, no[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19d: an AI-authored message is never edited post-send — Doc 0[39m[90m…[39m [90m0.48s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\HonestyTest[22m [90m>[39m it AC-05 (sabotage #10 target): a…    
+[39;1m  Exception "InvalidArgumentException" not thrown.[39;22m
+
+  at [32mtests/Feature/Ai/HonestyTest.php[39m:[32m39[39m
+     35▕     $bad = $configs->draft('persona', 'default', ['name' => 'Fixture Bet Support', 'greeting' => [
+     36▕         'en' => 'Welcome to Fixture Bet! '.$disclosure->wording('en').'.',
+     37▕         'am' => 'እንኳን ደህና መጡ! እንዴት ልርዳዎ?',
+     38▕     ]], $actor->identifier());
+  ➜  39▕     expect(fn () => $configs->publish($bad, $actor->identifier()))->toThrow(InvalidArgumentException::class, 'the am greeting does not contain the AI disclosure');
+     40▕     expect(DB::table('ai_config_versions')->where('id', $bad)->value('status'))->toBe('draft', 'the refused version must not have published');
+     41▕     expect($disclosure->greeting('am'))->toContain($disclosure->wording('am')); // the published persona is still the disclosing one
+     42▕ 
+     43▕     // No greetings → the platform greeting, disclosing in both languages.
+
+  [33m1   [39m[39;1mtests/Feature/Ai/HonestyTest.php[39;22m:[39;1m39[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (83 assertions)[39m
+  [90mDuration:[39m [39m7.02s[39m
+
+exit 1

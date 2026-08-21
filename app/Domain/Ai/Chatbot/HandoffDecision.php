@@ -40,6 +40,7 @@ final class HandoffDecision
         private readonly ComposeOutbound $outbound,
         private readonly DecisionWriter $decisions,
         private readonly EventPublisher $events,
+        private readonly \App\Domain\Ai\Honesty\FirstGreeting $greeting,
     ) {}
 
     /**
@@ -84,7 +85,8 @@ final class HandoffDecision
 
             if ($sendTemplate) {
                 $template = __('ai.handoff.template', [], $language);
-                $this->outbound->compose($conversation, 'ai', null, 'text', is_string($template) ? $template : (string) __('ai.handoff.template', [], 'en'), 'handoff:'.$triggerDecisionId);
+                // FR-19a: even a handoff-first conversation hears the disclosure.
+                $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversation->identifier(), $language, is_string($template) ? $template : (string) __('ai.handoff.template', [], 'en')), 'handoff:'.$triggerDecisionId);
             }
 
             $decisionId = (string) new UuidV7;

@@ -89,6 +89,21 @@ final class ConfigVersions
                     );
                 }
 
+                // FR-19a/BR-05 (S09 step 12): the disclosure PRESENCE gate on
+                // every persona publish — inside the one publish path, so no
+                // door can route around it.
+                if ($target->kind === 'persona') {
+                    $raw = DB::table('ai_config_versions')->where('id', $versionId)->value('payload');
+                    $payload = is_string($raw) ? json_decode($raw, true) : null;
+                    $keyed = [];
+                    foreach (is_array($payload) ? $payload : [] as $k => $v) {
+                        if (is_string($k)) {
+                            $keyed[$k] = $v;
+                        }
+                    }
+                    app(\App\Domain\Ai\Honesty\Disclosure::class)->gatePersona($keyed);
+                }
+
                 DB::update(
                     <<<'SQL'
                     UPDATE ai_config_versions

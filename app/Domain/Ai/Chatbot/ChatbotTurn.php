@@ -7,6 +7,7 @@ namespace App\Domain\Ai\Chatbot;
 use App\Domain\Ai\Config\ConfigVersions;
 use App\Domain\Ai\DecisionLog\DecisionRecord;
 use App\Domain\Ai\DecisionLog\DecisionWriter;
+use App\Domain\Ai\Honesty\FirstGreeting;
 use App\Domain\Ai\Orchestrator\AiOrchestrator;
 use App\Domain\Ai\Pipeline\FlowStateProvider;
 use App\Domain\Ai\Pipeline\RoutePolicy;
@@ -81,6 +82,7 @@ final class ChatbotTurn
         private readonly FlowStateProvider $flows,
         private readonly AdapterRegistry $adapters,
         private readonly SettingsRepository $settings,
+        private readonly FirstGreeting $greeting,
     ) {}
 
     /** @param array<string, mixed> $classification
@@ -129,7 +131,7 @@ final class ChatbotTurn
                 return $this->handoffOut('blocked_topic_persistence', $classificationDecisionId, $conversation, $messageId, $language, $classification);
             }
             $template = __('ai.deflection.template', [], $language);
-            $this->outbound->compose($conversation, 'ai', null, 'text', is_string($template) ? $template : (string) __('ai.deflection.template', [], 'en'), 'deflect:'.$classificationDecisionId);
+            $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, $language, is_string($template) ? $template : (string) __('ai.deflection.template', [], 'en')), 'deflect:'.$classificationDecisionId);
 
             return $this->recordOnly($classificationDecisionId, $conversation, $messageId, $language, $classification, 'deflect', ['blocked_topic' => $topic]);
         }
@@ -138,7 +140,7 @@ final class ChatbotTurn
             // EC-02: a third language with no KB coverage — the capability
             // template (English fallback) + unsupported_language handoff.
             $template = __('ai.unsupported_language.template', [], 'en');
-            $this->outbound->compose($conversation, 'ai', null, 'text', (string) $template, 'unsupported:'.$classificationDecisionId);
+            $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, 'en', (string) $template), 'unsupported:'.$classificationDecisionId);
 
             return $this->handoffOut('unsupported_language', $classificationDecisionId, $conversation, $messageId, $language, $classification, sendTemplate: false);
         }
@@ -223,7 +225,7 @@ final class ChatbotTurn
                 return $this->handoffOut('invalid_action', $classificationDecisionId, $conversation, $messageId, $language, $classification, $allowedRefs);
             }
             $citations = is_array($payload['citations'] ?? null) ? array_values(array_filter($payload['citations'], 'is_string')) : [];
-            $this->outbound->compose($conversation, 'ai', null, 'text', $this->renderAnswer($conversation, $answerText, $citations), 'answer:'.$classificationDecisionId);
+            $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, $language, $this->renderAnswer($conversation, $answerText, $citations)), 'answer:'.$classificationDecisionId);
             $decisionId = $this->log($classificationDecisionId, $conversation, $messageId, $language, $classification, $assembled, $result, 'answer', null, $started, ['citations' => $citations, 'kb_shown' => $citations]);
 
             return ['action' => 'answer', 'decision_id' => $decisionId];
@@ -231,7 +233,7 @@ final class ChatbotTurn
 
         if ($action === 'resolve') {
             $closing = is_string($payload['closing_text'] ?? null) ? $payload['closing_text'] : '';
-            $this->outbound->compose($conversation, 'ai', null, 'text', $closing, 'resolve:'.$classificationDecisionId);
+            $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, $language, $closing), 'resolve:'.$classificationDecisionId);
             $decisionId = $this->log($classificationDecisionId, $conversation, $messageId, $language, $classification, $assembled, $result, 'resolve', null, $started, ['csat_prompt' => '[D12] seam']);
             DB::transaction(fn () => $this->events->publish('ai.resolved', [
                 'tenant_id' => $this->context->tenantId(),

@@ -20,6 +20,13 @@ return [
     'rg' => [
         'template' => 'Thank you for telling us how you feel — that took courage. We are connecting you with a member of our team right now who can help. If you would like to take a break, you can set deposit limits or pause your account at any time, and free, confidential support is available from your local gambling-help line. You are not alone in this.',
     ],
+    // FR-19a/BR-05: disclosure WORDING (operator-overridable via guardrails.disclosure.<lang>); PRESENCE is code (Disclosure gate).
+    'disclosure' => [
+        'sentence' => 'I\'m an AI assistant',
+    ],
+    'greeting' => [
+        'first' => 'Hi! :disclosure for this support team — a human colleague is one message away whenever you need one.',
+    ],
     'handoff' => [
         'template' => 'Thanks for your message. A member of our team will be with you shortly.',
     ],
