@@ -44,6 +44,7 @@ final class CopilotController extends Controller
         private readonly ScopeSets $scopes,
         private readonly CopilotPanel $panel,
         private readonly CopilotArtifacts $artifacts,
+        private readonly \App\Support\Cache\TenantCache $cache,
     ) {}
 
     /** FR-14: the panel aggregate (chips live; the rest cached, refreshed by job). */
@@ -86,6 +87,30 @@ final class CopilotController extends Controller
         }
 
         return $this->enqueue($request, $conversationId, $action, $input);
+    }
+
+    /**
+     * The polling fallback for a queued request: pending until the job's card
+     * lands (the socket frames are T-04's; the card is the same either way).
+     * The requester only — another user's request id is the 404 pattern.
+     */
+    public function request(Request $request, string $conversationId, string $requestId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        if ($this->resolveScoped($user, $conversationId) === null || preg_match('/^[0-9a-f-]{36}$/', $requestId) !== 1) {
+            return $this->notFound();
+        }
+        $card = $this->cache->get(CopilotTaskJob::cacheKey($requestId));
+        if (! is_array($card)) {
+            return new JsonResponse(['request_id' => $requestId, 'state' => 'pending']);
+        }
+        if (($card['requester_id'] ?? $user->identifier()) !== $user->identifier()) {
+            return $this->notFound();
+        }
+        unset($card['requester_id']);
+
+        return new JsonResponse(['request_id' => $requestId] + $card);
     }
 
     /** FR-16: insertion = use (inserted_unedited until sent() says otherwise). Gated ai.copilot.insert_draft. */

@@ -69,6 +69,51 @@ Route::middleware([
         ->name('customers.profile.page');
 });
 
+// Doc 09 FR-18 — the AI Backoffice (S09 step 12, Option A [B8]). Same staff
+// chain; permission-gated with the CLOSED ai.* keys. Mutations ride the
+// domain doors that audit themselves (ConfigVersions publish/rollback = the
+// ai.config.* rows; KillSwitches::flip = ai.killswitch.changed) — no audit:
+// middleware, the Doc 06 property-door precedent (exemptions name it).
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('admin/ai')->group(function (): void {
+    Route::get('persona', [App\Http\Controllers\Ai\AiBackofficeController::class, 'persona'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.persona');
+    Route::post('persona/draft', [App\Http\Controllers\Ai\AiBackofficeController::class, 'personaDraft'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.persona.draft');
+    Route::post('persona/{versionId}/preview', [App\Http\Controllers\Ai\AiBackofficeController::class, 'personaPreview'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.persona.preview');
+    Route::get('persona/preview/{previewId}', [App\Http\Controllers\Ai\AiBackofficeController::class, 'personaPreviewShow'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.persona.preview_show');
+    Route::get('guardrails', [App\Http\Controllers\Ai\AiBackofficeController::class, 'guardrails'])
+        ->middleware('permission:ai.guardrails.edit')->name('ai.backoffice.guardrails');
+    Route::post('guardrails/draft', [App\Http\Controllers\Ai\AiBackofficeController::class, 'guardrailsDraft'])
+        ->middleware('permission:ai.guardrails.edit')->name('ai.backoffice.guardrails.draft');
+    // publish/rollback: the controller re-checks the KIND's own key (persona → ai.chatbot.configure, guardrails → ai.guardrails.edit);
+    // the route gate is the weaker of the two so both kinds reach the re-check, never a door without a gate.
+    Route::post('versions/{versionId}/publish', [App\Http\Controllers\Ai\AiBackofficeController::class, 'publish'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.publish');
+    Route::post('versions/{versionId}/rollback', [App\Http\Controllers\Ai\AiBackofficeController::class, 'rollback'])
+        ->middleware('permission:ai.chatbot.configure')->name('ai.backoffice.rollback');
+    Route::get('thresholds', [App\Http\Controllers\Ai\AiBackofficeController::class, 'thresholds'])
+        ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds');
+    Route::post('thresholds/simulate', [App\Http\Controllers\Ai\AiBackofficeController::class, 'simulate'])
+        ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds.simulate');
+    Route::post('thresholds/publish', [App\Http\Controllers\Ai\AiBackofficeController::class, 'thresholdsPublish'])
+        ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds.publish');
+    Route::get('kill-switches', [App\Http\Controllers\Ai\AiBackofficeController::class, 'killSwitches'])
+        ->middleware('permission:ai.killswitch')->name('ai.backoffice.killswitches');
+    Route::post('kill-switches/flip', [App\Http\Controllers\Ai\AiBackofficeController::class, 'killSwitchFlip'])
+        ->middleware('permission:ai.killswitch')->name('ai.backoffice.killswitches.flip');
+    Route::get('banner', [App\Http\Controllers\Ai\AiBackofficeController::class, 'banner'])
+        ->middleware('permission:tickets.view')->name('ai.backoffice.banner'); // AC-08: every staff member sees the banner
+    Route::get('decisions', [App\Http\Controllers\Ai\AiBackofficeController::class, 'decisions'])
+        ->middleware('permission:ai.decisions.view')->name('ai.backoffice.decisions');
+});
+
 // Doc 05 §8/§9 — the Telegram admin surfaces (B6-S01/S02/S03). Same staff
 // chain as the RBAC screens; permission-gated with the seeded telegram.* keys.
 Route::middleware([
@@ -181,6 +226,8 @@ Route::middleware([
         ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.draft');
     Route::post('ai/copilot/{conversationId}/actions/{action}', [App\Http\Controllers\Ai\CopilotController::class, 'action'])
         ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.action');
+    Route::get('ai/copilot/{conversationId}/requests/{requestId}', [App\Http\Controllers\Ai\CopilotController::class, 'request'])
+        ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.request');
     Route::post('ai/copilot/artifacts/{artifactId}/insert', [App\Http\Controllers\Ai\CopilotController::class, 'insert'])
         ->middleware('permission:ai.copilot.insert_draft')->name('inbox.ai.copilot.insert');
     Route::post('ai/copilot/artifacts/{artifactId}/sent', [App\Http\Controllers\Ai\CopilotController::class, 'sent'])

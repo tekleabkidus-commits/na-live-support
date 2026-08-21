@@ -102,7 +102,7 @@ it('T-04 job: CopilotTaskJob runs the stream end-to-end and ends in exactly ONE 
     $driver = copilotDriver(copilotEmbedding(2), new ProviderResponse((string) json_encode(['text' => '[FIXTURE] Hello! How can I help?', 'citations' => [], 'confidence' => 0.95]), 10, 10));
     Event::fake([RealtimePush::class]);
 
-    (new App\Jobs\Ai\CopilotTaskJob('req-job', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    (new App\Jobs\Ai\CopilotTaskJob('req-job', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
     Event::assertDispatchedTimes(RealtimePush::class, 3); // two sentence frames ("…Hello!" / "How can I help?…") + ONE card
     $cards = 0;
     Event::assertDispatched(RealtimePush::class, function (RealtimePush $push) use (&$cards): bool {
@@ -119,7 +119,7 @@ it('T-04 job: CopilotTaskJob runs the stream end-to-end and ends in exactly ONE 
     app(App\Domain\Ai\Concurrency\TenantSemaphore::class)->acquire();
     $calls = count($driver->seen);
     Event::fake([RealtimePush::class]);
-    (new App\Jobs\Ai\CopilotTaskJob('req-busy', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    (new App\Jobs\Ai\CopilotTaskJob('req-busy', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
     Event::assertDispatched(RealtimePush::class, fn (RealtimePush $push): bool => $push->eventName === 'ai.copilot.card' && $push->payload['state'] === 'busy' && $push->payload['request_id'] === 'req-busy');
     expect(count($driver->seen))->toBe($calls);
 });

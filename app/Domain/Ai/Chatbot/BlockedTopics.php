@@ -17,7 +17,7 @@ use App\Domain\Ai\Config\ConfigVersions;
 final class BlockedTopics
 {
     /** @var array<string, string> topic => seeded pattern */
-    private const SEEDED = [
+    public const SEEDED = [
         'betting_advice' => '/\b(what|which|who)\b[^.?!]{0,40}\b(should i bet|bet on|will win|to win|sure bet|tip|tips|odds are best)\b|\bguaranteed (win|odds)\b/iu',
         'legal_advice' => '/\b(sue|lawsuit|lawyer|legal action|take you to court|my rights under the law)\b/iu',
         'payment_promise' => '/\b(promise|guarantee)\b[^.?!]{0,30}\b(refund|reversal|payout|payment|money back)\b/iu',

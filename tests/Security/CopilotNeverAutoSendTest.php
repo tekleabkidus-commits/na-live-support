@@ -150,8 +150,8 @@ it('RUNTIME: the job that generates a draft has no send either — running Copil
         new ProviderResponse('Summary.', 10, 10),
     );
 
-    (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
-    (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'summarize', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
+    (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'summarize', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
 
     expect(DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->count())->toBe(0);
 });

@@ -131,8 +131,29 @@ it('FS-01 / AC-09 (Copilot half): with the provider chain exhausted the card is 
     Event::fake([RealtimePush::class]);
     Illuminate\Support\Facades\Cache::flush(); // breaker state reset — a fresh chain for the second leg
     copilotDriver(copilotEmbedding(1));
-    (new App\Jobs\Ai\CopilotTaskJob('req-degraded', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    (new App\Jobs\Ai\CopilotTaskJob('req-degraded', 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
     Event::assertDispatched(RealtimePush::class, fn (RealtimePush $push): bool => $push->eventName === 'ai.copilot.card' && ($push->payload['state'] ?? null) === 'degraded' && ($push->payload['request_id'] ?? null) === 'req-degraded');
     // And the degraded attempt did NOT consume a regeneration or start a cooldown (the platform's failure, not the agent's).
     expect(DB::table('ai_decisions')->where('conversation_id', $conversation->identifier())->where('surface', 'copilot')->where('error_category', 'provider_error')->count())->toBe(2);
+});
+
+it('the request-poll door (T-04\'s socket fallback): pending until the job\'s card lands, then the same card; another user\'s request id is the 404 pattern', function (): void {
+    [$tenant, $tenantId, $conversation, $ticket, $actor] = copilotScene();
+    copilotCustomerMessage($tenantId, $conversation, '[FIXTURE] hello');
+    Queue::fake();
+    $r = $this->actingAs($actor, 'staff')->postJson('https://localhost/inbox/ai/copilot/'.$conversation->identifier().'/draft');
+    $requestId = $r->json('request_id');
+    expect($this->actingAs($actor, 'staff')->getJson('https://localhost/inbox/ai/copilot/'.$conversation->identifier().'/requests/'.$requestId)->json('state'))->toBe('pending');
+
+    bindTenant($tenant);
+    copilotDriver(copilotEmbedding(1), new ProviderResponse((string) json_encode(['text' => '[FIXTURE] Hello!', 'citations' => [], 'confidence' => 0.9]), 5, 5));
+    (new App\Jobs\Ai\CopilotTaskJob($requestId, 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class), app(App\Support\Cache\TenantCache::class));
+
+    $card = $this->actingAs($actor, 'staff')->getJson('https://localhost/inbox/ai/copilot/'.$conversation->identifier().'/requests/'.$requestId);
+    expect($card->json('state'))->toBe('artifact')->and($card->json('text'))->toBe('[FIXTURE] Hello!')->and($card->json())->not->toHaveKey('requester_id');
+
+    bindTenant($tenant);
+    $other = inboxScopedActor('All', 'S09 Poll Other');
+    grantPermissions($other, ['tickets.view', 'conversations.view', 'ai.copilot.use'], 'S09 Poll Other Role');
+    $this->actingAs($other, 'staff')->getJson('https://localhost/inbox/ai/copilot/'.$conversation->identifier().'/requests/'.$requestId)->assertStatus(404);
 });

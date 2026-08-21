@@ -48,7 +48,13 @@ final class CopilotTaskJob implements ShouldQueue
         $this->onQueue('ai');
     }
 
-    public function handle(ComposerActions $actions, CopilotStreamRelay $relay, TenantSemaphore $semaphore): void
+    /** The card's cache key (TenantCache-prefixed): the panel polls it when no socket is wired. */
+    public static function cacheKey(string $requestId): string
+    {
+        return 'ai:copilot:request:'.$requestId;
+    }
+
+    public function handle(ComposerActions $actions, CopilotStreamRelay $relay, TenantSemaphore $semaphore, \App\Support\Cache\TenantCache $cache): void
     {
         $conversation = Conversation::query()->find($this->conversationId);
         if ($conversation === null || User::query()->find($this->userId) === null) {
@@ -56,7 +62,9 @@ final class CopilotTaskJob implements ShouldQueue
         }
 
         if (! $semaphore->acquire()) {
-            $relay->card($this->userId, $this->requestId, ['state' => 'busy', 'kind' => $this->action, 'notices' => ['ai.copilot.notice.busy']]);
+            $busy = ['state' => 'busy', 'kind' => $this->action, 'notices' => ['ai.copilot.notice.busy']];
+            $relay->card($this->userId, $this->requestId, $busy);
+            $cache->put(self::cacheKey($this->requestId), $busy, 600, 'TTL — a request card lives ten minutes');
 
             return;
         }
@@ -71,6 +79,9 @@ final class CopilotTaskJob implements ShouldQueue
                 default => throw new InvalidArgumentException(sprintf('unknown Copilot action "%s"', $this->action)),
             };
             $relay->card($this->userId, $this->requestId, $card);
+            // The polling fallback (T-04's socket client is Doc 07's seam): the
+            // same card, fetchable by request id by the requester only.
+            $cache->put(self::cacheKey($this->requestId), $card + ['requester_id' => $this->userId], 600, 'TTL — a request card lives ten minutes');
         } finally {
             $semaphore->release();
         }

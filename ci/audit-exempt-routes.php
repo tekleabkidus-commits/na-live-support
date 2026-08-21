@@ -102,6 +102,21 @@ return [
     'inbox.ai.copilot.insert' => 'Doc 09 FR-16: outcome enrichment (inserted_unedited) on the agent\'s OWN artifact row — T-08\'s column, not a new mutation class.',
     'inbox.ai.copilot.sent' => 'Doc 09 FR-16: outcome enrichment (inserted_edited{diff_ref}) on the agent\'s OWN artifact row; the SEND itself is the composer\'s evented door.',
     'inbox.ai.copilot.discard' => 'Doc 09 FR-16: outcome enrichment (discarded) on the agent\'s OWN artifact row.',
+    // ── Doc 09 FR-18 (S09 step 12): the Backoffice doors — every mutation is
+    //    a DOMAIN door that audits itself (SEC-05 high-visibility rows named
+    //    in registries/audit-coverage.php): ConfigVersions::publish ->
+    //    ai.config.published, ::rollbackTo -> ai.config.rolled_back,
+    //    KillSwitches::flip -> ai.killswitch.changed. Drafts and simulations
+    //    mutate nothing live (a draft is inert until published; a simulation
+    //    is a read); the persona preview is a cached read of a queued job.
+    'ai.backoffice.persona.draft' => 'Doc 09 FR-04: an INERT draft row (status=draft) — the audited act is the publish (ai.config.published, written by ConfigVersions itself).',
+    'ai.backoffice.persona.preview' => 'Doc 09 FR-18: queues a PREVIEW over fixture dialogs — nothing published, no decision row, a cached read.',
+    'ai.backoffice.guardrails.draft' => 'Doc 09 FR-04: an INERT draft row — the publish audits (ai.config.published).',
+    'ai.backoffice.publish' => 'Doc 09 FR-04/SEC-05: ConfigVersions::publish writes ai.config.published itself (actor + old/new) — no second row.',
+    'ai.backoffice.rollback' => 'Doc 09 FR-04/SEC-05: ConfigVersions::rollbackTo writes ai.config.rolled_back itself.',
+    'ai.backoffice.thresholds.simulate' => 'Doc 09 FR-11/BR-07: a READ (yesterday recomputed); the token it returns is consumed by the publish door.',
+    'ai.backoffice.thresholds.publish' => 'Doc 09 BR-07/SEC-05: ThresholdPublisher -> ConfigVersions::publish writes ai.config.published itself.',
+    'ai.backoffice.killswitches.flip' => 'Doc 09 FR-18/SEC-05: KillSwitches::flip writes ai.killswitch.changed itself (actor + old/new, flipped_at = the audit stamp).',
     'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',
 ];

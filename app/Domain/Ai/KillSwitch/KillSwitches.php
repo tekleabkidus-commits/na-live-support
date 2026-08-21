@@ -60,6 +60,49 @@ final class KillSwitches
     }
 
     /** @return string the switch row id */
+    /**
+     * FR-18's grid + AC-08's banner (S09 step 12): every switch row, off or
+     * on, with the "OFF since {time} by {actor}" facts read from the row
+     * (flipped_at is the audit stamp's byte-copy). Read-only.
+     *
+     * @return list<array{id: string, surface: string, channel: ?string, endpoint_ref: ?string, is_off: bool, reason: ?string, flipped_at: ?string, flipped_by: ?string, flipped_by_name: ?string}>
+     */
+    public function grid(): array
+    {
+        $rows = DB::table('ai_kill_switches as k')
+            ->leftJoin('users as u', 'u.id', '=', 'k.flipped_by')
+            ->orderBy('k.surface')->orderBy('k.channel')->orderBy('k.endpoint_ref')
+            ->get(['k.id', 'k.surface', 'k.channel', 'k.endpoint_ref', 'k.is_off', 'k.reason', DB::raw('k.flipped_at::text AS flipped_at'), 'k.flipped_by', 'u.name AS flipped_by_name']);
+
+        $grid = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id) || ! is_string($row->surface)) {
+                continue;
+            }
+            $grid[] = [
+                'id' => $row->id, 'surface' => $row->surface,
+                'channel' => is_string($row->channel) ? $row->channel : null,
+                'endpoint_ref' => is_string($row->endpoint_ref) ? $row->endpoint_ref : null,
+                'is_off' => (bool) $row->is_off, 'reason' => is_string($row->reason) ? $row->reason : null,
+                'flipped_at' => is_string($row->flipped_at) ? $row->flipped_at : null,
+                'flipped_by' => is_string($row->flipped_by) ? $row->flipped_by : null,
+                'flipped_by_name' => is_string($row->flipped_by_name) ? $row->flipped_by_name : null,
+            ];
+        }
+
+        return $grid;
+    }
+
+    /**
+     * AC-08 "bannered": the OFF rows only — what the workspace strip shows.
+     *
+     * @return list<array{id: string, surface: string, channel: ?string, endpoint_ref: ?string, is_off: bool, reason: ?string, flipped_at: ?string, flipped_by: ?string, flipped_by_name: ?string}>
+     */
+    public function bannerState(): array
+    {
+        return array_values(array_filter($this->grid(), static fn (array $row): bool => $row['is_off']));
+    }
+
     public function flip(string $surface, ?string $channel, ?string $endpointRef, bool $off, ?string $reason, string $actorId): string
     {
         if (! in_array($surface, self::SURFACES, true)) {

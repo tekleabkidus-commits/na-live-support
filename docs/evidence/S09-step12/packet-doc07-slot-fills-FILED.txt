@@ -1,0 +1,69 @@
+ESCALATION PACKET — step 12's Doc 07 slot fills (the "same rule": escalate-first).
+Four Doc 07-owned files, every edit additive; Doc 09 components already exist
+(resources/js/Components/Ai/{CopilotTab,ComposerAiActions}.vue + copilotApi.ts).
+
+(1) resources/js/Pages/Inbox/Workspace.vue — the ContextPanel #copilot slot (3 usages:
+    desktop rail, drawer, mobile) + the composer's AI-actions slot content + the
+    kill-switch banner strip:
++   import CopilotTab from '../../Components/Ai/CopilotTab.vue';
++   import ComposerAiActions from '../../Components/Ai/ComposerAiActions.vue';
+    ...
+                    <template #customer> ... </template>
++                   <template #copilot>
++                       <CopilotTab
++                           :conversation-id="activeThread"
++                           :can-insert="can.ai_copilot_insert"
++                           :t="tAi"
++                           :insert="insertAiIntoComposer"   // → ThreadPane/ComposerPane exposed insertAi()
++                       />
++                   </template>
+    (×3, identical)
++   // AC-08 "bannered": when any kill switch is OFF for this tenant, a banner strip
++   // above the list (text + "OFF since {time} by {actor}", calm — reads ai_banner
++   // from the workspace props; refreshed with the health indicator's poll).
++   <p v-if="aiBanner.off.length" data-testid="ai-killswitch-banner" role="status" …>{{ fill(tAi.banner_off, …) }}</p>
+
+(2) app/Http/Controllers/Inbox/WorkspaceController.php::show (+3 props, render-gates derived
+    from existing keys — no new permission):
++       'tAi' => array_merge((array) __('ai.ui'), ['notice' => __('ai.copilot.notice')]),
++       'aiBanner' => app(\App\Domain\Ai\KillSwitch\KillSwitches::class)->bannerState(),   // Doc 09, new read method: off rows {surface, channel, endpoint_ref, flipped_at, actor_name}
+        'can' => [ ...,
++           'ai_copilot_use' => $map->allows('ai.copilot.use'),
++           'ai_copilot_insert' => $map->allows('ai.copilot.insert_draft'),
+        ],
+
+(3) resources/js/Components/Inbox/Thread/ComposerPane.vue — the AI slot becomes a real slot +
+    the send carries the artifact id (FR-15/FR-16, the countersigned 10b contract):
+-   <span data-testid="ai-slot" …>✦ {{ t.ai_slot_title }}</span>
++   <slot name="ai-actions" :body="body" :mode="mode" :insert="insertAi">
++       <span data-testid="ai-slot" …>✦ {{ t.ai_slot_title }}</span>      // fallback unchanged
++   </slot>
++   const aiArtifactId = ref<string | null>(null);
++   function insertAi(text: string, kind: string, artifactId: string, target: 'reply' | 'note'): void {
++       mode.value = target; body.value = text; aiArtifactId.value = artifactId || null;
++       textarea.value?.focus();                                             // §13: focus returns to the composer
++   }
++   defineExpose({ insertAi });
+    // reply payload:
+-       body: JSON.stringify({ body: body.value, ... })
++       body: JSON.stringify({ body: body.value, ...(aiArtifactId.value ? { ai_artifact_id: aiArtifactId.value } : {}), ... })
++   // after a successful send: aiArtifactId.value = null
+    ThreadPane.vue (+1 passthrough): <ComposerPane ref="composer" …><template #ai-actions="s"><slot name="ai-actions" v-bind="s" /></template></ComposerPane>; defineExpose({ insertAi: (…) => composer.value?.insertAi(…) })
+
+(4) resources/js/Components/Inbox/Thread/MessageBubble.vue — FR-19c's AI accent + FR-15's hover
+    (AC-05 DOM):
++   const isAi = computed(() => str('author_type') === 'ai');
++   const translation = computed(() => (meta.value.ai_translation ?? null) as { original_text: string; source_language: string | null } | null);
+    :style="isNote ? … : isAi
++       ? { background: 'var(--ds-ai-bg)', color: 'var(--ds-ai-fg)', border: '1px solid var(--ds-ai-fg)' }
+        : isOut ? … : …"
++   <p v-if="isAi" data-role="ai-marker" class="text-[10px] font-semibold">✦ {{ t.ai_author }}</p>      // lang inbox.thread.ai_author en+am
++   <span v-if="translation" data-role="ai-translation" :title="fill(t.translated_from, { original: translation.original_text })" class="ms-1 text-[10px]" :style="{ color: 'var(--ds-ai-fg)' }">✦ {{ t.translated }}</span>   // hover = title; keyboard: the same text under a details/summary for a11y
+
+PROVING: (a) Doc 07's own suites green on the edited files (ThreadEndpointTest, ComposerEndpointTest,
+Feature/Inbox) + vue-tsc/eslint; (b) step 12d browser specs under make browser: ai-copilot.spec.ts
+(tab renders chips/summary/card; Suggest → card → Insert puts text in the composer, focus on the
+textarea, send carries ai_artifact_id; Discard; low-confidence banner; 10 s degraded card),
+ai-honesty.spec.ts (AI bubble carries data-role=ai-marker on every AI message; translation hover;
+Copilot cards carry the ✦ accent — AC-05 DOM), EC-03 chip DOM (chip-inactive present for the
+deleted-account fixture, absent otherwise), ai-backoffice.spec.ts (kill-switch grid + banner).

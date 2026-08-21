@@ -29,14 +29,19 @@ final class LayeredAssembly
     /**
      * @param  array{language: string, prior_topics: list<string>, acquisition: ?string, window: list<array{role: string, content: string}>}  $context
      * @param  list<array{article_ref: string, content: string}>  $retrieved
+     * @param  array<string, mixed>|null  $personaOverride  FR-18 preview: a DRAFT persona payload
      * @return array{messages: list<array{role: string, content: string}>, layer_hashes: array<string, string>, masking_map: array<string, string>}
      */
-    public function assemble(string $task, string $taskTemplate, array $context, array $retrieved = [], bool $keepReferences = false): array
+    public function assemble(string $task, string $taskTemplate, array $context, array $retrieved = [], bool $keepReferences = false, ?array $personaOverride = null): array
     {
         $persona = $this->configs->published('persona', 'default');
         $guardrails = $this->configs->published('guardrails', 'default');
 
-        $personaText = $persona === null ? '' : $this->payloadText($persona->payload, 'persona');
+        // FR-18 persona PREVIEW (S09 step 12): a draft persona may stand in for
+        // the published one — the immutable layer and guardrails never vary.
+        $personaText = $personaOverride !== null
+            ? $this->payloadText($personaOverride, 'persona')
+            : ($persona === null ? '' : $this->payloadText($persona->payload, 'persona'));
         $guardrailText = $guardrails === null ? '' : $this->payloadText($guardrails->payload, 'guardrails');
 
         $system = ImmutableLayer::TEXT
@@ -77,7 +82,7 @@ final class LayeredAssembly
             'messages' => $messages,
             'layer_hashes' => [
                 'immutable' => ImmutableLayer::hash(),
-                'persona' => $persona === null ? 'none' : sprintf('persona:v%d', $persona->version),
+                'persona' => $personaOverride !== null ? 'persona:preview' : ($persona === null ? 'none' : sprintf('persona:v%d', $persona->version)),
                 'guardrails' => $guardrails === null ? 'none' : sprintf('guardrails:v%d', $guardrails->version),
                 'task_template' => hash('sha256', $taskTemplate),
             ],
