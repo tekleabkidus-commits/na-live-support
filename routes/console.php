@@ -71,3 +71,4 @@ Schedule::command('inbox:consistency-check')->hourly()->withoutOverlapping();
 Schedule::command('customers:consistency-check')->weekly()->withoutOverlapping();
 Schedule::command('ai:partitions-maintain')->monthlyOn(1, '02:10')->timezone('UTC'); // Doc 09 (SCHEMA AMENDMENT 3): the ai_decisions window
 Schedule::job(new App\Jobs\Ai\ReduceAiDecisionPayloads)->dailyAt('03:10')->timezone('UTC'); // Doc 09 SEC-06: the 30-day payload reduction (privacy by schedule)
+Schedule::command('ai:embed-ticket-summaries')->dailyAt('02:40')->timezone('UTC'); // Doc 09 T-05: nightly resolved-ticket summary embeddings (Copilot similar tickets)

@@ -89,6 +89,19 @@ return [
     'inbox.composer.draft' => 'Doc 04 FR-20/T-07: the author\'s OWN draft — private by design (never visible to another principal), tombstoned on send; the prefs-update rationale.',
     'inbox.notifications.read_all' => 'Doc 07 FR-26: the viewer\'s OWN bell read-state (read_at is the only app-updatable column — R-19b); the read-marker rationale verbatim.',
     'inbox.status.set' => 'Doc 07 FR-28: the agent\'s OWN availability — every transition is EVENTED (agent.status_changed, catalogued; Doc 11/15 consume); FORCED transitions audit through their own door.',
+    // ── Doc 09 FR-16 (S09 step 10): the Copilot's artifact doors. EVERY
+    //    artifact and EVERY outcome is a row/column of ai_decisions — FR-20's
+    //    decision log IS the canonical trail (surface=copilot, requester in
+    //    meta, outcome enriched through T-08's one pen); a per-artifact audit
+    //    row would duplicate it, the inbox.composer.reply rationale verbatim.
+    //    Generation doors mint the row; insert/sent/discard enrich the
+    //    agent's OWN row (invisible to any other principal — the drafts
+    //    precedent). The agent's SEND stays the composer's evented door.
+    'inbox.ai.copilot.draft' => 'Doc 09 FR-16/FR-20: mints the agent\'s own artifact row in ai_decisions — the decision log is the trail.',
+    'inbox.ai.copilot.action' => 'Doc 09 FR-16/FR-20: mints the agent\'s own artifact row in ai_decisions — the decision log is the trail.',
+    'inbox.ai.copilot.insert' => 'Doc 09 FR-16: outcome enrichment (inserted_unedited) on the agent\'s OWN artifact row — T-08\'s column, not a new mutation class.',
+    'inbox.ai.copilot.sent' => 'Doc 09 FR-16: outcome enrichment (inserted_edited{diff_ref}) on the agent\'s OWN artifact row; the SEND itself is the composer\'s evented door.',
+    'inbox.ai.copilot.discard' => 'Doc 09 FR-16: outcome enrichment (discarded) on the agent\'s OWN artifact row.',
     'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',
 ];

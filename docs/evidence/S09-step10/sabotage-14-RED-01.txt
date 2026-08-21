@@ -1,0 +1,99 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\TranslateTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit §14 validator unit: same digits in any order pass; a reordered d[39m[90m…[39m [90m4.78s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §14 (sabotage #14 target): a translation that ALTERS a digit is[39m[90m… [39m [90m0.55s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §14: the repair retry SUCCEEDING yields the artifact — digits ve[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 mixed-language input: the dominant script decides the sour[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 on staff text: a phone number in the agent's draft never[39m[90m… [39m [90m0.49s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ComposerActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 guardrail notice: a money-intent draft WITHOUT a citation[39m[90m… [39m [90m0.44s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule[39m[90m… [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 doors: every composer action is QUEUED (202 + request id,[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an out-of-scope conversation answers the 404 pattern on ev[39m[90m…[39m [90m0.56s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\TranslateTest[22m [90m>[39m it §14 validator unit: same digi…   
+[39;1m  Failed asserting that an array has a key 'ok' with the value true.
+Failed asserting that true matches expected false.[39;22m
+
+  at [32mtests/Feature/Ai/TranslateTest.php[39m:[32m19[39m
+     15▕  * receives altered text.
+     16▕  */
+     17▕ it('§14 validator unit: same digits in any order pass; a reordered digit, a dropped zero, a "localized" amount, an altered reference all fail — with the exact missing/extra tokens named', function (): void {
+     18▕     expect(DigitValidator::compare('Deposit 1,500 ETB ref TX-48213 on 12/08/2026', 'የ1,500 ETB ተቀማጭ TX-48213 በ12/08/2026')['ok'])->toBeTrue();
+  ➜  19▕     expect(DigitValidator::compare('Your code is 4821', 'Your code is 4812'))->toMatchArray(['ok' => false, 'missing' => ['4821'], 'extra' => ['4812']]);
+     20▕     expect(DigitValidator::compare('Pay 500 ETB', 'Pay 50 ETB')['ok'])->toBeFalse();
+     21▕     expect(DigitValidator::compare('Pay 1,500 ETB', 'Pay 1500 ETB')['ok'])->toBeFalse('grouping separators are part of the verbatim token');
+     22▕     expect(DigitValidator::compare('ref TX-48213', 'ref TX-48231')['ok'])->toBeFalse();
+     23▕     expect(DigitValidator::compare('two amounts: 100 and 100', 'one amount: 100')['ok'])->toBeFalse('multiplicity counts');
+
+  [33m1   [39m[39;1mtests/Feature/Ai/TranslateTest.php[39;22m:[39;1m19[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\TranslateTest[22m [90m>[39m it §14 (sabotage #14 target): a…    
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'refused'[39m[39;1m
+  [39;22m[32m+'artifact'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/TranslateTest.php[39m:[32m36[39m
+     32▕     );
+     33▕ 
+     34▕     $card = app(ComposerActions::class)->translate($actor->identifier(), $conversation, '[FIXTURE] Your 500 ETB deposit reference is TX-48213.', 'am');
+     35▕ 
+  ➜  36▕     expect($card['state'])->toBe('refused')
+     37▕         ->and($card['notices'])->toBe(['ai.copilot.notice.digit_mismatch'])
+     38▕         ->and($card)->not->toHaveKey('text');
+     39▕     expect(count($driver->seen))->toBe(2, 'exactly one repair retry');
+     40▕     // The repair instruction names the mismatch so the model can fix it.
+
+  [33m1   [39m[39;1mtests/Feature/Ai/TranslateTest.php[39;22m:[39;1m36[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\TranslateTest[22m [90m>[39m it §14: the repair retry SUCCEED…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'[FIXTURE] የ500 ETB ተቀማጭዎ ማጣቀሻ TX-48213 ነው።'[39m[39;1m
+  [39;22m[32m+'[FIXTURE] የ50 ETB ተቀማጭዎ ማጣቀሻ TX-48213 ነው።'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/TranslateTest.php[39m:[32m63[39m
+     59▕     $original = '[FIXTURE] Your 500 ETB deposit reference is TX-48213.';
+     60▕     $card = app(ComposerActions::class)->translate($actor->identifier(), $conversation, $original, 'am');
+     61▕ 
+     62▕     expect($card['state'])->toBe('artifact')
+  ➜  63▕         ->and($card['text'])->toBe('[FIXTURE] የ500 ETB ተቀማጭዎ ማጣቀሻ TX-48213 ነው።')
+     64▕         ->and($card['source_language'])->toBe('en')
+     65▕         ->and($card['target_language'])->toBe('am');
+     66▕     $payload = json_decode((string) DB::table('ai_decisions')->where('id', $card['artifact_id'])->value('response_payload'), true);
+     67▕     expect($payload['original_text'])->toBe($original);
+
+  [33m1   [39m[39;1mtests/Feature/Ai/TranslateTest.php[39;22m:[39;1m63[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-15 Improve: tone/gra…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'refused'[39m[39;1m
+  [39;22m[32m+'artifact'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/ComposerActionsTest.php[39m:[32m62[39m
+     58▕     $ok = $actions->improve($actor->identifier(), $conversation, '[FIXTURE] thanks for patience, i check your 500 ETB deposit now');
+     59▕     expect($ok['state'])->toBe('artifact')->and($ok['kind'])->toBe('improve_text')->and($ok['text'])->toContain('500 ETB');
+     60▕ 
+     61▕     $bad = $actions->improve($actor->identifier(), $conversation, '[FIXTURE] thanks, i check your 500 ETB deposit now');
+  ➜  62▕     expect($bad['state'])->toBe('refused')->and($bad['notices'])->toBe(['ai.copilot.notice.digit_mismatch']);
+     63▕ });
+     64▕ 
+     65▕ it('FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft) built from customer+agent+ai turns and NEVER from notes (BR-06); nothing is written to the notes path', function (): void {
+     66▕     [$tenant, $tenantId, $conversation, $ticket, $actor] = copilotScene();
+
+  [33m1   [39m[39;1mtests/Feature/Ai/ComposerActionsTest.php[39;22m:[39;1m62[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (56 assertions)[39m
+  [90mDuration:[39m [39m9.86s[39m
+
+exit 1

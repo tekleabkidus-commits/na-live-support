@@ -691,4 +691,15 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    // Doc 09 EC-09 (S09 step 10): the cooldown between Copilot regenerations
+    // — the one value §8/EC-09 leave unspecified ("with cooldown"); the ×3
+    // limit and the 10 s debounce/timeout are the document's own constants.
+    [
+        'key' => 'ai.copilot.regenerate_cooldown_seconds',
+        'type' => 'int',
+        'default' => 5,
+        'validation' => 'required|integer|min:0|max:300',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

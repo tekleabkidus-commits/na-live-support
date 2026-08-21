@@ -33,4 +33,33 @@ return [
     'unsupported_language' => [
         'template' => 'Sorry, I can only help in English or Amharic right now. I\'m connecting you with a member of our team.',
     ],
+    // FR-14/§8 Copilot notices (amber inline strips) + card states (S09 step 10).
+    'copilot' => [
+        'notice' => [
+            'low_confidence' => 'Low confidence — no draft suggested. Verify with the knowledge base links below.',
+            'verify_reference' => 'Low confidence — verify the reference manually before sending.',
+            'retrieval_degraded' => 'Knowledge search is degraded — this draft may lack citations.',
+            'regenerate_exhausted' => 'Regenerate limit reached for this message — showing knowledge links instead.',
+            'cooldown' => 'Please wait a moment before regenerating.',
+            'digit_mismatch' => 'Rejected: the result changed a number, amount or reference. Nothing was inserted.',
+            'unavailable' => 'The assistant could not produce a result for this request.',
+            'degraded' => 'AI assistance is temporarily unavailable — the knowledge links below still work.',
+            'busy' => 'The assistant is busy — try again in a moment.',
+        ],
+        'state' => [
+            'artifact' => 'Suggested',
+            'low_confidence' => 'Low confidence',
+            'locked' => 'Locked',
+            'refused' => 'Rejected',
+            'degraded' => 'Unavailable',
+            'cooldown' => 'Cooling down',
+            'busy' => 'Busy',
+        ],
+        'kind' => [
+            'draft_reply' => 'Suggested reply',
+            'improve_text' => 'Improved text',
+            'translate' => 'Translation',
+            'note_draft' => 'Thread summary (note draft)',
+        ],
+    ],
 ];

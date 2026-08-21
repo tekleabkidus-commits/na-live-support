@@ -1493,3 +1493,91 @@ function decisionFixture(array $overrides = []): App\Domain\Ai\DecisionLog\Decis
 
     return new App\Domain\Ai\DecisionLog\DecisionRecord(...array_merge($defaults, $overrides));
 }
+
+/*
+|--------------------------------------------------------------------------
+| Doc 09 step 10 — Copilot scene helpers (shared by CopilotPanelTest,
+| ComposerActionsTest, ArtifactOutcomeTest, TranslateTest, SimilarTicketsTest,
+| StreamingTest and Security/CopilotNeverAutoSendTest).
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * An OPEN ticket's conversation in a fresh tenant, projected into the list
+ * read model (the scope filter's source), a staff actor scoped All holding
+ * the Copilot keys, thresholds published, the fake channel registered.
+ *
+ * @return array{0: Tenant, 1: string, 2: App\Models\Conversation, 3: App\Models\Ticket, 4: User}
+ */
+function copilotScene(array $permissions = ['tickets.view', 'conversations.view', 'tickets.reply', 'tickets.note', 'ai.copilot.use', 'ai.copilot.insert_draft']): array
+{
+    [$tenant, $conversation, $ticket] = ticketFixture('open');
+    $tenantId = $tenant->identifier();
+    runListProjector(inboxSeedEvent('ticket.created', [
+        'tenant_id' => $tenantId, 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversation->identifier(), 'customer_id' => $ticket->customer_id,
+        'source' => 'agent', 'actor_type' => 'agent', 'actor_id' => null,
+    ]));
+    registerFakeChannel();
+    activateTenant($tenant);
+    bindTenant($tenant);
+    Illuminate\Support\Facades\Cache::flush();
+
+    $actor = inboxScopedActor('All', 'S09 Copilot');
+    grantPermissions($actor, $permissions, 'S09 Copilot Role');
+
+    $configs = app(App\Domain\Ai\Config\ConfigVersions::class);
+    $v = $configs->draft('thresholds', 'default', ['chatbot_enabled' => false, 'rg_min' => 0.8, 'handoff_below' => 0.3, 'auto_resolve_min' => 0.85, 'spam_min' => 0.9], (string) Str::uuid7());
+    $configs->publish($v, (string) Str::uuid7());
+
+    return [$tenant, $tenantId, $conversation, $ticket, $actor];
+}
+
+/** A scripted provider bound to every tier (fast, strong, embeddings). */
+function copilotDriver(App\Domain\Ai\Providers\ProviderResponse|Throwable ...$responses): App\Domain\Ai\Providers\FakeDriver
+{
+    $driver = new App\Domain\Ai\Providers\FakeDriver(new App\Domain\Ai\Guards\FixturesOnlyEgress);
+    foreach ($responses as $response) {
+        $driver->queue($response);
+    }
+    app(App\Domain\Ai\Providers\ProviderRegistry::class)->swap('fake-copilot', $driver);
+    config([
+        'ai.default_routing.fast' => [['provider' => 'fake-copilot', 'model' => 'm']],
+        'ai.default_routing.strong' => [['provider' => 'fake-copilot', 'model' => 'm']],
+        'ai.default_routing.embeddings' => [['provider' => 'fake-copilot', 'model' => 'e']],
+    ]);
+
+    return $driver;
+}
+
+/** A persisted customer message (no pipeline) + its classification decision row. */
+function copilotCustomerMessage(string $tenantId, App\Models\Conversation $conversation, string $body, string $language = 'en', array $classification = []): string
+{
+    $id = (string) Str::uuid7();
+    DB::table('messages')->insert(['id' => $id, 'tenant_id' => $tenantId, 'conversation_id' => $conversation->identifier(), 'direction' => 'in', 'author_type' => 'customer', 'author_id' => $conversation->customer_id, 'kind' => 'text', 'body' => $body, 'language' => $language]);
+
+    $classification = array_merge(['intent' => 'deposits', 'sentiment' => -1, 'urgency' => 2, 'spam' => 0.0, 'rg_risk' => 0.05, 'confidence' => 0.82], $classification);
+    $writer = app(App\Domain\Ai\DecisionLog\DecisionWriter::class);
+    $writer->record(decisionFixture([
+        'conversationId' => $conversation->identifier(), 'messageId' => $id, 'language' => $language,
+        'intent' => $classification['intent'], 'confidence' => $classification['confidence'], 'rgRisk' => $classification['rg_risk'],
+        'responsePayload' => ['classification' => $classification],
+    ]));
+    $writer->flush();
+
+    return $id;
+}
+
+/** A fixture embedding: one hot component. */
+function copilotVector(int $hot): array
+{
+    $v = array_fill(0, 1024, 0.0);
+    $v[$hot] = 1.0;
+
+    return $v;
+}
+
+function copilotEmbedding(int $hot): App\Domain\Ai\Providers\ProviderResponse
+{
+    return new App\Domain\Ai\Providers\ProviderResponse('', 0, 0, [], [copilotVector($hot)]);
+}

@@ -35,17 +35,36 @@ final class PiiRedaction
             return ['text' => $text, 'map' => []];
         }
 
+        $masked = $this->maskWithValues($text);
+
+        return ['text' => $masked['text'], 'map' => $masked['map']];
+    }
+
+    /**
+     * The Copilot's staff-text variant (S09 step 10, FR-15 improve/translate):
+     * the agent's OWN text is masked for egress exactly as customer text is,
+     * and the VALUES stay in the caller's frame so the result can be
+     * unmasked positionally before it returns to the agent — the provider
+     * never sees the value, the agent never sees the label. `values` is
+     * NEVER logged (the decision meta takes `map` only).
+     *
+     * @return array{text: string, map: array<string, string>, values: array<string, string>}
+     */
+    public function maskWithValues(string $text): array
+    {
         $map = [];
+        $values = [];
         $counters = [];
 
         foreach (self::PATTERNS as $kind => $pattern) {
             $text = (string) preg_replace_callback(
                 $pattern,
-                static function () use (&$map, &$counters, $kind): string {
+                static function (array $match) use (&$map, &$values, &$counters, $kind): string {
                     $shortKind = $kind === 'phone_local' ? 'phone' : $kind;
                     $counters[$shortKind] = ($counters[$shortKind] ?? 0) + 1;
                     $label = sprintf('[masked:%s-%d]', $shortKind, $counters[$shortKind]);
                     $map[$label] = $shortKind;
+                    $values[$label] = $match[0];
 
                     return $label;
                 },
@@ -53,6 +72,12 @@ final class PiiRedaction
             );
         }
 
-        return ['text' => $text, 'map' => $map];
+        return ['text' => $text, 'map' => $map, 'values' => $values];
+    }
+
+    /** @param array<string, string> $values label => original value */
+    public function unmask(string $text, array $values): string
+    {
+        return $values === [] ? $text : strtr($text, $values);
     }
 }

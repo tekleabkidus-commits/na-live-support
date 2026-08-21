@@ -38,6 +38,20 @@ final class FakeDriver implements ProviderDriver
         return $this->next($payload);
     }
 
+    /**
+     * T-04 posture: the scripted content is delivered in sentence-boundary
+     * chunks so the relay's buffering is exercised by the same script.
+     */
+    public function stream(array $payload, callable $onDelta): ProviderResponse
+    {
+        $response = $this->next($payload);
+        foreach (SentenceChunker::chunks((string) $response->content) as $chunk) {
+            $onDelta($chunk);
+        }
+
+        return $response;
+    }
+
     /** @param array<string, mixed> $payload */
     private function next(array $payload): ProviderResponse
     {

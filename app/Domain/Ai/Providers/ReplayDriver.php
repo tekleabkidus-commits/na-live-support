@@ -63,6 +63,17 @@ final class ReplayDriver implements ProviderDriver
         ));
     }
 
+    /** T-04 posture: the recording replays in sentence-boundary chunks. */
+    public function stream(array $payload, callable $onDelta): ProviderResponse
+    {
+        $response = $this->complete($payload);
+        foreach (SentenceChunker::chunks((string) $response->content) as $chunk) {
+            $onDelta($chunk);
+        }
+
+        return $response;
+    }
+
     public function embeddings(array $payload): ProviderResponse
     {
         $this->guard->assertAllowed($payload);

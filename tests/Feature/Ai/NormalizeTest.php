@@ -75,7 +75,10 @@ it('the guard extends to MEDIA egress: outside production a real media reference
     $threw = false;
     try {
         (new TranscribeVoiceConsumer($eventId))->handle(app(App\Domain\Ai\Orchestrator\AiOrchestrator::class), app(App\Domain\Conversations\Storage\MessageRepository::class));
-    } catch (AllProvidersExhausted) {
+    } catch (App\Domain\Ai\Guards\NonFixturePayloadRefused) {
+        // S09 step 10: the refusal propagates AS ITSELF — never as an outage
+        // (it used to surface as AllProvidersExhausted after tripping the
+        // breaker; a guard refusal is not a provider failure).
         $threw = true;
     }
 

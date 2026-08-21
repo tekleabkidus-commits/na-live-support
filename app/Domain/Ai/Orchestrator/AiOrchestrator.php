@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Ai\Orchestrator;
 
 use App\Domain\Ai\Config\ConfigVersions;
+use App\Domain\Ai\Guards\NonFixturePayloadRefused;
 use App\Domain\Ai\Providers\AllProvidersExhausted;
 use App\Domain\Ai\Providers\CircuitBreaker;
 use App\Domain\Ai\Providers\ProviderHealth;
@@ -42,6 +43,32 @@ final class AiOrchestrator
      */
     public function execute(string $task, array $messages): array
     {
+        return $this->run($task, $messages, null);
+    }
+
+    /**
+     * T-04: the same chain, breakers, quota gate and metering — with the
+     * provider's deltas relayed to $onDelta as they arrive. A hop that fails
+     * MID-STREAM falls through to the next provider exactly like a failed
+     * complete(); the relay's consumer restarts its card from the new hop's
+     * deltas (the card is a draft — nothing was sent).
+     *
+     * @param  list<array{role: string, content: string}>  $messages
+     * @param  callable(string): void  $onDelta
+     * @return array{response: ProviderResponse, provider: string, model: string, latency_ms: int}
+     */
+    public function executeStreaming(string $task, array $messages, callable $onDelta): array
+    {
+        return $this->run($task, $messages, $onDelta);
+    }
+
+    /**
+     * @param  list<array{role: string, content: string}>  $messages
+     * @param  callable(string): void|null  $onDelta
+     * @return array{response: ProviderResponse, provider: string, model: string, latency_ms: int}
+     */
+    private function run(string $task, array $messages, ?callable $onDelta): array
+    {
         $definition = TaskCatalog::definition($task);
 
         // NFR-06/EC-12: the quota gate runs BEFORE any provider call (SEC-05's
@@ -64,12 +91,14 @@ final class AiOrchestrator
             $started = microtime(true);
 
             try {
-                $response = $this->providers->driver($provider, $definition['timeout_s'])->complete([
+                $request = [
                     'model' => $model,
                     'messages' => $messages,
                     'max_tokens' => $definition['max_tokens'],
                     'temperature' => $definition['tier'] === 'fast' ? 0 : 0.3,
-                ]);
+                ];
+                $driver = $this->providers->driver($provider, $definition['timeout_s']);
+                $response = $onDelta === null ? $driver->complete($request) : $driver->stream($request, $onDelta);
 
                 $this->breaker->recordSuccess($provider);
                 $this->health->observe($provider, 'healthy');
@@ -82,6 +111,13 @@ final class AiOrchestrator
                     'model' => $model,
                     'latency_ms' => (int) round((microtime(true) - $started) * 1000),
                 ];
+            } catch (NonFixturePayloadRefused $refused) {
+                // S09 step 10 finding: the NON-PRODUCTION egress guard's
+                // refusal is NOT a provider failure — it must neither trip
+                // the breaker nor publish a health transition (one untagged
+                // payload in staging would otherwise open the real
+                // provider's breaker for everyone). It propagates as itself.
+                throw $refused;
             } catch (Throwable $failure) {
                 $this->breaker->recordFailure($provider);
                 // FS-01: a TRIPPED provider = degraded (a failure below the
@@ -133,6 +169,8 @@ final class AiOrchestrator
                 $this->quota->record($response->tokensIn);
 
                 return $response->vectors;
+            } catch (NonFixturePayloadRefused $refused) {
+                throw $refused; // the guard's refusal is not an outage (see run())
             } catch (Throwable $failure) {
                 $this->breaker->recordFailure($hop['provider']);
                 $lastFailure = $failure;

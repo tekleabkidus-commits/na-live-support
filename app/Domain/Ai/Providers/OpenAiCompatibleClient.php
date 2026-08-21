@@ -68,6 +68,87 @@ final class OpenAiCompatibleClient implements ProviderDriver
         );
     }
 
+    /**
+     * T-04's provider side: `stream: true` + SSE. Each `data:` frame's
+     * content delta reaches $onDelta in arrival order; `[DONE]` ends the
+     * stream; usage rides the final frame when the provider honors
+     * stream_options.include_usage (OpenAI-compatible convention) — absent
+     * usage is recorded as 0 with `usage_missing` in raw so T-07's metering
+     * gap is visible, never silently invented.
+     *
+     * The guard, proxy, and at-call-time key resolution are EXACTLY
+     * complete()'s — one request() builder, no second egress path.
+     */
+    public function stream(array $payload, callable $onDelta): ProviderResponse
+    {
+        $this->guard->assertAllowed($payload);
+
+        $payload['stream'] = true;
+        $payload['stream_options'] = ['include_usage' => true];
+
+        $response = $this->request()
+            ->withHeaders(['Accept' => 'text/event-stream'])
+            ->withOptions(['stream' => true])
+            ->post($this->baseUrl.'/chat/completions', $payload);
+
+        if ($response->failed()) {
+            throw new RuntimeException(sprintf('provider error: HTTP %d from %s', $response->status(), $this->baseUrl));
+        }
+
+        $content = '';
+        $usage = null;
+        $finishReason = null;
+        $body = $response->toPsrResponse()->getBody();
+        $carry = '';
+
+        while (! $body->eof()) {
+            $carry .= $body->read(8192);
+            while (($nl = strpos($carry, "\n")) !== false) {
+                $line = rtrim(substr($carry, 0, $nl), "\r");
+                $carry = substr($carry, $nl + 1);
+                if (! str_starts_with($line, 'data:')) {
+                    continue;
+                }
+                $data = trim(substr($line, 5));
+                if ($data === '' || $data === '[DONE]') {
+                    continue;
+                }
+                $frame = json_decode($data, true);
+                if (! is_array($frame)) {
+                    continue;
+                }
+                if (is_array($frame['usage'] ?? null)) {
+                    $usage = $frame;
+                }
+                $choices = $frame['choices'] ?? null;
+                if (! is_array($choices) || ! is_array($choices[0] ?? null)) {
+                    continue;
+                }
+                $delta = $choices[0]['delta'] ?? null;
+                if (is_array($delta) && is_string($delta['content'] ?? null) && $delta['content'] !== '') {
+                    $content .= $delta['content'];
+                    $onDelta($delta['content']);
+                }
+                if (is_string($choices[0]['finish_reason'] ?? null)) {
+                    $finishReason = $choices[0]['finish_reason'];
+                }
+            }
+        }
+
+        [$tokensIn, $tokensOut] = $usage === null ? [0, 0] : $this->usage($usage);
+
+        return new ProviderResponse(
+            content: $content,
+            tokensIn: $tokensIn,
+            tokensOut: $tokensOut,
+            raw: [
+                'streamed' => true,
+                'usage_missing' => $usage === null,
+                'choices' => [['finish_reason' => $finishReason, 'message' => ['content' => $content]]],
+            ],
+        );
+    }
+
     public function embeddings(array $payload): ProviderResponse
     {
         $this->guard->assertAllowed($payload);

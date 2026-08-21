@@ -168,6 +168,25 @@ Route::middleware([
         ->middleware('permission:tickets.reply')->name('inbox.composer.draft');
     Route::post('thread/{conversationId}/transition', [App\Http\Controllers\Inbox\ComposerController::class, 'transition'])
         ->middleware(['permission:tickets.status.change', 'audit:ticket.status_changed'])->name('inbox.composer.transition');
+    // ── Doc 09 FR-14/15/16 (S09 step 10): the Copilot's doors — the Doc 07
+    // Copilot-tab + composer-AI-slot fills. Generation is QUEUED (202 +
+    // request id; the card streams to the agent's user channel) — no
+    // provider call inline, no send path anywhere in this block (BR-01;
+    // CopilotNeverAutoSendTest). insert/sent gated ai.copilot.insert_draft
+    // (FR-14's own words); the rest on ai.copilot.use. FR-16 outcomes are
+    // the decision log's own column — the audit-exempt reasons name it.
+    Route::get('ai/copilot/{conversationId}/panel', [App\Http\Controllers\Ai\CopilotController::class, 'panel'])
+        ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.panel');
+    Route::post('ai/copilot/{conversationId}/draft', [App\Http\Controllers\Ai\CopilotController::class, 'draft'])
+        ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.draft');
+    Route::post('ai/copilot/{conversationId}/actions/{action}', [App\Http\Controllers\Ai\CopilotController::class, 'action'])
+        ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.action');
+    Route::post('ai/copilot/artifacts/{artifactId}/insert', [App\Http\Controllers\Ai\CopilotController::class, 'insert'])
+        ->middleware('permission:ai.copilot.insert_draft')->name('inbox.ai.copilot.insert');
+    Route::post('ai/copilot/artifacts/{artifactId}/sent', [App\Http\Controllers\Ai\CopilotController::class, 'sent'])
+        ->middleware('permission:ai.copilot.insert_draft')->name('inbox.ai.copilot.sent');
+    Route::post('ai/copilot/artifacts/{artifactId}/discard', [App\Http\Controllers\Ai\CopilotController::class, 'discard'])
+        ->middleware('permission:ai.copilot.use')->name('inbox.ai.copilot.discard');
     // ── S07 step 13: thin doors over Doc 06's headless property services for
     // FR-31's I/A/P/T bindings and B2-S01's swipe-claim + actions sheet. The
     // services check the SAME keys internally and audit internally — the

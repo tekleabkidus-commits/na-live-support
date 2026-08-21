@@ -1,0 +1,27 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m4.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14 validator unit: same digits in any order pass; a reordered d[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 (sabotage #14 target): a translation that ALTERS a digit is[39m[90m… [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: the repair retry SUCCEEDING yields the artifact — digits ve[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 mixed-language input: the dominant script decides the sour[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 on staff text: a phone number in the agent's draft never[39m[90m… [39m [90m0.40s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ComposerActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 guardrail notice: a money-intent draft WITHOUT a citation[39m[90m… [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 doors: every composer action is QUEUED (202 + request id,[39m[90m… [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an out-of-scope conversation answers the 404 pattern on ev[39m[90m…[39m [90m0.49s[39m  
+
+  [90mTests:[39m    [32;1m15 passed[39;22m[90m (238 assertions)[39m
+  [90mDuration:[39m [39m11.26s[39m
+
+exit 0

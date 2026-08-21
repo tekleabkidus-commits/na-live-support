@@ -1,0 +1,64 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m4.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.75s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.55s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CopilotNeverAutoSendTest[22m [90m>[39m it STATIC (BR-01, sabot…   
+[39;1m  ComposerActions.php names ComposeOutbound — a send path inside the Copilot (BR-01 violated)
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/CopilotNeverAutoSendTest.php[39m:[32m67[39m
+     63▕ 
+     64▕     foreach ($files as $file) {
+     65▕         $code = copilotCodeOnly((string) file_get_contents($file));
+     66▕         foreach (COPILOT_FORBIDDEN_SYMBOLS as $symbol) {
+  ➜  67▕             expect(str_contains($code, $symbol))->toBeFalse(sprintf('%s names %s — a send path inside the Copilot (BR-01 violated)', basename($file), $symbol));
+     68▕         }
+     69▕     }
+     70▕ });
+     71▕
+
+  [33m1   [39m[39;1mtests/Security/CopilotNeverAutoSendTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CopilotNeverAutoSendTest[22m [90m>[39m it RUNTIME (AC-06): a s…   
+[39;1m  the Copilot produced an OUTBOUND message (BR-01 violated)
+Failed asserting that 1 is identical to 0.[39;22m
+
+  at [32mtests/Security/CopilotNeverAutoSendTest.php[39m:[32m129[39m
+    125▕ 
+    126▕     asTenant($tenant, function () use ($conversation): void {
+    127▕         $rows = DB::table('ai_decisions')->where('surface', 'copilot')->get(['task', 'action', 'error_category']);
+    128▕         expect($rows->where('action', 'artifact')->count())->toBe(4, 'four artifacts expected; rows: '.json_encode($rows->all()));
+  ➜ 129▕         expect(DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->count())->toBe(0, 'the Copilot produced an OUTBOUND message (BR-01 violated)');
+    130▕         expect(DB::table('messages')->where('conversation_id', $conversation->identifier())->where('author_type', 'ai')->count())->toBe(0);
+    131▕         expect(DB::table('outbox')->where('name', 'message.queued')->count())->toBe(0, 'a message.queued event was published by the Copilot');
+    132▕     });
+    133▕     $adapter = app(App\Domain\Conversations\Adapters\AdapterRegistry::class)->adapter('fakechan');
+
+  [33m1   [39m[39;1mtests/Security/CopilotNeverAutoSendTest.php[39;22m:[39;1m129[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CopilotNeverAutoSendTest[22m [90m>[39m it RUNTIME: the job tha…   
+[39;1m  Failed asserting that 1 is identical to 0.[39;22m
+
+  at [32mtests/Security/CopilotNeverAutoSendTest.php[39m:[32m156[39m
+    152▕ 
+    153▕     (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'draft', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    154▕     (new CopilotTaskJob((string) Illuminate\Support\Str::uuid7(), 'summarize', $conversation->identifier(), $actor->identifier()))->handle(app(App\Domain\Ai\Copilot\ComposerActions::class), app(App\Domain\Ai\Copilot\CopilotStreamRelay::class), app(App\Domain\Ai\Concurrency\TenantSemaphore::class));
+    155▕ 
+  ➜ 156▕     expect(DB::table('messages')->where('conversation_id', $conversation->identifier())->where('direction', 'out')->count())->toBe(0);
+    157▕ });
+    158▕
+
+  [33m1   [39m[39;1mtests/Security/CopilotNeverAutoSendTest.php[39;22m:[39;1m156[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (45 assertions)[39m
+  [90mDuration:[39m [39m6.09s[39m
+
+exit 1

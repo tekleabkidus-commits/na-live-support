@@ -2080,20 +2080,32 @@ entries:
     gap: >-
       No Doc 09 code exists yet — the plan-approval commit precedes step 1.
   - ac_ref: "Doc09 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/CopilotNeverAutoSendTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED (S09 step 10): CopilotNeverAutoSendTest — no code path from
-      suggestion to adapter without the composer send action, proven static AND
-      runtime (BR-01) — plus ArtifactOutcomeTest capturing all three FR-16
-      outcomes. Flips to automated in the step-10 commit.
+      FLIPPED AT S09 STEP 10 with its suites. CopilotNeverAutoSendTest (BR-01,
+      sabotage #7's target): STATIC — no Copilot source (domain, jobs, controller)
+      names ComposeOutbound / the adapter contract / the lane / persistOutbound /
+      NotesWriter (comments stripped before the sweep) AND the constructor graph
+      is walked transitively by reflection with the outbound services forbidden;
+      RUNTIME — draft + improve + translate + summarize through the real doors
+      and the job leave ZERO outbound rows, ZERO message.queued, ZERO adapter
+      sends; the only send is the agent's composer reply, author_type=agent.
+      ArtifactOutcomeTest (FR-16): inserted_unedited (insert door + identical
+      send), inserted_edited{diff_ref} (identifiers + numeric edit metrics, Q7
+      asserted leaf by leaf), discarded; insert/sent gated ai.copilot.insert_draft
+      (403 without it), another principal's artifact = the 404 pattern, a
+      low_confidence/refused row is not insertable. Sabotage #7 (an auto-send of
+      confident drafts) turned 3 of 4 tests red (sabotage-7-RED-01.txt), restored
+      byte-identical, green.
     gap: >-
-      No Doc 09 code exists yet — the plan-approval commit precedes step 1.
+      None for the AC's own clauses. The UI half (Insert/Regenerate/Discard
+      keyboard operability, focus return) is step 12's browser proof [B8].
   - ac_ref: "Doc09 AC-07"
     suite_path: tests/Security/AiInjectionRedTeamTest.php
     type: automated
@@ -2157,8 +2169,11 @@ entries:
       provider exhaustion at classify OR at the turn -> bypass_handoff / the
       handoff template — zero unanswered customers in every branch.
     gap: >-
-      PARTIAL: the degraded Copilot card (step 10) and the Supervisor pause
-      (step 11) are the two ladder rungs whose surfaces do not exist yet.
+      PARTIAL: the degraded COPILOT CARD landed at step 10 (CopilotPanelTest
+      FS-01 case: chain exhausted -> state=degraded card with KB links + a
+      provider_error row, pushed as the stream's last frame; a degraded attempt
+      consumes no regeneration). The Supervisor pause (step 11) is the one
+      ladder rung whose surface does not exist yet.
   - ac_ref: "Doc09 AC-10"
     suite_path: manual
     type: manual
