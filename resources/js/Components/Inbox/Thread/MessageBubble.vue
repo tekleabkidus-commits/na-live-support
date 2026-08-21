@@ -34,6 +34,24 @@ const isNote = computed(() => props.message.is_internal === true);
 const isDeleted = computed(() => str('deleted_at') !== '');
 
 const meta = computed(() => (props.message.channel_meta ?? {}) as Record<string, unknown>);
+
+// S09 step 12 (the COUNTERSIGNED Doc 07 slot-fill packet) — Doc 09 FR-19c /
+// AC-05: an AI-authored message carries the AI accent AND a text label (never
+// colour alone); FR-15: a translated agent message carries the original on
+// hover/title — ABSENT when channel_meta has no ai_translation.
+const isAi = computed(() => str('author_type') === 'ai');
+const showOriginal = ref(false);
+const aiTranslation = computed(() => {
+    const raw = meta.value.ai_translation;
+    if (typeof raw !== 'object' || raw === null) return null;
+    const record = raw as Record<string, unknown>;
+    return typeof record.original_text === 'string'
+        ? {
+              original: record.original_text,
+              source: typeof record.source_language === 'string' ? record.source_language : '',
+          }
+        : null;
+});
 const ownerPhone = computed(() => meta.value.reported_agent_type === 'owner_phone');
 
 // ── AC-07 (Doc 05, the closing proof): the truthful-receipts glyph map.
@@ -95,9 +113,15 @@ const time = computed(() => {
                           color: 'var(--ds-note-fg)',
                           border: '1px dashed var(--ds-border-strong)',
                       }
-                    : isOut
-                      ? { background: 'var(--ds-accent)', color: 'var(--ds-accent-contrast)' }
-                      : { background: 'var(--ds-panel-soft)', color: 'var(--ds-text-primary)' }
+                    : isAi
+                      ? {
+                            background: 'var(--ds-ai-bg)',
+                            color: 'var(--ds-ai-fg)',
+                            border: '1px solid var(--ds-ai-fg)',
+                        }
+                      : isOut
+                        ? { background: 'var(--ds-accent)', color: 'var(--ds-accent-contrast)' }
+                        : { background: 'var(--ds-panel-soft)', color: 'var(--ds-text-primary)' }
             "
         >
             <!-- Note banner (N-04's visual arm). -->
@@ -108,6 +132,34 @@ const time = computed(() => {
             >
                 🔒 {{ t.internal_note }}
             </p>
+            <!-- Doc 09 FR-19c: the AI marker — accent + TEXT, on every AI-authored message. -->
+            <p
+                v-if="isAi"
+                class="mb-1 text-[10px] font-bold uppercase tracking-wide"
+                data-role="ai-marker"
+            >
+                ✦ {{ t.ai_author }}
+            </p>
+            <!-- Doc 09 FR-15: the translation marker — the agent's original on hover/title; absent without ai_translation. -->
+            <div
+                v-if="aiTranslation"
+                class="mb-1 text-[10px]"
+                data-role="ai-translation"
+                :title="(t.translated_from ?? '').replace(':original', aiTranslation.original)"
+                :style="{ color: 'var(--ds-ai-fg)' }"
+            >
+                ✦ {{ t.translated }}
+                <button type="button" class="ms-1 underline" @click="showOriginal = !showOriginal">
+                    {{ t.translated_show_original }}
+                </button>
+                <span
+                    v-if="showOriginal"
+                    data-role="ai-translation-original"
+                    class="block"
+                    :style="{ color: 'var(--ds-text-primary)' }"
+                    >{{ aiTranslation.original }}</span
+                >
+            </div>
 
             <!-- US-03: owner-phone attribution, marked. -->
             <p

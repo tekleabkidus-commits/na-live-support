@@ -164,6 +164,11 @@ return [
         'media_omitted' => '[attachment omitted from print]',
     ],
     'thread' => [
+        // Doc 09 FR-19c / FR-15 (S09 step 12, countersigned slot-fill packet): the AI marker + translation marker.
+        'ai_author' => 'AI assistant',
+        'translated' => 'Translated by the assistant',
+        'translated_from' => 'Original: :original',
+        'translated_show_original' => 'show original',
         'split_selected' => ':count selected',
         'split_continue' => 'Split into a new ticket',
         'cancel' => 'Cancel',

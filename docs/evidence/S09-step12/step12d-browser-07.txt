@@ -1,0 +1,13 @@
+
+Running 8 tests using 1 worker
+
+[1/8] [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone
+[2/8] [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas
+[3/8] [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16)
+[4/8] [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded
+[5/8] [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on
+[6/8] [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not
+[7/8] [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text)
+[8/8] [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there
+  8 passed (27.3s)
+exit 0

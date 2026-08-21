@@ -12,6 +12,18 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useInboxConnection } from '../../../stores/inbox/connection';
 import ComposerPane from './ComposerPane.vue';
+
+// S09 step 12 (countersigned packet): Doc 09's insert door, passed up to the workspace.
+const composerRef = ref<InstanceType<typeof ComposerPane> | null>(null);
+function insertAi(
+    text: string,
+    kind: string,
+    artifactId: string,
+    target: 'reply' | 'note' = 'reply',
+): void {
+    composerRef.value?.insertAi(text, kind, artifactId, target);
+}
+defineExpose({ insertAi });
 import TicketStateBanner from './TicketStateBanner.vue';
 import HandoffCard from './HandoffCard.vue';
 import MediaLightbox from './MediaLightbox.vue';
@@ -658,6 +670,7 @@ onMounted(async () => {
             @open-rescue="emit('open-rescue')"
         />
         <ComposerPane
+            ref="composerRef"
             v-if="!composerReplaced"
             :conversation-id="conversationId"
             :channel="channel"
@@ -674,7 +687,12 @@ onMounted(async () => {
             :t="composerT"
             :voice-flag="voiceFlag"
             @sent="() => load()"
-        />
+        >
+            <!-- S09 step 12 (countersigned packet): the AI-actions slot passes through to the workspace. -->
+            <template #ai-actions="slotProps">
+                <slot name="ai-actions" v-bind="slotProps" />
+            </template>
+        </ComposerPane>
 
         <MediaLightbox v-if="lightbox" :media="lightbox" :t="t" @close="lightbox = null" />
 

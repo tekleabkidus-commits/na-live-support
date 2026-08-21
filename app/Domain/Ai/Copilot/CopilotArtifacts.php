@@ -87,7 +87,8 @@ final class CopilotArtifacts
             requestPayload: $requestPayload,
             responsePayload: $meta + ['kind' => $kind, 'text' => $text, 'requester_id' => $requesterId],
         ));
-        $this->decisions->flush();
+        // INLINE: the agent's Insert/Discard need this row before the card lands.
+        $this->decisions->flushSync();
 
         return $id;
     }

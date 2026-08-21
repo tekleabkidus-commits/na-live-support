@@ -92,6 +92,11 @@ final class WorkspaceController extends Controller
             // S08 escalation #3 part 2 (the slot fill): the Customer panel's
             // own strings ride the same C-08 chain.
             'tCustomers' => array_merge((array) __('customers.panel'), (array) __('customers.fields')),
+            // S09 step 12 (the COUNTERSIGNED Doc 07 slot-fill packet): the
+            // Copilot tab + composer AI actions' strings and AC-08's banner
+            // state (the OFF kill-switch rows — empty renders nothing).
+            'tAi' => array_merge((array) __('ai.ui'), ['notice' => (array) __('ai.copilot.notice')]),
+            'aiBanner' => ['off' => app(\App\Domain\Ai\KillSwitch\KillSwitches::class)->bannerState()],
             'tenantName' => $tenantName,
             'views' => $views,
             'savedViews' => array_map(fn (object $row): array => [
@@ -156,6 +161,9 @@ final class WorkspaceController extends Controller
                 // Unit D (C15/C16): the bulk bar's Close — the EXISTING
                 // tickets.close key, catalog untouched.
                 'tickets_close' => $map->allows('tickets.close'),
+                // S09 step 12 (countersigned packet): Doc 09's render-gates, DERIVED from existing keys.
+                'ai_copilot_use' => $map->allows('ai.copilot.use'),
+                'ai_copilot_insert' => $map->allows('ai.copilot.insert_draft'),
             ],
             // EC-07 (step 13): the handshake's clock anchor — DB time, the
             // same source SyncReader answers with; the client renders

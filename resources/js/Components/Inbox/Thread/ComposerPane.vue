@@ -300,6 +300,10 @@ async function send(then: string | null = null, confirmReopen = false): Promise<
                 idempotency_key: currentSendKey.value,
                 ...(then ? { then } : {}),
                 ...(confirmReopen ? { confirm_reopen: true } : {}),
+                // S09 step 12 (countersigned packet): the Copilot artifact this body
+                // came from — FR-15's original-in-metadata + FR-16's verdict ride the
+                // agent's own send (the 10b contract). Absent when nothing was inserted.
+                ...(aiArtifactId.value ? { ai_artifact_id: aiArtifactId.value } : {}),
             }),
         });
         if (response.status === 409) {
@@ -315,6 +319,7 @@ async function send(then: string | null = null, confirmReopen = false): Promise<
             emit('sent', payload.message_id);
             body.value = '';
             currentSendKey.value = null;
+            aiArtifactId.value = null;
             reopenPrompt.value = false;
             raceBy.value = null;
             if (payload.transition && !payload.transition.ok) {
@@ -358,6 +363,25 @@ function label(key: string, replacements: Record<string, string> = {}): string {
 // dispatcher — the composer keeps its internals private and answers the
 // four commands the map names.
 const inputEl = ref<HTMLTextAreaElement | null>(null);
+
+// S09 step 12 (the COUNTERSIGNED Doc 07 slot-fill packet): Doc 09's insert door.
+// A Copilot artifact lands in the composer (reply or note mode), the artifact id
+// is remembered for the send, and focus returns to the textarea (Doc 09 §13).
+// Nothing here sends — the agent's send stays the agent's (BR-01).
+const aiArtifactId = ref<string | null>(null);
+function insertAi(
+    text: string,
+    kind: string,
+    artifactId: string,
+    target: 'reply' | 'note' = 'reply',
+): void {
+    void kind;
+    mode.value = target;
+    body.value = text;
+    aiArtifactId.value = artifactId !== '' ? artifactId : null;
+    inputEl.value?.focus();
+}
+defineExpose({ insertAi });
 function onComposerCommand(event: Event): void {
     const command = (event as CustomEvent<{ command: string }>).detail?.command;
     switch (command) {
@@ -673,17 +697,20 @@ onMounted(() => {
                 >
                     🎤
                 </button>
-                <span
-                    data-testid="ai-slot"
-                    class="rounded border px-1.5 py-0.5 text-[10px]"
-                    :style="{
-                        borderColor: 'var(--ds-ai-fg)',
-                        color: 'var(--ds-ai-fg)',
-                        background: 'var(--ds-ai-bg)',
-                    }"
-                    :title="t.ai_slot_hint"
-                    >✦ {{ t.ai_slot_title }}</span
-                >
+                <!-- S09 step 12 (countersigned packet): the AI slot is a real slot — Doc 09 fills it; the placeholder is the fallback, unchanged. -->
+                <slot name="ai-actions" :body="body" :mode="mode" :insert="insertAi">
+                    <span
+                        data-testid="ai-slot"
+                        class="rounded border px-1.5 py-0.5 text-[10px]"
+                        :style="{
+                            borderColor: 'var(--ds-ai-fg)',
+                            color: 'var(--ds-ai-fg)',
+                            background: 'var(--ds-ai-bg)',
+                        }"
+                        :title="t.ai_slot_hint"
+                        >✦ {{ t.ai_slot_title }}</span
+                    >
+                </slot>
                 <!-- FR-18: live caps + the downgrade hint. -->
                 <span
                     data-testid="caps-hint"

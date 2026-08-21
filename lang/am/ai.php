@@ -81,6 +81,8 @@ return [
     ],
     // FR-14/FR-15 staff UI strings (S09 step 12, Option A [B8]).
     'ui' => [
+        'banner_off' => 'የረዳት :surface ለ:scope ጠፍቷል — ከ:time ጀምሮ በ:actor (:count ማብሪያ(ዎች) ጠፍተዋል)',
+        'banner_all' => 'ሁሉም ቻናሎች',
         'empty' => 'ረዳቱን እዚህ ለማየት ውይይት ይክፈቱ።',
         'loading' => 'ረዳት በመጫን ላይ…',
         'panel_failed' => 'የረዳቱ ፓነል መጫን አልቻለም።',

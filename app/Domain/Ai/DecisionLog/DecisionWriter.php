@@ -45,6 +45,24 @@ final class DecisionWriter
 
     public function flush(): void
     {
+        $this->flushVia(false);
+    }
+
+    /**
+     * S09 step 12d finding: the Copilot's artifact rows are what the agent's
+     * Insert/Discard act on SECONDS later — persisted asynchronously (the
+     * customer-turn posture, NFR-05) the row could arrive AFTER the card and
+     * Insert answered the 404 pattern (seen in the browser run). Agent-facing
+     * artifacts therefore persist INLINE, in this transaction; the customer
+     * turn keeps the async batch.
+     */
+    public function flushSync(): void
+    {
+        $this->flushVia(true);
+    }
+
+    private function flushVia(bool $sync): void
+    {
         if ($this->staged === []) {
             return;
         }
@@ -58,7 +76,7 @@ final class DecisionWriter
         // (Doc 01 T-03); inside a caller's transaction this is a savepoint and
         // the event commits with the caller's write, outside one it is its own
         // short transaction. Either way the dispatch is afterCommit (C-06).
-        DB::transaction(function () use ($rows, $tenantId): void {
+        DB::transaction(function () use ($rows, $tenantId, $sync): void {
             foreach ($rows as $record) {
                 if ($this->sampled()) {
                     $this->events->publish('ai.decision.logged', [
@@ -72,10 +90,12 @@ final class DecisionWriter
                 }
             }
 
-            PersistAiDecisions::dispatch($tenantId, array_map(
-                static fn (DecisionRecord $record): array => PersistAiDecisions::rowFor($record),
-                $rows,
-            ));
+            $payload = array_map(static fn (DecisionRecord $record): array => PersistAiDecisions::rowFor($record), $rows);
+            if ($sync) {
+                PersistAiDecisions::dispatchSync($tenantId, $payload);
+            } else {
+                PersistAiDecisions::dispatch($tenantId, $payload);
+            }
         });
     }
 

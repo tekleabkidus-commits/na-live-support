@@ -2146,7 +2146,7 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
       FLIPPED AT S09 STEP 8, same commit as the suite: exact blast radii
       BOTH directions (endpoint / channel-wide / all-switch; siblings, other
@@ -2157,11 +2157,12 @@ entries:
       control hardened with the A-33 static pin + a forced second boundary,
       then RED -> restored). Sabotage #9 (scope leak) red -> restored.
     gap: >-
-      PARTIAL: the BANNER clause ("bannered") is step 12's inbox-header
-      mirror ([B8]); the enablement composition with scope config is proven
-      (SwitchesAndFlags); the chatbot's live reaction PROVED at step 9
-      (ChatbotTurnTest FR-07 handoff_path: chatbot disabled -> straight to a
-      human, packet + template, no model call).
+      None. The BANNER clause closed at S09 step 12: KillSwitches::bannerState
+      + the banner door (BackofficeConfigTest) and the workspace strip
+      (tests/Browser/ai-backoffice.spec.ts: absent while on, present after a
+      confirmed flip OFF with "OFF since {time} by {actor}", gone after the
+      flip back); the chatbot's live reaction at step 9 (ChatbotTurnTest FR-07
+      handoff_path). Pixel fidelity of the strip remains [B8].
   - ac_ref: "Doc09 AC-09"
     suite_path: tests/Feature/Ai/FailoverDrillTest.php
     type: automated

@@ -36,6 +36,9 @@ import SavedViewEditor from '../../Components/Inbox/SavedViewEditor.vue';
 import ShortcutOverlay from '../../Components/Inbox/ShortcutOverlay.vue';
 import ListPane from '../../Components/Inbox/List/ListPane.vue';
 import ThreadPane from '../../Components/Inbox/Thread/ThreadPane.vue';
+// S09 step 12 (the countersigned Doc 07 slot-fill packet): Doc 09's two slot fills.
+import CopilotTab from '../../Components/Ai/CopilotTab.vue';
+import ComposerAiActions from '../../Components/Ai/ComposerAiActions.vue';
 import TopBar from '../../Components/Inbox/TopBar.vue';
 import ViewsRail from '../../Components/Inbox/ViewsRail.vue';
 import { runCommand } from '../../lib/commands';
@@ -123,9 +126,22 @@ const props = defineProps<{
         tickets_spam_mark: boolean;
         tickets_split: boolean;
         tickets_close: boolean;
+        // S09 step 12 (countersigned packet): Doc 09 render-gates; absent props → the slot fallbacks render as before.
+        ai_copilot_use?: boolean;
+        ai_copilot_insert?: boolean;
     };
     tabBadges: { customer: boolean; copilot: boolean };
     tCustomers: Record<string, string>;
+    tAi?: Record<string, string | Record<string, string>>;
+    aiBanner?: {
+        off: {
+            surface: string;
+            channel: string | null;
+            endpoint_ref: string | null;
+            flipped_at: string | null;
+            flipped_by_name: string | null;
+        }[];
+    };
     transitions: Record<string, string[]>;
     queueViews: { id: string; name: string; count: number }[];
     agentStatus: { status: string; reason: string | null; set_by_name: string | null };
@@ -138,6 +154,42 @@ const props = defineProps<{
 }>();
 
 const prefsStore = useInboxPrefs();
+
+// S09 step 12 (countersigned packet): the Copilot tab + composer AI actions —
+// flat strings for the components (notice.* keys flattened), the insert hook
+// that puts an artifact into the composer through ThreadPane's exposed door.
+const tAiFlat = computed<Record<string, string>>(() => {
+    const out: Record<string, string> = {};
+    for (const [k, v] of Object.entries(props.tAi ?? {})) {
+        if (typeof v === 'string') out[k] = v;
+        else for (const [nk, nv] of Object.entries(v)) out[k + '.' + nk] = nv;
+    }
+    return out;
+});
+const threadPaneRef = ref<InstanceType<typeof ThreadPane> | null>(null);
+function insertAiIntoComposer(
+    text: string,
+    kind: string,
+    artifactId: string,
+    mode: 'reply' | 'note' = 'reply',
+): void {
+    threadPaneRef.value?.insertAi(text, kind, artifactId, mode);
+}
+const aiOff = computed(() => props.aiBanner?.off ?? []);
+function aiBannerText(): string {
+    const first = aiOff.value[0];
+    if (!first) return '';
+    let out = tAiFlat.value.banner_off ?? '';
+    const vars: Record<string, string> = {
+        surface: first.surface,
+        scope: first.endpoint_ref ?? first.channel ?? tAiFlat.value.banner_all ?? '',
+        time: (first.flipped_at ?? '').slice(0, 16),
+        actor: first.flipped_by_name ?? '—',
+        count: String(aiOff.value.length),
+    };
+    for (const [k, v] of Object.entries(vars)) out = out.replaceAll(':' + k, v);
+    return out;
+}
 prefsStore.hydrate(props.prefs as Parameters<typeof prefsStore.hydrate>[0]);
 const connection = useInboxConnection();
 
@@ -1315,6 +1367,20 @@ function dismissCoach(): void {
             @mute="(until) => prefsStore.setMutedUntil(until)"
             @open-palette="paletteOpen = true"
         />
+        <!-- S09 step 12 (countersigned packet) / AC-08 "bannered": renders ONLY when a kill switch is actually OFF. -->
+        <p
+            v-if="aiOff.length > 0"
+            data-testid="ai-killswitch-banner"
+            role="status"
+            class="border-b px-3 py-1 text-xs"
+            :style="{
+                background: 'var(--ds-status-danger-bg)',
+                color: 'var(--ds-status-danger-fg)',
+                borderColor: 'var(--ds-status-danger-fg)',
+            }"
+        >
+            ✦ {{ aiBannerText() }}
+        </p>
 
         <!-- ═══ FR-29/FR-30/FS-05 (step 13): the whole-workspace banner stack
              (B1-S02's drawn strips). Live region: state flips are announced. -->
@@ -1518,6 +1584,7 @@ function dismissCoach(): void {
                     </button>
                 </div>
                 <ThreadPane
+                    ref="threadPaneRef"
                     v-if="activeThread"
                     :key="activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick"
                     :conversation-id="activeThread"
@@ -1541,7 +1608,22 @@ function dismissCoach(): void {
                             panelLoading = false;
                         }
                     "
-                />
+                >
+                    <!-- S09 step 12 (countersigned packet): the composer AI actions — only with the Doc 09 props; the placeholder otherwise. -->
+                    <template v-if="tAi && can.ai_copilot_use" #ai-actions="slotProps">
+                        <ComposerAiActions
+                            :conversation-id="activeThread"
+                            :body="slotProps.body"
+                            :mode="slotProps.mode"
+                            :can-insert="can.ai_copilot_insert === true"
+                            :customer-language="null"
+                            :t="tAiFlat"
+                            :insert="
+                                (text, kind, id, mode) => slotProps.insert(text, kind, id, mode)
+                            "
+                        />
+                    </template>
+                </ThreadPane>
                 <p v-else class="px-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                     {{ t.shell.thread_placeholder }}
                 </p>
@@ -1578,6 +1660,17 @@ function dismissCoach(): void {
                     <template #customer>
                         <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
                     </template>
+                    <!-- S09 step 12 (countersigned packet): the Copilot slot — only with the Doc 09 props; the slot's own text otherwise. -->
+                    <template v-if="tAi && can.ai_copilot_use" #copilot>
+                        <CopilotTab
+                            :conversation-id="activeThread"
+                            :can-insert="can.ai_copilot_insert === true"
+                            :t="tAiFlat"
+                            :insert="
+                                (text, kind, id) => insertAiIntoComposer(text, kind, id, 'reply')
+                            "
+                        />
+                    </template>
                 </ContextPanel>
             </div>
             <div
@@ -1609,6 +1702,17 @@ function dismissCoach(): void {
                     </template>
                     <template #customer>
                         <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
+                    </template>
+                    <!-- S09 step 12 (countersigned packet): the Copilot slot — only with the Doc 09 props; the slot's own text otherwise. -->
+                    <template v-if="tAi && can.ai_copilot_use" #copilot>
+                        <CopilotTab
+                            :conversation-id="activeThread"
+                            :can-insert="can.ai_copilot_insert === true"
+                            :t="tAiFlat"
+                            :insert="
+                                (text, kind, id) => insertAiIntoComposer(text, kind, id, 'reply')
+                            "
+                        />
                     </template>
                 </ContextPanel>
             </div>
@@ -1782,6 +1886,7 @@ function dismissCoach(): void {
                     tabindex="-1"
                 >
                     <ThreadPane
+                        ref="threadPaneRef"
                         v-if="activeThread"
                         :key="
                             activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick
@@ -1807,7 +1912,22 @@ function dismissCoach(): void {
                                 panelLoading = false;
                             }
                         "
-                    />
+                    >
+                        <!-- S09 step 12 (countersigned packet): the composer AI actions — only with the Doc 09 props; the placeholder otherwise. -->
+                        <template v-if="tAi && can.ai_copilot_use" #ai-actions="slotProps">
+                            <ComposerAiActions
+                                :conversation-id="activeThread"
+                                :body="slotProps.body"
+                                :mode="slotProps.mode"
+                                :can-insert="can.ai_copilot_insert === true"
+                                :customer-language="null"
+                                :t="tAiFlat"
+                                :insert="
+                                    (text, kind, id, mode) => slotProps.insert(text, kind, id, mode)
+                                "
+                            />
+                        </template>
+                    </ThreadPane>
                     <p v-else class="p-4 text-sm" :style="{ color: 'var(--ds-text-muted)' }">
                         {{ t.shell.thread_placeholder }}
                     </p>
@@ -1858,6 +1978,17 @@ function dismissCoach(): void {
                             </template>
                             <template #customer>
                                 <CustomerPanel :customer-id="panelCustomerId" :t="tCustomers" />
+                            </template>
+                            <template v-if="tAi && can.ai_copilot_use" #copilot>
+                                <CopilotTab
+                                    :conversation-id="activeThread"
+                                    :can-insert="can.ai_copilot_insert === true"
+                                    :t="tAiFlat"
+                                    :insert="
+                                        (text, kind, id) =>
+                                            insertAiIntoComposer(text, kind, id, 'reply')
+                                    "
+                                />
                             </template>
                         </ContextPanel>
                     </div>

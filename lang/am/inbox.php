@@ -162,6 +162,11 @@ return [
         'media_omitted' => '[አባሪ ከህትመት ተትቷል]',
     ],
     'thread' => [
+        // Doc 09 FR-19c / FR-15 (S09 step 12, countersigned slot-fill packet): the AI marker + translation marker.
+        'ai_author' => 'የAI ረዳት',
+        'translated' => 'በረዳቱ የተተረጎመ',
+        'translated_from' => 'ዋናው፦ :original',
+        'translated_show_original' => 'ዋናውን አሳይ',
         'split_selected' => ':count ተመርጠዋል',
         'split_continue' => 'ወደ አዲስ ትኬት ክፈል',
         'cancel' => 'ሰርዝ',

@@ -92,6 +92,8 @@ return [
     ],
     // FR-14/FR-15 staff UI strings (S09 step 12, Option A [B8]).
     'ui' => [
+        'banner_off' => 'Assistant :surface is OFF for :scope — since :time by :actor (:count switch(es) off)',
+        'banner_all' => 'all channels',
         'empty' => 'Open a conversation to see the assistant here.',
         'loading' => 'Loading assistant…',
         'panel_failed' => 'The assistant panel failed to load.',

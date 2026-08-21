@@ -1,0 +1,180 @@
+
+Running 8 tests using 1 worker
+
+[1/8] [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone
+  1) [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('ai-killswitch-banner')
+    Expected substring: "chatbot"
+    Received string:    " ✦ "
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('ai-killswitch-banner')
+        14 × locator resolved to <p role="status" data-v-ca22b2b6="" data-testid="ai-killswitch-banner" class="border-b px-3 py-1 text-xs"> ✦ </p>
+           - unexpected value " ✦ "
+
+
+      74 |     await dismissCoachMarks(page);
+      75 |     await expect(page.getByTestId('ai-killswitch-banner')).toBeVisible();
+    > 76 |     await expect(page.getByTestId('ai-killswitch-banner')).toContainText('chatbot');
+         |                                                            ^
+      77 |
+      78 |     await page.goto('/admin/ai/kill-switches');
+      79 |     await page.getByTestId('switch-chatbot-telegram-all').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-backoffice.spec.ts:76:60
+
+    Error Context: test-results/ai-backoffice-AC-08-banner-4aa76-ner-flip-back-→-banner-gone-chromium/error-context.md
+
+
+[2/8] [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas
+[3/8] [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16)
+  2) [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:71:5
+
+    Error Context: test-results/ai-copilot-FR-14-the-Copil-ba674-ries-the-artifact-id-FR-16--chromium/error-context.md
+
+
+[4/8] [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Summarize lands a NOTE draft and flips the composer to note mode; Discard clears the card
+  3) [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Summarize lands a NOTE draft and flips the composer to note mode; Discard clears the card 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:114:5
+
+    Error Context: test-results/ai-copilot-FR-15-the-compo-abf18-ode-Discard-clears-the-card-chromium/error-context.md
+
+
+[5/8] [chromium] › tests/Browser/ai-copilot.spec.ts:132:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on
+  4) [chromium] › tests/Browser/ai-copilot.spec.ts:132:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      141 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      142 |         .locator('[data-role="row-open"]')
+    > 143 |         .click();
+          |          ^
+      144 |     await expect(page.getByTestId('composer')).toBeVisible();
+      145 |     await expect(page.getByTestId('ai-slot')).toBeVisible();
+      146 |     await expect(page.getByTestId('ai-actions')).toHaveCount(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:143:10
+
+    Error Context: test-results/ai-copilot-COUNTERSIGNED-O-37067-rs-while-every-switch-is-on-chromium/error-context.md
+
+
+[6/8] [chromium] › tests/Browser/ai-honesty.spec.ts:63:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, a plain agent message does not
+  5) [chromium] › tests/Browser/ai-honesty.spec.ts:63:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, a plain agent message does not 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      57 |         .locator('[data-ticket]', { hasText: rowText })
+      58 |         .locator('[data-role="row-open"]')
+    > 59 |         .click();
+         |          ^
+      60 |     await expect(page.getByTestId('composer')).toBeVisible();
+      61 | }
+      62 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:59:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:66:5
+
+    Error Context: test-results/ai-honesty-AC-05-DOM-the-A-b5eea-lain-agent-message-does-not-chromium/error-context.md
+
+
+[7/8] [chromium] › tests/Browser/ai-honesty.spec.ts:103:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text)
+  6) [chromium] › tests/Browser/ai-honesty.spec.ts:103:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      57 |         .locator('[data-ticket]', { hasText: rowText })
+      58 |         .locator('[data-role="row-open"]')
+    > 59 |         .click();
+         |          ^
+      60 |     await expect(page.getByTestId('composer')).toBeVisible();
+      61 | }
+      62 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:59:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:104:5
+
+    Error Context: test-results/ai-honesty-AC-05-DOM-the-C-ef254-ry-the-✦-accent-label-text--chromium/error-context.md
+
+
+[8/8] [chromium] › tests/Browser/ai-honesty.spec.ts:110:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there
+  7) [chromium] › tests/Browser/ai-honesty.spec.ts:110:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Deleted Account Fixture' }).locator('[data-role="row-open"]')
+
+
+      57 |         .locator('[data-ticket]', { hasText: rowText })
+      58 |         .locator('[data-role="row-open"]')
+    > 59 |         .click();
+         |          ^
+      60 |     await expect(page.getByTestId('composer')).toBeVisible();
+      61 | }
+      62 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:59:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:113:5
+
+    Error Context: test-results/ai-honesty-Doc-08-EC-03-ch-90780-ount-fixture-and-ONLY-there-chromium/error-context.md
+
+
+  7 failed
+    [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone 
+    [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+    [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Summarize lands a NOTE draft and flips the composer to note mode; Discard clears the card 
+    [chromium] › tests/Browser/ai-copilot.spec.ts:132:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:63:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, a plain agent message does not 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:103:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:110:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there 
+  1 passed (3.5m)
+exit 1
