@@ -14,6 +14,8 @@ return [
         'template' => 'ስለመልእክትዎ እናመሰግናለን። የቡድናችን አባል በቅርቡ ያነጋግርዎታል።',
     ],
     'notify' => [
+        'anomaly' => 'የAI ያልተለመደ ሁኔታ ማንቂያ',
+        'digest' => 'የAI ዕለታዊ ማጠቃለያ',
         'killswitch_changed' => 'የAI ማቋረጫ ማብሪያ ተቀይሯል',
         'quota_80' => 'የAI ዕለታዊ የቶከን ኮታ 80% ደርሷል',
     ],
@@ -49,6 +51,25 @@ return [
             'improve_text' => 'የተሻሻለ ጽሑፍ',
             'translate' => 'ትርጉም',
             'note_draft' => 'የውይይት ማጠቃለያ (የማስታወሻ ረቂቅ)',
+        ],
+    ],
+    // FR-17 supervisor surface (S09 step 11): anomaly alert templates + the
+    // digest's TEMPLATE bullets (the fallback when the model's six lines fail
+    // the guards — numbers verbatim, never invented).
+    'supervisor' => [
+        'anomaly' => [
+            'intent_delta' => 'የ:intent ውይይቶች ከ:since ጀምሮ +:pct%',
+            'intent_new' => 'የ:intent ውይይቶች ከ:since ጀምሮ ታይተዋል (መነሻ የለም)',
+            'volume_delta' => 'የውይይት መጠን ከ:since ጀምሮ +:pct%',
+            'sentiment_drop' => 'አማካይ ስሜት ከ:since ጀምሮ በ:drop ነጥብ ቀንሷል',
+        ],
+        'digest' => [
+            'tickets' => ':created ቲኬቶች ተከፍተዋል፣ :resolved ተፈትተዋል',
+            'ai_resolved' => ':count ውይይቶች ያለ ቲኬት በረዳቱ ተፈትተዋል',
+            'handoffs' => ':count ወደ ወኪሎች ማስተላለፎች (:reasons)',
+            'rg' => ':count የኃላፊነት ጨዋታ ምልክቶች በረዳቱ ተነስተዋል',
+            'anomalies' => ':count ያልተለመዱ ሁኔታ ማንቂያዎች',
+            'intents' => 'ዋና ዓላማዎች፦ :intents',
         ],
     ],
 ];

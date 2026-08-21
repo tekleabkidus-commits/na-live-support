@@ -237,12 +237,21 @@ function cleanupTenants(array $tenantIds): void
         // so ticket children first, tickets before conversations. Self-FKs inside
         // tickets (merged_into, origin/previous/parent) are fine in one statement:
         // NO ACTION FK triggers fire at end of statement, when both sides are gone.
+        // Doc 07 (S09 step 11 harness fix — the first committed-fixture test
+        // with inbox rows found cleanup blind to them): list items reference
+        // tickets; the bell/read/views/prefs/selections/status rows reference
+        // users — all before tickets and users.
+        'ticket_list_items', 'inbox_notifications', 'inbox_read_markers', 'inbox_saved_views',
+        'inbox_selection_tokens', 'inbox_user_prefs', 'agent_statuses',
         'ticket_message_anchors', 'ticket_bulk_job_items', 'ticket_bulk_jobs',
         'ticket_merge_snapshots', 'ticket_handoff_packets', 'ticket_followers', 'tickets',
         // Doc 04: messages reference conversations, conversations reference
         // customers — so drafts/revisions/messages first, customers last.
         'message_drafts', 'message_revisions', 'legal_hold_messages', 'message_dead_letters',
         'messages', 'conversations',
+        // Doc 08 (same harness fix): every customer child before customers.
+        'customer_block_cascade_items', 'customer_field_values', 'customer_identity_conflicts',
+        'customer_merge_snapshots', 'customer_notes', 'rg_flag_history',
         'customer_identities', 'customers',
         'events', 'outbox', 'audit_log', 'tenant_settings', 'tenant_sequences',
         'tenant_provisioning_steps', 'tenant_quota_usage', 'widgets', 'webhook_credentials',

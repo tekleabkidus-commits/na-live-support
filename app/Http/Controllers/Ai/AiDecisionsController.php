@@ -38,6 +38,14 @@ final class AiDecisionsController extends Controller
             ->orderByDesc('id')
             ->limit($limit + 1);
 
+        // S09 step 11: the SUPERVISOR FEED is this same door filtered by
+        // surface (FR-17's outputs are decision rows) — a curated filter,
+        // same allowlist, no second read path.
+        $surface = $request->string('surface')->toString();
+        if (in_array($surface, ['chatbot', 'copilot', 'supervisor'], true)) {
+            $query->where('surface', $surface);
+        }
+
         if ($cursor !== '') {
             $decoded = json_decode((string) base64_decode($cursor, true), true);
             if (is_array($decoded) && is_string($decoded['created_at'] ?? null) && is_string($decoded['id'] ?? null)) {

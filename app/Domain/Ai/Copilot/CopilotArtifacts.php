@@ -63,6 +63,7 @@ final class CopilotArtifacts
         ?array $requestPayload = null,
         ?string $ticketId = null,
         ?string $action = null,
+        ?string $intent = null,
     ): string {
         $id = (string) new UuidV7;
 
@@ -77,6 +78,7 @@ final class CopilotArtifacts
             ticketId: $ticketId,
             messageId: $messageId,
             language: $language,
+            intent: $intent,
             action: $action ?? ($errorCategory === null ? 'artifact' : 'refused'),
             tokensIn: $tokensIn,
             tokensOut: $tokensOut,

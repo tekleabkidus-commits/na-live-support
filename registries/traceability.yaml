@@ -2158,7 +2158,7 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
       FLIPPED AT S09 STEP 9 (the suite landed at step 8; the customer side at
       step 9): FailoverDrillTest — primary fails -> breaker trips -> DEGRADED
@@ -2169,11 +2169,13 @@ entries:
       provider exhaustion at classify OR at the turn -> bypass_handoff / the
       handoff template — zero unanswered customers in every branch.
     gap: >-
-      PARTIAL: the degraded COPILOT CARD landed at step 10 (CopilotPanelTest
-      FS-01 case: chain exhausted -> state=degraded card with KB links + a
-      provider_error row, pushed as the stream's last frame; a degraded attempt
-      consumes no regeneration). The Supervisor pause (step 11) is the one
-      ladder rung whose surface does not exist yet.
+      None for the scripted drill's clauses. Every ladder rung now has its proof:
+      chatbot bypass (ChatbotTurnTest), Copilot degraded card (CopilotPanelTest,
+      step 10), Supervisor PAUSE + auto-resume (SupervisorTest, step 11: every
+      hop DOWN -> all four tasks pause with a recorded row and ZERO model calls;
+      a healthy transition resumes with nothing to un-pause; the supervisor kill
+      switch pauses the same way while the chatbot surface stays on). SS-04's
+      events-only post-incident report is Doc 15's rendering [D15].
   - ac_ref: "Doc09 AC-10"
     suite_path: manual
     type: manual

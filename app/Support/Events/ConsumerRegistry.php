@@ -68,7 +68,8 @@ final class ConsumerRegistry
         //    agent keeping a customer in search would be a scope leak. The
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],

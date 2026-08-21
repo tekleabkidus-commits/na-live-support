@@ -702,4 +702,41 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    // Doc 09 FR-17 (S09 step 11): the supervisor surface's knobs — anomaly
+    // noise floor + delta threshold, the very-negative sentiment line, the
+    // QA pre-score sample size. Platform-maximum validation; tenant-editable
+    // where the document makes it the operator's call (thresholds), not the
+    // sample size (cost).
+    [
+        'key' => 'ai.supervisor.anomaly_min_volume',
+        'type' => 'int',
+        'default' => 5,
+        'validation' => 'required|integer|min:1|max:10000',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        'key' => 'ai.supervisor.anomaly_delta_pct',
+        'type' => 'int',
+        'default' => 200,
+        'validation' => 'required|integer|min:10|max:10000',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        'key' => 'ai.supervisor.very_negative_sentiment',
+        'type' => 'int',
+        'default' => -2,
+        'validation' => 'required|integer|min:-2|max:0',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        'key' => 'ai.supervisor.qa_sample_size',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:0|max:200',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc09',
+    ],
 ];

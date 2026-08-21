@@ -186,4 +186,22 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 FR-17 (S09 step 11): anomaly alerts ("withdrawal complaints
+        // +240% since 14:00") + sentiment-watch feed items to supervisors.
+        'category_key' => 'notify.ai.anomaly',
+        'label_i18n_key' => 'ai.notify.anomaly',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc09',
+    ],
+    [
+        // Doc 09 FR-17 (S09 step 11): the daily digest's delivery (per
+        // manager, localized).
+        'category_key' => 'notify.ai.digest',
+        'label_i18n_key' => 'ai.notify.digest',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc09',
+    ],
 ];

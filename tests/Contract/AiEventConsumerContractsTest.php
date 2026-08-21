@@ -134,5 +134,6 @@ test('completeness: every event the registry maps to an App\\Jobs\\Ai durable co
     $uncontracted = array_values(array_diff(aiDurableEvents(), $contracted));
 
     expect($uncontracted)->toBe([], sprintf('durable Doc 09 subscription(s) with NO contract fixture: %s', implode(', ', $uncontracted)));
-    expect(aiDurableEvents())->toBe(['media.needs_ocr', 'media.needs_transcript', 'message.received', 'ticket.reopened', 'ticket.resolved']);
+    // S09 step 11: ticket.created joined (GenerateTicketSubject — Doc 06 FR-03's generation half); the pin moves deliberately, same commit as the registry + fixture.
+    expect(aiDurableEvents())->toBe(['media.needs_ocr', 'media.needs_transcript', 'message.received', 'ticket.created', 'ticket.reopened', 'ticket.resolved']);
 });

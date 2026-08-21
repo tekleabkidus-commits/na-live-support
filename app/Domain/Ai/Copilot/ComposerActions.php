@@ -111,13 +111,16 @@ final class ComposerActions
             ->orderByDesc('created_at')
             ->get(['id', 'action', 'created_at']);
 
+        $classification = $this->latestClassification($conversationId);
+        $intent = is_string($classification['intent'] ?? null) ? $classification['intent'] : null;
+
         if ($prior->count() >= self::REGENERATE_LIMIT) {
             $kb = $this->kbFor($conversation, $anchor['body'] ?? '', $language);
             $alreadyLocked = DB::table('ai_decisions')->where('conversation_id', $conversationId)->where('surface', 'copilot')
                 ->where('action', 'low_confidence_locked')->when($anchorId !== null, fn ($q) => $q->where('message_id', $anchorId))->exists();
             if (! $alreadyLocked) {
-                // Telemetry for FR-20's weekly unanswerable review: one row per anchor.
-                $this->artifacts->mint('draft_reply', 'locked', $agentId, $conversationId, $anchorId, $language, null, 'none', 'none', [], 0, 0, 0, null, ['locked' => true], null, null, 'low_confidence_locked');
+                // Telemetry for FR-20's weekly unanswerable review: one row per anchor, carrying the intent it groups under.
+                $this->artifacts->mint('draft_reply', 'locked', $agentId, $conversationId, $anchorId, $language, null, 'none', 'none', [], 0, 0, 0, null, ['locked' => true], null, null, 'low_confidence_locked', $intent);
             }
 
             return ['state' => 'locked', 'kind' => 'draft_reply', 'notices' => ['ai.copilot.notice.regenerate_exhausted'], 'kb' => $kb, 'regenerations' => ['used' => $prior->count(), 'limit' => self::REGENERATE_LIMIT]];
@@ -149,7 +152,6 @@ final class ComposerActions
         $allowedRefs = array_values(array_unique(array_map(static fn (array $c): string => $c['article_ref'], $retrieval['chunks'])));
         $kb = array_map(static fn (array $c): array => ['article_ref' => $c['article_ref'], 'excerpt' => mb_substr($c['content'], 0, 160)], $retrieval['chunks']);
 
-        $classification = $this->latestClassification($conversationId);
         $handoffBelow = $this->thresholds->value('handoff_below', $endpointRef);
         $notices = [];
         if ($retrieval['degraded']) {

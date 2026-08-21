@@ -768,7 +768,7 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/CreateTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups, Doc08/SearchIndexer
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups, Doc08/SearchIndexer, Doc09/GenerateTicketSubject
 
 ## `ticket.deescalated`
 

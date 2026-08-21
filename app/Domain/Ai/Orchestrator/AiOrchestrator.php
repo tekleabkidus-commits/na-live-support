@@ -180,6 +180,17 @@ final class AiOrchestrator
         throw new AllProvidersExhausted('every embeddings provider failed or sits tripped', previous: $lastFailure);
     }
 
+    /**
+     * The resolved chain for a tier (published provider_routing, else the
+     * seed) — read-only; the Supervisor's FS-01 pause consults it.
+     *
+     * @return list<array{provider: string, model: string}>
+     */
+    public function chainFor(string $tier): array
+    {
+        return $this->routingFor($tier);
+    }
+
     /** @return list<array{provider: string, model: string}> */
     private function routingFor(string $tier): array
     {

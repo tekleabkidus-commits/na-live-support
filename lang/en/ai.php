@@ -24,6 +24,8 @@ return [
         'template' => 'Thanks for your message. A member of our team will be with you shortly.',
     ],
     'notify' => [
+        'anomaly' => 'AI anomaly alert',
+        'digest' => 'AI daily digest',
         'killswitch_changed' => 'AI kill switch changed',
         'quota_80' => 'AI daily token quota at 80%',
     ],
@@ -60,6 +62,25 @@ return [
             'improve_text' => 'Improved text',
             'translate' => 'Translation',
             'note_draft' => 'Thread summary (note draft)',
+        ],
+    ],
+    // FR-17 supervisor surface (S09 step 11): anomaly alert templates + the
+    // digest's TEMPLATE bullets (the fallback when the model's six lines fail
+    // the guards — numbers verbatim, never invented).
+    'supervisor' => [
+        'anomaly' => [
+            'intent_delta' => ':intent conversations +:pct% since :since',
+            'intent_new' => ':intent conversations appeared since :since (no baseline)',
+            'volume_delta' => 'Conversation volume +:pct% since :since',
+            'sentiment_drop' => 'Average sentiment dropped :drop points since :since',
+        ],
+        'digest' => [
+            'tickets' => ':created tickets opened, :resolved resolved',
+            'ai_resolved' => ':count conversations resolved by the assistant without a ticket',
+            'handoffs' => ':count handoffs to agents (:reasons)',
+            'rg' => ':count responsible-gaming flags raised by the assistant',
+            'anomalies' => ':count anomaly alerts',
+            'intents' => 'Top intents: :intents',
         ],
     ],
 ];

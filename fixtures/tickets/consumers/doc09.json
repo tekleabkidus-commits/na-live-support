@@ -1,7 +1,7 @@
 {
   "doc": "Doc09",
   "spec": "Doc 06 NFR-06/T-09 — consumer contract for Doc 09's ticket.* consumption (S09 step 9; ADR 0011)",
-  "note": "AiOutcomeEnrichmentConsumer reads ticket_id ONLY from the payload and JOINS ai_decisions.ticket_id (the handoff wrote it) — T-08's enrichment: resolved -> 'resolved', reopened -> 'resolved_then_reopened'. Values come from truth, never the payload.",
+  "note": "AiOutcomeEnrichmentConsumer reads ticket_id ONLY from the payload and JOINS ai_decisions.ticket_id (the handoff wrote it) — T-08's enrichment: resolved -> 'resolved', reopened -> 'resolved_then_reopened'. Values come from truth, never the payload. GenerateTicketSubject (S09 step 11, Doc 06 FR-03's generation half) reads ticket_id ONLY and re-reads the ticket + its first customer messages from truth; writes through SubjectWriter::generated().",
   "entries": [
     {
       "event": "ticket.resolved",
@@ -15,6 +15,15 @@
     {
       "event": "ticket.reopened",
       "consumer": "Doc09/OutcomeEnrichment",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc09/GenerateTicketSubject",
       "schema_version": 1,
       "reads": [
         "tenant_id",
