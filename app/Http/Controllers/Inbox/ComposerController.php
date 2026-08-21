@@ -55,16 +55,21 @@ final class ComposerController extends Controller
         private readonly TicketTransitionService $transitions,
         private readonly ListProjector $projector,
         private readonly \App\Domain\Tickets\Assignment\AssignTicket $assign,
+        // COUNTERSIGNED CORE EDIT (S09 step 10 packet): Doc 09's send-time seam —
+        // FR-15's original-in-metadata + FR-16's verdict ride the agent's send.
+        private readonly \App\Domain\Ai\Copilot\CopilotSendMeta $copilot,
     ) {}
 
     public function reply(Request $request, string $conversationId): JsonResponse
     {
-        /** @var array{body: string, idempotency_key?: string, then?: string, confirm_reopen?: bool} $input */
+        /** @var array{body: string, idempotency_key?: string, then?: string, confirm_reopen?: bool, ai_artifact_id?: string} $input */
         $input = $request->validate([
             'body' => ['required', 'string', 'max:16384'],
             'idempotency_key' => ['sometimes', 'string', 'max:64'],
             'then' => ['sometimes', 'string', 'in:resolve,pending_customer'],
             'confirm_reopen' => ['sometimes', 'boolean'],
+            // Doc 09 FR-15/FR-16 (countersigned packet): the Copilot artifact this body came from.
+            'ai_artifact_id' => ['sometimes', 'uuid'],
         ]);
 
         /** @var User $user */
@@ -90,14 +95,30 @@ final class ComposerController extends Controller
             $this->projector->recomputeTicket($ticket->identifier());
         }
 
+        // Doc 09 FR-15 (countersigned packet): a translate artifact carries its
+        // ORIGINAL into the message's channel_meta at compose time — one write,
+        // same row; FR-16's send-time verdict rides the same call. Doc 09 owns
+        // the mapping: an unknown / foreign / non-insertable artifact, or a
+        // caller without ai.copilot.insert_draft, yields [] and the reply
+        // proceeds exactly as without the parameter.
+        $channelMeta = isset($input['ai_artifact_id'])
+            ? $this->copilot->channelMetaForSend($user, $input['ai_artifact_id'], $conversation->identifier(), $input['body'])
+            : [];
+
         try {
-            $message = $this->compose->compose($conversation, 'agent', $user->identifier(), 'text', $input['body'], $input['idempotency_key'] ?? null);
+            $message = $this->compose->compose($conversation, 'agent', $user->identifier(), 'text', $input['body'], $input['idempotency_key'] ?? null, $channelMeta);
         } catch (DomainException $e) {
             return ProblemDetails::response(ErrorCode::ConversationBlocked, 422, $e->getMessage());
         }
 
         // FR-22: a successful send clears the sender's draft (tombstone).
         $this->drafts->clearOnSend($user, $conversation);
+
+        // Doc 09 FR-16 (countersigned packet): the verdict against the message
+        // that actually went out — after the row exists, never before.
+        if (isset($input['ai_artifact_id'])) {
+            $this->copilot->recordSent($user, $input['ai_artifact_id'], $message->identifier());
+        }
 
         // Doc 06 FR-05/BR-03 (ruling (c), step 14): the first staff public
         // reply IS a claim — through the owning service's own door, honoring

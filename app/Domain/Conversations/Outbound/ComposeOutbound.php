@@ -43,6 +43,9 @@ final class ComposeOutbound
         private readonly \App\Domain\Customers\Blocking\CustomerSendGuard $customerGuard,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $channelMeta  COUNTERSIGNED CORE EDIT (S09 step 10 packet): passthrough to persistOutbound, nothing else
+     */
     public function compose(
         Conversation $conversation,
         string $authorType,
@@ -50,6 +53,7 @@ final class ComposeOutbound
         string $kind,
         ?string $body,
         ?string $idempotencyKey = null,
+        array $channelMeta = [],
     ): Message {
         if ($kind === 'note') {
             throw new DomainException('notes are not deliverable and never compose as outbound (SEC-07/BR-01) — use the notes path.');
@@ -77,8 +81,8 @@ final class ComposeOutbound
             }
         }
 
-        $message = DB::transaction(function () use ($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey): Message {
-            $message = $this->messages->persistOutbound($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey);
+        $message = DB::transaction(function () use ($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey, $channelMeta): Message {
+            $message = $this->messages->persistOutbound($conversation, $authorType, $authorId, $kind, $body, $idempotencyKey, $channelMeta);
 
             $this->events->publish('message.queued', [
                 'tenant_id' => $conversation->getAttribute('tenant_id'),

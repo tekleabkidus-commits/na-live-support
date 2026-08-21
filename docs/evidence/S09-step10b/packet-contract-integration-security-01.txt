@@ -1,0 +1,264 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\FakeAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m4.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the second adapter implements ONLY the base contract — the m[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole inbound pipeline works on the second adapter uncha[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole outbound pipeline works on the second adapter unch[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the capability envelope binds the core, not conditionals — a[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AiEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-21: the ai.* family is CLOSED at seven (six + the approved rule-[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mQ7/SEC-06: every ai.* payload is identifiers + closed categories —[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mai.decision.logged is SAMPLED by a registered platform setting (FR-[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every Doc 09 fixture entry matches the catalog — event ex[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to an App\Jobs\Ai durab[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\CustomerEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 08 durable con[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe rollup consumer is registered for the customer merge family — t[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\InboxEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 07 durable con[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe health consumer is registered for channel.health.changed — the[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Integration\AsTenantAbortSurfacingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit surfaces the REAL error when the callback aborts the transaction[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit still restores the previous binding on the normal path[39m[90m           [39m [90m0.03s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Integration\SessionRevocationSocketTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit deletes the session key and drops it from the index when revoked[39m[90m…[39m [90m0.27s[39m  
+  [33;1m-[39;22m[90m [39m[90mit publishes session.revoked so other nodes learn about it (T-04)[39m[90m [39m[33m→[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closes a live Reverb socket within 2 seconds of revocation (AC-0[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 01 EC-03: suspending a tenant kills its LIVE sessions, not j[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves OTHER tenants' sessions untouched when one tenant is susp[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Integration\StackSmokeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery port compose.yaml publishes has a real listener on the host[39m[90m   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhost-published database ports reach the stack containers, not a hos[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe running app server answers /up over TLS with a chain that valid[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe app serves NOTHING over cleartext: :80 only redirects (SEC-06)[39m[90m  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe app certificate covers every name the stack addresses it by[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpostgres role physics: app cannot bypass RLS, platform_admin is the[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mapp credentials cannot authenticate as platform_admin[39m[90m               [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mboth redis instances respond and are distinct servers with opposite[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhorizon supervises all twelve queue families[39m[90m                        [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreverb accepts a websocket connection over WSS with a validated cha[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04/BR-06: planted RG flag content and staff notes NEVER ente[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the exclusion holds through the FULL assembled prompt, a[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the allowlist is honest in the OTHER direction: language, prior-[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CustomerSearchScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 1: tenant A NEVER sees tenant B's indexed customers[39m[90m… [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 2: the customers-module scope filter is INJECTED ser[39m[90m…[39m [90m0.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: the HTTP door accepts a QUERY STRING and nothing else —[39m[90m… [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07: HISTORICAL usernames hit (FR-06) — a renamed Telegram ide[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 / §14: Amharic name search returns the expected customers[39m[90m… [39m [90m3.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\DuplicateHintScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: the hint is COUNT + scope-checked links — All-scope gets[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 through the DOOR: the card's hint payload is {count, link[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no player_id on the customer → no hint at all (null, not a zero-[39m[90m…[39m [90m0.07s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Security\EnumerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body for an existing and a non-existing[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body regardless of which TENANT the add[39m[90m…[39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends the same work across 0, 1 and N candidate paths (AC-01 ti[39m[90m…[39m [90m8.95s[39m  
+  [33;1m-[39;22m[90m [39m[90mit does the password-verification work even when no account matches[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never reveals which of several tenants the address belongs to, e[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical reset-request body across 0, 1 and N ca[39m[90m…[39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers reset requests at the fixed floor whatever matched — and[39m[90m…[39m [90m2.07s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Security\HttpsRefusalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a cleartext request in the testing environment[39m[90m           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a cleartext API request with the problem-details shape[39m[90m   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit serves the same request over TLS[39m[90m                                 [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses cleartext even when the app believes it is production[39m[90m    [39m [90m0.02s[39m  
+  [33;1m-[39;22m[90m [39m[90mit honours a trusted proxy's X-Forwarded-Proto rather than double-r[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks the session cookie secure and http-only in every environme[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\InboxSearchScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe[39m[90m…[39m [90m1.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-09 layer 2: the Own-scope filter is INJECTED server-side — no[39m[90m…[39m [90m1.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: the HTTP door accepts a QUERY STRING and nothing else —[39m[90m… [39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: Meilisearch down → inline "unavailable", never a 500 — an[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING D1: Meilisearch down → the palette answers its OWN unavai[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING D2 (the recorded behavior change): a viewer WITHOUT custo[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING D4/SCOPE: an Own-scoped viewer's palette shows ONLY their[39m[90m…[39m [90m0.81s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\InboxSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows[39m[90m…[39m [90m1.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC posture: the hydration order is the ZSET's and out-of-scope[39m[90m… [39m [90m1.56s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\LogScrubberTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08: every configured channel carries SecurityLogTap — null a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs secret-shaped keys on the rendered sink and passes benign[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scrubs the webhook auth headers in nested access-log shapes (ste[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never scrubs identifier suffixes — token_id and key_id stay trac[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-08/C-14: every rendered record carries trace_id and tenant_i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a real refused request logs WITH a trace_id and WITHOUT the pres[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: seeded credentials from every real flow are absent from t[39m[90m…[39m [90m3.51s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\MiddlewareOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit orders tenant-resolve before tenant-state before permission on t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never enforces tenant state on a route that has not resolved a t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED bearer stack binder-first — the sorter, not[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the bearer surface stateless — no session, no cookies, no[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED widget stack binder → CORS → guard → state ([39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the widget surface sessionless — no session, no cookie enc[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED webhook stacks binder → throttle → secret →[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the permission alias to the RequirePermission middlewa[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoImpersonationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit exposes no impersonation route[39m[90m                                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers no impersonation permission, setting, flag, or notific[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit contains no impersonation class or file in the application tree[39m[90m  [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoVerifiedAffordanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-shaped column on any customer table (schema swee[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-named component anywhere in the client tree (BR-[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the customer UI namespaces and customers.* lang files free[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Customers server namespaces free of any verified API f[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoteIsolationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDeliverableKind is exactly the seven customer-content kinds — no no[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe single kind-conversion point refuses note and system, and maps[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma channel cannot originate a note: NormalizedInbound refuses kind=n[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDeliverablePayload is constructible only through kind-safe named co[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno adapter-namespace method accepts message kinds or message rows —[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\PhoneEmailScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: near-miss controls survive to the sink — the scanner and[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES under innocent keys never reach t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES inside the message string itself[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: benign context survives — UUIDs, timezone offsets, _id k[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the four DB sinks — per-sink plant→detect→rollback contr[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\RgVisibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01/BR-03: an unpermitted payload NEVER NAMES the rg columns[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permitted payload carries the rg block, values intact[39m[90m        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06/AC-B4-01: RG reads are FRESH against a warm cache — an in[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: the history is immutable LIVE — app UPDATE and DELETE bot[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05: Doc 03's capability cache already bypasses customers.rg_fl[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecretsNeverSerializeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08/C-13: seeded credentials never serialize into jobs, outbox[39m[90m…[39m [90m3.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: the events sink, after a real committed relay run, carrie[39m[90m…[39m [90m3.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-13 model pins: no Doc 02-minted credential column serializes o[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecurityHeadersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on the root web page[39m[90m            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on an authenticated staff API r[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on an error response[39m[90m            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rotates the CSP nonce on every request[39m[90m                           [39m [90m0.03s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Security\SessionFixationTest[39m
+  [33;1m-[39;22m[90m [39m[90mit regenerates the session id when the password is accepted (SEC-04[39m[90m…[39m [90m0.03s[39m  
+  [33;1m-[39;22m[90m [39m[90mit does not carry pre-login session data into the authenticated ses[39m[90m…[39m [90m0.02s[39m  
+  [33;1m-[39;22m[90m [39m[90mit regenerates again after the 2FA challenge (SEC-04, boundary 2)[39m[90m [39m[33m→[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit writes a signed tenant hint at login that matches the account te[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: an authenticated request with a MATCHING hint[39m[90m… [39m [90m0.16s[39m  
+  [33;1m-[39;22m[90m [39m[90mit treats a MISMATCHED tenant hint as no session (Q7)[39m[90m [39m[33m→ NOT PROVEN:[39m[90m…[39m [90m0.02s[39m  
+  [33;1m-[39;22m[90m [39m[90mit treats a TAMPERED or ABSENT tenant hint as no session (Q7)[39m[90m [39m[33m→ NOT[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit signs and verifies only intact values[39m[90m                            [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\TelegramScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: a bot-token-shaped VALUE under an innocent key never rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: a token inside the MESSAGE string is scrubbed — free tex[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\TelegramSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01: no screen props ever carry the stored token — bots, heal[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01: the model itself hides the token from serialization (the[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03 POSITIVE CONTROLS: phones, contact payloads and forwarded[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03/EC-12: RawUpdateLog stores raw but READS masked — and no[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-30 BOTH WAYS: simulate-window-expiry expires a real window ou[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03 permission DENY: without telegram.health.view the health[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WebhookComparatorPinTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit compares the header secret and the HMAC through hash_equals, pin[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends replay nonces through an atomic SET NX, pinned at the sou[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetPartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a valid visitor session on the staff and bearer surfaces[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses staff credentials on the widget surface (BR-06, staff →[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the widget guard no user provider to misconfigure (BR-06 s[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a visitor onto exactly their own Reverb channel and n[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the widget broadcasting door to anyone who is not a visi[39m[90m…[39m [90m0.16s[39m  
+
+  [90mTests:[39m    [33;1m8 skipped[39;22m[90m,[39m[39m [39m[32;1m180 passed[39;22m[90m (4001 assertions)[39m
+  [90mDuration:[39m [39m52.33s[39m
+
+exit 0

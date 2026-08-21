@@ -86,6 +86,14 @@ final class MessageRepository
      * Persist one outbound message in `queued` (FR-12) — every compose source (agent,
      * AI, automation, system) starts here; the outbox job is the caller's half of the
      * same transaction.
+     *
+     * COUNTERSIGNED CORE EDIT (S09 step 10 packet, additive, default-preserving):
+     * `$channelMeta` lands in channel_meta AT INSERT — the one write of that column
+     * for an outbound row. First consumer: Doc 09 FR-15's ai_translation (the
+     * agent's original beside the sent translation, for the hover). The absent-param
+     * path is byte-identical to the prior behavior (proven by TranslateSendTest).
+     *
+     * @param  array<string, mixed>  $channelMeta
      */
     public function persistOutbound(
         Conversation $conversation,
@@ -94,8 +102,11 @@ final class MessageRepository
         string $kind,
         ?string $body,
         ?string $idempotencyKey = null,
+        array $channelMeta = [],
     ): Message {
-        return Message::query()->create([
+        // An empty $channelMeta leaves the column to its DB default ('{}') — the
+        // absent-param row is byte-identical to the pre-edit row (json [] ≠ {}).
+        return Message::query()->create(($channelMeta === [] ? [] : ['channel_meta' => $channelMeta]) + [
             'conversation_id' => $conversation->identifier(),
             'direction' => 'out',
             'author_type' => $authorType,
