@@ -59,7 +59,7 @@ async function openThread(page: Page, email = AGENT_EMAIL): Promise<void> {
     await page.goto('/inbox');
     await dismissCoachMarks(page);
     await page
-        .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+        .locator('[data-ticket]', { hasText: 'Copilot Fixture Player' })
         .locator('[data-role="row-open"]')
         .click();
     await expect(page.getByTestId('composer')).toBeVisible();

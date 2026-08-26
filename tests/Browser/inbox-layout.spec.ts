@@ -167,14 +167,21 @@ test('§9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures 
     await expect(page.getByTestId('badge-copilot')).toHaveCount(0);
 
     // The Customer slot is FILLED (S08 escalation #3 part 2) — with no thread
-    // open it states its empty contract honestly; Copilot still states its seam.
+    // open it states its empty contract honestly. The Copilot slot is FILLED
+    // too since the S09 countersigned packet: a permitted viewer sees
+    // CopilotTab's own empty contract here; the pre-packet slot text is now
+    // the NO-PERMISSION fallback, proven on the Read Only user in
+    // ai-copilot.spec (post-close fix: the old 'Doc 09' seam assertion was
+    // the pre-packet truth and went red on CI run 32496238558).
     await page.getByTestId('tab-customer').click();
     // toHaveCount, not toBeVisible: a parallel worker (AC-01, same user) may
     // have server-persisted a collapsed context rail — presence is the claim.
     await expect(page.getByTestId('customer-panel-fill')).toHaveCount(1);
     await expect(page.getByTestId('panel-customer')).toContainText('Open a conversation');
     await page.getByTestId('tab-copilot').click();
-    await expect(page.getByTestId('panel-copilot')).toContainText('Doc 09');
+    await expect(page.getByTestId('panel-copilot')).toContainText(
+        'Open a conversation to see the assistant here.',
+    );
 
     // With the seam override (local/ci): ONLY the copilot dot is seam-driven
     // now — the customer badge is REAL (per-viewer RG, the retired

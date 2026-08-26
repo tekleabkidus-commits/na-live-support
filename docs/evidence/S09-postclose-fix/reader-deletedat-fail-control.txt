@@ -1,0 +1,29 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\ListProjectorTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit S09 POST-CLOSE RULING — tombstones never serve the list: a DELET[39m[90m…[39m [90m5.94s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\ListProjectorTest[22m [90m>[39m it S09 POST-CLOSE RULING…    
+[39;1m  the deleted body kept serving as the snippet — the list leaks what the thread hides
+Failed asserting that two strings are identical.
+  [39;22m[31m-'የመጀመሪያው መልእክት'[39m[39;1m
+  [39;22m[32m+'the newer english message'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Inbox/ListProjectorTest.php[39m:[32m111[39m
+    107▕     // list must not keep saying its body — the PRIOR public message serves.
+    108▕     DB::table('messages')->where('id', $newer)->update(['deleted_at' => DB::raw('clock_timestamp()')]);
+    109▕     $projector->recomputeTicket($ticket->identifier());
+    110▕     $row = DB::table('ticket_list_items')->where('ticket_id', $ticket->identifier())->first();
+  ➜ 111▕     expect($row->snippet)->toBe('የመጀመሪያው መልእክት', 'the deleted body kept serving as the snippet — the list leaks what the thread hides')
+    112▕         ->and($row->language)->toBe('am', 'the FR-09 language chip still follows the deleted message');
+    113▕ 
+    114▕     // Tombstone the last one too: the existing empty-snippet contract, not
+    115▕     // an error and not a resurrected body.
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/ListProjectorTest.php[39;22m:[39;1m111[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m6.02s[39m
+

@@ -80,6 +80,47 @@ it('EC-11: a media-only last message stores the KIND as the placeholder key — 
         ->and($row->snippet)->toBeNull('a media-only message leaked body text (or a storage key) into the snippet');
 });
 
+it('S09 POST-CLOSE RULING — tombstones never serve the list: a DELETED last public message falls back to the prior message\'s snippet AND language, never the deleted body; with no public message left, the empty-snippet contract holds', function (): void {
+    [$tenant, $conversation, $ticket] = ticketFixture('open');
+    $tenantId = $tenant->identifier();
+
+    $older = (string) Str::uuid7();
+    DB::table('messages')->insert([
+        'id' => $older, 'tenant_id' => $tenantId, 'conversation_id' => $conversation->identifier(),
+        'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
+        'body' => 'የመጀመሪያው መልእክት', 'language' => 'am', 'is_internal' => false,
+    ]);
+    $newer = (string) Str::uuid7();
+    DB::table('messages')->insert([
+        'id' => $newer, 'tenant_id' => $tenantId, 'conversation_id' => $conversation->identifier(),
+        'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
+        'body' => 'the newer english message', 'language' => 'en', 'is_internal' => false,
+    ]);
+
+    $projector = app(ListProjector::class);
+    $projector->recomputeTicket($ticket->identifier());
+    $row = DB::table('ticket_list_items')->where('ticket_id', $ticket->identifier())->first();
+    expect($row->snippet)->toBe('the newer english message')
+        ->and($row->language)->toBe('en');
+
+    // Tombstone the newest: the thread renders it as a placeholder, so the
+    // list must not keep saying its body — the PRIOR public message serves.
+    DB::table('messages')->where('id', $newer)->update(['deleted_at' => DB::raw('clock_timestamp()')]);
+    $projector->recomputeTicket($ticket->identifier());
+    $row = DB::table('ticket_list_items')->where('ticket_id', $ticket->identifier())->first();
+    expect($row->snippet)->toBe('የመጀመሪያው መልእክት', 'the deleted body kept serving as the snippet — the list leaks what the thread hides')
+        ->and($row->language)->toBe('am', 'the FR-09 language chip still follows the deleted message');
+
+    // Tombstone the last one too: the existing empty-snippet contract, not
+    // an error and not a resurrected body.
+    DB::table('messages')->where('id', $older)->update(['deleted_at' => DB::raw('clock_timestamp()')]);
+    $projector->recomputeTicket($ticket->identifier());
+    $row = DB::table('ticket_list_items')->where('ticket_id', $ticket->identifier())->first();
+    expect($row->snippet)->toBe('')
+        ->and($row->language)->toBeNull()
+        ->and($row->last_message_created_at)->toBeNull();
+});
+
 it('FR-05 my_open: assignment adds to the assignee\'s set; REASSIGNMENT removes from the old assignee\'s; resolve removes it', function (): void {
     [$tenant, $conversation, $ticket] = ticketFixture('open');
     $tenantId = $tenant->identifier();

@@ -1,0 +1,58 @@
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan octane:reload
+
+   INFO  Reloading workers...  
+
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml restart worker scheduler reverb
+ Container na-live-support-reverb-1 Restarting 
+ Container na-live-support-worker-1 Restarting 
+ Container na-live-support-scheduler-1 Restarting 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-worker-1 Started 
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml up -d --wait app worker scheduler reverb
+ Container na-live-support-redis-durable-1 Running 
+ Container na-live-support-scheduler-1 Running 
+ Container na-live-support-worker-1 Running 
+ Container na-live-support-postgres-1 Running 
+ Container na-live-support-app-1 Running 
+ Container na-live-support-redis-volatile-1 Running 
+ Container na-live-support-reverb-1 Running 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-scheduler-1 Waiting 
+ Container na-live-support-worker-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-app-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-reverb-1 Waiting 
+ Container na-live-support-app-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-reverb-1 Healthy 
+ Container na-live-support-worker-1 Healthy 
+ Container na-live-support-scheduler-1 Healthy 
+Octane reloaded; worker/scheduler/reverb restarted and healthy.

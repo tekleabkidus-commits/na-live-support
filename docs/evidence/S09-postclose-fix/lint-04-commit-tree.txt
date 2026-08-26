@@ -1,0 +1,43 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Components/Customers/CustomerPanel.vue
+  433:38  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-text-muted)'` with `⏎································borderColor:·'var(--ds-border-strong)',⏎································color:·'var(--ds-text-muted)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/OperationDialog.vue
+   49:58  warning  Replace `·assignees:·{·id:·string;·name:·string·}[]` with `⏎····················assignees:·{·id:·string;·name:·string·}[];⏎···············`                                                                                                                                                                                         prettier/prettier
+  125:31  warning  Replace `·v-model="path"·type="radio"·value="supervisor_review"·data-testid="path-supervisor"` with `⏎····························v-model="path"⏎····························type="radio"⏎····························value="supervisor_review"⏎····························data-testid="path-supervisor"⏎·······················`  prettier/prettier
+  223:36  warning  Insert `⏎···························`                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/SplitUnmergeDialog.vue
+   68:28  warning  Replace `1,·Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000)` with `⏎········1,⏎········Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000),⏎····`                                  prettier/prettier
+   76:17  warning  Replace `·props.kind·===·'split'·?·`/inbox/t/${props.ticketId}/split`` with `⏎········props.kind·===·'split'⏎············?·`/inbox/t/${props.ticketId}/split`⏎···········`                                                                 prettier/prettier
+  313:38  warning  Replace `·background:·'var(--ds-text-ink)',·color:·'var(--ds-page-bg)'` with `⏎································background:·'var(--ds-text-ink)',⏎································color:·'var(--ds-page-bg)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/Thread/ThreadPane.vue
+  674:13  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/TicketPanel.vue
+  947:19  warning  Replace `(can.tickets_escalate·||·can.tickets_spam_mark)·&&·ticket.status·!==·'spam'·&&·ticket.status·!==·'closed'` with `⏎················(can.tickets_escalate·||·can.tickets_spam_mark)·&&⏎················ticket.status·!==·'spam'·&&⏎················ticket.status·!==·'closed'⏎············`  prettier/prettier
+  976:26  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-danger-strong)'` with `⏎····················borderColor:·'var(--ds-border-strong)',⏎····················color:·'var(--ds-danger-strong)',⏎···············`                                                                       prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Inbox/Workspace.vue
+  1588:21  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+  1890:25  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+✖ 15 problems (0 errors, 15 warnings)
+  0 errors and 12 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+EXIT: 0

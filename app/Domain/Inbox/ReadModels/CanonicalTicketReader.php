@@ -48,10 +48,17 @@ final class CanonicalTicketReader
             ? DB::table('customers')->where('id', $ticket->customer_id)->first()
             : null;
 
+        // TOMBSTONES NEVER SERVE THE LIST (S09 post-close ruling): a deleted
+        // message's body must not keep leaking as the row's snippet — the
+        // thread renders it as a placeholder, and the list must not say what
+        // the thread hides. Snippet and language fall back to the PREVIOUS
+        // non-deleted public message; when none remains, the row keeps the
+        // existing empty-snippet contract (empty snippet, no language chip).
         /** @var object{kind: string, body: string|null, created_at: string, language: string|null}|null $lastPublic */
         $lastPublic = DB::table('messages')
             ->where('conversation_id', $ticket->conversation_id)
             ->whereNotIn('kind', ['note', 'system'])
+            ->whereNull('deleted_at')
             ->orderByDesc('created_at')->orderByDesc('id')
             ->select(['kind', 'body', 'created_at', 'language'])
             ->first();

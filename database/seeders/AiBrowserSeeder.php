@@ -19,10 +19,12 @@ use RuntimeException;
  *
  *  - thresholds published for `default` (chatbot OFF — §21 rec 2) so the
  *    Copilot panel has a thresholds record; every kill switch ON;
- *  - on ticket #4801's conversation: one AI-authored outbound (FR-19c's
- *    marker — AC-05 DOM), one agent message carrying channel_meta
- *    .ai_translation (FR-15's hover), one classification decision row (the
- *    chips);
+ *  - ticket #4875 "Copilot Fixture Player" — the AI thread fixture's OWN
+ *    ticket (post-close fix: never #4801, whose FR-09 unread=2 canon the
+ *    AI rows and ai-copilot.spec's sent replies were breaking): one
+ *    AI-authored outbound (FR-19c's marker — AC-05 DOM), one agent message
+ *    carrying channel_meta.ai_translation (FR-15's hover), one
+ *    classification decision row (the chips);
  *  - ticket #4871 "Deleted Account Fixture" — a customer whose last three
  *    telegram sends are failed_final/blocked_by_user (Doc 08 EC-03's chip);
  *    ticket #4872 "Live Account Fixture" — a control with one sent message
@@ -73,33 +75,114 @@ final class AiBrowserSeeder extends Seeder
             $switches->flip($off['surface'], $off['channel'], $off['endpoint_ref'], false, 'S09-BROWSER reset', $agent->identifier());
         }
 
-        // The #4801 thread: AI message + translated agent message + a classification row.
-        /** @var object{ticket_id: string, conversation_id: string} $item */
-        $item = DB::table('ticket_list_items')->where('number', 4801)->first(['ticket_id', 'conversation_id']);
-        // Heal a prior run: the marker rows are hidden (tombstoned) so the thread does not grow per seed.
-        DB::table('messages')->where('conversation_id', $item->conversation_id)->where('body', 'like', 'S09-BROWSER%')->whereNull('deleted_at')->update(['deleted_at' => DB::raw('clock_timestamp()')]);
-        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $item->conversation_id, 'direction' => 'out', 'author_type' => 'ai', 'kind' => 'text',
+        // The AI thread fixture — ITS OWN ticket (#4875), NEVER the Doc 07
+        // list scene's #4801 (S09 post-close fix, CI run 32496238558):
+        // ai-copilot.spec SENDS a real reply into the thread it opens, and
+        // this seeder itself adds three rows — on #4801 that broke
+        // inbox-list's FR-09 unread=2 canon the moment spec order let the AI
+        // files run first. A dedicated ticket keeps the Doc 07 canon intact
+        // whatever the worker order.
+        $projector = app(\App\Domain\Inbox\ReadModels\ListProjector::class);
+        /** @var object{id: string, conversation_id: string}|null $aiTicket */
+        $aiTicket = DB::table('tickets')->where('number', 4875)->first(['id', 'conversation_id']);
+        if ($aiTicket === null) {
+            $customer = \App\Models\Customer::query()->firstOrCreate(
+                ['username' => '@fixture_copilot_s09'],
+                ['display_name' => 'Copilot Fixture Player', 'is_shell' => true, 'created_source' => 'telegram'],
+            );
+            $conversationId = (string) Str::uuid7();
+            DB::table('conversations')->insert(['id' => $conversationId, 'tenant_id' => $tenantId, 'channel' => 'telegram', 'channel_ref_id' => 'fixture_brand_bot', 'external_chat_id' => 'chat-'.Str::random(10), 'customer_id' => $customer->identifier(), 'state' => 'active']);
+            $ticketId = (string) Str::uuid7();
+            // priority stays 'normal': inbox-views' urgent-filter membership
+            // proof must keep seeing exactly the R1 row.
+            DB::table('tickets')->insert(['id' => $ticketId, 'tenant_id' => $tenantId, 'conversation_id' => $conversationId, 'customer_id' => $customer->identifier(), 'number' => 4875, 'status' => 'open', 'priority' => 'normal', 'source' => 'agent', 'subject' => 'AI withdrawal context', 'assignee_id' => $agent->identifier()]);
+            $aiTicket = (object) ['id' => $ticketId, 'conversation_id' => $conversationId];
+        } else {
+            // HEAL, not create-once (the healListScene lesson, relearned the
+            // day this ticket shipped): battery specs legitimately consume
+            // My Open rows through real doors — a bulk resolve took #4875
+            // out of the view and every AI spec lost its thread. Restore the
+            // canonical state every seed; the reprojection below re-lists it.
+            DB::table('tickets')->where('id', $aiTicket->id)->update([
+                'status' => 'open', 'assignee_id' => $agent->identifier(),
+                'priority' => 'normal', 'tags' => '{}', 'merged_into' => null,
+            ]);
+        }
+        // Heal a prior run: the marker rows are hidden (tombstoned) so the
+        // thread does not grow per seed — the reply ai-copilot.spec actually
+        // SENDS (the replay recording's text) included.
+        DB::table('messages')->where('conversation_id', $aiTicket->conversation_id)
+            ->where(fn (\Illuminate\Database\Query\Builder $q) => $q->where('body', 'like', 'S09-BROWSER%')->orWhere('body', 'like', '[FIXTURE] Thanks for your patience%'))
+            ->whereNull('deleted_at')->update(['deleted_at' => DB::raw('clock_timestamp()')]);
+        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $aiTicket->conversation_id, 'direction' => 'out', 'author_type' => 'ai', 'kind' => 'text',
             'body' => 'S09-BROWSER [FIXTURE] Hi! I\'m an AI assistant for this support team. You mentioned a 2,500 ETB withdrawal — a colleague will check it.', 'delivery_state' => 'sent', 'language' => 'en']);
-        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $item->conversation_id, 'direction' => 'out', 'author_type' => 'agent', 'author_id' => $agent->identifier(), 'kind' => 'text',
+        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $aiTicket->conversation_id, 'direction' => 'out', 'author_type' => 'agent', 'author_id' => $agent->identifier(), 'kind' => 'text',
             'body' => 'S09-BROWSER የ2,500 ብር ማውጣትዎን አሁን እያረጋገጥን ነው።', 'delivery_state' => 'sent', 'language' => 'am',
             'channel_meta' => json_encode(['ai_translation' => ['artifact_id' => (string) Str::uuid7(), 'original_text' => 'We are checking your 2,500 ETB withdrawal now.', 'source_language' => 'en', 'target_language' => 'am', 'edited' => false]])]);
-        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $item->conversation_id, 'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
+        DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $aiTicket->conversation_id, 'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
             'body' => 'S09-BROWSER-COPILOT where is my 2,500 ETB withdrawal? [FIXTURE]', 'language' => 'en']);
-        if (! DB::table('ai_decisions')->where('conversation_id', $item->conversation_id)->where('task', 'classify_message')->exists()) {
+        $projector->recomputeTicket($aiTicket->id);
+        if (! DB::table('ai_decisions')->where('conversation_id', $aiTicket->conversation_id)->where('task', 'classify_message')->exists()) {
             $writer = app(\App\Domain\Ai\DecisionLog\DecisionWriter::class);
             $writer->record(new \App\Domain\Ai\DecisionLog\DecisionRecord(
                 id: (string) Str::uuid7(), surface: 'chatbot', task: 'classify_message', provider: 'fixture', model: 'fixture',
-                layerHashes: ['immutable' => \App\Domain\Ai\Prompt\ImmutableLayer::hash()], conversationId: $item->conversation_id,
+                layerHashes: ['immutable' => \App\Domain\Ai\Prompt\ImmutableLayer::hash()], conversationId: $aiTicket->conversation_id,
                 language: 'am', intent: 'withdrawals', confidence: 0.91, action: 'copilot_context',
                 responsePayload: ['classification' => ['intent' => 'withdrawals', 'sentiment' => -1, 'urgency' => 2, 'spam' => 0.0, 'rg_risk' => 0.05, 'confidence' => 0.91]],
             ));
             $writer->flush();
         }
 
+        // LEGACY HEAL (the post-close fix): earlier S09 seeds planted the
+        // marker rows — and ai-copilot.spec's sent replies — into #4801's
+        // conversation. Tombstone them there and reproject, so the Doc 07
+        // list canon (2 unread Amharic inbound) holds on warm databases too.
+        /** @var object{ticket_id: string, conversation_id: string}|null $legacy */
+        $legacy = DB::table('ticket_list_items')->where('number', 4801)->first(['ticket_id', 'conversation_id']);
+        if ($legacy !== null) {
+            // Tombstone AND rewrite language to 'am': lastPublic ignores
+            // deleted_at (the escalated reader gap), so a LATER reprojection
+            // of #4801 — healListScene after admin-tag-manager's tag drift,
+            // for one — would otherwise flip the FR-09 language chip to the
+            // newest (EN) pollution row whatever this seeder restored below.
+            // With every pollution row carrying 'am', any reprojection
+            // converges on the canon.
+            $tombstoned = DB::table('messages')->where('conversation_id', $legacy->conversation_id)
+                ->where(fn (\Illuminate\Database\Query\Builder $q) => $q->where('body', 'like', 'S09-BROWSER%')->orWhere('body', 'like', '[FIXTURE] Thanks for your patience%'))
+                ->update(['deleted_at' => DB::raw('coalesce(deleted_at, clock_timestamp())'), 'language' => 'am']);
+            if ($tombstoned > 0) {
+                $projector->recomputeTicket($legacy->ticket_id);
+                // Hand-restore what recompute cannot recover: sentiment/sla
+                // are InboxBrowserSeeder's hand-tuned pair; language/snippet
+                // flip to the tombstoned EN rows because
+                // CanonicalTicketReader::lastPublic does not filter
+                // deleted_at (Doc 07 reader gap, escalated with this fix).
+                // Restore the R1 canon (2 Amharic inbound).
+                DB::table('ticket_list_items')->where('number', 4801)->update([
+                    'sentiment' => 'negative', 'sla_state' => 'breached',
+                    'sla_due_at' => DB::raw("clock_timestamp() - interval '12 minutes'"),
+                    'language' => 'am',
+                    'snippet' => 'እባክዎ በአስቸኳይ ይመልከቱልኝ',
+                    'snippet_kind' => 'text',
+                ]);
+            }
+        }
+
         // EC-03: the deleted-account customer (+ a live control).
-        $projector = app(\App\Domain\Inbox\ReadModels\ListProjector::class);
         foreach ([[4871, 'Deleted Account Fixture', '@fixture_deleted_s09', 'failed_final', 'blocked_by_user'], [4872, 'Live Account Fixture', '@fixture_live_s09', 'sent', null]] as [$number, $name, $username, $state, $reason]) {
-            if (DB::table('tickets')->where('number', $number)->exists()) {
+            /** @var object{id: string}|null $existing */
+            $existing = DB::table('tickets')->where('number', $number)->first(['id']);
+            if ($existing !== null) {
+                // HEAL + REPROJECT every seed (the #4875 lesson): a battery
+                // spec may consume the row through a real door, and a Pest
+                // battery flushing redis-volatile empties the view ZSETs —
+                // only a reprojection re-lists the ticket on a warm database.
+                DB::table('tickets')->where('id', $existing->id)->update([
+                    'status' => 'open', 'assignee_id' => null,
+                    'priority' => 'normal', 'merged_into' => null,
+                ]);
+                $projector->recomputeTicket($existing->id);
+
                 continue;
             }
             $customer = \App\Models\Customer::query()->firstOrCreate(['username' => $username], ['display_name' => $name, 'is_shell' => true, 'created_source' => 'telegram']);

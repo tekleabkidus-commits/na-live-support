@@ -90,7 +90,7 @@ final class ReadMarkers
             WHERE m.conversation_id IN ({$placeholders})
               AND m.is_internal = false
               AND m.deleted_at IS NULL
-              AND NOT (m.author_type = 'staff' AND m.author_id = ?)
+              AND NOT (m.author_type = 'agent' AND m.author_id = ?)
               AND (r.last_read_at IS NULL OR m.created_at > r.last_read_at)
             GROUP BY m.conversation_id
             SQL,

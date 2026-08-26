@@ -192,6 +192,44 @@ it('the per-viewer overlay: unread counts from the marker boundary (all-unread w
     expect($theirRows[$conversationA->identifier()]['unread'])->toBe(2, 'one viewer\'s marker leaked into another\'s overlay');
 });
 
+it('the overlay excludes the VIEWER\'S OWN replies from unread — while an AI reply, and the same agent reply seen by a COLLEAGUE, still count (S09 post-close fix: the exclusion clause said author_type=\'staff\', a value the enum does not hold, so it could never match and agents inflated their own badges)', function (): void {
+    [$tenant, $tenantId, $rows] = listScene(1);
+    [, $conversation] = $rows[0];
+    activateTenant($tenant);
+    $actor = inboxScopedActor('All', 'S09 Own Reply');
+    $colleague = inboxScopedActor('All', 'S09 Own Reply Colleague');
+
+    inboundListMessage($tenantId, $conversation->identifier(), 'customer asks');
+    // The viewer's own reply — author_type 'agent', the only staff-shaped
+    // value the messages enum holds ('customer','agent','ai','system').
+    DB::table('messages')->insert([
+        'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $conversation->identifier(),
+        'direction' => 'out', 'author_type' => 'agent', 'author_id' => $actor->identifier(),
+        'kind' => 'text', 'body' => 'my own reply', 'is_internal' => false, 'delivery_state' => 'sent',
+    ]);
+    // An AI reply: nobody's own — counts for every viewer.
+    DB::table('messages')->insert([
+        'id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $conversation->identifier(),
+        'direction' => 'out', 'author_type' => 'ai', 'author_id' => null,
+        'kind' => 'text', 'body' => 'ai reply', 'is_internal' => false, 'delivery_state' => 'sent',
+    ]);
+
+    $mine = $this->actingAs($actor, 'staff')->getJson('https://localhost/inbox/list?view=unassigned');
+    $mine->assertOk();
+    /** @var array<string, array<string, mixed>> $mineRows */
+    $mineRows = collect($mine->json('rows'))->keyBy('conversation_id')->all();
+    expect($mineRows[$conversation->identifier()]['unread'])
+        ->toBe(2, 'the viewer\'s own reply counted into their own unread badge');
+
+    // The exclusion is PER AUTHOR, not per author_type: the colleague sees
+    // the same agent reply as unread.
+    $theirs = $this->actingAs($colleague, 'staff')->getJson('https://localhost/inbox/list?view=unassigned');
+    /** @var array<string, array<string, mixed>> $theirRows */
+    $theirRows = collect($theirs->json('rows'))->keyBy('conversation_id')->all();
+    expect($theirRows[$conversation->identifier()]['unread'])
+        ->toBe(3, 'a colleague\'s overlay dropped another agent\'s reply');
+});
+
 it('FR-10 sort override: ?sort=priority serves urgent-first with a working keyset cursor (the PREFERENCE persists per view in prefs.sort_overrides — FR-08\'s blob, client-written)', function (): void {
     [$tenant, $tenantId, $rows] = listScene(5);
     activateTenant($tenant);

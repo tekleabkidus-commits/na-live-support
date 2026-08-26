@@ -1,0 +1,214 @@
+
+Running 15 tests using 1 worker
+
+  ✘   1 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (30.1s)
+  ✘   2 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (30.1s)
+  ✓   3 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (1.8s)
+  ✘   4 [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not (30.1s)
+  ✘   5 [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) (30.1s)
+  ✘   6 [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there (30.1s)
+  ✓   7 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (light); landmarks name R1–R4; health dot shows the seeded degraded state (2.4s)
+  ✓   8 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (dark); landmarks name R1–R4; health dot shows the seeded degraded state (2.2s)
+  ✓   9 [chromium] › tests/Browser/inbox-layout.spec.ts:136:1 › B12-A01 AC-02: first tab press on a cold load reveals the skip link, and it jumps PAST the rail into the list (1.4s)
+  ✘  10 [chromium] › tests/Browser/inbox-layout.spec.ts:155:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels (6.4s)
+  ✓  11 [chromium] › tests/Browser/inbox-layout.spec.ts:188:1 › AC-01: rail collapse, list width (keyboard resize — §13) and density persist, and RESTORE ACROSS SESSIONS (3.1s)
+  ✓  12 [chromium] › tests/Browser/inbox-layout.spec.ts:259:1 › THE COUNTERSIGNED PREFS RIDER: Read Only degrades to session-local prefs — silent refusal, ZERO error toasts, nothing server-persisted (2.2s)
+  ✘  13 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (6.4s)
+  ✘  14 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (6.9s)
+  ✓  15 [chromium] › tests/Browser/inbox-list.spec.ts:126:1 › FR-10: the sort override reorders (priority serves urgent first) and PERSISTS per view across a fresh session (prefs.sort_overrides) (3.5s)
+
+
+  1) [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:71:5
+
+    Error Context: test-results/ai-copilot-FR-14-the-Copil-ba674-ries-the-artifact-id-FR-16--chromium/error-context.md
+
+  2) [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:114:5
+
+    Error Context: test-results/ai-copilot-FR-15-the-compo-be5ca--a-second-card-is-Discarded-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      58 |         .locator('[data-ticket]', { hasText: rowText })
+      59 |         .locator('[data-role="row-open"]')
+    > 60 |         .click();
+         |          ^
+      61 |     await expect(page.getByTestId('composer')).toBeVisible();
+      62 | }
+      63 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:60:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:67:5
+
+    Error Context: test-results/ai-honesty-AC-05-DOM-the-A-87fc6-nal-the-AI-message-does-not-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      58 |         .locator('[data-ticket]', { hasText: rowText })
+      59 |         .locator('[data-role="row-open"]')
+    > 60 |         .click();
+         |          ^
+      61 |     await expect(page.getByTestId('composer')).toBeVisible();
+      62 | }
+      63 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:60:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:98:5
+
+    Error Context: test-results/ai-honesty-AC-05-DOM-the-C-ef254-ry-the-✦-accent-label-text--chromium/error-context.md
+
+  5) [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Deleted Account Fixture' }).locator('[data-role="row-open"]')
+
+
+      58 |         .locator('[data-ticket]', { hasText: rowText })
+      59 |         .locator('[data-role="row-open"]')
+    > 60 |         .click();
+         |          ^
+      61 |     await expect(page.getByTestId('composer')).toBeVisible();
+      62 | }
+      63 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:60:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-honesty.spec.ts:107:5
+
+    Error Context: test-results/ai-honesty-Doc-08-EC-03-ch-90780-ount-fixture-and-ONLY-there-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/inbox-layout.spec.ts:155:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('panel-copilot')
+    Expected substring: "Doc 09"
+    Received string:    "Open a conversation to see the assistant here."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('panel-copilot')
+        14 × locator resolved to <div role="tabpanel" data-testid="panel-copilot">…</div>
+           - unexpected value "Open a conversation to see the assistant here."
+
+
+      175 |     await expect(page.getByTestId('panel-customer')).toContainText('Open a conversation');
+      176 |     await page.getByTestId('tab-copilot').click();
+    > 177 |     await expect(page.getByTestId('panel-copilot')).toContainText('Doc 09');
+          |                                                     ^
+      178 |
+      179 |     // With the seam override (local/ci): ONLY the copilot dot is seam-driven
+      180 |     // now — the customer badge is REAL (per-viewer RG, the retired
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-layout.spec.ts:177:53
+
+    Error Context: test-results/inbox-layout-§9-the-three--d73cd--badge-dots-with-§13-labels-chromium/error-context.md
+
+  7) [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' })
+
+
+      75 |
+      76 |     const row = page.locator('[data-ticket]', { hasText: 'አበበ ታደሰ' });
+    > 77 |     await expect(row).toBeVisible();
+         |                       ^
+      78 |     await expect(row.locator('[data-role="sla-pill"]')).toContainText('SLA breached');
+      79 |     await expect(row.locator('[data-role="unread-count"]')).toHaveText('2');
+      80 |     await expect(row.locator('[data-role="language-chip"]')).toHaveText('AM');
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:77:23
+
+    Error Context: test-results/inbox-list-FR-09-line-1-2--d4371-ag-overflow-assignee-avatar-chromium/error-context.md
+
+  8) [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-ticket]').filter({ hasText: 'Hana Girma' })
+    Expected: 2
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Hana Girma' })
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      114 |     // STALE one warns.
+      115 |     const hybridRows = page.locator('[data-ticket]', { hasText: 'Hana Girma' });
+    > 116 |     await expect(hybridRows).toHaveCount(2);
+          |                              ^
+      117 |     await expect(page.locator('[data-role="dual-channel-badge"]')).toHaveCount(2);
+      118 |     await expect(page.locator('[data-role="older-activity-warning"]')).toHaveCount(1);
+      119 |     await expect(
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:116:30
+
+    Error Context: test-results/inbox-list-FR-09-Unassigne-f9180--ONE-older-activity-warning-chromium/error-context.md
+
+  8 failed
+    [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+    [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) 
+    [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there 
+    [chromium] › tests/Browser/inbox-layout.spec.ts:155:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels 
+    [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+    [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+  7 passed (3.8m)

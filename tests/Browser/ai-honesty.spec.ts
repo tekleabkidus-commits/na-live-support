@@ -64,7 +64,7 @@ async function openThread(page: Page, rowText: string, view: string | null = nul
 test('AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not', async ({
     page,
 }) => {
-    await openThread(page, 'አበበ ታደሰ');
+    await openThread(page, 'Copilot Fixture Player');
     const bubble = (text: string) =>
         page
             .locator('[data-role="body"]', { hasText: text })
@@ -95,7 +95,7 @@ test('AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text 
 });
 
 test('AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text)', async ({ page }) => {
-    await openThread(page, 'አበበ ታደሰ');
+    await openThread(page, 'Copilot Fixture Player');
     await page.getByTestId('tab-copilot').click();
     await expect(page.getByTestId('copilot-chips')).toContainText('✦');
     await expect(page.getByTestId('copilot-card')).toContainText('✦');

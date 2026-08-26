@@ -1,0 +1,20 @@
+
+Running 15 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (5.6s)
+  ✓   2 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (5.7s)
+  ✓   3 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (1.7s)
+  ✓   4 [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not (1.7s)
+  ✓   5 [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) (1.6s)
+  ✓   6 [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there (2.0s)
+  ✓   7 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (light); landmarks name R1–R4; health dot shows the seeded degraded state (2.7s)
+  ✓   8 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (dark); landmarks name R1–R4; health dot shows the seeded degraded state (2.4s)
+  ✓   9 [chromium] › tests/Browser/inbox-layout.spec.ts:136:1 › B12-A01 AC-02: first tab press on a cold load reveals the skip link, and it jumps PAST the rail into the list (1.3s)
+  ✓  10 [chromium] › tests/Browser/inbox-layout.spec.ts:155:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels (1.7s)
+  ✓  11 [chromium] › tests/Browser/inbox-layout.spec.ts:195:1 › AC-01: rail collapse, list width (keyboard resize — §13) and density persist, and RESTORE ACROSS SESSIONS (2.8s)
+  ✓  12 [chromium] › tests/Browser/inbox-layout.spec.ts:266:1 › THE COUNTERSIGNED PREFS RIDER: Read Only degrades to session-local prefs — silent refusal, ZERO error toasts, nothing server-persisted (2.4s)
+  ✓  13 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (2.5s)
+  ✓  14 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (1.5s)
+  ✓  15 [chromium] › tests/Browser/inbox-list.spec.ts:126:1 › FR-10: the sort override reorders (priority serves urgent first) and PERSISTS per view across a fresh session (prefs.sort_overrides) (2.5s)
+
+  15 passed (49.9s)

@@ -376,6 +376,36 @@ InboxBrowserSeeder status-write precedent), landed with the S08 step-11
 commit and proven 7/7 ×3. **0j should never fire again; a recurrence means
 the fix failed, not that the letter needs widening.**
 
+**0l. LETTERED (the S09 post-close fix session's countersigned filing,
+2026-08-26) — WARM-DB BROWSER-FIXTURE ACCUMULATION. CI's FRESH DB IS THE
+VERDICT-BEARER; a warm local browser battery carries known reds of this
+class and they are triaged against this letter, not chased.** The browser
+fixture layer shares one mutable database across spec files, specs
+legitimately mutate fixtures through real doors, and most seeders
+create-once rather than heal — so state accumulates run over run on a warm
+database while CI's fresh-create path never sees it. The S09 post-close
+full local battery (`docs/evidence/S09-postclose-fix/browser-battery-01.txt`,
+186/8/1) inventoried the class; two of the 8 were the ordered CI reds
+(FIXED at cause — the AI thread fixture moved off #4801 to its own healed
+ticket #4875), and six were pre-existing instances, each cause-pinned,
+green on CI's fresh DB, REPORT-ONLY here: (1) `admin-tag-manager` R-22 —
+Doc 08's CustomerBrowserSeeder seeds #8801 `{withdrawal,vip}`, a second
+`vip` carrier colliding with the tag canon's expected count of 1; fires
+once per warm cycle, then self-clears when the merge consumes it. (2)
+`inbox-keyboard-shift` SS-01 — the 1500-step guard budget cannot cover 60
+re-walks over ~27 accumulated non-shift Unassigned residents (60×28=1680;
+observed stop at 53/60). (3–7) `inbox-thread` ×5 — the Yonas scene
+conversation accumulated ~56 queued sends/notes from offline/store-recovery
+runs (70 messages total), pushing the canonical glyph rows out of the
+render window. OPERATIONAL NOTES: a Pest battery's harness `Cache::flush()`
+empties the view ZSETs (the S09 honest-trail dev-loop trap) — run
+`php artisan inbox:views-rebuild` (FS-02) before a warm browser run;
+seeders that HEAL + REPROJECT every seed (AiBrowserSeeder's #4875/#4871/
+#4872 pattern, InboxBrowserSeeder's healListScene) self-recover and are the
+pattern for any new browser fixture. A future hardening session may extend
+the heal pattern to the six pre-existing instances; the files are Doc 07/08
+owned, so that work runs escalate-first.**
+
 **0f RUNG-1 FIRING (S08 step 10, recorded per the ladder — nothing more):**
 run [31943627204](https://github.com/tekleabkidus-commits/na-live-support/actions/runs/31943627204)
 (`74a76d4`) RED at Stage 3 on `LockoutTest > throttles per IP` — a 429

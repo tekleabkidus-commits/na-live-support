@@ -1,0 +1,59 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/admin-tag-manager.spec.ts:82:1 › R-22 THE RENAME THEN THE MERGE: consequence before save, the verb on the primary, the typed gate only on the irreversible merge, the count on the result strip, the DB converged (3.7s)
+  ✓  2 [chromium] › tests/Browser/admin-tag-manager.spec.ts:125:1 › R-22 J19: under 1024 the surface is read-only — the notice shows and no rename affordance renders (1.5s)
+  ✘  3 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (30.1s)
+  ✘  4 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (30.1s)
+  ✓  5 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (1.8s)
+  ✓  6 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (2.3s)
+  ✓  7 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (1.5s)
+  ✓  8 [chromium] › tests/Browser/inbox-list.spec.ts:126:1 › FR-10: the sort override reorders (priority serves urgent first) and PERSISTS per view across a fresh session (prefs.sort_overrides) (3.6s)
+
+
+  1) [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Copilot Fixture Player' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'Copilot Fixture Player' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:71:5
+
+    Error Context: test-results/ai-copilot-FR-14-the-Copil-ba674-ries-the-artifact-id-FR-16--chromium/error-context.md
+
+  2) [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Copilot Fixture Player' }).locator('[data-role="row-open"]')
+
+
+      62 |         .locator('[data-ticket]', { hasText: 'Copilot Fixture Player' })
+      63 |         .locator('[data-role="row-open"]')
+    > 64 |         .click();
+         |          ^
+      65 |     await expect(page.getByTestId('composer')).toBeVisible();
+      66 | }
+      67 |
+        at openThread (/home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:64:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-copilot.spec.ts:114:5
+
+    Error Context: test-results/ai-copilot-FR-15-the-compo-be5ca--a-second-card-is-Discarded-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) 
+    [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded 
+  6 passed (3.3m)
