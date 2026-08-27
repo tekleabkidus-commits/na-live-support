@@ -1077,4 +1077,76 @@ return [
         'required_fields' => ['old', 'new'],
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 10 FR-01 (S10 step 3).
+        'action_key' => 'kb.category.created',
+        'entity' => 'kb_category',
+        'actor_types' => ['staff'],
+        'required_fields' => ['slug', 'depth', 'ai_usable'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-01 — ai_usable old/new (FLAG 3 re-derivation is a visible act) (S10 step 3).
+        'action_key' => 'kb.category.updated',
+        'entity' => 'kb_category',
+        'actor_types' => ['staff'],
+        'required_fields' => ['fields', 'old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-01/EC-03 (S10 step 3).
+        'action_key' => 'kb.category.reassigned',
+        'entity' => 'kb_category',
+        'actor_types' => ['staff'],
+        'required_fields' => ['to', 'articles', 'retrieval_impact'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-01/A-43 soft delete (S10 step 3).
+        'action_key' => 'kb.category.deleted',
+        'entity' => 'kb_category',
+        'actor_types' => ['staff'],
+        'required_fields' => ['soft'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-02/FR-04 (S10 step 3).
+        'action_key' => 'kb.article.created',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['audience', 'source_language', 'seeded'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-02/FR-03 (S10 step 3).
+        'action_key' => 'kb.variant.created',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['article_id', 'language', 'translation_source'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-02 metadata (S10 step 3).
+        'action_key' => 'kb.variant.updated',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['fields'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-01/EC-02 (S10 step 3).
+        'action_key' => 'kb.article.moved',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new', 'ai_usable_changed'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-05/T-07 — BOTH parties: two rows, party=taker|holder (S10 step 3).
+        'action_key' => 'kb.lock.taken_over',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['variant_id', 'previous_holder_id', 'new_holder_id', 'party'],
+        'owning_doc' => 'Doc10',
+    ],
 ];

@@ -37,6 +37,9 @@ return [
     'error' => [
         'identity_already_linked' => 'መለያው አስቀድሞ ተያይዟል',
         'media_not_servable' => 'ሚዲያው ሊቀርብ አይችልም',
+        'kb_lock_held' => 'ሌላ ሰው ይህን ጽሑፍ እያረመ ነው',
+        'kb_save_conflict' => 'ከመጨረሻው ማስቀመጥዎ በኋላ ጽሑፉ ተቀይሯል',
+        'kb_category_has_articles' => 'ምድቡ አሁንም ጽሑፎችን ይዟል',
         'quota_exceeded' => 'የአጠቃቀም ገደብ ተደርሷል',
         'tenant_state_forbidden' => 'ለዚህ የሥራ ቦታ አይገኝም',
         'unregistered_setting' => 'ያልታወቀ ማስተካከያ',

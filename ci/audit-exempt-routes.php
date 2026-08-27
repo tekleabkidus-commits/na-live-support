@@ -117,6 +117,11 @@ return [
     'ai.backoffice.thresholds.simulate' => 'Doc 09 FR-11/BR-07: a READ (yesterday recomputed); the token it returns is consumed by the publish door.',
     'ai.backoffice.thresholds.publish' => 'Doc 09 BR-07/SEC-05: ThresholdPublisher -> ConfigVersions::publish writes ai.config.published itself.',
     'ai.backoffice.killswitches.flip' => 'Doc 09 FR-18/SEC-05: KillSwitches::flip writes ai.killswitch.changed itself (actor + old/new, flipped_at = the audit stamp).',
+    // Doc 10 (S10 step 3): the editor's presence + working-copy doors — inert by design.
+    'kb.editor.autosave' => 'Doc 10 FR-05: the WORKING COPY is not history (versions are minted only by publish, which audits); an autosave every 5 s is inert state, not an accountable act.',
+    'kb.editor.lock.acquire' => 'Doc 10 T-07: a TTL presence key in redis-volatile (the inbox.status.heartbeat precedent); the TAKEOVER door audits both parties.',
+    'kb.editor.lock.heartbeat' => 'Doc 10 T-07: a TTL refresh in redis-volatile — no durable state mutates.',
+    'kb.editor.lock.release' => 'Doc 10 T-07: releasing one\'s own presence key — no durable state mutates.',
     'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',
 ];

@@ -69,6 +69,54 @@ Route::middleware([
         ->name('customers.profile.page');
 });
 
+// Doc 10 — the Knowledge Base doors (S10 step 3; JSON only until step 12's [B9] UI).
+// Same staff chain; every route on a CLOSED kb.* key (six + delete); mutations
+// declare their audit action or are exempted with a reason (autosave/locks are
+// inert presence). INTERNAL articles are ABSENT for readers without kb.view_internal.
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('admin/kb')->group(function (): void {
+    Route::get('categories', [App\Http\Controllers\Kb\KbCategoryController::class, 'index'])
+        ->middleware('permission:tickets.view')->name('kb.categories.index'); // every staff member browses the tree
+    Route::post('categories', [App\Http\Controllers\Kb\KbCategoryController::class, 'store'])
+        ->middleware(['permission:kb.categories.manage', 'audit:kb.category.created'])->name('kb.categories.store');
+    Route::patch('categories/{categoryId}', [App\Http\Controllers\Kb\KbCategoryController::class, 'update'])
+        ->middleware(['permission:kb.categories.manage', 'audit:kb.category.updated'])->name('kb.categories.update');
+    Route::get('categories/{categoryId}/impact', [App\Http\Controllers\Kb\KbCategoryController::class, 'impact'])
+        ->middleware('permission:kb.categories.manage')->name('kb.categories.impact');
+    Route::post('categories/{categoryId}/reassign', [App\Http\Controllers\Kb\KbCategoryController::class, 'reassign'])
+        ->middleware(['permission:kb.categories.manage', 'audit:kb.category.reassigned'])->name('kb.categories.reassign');
+    Route::delete('categories/{categoryId}', [App\Http\Controllers\Kb\KbCategoryController::class, 'destroy'])
+        ->middleware(['permission:kb.categories.manage', 'audit:kb.category.deleted'])->name('kb.categories.destroy');
+
+    Route::post('articles', [App\Http\Controllers\Kb\KbArticleController::class, 'store'])
+        ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.articles.store');
+    Route::get('articles/{articleId}', [App\Http\Controllers\Kb\KbArticleController::class, 'show'])
+        ->middleware('permission:tickets.view')->name('kb.articles.show');
+    Route::post('articles/{articleId}/variants', [App\Http\Controllers\Kb\KbArticleController::class, 'addVariant'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.created'])->name('kb.articles.variants.store');
+    Route::post('articles/{articleId}/move', [App\Http\Controllers\Kb\KbArticleController::class, 'move'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.article.moved'])->name('kb.articles.move');
+    Route::patch('variants/{variantId}/meta', [App\Http\Controllers\Kb\KbArticleController::class, 'updateMeta'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.updated'])->name('kb.variants.meta');
+
+    Route::put('variants/{variantId}/working-copy', [App\Http\Controllers\Kb\KbEditorController::class, 'autosave'])
+        ->middleware('permission:kb.articles.edit')->name('kb.editor.autosave');
+    Route::get('variants/{variantId}/working-copy', [App\Http\Controllers\Kb\KbEditorController::class, 'recover'])
+        ->middleware('permission:kb.articles.edit')->name('kb.editor.recover');
+    Route::post('variants/{variantId}/lock', [App\Http\Controllers\Kb\KbEditorController::class, 'acquire'])
+        ->middleware('permission:kb.articles.edit')->name('kb.editor.lock.acquire');
+    Route::post('variants/{variantId}/lock/heartbeat', [App\Http\Controllers\Kb\KbEditorController::class, 'heartbeat'])
+        ->middleware('permission:kb.articles.edit')->name('kb.editor.lock.heartbeat');
+    Route::delete('variants/{variantId}/lock', [App\Http\Controllers\Kb\KbEditorController::class, 'release'])
+        ->middleware('permission:kb.articles.edit')->name('kb.editor.lock.release');
+    Route::post('variants/{variantId}/lock/takeover', [App\Http\Controllers\Kb\KbEditorController::class, 'takeover'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.lock.taken_over'])->name('kb.editor.lock.takeover');
+});
+
 // Doc 09 FR-18 — the AI Backoffice (S09 step 12, Option A [B8]). Same staff
 // chain; permission-gated with the CLOSED ai.* keys. Mutations ride the
 // domain doors that audit themselves (ConfigVersions publish/rollback = the

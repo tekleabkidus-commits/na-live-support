@@ -166,6 +166,12 @@ enum ErrorCode: string
     //    path (Doc 04 SEC-04's guard, surfaced as a stable refusal).
     case MediaNotServable = 'media_not_servable';
 
+    // ── Doc 10 (S10 step 3): the editor's refusals — a held lock (FR-05), an
+    //    optimistic save that lost (FS-05), a category still holding articles (EC-03).
+    case KbLockHeld = 'kb_lock_held';
+    case KbSaveConflict = 'kb_save_conflict';
+    case KbCategoryHasArticles = 'kb_category_has_articles';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *
