@@ -33,6 +33,16 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-10 (Doc 10) — STEP 0 (opened 2026-08-27; plan of record `docs/SESSION-10-APPROVED-PLAN.md` at 62d61b6)
+
+**Commits of record:** captures `45a58cc` · plan approved `62d61b6` · step 0.4 `7915b64` · step 0.7 (this section's commit).
+
+**Step 0.4 — `ai.providers.manage` (R-D10-1, AMENDED at the plan rulings):** registered HIGH; catalog **113→114 EXECUTED** (`docs/evidence/S10-step0.4/count-before-after-01.txt`), high 38→39; pins moved; SA + Admin by computed rule; the switch DOOR bound (`POST admin/ai/providers/routing`, `audit:ai.providers.switched` old/new); NO page — the B8-S08 screen is the [B8] pass's. ProviderSwitchDoorTest 2/2; DOC 09 SUITES 190/2643; gates 14/14; lint 0; full battery 1438/22,460/11 skips/0 reds.
+
+**Step 0.7 — ADR 0018 sidecar STOOD UP (STOP-C, option 2, owner-confirmed):** `sidecars/embeddings/` (Node 20, `@huggingface/transformers` 3.8.1, `Xenova/bge-m3` @ `4de13258…`, q8, 1024 dims; model baked at build, `allowRemoteModels=false` at runtime — no egress by mechanism); compose service `embeddings` under the **`embeddings` profile** (`make up` enables it; CI's raw compose never names it — CI stays on the fake driver per the ruling); image 1.95 GB. Liveness probe from the app container (`S10-step0.7/liveness-probe-01.txt`): healthz ok, `dims 1024 norm 1.000000`. LIVE PROBE (`AI_EMBEDDINGS_LIVE=1`, `sidecar-live-01.txt`): cosine(en deposit, am deposit) 0.7529 > cosine(en deposit, cashout) 0.5496; KbIndexer→HybridRetriever round trip un-degraded with a real vector — 2/2. Skip path proven (`sidecar-skip-path-01.txt`, 2 skipped, exit 0). **Standing per the ruling: one recorded live run per S10 checkpoint.** Honest trail: the S09 register implied the sidecar existed; it was configuration only (ADR 0018 amendment records the correction).
+
+**Honest trail (step 0):** INVALID-RED-01 — a battery and `make gates` launched CONCURRENTLY; the isolation-suite's `migrate:fresh` wiped the shared test DB mid-run (85 phantom reds, 2 phantom gate reds); filed under its name in `S10-step0.4/`, re-run sequentially, green. Risk 0k's lettered block was missing (only a pointer) — added at 62d61b6 by advisor order. R-D10-1's "provider page" premise was false — amended on the record.
+
 ## SESSION-09 (Doc 09) — CLOSE-OUT (step 14; the 94-id self-audit, the ledger, the core edits, §12 with the token-cost axis)
 
 **Commits of record (grounded by the owner at each checkpoint):** step 1 `b5feecf` · 2a `560a3d4` · 2b `d1b8ae4` · 3 `043083e` · 4 `6f95a4f` · 5 `c48edfc` · 6 `8ecfc50` · 7 `98a6c27` · 8 `86954d9` · 9 `8b7982a` · 10 `e8df378` · 10b `21ee127` · 11 `c90a534` · 11b `5b457c0` · 12a `ac7e6fe` · 12b+c `7757b22` · 12d `fea8d00` · 13 `78349a1` · 14 (this section's commit).

@@ -5,7 +5,9 @@
 # so local runs test the code you just edited, not the code baked at build
 # time. CI deliberately does NOT use it — .github/workflows/ci.yml names
 # compose.yaml alone, so the pipeline always exercises the immutable image.
-COMPOSE := docker compose -f docker/compose.yaml -f docker/compose.dev.yaml
+# `--profile embeddings`: the ADR 0018 sidecar runs LOCALLY (S10 step 0.7); CI's
+# raw compose never names the profile and stays on the fake driver (ruling).
+COMPOSE := docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml
 
 # Evidence set for captured runs (RISK 0b). Override per session:
 #   make soak SET=S21-step0

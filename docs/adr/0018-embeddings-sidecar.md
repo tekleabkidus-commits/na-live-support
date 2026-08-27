@@ -32,3 +32,34 @@ Retrieval CORRECTNESS proofs run over **fixture-seeded vectors** (deterministic,
 CI-safe, no sidecar dependency); the sidecar itself is proven by its own integration
 probe (real text → 1024-dim vector, cosine sanity) and by the nightly staging leg.
 A model upgrade is an expand-contract re-embed (ADR 0015's rule).
+
+## Amendment (S10 step 0.7, 2026-08-27 — STOP-C ruling, option 2, owner-confirmed)
+
+**Correction of record:** at the S09 close this sidecar existed only as configuration
+(`config/ai.php` → `http://embeddings:8081/v1`); no container, compose service or
+`sidecars/embeddings/` directory was ever built — S10's step-0 liveness probe found
+"no host embeddings", HTTP 000 (`docs/evidence/S10-step0/sidecar-probe-01.txt`). S09's
+retrieval proofs ran on fixture vectors, exactly as this ADR's determinism split allows;
+the register's wording implied more than existed (honest trail, no blame row).
+
+**Stood up at S10 step 0.7:**
+- `sidecars/embeddings/` — Node 20 + `@huggingface/transformers` **3.8.1** (ONNX runtime),
+  model **`Xenova/bge-m3`** pinned to Hugging Face commit
+  **`4de13258303883538bd53b696b452bf8099f0858`**, dtype **q8** (`onnx/model_quantized.onnx`),
+  CLS pooling + L2 normalize → **1024 dims** (`model.mjs` is the one place the model is named).
+- The model is downloaded ONCE at image build (`prefetch.mjs`) and baked into `/models`;
+  the running container sets `allowRemoteModels=false` — **no runtime egress by mechanism**.
+- OpenAI-compatible `POST /v1/embeddings` (+ `GET /healthz`, `GET /v1/models`); ADR 0016's
+  thin client reaches it unchanged as provider `local-embeddings`; the fixtures-only egress
+  guard applies to every payload sent to it (no exemption).
+- Compose service `embeddings` under the **`embeddings` profile**: `make up` enables it
+  locally; CI's raw `docker compose up --build` never names the profile, so **CI stays on
+  the deterministic fake driver** (the ruling). The app tolerates the sidecar's absence
+  (`KbIndexer` stores a null vector; the keyword half serves).
+- Proof: `tests/Integration/EmbeddingsSidecarProbeTest.php`, LIVE-GATED by
+  `AI_EMBEDDINGS_LIVE=1` (real text → 1024-dim unit vectors; cross-language paraphrase
+  closer than an unrelated sentence; index → retrieve through the built seam with no fixture
+  vector). Per the ruling, ONE recorded local run against the real sidecar is captured at
+  every S10 checkpoint under `docs/evidence/S10-step*/sidecar-live-*.txt`.
+- `[D18]` carries only the production/ops half (image registry, resource sizing, the
+  nightly live leg's schedule).

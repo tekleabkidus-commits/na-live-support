@@ -263,6 +263,25 @@ services:
       timeout: 3s
       retries: 6
 
+  # ADR 0018 — the LOCAL embeddings sidecar (S10 step 0.7, STOP-C ruling):
+  # pinned bge-m3 (ONNX, q8, 1024 dims) baked into the image; runtime offline.
+  # Under the `embeddings` PROFILE so CI's `up --build` (which never names the
+  # profile) stays on the deterministic fake driver per the ruling; `make up`
+  # enables it locally. The app tolerates its absence (keyword half serves).
+  embeddings:
+    build:
+      context: ../sidecars/embeddings
+    image: na-live-support/embeddings:bge-m3-q8
+    profiles: [embeddings]
+    environment: { PORT: 8081 }
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8081/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 90s
+
   mock-ai:
     build:
       context: ./mocks
