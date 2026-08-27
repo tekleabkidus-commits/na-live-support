@@ -2157,3 +2157,188 @@ the nightly summarize job lands).**
 - **Kill-switch/audit history**: the audit log IS the history (SEC-05
   high-visibility entries with actor + old/new); the switch table stores only
   current state + its provenance stamps.
+
+## S10 (Doc 10) — SCHEMA AMENDMENT 4 (filed at step 2a, BEFORE any migration exists — the B1-split law; needs advisor countersign; STOP-A/STOP-B rulings of 2026-08-27 folded)
+
+The Doc 10 schema, complete: SEVEN new tables + the countersigned delta to Doc 09's
+`kb_chunks`. Every column R-19b-analyzed; ADR-0003 grant physics; FORCED RLS +
+`tenant_isolation` + `REVOKE DELETE` on every table and every partition; DB time only
+(C-11); `APP_WRITABLE_COLUMNS` split stated per table; interpretations FLAGGED (⚑) for
+the countersign rather than chosen silently. No migration ships until this returns
+countersigned. UUIDv7 ids, non-null `tenant_id` FK to `tenants`, `created_at`/`updated_at`
+timestamptz(6) `clock_timestamp()` defaults, app INSERT-denied on `created_at` everywhere
+(the R-19b posture) — stated once here, true for all tables below.
+
+**1. `kb_categories` (FR-01, EC-03, A-43).** `parent_id` uuid nullable (self FK);
+`depth` smallint NOT NULL CHECK (1..3) — materialized so the max-depth rule is physics;
+`name` jsonb NOT NULL (per-language `{lang: text}`); `slug` text NOT NULL;
+`description` jsonb; `position` int NOT NULL default 0 (the ordering key — an int, not a
+clock); `icon` text nullable; `ai_usable` bool NOT NULL default false (FR-01 — the
+category-level flag that RE-DERIVES the chunk interim, FLAG 3's reopener); `visibility_default`
+text CHECK (public|internal); `deleted_at` timestamptz nullable (A-43 soft delete).
+UNIQUE NULLS NOT DISTINCT (tenant_id, parent_id, slug). GRANTS: INSERT column-granted
+(minus created_at); UPDATE (parent_id, depth, name, slug, description, position, icon,
+ai_usable, visibility_default, deleted_at, updated_at); REVOKE DELETE.
+
+**2. `kb_articles` (FR-02, BR-03, FR-04/BR-07, EC-11, A-43).** `category_id` uuid FK
+NOT NULL; `audience` text NOT NULL CHECK (public|internal) — ARTICLE-level, one decision
+per article (BR-03 is physics: no per-variant column exists to disagree); `source_language`
+text NOT NULL (FR-03: the operator-marked source, per article — §14); `tags` jsonb
+NOT NULL default '[]'; `related_article_ids` jsonb NOT NULL default '[]'; `seeded` bool
+NOT NULL default false + `seeded_fingerprint` text nullable (BR-07: the RoleSeeder
+fingerprint contract — editable, deletable, never overwritten once touched); `created_by`
+uuid NOT NULL; `deleted_at` timestamptz nullable. GRANTS: INSERT (minus created_at);
+UPDATE (category_id, audience, source_language, tags, related_article_ids,
+seeded_fingerprint, deleted_at, updated_at); REVOKE DELETE. ⚑ **FLAG A — `audience` is
+app-updatable** because EC-11's internal→public change is a real operation; the
+high-visibility audit + full-pipeline requirement is enforced by the ONE write door
+(step 4's `Visibility::change`) and its sabotage (#12: a plain UPDATE bypassing the
+pipeline goes red on the audit + index assertions), not by a grant. Countersign confirms.
+
+**3. `kb_article_variants` (FR-02, FR-03, FR-05, FR-07, FR-13/NFR-01 states, T-07, EC-12).**
+`article_id` uuid FK NOT NULL; `language` text NOT NULL; `status` text NOT NULL CHECK
+(draft|in_review|published|archived) — VARIANT-level workflow; `translation_state` text
+NOT NULL CHECK (current|outdated|missing) default 'missing'; `translation_source` text
+NOT NULL CHECK (human|ai) default 'human'; `title` text NOT NULL default ''; `slug` text
+NOT NULL; `summary` text NOT NULL default '' (FR-02's summary line = chunk 0);
+`working_copy` jsonb NOT NULL default '{}' (FR-05 autosave = working copy, not history;
+EC-12 recovery point); `working_copy_saved_at` timestamptz nullable — display provenance
+("restored unsaved changes from {time}"), stamped IN SQL by the autosave UPDATE's
+`clock_timestamp()`, never an app clock; `current_version_id` uuid nullable;
+`index_status` text NOT NULL CHECK (none|pending|current|failed) default 'none' (§8 error
+state: "index pending" with retry); `retrieval_generation` int NOT NULL default 0 (the
+generation the SWAP made current); `submitted_at`, `published_at` timestamptz nullable —
+provenance, DB-stamped in the transition UPDATE. UNIQUE (tenant_id, article_id, language);
+UNIQUE (tenant_id, language, slug) (per-language slugs, §14; EC-06 collision =
+auto-suffix). GRANTS: INSERT (minus created_at); UPDATE (status, translation_state,
+translation_source, title, slug, summary, working_copy, working_copy_saved_at,
+current_version_id, index_status, retrieval_generation, submitted_at, published_at,
+updated_at); REVOKE DELETE. Locks live in Redis `volatile` (T-07) — no lock columns.
+
+**4. `kb_article_versions` (FR-08, AC-07, SEC-04, BR-06) — IMMUTABLE BY GRANT.**
+`variant_id` uuid FK NOT NULL; `article_id` uuid NOT NULL; `version` int NOT NULL;
+`language` text NOT NULL; `title`, `slug`, `summary` text NOT NULL; `content` jsonb
+NOT NULL (the FULL snapshot, NFR-04); `content_hash` text NOT NULL (T-02 determinism:
+same content → same hash → same chunks); `audience_at_publish` text NOT NULL CHECK
+(public|internal) (forensics: what the customer could have seen); `author_id` uuid
+NOT NULL; `note` text nullable; `sanitizer_flags` jsonb NOT NULL default '[]';
+`sanitizer_override` jsonb nullable (`{by, at, reason}` — BR-06/SEC-04, written at
+INSERT, never after); `published_at` timestamptz NOT NULL default clock_timestamp() —
+ORDERING-RELEVANT for SS-04 ("what did the bot show on May 3") → app INSERT AND UPDATE
+denied. UNIQUE (tenant_id, variant_id, version). GRANTS: INSERT column-granted (every
+column EXCEPT created_at, published_at); **NO UPDATE GRANT AT ALL**; REVOKE DELETE.
+AC-07's "immutable (DB-level)" is this table's physics; `KbGrantPhysicsTest` pins the
+empty UPDATE set and sabotage #5 (an in-place content UPDATE) goes red at the grant.
+
+**5. `kb_slug_history` (T-06, EC-06, FR-16) — APPEND-ONLY.** `article_id`, `variant_id`
+uuid NOT NULL; `language` text NOT NULL; `slug` text NOT NULL; UNIQUE (tenant_id,
+language, slug) (a slug ever used resolves forever to the variant that owned it; a NEW
+owner of a retired slug is refused — EC-06's auto-suffix keeps both URLs working).
+GRANTS: INSERT (minus created_at) ONLY; no UPDATE; REVOKE DELETE.
+
+**6. `kb_review_comments` (FR-07, §8 review).** `variant_id` uuid FK NOT NULL;
+`version_id` uuid nullable (the version under review); `block_anchor` text nullable;
+`author_id` uuid NOT NULL; `body` text NOT NULL (SEC-03 inert-rendered); `resolved_at`
+timestamptz nullable + `resolved_by` uuid nullable (DB-stamped in the resolving UPDATE);
+`created_at` — **ORDERING-RELEVANT** (the thread renders in order) → clock_timestamp()
+default + app INSERT/UPDATE denied. GRANTS: INSERT (minus created_at); UPDATE
+(resolved_at, resolved_by, updated_at) — a comment's text never changes after posting
+(accountability); REVOKE DELETE.
+
+**7. `kb_feedback` (FR-11, FR-12, SEC-05, EC-10, AC-08).** `article_id`, `variant_id`
+uuid NOT NULL; `source` text NOT NULL CHECK (widget|telegram|staff); `visitor_hash` text
+nullable (a keyed hash of the Doc 04 visitor token / Telegram user id — never the raw
+id; NULL for staff); `staff_id` uuid nullable; `score` smallint NOT NULL CHECK (score IN
+(-1, 1)); `comment` text nullable (length-capped by the door: `kb.feedback.comment_max_chars`);
+`actioned_at` timestamptz nullable + `actioned_by` uuid nullable (§8 "mark-actioned",
+DB-stamped); `created_at` — **METRIC-RELEVANT** (AC-08 windows; EC-10 anomaly rate) →
+app INSERT/UPDATE denied. CHECK ((visitor_hash IS NULL) <> (staff_id IS NULL)).
+**Partial UNIQUE (tenant_id, variant_id, visitor_hash) WHERE visitor_hash IS NOT NULL —
+EC-10's dedupe arbiter ("one score per visitor per article, latest wins").** ⚑ **FLAG B
+(the amendment-3 FLAG-2 discipline, inverted): this index IS an ON CONFLICT target** —
+the feedback writer upserts on it (latest wins = `ON CONFLICT … DO UPDATE SET score,
+comment, updated_at`); it is the ONLY non-PK unique on the table, so the arbiter law
+holds. Countersign confirms. GRANTS: INSERT (minus created_at); UPDATE (score, comment,
+actioned_at, actioned_by, updated_at); REVOKE DELETE.
+
+**8. `kb_chunks` — THE DOC 09 DELTA (STOP-A + STOP-B as ruled; every line below is a
+Doc 09 core edit landing under this countersign).**
+
+- **Shape:** the table is RECREATED as `PARTITION BY LIST (audience)` with exactly two
+  partitions, `kb_chunks_public` FOR VALUES IN ('public') and `kb_chunks_internal` FOR
+  VALUES IN ('internal') — index-level separation in the literal sense: each partition
+  owns its OWN HNSW (`vector_cosine_ops`) and GIN (`content_tsv`) indexes. The chatbot's
+  retrieval path (step 7, `PublicChunkSource`) reads `kb_chunks_public` BY TABLE NAME with
+  no widening parameter anywhere on that path; Copilot reads the parent. Postgres requires
+  the partition key inside every unique constraint, so: PRIMARY KEY (id, audience).
+- **New columns:** `variant_id` uuid NOT NULL; `version_id` uuid NOT NULL (FR-14's
+  version-pinned citation); `retrieval_generation` int NOT NULL (T-01); `heading_path`
+  text NOT NULL default '' (FR-14/T-02); `sanitizer_flags` jsonb NOT NULL default '[]'
+  (T-01's own list). `article_ref` STAYS (no FK — the seam law) and stays indexed.
+- **The arbiter:** `UNIQUE (tenant_id, audience, variant_id, retrieval_generation,
+  chunk_index)` — the ONLY non-PK unique. The old `kb_chunks_identity`
+  (tenant, article_ref, chunk_index) is DROPPED WITH THIS AMENDMENT (STOP-A condition 3):
+  it has no language and no generation, so `en`/`am` variants collided and two generations
+  could not coexist. **FLAG-2 proof attached:** a static sweep asserts no `ON CONFLICT`
+  anywhere in `app/` targets `kb_chunks` at all (KbIndexer's upsert is select-then-
+  insert/update by design — verified in the source, `KbIndexer.php:54-63`), plus the
+  `KbGrantPhysicsTest` pin that the ONLY unique indexes on `kb_chunks` are the PK and the
+  new arbiter.
+- **The swap (T-01, NFR-06, AC-03):** publish writes generation N+1 rows with
+  `retrievable=false`; the swap is ONE statement inside the publish transaction —
+  `UPDATE kb_chunks SET retrievable = (retrieval_generation = ?) WHERE tenant_id = ? AND
+  variant_id = ?` — so no reader ever sees a mixed generation; `retrievable` alone encodes
+  "current generation" and HybridRetriever's existing `where('retrievable', true)` already
+  filters it (no extra query predicate needed — stated so the retriever packet stays
+  minimal). Unpublish/archive/move-to-non-ai_usable flip all of a variant's rows to
+  `retrievable=false` in-transaction (EC-02 = the same atomic path as unpublish).
+- **"Delete old async" (STOP-A):** a PLATFORM-ROLE prune job `kb:chunks-prune` (Doc 01
+  SEC-02's retention class; the S09 payload-reduction precedent; scoped by this filing to
+  `kb_chunks` rows WHERE `retrievable = false AND retrieval_generation < (the variant's
+  current generation − 1)` AND `version_id <> the variant's current_version_id`), daily.
+  The app role NEVER deletes: `REVOKE DELETE` on the parent AND both partitions
+  (STOP-A condition 5's proving test asserts the refusal under `app` and the prune under
+  `platform_admin`).
+- **Backfill (expand-contract inside step 2b, three migrations in dependency order, all
+  in one release — no production data exists; countersign may order release separation):**
+  (1) EXPAND — create the partitioned table as `kb_chunks_v2` with the new columns,
+  partitions, RLS (parent + each partition: ENABLE + FORCE + `tenant_isolation`), grants
+  (parent + partitions: INSERT column-granted minus created_at, UPDATE column-granted to
+  (content, provenance, embedding, language, ai_usable, retrievable, heading_path,
+  sanitizer_flags, version_id, retrieval_generation, updated_at) — `audience` and
+  `variant_id` are NOT updatable: an audience change is a re-index into the other partition
+  through the door (EC-11), never a row move; REVOKE DELETE on all three), and copy every
+  existing row with `variant_id := article_ref`, `version_id := article_ref`,
+  `retrieval_generation := 1` (fixture rows only — no seeder writes kb_chunks; verified);
+  (2) SWAP — rename `kb_chunks` → `kb_chunks_legacy`, `kb_chunks_v2` → `kb_chunks`
+  (partitions keep their names; indexes renamed to the canonical names); (3) CONTRACT —
+  ⚑ **FLAG C:** `kb_chunks_legacy` is DROPPED in a later contract-phase migration carrying
+  the `@expand-contract: contract-phase` marker, scheduled for the Doc 18 window (C-12's
+  two-release rule honored literally even though the table holds no production rows).
+  Countersign may order the drop now instead.
+- **Grant-physics pins move in the SAME packet:** `AiGrantPhysicsTest::DOC09_DENIED_COLUMNS
+  ['kb_chunks']` gains `audience`, `variant_id` in the UPDATE-denied set (a widened set is
+  as red as a narrowed one — the test's own rule); `KbGrantPhysicsTest` pins the partitions.
+- **Code packets riding this countersign (escalate-first, diffs shown at 2b before
+  landing):** (i) `KbIndexer::index()` gains `variantId`, `versionId`, `generation`,
+  `headingPath`, `sanitizerFlags` and upserts on the new arbiter; `retire()` flips by
+  `variant_id`; a new `swap(variantId, generation)` is the ONE-statement door; (ii)
+  `HybridRetriever` returns `version_id`, `heading_path`, `language` per chunk (FR-14) —
+  no other change; (iii) `ChatbotTurn::renderAnswer` (step 7) renders the version-pinned
+  citation URL through the FR-16 resolver.
+
+**DELIBERATE NON-TABLES (so the countersign can refuse them if wrong):** locks (Redis
+`volatile`, T-07); the retrieval cache (TenantCache, T-05); analytics aggregates (events
+→ Doc 15; the stats header is a read model over `kb_feedback` + the events stream);
+translation-state history (the audit log IS the history); `kb_media` — article images
+are Doc 04 media items referenced by storage key inside `content` blocks (SEC-02: the
+public-URL grant rides publish, not a table).
+
+**Doc 10 settings registering with the schema (A-5 naming; platform-maximum validation):**
+`kb.require_alt` bool true (tenant_editable); `kb.lock.heartbeat_seconds` int 90;
+`kb.feedback.rate_per_hour` int 20; `kb.feedback.comment_max_chars` int 500 (max 2000);
+`kb.render_cache_ttl_seconds` int 300 (max 300 — FS-03's cap is physics in the
+validation rule); `kb.mega_article_warn_words` int 5000; `kb.chunk_target_tokens` int 500
+(min 100, max 1000). None disables the one door, the alt gate or the sanitizer
+(`FORBIDDEN_SETTING_PATTERNS` extended with `kb.*sanitizer*` and `kb.*indexer*` in the
+same commit, so `registry:check` refuses such a key by mechanism).
