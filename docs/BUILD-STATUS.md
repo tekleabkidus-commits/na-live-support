@@ -376,6 +376,14 @@ InboxBrowserSeeder status-write precedent), landed with the S08 step-11
 commit and proven 7/7 ×3. **0j should never fire again; a recurrence means
 the fix failed, not that the letter needs widening.**
 
+**0k. LETTERED (filed at the S09 close as a risk row by name — this block added at the S10 plan-approval
+commit by advisor order; the S09 ruling never received its block — honest trail). THE DOC 02
+QUEUED-MAIL CI FLAKE CANDIDATE.** Signature: "mailable was not queued", one test per run, green
+locally (Doc 02's auth-mail suites). Threshold: 0k-class reds in 3 OR MORE of any 10 consecutive
+COMPLETED runs. Consequence: ESCALATE-FIRST to fix — the files are Doc 02's, not the sitting
+session's; a red is dispositioned "0k-class, retry-green" or "REAL", stated never implied (the
+0i triage law applied to this class). Source of record: PROJECT-HANDOFF-v9 §8.
+
 **0l. LETTERED (the S09 post-close fix session's countersigned filing,
 2026-08-26) — WARM-DB BROWSER-FIXTURE ACCUMULATION. CI's FRESH DB IS THE
 VERDICT-BEARER; a warm local browser battery carries known reds of this
