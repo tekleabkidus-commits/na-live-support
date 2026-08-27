@@ -1,0 +1,7 @@
+# S10 step 0 — solo guard (after killing stale --serve/--bridge trees 54210/57213/57214, started 15:07/15:48 on other ttys)
+kidus    59949   554 11 17:40 pts/4    00:02:08 claude
+kidus    60148 60135  0 17:42 ?        00:00:00 /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.f1102b1876ef9ca6
+kidus    60158 60157  0 17:42 pts/2    00:00:00 sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+kidus    60159 60158  0 17:42 pts/2    00:00:00 /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+--- pstree
+init(Ubuntu)(1)---SessionLeader(552)---Relay(554)(553)---bash(554)---claude(59949)---bash(62853)---pstree(62861)

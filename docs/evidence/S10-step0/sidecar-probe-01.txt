@@ -1,0 +1,10 @@
+# ADR 0018 sidecar liveness probe (config/ai.php: AI_EMBEDDINGS_BASE_URL default http://embeddings:8081/v1)
+compose services matching embedd/sidecar:
+(none)
+sidecars/ dir:
+smpp
+--- from app container:
+DNS: no host embeddings
+embeddings:8081 HTTP 000
+{"ok":false,"error":"mock-ai: unknown route"}
+mock-ai:8083 /v1/embeddings HTTP 404
