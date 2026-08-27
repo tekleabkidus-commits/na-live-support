@@ -1,0 +1,58 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\PublishRetireRoundTripTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the resolver contract to the chunk-state implementation (s[39m[90m…[39m [90m6.92s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit round trip: index → served + Current → retire → not served, row[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\KbOneIndexerDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every row the door writes carries strip provenance, and[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\PublishRetireRoundTripTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table kb_chunks (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "kb_chunks" where "article_ref" = 018f6b2e-0000-7000-8000-0000000002a1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Ai/Retrieval/KbIndexer.php[39;22m:[39;1m70[39;22m
+  [33m8   [39m[39;1mtests/Feature/Kb/PublishRetireRoundTripTest.php[39;22m:[39;1m65[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\RetrievalTest[22m [90m>[39m it EC-06/[D10]:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table kb_chunks (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "kb_chunks" where "article_ref" = 018f6b2e-0000-7000-8000-0000000000a1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Ai/Retrieval/KbIndexer.php[39;22m:[39;1m70[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/RetrievalTest.php[39;22m:[39;1m89[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (29 assertions)[39m
+  [90mDuration:[39m [39m7.41s[39m
+
+EXIT 2

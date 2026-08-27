@@ -1,0 +1,33 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\KbOneIndexerDoorTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php[39m[90m…[39m [90m6.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every row the door writes carries strip provenance, and[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\KbOneIndexerDoorTest[22m [90m>[39m it STATIC: the ONLY writer…    
+[39;1m  a second route into kb_chunks exists: app/Domain/Ai/Retrieval/KbIndexer.php, app/Domain/Kb/Publish/RogueChunkWriter.php
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => 'app/Domain/Ai/Retrieval/KbIndexer.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Domain/Kb/Publish/RogueChunkWriter.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/KbOneIndexerDoorTest.php[39m:[32m63[39m
+     59▕             $writers[] = $path;
+     60▕         }
+     61▕         expect(preg_match('/\$table\s*=\s*[\'"]kb_chunks[\'"]/', $source))->toBe(0, "{$path} maps kb_chunks as an Eloquent model — a second door");
+     62▕     }
+  ➜  63▕     expect($writers)->toBe(['app/Domain/Ai/Retrieval/KbIndexer.php'], 'a second route into kb_chunks exists: '.implode(', ', $writers));
+     64▕     expect(count(kbChunkMentions()))->toBeGreaterThanOrEqual(2, 'the sweep found almost nothing — vacuous');
+     65▕ });
+     66▕ 
+     67▕ it('RUNTIME: every row the door writes carries strip provenance, and a planted assistant-directed imperative never reaches the stored chunk', function (): void {
+
+  [33m1   [39m[39;1mtests/Security/KbOneIndexerDoorTest.php[39;22m:[39;1m63[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (15 assertions)[39m
+  [90mDuration:[39m [39m6.14s[39m
+
+EXIT 1

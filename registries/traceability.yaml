@@ -2205,3 +2205,113 @@ entries:
     gap: >-
       No Doc 09 code exists yet — the plan-approval commit precedes step 1.
       The invoice half stays [OA] even at close.
+
+  # ── Doc 10 (S10): seeded at step 1 when the BUILD-STATUS row left NOT STARTED
+  #    (the per-document flip, ADR 0004; the S08 step-1a precedent). AC-04 and
+  #    AC-06 carry the step-1 safety floor as PARTIAL automated rows; the rest are
+  #    honest planned-manual entries, each naming the approved-plan step whose
+  #    suite flips it. A row here never claims coverage that does not exist.
+  - ac_ref: "Doc10 AC-01"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 4 to tests/Feature/Kb/WorkflowTest.php: the workflow matrix (transitions, self-publish collapse, request-changes loop, archive/un-archive) with permissions, events and badges.
+  - ac_ref: "Doc10 AC-02"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 8 to tests/Feature/Kb/TranslationStateTest.php: the translation-state matrix: source publish flips siblings to outdated ≤ 5 s, missing-vs-outdated fallback (BR-05), per-variant independence (EC-04).
+  - ac_ref: "Doc10 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 6 to tests/Feature/Kb/PublishAtomicityTest.php: the stage-kill chaos proof of the human/retrieval generation split (NFR-06); the week-long staging probe half rides [D19].
+  - ac_ref: "Doc10 AC-04"
+    suite_path: tests/Security/KbOneIndexerDoorTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      SEEDED AT S10 STEP 1 with the safety floor: the ONE-INDEXER-DOOR proof (static sweep — KbIndexer.php is the only writer of kb_chunks; runtime — every row carries strip provenance) is the precondition AC-04's "only sanitized, published content reachable" rests on.
+    gap: >-
+      PARTIAL: the chunk contract fields (article id, language, heading path, version id) and the STRUCTURAL internal/public separation flip at step 7 (tests/Security/KbIndexSeparationTest.php, the three-way T-08 proof per the STOP-B ruling).
+  - ac_ref: "Doc10 AC-05"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 5 to tests/Feature/Kb/SanitizerTest.php: the shared Doc 09 AC-07 fixture suite + the guide-style EC-09 false-positive fixtures + overrides recorded on versions.
+  - ac_ref: "Doc10 AC-06"
+    suite_path: tests/Feature/Kb/PublishRetireRoundTripTest.php
+    type: automated
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      SEEDED AT S10 STEP 1 with the safety floor: the publish → retire ROUND TRIP over the existing Doc 09 door — retire flips retrievable (never deletes; the app-role DELETE refusal is the positive control), and a citation to the retired ref resolves Retired through the FR-16 CitationResolver contract — never a 404.
+    gap: >-
+      PARTIAL: unpublish/archive/supersede/slug-change URL fixtures, slug-history redirects and version-pinned citation URLs flip at step 7 (tests/Feature/Kb/TombstoneTest.php).
+  - ac_ref: "Doc10 AC-07"
+    suite_path: manual
+    type: manual
+    tier: isolation
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 4 to tests/Feature/Kb/VersioningTest.php: DB-level immutable snapshots (grant physics), diff correctness on the block-edit fixture set, restore-creates-draft.
+  - ac_ref: "Doc10 AC-08"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 10 to tests/Feature/Kb/FeedbackTest.php: FR-12 events with EC-10 dedupe; the stats header reconciled against a Doc 15 fixture (rendering [D15]).
+  - ac_ref: "Doc10 AC-09"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 9 to tests/Feature/Kb/AiAuthoringTest.php: every FR-06 tool yields an AI-accented draft, never publishes (static + runtime — KbAiNeverPublishesTest), draft-from-conversations end-to-end on a Doc 09 cluster fixture.
+  - ac_ref: "Doc10 AC-10"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S10 step 6 to tests/Feature/Kb/PublishPipelineTest.php: the alt-text gate (kb.require_alt on) blocks public publish with missing alts and lists them.

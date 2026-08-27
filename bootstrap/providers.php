@@ -9,4 +9,5 @@ return [
     App\Providers\HorizonServiceProvider::class,
     App\Providers\TelegramServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
+    App\Providers\KbServiceProvider::class,
 ];
