@@ -136,6 +136,9 @@ return [
             'view' => 'የAI ውሳኔዎችን ማየት',
         ],
         'killswitch' => 'የAI ማቆሚያ መጠቀም',
+        'providers' => [
+            'manage' => 'የAI አቅራቢዎችን ማስተዳደር',
+        ],
     ],
     'kb' => [
         'view_internal' => 'የውስጥ ጽሑፎችን ማየት',

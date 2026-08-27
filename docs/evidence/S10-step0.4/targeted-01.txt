@@ -1,0 +1,43 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ProviderSwitchDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana[39m[90m…[39m [90m9.71s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the switch door: 403 without the key; GET answers the model map;[39m[90m…[39m [90m4.94s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\CatalogSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the v[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks high-risk exactly where §4.1 writes "(high)" plus ai.provi[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the scope dimension of every key: 47 scoped (46 per the §4.[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the four Doc 02-era entries under their exact registered n[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves every label and description i18n key in BOTH launch lan[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit groups every key under one of the fourteen §4.1 modules, each wi[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats an unknown key as a programming error, never a verdict (B[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RoleSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the nine Appendix B templates through REAL provisioning, f[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the ratified grant constraints: SA=all keys (114 since S10[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent: provisioning-style double seed yields ONE consist[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEVER overwrites an edited template, updates an untouched one on[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit emits rbac.role.created through the outbox and writes the audit[39m[90m… [39m [90m0.13s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ProviderSwitchDoorTest[22m [90m>[39m i… [41;1m MissingTenantContext [49;22m  
+[39;1m  No tenant context is bound, so App\Models\User cannot be queried (Doc 01 T-05). Every entry point must resolve a tenant first: HTTP through the tenant middleware, jobs through the tenant job middleware, sockets through the Reverb channel callback, CLI through --tenant. If this is genuinely a platform-wide operation, it belongs behind PlatformConnection::run() and must name its actor (SEC-02).[39;22m
+
+  at [32mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39m:[32m25[39m
+     21▕ final class MissingTenantContext extends RuntimeException
+     22▕ {
+     23▕     public static function forModel(string $model): self
+     24▕     {
+  ➜  25▕         return new self(sprintf(
+     26▕             'No tenant context is bound, so %s cannot be queried (Doc 01 T-05). Every entry point must '
+     27▕             .'resolve a tenant first: HTTP through the tenant middleware, jobs through the tenant job '
+     28▕             .'middleware, sockets through the Reverb channel callback, CLI through --tenant. If this is '
+     29▕             .'genuinely a platform-wide operation, it belongs behind PlatformConnection::run() and must '
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39;22m:[39;1m25[39;22m
+  [33m2   [39m[39;1mapp/Support/Tenancy/BelongsToTenant.php[39;22m:[39;1m50[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m13 passed[39;22m[90m (1029 assertions)[39m
+  [90mDuration:[39m [39m16.49s[39m
+

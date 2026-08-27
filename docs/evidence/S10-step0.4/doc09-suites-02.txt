@@ -1,0 +1,284 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m6.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiBellDeliveryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ai.killswitch.changed → every live ai.killswitch holder EXCEPT t[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.anomaly.detected → every live reports.supervisor.live holder,[39m[90m…[39m [90m1.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.digest.ready → its ONE recipient and only while they still ho[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.provider.health_changed is DELIBERATELY not projected into th[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiI18nParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit en and am ai.php carry the same key set; every :param in en appe[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the R-14 queue file lists every machine-authored am ai.* key exa[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiQueueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0017 (amended): ai and ai-background are SEPARATE supervisor[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the per-tenant semaphore admits to the registered cap and[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the semaphore is per-tenant — one tenant at cap starves n[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the ai.concurrency.per_tenant setting is registered with platfor[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ArtifactOutcomeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_unedited: insert (gated ai.copilot.insert_draft)[39m[90m… [39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_edited{diff_ref}: the agent edits before sending[39m[90m… [39m [90m0.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 discarded: the discard door records it; a discarded artifa[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 gating: insert WITHOUT ai.copilot.insert_draft is refused[39m[90m… [39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: a non-usable row (low_confidence / refused) cannot be ins[39m[90m…[39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\BackofficeConfigTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit persona: draft → preview (queued on ai-background, the DRAFT per[39m[90m…[39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guardrails: draft → publish writes the SEC-05 audit row (ai.conf[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit thresholds/scope (BR-07, US-06): simulate returns before/after/d[39m[90m…[39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit permissions: every Backoffice door is gated by its closed key —[39m[90m… [39m [90m0.68s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01 (AC-01's pipeline clause): a six-message burst yields ONE[39m[90m… [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ClassifyPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/FR-07: the consumer classifies the burst and records the d[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: only the confirmed batch TAIL classifies — a superseded a[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event changes nothing — one decision, howeve[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 (Doc 04): a quarantined inbound gets NO classification — n[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06: the two-stage RG confirmation runs ONLY past the screening[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 (filed interpretation, S09 step 14): a second customer mes[39m[90m…[39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ComposerActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 guardrail notice: a money-intent draft WITHOUT a citation[39m[90m… [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule[39m[90m… [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 doors: every composer action is QUEUED (202 + request id,[39m[90m… [39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an out-of-scope conversation answers the 404 pattern on ev[39m[90m…[39m [90m0.71s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m1.48s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\CopilotPanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 chips: intent / sentiment / urgency / confidence from the[39m[90m… [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 debounce: repeated panel reads within 10 s dispatch ONE re[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09: regenerate ×3 exhausted → the card LOCKS to the low-confi[39m[90m…[39m [90m0.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09 cooldown: a regenerate inside the cooldown window is refus[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 / AC-09 (Copilot half): with the provider chain exhausted[39m[90m… [39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the request-poll door (T-04's socket fallback): pending until th[39m[90m…[39m [90m0.80s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.22s[39m  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.006 ms   p99   0.033 ms   max   0.182 ms   budget(p99) 3.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\HonestyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (sabotage #10 target): a persona publishes ONLY if every d[39m[90m…[39m [90m0.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19a wording vs presence: guardrails may REWORD the disclosure[39m[90m…[39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-08 / BR-05 ABSENCE: no registered setting, no config kind, no[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19d: an AI-authored message is never edited post-send — Doc 0[39m[90m…[39m [90m0.57s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\LanguageGateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14: the launch pair publishes; a third language with NO templat[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: a language becomes enableable ONLY once a guardrails overri[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 in the turn: a customer writing in a language the endpoint d[39m[90m…[39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\NormalizeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the guard extends to MEDIA egress: outside production a real med[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a voice note gains its transcript_ref through the Doc 04[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a receipt image gains ocr_ref with per-field confidence[39m[90m   [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a provider outage leaves the media item UNTOUCHED and the[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\OrchestratorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: the task catalog is CLOSED at twelve, matching the ai_dec[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: the fallback chain falls through a failing provider to the[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: an OPEN breaker skips its provider without spending a call[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE STEP-3 ASSERTION: no egress path skips the guard — every Pro[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a PUBLISHED provider_routing config overrides the seed —[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ProviderSwitchDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the switch door: 403 without the key; GET answers the model map;[39m[90m…[39m [90m0.66s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.08s[39m  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgEvalHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the corpus is the shipped 50: half risk, half healthy, both lang[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-07: at the shipped rg_min the scripted realistic scorer meet[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the harness CAN fail: a miscalibrated threshold drops precision[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimilarTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-05/FR-14: top-3 by cosine over resolved-ticket summaries, the[39m[90m… [39m [90m1.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 scope AT QUERY TIME: an Own-scoped agent sees ONLY tickets[39m[90m… [39m [90m1.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 nightly: the embedder summarizes + embeds resolved tickets[39m[90m… [39m [90m0.66s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimulationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)[39m[90m… [39m [90m1.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\StreamingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-04 client: an SSE response is parsed delta-by-delta in order,[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §13 sentence chunker: Latin and Ethiopic terminators both bound[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 relay: token-sized deltas become SENTENCE frames on the age[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 job: CopilotTaskJob runs the stream end-to-end and ends in[39m[90m… [39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SubjectGenerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a subjectless ticket gets a generated subject through Sub[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a ticket that ALREADY has a staff subject is never overwr[39m[90m…[39m [90m1.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the 80-character cap and one-line normalization hold; an[39m[90m… [39m [90m1.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SupervisorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/US-05: withdrawal complaints tripling in the last hour vs[39m[90m… [39m [90m1.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 sentiment watch: a conversation whose latest classificatio[39m[90m…[39m [90m0.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 qa_prescore: samples yesterday's resolved tickets once eac[39m[90m…[39m [90m0.98s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 daily_digest: six bullets per manager (reports.supervisor.[39m[90m…[39m [90m1.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 (AC-09's last rung) + FR-18: with every provider of the ch[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the supervisor FEED is the decision-log door filtered by surface[39m[90m…[39m [90m0.76s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit (b)+(d): a translate send carries channel_meta.ai_translation {a[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (d): an EDITED translation still carries the original and the ve[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) default-preserving, TESTED: a reply WITHOUT ai_artifact_id w[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) negative controls: wrong-owner artifact, missing ai.copilot.[39m[90m…[39m [90m1.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14 validator unit: same digits in any order pass; a reordered d[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 (sabotage #14 target): a translation that ALTERS a digit is[39m[90m… [39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: the repair retry SUCCEEDING yields the artifact — digits ve[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 mixed-language input: the dominant script decides the sour[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 on staff text: a phone number in the agent's draft never[39m[90m… [39m [90m0.56s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\WeeklyOutputsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit top unanswerable: no_grounding handoffs and locked regenerations[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit calibration curve: confidence buckets vs outcomes over chatbot +[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RG precision queue delegates to RgCalibration (the [D09] EC-06 r[39m[90m…[39m [90m0.51s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m5.85s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AiEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-21: the ai.* family is CLOSED at seven (six + the approved rule-[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mQ7/SEC-06: every ai.* payload is identifiers + closed categories —[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mai.decision.logged is SAMPLED by a registered platform setting (FR-[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every Doc 09 fixture entry matches the catalog — event ex[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to an App\Jobs\Ai durab[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\AiGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003: app holds no DELETE on any Doc 09 table[39m[90m                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 09 table is FORCED row-level security with the t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the messages lesson: EVERY ai_decisions partition carries its ow[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AiDecisionPartitions: the window is idempotent and a created mon[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 (countersigned): no ON CONFLICT statement ever targets ai[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04/BR-06: planted RG flag content and staff notes NEVER ente[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the exclusion holds through the FULL assembled prompt, a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the allowlist is honest in the OTHER direction: language, prior-[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.60s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\PhoneEmailScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: near-miss controls survive to the sink — the scanner and[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES under innocent keys never reach t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES inside the message string itself[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: benign context survives — UUIDs, timezone offsets, _id k[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the four DB sinks — per-sink plant→detect→rollback contr[39m[90m…[39m [90m0.15s[39m  
+
+  [90mTests:[39m    [32;1m190 passed[39;22m[90m (2643 assertions)[39m
+  [90mDuration:[39m [39m73.39s[39m
+
+EXIT 0

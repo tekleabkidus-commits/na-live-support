@@ -20,6 +20,9 @@ use App\Support\Rbac\PermissionCatalog;
  * document) — REGISTERED with Doc 07 landing. S07 STEP-4 UPDATE (R-26,
  * owner-signed): `views.manage`, the write-tier key A-34 ruled. Catalog 113,
  * scoped 47 (views.manage is unscoped); the high set is unchanged at 38.
+ * S10 STEP 0.4 UPDATE (R-D10-1, owner-signed, amended at the S10 plan rulings):
+ * `ai.providers.manage` — the FOURTH addition of record (Doc 09 FR-02's change-log
+ * key), HIGH. Catalog 114, high 39, scoped 47 unchanged.
  * Each edit and its registry edit are the same commit, per this file's own
  * contract.
  */
@@ -51,6 +54,8 @@ const DOC03_CATALOG_KEYS = [
     // AI
     'ai.copilot.use', 'ai.copilot.insert_draft', 'ai.chatbot.configure', 'ai.guardrails.edit',
     'ai.thresholds.edit', 'ai.decisions.view', 'ai.killswitch',
+    // S10 step 0.4 (R-D10-1, owner-signed): the FOURTH addition of record, Doc 09 FR-02's change-log key.
+    'ai.providers.manage',
     // Knowledge Base
     'kb.view_internal', 'kb.articles.create', 'kb.articles.edit', 'kb.articles.delete',
     'kb.articles.publish', 'kb.categories.manage', 'kb.feedback.view',
@@ -89,6 +94,8 @@ const DOC03_HIGH_KEYS = [
     'webchat.widgets.configure',
     'sms.gateways.manage',
     'ai.chatbot.configure', 'ai.guardrails.edit', 'ai.thresholds.edit', 'ai.killswitch',
+    // S10 step 0.4: HIGH by FR-02's "thresholds-adjacent" words (R-D10-1 as amended) — 39.
+    'ai.providers.manage',
     'automation.rules.activate', 'forms.publish', 'fields.manage', 'sla.policies.edit',
     'org.departments.manage',
     'admin.users.manage', 'admin.users.disable', 'admin.roles.manage',
@@ -124,16 +131,16 @@ const DOC03_SCOPED_KEYS = [
     'views.share',
 ];
 
-it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the views.share/views.manage additions of record — verbatim, nothing else (Q9, R-12, S07, R-26)', function () {
+it('registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the views.share/views.manage/ai.providers.manage additions of record — verbatim, nothing else (Q9, R-12, S07, R-26, R-D10-1)', function () {
     $registered = array_keys(app(PermissionCatalog::class)->all());
 
     expect($registered)->toBe(DOC03_CATALOG_KEYS)
-        ->and(count($registered))->toBe(113);
+        ->and(count($registered))->toBe(114);
 });
 
-it('marks high-risk exactly where §4.1 writes "(high)" — all 38, no more, no fewer (R-12)', function () {
+it('marks high-risk exactly where §4.1 writes "(high)" plus ai.providers.manage (R-D10-1) — all 39, no more, no fewer (R-12)', function () {
     expect(app(PermissionCatalog::class)->highKeys())->toBe(DOC03_HIGH_KEYS)
-        ->and(count(DOC03_HIGH_KEYS))->toBe(38);
+        ->and(count(DOC03_HIGH_KEYS))->toBe(39);
 });
 
 it('pins the scope dimension of every key: 47 scoped (46 per the §4.1 module headers + views.share, S07), the rest unscoped', function () {

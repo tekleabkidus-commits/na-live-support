@@ -1066,4 +1066,15 @@ return [
         'required_fields' => ['surface', 'old', 'new'],
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 09 FR-02/SEC-05 (S10 step 0.4, R-D10-1 as amended): a provider/model
+        // switch is the high-visibility class — actor + the OLD and NEW chains per
+        // tier. The ConfigVersions publish also writes ai.config.published; this
+        // row names the switch by what it is.
+        'action_key' => 'ai.providers.switched',
+        'entity' => 'ai_config_version',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc09',
+    ],
 ];

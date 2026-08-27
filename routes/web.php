@@ -112,6 +112,14 @@ Route::middleware([
         ->middleware('permission:tickets.view')->name('ai.backoffice.banner'); // AC-08: every staff member sees the banner
     Route::get('decisions', [App\Http\Controllers\Ai\AiBackofficeController::class, 'decisions'])
         ->middleware('permission:ai.decisions.view')->name('ai.backoffice.decisions');
+    // S10 step 0.4 (R-D10-1 as amended at the plan rulings): the provider SWITCH
+    // DOOR — JSON only; the B8-S08 screen lands in the [B8] pass. The mutation
+    // rides ConfigVersions (ai.config.published) + the ai.providers.switched
+    // high-visibility row written by the domain door itself.
+    Route::get('providers', [App\Http\Controllers\Ai\AiBackofficeController::class, 'providers'])
+        ->middleware('permission:ai.providers.manage')->name('ai.backoffice.providers');
+    Route::post('providers/routing', [App\Http\Controllers\Ai\AiBackofficeController::class, 'providersRouting'])
+        ->middleware(['permission:ai.providers.manage', 'audit:ai.providers.switched'])->name('ai.backoffice.providers.routing');
 });
 
 // Doc 05 §8/§9 — the Telegram admin surfaces (B6-S01/S02/S03). Same staff

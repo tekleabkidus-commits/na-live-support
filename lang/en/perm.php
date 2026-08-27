@@ -136,6 +136,9 @@ return [
             'view' => 'View AI decisions',
         ],
         'killswitch' => 'Use AI kill switch',
+        'providers' => [
+            'manage' => 'Manage AI providers',
+        ],
     ],
     'kb' => [
         'view_internal' => 'View internal articles',

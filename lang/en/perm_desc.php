@@ -136,6 +136,9 @@ return [
             'view' => 'See the AI\'s decision log.',
         ],
         'killswitch' => 'Stop all AI activity for the workspace immediately.',
+        'providers' => [
+            'manage' => 'Switch which AI provider and model answers each task tier — a versioned, instantly reversible, high-visibility change.',
+        ],
     ],
     'kb' => [
         'view_internal' => 'Read internal-only knowledge base articles.',

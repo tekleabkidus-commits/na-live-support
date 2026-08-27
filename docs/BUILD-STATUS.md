@@ -46,7 +46,7 @@ this note. All subsequent S19 work is single-session.
 | Id | Status | Proof |
 |---|---|---|
 | FR-01 | DONE | TaskCatalog (12 closed tasks, tiers/timeouts/retries/customer-visible) — OrchestratorTest |
-| FR-02 | PARTIAL **[OA]** | ProviderRegistry + drivers + published provider_routing zero-deploy (OrchestratorTest FR-02); the Backoffice provider PAGE waits on `ai.providers.manage` (owner sign-off row below) |
+| FR-02 | PARTIAL **[B8]** | ProviderRegistry + drivers + published provider_routing zero-deploy (OrchestratorTest FR-02); `ai.providers.manage` REGISTERED + the switch DOOR bound at S10 step 0.4 (ProviderSwitchDoorTest; R-D10-1 as amended); the B8-S08 provider SCREEN is the [B8] pass's. Was: PARTIAL [OA] awaiting sign-off |
 | FR-03 | DONE | ai / ai-background families (ADR 0017), TenantSemaphore (AiQueueTest), pre-call quota (QuotaEnforcementTest); every task a queued job |
 | FR-04 | DONE | ConfigVersions publish/rollback + config_version on decisions — ConfigVersioningTest; Backoffice doors (BackofficeConfigTest) |
 | FR-05 | DONE | NormalizeTest (transcript_ref, OCR fields + confidences, language persist) |
@@ -62,7 +62,7 @@ this note. All subsequent S19 work is single-session.
 | FR-15 | DONE | ComposerActionsTest + TranslateTest + TranslateSendTest (original in message metadata through the countersigned 10b packet) + the composer actions UI (ai-copilot.spec) |
 | FR-16 | DONE | ArtifactOutcomeTest (all three outcomes, diff_ref identifiers + numeric metrics) |
 | FR-17 | PARTIAL **[D15]/[D12]/[D16]** | SupervisorTest (anomaly arithmetic, sentiment watch, advisory qa_prescore on the fixture rubric, localized 6-bullet digest); notifications delivered via the three bell arms (AiBellDeliveryTest); dashboards render in Doc 15; rubric content Doc 12/16 |
-| FR-18 | PARTIAL **[B8]/[OA]** | BackofficeConfigTest + ai-backoffice.spec (persona w/ 5-conversation preview, guardrails, thresholds+scope, kill-switch grid + confirmation, decisions); provider switch page = `ai.providers.manage` sign-off; pixel fidelity [B8] |
+| FR-18 | PARTIAL **[B8]/[OA]** | BackofficeConfigTest + ai-backoffice.spec (persona w/ 5-conversation preview, guardrails, thresholds+scope, kill-switch grid + confirmation, decisions); provider switch DOOR landed at S10 step 0.4 (`ai.providers.manage`, R-D10-1); the B8-S08 screen + pixel fidelity [B8] |
 | FR-19 | DONE | HonestyTest (a: gate + first greeting; b: trap fixtures; c: author_type=ai + the AI marker DOM in ai-honesty.spec; d: Doc 04 FR-23 re-asserted) |
 | FR-20 | PARTIAL **[D10]/[D15]** | DecisionLogTest + OutcomeEnrichment + WeeklyOutputsTest (top-10 unanswerable ids-only seam, calibration curve, RG queue); the one-click KB draft is Doc 10's; rendering Doc 15's |
 | FR-21 | DONE | AiEventConsumerContractsTest — the family CLOSED at NINE after the filed amendments (ai.provider.health_changed at step 8; ai.anomaly.detected + ai.digest.ready at step 11b) |
@@ -144,7 +144,7 @@ SEC-03 scrubber (Doc 02, step 1) · SCHEMA AMENDMENT 3 (step 2) · QuotaMeter::h
 guard refusal treated as provider failure (tripping breakers/health) · meter compensation re-admitting past the band · `flushSync` for Copilot artifacts (FR-16 race) · FR-07's open-unassigned second handoff crash · DecisionWriter's 1% T-03 flake · `cleanupTenants` blind to Doc 07/08 tables · jsonb `?` vs PDO (0h, twice) · the test harness's `Cache::flush()` wiping the dev workspace's view ZSETs (dev-loop trap, filed for Doc 18 with the Octane/anon-volume pair) · `Doc 01 QuotaTest` order-dependence (FILED, Doc 01's window) · `RgStorageTest` depends on `rgScene()` from a Security file (FILED, Doc 08's window) · the Doc 02 queued-mail CI flake class (FILED as risk row 0k, 3-in-10 threshold).
 
 ### Carries (named, with their unblocker)
-- **`ai.providers.manage` — OWNER SIGN-OFF ROW (not seeded):** the catalog stays at 113; the provider switch page and its route land in one commit with CatalogSnapshotTest/RoleSeederTest pin moves the moment the owner signs.
+- **`ai.providers.manage` — DISCHARGED at S10 step 0.4 (R-D10-1, owner-signed; AMENDED at the S10 plan rulings — this row's "provider switch page" premise was false, the controller's own docblock said "no page here yet"; honest trail):** registered HIGH, catalog 113→114 (executed, pasted), pins moved, SA/Admin by computed rule, the switch DOOR (`POST admin/ai/providers/routing`, audited `ai.providers.switched` old/new) bound; the B8-S08 screen is the [B8] pass's.
 - **`notify.ai.quota_80` delivery:** Doc 01's 80% alert is a log metric; a `quota.warning_80` event (Doc 01 enumeration) is the unblocker for a one-line projector arm.
 - **Client-side token streaming** (Copilot card / widget): Doc 07's Reverb client seam + Doc 13.
 - **Batch 8 design freeze** → pixel fidelity for every Doc 09 staff surface [B8].

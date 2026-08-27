@@ -14,7 +14,7 @@ declare(strict_types=1);
 | (NFR-03); deprecation = new key + two-release migration. Additions require
 | doc-owner sign-off (Doc 01 R-03) — `views.share` REGISTERED at S07 (Doc 07
 | FR-06 landing, the addition of record; owner-approved plan 2026-08-10);
-| `ai.providers.manage` (Doc 09) registers when its document lands.
+| `ai.providers.manage` REGISTERED at S10 step 0.4 (R-D10-1, owner-signed; catalog 114).
 |
 | Every route/action must map to a key registered here; an unmapped route
 | fails the `permission-mapping` CI gate. CatalogSnapshotTest (T-05b) pins the
@@ -708,6 +708,23 @@ return [
         'key' => 'ai.killswitch',
         'label_i18n_key' => 'perm.ai.killswitch',
         'description_i18n_key' => 'perm_desc.ai.killswitch',
+        'group' => 'ai',
+        'module' => 'ai',
+        'scopes' => ['All'],
+        'scope_dimension' => 'unscoped',
+        'risk' => 'high',
+        'owning_doc' => 'Doc03',
+    ],
+    [
+        // The FOURTH addition of record (Doc 09 FR-02's change-log entry; Q9/R-12):
+        // owner sign-off R-D10-1 (docs/ADVISOR-RULINGS-D10.md, amended at the S10
+        // plan-approval rulings: the switch DOOR binds here, the B8-S08 screen is
+        // the [B8] pass's). HIGH — "ai.thresholds.edit-adjacent" by FR-02's own
+        // words; a provider/model switch is a high-visibility audit event.
+        // Catalog 113→114, high 38→39.
+        'key' => 'ai.providers.manage',
+        'label_i18n_key' => 'perm.ai.providers.manage',
+        'description_i18n_key' => 'perm_desc.ai.providers.manage',
         'group' => 'ai',
         'module' => 'ai',
         'scopes' => ['All'],

@@ -1,0 +1,2053 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m5.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiBellDeliveryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ai.killswitch.changed → every live ai.killswitch holder EXCEPT t[39m[90m…[39m [90m3.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.anomaly.detected → every live reports.supervisor.live holder,[39m[90m…[39m [90m2.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.digest.ready → its ONE recipient and only while they still ho[39m[90m…[39m [90m1.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.provider.health_changed is DELIBERATELY not projected into th[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiI18nParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit en and am ai.php carry the same key set; every :param in en appe[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the R-14 queue file lists every machine-authored am ai.* key exa[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiQueueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0017 (amended): ai and ai-background are SEPARATE supervisor[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the per-tenant semaphore admits to the registered cap and[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the semaphore is per-tenant — one tenant at cap starves n[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the ai.concurrency.per_tenant setting is registered with platfor[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ArtifactOutcomeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_unedited: insert (gated ai.copilot.insert_draft)[39m[90m… [39m [90m5.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_edited{diff_ref}: the agent edits before sending[39m[90m… [39m [90m1.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 discarded: the discard door records it; a discarded artifa[39m[90m…[39m [90m0.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 gating: insert WITHOUT ai.copilot.insert_draft is refused[39m[90m… [39m [90m0.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: a non-usable row (low_confidence / refused) cannot be ins[39m[90m…[39m [90m1.46s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\BackofficeConfigTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit persona: draft → preview (queued on ai-background, the DRAFT per[39m[90m…[39m [90m0.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit guardrails: draft → publish writes the SEC-05 audit row (ai.conf[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit thresholds/scope (BR-07, US-06): simulate returns before/after/d[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit permissions: every Backoffice door is gated by its closed key —[39m[90m… [39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-01 (AC-01's pipeline clause): a six-message burst yields ONE[39m[90m… [39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ClassifyPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-06/FR-07: the consumer classifies the burst and records the d[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-01: only the confirmed batch TAIL classifies — a superseded a[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-09: a redelivered event changes nothing — one decision, howeve[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-11 (Doc 04): a quarantined inbound gets NO classification — n[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-06: the two-stage RG confirmation runs ONLY past the screening[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-07 (filed interpretation, S09 step 14): a second customer mes[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ComposerActionsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 guardrail notice: a money-intent draft WITHOUT a citation[39m[90m… [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule[39m[90m… [39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 doors: every composer action is QUEUED (202 + request id,[39m[90m… [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-10: an out-of-scope conversation answers the 404 pattern on ev[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\CopilotPanelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 chips: intent / sentiment / urgency / confidence from the[39m[90m… [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 debounce: repeated panel reads within 10 s dispatch ONE re[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-09: regenerate ×3 exhausted → the card LOCKS to the low-confi[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-09 cooldown: a regenerate inside the cooldown window is refus[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01 / AC-09 (Copilot half): with the provider chain exhausted[39m[90m… [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the request-poll door (T-04's socket fallback): pending until th[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.10s[39m  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.007 ms   p99   0.074 ms   max  11.398 ms   budget(p99) 3.0 ms   WITHIN
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m0.53s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\HonestyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-05 (sabotage #10 target): a persona publishes ONLY if every d[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-19a wording vs presence: guardrails may REWORD the disclosure[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-08 / BR-05 ABSENCE: no registered setting, no config kind, no[39m[90m… [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-19d: an AI-authored message is never edited post-send — Doc 0[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m1.27s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\LanguageGateTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit §14: the launch pair publishes; a third language with NO templat[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §14: a language becomes enableable ONLY once a guardrails overri[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §14 in the turn: a customer writing in a language the endpoint d[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\NormalizeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit the guard extends to MEDIA egress: outside production a real med[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-05: a voice note gains its transcript_ref through the Doc 04[39m[90m… [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-05: a receipt image gains ocr_ref with per-field confidence[39m[90m   [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-03: a provider outage leaves the media item UNTOUCHED and the[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\OrchestratorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: the task catalog is CLOSED at twelve, matching the ai_dec[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-01: the fallback chain falls through a failing provider to the[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-01: an OPEN breaker skips its provider without spending a call[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE STEP-3 ASSERTION: no egress path skips the guard — every Pro[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-02: a PUBLISHED provider_routing config overrides the seed —[39m[90m… [39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.32s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ProviderSwitchDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the switch door: 403 without the key; GET answers the model map;[39m[90m…[39m [90m0.74s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.06s[39m  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgEvalHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the corpus is the shipped 50: half risk, half healthy, both lang[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-07: at the shipped rg_min the scripted realistic scorer meet[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the harness CAN fail: a miscalibrated threshold drops precision[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimilarTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-05/FR-14: top-3 by cosine over resolved-ticket summaries, the[39m[90m… [39m [90m1.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 scope AT QUERY TIME: an Own-scoped agent sees ONLY tickets[39m[90m… [39m [90m1.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 nightly: the embedder summarizes + embeds resolved tickets[39m[90m… [39m [90m1.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimulationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)[39m[90m… [39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\StreamingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-04 client: an SSE response is parsed delta-by-delta in order,[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §13 sentence chunker: Latin and Ethiopic terminators both bound[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 relay: token-sized deltas become SENTENCE frames on the age[39m[90m…[39m [90m3.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 job: CopilotTaskJob runs the stream end-to-end and ends in[39m[90m… [39m [90m0.60s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SubjectGenerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a subjectless ticket gets a generated subject through Sub[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a ticket that ALREADY has a staff subject is never overwr[39m[90m…[39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the 80-character cap and one-line normalization hold; an[39m[90m… [39m [90m0.87s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SupervisorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/US-05: withdrawal complaints tripling in the last hour vs[39m[90m… [39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 sentiment watch: a conversation whose latest classificatio[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 qa_prescore: samples yesterday's resolved tickets once eac[39m[90m…[39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 daily_digest: six bullets per manager (reports.supervisor.[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 (AC-09's last rung) + FR-18: with every provider of the ch[39m[90m…[39m [90m0.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the supervisor FEED is the decision-log door filtered by surface[39m[90m…[39m [90m0.68s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit (b)+(d): a translate send carries channel_meta.ai_translation {a[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (d): an EDITED translation still carries the original and the ve[39m[90m…[39m [90m1.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) default-preserving, TESTED: a reply WITHOUT ai_artifact_id w[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) negative controls: wrong-owner artifact, missing ai.copilot.[39m[90m…[39m [90m1.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14 validator unit: same digits in any order pass; a reordered d[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 (sabotage #14 target): a translation that ALTERS a digit is[39m[90m… [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: the repair retry SUCCEEDING yields the artifact — digits ve[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 mixed-language input: the dominant script decides the sour[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 on staff text: a phone number in the agent's draft never[39m[90m… [39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\WeeklyOutputsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit top unanswerable: no_grounding handoffs and locked regenerations[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit calibration curve: confidence buckets vs outcomes over chatbot +[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RG precision queue delegates to RgCalibration (the [D09] EC-06 r[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m4.88s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AiEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-21: the ai.* family is CLOSED at seven (six + the approved rule-[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mQ7/SEC-06: every ai.* payload is identifiers + closed categories —[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mai.decision.logged is SAMPLED by a registered platform setting (FR-[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every Doc 09 fixture entry matches the catalog — event ex[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to an App\Jobs\Ai durab[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\AiGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit ADR 0003: app holds no DELETE on any Doc 09 table[39m[90m                [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit N-01: every Doc 09 table is FORCED row-level security with the t[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the messages lesson: EVERY ai_decisions partition carries its ow[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AiDecisionPartitions: the window is idempotent and a created mon[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 (countersigned): no ON CONFLICT statement ever targets ai[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\AiContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-04/BR-06: planted RG flag content and staff notes NEVER ente[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-04: the exclusion holds through the FULL assembled prompt, a[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the allowlist is honest in the OTHER direction: language, prior-[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\PhoneEmailScrubberPatternsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: near-miss controls survive to the sink — the scanner and[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES under innocent keys never reach t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: phone and email VALUES inside the message string itself[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: benign context survives — UUIDs, timezone offsets, _id k[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the four DB sinks — per-sink plant→detect→rollback contr[39m[90m…[39m [90m0.15s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\BackofficeConfigTest[22m [90m>[39m it person… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator VERL, fixture-jcverl, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-0f4d-7352-8c68-74c7752ccfb4, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Pest.php[39;22m:[39;1m570[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\BackofficeConfigTest[22m [90m>[39m it guardr… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator SCFQ, fixture-uascfq, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-0ff6-7342-8255-5e00c1bc28b6, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Pest.php[39;22m:[39;1m570[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\BackofficeConfigTest[22m [90m>[39m it thresh… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator DLQZ, fixture-lddlqz, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-102c-725e-8dbd-caf43da5590c, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Pest.php[39;22m:[39;1m570[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\BackofficeConfigTest[22m [90m>[39m it kill s… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator YQBQ, fixture-yhyqbq, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-1056-7012-9995-a50290e93b77, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Pest.php[39;22m:[39;1m570[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\BackofficeConfigTest[22m [90m>[39m it permis… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator WOLH, fixture-ldwolh, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-1078-703a-a5f7-812985236ea3, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Pest.php[39;22m:[39;1m570[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-08/FR-10… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator AKAM, fixture-rlakam, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-10ae-722f-a7cf-6f9812f31d33, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it AC-02/BR-02… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator EXNE, fixture-nsexne, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-10e2-7294-b00d-5ab504659e67, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it EC-05: an o… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator BMBR, fixture-mabmbr, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-1107-72d6-95d3-61547fdc8458, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-12: cust… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator SSAH, fixture-twssah, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-112d-71c8-a35c-60d8c46c3414, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-09/EC-08… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator IEWI, fixture-ywiewi, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-1153-739a-8507-5a10d7d58697, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it EC-04: bett… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator OVFY, fixture-ttovfy, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-117b-725e-b603-f8920f5fb3d0, 2026-08-27 15:18:27, 2026-08-27 15:18:27))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-12/EC-02… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator RKDS, fixture-ahrkds, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-119f-7271-8046-67c19f1c8310, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it FR-07 hando… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator BWCR, fixture-sebwcr, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-11cc-7000-8998-49ee43b32630, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it AC-04 MID-F… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator OYZU, fixture-juoyzu, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-11f0-721b-8102-33ce958db563, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ChatbotTurnTest[22m [90m>[39m it EC-01 (AC-0… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "tenants" does not exist
+LINE 1: insert into "tenants" ("name", "slug", "state", "region", "d...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tenants" ("name", "slug", "state", "region", "default_language_code", "timezone_name", "currency_code", "plan_flags", "quota_overrides", "id", "updated_at", "created_at") values (Fixture Operator FUSY, fixture-ogfusy, provisioning, et-central, en, Africa/Addis_Ababa, ETB, [], [], 01a043cd-1212-73c5-b0da-b911be2749da, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+14 vendor frames [22m
+  [33m15  [39m[39;1mtests/Pest.php[39;22m:[39;1m70[39;22m
+  [33m16  [39m[39;1mtests/Feature/Ai/ChatbotTurnTest.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it FR-06/… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-125b-736d-8e17-c2d0c6e6d11e, 01a043cd-1251-7038-8063-e56fc575785b, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m28[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m69[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it EC-01:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-1285-7345-92a5-076ba75ec5cd, 01a043cd-127b-7330-a322-a81ef3831044, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m28[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it C-09:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-12b6-72c1-a53a-f4ddc94ad50e, 01a043cd-12a5-71e1-93f2-27ed61dc0235, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m28[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m113[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it FR-11…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-12f4-7276-a751-b09a6d7a0bd6, 01a043cd-12d8-71ba-be0b-1b8696f336f1, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m28[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m128[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it T-06:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-1328-729b-b360-b19b8645d670, 01a043cd-1313-7114-b560-6b6200b81273, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m28[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ClassifyPipelineTest.php[39;22m:[39;1m139[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ClassifyPipelineTest[22m [90m>[39m it FR-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_GXXJcL, 1, staff, 01a043cd-135e-72c6-8007-7600209d2e7b, 01a043cd-1345-70d4-9377-afc91b5a98f1, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-15 D… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_gWilnU, 1, staff, 01a043cd-13ab-736d-872f-ceb6aaf86624, 01a043cd-138e-70d4-8293-eab5d340730c, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-14 g… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_s3QxdH, 1, staff, 01a043cd-13f5-72f8-a4a2-bc92d1582261, 01a043cd-13ca-7179-8359-9a83fa4d16e8, 2026-08-27 15:18:28, 2026-08-27 15:18:28))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-15 I… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_TGRIhW, 1, staff, 01a043cd-158d-7315-af59-aa893ac6e2ba, 01a043cd-1425-72b9-a47b-72e9dd7f3967, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-15 S… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_gthe5e, 1, staff, 01a043cd-15c2-725e-9f52-7008af5c3b6e, 01a043cd-15b3-72c2-ad0b-87998b0ad795, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it FR-15 d… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_Nb1eXG, 1, staff, 01a043cd-1628-7394-968c-eafa655f64bc, 01a043cd-15f6-72fa-ae37-8f0c93888468, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ComposerActionsTest[22m [90m>[39m it C-10: a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_xLojsW, 1, staff, 01a043cd-1659-7293-ab8b-328f7a84a575, 01a043cd-1653-7265-811f-dfadc4ad5ecf, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ConfigVersioningTest[22m [90m>[39m it FR-04:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select max("version") as "aggregate" from "ai_config_version...
+                                                  ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("version") as "aggregate" from "ai_config_versions" where "kind" = thresholds and "key" = default)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m52[39;22m
+      [2m+3 vendor frames [22m
+  [33m13  [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ConfigVersioningTest[22m [90m>[39m it FR-04:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select max("version") as "aggregate" from "ai_config_version...
+                                                  ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("version") as "aggregate" from "ai_config_versions" where "kind" = guardrails and "key" = default)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m52[39;22m
+      [2m+3 vendor frames [22m
+  [33m13  [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ConfigVersioningTest[22m [90m>[39m it FR-04:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select max("version") as "aggregate" from "ai_config_version...
+                                                  ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("version") as "aggregate" from "ai_config_versions" where "kind" = persona and "key" = default)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m52[39;22m
+      [2m+3 vendor frames [22m
+  [33m13  [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\ConfigVersioningTest[22m [90m>[39m it flag 2… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: delete from "ai_decisions" where "tenant_id" in ($1)
+                    ^ (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "ai_decisions" where "tenant_id" in (01a043cd-1760-7253-a94c-0efbf46cbe40))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Pest.php[39;22m:[39;1m263[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/ConfigVersioningTest.php[39;22m:[39;1m157[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it FR-14 chip… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_4V4RYO, 1, staff, 01a043cd-17ed-71cf-96e9-e12376e082c1, 01a043cd-17d3-71cc-909b-e9061b805e90, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it FR-14 debo… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_vZDCaS, 1, staff, 01a043cd-1841-717c-b0bf-f5d36a64139b, 01a043cd-1810-723e-8fe3-ee5d3171a5d8, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it EC-09: reg… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_x0pqQk, 1, staff, 01a043cd-1869-7235-8889-3cb0b79edfcd, 01a043cd-1862-7111-bf1c-5ac63867757a, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it EC-09 cool… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_pSMyHq, 1, staff, 01a043cd-18a8-719c-944e-aa7e82b0f9d3, 01a043cd-188b-70e8-b5b7-6a8d98f5fd7b, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it FS-01 / AC… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_LasPSr, 1, staff, 01a043cd-18ee-737b-9004-5ba375a2c0b5, 01a043cd-18c8-71de-9efc-7473cdd5c921, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\CopilotPanelTest[22m [90m>[39m it the reques… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_Oc6y8u, 1, staff, 01a043cd-1934-73ae-9c75-65dbee7887a5, 01a043cd-190f-7364-9819-89a230d025e1, 2026-08-27 15:18:29, 2026-08-27 15:18:29))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it SEC-06:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (?, ?, ?, ?, ?, ?, ?, 01a043cd-1996-70de-a9be-db9367857b1f, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 0"}]}, {"content":"model output 0"}, ?, chatbot, classify_message, 01a043cd-195e-7175-aba2-63b9e309dfdc, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1996-70de-a9be-db936815e221, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 1"}]}, {"content":"model output 1"}, ?, chatbot, classify_message, 01a043cd-195e-7175-aba2-63b9e309dfdc, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1996-70de-a9be-db93688fad08, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 2"}]}, {"content":"model output 2"}, ?, chatbot, classify_message, 01a043cd-195e-7175-aba2-63b9e309dfdc, ?, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it SEC-06:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (?, ?, ?, ?, ?, ?, ?, 01a043cd-19f9-71ee-aa29-c5cadcccd6db, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 0"}]}, {"content":"model output 0"}, ?, chatbot, classify_message, 01a043cd-19dd-717a-bfe1-3ca64eb2c6cc, ?, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it C-05: th… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (?, ?, ?, ?, ?, ?, ?, 01a043cd-1aa0-7056-8928-7a5d1f635595, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 0"}]}, {"content":"model output 0"}, ?, chatbot, classify_message, 01a043cd-1a23-72e5-a053-223c069e8961, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1aa0-7056-8928-7a5d20470a3e, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 1"}]}, {"content":"model output 1"}, ?, chatbot, classify_message, 01a043cd-1a23-72e5-a053-223c069e8961, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1aa0-7056-8928-7a5d20a45943, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 2"}]}, {"content":"model output 2"}, ?, chatbot, classify_message, 01a043cd-1a23-72e5-a053-223c069e8961, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1aa0-7056-8928-7a5d20af0d06, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 3"}]}, {"content":"model output 3"}, ?, chatbot, classify_message, 01a043cd-1a23-72e5-a053-223c069e8961, ?, 0, 0), (?, ?, ?, ?, ?, ?, ?, 01a043cd-1aa0-7056-8928-7a5d217d6a6f, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] secret-adjacent prompt text 4"}]}, {"content":"model output 4"}, ?, chatbot, classify_message, 01a043cd-1a23-72e5-a053-223c069e8961, ?, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionAccessTest[22m [90m>[39m it the spli… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: delete from "ai_decisions" where "tenant_id" in ($1)
+                    ^ (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "ai_decisions" where "tenant_id" in (01a043cd-1ac9-7381-98bb-f96563a1ad5e))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Pest.php[39;22m:[39;1m263[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/DecisionAccessTest.php[39;22m:[39;1m90[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionLogTest[22m [90m>[39m it FR-20: reco… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (answer, 0.91, ?, ?, ?, ?, ?, 01a043cd-1d16-726c-a099-2c0ab943def4, deposits, ?, 2100, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, {"messages":[{"role":"user","content":"[FIXTURE] hi"}]}, {"content":"{\"action\":\"answer\"}"}, ?, chatbot, classify_message, 01a043cd-1b34-737d-b154-53ff42e40b1f, ?, 400, 60))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionLogTest[22m [90m>[39m it FR-21 (flag… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (handoff, ?, ?, ?, ?, ?, invalid_action, 01a043cd-1d6e-735c-828f-a31316c01dc0, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, ?, ?, ?, chatbot, classify_message, 01a043cd-1d56-72fa-9cc4-dbf7241d5f33, ?, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\DecisionLogTest[22m [90m>[39m it T-08: the e… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: insert into "ai_decisions" ("action", "confidence", "config_...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (?, ?, ?, ?, ?, ?, ?, 01a043cd-1d9b-7154-a182-55b1fc73e84a, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2","task_template":"abc"}, ?, fixture-model, fake, ?, ?, ?, chatbot, classify_message, 01a043cd-1d93-70e8-8f81-5524d82756b4, ?, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\FailoverDrillTest[22m [90m>[39m it FS-01: pr… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = provider_routing and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39;22m:[39;1m197[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\FailoverDrillTest[22m [90m>[39m it FS-01/NFR-04: every provi…   
+[39;1m  Failed asserting that an instance of class Illuminate\Database\QueryException is an instance of class App\Domain\Ai\Providers\AllProvidersExhausted.[39;22m
+
+  at [32mtests/Feature/Ai/FailoverDrillTest.php[39m:[32m68[39m
+     64▕     app(ProviderRegistry::class)->swap('fake-dead', new FakeDriver(new FixturesOnlyEgress));
+     65▕     config(['ai.default_routing.fast' => [['provider' => 'fake-dead', 'model' => 'd']]]);
+     66▕ 
+     67▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [['role' => 'user', 'content' => '[FIXTURE] z']]))
+  ➜  68▕         ->toThrow(AllProvidersExhausted::class);
+     69▕ 
+     70▕     $statuses = array_column(array_filter(healthEvents(), fn (array $e): bool => $e['provider'] === 'fake-dead'), 'status');
+     71▕     expect($statuses)->toBe(['down']);
+     72▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Ai/FailoverDrillTest.php[39;22m:[39;1m68[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\HonestyTest[22m [90m>[39m it AC-05 (sabotage… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_IYTOq8, 1, staff, 01a043cd-1f66-71e5-9534-5f1658ec457c, 01a043cd-1f53-7255-a433-c2d32ebcc337, 2026-08-27 15:18:31, 2026-08-27 15:18:31))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\HonestyTest[22m [90m>[39m it FR-19a wording…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_FxdUGo, 1, staff, 01a043cd-1fc8-7352-b6fa-029f4353b19c, 01a043cd-1f89-7337-a164-3b399094c557, 2026-08-27 15:18:31, 2026-08-27 15:18:31))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\HonestyTest[22m [90m>[39m it FR-19d: an AI-a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_BD03Lq, 1, staff, 01a043cd-2037-7053-bd1e-75031e5b8575, 01a043cd-202c-7106-918b-bb3fb513788a, 2026-08-27 15:18:31, 2026-08-27 15:18:31))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it AC-08 BOTH D… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select * from "ai_kill_switches" where "surface" = $1 and "c...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_kill_switches" where "surface" = chatbot and "channel" = telegram and "endpoint_ref" = bot-a limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m122[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it AC-08: a cha… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select * from "ai_kill_switches" where "surface" = $1 and "c...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_kill_switches" where "surface" = chatbot and "channel" = telegram and "endpoint_ref" is null limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m122[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it SEC-05: ever… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select * from "ai_kill_switches" where "surface" = $1 and "c...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_kill_switches" where "surface" = chatbot and "channel" = telegram and "endpoint_ref" = bot-a limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m122[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it SABOTAGE #16… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select * from "ai_kill_switches" where "surface" = $1 and "c...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_kill_switches" where "surface" = chatbot and "channel" = telegram and "endpoint_ref" = bot-a limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m122[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it FR-07 enable… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select exists(select * from "ai_kill_switches" where "surfac...
+                                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select exists(select * from "ai_kill_switches" where "surface" = chatbot and "is_off" = 1 and (("channel" = telegram and "endpoint_ref" = bot-a) or ("channel" = telegram and "endpoint_ref" is null) or ("channel" is null and "endpoint_ref" is null))) as "exists")[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+5 vendor frames [22m
+  [33m6   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m59[39;22m
+  [33m7   [39m[39;1mapp/Domain/Ai/KillSwitch/SwitchesAndFlags.php[39;22m:[39;1m31[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\KillSwitchTest[22m [90m>[39m it the scope gr… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_kill_switches" does not exist
+LINE 1: select * from "ai_kill_switches" where "surface" = $1 and "c...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_kill_switches" where "surface" = supervisor and "channel" is null and "endpoint_ref" is null limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m122[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Ai/KillSwitch/KillSwitches.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\LanguageGateTest[22m [90m>[39m it §14: the l… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_r9h8Fb, 1, staff, 01a043cd-2683-7328-b704-9385af9ee129, 01a043cd-2676-70f5-b987-58d7127d4379, 2026-08-27 15:18:33, 2026-08-27 15:18:33))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\LanguageGateTest[22m [90m>[39m it §14: a lan… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_dLWKci, 1, staff, 01a043cd-26b1-7148-874b-92671f2cf2a1, 01a043cd-26a8-7331-86a4-715000ab3a8b, 2026-08-27 15:18:33, 2026-08-27 15:18:33))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\LanguageGateTest[22m [90m>[39m it §14 in the… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: ...stomers" ("display_name", "username", "is_shell", "created_s...
+                                                             ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_h9yiAh, 1, staff, 01a043cd-26de-72a8-a654-a67fb3b2a4b4, 01a043cd-26d5-72b4-9159-de66e68521a7, 2026-08-27 15:18:33, 2026-08-27 15:18:33))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\NormalizeTest[22m [90m>[39m it the guard ext… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                                                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-273f-7301-9f5c-e986432e1791, 01a043cd-271c-7270-aafd-0701798ac3de, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m31[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m70[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\NormalizeTest[22m [90m>[39m it FR-05: a voic… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                                                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-2777-73fc-9165-49320e687ad7, 01a043cd-2765-7107-9189-77cb498366f4, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m31[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m93[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\NormalizeTest[22m [90m>[39m it FR-05: a rece… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                                                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-27b7-7344-9b56-7130f7946549, 01a043cd-27a3-71a7-9d02-c4df32372e17, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m31[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m109[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\NormalizeTest[22m [90m>[39m it FS-03: a prov… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "created_source" of relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                                                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source") values (01a043cd-27f4-72e4-a6f1-dcce490f545b, 01a043cd-27dc-7181-8928-0a0025dc60d5, telegram))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m31[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/NormalizeTest.php[39;22m:[39;1m126[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\OrchestratorTest[22m [90m>[39m it T-01: the…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = provider_routing and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Orchestrator/AiOrchestrator.php[39;22m:[39;1m197[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\OrchestratorTest[22m [90m>[39m it T-01: an OPEN breaker skip…   
+[39;1m  Failed asserting that an instance of class Illuminate\Database\QueryException is an instance of class App\Domain\Ai\Providers\AllProvidersExhausted.[39;22m
+
+  at [32mtests/Feature/Ai/OrchestratorTest.php[39m:[32m85[39m
+     81▕     expect($breaker->isOpen('fake-tripped'))->toBeTrue();
+     82▕ 
+     83▕     expect(fn () => app(AiOrchestrator::class)->execute('classify_message', [
+     84▕         ['role' => 'user', 'content' => '[FIXTURE] hello'],
+  ➜  85▕     ]))->toThrow(AllProvidersExhausted::class);
+     86▕ 
+     87▕     expect($tripped->seen)->toBe([], 'the open breaker still let a call through');
+     88▕ });
+     89▕
+
+  [33m1   [39m[39;1mtests/Feature/Ai/OrchestratorTest.php[39;22m:[39;1m85[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\OrchestratorTest[22m [90m>[39m it FR-02: a P… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select max("version") as "aggregate" from "ai_config_version...
+                                                  ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("version") as "aggregate" from "ai_config_versions" where "kind" = provider_routing and "key" = default)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m52[39;22m
+      [2m+3 vendor frames [22m
+  [33m13  [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PayloadReductionJobTest[22m [90m>[39m it SEC… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist
+LINE 1: delete from "ai_decisions" where "tenant_id" in ($1)
+                    ^ (Connection: pgsql_platform, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: delete from "ai_decisions" where "tenant_id" in (01a043cd-2942-7378-9b2b-af94ec6f6061))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Pest.php[39;22m:[39;1m263[39;22m
+  [33m8   [39m[39;1mtests/Feature/Ai/PayloadReductionJobTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PromptAssemblyTest[22m [90m>[39m it T-02: th… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PromptAssemblyTest[22m [90m>[39m it BR-05/N-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select max("version") as "aggregate" from "ai_config_version...
+                                                  ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("version") as "aggregate" from "ai_config_versions" where "kind" = persona and "key" = default)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m52[39;22m
+      [2m+3 vendor frames [22m
+  [33m13  [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PromptAssemblyTest[22m [90m>[39m it T-03: cu… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\PromptAssemblyTest[22m [90m>[39m it T-03: re… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it R-19b/ADR-0003: the app r…   
+[39;1m  Expecting [] not to be empty 'information_schema knows no c…othing'.[39;22m
+
+  at [32mtests/Isolation/AiGrantPhysicsTest.php[39m:[32m73[39m
+     69▕             'SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY column_name',
+     70▕             ['public', $table],
+     71▕         );
+     72▕         $columns = array_map(static fn (object $row): string => $row->column_name, $rows);
+  ➜  73▕         expect($columns)->not->toBeEmpty("information_schema knows no columns for {$table} — the derivation below would assert nothing");
+     74▕ 
+     75▕         foreach (['INSERT', 'UPDATE'] as $privilege) {
+     76▕             $denied = [];
+     77▕             foreach ($columns as $column) {
+
+  [33m1   [39m[39;1mtests/Isolation/AiGrantPhysicsTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it ADR 0003:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT has_table_privilege('app', ai_decisions, 'DELETE') AS ok)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mtests/Isolation/AiGrantPhysicsTest.php[39;22m:[39;1m100[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it N-01: eve… [41;1m ErrorException [49;22m  
+[39;1m  Attempt to read property "relrowsecurity" on null[39;22m
+
+  at [32mtests/Isolation/AiGrantPhysicsTest.php[39m:[32m109[39m
+    105▕ it('N-01: every Doc 09 table is FORCED row-level security with the tenant_isolation policy', function (): void {
+    106▕     foreach (DOC09_TABLES as $table) {
+    107▕         /** @var object{relrowsecurity: bool, relforcerowsecurity: bool} $row */
+    108▕         $row = DB::selectOne('SELECT relrowsecurity, relforcerowsecurity FROM pg_class WHERE relname = ?', [$table]);
+  ➜ 109▕         expect($row->relrowsecurity)->toBeTrue("{$table} has RLS disabled")
+    110▕             ->and($row->relforcerowsecurity)->toBeTrue("{$table} does not FORCE RLS");
+    111▕ 
+    112▕         /** @var object{n: int} $policy */
+    113▕         $policy = DB::selectOne(
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it the messages lesson: EVER…   
+[39;1m  the migration promised MONTHS_AHEAD+1 partitions plus the default — the sweep below would be vacuous
+Failed asserting that 0 is equal to 5 or is greater than 5.[39;22m
+
+  at [32mtests/Isolation/AiGrantPhysicsTest.php[39m:[32m130[39m
+    126▕          WHERE relname ~ '^ai_decisions_' AND relkind = 'r'
+    127▕          ORDER BY relname
+    128▕         SQL);
+    129▕ 
+  ➜ 130▕     expect(count($partitions))->toBeGreaterThanOrEqual(5, 'the migration promised MONTHS_AHEAD+1 partitions plus the default — the sweep below would be vacuous');
+    131▕ 
+    132▕     foreach ($partitions as $partition) {
+    133▕         expect($partition->relrowsecurity)->toBeTrue("{$partition->relname} has RLS disabled — a month-sized hole in N-01")
+    134▕             ->and($partition->relforcerowsecurity)->toBeTrue("{$partition->relname} does not FORCE RLS");
+
+  [33m1   [39m[39;1mtests/Isolation/AiGrantPhysicsTest.php[39;22m:[39;1m130[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AiGrantPhysicsTest[22m [90m>[39m it AiDecisio… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_decisions" does not exist (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: CREATE TABLE ai_decisions_2026_08 PARTITION OF ai_decisions FOR VALUES FROM ('2026-08-01 00:00:00') TO ('2026-09-01 00:00:00'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+4 vendor frames [22m
+  [33m5   [39m[39;1mapp/Domain/Ai/DecisionLog/AiDecisionPartitions.php[39;22m:[39;1m79[39;22m
+  [33m6   [39m[39;1mapp/Domain/Ai/DecisionLog/AiDecisionPartitions.php[39;22m:[39;1m63[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiContextAllowlistTest[22m [90m>[39m it SEC-04… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source", "rg_flag", "rg_flag_reason") values (01a043cd-ab20-7127-ba03-e7afdcfb0ee1, 01a043cd-ab0a-71be-a7cf-1a38abfac0f9, telegram, 1, FAKESENSITIVE-rg-reason-self-exclusion-request))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m27[39;22m
+  [33m8   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m40[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiContextAllowlistTest[22m [90m>[39m it SEC-04… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source", "rg_flag", "rg_flag_reason") values (01a043cd-ab5d-702a-8ebf-7b191a49b4e7, 01a043cd-ab44-7216-9770-3010b243180e, telegram, 1, FAKESENSITIVE-rg-reason-self-exclusion-request))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m27[39;22m
+  [33m8   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m53[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiContextAllowlistTest[22m [90m>[39m it the al… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("id", "tenant_id", "created_source"...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("id", "tenant_id", "created_source", "rg_flag", "rg_flag_reason") values (01a043cd-ab96-7269-8cc8-56c11222a667, 01a043cd-ab85-71cd-96c1-690d92f90e45, telegram, 1, FAKESENSITIVE-rg-reason-self-exclusion-request))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m27[39;22m
+  [33m8   [39m[39;1mtests/Security/AiContextAllowlistTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiInjectionRedTeamTest[22m [90m>[39m it AC-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiInjectionRedTeamTest[22m [90m>[39m it AC-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiInjectionRedTeamTest[22m [90m>[39m it AC-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiInjectionRedTeamTest[22m [90m>[39m it AC-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\AiInjectionRedTeamTest[22m [90m>[39m it AC-07…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "ai_config_versions" does not exist
+LINE 1: select * from "ai_config_versions" where "kind" = $1 and "ke...
+                      ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "ai_config_versions" where "kind" = persona and "key" = default and "status" = published limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Ai/Config/ConfigVersions.php[39;22m:[39;1m203[39;22m
+  [33m9   [39m[39;1mapp/Domain/Ai/Prompt/LayeredAssembly.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CopilotNeverAutoSendTest[22m [90m>[39m it RUNT… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_puqTkm, 1, staff, 01a043cd-aef0-7070-8355-ed3de4079d36, 01a043cd-aee5-71a7-9938-2905fe891581, 2026-08-27 15:19:08, 2026-08-27 15:19:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CopilotNeverAutoSendTest[22m [90m>[39m it RUNT… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "customers" does not exist
+LINE 1: insert into "customers" ("display_name", "username", "is_she...
+                    ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "customers" ("display_name", "username", "is_shell", "created_source", "id", "tenant_id", "updated_at", "created_at") values (Fixture Player, @fixture_ticket_cONHpp, 1, staff, 01a043cd-af46-7055-9a4b-b6dfb7e7cef2, 01a043cd-af17-728e-92dc-a820e712b078, 2026-08-27 15:19:08, 2026-08-27 15:19:08))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+12 vendor frames [22m
+  [33m13  [39m[39;1mtests/Pest.php[39;22m:[39;1m572[39;22m
+  [33m14  [39m[39;1mtests/Pest.php[39;22m:[39;1m1523[39;22m
+
+
+  [90mTests:[39m    [31;1m85 failed[39;22m[90m,[39m[39m [39m[32;1m105 passed[39;22m[90m (2066 assertions)[39m
+  [90mDuration:[39m [39m65.46s[39m
+
+EXIT 2

@@ -12,6 +12,8 @@ use App\Domain\Ai\Simulation\ThresholdPublisher;
 use App\Http\Controllers\Controller;
 use App\Jobs\Ai\PersonaPreviewJob;
 use App\Models\User;
+use App\Support\Audit\AuditActor;
+use App\Support\Audit\AuditLogger;
 use App\Support\Cache\TenantCache;
 use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
@@ -35,8 +37,9 @@ use InvalidArgumentException;
  *
  * Route → permission from the CLOSED catalog: ai.chatbot.configure
  * (persona + scope), ai.thresholds.edit, ai.guardrails.edit, ai.killswitch,
- * ai.decisions.view. The provider switch (ai.providers.manage) is the
- * close-out's addition-of-record with owner sign-off — no page here yet.
+ * ai.decisions.view. The provider switch DOOR (ai.providers.manage, the
+ * fourth addition of record — S10 step 0.4, R-D10-1 as amended) is JSON
+ * only here: the B8-S08 provider screen belongs to the [B8] fidelity pass.
  * Every mutation goes through the domain doors that audit (ConfigVersions
  * publish/rollback, KillSwitches::flip) — no second pen.
  */
@@ -49,7 +52,83 @@ final class AiBackofficeController extends Controller
         private readonly ThresholdPublisher $thresholdPublisher,
         private readonly Disclosure $disclosure,
         private readonly TenantCache $cache,
+        private readonly AuditLogger $audit,
     ) {}
+
+    // ── Providers (S10 step 0.4 — the switch door; FR-02 zero-deploy) ──────
+
+    /** The model map: published provider_routing (else the seed) per tier, plus the provider names config knows. */
+    public function providers(): JsonResponse
+    {
+        return new JsonResponse([
+            'tiers' => $this->routingMap(),
+            'providers' => array_values(array_filter(array_keys((array) config('ai.providers')), 'is_string')),
+            'published' => $this->versionOf('provider_routing'),
+        ]);
+    }
+
+    /**
+     * Switch provider/model per tier: validated against config's named providers,
+     * drafted + published through ConfigVersions (instant, rollback-able), audited
+     * as ai.providers.switched with the OLD and NEW chains (SEC-05 high-visibility).
+     */
+    public function providersRouting(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $known = array_values(array_filter(array_keys((array) config('ai.providers')), 'is_string'));
+        try {
+            /** @var array{tiers: array<string, list<array{provider: string, model: string}>>} $input */
+            $input = $request->validate([
+                'tiers' => ['required', 'array'],
+                'tiers.fast' => ['required', 'array', 'min:1', 'max:4'],
+                'tiers.strong' => ['required', 'array', 'min:1', 'max:4'],
+                'tiers.embeddings' => ['required', 'array', 'min:1', 'max:4'],
+                'tiers.*.*.provider' => ['required', 'string', 'in:'.implode(',', $known)],
+                'tiers.*.*.model' => ['required', 'string', 'max:120'],
+            ]);
+        } catch (ValidationException $e) {
+            // shouldRenderJsonWhen covers api/* only — the per-door interim (inherited row 5).
+            /** @var array<string, list<string>> $errors */
+            $errors = $e->errors();
+
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, 'invalid provider routing', errors: $errors);
+        }
+        if (count(array_diff(array_keys($input['tiers']), ['fast', 'strong', 'embeddings'])) > 0) {
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, 'unknown tier');
+        }
+
+        $old = $this->routingMap();
+        $new = [];
+        foreach (['fast', 'strong', 'embeddings'] as $tier) {
+            $new[$tier] = array_map(static fn (array $hop): array => ['provider' => $hop['provider'], 'model' => $hop['model']], $input['tiers'][$tier]);
+        }
+
+        $versionId = $this->configs->draft('provider_routing', 'default', $new, $user->identifier());
+        try {
+            $this->configs->publish($versionId, $user->identifier());
+        } catch (InvalidArgumentException $e) {
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, $e->getMessage());
+        }
+        $this->audit->record('ai.providers.switched', 'ai_config_version', $versionId, AuditActor::Staff, [
+            'old' => $old,
+            'new' => $new,
+        ], actorId: $user->identifier());
+
+        return new JsonResponse(['version_id' => $versionId, 'published' => true, 'tiers' => $new]);
+    }
+
+    /** @return array<string, list<array{provider: string, model: string}>> */
+    private function routingMap(): array
+    {
+        $orchestrator = app(\App\Domain\Ai\Orchestrator\AiOrchestrator::class);
+        $map = [];
+        foreach (['fast', 'strong', 'embeddings'] as $tier) {
+            $map[$tier] = $orchestrator->chainFor($tier);
+        }
+
+        return $map;
+    }
 
     // ── Persona ──────────────────────────────────────────────────────────
 

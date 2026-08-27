@@ -109,3 +109,16 @@ data writes). Read Only's exclusion is automatic — its grant list is computed
 as non-high `.view`-suffix keys, which `views.manage` fails — so BR-05's
 zero-accepted-writes bar stays physics. The zero-high-risk constraints are
 unaffected (normal risk). `views.share` remains seeded into NO template.
+
+---
+
+## Amendment — R-D10-1 (S10 step 0.4, 2026-08-27, owner-signed; amended at the S10 plan-approval rulings)
+
+`ai.providers.manage` (the fourth addition of record; Doc 09 FR-02's change-log
+key) registers at risk HIGH ("ai.thresholds.edit-adjacent" — FR-02's own words; a
+provider/model switch is a high-visibility audit event). Catalog 113→114, high
+38→39. Seeding: Super Admin (all-keys rule) and Admin (computed: everything minus
+the four hard-destruction/RG keys) receive it; every other template excludes it —
+the agent tier, QA and Read Only carry zero high-risk keys by the R-10 constraint,
+which the pinned test enforces. The switch DOOR (`POST admin/ai/providers/routing`)
+binds to it; the B8-S08 provider screen lands in the [B8] fidelity pass.
