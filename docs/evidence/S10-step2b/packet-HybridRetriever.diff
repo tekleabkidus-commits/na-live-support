@@ -1,0 +1,41 @@
+diff --git a/app/Domain/Ai/Retrieval/HybridRetriever.php b/app/Domain/Ai/Retrieval/HybridRetriever.php
+index 2600de7..7f2e4cf 100644
+--- a/app/Domain/Ai/Retrieval/HybridRetriever.php
++++ b/app/Domain/Ai/Retrieval/HybridRetriever.php
+@@ -24,7 +24,7 @@ public function __construct(private readonly AiOrchestrator $orchestrator) {}
+ 
+     /**
+      * @param  list<string>  $languages  the fallback chain, most specific first
+-     * @return array{chunks: list<array{article_ref: string, content: string, score: float}>, degraded: bool}
++     * @return array{chunks: list<array{article_ref: string, version_id: string, heading_path: string, language: string, content: string, score: float}>, degraded: bool}
+      */
+     public function retrieve(string $query, array $languages, bool $includeInternal = false, int $topK = 5): array
+     {
+@@ -50,14 +50,14 @@ public function retrieve(string $query, array $languages, bool $includeInternal
+         if ($vector !== null) {
+             $literal = '['.implode(',', $vector).']';
+             $builder->selectRaw(
+-                "article_ref, content, language, (0.6 * COALESCE(1 - (embedding <=> ?::vector), 0) + 0.4 * {$keywordRank}) AS score",
++                "article_ref, version_id, heading_path, content, language, (0.6 * COALESCE(1 - (embedding <=> ?::vector), 0) + 0.4 * {$keywordRank}) AS score",
+                 [$literal, $query],
+             );
+         } else {
+-            $builder->selectRaw("article_ref, content, language, {$keywordRank} AS score", [$query]);
++            $builder->selectRaw("article_ref, version_id, heading_path, content, language, {$keywordRank} AS score", [$query]);
+         }
+ 
+-        /** @var list<object{article_ref: string, content: string, language: string, score: string|float}> $rows */
++        /** @var list<object{article_ref: string, version_id: string, heading_path: string, content: string, language: string, score: string|float}> $rows */
+         $rows = $builder->orderByDesc('score')->limit($topK * 3)->get()->all();
+ 
+         // Language preference inside the chain: the most specific language
+@@ -74,7 +74,8 @@ public function retrieve(string $query, array $languages, bool $includeInternal
+             if ((float) $row->score <= 0.0) {
+                 continue;
+             }
+-            $chunks[] = ['article_ref' => $row->article_ref, 'content' => $row->content, 'score' => (float) $row->score];
++            // FR-14 (SCHEMA AMENDMENT 4, S10 step 2b): the version pin + heading path + language ride every chunk.
++            $chunks[] = ['article_ref' => $row->article_ref, 'version_id' => $row->version_id, 'heading_path' => $row->heading_path, 'language' => $row->language, 'content' => $row->content, 'score' => (float) $row->score];
+         }
+ 
+         return ['chunks' => $chunks, 'degraded' => $vector === null];

@@ -53,6 +53,9 @@ final class RegistryCheck extends Command
         '/starvation.*(disable|off|null)/i',
         '/contrast.*(override|disable|off)/i',
         '/erasure.*(single|skip|bypass)/i',
+        // Doc 10 (S10 step 2b): no setting may disable the one indexer door or the sanitizer.
+        '/kb.*sanitiz.*(disable|off|skip|bypass)/i',
+        '/kb.*index.*(disable|off|skip|bypass)/i',
     ];
 
     public function handle(): int

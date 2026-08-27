@@ -1,0 +1,51 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Integration\EmbeddingsSidecarProbeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit ADR 0018 probe: real text → 1024-dim unit vectors; a cross-language paraphrase sits closer than an unrelated sentence (bge-m3 cosine sanity)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit the retrieval seam against the REAL sidecar: KbIndexer embeds with no fixture vector, HybridRetriever answers un-degraded with the semantically nearest chunk first[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Integration\EmbeddingsSidecarProbeTest[22m [90m>[39m it… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "migrations" does not exist
+LINE 1: select max("batch") as "aggregate" from "migrations"
+                                                ^ (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select max("batch") as "aggregate" from "migrations")[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+41 vendor frames [22m
+  [33m42  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+  [33m43  [39m[39;1mtests/TestCase.php[39;22m:[39;1m46[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Integration\EmbeddingsS[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(users, 2200) already exists. (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: create table "users" ("id" uuid not null, "name" varchar(255) not null, "email" varchar(255) not null, "email_verified_at" timestamp(0) with time zone null, "password" varchar(255) not null, "remember_token" varchar(100) null, "created_at" timestamp(0) with time zone null, "updated_at" timestamp(0) with time zone null))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/0001_01_01_000000_create_users_table.php[39;22m:[39;1m41[39;22m
+      [2m+39 vendor frames [22m
+  [33m49  [39m[39;1mtests/TestCase.php[39;22m:[39;1m123[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m0.57s[39m
+
+EXIT 2

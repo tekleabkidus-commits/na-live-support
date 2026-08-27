@@ -233,6 +233,10 @@ function cleanupTenants(array $tenantIds): void
         // ai_ticket_summaries references tickets — so all five go first.
         'ai_decisions', 'ai_config_versions', 'ai_kill_switches', 'kb_chunks',
         'ai_ticket_summaries',
+        // Doc 10 (SCHEMA AMENDMENT 4, S10 step 2b): children before variants, variants
+        // before articles, articles before categories (current_version_id is a soft ref).
+        'kb_feedback', 'kb_review_comments', 'kb_slug_history', 'kb_article_versions',
+        'kb_article_variants', 'kb_articles', 'kb_categories',
         // Doc 06: everything references tickets, tickets reference conversations —
         // so ticket children first, tickets before conversations. Self-FKs inside
         // tickets (merged_into, origin/previous/parent) are fine in one statement:

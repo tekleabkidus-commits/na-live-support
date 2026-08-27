@@ -14,10 +14,14 @@ use Illuminate\Support\Facades\DB;
  * instruction-stripping is a safety mechanism: a second route into kb_chunks
  * that skips KbIndexer is an unstripped injection channel. Static half: the
  * only file under app/ that WRITES kb_chunks is KbIndexer.php; no Eloquent
- * model maps the table. Runtime half: every row the door writes carries the
- * strip provenance and the planted imperative is gone.
+ * model maps the table; the ONLY deleter is the platform-role prune (STOP-A) and it
+ * deletes through the platform connection alone. Runtime half: every row the door
+ * writes carries the strip provenance and the planted imperative is gone.
  */
-const KB_WRITE_VERBS = ['->insert(', '->insertOrIgnore(', '->insertGetId(', '->update(', '->updateOrInsert(', '->upsert(', '->delete(', '->truncate(', '->increment(', '->decrement('];
+const KB_WRITE_VERBS = ['->insert(', '->insertOrIgnore(', '->insertGetId(', '->update(', '->updateOrInsert(', '->upsert(', '->truncate(', '->increment(', '->decrement('];
+
+/** The ONE lawful deleter (STOP-A ruling): the platform-role prune — never the app connection. */
+const KB_PLATFORM_DELETER = 'app/Console/Commands/KbChunksPrune.php';
 
 /** @return list<string> repo-relative paths under app/ that mention kb_chunks */
 function kbChunkMentions(): array
@@ -48,19 +52,31 @@ function kbChunkWrites(string $source): bool
         }
     }
 
-    return preg_match('/\b(INSERT\s+INTO|UPDATE|DELETE\s+FROM|TRUNCATE)\s+kb_chunks\b/i', $source) === 1;
+    return preg_match('/\b(INSERT\s+INTO|UPDATE|TRUNCATE)\s+kb_chunks\b/i', $source) === 1;
+}
+
+function kbChunkDeletes(string $source): bool
+{
+    return str_contains($source, '->delete(') || preg_match('/\bDELETE\s+FROM\s+kb_chunks\b/i', $source) === 1;
 }
 
 it('STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php — every other mention is read-only; no Eloquent model maps the table', function (): void {
     $writers = [];
+    $deleters = [];
     foreach (kbChunkMentions() as $path) {
         $source = (string) file_get_contents(base_path($path));
         if (kbChunkWrites($source)) {
             $writers[] = $path;
         }
+        if (kbChunkDeletes($source)) {
+            $deleters[] = $path;
+            // The prune deletes ONLY through the platform connection (the app role holds no DELETE).
+            expect(str_contains($source, "DB::connection('pgsql_platform')"))->toBeTrue("{$path} deletes kb_chunks outside the platform connection");
+        }
         expect(preg_match('/\$table\s*=\s*[\'"]kb_chunks[\'"]/', $source))->toBe(0, "{$path} maps kb_chunks as an Eloquent model — a second door");
     }
-    expect($writers)->toBe(['app/Domain/Ai/Retrieval/KbIndexer.php'], 'a second route into kb_chunks exists: '.implode(', ', $writers));
+    expect($writers)->toBe(['app/Domain/Ai/Retrieval/KbIndexer.php'], 'a second route into kb_chunks exists: '.implode(', ', $writers))
+        ->and($deleters)->toBe([KB_PLATFORM_DELETER], 'a deleter of kb_chunks beside the platform-role prune: '.implode(', ', $deleters));
     expect(count(kbChunkMentions()))->toBeGreaterThanOrEqual(2, 'the sweep found almost nothing — vacuous');
 });
 

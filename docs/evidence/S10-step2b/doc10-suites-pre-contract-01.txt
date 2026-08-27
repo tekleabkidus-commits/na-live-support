@@ -1,0 +1,57 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\GenerationSwapTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the swap is ONE statement: generation 2 lands non-retrievable be[39m[90m…[39m [90m3.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 5: only the PLATFORM-role prune removes a super[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\PublishRetireRoundTripTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the resolver contract to the chunk-state implementation (s[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit round trip: index → served + Current → retire → not served, row[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\KbGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07/T-06 physics: kb_article_versions and kb_slug_history carr[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 10 table and both kb_chunks partitions are FORCE[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-B: kb_chunks is LIST-partitioned by audience into exactly p[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 3 + FLAG B: the ONLY non-PK unique on kb_chunks[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG-2 / FLAG B static sweep: no ON CONFLICT or upsert() in app/[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\KbOneIndexerDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every row the door writes carries strip provenance, and[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m2.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m33 passed[39;22m[90m (648 assertions)[39m
+  [90mDuration:[39m [39m8.11s[39m
+
+EXIT 0

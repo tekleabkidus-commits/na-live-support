@@ -1,0 +1,16 @@
+diff --git a/tests/Isolation/AiGrantPhysicsTest.php b/tests/Isolation/AiGrantPhysicsTest.php
+index 7840909..11c5eb3 100644
+--- a/tests/Isolation/AiGrantPhysicsTest.php
++++ b/tests/Isolation/AiGrantPhysicsTest.php
+@@ -54,7 +54,10 @@
+     'kb_chunks' => [
+         // content_tsv is GENERATED (unnameable either way, asserted anyway).
+         'INSERT' => ['content_tsv', 'created_at'],
+-        'UPDATE' => ['article_ref', 'chunk_index', 'content_tsv', 'created_at', 'id', 'tenant_id'],
++        // SCHEMA AMENDMENT 4 (S10 step 2b, countersigned): audience and variant_id
++        // join the identity set — an audience change is a re-index into the other
++        // partition through the one door, never a row move.
++        'UPDATE' => ['article_ref', 'audience', 'chunk_index', 'content_tsv', 'created_at', 'id', 'tenant_id', 'variant_id'],
+     ],
+     'ai_ticket_summaries' => [
+         'INSERT' => ['created_at'],

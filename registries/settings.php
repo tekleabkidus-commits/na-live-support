@@ -739,4 +739,68 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc09',
     ],
+    // ── Doc 10 (SCHEMA AMENDMENT 4, S10 step 2b; A-5 naming; platform-maximum validation) ──
+    [
+        // Doc 10 §13/AC-10: the alt-text gate — blocks PUBLIC publish with missing alts.
+        'key' => 'kb.require_alt',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 T-07: the per-variant edit lock's heartbeat TTL (Redis volatile).
+        'key' => 'kb.lock.heartbeat_seconds',
+        'type' => 'int',
+        'default' => 90,
+        'validation' => 'required|integer|min:15|max:600',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 SEC-05/EC-10: feedback writes per visitor token per hour.
+        'key' => 'kb.feedback.rate_per_hour',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:1|max:200',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 SEC-05: feedback comment length cap (hostile input).
+        'key' => 'kb.feedback.comment_max_chars',
+        'type' => 'int',
+        'default' => 500,
+        'validation' => 'required|integer|min:0|max:2000',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 T-05/FS-03: article render cache TTL — the 5-minute cap IS the validation rule.
+        'key' => 'kb.render_cache_ttl_seconds',
+        'type' => 'int',
+        'default' => 300,
+        'validation' => 'required|integer|min:0|max:300',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 EC-08: the mega-article soft warning threshold (words).
+        'key' => 'kb.mega_article_warn_words',
+        'type' => 'int',
+        'default' => 5000,
+        'validation' => 'required|integer|min:500|max:50000',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 T-02: the chunker's target size in tokens (deterministic splitter).
+        'key' => 'kb.chunk_target_tokens',
+        'type' => 'int',
+        'default' => 500,
+        'validation' => 'required|integer|min:100|max:1000',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc10',
+    ],
 ];

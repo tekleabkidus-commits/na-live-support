@@ -71,6 +71,7 @@ Schedule::command('inbox:consistency-check')->hourly()->withoutOverlapping();
 Schedule::command('customers:consistency-check')->weekly()->withoutOverlapping();
 Schedule::command('ai:partitions-maintain')->monthlyOn(1, '02:10')->timezone('UTC'); // Doc 09 (SCHEMA AMENDMENT 3): the ai_decisions window
 Schedule::job(new App\Jobs\Ai\ReduceAiDecisionPayloads)->dailyAt('03:10')->timezone('UTC'); // Doc 09 SEC-06: the 30-day payload reduction (privacy by schedule)
-Schedule::command('ai:embed-ticket-summaries')->dailyAt('02:40')->timezone('UTC'); // Doc 09 T-05: nightly resolved-ticket summary embeddings (Copilot similar tickets)
+Schedule::command('ai:embed-ticket-summaries')->dailyAt('02:40')->timezone('UTC');
+Schedule::command('kb:chunks-prune')->dailyAt('03:40')->timezone('UTC'); // Doc 10 T-01 (SCHEMA AMENDMENT 4, STOP-A): superseded generations pruned under the PLATFORM role — app never deletes // Doc 09 T-05: nightly resolved-ticket summary embeddings (Copilot similar tickets)
 Schedule::command('ai:supervisor-hourly')->hourlyAt(5)->timezone('UTC'); // Doc 09 FR-17: anomaly scan + sentiment watch
 Schedule::command('ai:supervisor-daily')->dailyAt('04:10')->timezone('UTC'); // Doc 09 FR-17: qa_prescore sample + daily digest
