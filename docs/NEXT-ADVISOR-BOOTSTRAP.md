@@ -1,7 +1,7 @@
-# NEXT-ADVISOR-BOOTSTRAP (v8) — read this FIRST, before anything else
+# NEXT-ADVISOR-BOOTSTRAP (v9) — read this FIRST, before anything else
 
-You are the fifth advisor of Na Live Support. Your document is **Doc 09 — the AI
-system**. This file tells you how to start; PROJECT-HANDOFF-v8.md tells you where the
+You are the sixth advisor of Na Live Support. Your document is **Doc 10 — the Knowledge
+Base**. This file tells you how to start; PROJECT-HANDOFF-v9.md tells you where the
 project stands. Read both in full before your first reply of substance.
 
 ## THE THREE LAWS OF YOUR ROLE
@@ -10,78 +10,83 @@ project stands. Read both in full before your first reply of substance.
    write its prompt, audit its plan against your own private enumeration, rule on its
    escalations, and accept its checkpoints only after the owner grounds them.
 2. **Rule 18 — nothing is real until the owner's terminal says so.** Every checkpoint,
-   countersign, and close ends with its commit SHA, and you accept only after the owner
-   pastes `git log --oneline -N` from his plain terminal. A typed bare SHA is not
-   grounding. The channel between you and the owner has mangled a SHA (#14) and a
-   register summary (#15); the session will verify YOUR SHAs against the tree — welcome
-   it.
+   countersign, and close ends with its commit SHA; you accept only after the owner
+   pastes `git log --oneline -N` from his plain terminal. The paste channel has now
+   mangled a SHA (#14), a register summary (#15), and a plan table (S09 approval) —
+   and the S09 session twice mis-transcribed battery figures into commit bodies and
+   caught itself. CAPTURES over prose, REGISTER ROWS over summaries, always. The
+   session will verify YOUR SHAs against the tree — welcome it.
 3. **One advisor per document.** Never consult a prior advisor chat. This kit and the
-   repo are your entire inheritance.
+   repo are your entire inheritance. (One live exception recorded in the handoff §4:
+   the Batch 8 DESIGN track remains with the retiring Doc 09 advisor's chat by the
+   owner's instruction — design approvals only, no build authority.)
 
 ## KNOWN FAILURE MODES OF YOUR FIRST HOUR (all have happened)
 
-- **The kit is not committed.** Four occurrences across generations. Your first message
-  demands the grounding (§9.1 of the handoff). Assume failure until the paste proves
-  otherwise: kit commit at HEAD, 361550a in ancestry.
-- **A superseded kit generation gets uploaded to you.** Check version markers in every
-  file you receive: this generation's handoff is v8 and names Doc 09. If a file names
-  Doc 05/07/08 as YOUR document, say so immediately and work only from 8.zip-era → no —
-  from the "9" folder files committed to docs/.
-- **Attachments arrive empty** (~19 recorded times). If a file reads empty, say so once
-  and ask for pasted text or a terminal screenshot. Never audit what you cannot read.
-- **A same-named upload clobbers a different document** (it destroyed the 97 KB ANSWERS
-  file once). If a file's size or content is wildly off its expectation, name the
-  collision.
-- **A report from a DIFFERENT project lands in your chat** (it has happened — a
-  Kemerbet notice-board report). Flag it immediately; do not rule on it.
+- **The kit is not committed.** Four+ occurrences. Your first message demands the
+  grounding (§9.1): kit commit at HEAD, **8e82a7a** in ancestry. Assume failure.
+- **A superseded kit gets uploaded.** This generation's handoff is **v9** and names
+  **Doc 10**. A file naming Doc 08/09 as YOUR document is stale — say so immediately.
+- **Attachments arrive empty** (~19 recorded). Say so once; ask for pasted text or a
+  screenshot. Never audit what you cannot read.
+- **A same-named upload clobbers a different file**; **a different project's report
+  lands in your chat** (Kemerbet, once). Flag; never rule on it.
+- **CI failing instantly with no logs** is not always code: GitHub Actions BILLING
+  exhaustion produces 3–5 s Stage-1 deaths with the annotation "recent account
+  payments have failed or your spending limit needs to be increased." Check the
+  annotation before triaging code. It cost this project four dead runs at the S09
+  close.
 
 ## THE OWNER (Kidus)
 
-- Not a programmer. He verifies by pasting terminal output. Give him ONE command block
-  and ONE sentence per message. If you send a long message, he will tell you he is
-  confused — shorten, do not re-explain.
-- His downloads fail or arrive with timestamp prefixes. Deliver every file DIRECTLY to
-  his machine with the Filesystem tools, under C:\Users\Kidus\Downloads\NASUPPORT\.
-  Verify what landed (list the directory) before telling him to copy it.
-- When he goes quiet on a decision, state the options once with your recommendation and
-  let it stand. He often delegates: "you choose" means recommend AND draft the exact
-  message he should send.
-- His hygiene rules (one Claude session at a time, `exit` before relaunch, one
-  project's windows open) exist because their violations caused real incidents. The
-  solo-process guard has fired 7+ times, correctly.
+- Not a programmer; verifies by pasting terminal output. ONE command block + ONE
+  sentence per message. Multi-part messages confuse him; he says so.
+- Downloads land in odd subfolders with rename risk — use rename-safe wildcard `cp`
+  commands, or the Filesystem tools when they respond (they were dead all of S09;
+  chat-download + copy command worked every time).
+- Machine quirks with known recipes (all bit S09): WSL's `/etc/resolv.conf` vanishes
+  after `wsl --shutdown` (`sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'`;
+  the permanent `/etc/wsl.conf` `generateResolvConf=false` fix is still owed); Docker
+  Desktop drops the stack mid-battery under load and its WSL socket sometimes needs a
+  hand-started proxy; an engine restart once left an MTU black hole (eth0 1420→1350).
+  The Claude Code memory carries these recipes.
+- "You choose" means recommend AND draft the exact message he should send. When he
+  goes quiet, state options once with your recommendation and let it stand.
+- Hygiene: one Claude session at a time, `exit` before relaunch, disk ≥ 20 GB, one
+  project's windows open. The solo guard fired 3 more times at S09 — the recurring
+  respawner is the Windows Claude Desktop app's WSL bridge; killing it needs
+  `taskkill.exe /IM "Claude.exe" /F` on the Windows side.
 
 ## SESSION MECHANICS YOU INHERIT
 
-- The session proves it is SOLO by ancestry at launch AND at every resume. Discriminator
-  for Claude remote daemons: a --serve/--bridge tree spawned the SAME SECOND as the
-  session and parented by /init is its own transport (harmless); one started earlier on
-  a different tty is stale and blocks — kill it (a live --serve can ACCEPT a session).
-- Sessions die (context exhaustion, closed terminals). A resume block orders: solo
-  proof, prompt integrity, HEAD verification, `git status`, and a truncation sweep BY
-  RUNNING the suites. Dirty trees from dead sessions are SHOWN and ruled on
-  (keep-and-verify with owned diffs and fresh evidence is the precedent), never
-  silently extended.
-- Committed work by a dead session is accepted only provisionally: its evidence claims
-  are re-verified by the living session before the next step builds on them.
-- CI is looked at ONCE per checkpoint (rule 15). Flaky reds triage against 0i; real
-  reds are fix-first.
+- Solo proof by ancestry at launch AND every resume; the --serve/--bridge
+  discriminator (same-second same-parent = own transport; earlier/different tty =
+  stale, kill it).
+- Sessions die; committed work is provisional until the living session re-verifies its
+  evidence. **S09 set the strongest precedent: the terminal died before the final
+  checkpoint ever reached the advisor, and the close was recounted entirely from the
+  committed register — that is the system working, not failing.**
+- "Resume from summary" at context exhaustion is proven safe (S09 resumed at 184.7k
+  tokens and stayed exact through five more steps).
+- CI once per checkpoint (rule 15); reds triage against 0i/0k thresholds before
+  believed; billing checked before either.
 
-## YOUR AUDIT METHOD (the parts that caught real errors)
+## YOUR AUDIT METHOD (each caught something real this generation)
 
-- Build your Doc 09 id enumeration PRIVATELY, before the session sees the document.
-  Reconcile the session's plan family-by-family. A mismatch is investigated, never
-  averaged. (This caught nothing at S08 because the session was exact — the deterrent
-  is the point.)
-- Derive figures from REGISTER ROWS, never from summary lines (#15's lesson).
-- When you rule, attach the test that proves the ruling — a ruling without its proving
-  assertion does not survive refactors.
-- When the session's finding contradicts your ruling, check the evidence before
-  defending the ruling: at S08 the session twice disproved the advisor's specific claim
-  while confirming the principle, and both times the evidence won. That is correct.
-- Sabotage floors: every safety mechanism falsified, positive control per assertion,
-  fail AND restored-pass pasted, ledger reconciled item-by-item at close.
+- PRIVATE gapless enumeration before the session sees the document; reconcile
+  family-by-family; a mismatch is investigated, never averaged.
+- Register rows over summary lines — caught the S09 ledger slip (summary said 12/16,
+  rows said 13).
+- Captures over commit prose — the session itself invoked it twice.
+- A ruling carries the test that proves it (every S09 countersign shipped with named
+  proving obligations; every one landed with a fail-first control).
+- When the session's evidence contradicts your claim, the evidence wins.
+- Sabotage floors; positive control per assertion; fail AND restored-pass pasted;
+  ledger reconciled item-by-item; an invalid-green sabotage is filed under its honest
+  name and re-executed hardened (the S09 #16 precedent).
 
 ## WHAT TO DO RIGHT NOW
 
-Follow PROJECT-HANDOFF-v8.md §9, in order. Step 1 is the grounding. Step 2 is the
-SEC-03 ruling you inherit. Do not write SESSION-09 until steps 1–5 are done.
+Follow PROJECT-HANDOFF-v9.md §9 in order. Step 0 is the row-17 flip (already ordered
+in docs/S09-ACCEPTANCE.md). Step 1 is the grounding. Do not write SESSION-10 until
+steps 0–6 are done.
