@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B8-S12 — Cross-cutting proof sheet — v1</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1320px; margin: 0 auto; padding: 28px 24px 80px; }
+  .hdr h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .hdr .meta { font-size: 12px; color: #6B675D; margin-bottom: 14px; }
+  .hdr p { font-size: 13.5px; line-height: 1.55; max-width: 860px; margin: 0 0 8px; }
+  .sec { margin-top: 36px; }
+  .sec > .cap { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+  .sec > .ref { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px; }
+  .card { background: #FFFFFF; border: 1px solid #E5E2DB; border-radius: 10px; padding: 14px 16px; }
+  .note { font-size: 11.5px; line-height: 1.5; color: #4A4842; max-width: 820px; margin-top: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+  th { text-align: left; font-size: 9.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #6F6A61; padding: 7px 9px; border-bottom: 1px solid #CFCBC1; }
+  td { padding: 7px 9px; border-bottom: 1px solid #E5E2DB; color: #1D1C18; vertical-align: top; line-height: 1.5; }
+  .mono { font-family: ui-monospace, monospace; font-size: 10.5px; }
+  .ok { color: #156F45; font-weight: 700; }
+  .sw { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid #CFCBC1; vertical-align: -3px; margin-right: 5px; }
+  .dim { color: #6B675D; }
+  code { font-family: ui-monospace, monospace; font-size: 11px; background: rgba(127,127,127,0.12); border-radius: 4px; padding: 1px 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hdr">
+    <h1>Cross-cutting proof sheet</h1>
+    <div class="meta">B8-S12-cross-cutting-v1 · Section L · checklist rows L01–L07 · the audit that closes Batch 8's system-level promises across S01–S11</div>
+    <p>This sheet is evidence, not a new screen: for each system-level promise the batch made, it names where the proof lives on the eleven delivered screens — with measured numbers where a number is the proof. A row here is only as good as the frames it cites; the closing audit checks both.</p>
+  </div>
+
+  <!-- L01 tokens -->
+  <div class="sec">
+    <div class="cap">L01 — Tokens verbatim, both colourways, no invented dark values</div>
+    <div class="ref">Source: B1-DS-design-system-v2 §2 + addenda · the AI family verified against the frozen file (S01 §—; the drawn bubble anatomy extracted before any frame was authored)</div>
+    <div class="card">
+      <table>
+        <tr><th>Token role</th><th>Light</th><th>Dark</th><th>Where it rules</th></tr>
+        <tr><td>AI surface / text / border / edge</td><td class="mono"><span class="sw" style="background:#F1EDFE"></span>#F1EDFE · <span class="sw" style="background:#5B3FD6"></span>#5B3FD6 · <span class="sw" style="background:#DACFFB"></span>#DACFFB · <span class="sw" style="background:#7C5CFC"></span>#7C5CFC</td><td class="mono"><span class="sw" style="background:#292144"></span>#292144 · <span class="sw" style="background:#BCA9FF"></span>#BCA9FF · <span class="sw" style="background:#3D3266"></span>#3D3266 · <span class="sw" style="background:#A18BFF"></span>#A18BFF</td><td>Every AI bubble, card, chip and ✦ label on S01–S11 — the only AI visual language</td></tr>
+        <tr><td>Calm slate (RG)</td><td class="mono"><span class="sw" style="background:#ECEEF1"></span>#ECEEF1 / #59636F</td><td class="mono"><span class="sw" style="background:#272D34"></span>#272D34 / #9AA6B2</td><td>S03 §D, S06 §D, S10 §D — all RG material; never alarm red</td></tr>
+        <tr><td>Amber (warn / guardrail / stale)</td><td class="mono"><span class="sw" style="background:#FCF0D9"></span>#FCF0D9 / #8F5F08 / #E8CF9B</td><td class="mono"><span class="sw" style="background:#332B12"></span>#332B12 / #E8C25A / #6B551A</td><td>Guardrail strips (S01), stale gates (S05), language gates (S04/S06), pauses (S11)</td></tr>
+        <tr><td>Danger (off / block / breach)</td><td class="mono"><span class="sw" style="background:#FBE5E5"></span>#FBE5E5 / #B32B2B / #8E2222</td><td class="mono"><span class="sw" style="background:#3D1B1B"></span>#3D1B1B / #F08A8A / #E06B6B</td><td>Kill-switch OFF (S07), digit-validator block (S02), exhausted chain (S08/S11)</td></tr>
+        <tr><td>Note (internal)</td><td class="mono"><span class="sw" style="background:#FBF3D6"></span>#FBF3D6 / #7E650F / #E3C455</td><td class="mono"><span class="sw" style="background:#332B12"></span>#332B12 / #E8C25A / #6B551A</td><td>Summarize→note (S02 §D) — note surfaces stay Doc 07's yellow, never AI violet</td></tr>
+      </table>
+      <div class="note">Every dark value above comes from the frozen dark column — none derived by eye. The full surface/text/status families follow the same law; the build's <code>design-tokens.css</code> (144 declarations, hex-verified against the frozen sources by the committed extraction script) is the implementation bridge.</div>
+    </div>
+  </div>
+
+  <!-- L02 coverage -->
+  <div class="sec">
+    <div class="cap">L02 — Coverage: both themes and both viewports on every screen; 44 px at 375</div>
+    <div class="ref">Verified frame-by-frame; ✓ = the state exists as a captioned frame on that screen</div>
+    <div class="card">
+      <table>
+        <tr><th>Screen</th><th>Light 1440</th><th>Dark 1440</th><th>Light 375</th><th>Dark 375</th><th>44 px note</th></tr>
+        <tr><td>S01 Copilot panel</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>mobile buttons 12px-padded; tab row 44 px</td></tr>
+        <tr><td>S02 Composer actions</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>all four verbs visible, wrapped — no overflow menu</td></tr>
+        <tr><td>S03 Marking &amp; honesty</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓ (phone frames)</td><td class="ok">✓</td><td>customer frames are 340 px content by nature</td></tr>
+        <tr><td>S04 Personas</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>editor stacks above preview</td></tr>
+        <tr><td>S05 Thresholds (v2)</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>full-width Run/Publish buttons</td></tr>
+        <tr><td>S06 Guardrails</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>row actions stack under content</td></tr>
+        <tr><td>S07 Kill switches</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>64×32 switches; grid stacks by surface</td></tr>
+        <tr><td>S08 Provider status</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>chains stack; arrow rotates</td></tr>
+        <tr><td>S09 Decision log</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>rows become cards</td></tr>
+        <tr><td>S10 Supervisor + RG</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>RG actions stack full-width</td></tr>
+        <tr><td>S11 Degraded states</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td>checklist buttons full-width</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- L03 AA + never color alone -->
+  <div class="sec">
+    <div class="cap">L03 — WCAG AA, measured; nothing by color alone</div>
+    <div class="ref">Contrast computed (WCAG relative-luminance), not eyeballed — every pair used for text in the batch, both colourways; AA normal-text floor is 4.5:1</div>
+    <div class="card">
+      <table>
+        <tr><th>Pair</th><th>Light</th><th>Dark</th></tr>
+        <tr><td>AI label on AI surface</td><td class="mono">#5B3FD6 / #F1EDFE — <b>5.85:1</b></td><td class="mono">#BCA9FF / #292144 — <b>7.35:1</b></td></tr>
+        <tr><td>Body text on AI surface</td><td class="mono">#1D1C18 / #F1EDFE — <b>14.85:1</b></td><td class="mono">#ECEAE4 / #292144 — <b>12.51:1</b></td></tr>
+        <tr><td>Warn text on warn surface</td><td class="mono">#8F5F08 / #FCF0D9 — <b>4.89:1</b></td><td class="mono">#E8C25A / #332B12 — <b>8.22:1</b></td></tr>
+        <tr><td>Danger text on danger surface</td><td class="mono">#B32B2B / #FBE5E5 — <b>5.29:1</b></td><td class="mono">#F08A8A / #3D1B1B — <b>6.35:1</b></td></tr>
+        <tr><td>Success text on success surface</td><td class="mono">#156F45 / #E4F4EA — <b>5.43:1</b></td><td class="mono">#5AD190 / #123322 — <b>7.20:1</b></td></tr>
+        <tr><td>Slate text on slate surface (RG)</td><td class="mono">#59636F / #ECEEF1 — <b>5.25:1</b></td><td class="mono">#9AA6B2 / #272D34 — <b>5.61:1</b></td></tr>
+        <tr><td>Label / secondary / primary on panel</td><td class="mono">5.37 · 9.14 · 17.05:1</td><td class="mono">6.69 · 9.91 · 14.20:1</td></tr>
+      </table>
+      <div class="note"><b>All 18 measured pairs ≥ 4.5:1 — AA passes at normal-text size in both colourways</b>, including the 9.5–10 px bold labels, which AA would only relax for LARGER text, not smaller. The label token itself is the S19 filed deviation working as intended (the drawn #9A9588 failed; the compliant gray shipped).<br><br><b>Never color alone — the carrier inventory:</b> classification chips → named values ("Sentiment: negative (−1)") · confidence meter → "82% · High" beside the segments · kill switches → "On" / "OFF since {time} by {actor}" · breaker dots → "Serving / Tripped / Standby" words · outcome chips → words in the chip · simulation deltas → "+12% more" worded, colored second · quota meter → counts and percentages in the sentence · digit-validator block → the caught digits named in text · every ✦ AI accent → the text label beside it.</div>
+    </div>
+  </div>
+
+  <!-- L04 Amharic -->
+  <div class="sec">
+    <div class="cap">L04 — Real Amharic, long strings proving the layouts, R-14 flagged</div>
+    <div class="ref">Ethiopic line-height law (B1-DS type rules) applied wherever Amharic renders</div>
+    <div class="card">
+      <table>
+        <tr><th>Screen</th><th>The long-Amharic proof frames</th></tr>
+        <tr><td>S01</td><td>§E — full panel (summary + draft + actions) in Amharic, the longest strings in the batch</td></tr>
+        <tr><td>S02</td><td>§C — EN↔AM translate pairs; mixed-language input; the sent bubble + hover original</td></tr>
+        <tr><td>S03</td><td>§A greeting, §C batch-tail (six rapid Amharic messages), §D the RG template in full</td></tr>
+        <tr><td>S04</td><td>§B the angry-escalation preview in አማርኛ; the Amharic greeting field</td></tr>
+        <tr><td>S06</td><td>§B deflection wording in አማርኛ; §D the full RG template editor + preview</td></tr>
+        <tr><td>S10</td><td>§B the entire daily-digest email in አማርኛ; RG excerpts in §D</td></tr>
+        <tr><td>S11</td><td>§B the bypass conversation in Amharic</td></tr>
+      </table>
+      <div class="note">Every Amharic string in the batch is real text (no stretched Latin, no lorem) and joins the R-14 native-review queue. Digits, currency amounts and reference ids stay verbatim across every language switch (§14's money rule — proven visually in S02 §C).</div>
+    </div>
+  </div>
+
+  <!-- L05 motion -->
+  <div class="sec">
+    <div class="cap">L05 — Reduced motion</div>
+    <div class="ref">§9 streaming rules · B1-DS motion law</div>
+    <div class="card">
+      <div style="font-size:12.5px; line-height:1.65">
+        · Streaming renders in chunks under reduced motion; the caret does not blink (S01 §A, contract §H).<br>
+        · Nothing in the batch pulses, in any state — including kill-switch OFF and full-outage banners (S07/S11): loudness comes from size, red and the named actor, never animation.<br>
+        · Skeletons are static blocks (S01 §B); screen-reader announcements land at sentence boundaries, never per token (S01/S13 contract rows).
+      </div>
+    </div>
+  </div>
+
+  <!-- L06 white label -->
+  <div class="sec">
+    <div class="cap">L06 — White-label neutral</div>
+    <div class="ref">House law · BR-05's boundary: the name is brandable, the nature is not</div>
+    <div class="card">
+      <div style="font-size:12.5px; line-height:1.65">
+        Fixture identities across the batch: <b>Brand Support</b> (operator), <b>@BrandSupport / @BrandVIP</b> (endpoints), <b>Selam / ሰላም</b> (persona), <code>@fixture…</code>-class customers (አበበ ታደሰ, Kidist Haile, Hana Girma…). No real operator brand, logo, or color appears anywhere; the persona avatar choices are deliberately neutral marks (S04 §A). The one thing white-labeling can never rebrand away is the AI disclosure — the X3 audit below.
+      </div>
+    </div>
+  </div>
+
+  <!-- L07 X audit -->
+  <div class="sec">
+    <div class="cap">L07 — The five hard absences, re-audited against every delivered screen</div>
+    <div class="ref">X1–X5 · a designed absence is proven by showing WHERE it was probed and stayed absent</div>
+    <div class="card">
+      <table>
+        <tr><th>Absence</th><th>Probed at</th><th>Held</th></tr>
+        <tr><td><b>X1 — no auto-send</b></td><td>S01 (every card state ends at Insert/Regenerate/Discard; contract §H) · S02 (every verb's card: Insert/Edit/Discard only; send button untouched by the slot) · S03 (AI messages sent only by the chatbot pipeline, never from staff surfaces)</td><td class="ok">✓</td></tr>
+        <tr><td><b>X2 — no generated RG text</b></td><td>S03 §D (customer receives the byte-fixed template; staff card names it) · S06 §D (the editor states "sent exactly as written"; no improve/suggest exists on RG text) · S10 §D (every fire row shows "template sent")</td><td class="ok">✓</td></tr>
+        <tr><td><b>X3 — no removable disclosure</b></td><td>S03 §A (present in every greeting, both languages) · S04 §A (wording field + permanent lock, no disable in any state) · S06 §C (the same lock at the guardrails home) · S08 §D (the honesty layer as a code hash with no rollback affordance)</td><td class="ok">✓</td></tr>
+        <tr><td><b>X4 — no stated transaction facts</b></td><td>S03 §B (the trap drawn refusing; claim-framing on every money sentence) · S01 §A (the panel summary restates OCR as "his claim, unverified") · S02 §G contract (drafted money sentences claim-frame) · S06 §A (account-balance claims a locked blocked topic) · S11 §B (even the reserve-served answer claim-frames)</td><td class="ok">✓</td></tr>
+        <tr><td><b>X5 — no publish without fresh simulation</b></td><td>S05 v2 (stale gate locks Publish with the reason on the button; re-locks on every slider touch; the zero-history state has NOTHING to publish — no exception exists)</td><td class="ok">✓</td></tr>
+      </table>
+      <div class="note">Nothing on S07's kill switches, S08's provider config, or S09's decision log creates a path around any of the five — switches silence, configs version, logs record; none of them send, generate RG text, hide disclosure, state facts, or publish thresholds.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

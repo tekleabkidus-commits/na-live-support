@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B8-S02 — Composer AI actions — v1</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .page { max-width: 1520px; margin: 0 auto; padding: 28px 24px 80px; }
+  .hdr h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .hdr .meta { font-size: 12px; color: #6B675D; margin-bottom: 14px; }
+  .hdr p { font-size: 13.5px; line-height: 1.55; max-width: 860px; margin: 0 0 8px; }
+  .sec { margin-top: 40px; }
+  .sec > .cap { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 2px; }
+  .sec > .ref { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px; }
+  .sec > .why { font-size: 12.5px; line-height: 1.55; color: #4A4842; max-width: 820px; margin: 6px 0 14px; }
+  .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .frame { border-radius: 12px; padding: 16px; }
+  .frame > .fcap { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px; }
+  .note { font-size: 11.5px; line-height: 1.5; color: #4A4842; max-width: 720px; margin-top: 8px; }
+
+  .lt {
+    --pg:#F4F3F1; --pn:#FFFFFF; --soft:#F6F5F2; --hov:#F0EEE9; --inset:#EEECE6;
+    --bd:#E5E2DB; --bds:#CFCBC1; --tx:#1D1C18; --tx2:#4A4842; --mut:#6B675D; --lab:#6F6A61;
+    --ai-bg:#F1EDFE; --ai-fg:#5B3FD6; --ai-bd:#DACFFB; --ai-edge:#7C5CFC;
+    --warn-bg:#FCF0D9; --warn-fg:#8F5F08; --warn-bd:#E8CF9B;
+    --dan-bg:#FBE5E5; --dan-fg:#B32B2B; --dan-bd:#E3B6B6;
+    --note-bg:#FBF3D6; --note-fg:#7E650F; --note-bd:#E3C455;
+    --ok-bg:#E4F4EA; --ok-fg:#156F45; --focus:#1D4FD7;
+    background: var(--pg); border: 1px solid #DCD8CF; color: var(--tx);
+  }
+  .dk {
+    --pg:#141412; --pn:#1C1C19; --soft:#232320; --hov:#262622; --inset:#2F2F29;
+    --bd:#343430; --bds:#45443E; --tx:#ECEAE4; --tx2:#C9C5BB; --mut:#A6A296; --lab:#A6A296;
+    --ai-bg:#292144; --ai-fg:#BCA9FF; --ai-bd:#3D3266; --ai-edge:#A18BFF;
+    --warn-bg:#332B12; --warn-fg:#E8C25A; --warn-bd:#6B551A;
+    --dan-bg:#3D1B1B; --dan-fg:#F08A8A; --dan-bd:#6B3838;
+    --note-bg:#332B12; --note-fg:#E8C25A; --note-bd:#6B551A;
+    --ok-bg:#123322; --ok-fg:#5AD190; --focus:#8FB6FF;
+    background: var(--pg); border: 1px solid #000; color: var(--tx);
+  }
+  .lt .fcap { color: #6F6A61; } .dk .fcap { color: #9A9588; }
+  .dk .note { color: #C9C5BB; }
+
+  /* ── the composer (Doc 07 chrome — context only) ── */
+  .comp { width: 700px; background: var(--pn); border: 1px solid var(--bd); border-radius: 10px; overflow: hidden; }
+  .comp.m { width: 375px; }
+  .modes { display: flex; gap: 2px; padding: 8px 10px 0; }
+  .mode { font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 6px 6px 0 0; color: var(--mut); border: 1px solid transparent; border-bottom: 0; }
+  .mode.on { background: var(--pn); color: var(--tx); border-color: var(--bd); }
+  .mode.on.note { background: var(--note-bg); color: var(--note-fg); border-color: var(--note-bd); }
+  .ta { margin: 0 10px; border: 1px solid var(--bd); border-radius: 0 8px 8px 8px; background: var(--pn); padding: 10px 12px; font-size: 12.5px; line-height: 1.55; color: var(--tx); min-height: 64px; }
+  .ta.note { background: var(--note-bg); color: var(--note-fg); border-color: var(--note-bd); }
+  .ta .ph { color: var(--mut); }
+  .cbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px 10px; flex-wrap: wrap; }
+  .m .cbar { gap: 8px; }
+  .aiacts { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .aibtn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--ai-fg); background: var(--ai-bg); border: 1px solid var(--ai-bd); border-radius: 6px; padding: 5px 10px; }
+  .aibtn[disabled] { opacity: 0.55; }
+  .m .aibtn { padding: 12px 14px; }
+  .send { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 6px 14px; background: var(--tx); color: var(--pg); border: 1px solid var(--tx); }
+  .dk .send { background: #ECEAE4; color: #171714; border-color: #ECEAE4; }
+  .m .send { padding: 12px 18px; }
+  .lab { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lab); }
+
+  /* ── AI result card (the S01 anatomy, above the composer) ── */
+  .aicard { background: var(--ai-bg); border: 1px solid var(--ai-bd); border-left: 3px solid var(--ai-edge); border-radius: 8px; padding: 10px 11px; margin: 10px 10px 0; }
+  .ailabel { font-size: 9.5px; font-weight: 700; color: var(--ai-fg); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; gap: 8px; }
+  .aitext { font-size: 12.5px; line-height: 1.55; color: var(--tx); }
+  .pair { display: grid; grid-template-columns: 14px 1fr; gap: 4px 8px; font-size: 12.5px; line-height: 1.5; }
+  .pair .tag { font-size: 10px; font-weight: 700; color: var(--ai-fg); padding-top: 2px; }
+  .pair .orig { color: var(--mut); }
+  .acts { display: flex; gap: 8px; margin: 10px 10px 0; flex-wrap: wrap; padding-bottom: 2px; }
+  .btn { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 6px 12px; border: 1px solid var(--bds); background: var(--pn); color: var(--tx); }
+  .btn.pri { background: var(--tx); color: var(--pg); border-color: var(--tx); }
+  .dk .btn.pri { background: #ECEAE4; color: #171714; border-color: #ECEAE4; }
+  .m .btn { padding: 12px 16px; }
+  .hint { font-size: 10.5px; color: var(--mut); margin: 7px 10px 0; }
+  .pad { padding-bottom: 12px; }
+
+  .banner { border-radius: 8px; padding: 9px 11px; font-size: 11.5px; line-height: 1.5; font-weight: 600; margin: 10px 10px 0; }
+  .banner.deg { background: var(--inset); border: 1px solid var(--bds); color: var(--tx2); }
+  .banner.rej { background: var(--dan-bg); border: 1px solid var(--dan-bd); color: var(--dan-fg); }
+  .banner small { display: block; font-weight: 400; margin-top: 4px; opacity: 0.92; }
+
+  /* sent bubble w/ translation marker (context for B04's post-send half) */
+  .bub { align-self: flex-end; max-width: 78%; margin: 10px 10px 0 auto; }
+  .bub .bx { background: var(--inset); border: 1px solid var(--bds); border-radius: 10px 10px 3px 10px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .bub .meta { font-size: 10.5px; color: var(--mut); margin-top: 3px; text-align: right; }
+  .tmark { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--ai-fg); background: var(--ai-bg); border: 1px solid var(--ai-bd); border-radius: 4px; padding: 1px 6px; }
+  .tip { background: var(--pn); border: 1px solid var(--bds); border-radius: 8px; padding: 8px 10px; font-size: 11.5px; line-height: 1.5; color: var(--tx2); box-shadow: 0 4px 14px rgba(0,0,0,0.10); max-width: 340px; margin: 6px 10px 0 auto; }
+  .dk .tip { box-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+
+  code { font-family: ui-monospace, monospace; font-size: 11px; background: rgba(127,127,127,0.12); border-radius: 4px; padding: 1px 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hdr">
+    <h1>Composer AI actions</h1>
+    <div class="meta">B8-S02-composer-actions-v1 · Section B · checklist rows B01–B08 (+ X1, X4 audited) · Doc 09 FR-15, FR-16, US-04, EC-10, §8, §13, §14</div>
+    <p>Four verbs live in the composer's AI slot: <b>Draft · Improve · Translate · Summarize</b>. Each produces a card the agent reads before anything moves — and every card ends the same way: text lands in the composer, the send button stays untouched, unclicked, the agent's own. The dangerous verb here is Translate, because translation can silently change money; so the two-line preview is mandatory before send, the original is stored and hoverable forever after, and a translation that alters a digit is <i>blocked</i>, not warned.</p>
+    <p>The composer chrome (modes, textarea, send) is Doc 07 law — context only. The AI slot's placement in the action bar is Doc 07 FR-19's; what fills it is this screen's subject. Components and the violet family are B1-DS verbatim; every AI product carries the text label. Amharic is real, flagged for native review.</p>
+  </div>
+
+  <!-- ═══════════ §A the cluster ═══════════ -->
+  <div class="sec">
+    <div class="cap">§A — The action cluster · 1440 · light</div>
+    <div class="ref">B01 · FR-15 · Doc 07 FR-19 slot · states: normal / busy / AI-off</div>
+    <div class="why">The four verbs sit left of Send, violet-familied so they read as one system with the Copilot panel — but each is a plain, labeled button: no icon-only mystery meat in a tool agents use two hundred times a shift.</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · normal — reply mode, text typed</div>
+        <div class="comp">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">we check your withdrawal now, 2,500 birr telebirr, finance will confirm the ref then release</div>
+          <div class="cbar">
+            <div class="aiacts">
+              <button class="aibtn">✦ Draft</button>
+              <button class="aibtn">✦ Improve</button>
+              <button class="aibtn">✦ Translate</button>
+              <button class="aibtn">✦ Summarize</button>
+            </div>
+            <button class="send">Send reply</button>
+          </div>
+        </div>
+        <div class="note">Draft works from the thread; Improve and Translate work on what's typed; Summarize writes an internal-note draft. All four are read-only against the conversation until the agent inserts.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · busy — one verb running, the rest wait</div>
+        <div class="comp">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">we check your withdrawal now, 2,500 birr telebirr, finance will confirm the ref then release</div>
+          <div class="cbar">
+            <div class="aiacts">
+              <button class="aibtn" disabled>✦ Draft</button>
+              <button class="aibtn" disabled>◌ Improving…</button>
+              <button class="aibtn" disabled>✦ Translate</button>
+              <button class="aibtn" disabled>✦ Summarize</button>
+            </div>
+            <button class="send">Send reply</button>
+          </div>
+        </div>
+        <div class="note">One AI verb at a time — a second request would race the first card. Send is never disabled by AI activity: the agent can always ignore the machine and just reply (§8: nothing blocks the composer).</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · AI-off — kill switch or outage (labeled degrade)</div>
+        <div class="comp">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta"><span class="ph">Write your reply…</span></div>
+          <div class="banner deg" style="margin-top:0">AI actions unavailable — macros, KB search and sending all still work.</div>
+          <div class="cbar">
+            <button class="send" style="margin-left:auto">Send reply</button>
+          </div>
+        </div>
+        <div class="note">Off is said, not implied: the cluster is gone and one line explains what remains. The composer is fully operable AI-off — the platform's ultimate fallback is its own human workflow (R-04).</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §B Improve ═══════════ -->
+  <div class="sec">
+    <div class="cap">§B — Improve · 1440 · light</div>
+    <div class="ref">B03 · FR-15 · §8 "v1 whole-text accept" · original recoverable before accept</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · improve card over the typed text</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">we check your withdrawal now, 2,500 birr telebirr, finance will confirm the ref then release</div>
+          <div class="aicard">
+            <div class="ailabel"><span>✦ Improved — tone &amp; grammar, meaning kept</span></div>
+            <div class="aitext">We're checking your 2,500 ETB Telebirr withdrawal now. Finance will confirm the reference and release it right after.</div>
+          </div>
+          <div class="acts">
+            <button class="btn pri">Insert — replaces your text</button>
+            <button class="btn">Discard</button>
+          </div>
+          <div class="hint">Whole-text accept (v1). Your original stays in the box until you insert; Discard leaves it untouched. Per-change accept/revert is the documented v2.</div>
+          <div class="cbar"><div class="aiacts"><button class="aibtn">✦ Draft</button><button class="aibtn">✦ Improve</button><button class="aibtn">✦ Translate</button><button class="aibtn">✦ Summarize</button></div><button class="send">Send reply</button></div>
+        </div>
+        <div class="note">The verb's promise is in its label — "meaning kept". The digits rule applies here too: 2,500 stayed 2,500, and an Improve that changed it would be blocked exactly like a translation (§C below).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §C Translate: preview, digit block, sent + hover ═══════════ -->
+  <div class="sec">
+    <div class="cap">§C — Translate · 1440 · light</div>
+    <div class="ref">B04 B05 B06 · FR-15 · US-04 · EC-10 · §14 digit validator — the money-safety rule</div>
+    <div class="why">An agent who cannot read the output language is signing something they cannot check — so the design gives them the two things they <i>can</i> check: the preview pairs every line with its original, and the validator guarantees the numbers are untouched. When it can't guarantee that, the send path closes. Not a warning — closed.</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · two-line preview BEFORE send (B04)</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">We're checking your 2,500 ETB Telebirr withdrawal now. Finance will confirm reference TB-88412 and release it right after.</div>
+          <div class="aicard">
+            <div class="ailabel"><span>✦ Translate — English → Amharic</span><span>digits verified ✓</span></div>
+            <div class="pair">
+              <span class="tag">EN</span><span class="orig">We're checking your 2,500 ETB Telebirr withdrawal now. Finance will confirm reference TB-88412 and release it right after.</span>
+              <span class="tag">AM</span><span>የ2,500 ብር የቴሌብር ወጪዎን አሁን እየተመለከትን ነው። ፋይናንስ መለያ TB-88412ን አረጋግጦ ወዲያውኑ ይለቅቀዋል።</span>
+            </div>
+          </div>
+          <div class="acts">
+            <button class="btn pri">Send the Amharic</button>
+            <button class="btn">Edit translation</button>
+            <button class="btn">Discard</button>
+          </div>
+          <div class="hint">The original is stored with the message and stays visible on hover after send — your team can always audit what you actually wrote (US-04).</div>
+        </div>
+        <div class="note">"digits verified ✓" is the validator speaking in the card header: 2,500 and TB-88412 appear verbatim on both lines.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · validator rejection — altered digit (B05)</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">We're checking your 2,500 ETB Telebirr withdrawal now.</div>
+          <div class="banner rej">Translation blocked — a number changed (2,500 → 2,050).<small>Money figures must survive translation verbatim. Regenerate, or edit the translation manually; sending this version is not possible.</small></div>
+          <div class="acts">
+            <button class="btn">Regenerate</button>
+            <button class="btn">Edit translation</button>
+            <button class="btn">Discard</button>
+          </div>
+        </div>
+        <div class="note">The block names the exact digits it caught — an agent shouldn't have to diff two languages to find the problem. There is no override: the safe paths are regenerate or hand-edit, both of which re-validate.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · mixed-language input (B06 · EC-10) + the sent message with hover (B04 post-send)</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">ደረሰኙን አይተናል — the Telebirr reference TB-88412 checks out, ብሩ በ2 ሰዓት ውስጥ ይደርሳል።</div>
+          <div class="aicard">
+            <div class="ailabel"><span>✦ Translate — mixed input → Amharic (dominant language detected)</span><span>digits verified ✓</span></div>
+            <div class="pair">
+              <span class="tag">IN</span><span class="orig">ደረሰኙን አይተናል — the Telebirr reference TB-88412 checks out, ብሩ በ2 ሰዓት ውስጥ ይደርሳል።</span>
+              <span class="tag">AM</span><span>ደረሰኙን አይተናል — የቴሌብር መለያ TB-88412 ትክክል ነው፣ ብሩ በ2 ሰዓት ውስጥ ይደርሳል።</span>
+            </div>
+          </div>
+          <div class="acts"><button class="btn pri">Send the Amharic</button><button class="btn">Discard</button></div>
+          <div class="bub">
+            <div class="bx">ደረሰኙን አይተናል — የቴሌብር መለያ TB-88412 ትክክል ነው፣ ብሩ በ2 ሰዓት ውስጥ ይደርሳል።</div>
+            <div class="meta"><span class="tmark">✦ Translated</span> · Sara B. · 09:26 · ✓ Sent</div>
+          </div>
+          <div class="tip"><b>Original (English/mixed):</b> ደረሰኙን አይተናል — the Telebirr reference TB-88412 checks out, ብሩ በ2 ሰዓት ውስጥ ይደርሳል።<br><span style="color:var(--mut)">Stored with the message · shown on hover</span></div>
+        </div>
+        <div class="note">Mixed input: dominant-language detection, embedded terms ("Telebirr", the reference) preserved. Below the card: the message as it looks after send — the ✦ Translated marker with the stored original in its hover tip, the honesty trail made permanent.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §D Summarize → internal note ═══════════ -->
+  <div class="sec">
+    <div class="cap">§D — Summarize → internal-note draft · 1440 · light</div>
+    <div class="ref">B07 · FR-15 · note tokens (Doc 07 FR-17) — never a public reply</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · the summary lands in NOTE mode</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode">Reply</div><div class="mode on note">🔒 Internal note</div></div>
+          <div class="ta note">✦ AI summary — Abebe's 2,500 ETB Telebirr withdrawal (his ref TB-88412, from his receipt) hasn't arrived after 2 h. He's sent 6 messages, tone urgent. Prior #4640 resolved fine. Next: finance confirms the reference, then release.</div>
+          <div class="cbar">
+            <div class="aiacts"><button class="aibtn">✦ Draft</button><button class="aibtn">✦ Improve</button><button class="aibtn">✦ Translate</button><button class="aibtn">✦ Summarize</button></div>
+            <button class="send">Add note</button>
+          </div>
+        </div>
+        <div class="note">Summarize switches the composer to note mode and drops the draft there — yellow note surface, lock glyph, "Add note" verb. Structurally it cannot become a customer message without the agent deliberately switching modes and re-reading (the Doc 04 note physics this design leans on). The draft is editable like any note; the ✦ prefix marks its origin for FR-16's outcome logging.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §E dark ═══════════ -->
+  <div class="sec">
+    <div class="cap">§E — Dark · 1440 · key states in dark-column tokens</div>
+    <div class="ref">B01 B04 B05 dark · no invented dark values</div>
+    <div class="row">
+
+      <div class="frame dk">
+        <div class="fcap">Dark · cluster + translate preview</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">We're checking your 2,500 ETB Telebirr withdrawal now. Finance will confirm reference TB-88412 and release it right after.</div>
+          <div class="aicard">
+            <div class="ailabel"><span>✦ Translate — English → Amharic</span><span>digits verified ✓</span></div>
+            <div class="pair">
+              <span class="tag">EN</span><span class="orig">We're checking your 2,500 ETB Telebirr withdrawal now. Finance will confirm reference TB-88412 and release it right after.</span>
+              <span class="tag">AM</span><span>የ2,500 ብር የቴሌብር ወጪዎን አሁን እየተመለከትን ነው። ፋይናንስ መለያ TB-88412ን አረጋግጦ ወዲያውኑ ይለቅቀዋል።</span>
+            </div>
+          </div>
+          <div class="acts"><button class="btn pri">Send the Amharic</button><button class="btn">Edit translation</button><button class="btn">Discard</button></div>
+          <div class="cbar"><div class="aiacts"><button class="aibtn">✦ Draft</button><button class="aibtn">✦ Improve</button><button class="aibtn">✦ Translate</button><button class="aibtn">✦ Summarize</button></div><button class="send">Send reply</button></div>
+        </div>
+      </div>
+
+      <div class="frame dk">
+        <div class="fcap">Dark · validator rejection</div>
+        <div class="comp pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">We're checking your 2,500 ETB Telebirr withdrawal now.</div>
+          <div class="banner rej">Translation blocked — a number changed (2,500 → 2,050).<small>Money figures must survive translation verbatim. Regenerate, or edit the translation manually; sending this version is not possible.</small></div>
+          <div class="acts"><button class="btn">Regenerate</button><button class="btn">Edit translation</button><button class="btn">Discard</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §F mobile ═══════════ -->
+  <div class="sec">
+    <div class="cap">§F — Mobile · 375 · both themes</div>
+    <div class="ref">B08 · §13 44 px targets · cluster wraps, nothing hides</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · 375 · cluster + improve card</div>
+        <div class="comp m pad">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta">we check your withdrawal now, 2,500 birr telebirr</div>
+          <div class="aicard">
+            <div class="ailabel"><span>✦ Improved</span></div>
+            <div class="aitext">We're checking your 2,500 ETB Telebirr withdrawal now.</div>
+          </div>
+          <div class="acts"><button class="btn pri">Insert</button><button class="btn">Discard</button></div>
+          <div class="cbar">
+            <div class="aiacts"><button class="aibtn">✦ Draft</button><button class="aibtn">✦ Improve</button><button class="aibtn">✦ Translate</button><button class="aibtn">✦ Summarize</button></div>
+            <button class="send">Send</button>
+          </div>
+        </div>
+        <div class="note">All four verbs stay visible and wrap to a second row — no overflow menu hiding Translate exactly when a night-shift agent needs it. Every target clears 44 px.</div>
+      </div>
+
+      <div class="frame dk">
+        <div class="fcap">Dark · 375 · AI-off</div>
+        <div class="comp m">
+          <div class="modes"><div class="mode on">Reply</div><div class="mode">Internal note</div></div>
+          <div class="ta"><span class="ph">Write your reply…</span></div>
+          <div class="banner deg" style="margin-top:0">AI actions unavailable — macros, KB search and sending all still work.</div>
+          <div class="cbar"><button class="send" style="margin-left:auto">Send</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §G contract ═══════════ -->
+  <div class="sec">
+    <div class="cap">§G — Accessibility &amp; honesty contract (build notes on the frame)</div>
+    <div class="ref">B08 · §13 · X1 X4 audited · FR-16</div>
+    <div class="frame lt" style="max-width:860px">
+      <div class="fcap">Contract</div>
+      <div style="font-size:12.5px; line-height:1.65; color:var(--tx)">
+        · Every card is a labeled region; keyboard reaches all verbs and card actions; Insert returns focus to the textarea (§13).<br>
+        · The preview pair reads as two labeled lines (EN/AM) — comprehensible to a screen reader, not a visual diff only.<br>
+        · The validator's block names the digits it caught, as text; the blocked state has no color-only signal.<br>
+        · <b>X1 audited:</b> every card action is Insert / Edit / Discard — no card sends. The send/Add-note button is the composer's own, untouched by this slot.<br>
+        · <b>X4 audited:</b> every drafted money sentence claim-frames or states the process, never a fact about the customer's account balance.<br>
+        · Every use is logged with its outcome — inserted unedited, inserted edited, discarded (FR-16); the ✦ markers on inserted text are what make that trail visible to staff.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

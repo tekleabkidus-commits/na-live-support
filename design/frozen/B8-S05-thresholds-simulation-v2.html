@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B8-S05 — Thresholds &amp; simulation — v2</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .page { max-width: 1520px; margin: 0 auto; padding: 28px 24px 80px; }
+  .hdr h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .hdr .meta { font-size: 12px; color: #6B675D; margin-bottom: 14px; }
+  .hdr p { font-size: 13.5px; line-height: 1.55; max-width: 860px; margin: 0 0 8px; }
+  .sec { margin-top: 40px; }
+  .sec > .cap { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 2px; }
+  .sec > .ref { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px; }
+  .sec > .why { font-size: 12.5px; line-height: 1.55; color: #4A4842; max-width: 820px; margin: 6px 0 14px; }
+  .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .frame { border-radius: 12px; padding: 16px; }
+  .frame > .fcap { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px; }
+  .note { font-size: 11.5px; line-height: 1.5; color: #4A4842; max-width: 720px; margin-top: 8px; }
+
+  .lt {
+    --pg:#F4F3F1; --pn:#FFFFFF; --soft:#F6F5F2; --inset:#EEECE6;
+    --bd:#E5E2DB; --bds:#CFCBC1; --tx:#1D1C18; --tx2:#4A4842; --mut:#6B675D; --lab:#6F6A61;
+    --ai-bg:#F1EDFE; --ai-fg:#5B3FD6; --ai-bd:#DACFFB; --ai-edge:#7C5CFC;
+    --warn-bg:#FCF0D9; --warn-fg:#8F5F08; --warn-bd:#E8CF9B;
+    --ok-bg:#E4F4EA; --ok-fg:#156F45;
+    --slate-bg:#ECEEF1; --slate-fg:#59636F;
+    background: var(--pg); border: 1px solid #DCD8CF; color: var(--tx);
+  }
+  .dk {
+    --pg:#141412; --pn:#1C1C19; --soft:#232320; --inset:#2F2F29;
+    --bd:#343430; --bds:#45443E; --tx:#ECEAE4; --tx2:#C9C5BB; --mut:#A6A296; --lab:#A6A296;
+    --ai-bg:#292144; --ai-fg:#BCA9FF; --ai-bd:#3D3266; --ai-edge:#A18BFF;
+    --warn-bg:#332B12; --warn-fg:#E8C25A; --warn-bd:#6B551A;
+    --ok-bg:#123322; --ok-fg:#5AD190;
+    --slate-bg:#272D34; --slate-fg:#9AA6B2;
+    background: var(--pg); border: 1px solid #000; color: var(--tx);
+  }
+  .lt .fcap { color: #6F6A61; } .dk .fcap { color: #9A9588; }
+  .dk .note { color: #C9C5BB; }
+
+  .shell { background: var(--pn); border: 1px solid var(--bd); border-radius: 10px; overflow: hidden; }
+  .crumb { display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-bottom: 1px solid var(--bd); font-size: 11px; color: var(--mut); flex-wrap: wrap; }
+  .crumb b { color: var(--tx); font-weight: 600; }
+  .lab { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lab); }
+  .vchip { font-size: 10.5px; font-weight: 600; background: var(--soft); border: 1px solid var(--bd); color: var(--tx2); border-radius: 5px; padding: 3px 8px; }
+  .btn { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 7px 13px; border: 1px solid var(--bds); background: var(--pn); color: var(--tx); }
+  .btn.pri { background: var(--tx); color: var(--pg); border-color: var(--tx); }
+  .dk .btn.pri { background: #ECEAE4; color: #171714; border-color: #ECEAE4; }
+  .btn[disabled] { opacity: 0.55; }
+
+  /* sliders */
+  .srow { padding: 12px 0; border-top: 1px solid var(--bd); }
+  .srow:first-of-type { border-top: 0; padding-top: 4px; }
+  .srow .nm { font-size: 12.5px; font-weight: 600; color: var(--tx); }
+  .srow .ds { font-size: 11px; color: var(--mut); margin: 2px 0 8px; }
+  .track { position: relative; height: 4px; border-radius: 2px; background: var(--inset); max-width: 420px; }
+  .fill { position: absolute; left: 0; top: 0; height: 4px; border-radius: 2px; background: var(--ai-edge); }
+  .knob { position: absolute; top: -5px; width: 14px; height: 14px; border-radius: 50%; background: var(--pn); border: 2px solid var(--ai-edge); }
+  .sval { font-size: 11px; font-weight: 700; color: var(--tx); margin-top: 6px; }
+  .sval small { font-weight: 400; color: var(--mut); }
+
+  /* simulation panel */
+  .sim { background: var(--soft); border: 1px solid var(--bd); border-radius: 8px; padding: 12px; }
+  .sim .sh { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .sim .st { font-size: 12px; font-weight: 600; color: var(--tx); }
+  .sim .ss { font-size: 10.5px; color: var(--mut); }
+  .mrow { display: grid; grid-template-columns: 130px 1fr 92px; gap: 8px; align-items: center; padding: 6px 0; border-top: 1px solid var(--bd); }
+  .mrow:first-of-type { border-top: 0; }
+  .mrow .mn { font-size: 11.5px; color: var(--tx2); }
+  .bars { display: flex; flex-direction: column; gap: 3px; }
+  .bar { height: 7px; border-radius: 3px; background: var(--inset); position: relative; overflow: hidden; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+  .bar.before i { background: var(--bds); }
+  .bar.after i { background: var(--ai-edge); }
+  .delta { font-size: 11px; font-weight: 700; text-align: right; }
+  .delta.up { color: var(--ok-fg); } .delta.down { color: var(--warn-fg); } .delta.flat { color: var(--mut); }
+  .legend { display: flex; gap: 12px; font-size: 10px; color: var(--mut); margin-top: 8px; }
+  .sw { display: inline-block; width: 10px; height: 7px; border-radius: 3px; vertical-align: middle; margin-right: 4px; }
+
+  .gate { display: flex; gap: 8px; align-items: flex-start; border-radius: 8px; padding: 9px 11px; font-size: 11.5px; line-height: 1.5; }
+  .gate.ok { background: var(--ok-bg); color: var(--ok-fg); border: 1px solid var(--bd); }
+  .gate.stale { background: var(--warn-bg); color: var(--warn-fg); border: 1px solid var(--warn-bd); }
+
+  .flip { border-top: 1px solid var(--bd); padding: 8px 2px; font-size: 12px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .flip:first-of-type { border-top: 0; }
+  .flip .who { color: var(--tx); font-weight: 500; }
+  .flip .what { font-size: 10.5px; color: var(--mut); }
+  .arrow { font-weight: 700; color: var(--ai-fg); }
+  .tag { font-size: 9.5px; font-weight: 700; border-radius: 4px; padding: 2px 7px; background: var(--soft); border: 1px solid var(--bd); color: var(--tx2); }
+  .tag.rg { background: var(--slate-bg); color: var(--slate-fg); border-color: var(--bd); }
+
+  table.tt { border-collapse: collapse; font-size: 11.5px; width: 100%; }
+  table.tt th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lab); padding: 6px 10px; border-bottom: 1px solid var(--bds); }
+  table.tt td { padding: 6px 10px; border-bottom: 1px solid var(--bd); color: var(--tx); }
+  table.tt td.num { font-variant-numeric: tabular-nums; }
+
+  .sk { border-radius: 4px; background: var(--inset); height: 10px; }
+  code { font-family: ui-monospace, monospace; font-size: 11px; background: rgba(127,127,127,0.12); border-radius: 4px; padding: 1px 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hdr">
+    <h1>Thresholds &amp; simulation</h1>
+    <div class="meta">B8-S05-thresholds-simulation-v2 · Section E · checklist rows E01–E07 (+ X5 enforced) · Doc 09 FR-11, BR-07, T-06, NFR-07, EC-07, US-06 · §8 §9 §13</div>
+    <p>Four numbers decide who talks to a machine and who talks to a person. The design's law is BR-07, made physical: <b>you cannot publish a threshold you haven't watched play out.</b> Move a slider and the simulation re-runs yesterday against your pending values — real counts, real deltas, and the actual conversations that would have flipped. Publish stays locked until the simulation is fresh for exactly the values you're about to publish; touch a slider again and it re-locks.</p>
+    <p>The RG threshold lives under the same roof but answers to a harder judge: its row carries the measured precision readout against the labeled fixture set, because a false accusation is the costlier error (NFR-07). Backoffice shell is B6-S11 law — context only. Every number on this page also exists as text (§13); nothing is bar-only.</p>
+  </div>
+
+  <!-- ═══════════ §A the screen, fresh simulation ═══════════ -->
+  <div class="sec">
+    <div class="cap">§A — Sliders + simulation, freshly computed · 1440 · light</div>
+    <div class="ref">E01 E02 E06 · FR-11 · T-06 · the before/after columns with deltas and the bar pair per metric</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · Settings → AI → Thresholds · default endpoint · simulation FRESH</div>
+        <div class="shell" style="width:1180px">
+          <div class="crumb">Settings · AI · <b>Thresholds</b><span class="vchip" style="margin-left:auto">Endpoint: Default ▾</span><span class="vchip">Published: v11</span></div>
+          <div style="display:grid; grid-template-columns: 1fr 460px; gap:0">
+            <div style="padding:16px; border-right:1px solid var(--bd)">
+
+              <div class="srow">
+                <div class="nm">auto_resolve_min</div>
+                <div class="ds">The chatbot may close a conversation itself only above this confidence.</div>
+                <div class="track"><div class="fill" style="width:85%"></div><div class="knob" style="left:calc(85% - 7px)"></div></div>
+                <div class="sval">0.85 <small>· published 0.85 · unchanged</small></div>
+              </div>
+
+              <div class="srow">
+                <div class="nm">handoff_below</div>
+                <div class="ds">Below this confidence the turn goes to a person instead of answering.</div>
+                <div class="track"><div class="fill" style="width:34%"></div><div class="knob" style="left:calc(34% - 7px)"></div></div>
+                <div class="sval">0.34 <small>· published 0.30 · pending +0.04</small></div>
+              </div>
+
+              <div class="srow">
+                <div class="nm">spam_min</div>
+                <div class="ds">At or above this spam probability the message is filed as spam, never answered.</div>
+                <div class="track"><div class="fill" style="width:90%"></div><div class="knob" style="left:calc(90% - 7px)"></div></div>
+                <div class="sval">0.90 <small>· published 0.90 · unchanged</small></div>
+              </div>
+
+              <div class="srow">
+                <div class="nm">rg_min <span class="tag rg" style="margin-left:6px">RG — precision-first</span></div>
+                <div class="ds">At or above this risk score the RG override takes the conversation — template + specialist queue, over everything.</div>
+                <div class="track"><div class="fill" style="width:80%"></div><div class="knob" style="left:calc(80% - 7px)"></div></div>
+                <div class="sval">0.80 <small>· published 0.80 · unchanged</small></div>
+                <div class="gate ok" style="margin-top:8px; max-width:420px">✓&nbsp;<span><b>Precision at 0.80: 0.93</b> on the labeled fixture set (target ≥ 0.90). Recall is secondary by design — missed cases fall to human handling; a false accusation is the costlier error.</span></div>
+              </div>
+
+            </div>
+            <div style="padding:16px">
+              <div class="sim">
+                <div class="sh">
+                  <span class="st">Simulation — yesterday · 1,240 conversations</span>
+                  <span class="ss">Computed 40 s ago for the pending values ✓</span>
+                </div>
+                <div class="mrow"><span class="mn">Auto-resolved</span>
+                  <span class="bars"><span class="bar before"><i style="width:58%"></i></span><span class="bar after"><i style="width:61%"></i></span></span>
+                  <span class="delta up">58% → 61%</span></div>
+                <div class="mrow"><span class="mn">Handoffs</span>
+                  <span class="bars"><span class="bar before"><i style="width:27%"></i></span><span class="bar after"><i style="width:30%"></i></span></span>
+                  <span class="delta down">+12% more</span></div>
+                <div class="mrow"><span class="mn">Spam filtered</span>
+                  <span class="bars"><span class="bar before"><i style="width:9%"></i></span><span class="bar after"><i style="width:9%"></i></span></span>
+                  <span class="delta flat">no change</span></div>
+                <div class="mrow"><span class="mn">RG flags</span>
+                  <span class="bars"><span class="bar before"><i style="width:1.6%"></i></span><span class="bar after"><i style="width:1.6%"></i></span></span>
+                  <span class="delta flat">20 · no change</span></div>
+                <div class="legend"><span><span class="sw" style="background:var(--bds)"></span>published values</span><span><span class="sw" style="background:var(--ai-edge)"></span>pending values</span></div>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:12px; align-items:center; flex-wrap:wrap">
+                <button class="btn">View the 38 conversations that flip</button>
+                <button class="btn">View as table</button>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end">
+                <button class="btn">Discard changes</button>
+                <button class="btn pri">Publish v12</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note">One pending change (handoff_below 0.30 → 0.34) and the panel says what it buys: three points more auto-resolution, twelve percent more handoffs. The trade is visible before it is real — US-06, drawn. Bars are the published-vs-pending pair per metric; the numbers beside them are the truth the bars illustrate.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §B computing / no data ═══════════ -->
+  <div class="sec">
+    <div class="cap">§B — Simulation states: computing, and a tenant with no history · 1440 · light</div>
+    <div class="ref">E02 · §12 "simulation over 10k decisions ≤ 5 s" · labeled states, never a silent panel</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · computing</div>
+        <div class="sim" style="width:460px">
+          <div class="sh"><span class="st">Simulation — yesterday · 1,240 conversations</span><span class="ss">◌ Computing for the pending values…</span></div>
+          <div class="mrow"><span class="mn">Auto-resolved</span><span class="bars"><span class="bar before"><i style="width:58%"></i></span><span class="sk" style="height:7px"></span></span><span class="delta flat">…</span></div>
+          <div class="mrow"><span class="mn">Handoffs</span><span class="bars"><span class="bar before"><i style="width:27%"></i></span><span class="sk" style="height:7px"></span></span><span class="delta flat">…</span></div>
+        </div>
+        <div class="note">The published bars stay put while the pending row skeletons — the comparison never blanks. Budgeted ≤ 5 s over a 10k-decision day (§12); if the engine misses that, the panel says so rather than spinning.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · no decision history yet</div>
+        <div class="sim" style="width:460px">
+          <div class="sh"><span class="st">Simulation</span></div>
+          <div style="font-size:11.5px; line-height:1.55; color:var(--tx2)"><b>Platform defaults active — nothing to publish.</b> The chatbot already runs on the platform's deliberately conservative defaults (high handoff, small scope). Simulation and publishing unlock once conversation history exists — usually after your first day of live traffic.</div>
+          <div style="display:flex; gap:8px; margin-top:10px"><button class="btn" disabled>Run simulation — needs history</button><button class="btn" disabled>Publish — needs a simulation</button></div>
+        </div>
+        <div class="note">A new tenant needs no publish at all — the built fallback chain (published → defaults → launch constants) serves the defaults without one. So the gate never opens early: both controls stay locked, each naming what unlocks it, and X5 holds with no exception (§21's launch-conservative recommendation is the default itself).</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §C the X5 gate ═══════════ -->
+  <div class="sec">
+    <div class="cap">§C — The publish gate: stale simulation locks, fresh unlocks · 1440 · light</div>
+    <div class="ref">E04 · BR-07 · X5 — no publish without a fresh simulation for exactly the pending values</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · a slider moved AFTER the last simulation → locked</div>
+        <div class="shell" style="width:560px">
+          <div style="padding:14px 16px">
+            <div class="gate stale">⚠&nbsp;<span><b>Values changed since the last simulation.</b> The numbers below describe your previous values, not these. Re-run to see what these values would have done.</span></div>
+            <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end">
+              <button class="btn pri">Run simulation</button>
+              <button class="btn" disabled>Publish — simulate these values first</button>
+            </div>
+          </div>
+        </div>
+        <div class="note">The stale banner also discredits the on-screen numbers explicitly — a stale delta believed is worse than no delta. The gate re-arms on every slider touch; there is no path around it (X5).</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · fresh → unlocked, and the publish confirm</div>
+        <div class="shell" style="width:560px">
+          <div style="padding:14px 16px">
+            <div class="gate ok">✓&nbsp;<span>Simulated 40 s ago for exactly these values — 1,240 conversations, deltas above.</span></div>
+            <div style="border:1px dashed var(--bds); border-radius:10px; padding:14px; margin-top:12px">
+              <div style="font-size:13.5px; font-weight:600; margin-bottom:6px">Publish thresholds v12?</div>
+              <div style="font-size:12px; line-height:1.55; color:var(--tx2); margin-bottom:12px">Applies instantly to the Default endpoint. Yesterday, these values would have auto-resolved 61% (58% today) and handed off 12% more. Rollback to v11 is one click.</div>
+              <div style="display:flex; gap:8px; justify-content:flex-end"><button class="btn">Cancel</button><button class="btn pri">Publish now</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="note">The confirm repeats the simulation's headline — the operator signs the consequence, not just the values.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §D flip drill-down ═══════════ -->
+  <div class="sec">
+    <div class="cap">§D — The conversations that flip · 1440 · light</div>
+    <div class="ref">E03 · §9 — samples, anonymized display names, each naming its old and new outcome</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · drill-down · 38 flips, first rows</div>
+        <div class="shell" style="width:640px">
+          <div class="crumb"><b>Conversations that flip</b> · handoff_below 0.30 → 0.34 · 38 of 1,240<span class="vchip" style="margin-left:auto">Anonymized</span></div>
+          <div style="padding: 6px 16px 14px">
+            <div class="flip"><div><div class="who">A··· T···</div><div class="what">bonuses · confidence 0.32 · yesterday 14:20</div></div><div><span class="tag">answered</span> <span class="arrow">→</span> <span class="tag">handoff</span></div></div>
+            <div class="flip"><div><div class="who">M··· K···</div><div class="what">withdrawals · confidence 0.31 · yesterday 15:02</div></div><div><span class="tag">answered</span> <span class="arrow">→</span> <span class="tag">handoff</span></div></div>
+            <div class="flip"><div><div class="who">S··· B···</div><div class="what">technical · confidence 0.33 · yesterday 18:44</div></div><div><span class="tag">answered</span> <span class="arrow">→</span> <span class="tag">handoff</span></div></div>
+            <div class="flip"><div><div class="who">R··· G···</div><div class="what">deposits · confidence 0.86 · yesterday 09:12</div></div><div><span class="tag">handoff</span> <span class="arrow">→</span> <span class="tag">auto-resolve</span></div></div>
+            <div style="font-size:10.5px; color:var(--mut); padding-top:8px">34 more · names anonymized; opening a sample shows the transcript read-only under your normal ticket permissions</div>
+          </div>
+        </div>
+        <div class="note">Aggregates convince analysts; samples convince operators. Each row names the flip in plain outcome words. Names are masked here because this is a tuning surface, not an inbox — the transcript view behind a row re-applies real permissions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §E endpoint overrides ═══════════ -->
+  <div class="sec">
+    <div class="cap">§E — Per-endpoint overrides · 1440 · light</div>
+    <div class="ref">E05 · FR-11 · EC-07 — per-endpoint config applies per conversation; a stricter bot for VIP</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · overrides</div>
+        <div class="shell" style="width:640px">
+          <div class="crumb">Settings · AI · <b>Thresholds</b> · Endpoints</div>
+          <div style="padding: 6px 16px 14px">
+            <table class="tt">
+              <tr><th>Endpoint</th><th>auto_resolve_min</th><th>handoff_below</th><th>rg_min</th><th></th></tr>
+              <tr><td><b>Default</b> — all endpoints</td><td class="num">0.85</td><td class="num">0.30</td><td class="num">0.80</td><td></td></tr>
+              <tr><td><b>@BrandVIP</b> bot <span class="tag">override</span></td><td class="num"><b>0.92</b></td><td class="num"><b>0.40</b></td><td class="num">0.80</td><td><button class="btn">Edit</button></td></tr>
+            </table>
+            <div style="display:flex; gap:8px; margin-top:10px"><button class="btn">Add endpoint override</button></div>
+            <div style="font-size:10.5px; color:var(--mut); margin-top:8px">Overrides simulate and publish exactly like the default — each endpoint's gate is its own. A customer on two endpoints gets each conversation's own endpoint config (EC-07).</div>
+          </div>
+        </div>
+        <div class="note">The VIP bot is stricter in both directions — resolves less on its own, hands off sooner. Overridden cells are bold; inherited cells stay plain, so the table reads as "what differs" at a glance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §F text table (a11y) ═══════════ -->
+  <div class="sec">
+    <div class="cap">§F — The same simulation as a text table · 1440 · light</div>
+    <div class="ref">E07 · §13 — deltas readable as text; the bars are illustration, this is the record</div>
+    <div class="row">
+      <div class="frame lt">
+        <div class="fcap">Light · "View as table"</div>
+        <div class="shell" style="width:640px">
+          <div style="padding: 12px 16px 14px">
+            <table class="tt">
+              <tr><th>Metric</th><th>Published values</th><th>Pending values</th><th>Change</th></tr>
+              <tr><td>Auto-resolved</td><td class="num">719 (58%)</td><td class="num">757 (61%)</td><td class="num">+38 conversations</td></tr>
+              <tr><td>Handoffs</td><td class="num">335 (27%)</td><td class="num">373 (30%)</td><td class="num">+38 (+12% relative)</td></tr>
+              <tr><td>Spam filtered</td><td class="num">112 (9%)</td><td class="num">112 (9%)</td><td class="num">no change</td></tr>
+              <tr><td>RG flags</td><td class="num">20 (1.6%)</td><td class="num">20 (1.6%)</td><td class="num">no change</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="note">Counts and percentages together — 38 real conversations is what "+3 points" means. This table is what a screen reader gets, and what an operator pastes into an email.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §G dark ═══════════ -->
+  <div class="sec">
+    <div class="cap">§G — Dark · sliders + fresh simulation</div>
+    <div class="ref">E01 E02 E04 E06 dark · dark-column tokens only</div>
+    <div class="row">
+      <div class="frame dk">
+        <div class="fcap">Dark · the screen, condensed</div>
+        <div class="shell" style="width:1000px">
+          <div class="crumb">Settings · AI · <b>Thresholds</b><span class="vchip" style="margin-left:auto">Endpoint: Default ▾</span></div>
+          <div style="display:grid; grid-template-columns: 1fr 420px; gap:0">
+            <div style="padding:16px; border-right:1px solid var(--bd)">
+              <div class="srow">
+                <div class="nm">handoff_below</div>
+                <div class="ds">Below this confidence the turn goes to a person instead of answering.</div>
+                <div class="track"><div class="fill" style="width:34%"></div><div class="knob" style="left:calc(34% - 7px)"></div></div>
+                <div class="sval">0.34 <small>· published 0.30 · pending +0.04</small></div>
+              </div>
+              <div class="srow">
+                <div class="nm">rg_min <span class="tag rg" style="margin-left:6px">RG — precision-first</span></div>
+                <div class="track"><div class="fill" style="width:80%"></div><div class="knob" style="left:calc(80% - 7px)"></div></div>
+                <div class="sval">0.80 <small>· unchanged</small></div>
+                <div class="gate ok" style="margin-top:8px; max-width:420px">✓&nbsp;<span><b>Precision at 0.80: 0.93</b> (target ≥ 0.90).</span></div>
+              </div>
+            </div>
+            <div style="padding:16px">
+              <div class="sim">
+                <div class="sh"><span class="st">Yesterday · 1,240 conversations</span><span class="ss">Computed 40 s ago ✓</span></div>
+                <div class="mrow"><span class="mn">Auto-resolved</span><span class="bars"><span class="bar before"><i style="width:58%"></i></span><span class="bar after"><i style="width:61%"></i></span></span><span class="delta up">58% → 61%</span></div>
+                <div class="mrow"><span class="mn">Handoffs</span><span class="bars"><span class="bar before"><i style="width:27%"></i></span><span class="bar after"><i style="width:30%"></i></span></span><span class="delta down">+12% more</span></div>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end"><button class="btn">Discard</button><button class="btn pri">Publish v12</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §H mobile ═══════════ -->
+  <div class="sec">
+    <div class="cap">§H — Mobile · 375 · both themes</div>
+    <div class="ref">E01 E02 E04 at 375 · §13 44 px targets · simulation stacks under the sliders</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · 375</div>
+        <div class="shell" style="width:375px">
+          <div class="crumb">Settings · AI · <b>Thresholds</b></div>
+          <div style="padding:14px 16px">
+            <div class="srow">
+              <div class="nm">handoff_below</div>
+              <div class="track"><div class="fill" style="width:34%"></div><div class="knob" style="left:calc(34% - 7px)"></div></div>
+              <div class="sval">0.34 <small>· pending +0.04</small></div>
+            </div>
+            <div class="sim" style="margin-top:10px">
+              <div class="sh"><span class="st">Yesterday · 1,240</span><span class="ss">Fresh ✓</span></div>
+              <div class="mrow" style="grid-template-columns: 92px 1fr 80px"><span class="mn">Auto-resolved</span><span class="bars"><span class="bar before"><i style="width:58%"></i></span><span class="bar after"><i style="width:61%"></i></span></span><span class="delta up">58→61%</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px">
+              <button class="btn" style="padding:12px 16px">Run simulation</button>
+              <button class="btn pri" style="padding:12px 16px">Publish v12</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame dk">
+        <div class="fcap">Dark · 375 · stale gate</div>
+        <div class="shell" style="width:375px">
+          <div class="crumb">Settings · AI · <b>Thresholds</b></div>
+          <div style="padding:14px 16px">
+            <div class="gate stale">⚠&nbsp;<span><b>Values changed since the last simulation.</b> Re-run before publishing.</span></div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px">
+              <button class="btn pri" style="padding:12px 16px">Run simulation</button>
+              <button class="btn" style="padding:12px 16px" disabled>Publish — simulate first</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §I contract ═══════════ -->
+  <div class="sec">
+    <div class="cap">§I — Contract (build notes on the frame)</div>
+    <div class="ref">X5 audited · §13 · AC-03 · T-06</div>
+    <div class="frame lt" style="max-width:860px">
+      <div class="fcap">Contract</div>
+      <div style="font-size:12.5px; line-height:1.65; color:var(--tx)">
+        · <b>X5 audited, no exceptions:</b> Publish is disabled unless the last simulation matches the pending values exactly; any slider change re-locks it. A no-history tenant has nothing to publish — the fallback chain serves platform defaults — so no state of this screen, anywhere, renders an enabled Publish without a fresh simulation.<br>
+        · Simulation numbers are the engine's own replay (AC-03 parity: what the panel predicts is what the engine would do) — the UI never estimates.<br>
+        · Sliders are keyboard-adjustable with the numeric value announced; every bar has its numbers beside it; the full result exists as a text table (§13).<br>
+        · The RG row always shows the precision readout next to any pending change (T-06) — you cannot move <code>rg_min</code> without seeing what it does to precision.<br>
+        · Flip samples are anonymized on this surface; the transcript behind a sample re-applies real ticket permissions.<br>
+        · Deltas use arrows AND words ("+12% more"), colored second, worded first.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

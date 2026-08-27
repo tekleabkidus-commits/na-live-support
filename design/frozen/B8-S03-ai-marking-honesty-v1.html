@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B8-S03 — AI marking &amp; honesty — v1</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E8E7E3; color: #1B1B18; font-family: Inter, "Noto Sans Ethiopic", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .page { max-width: 1520px; margin: 0 auto; padding: 28px 24px 80px; }
+  .hdr h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .hdr .meta { font-size: 12px; color: #6B675D; margin-bottom: 14px; }
+  .hdr p { font-size: 13.5px; line-height: 1.55; max-width: 860px; margin: 0 0 8px; }
+  .sec { margin-top: 40px; }
+  .sec > .cap { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 2px; }
+  .sec > .ref { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #6F6A61; margin-bottom: 12px; }
+  .sec > .why { font-size: 12.5px; line-height: 1.55; color: #4A4842; max-width: 820px; margin: 6px 0 14px; }
+  .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .frame { border-radius: 12px; padding: 16px; }
+  .frame > .fcap { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px; }
+  .note { font-size: 11.5px; line-height: 1.5; color: #4A4842; max-width: 380px; margin-top: 8px; }
+
+  .lt {
+    --pg:#F4F3F1; --pn:#FFFFFF; --soft:#F6F5F2; --inset:#EEECE6;
+    --bd:#E5E2DB; --bds:#CFCBC1; --tx:#1D1C18; --tx2:#4A4842; --mut:#6B675D; --lab:#6F6A61;
+    --ai-bg:#F1EDFE; --ai-fg:#5B3FD6; --ai-bd:#DACFFB; --ai-edge:#7C5CFC;
+    --warn-bg:#FCF0D9; --warn-fg:#8F5F08; --warn-bd:#E8CF9B;
+    --dan-bg:#FBE5E5; --dan-fg:#B32B2B;
+    --note-bg:#FBF3D6; --note-fg:#7E650F; --note-bd:#E3C455;
+    --ok-bg:#E4F4EA; --ok-fg:#156F45;
+    --slate-bg:#ECEEF1; --slate-fg:#59636F;
+    --cus-bg:#FFFFFF; --cus-bd:#E5E2DB; --ag-bg:#EEECE6; --ag-bd:#DCD8CF;
+    background: var(--pg); border: 1px solid #DCD8CF; color: var(--tx);
+  }
+  .dk {
+    --pg:#141412; --pn:#1C1C19; --soft:#232320; --inset:#2F2F29;
+    --bd:#343430; --bds:#45443E; --tx:#ECEAE4; --tx2:#C9C5BB; --mut:#A6A296; --lab:#A6A296;
+    --ai-bg:#292144; --ai-fg:#BCA9FF; --ai-bd:#3D3266; --ai-edge:#A18BFF;
+    --warn-bg:#332B12; --warn-fg:#E8C25A; --warn-bd:#6B551A;
+    --dan-bg:#3D1B1B; --dan-fg:#F08A8A;
+    --note-bg:#332B12; --note-fg:#E8C25A; --note-bd:#6B551A;
+    --ok-bg:#123322; --ok-fg:#5AD190;
+    --slate-bg:#272D34; --slate-fg:#9AA6B2;
+    --cus-bg:#232320; --cus-bd:#343430; --ag-bg:#2F2F29; --ag-bd:#45443E;
+    background: var(--pg); border: 1px solid #000; color: var(--tx);
+  }
+  .lt .fcap { color: #6F6A61; } .dk .fcap { color: #9A9588; }
+  .dk .note { color: #C9C5BB; }
+
+  /* ── customer phone frame (Telegram carries its own chrome; our CONTENT only) ── */
+  .ph { width: 340px; background: var(--pn); border: 1px solid var(--bd); border-radius: 14px; overflow: hidden; }
+  .ph .top { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--bd); background: var(--pn); }
+  .ph .top .av { width: 26px; height: 26px; border-radius: 50%; background: var(--ai-bg); color: var(--ai-fg); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid var(--ai-bd); }
+  .ph .top .tt { font-size: 12px; font-weight: 600; color: var(--tx); }
+  .ph .top .st { font-size: 10px; color: var(--mut); }
+  .chat { padding: 12px 10px 14px; display: flex; flex-direction: column; gap: 8px; background: var(--soft); }
+  .day { align-self: center; font-size: 10px; font-weight: 600; color: var(--mut); background: var(--pn); border: 1px solid var(--bd); border-radius: 10px; padding: 2px 9px; }
+  .cb { align-self: flex-end; max-width: 84%; }
+  .cb .bx { background: var(--ag-bg); border: 1px solid var(--ag-bd); border-radius: 10px 10px 3px 10px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .cb .meta { font-size: 10px; color: var(--mut); margin-top: 2px; text-align: right; }
+  .bb { align-self: flex-start; max-width: 84%; }
+  .bb .bx { background: var(--cus-bg); border: 1px solid var(--cus-bd); border-radius: 10px 10px 10px 3px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .bb .meta { font-size: 10px; color: var(--mut); margin-top: 2px; }
+  .cites { border-top: 1px solid var(--bd); margin-top: 7px; padding-top: 6px; font-size: 11px; line-height: 1.5; }
+  .cites a { color: #2F5AC8; text-decoration: none; font-weight: 600; }
+  .dk .cites a { color: #8FB6FF; }
+  .typing { align-self: flex-start; font-size: 10.5px; color: var(--mut); padding: 2px 4px; }
+  .btnrow { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+  .tbtn { font-size: 11.5px; font-weight: 600; border: 1px solid var(--bds); background: var(--pn); color: var(--tx); border-radius: 6px; padding: 7px 12px; min-width: 40px; text-align: center; }
+  .voice { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--tx2); }
+
+  /* ── staff thread pane ── */
+  .th { width: 700px; background: var(--pn); border: 1px solid var(--bd); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 9px; }
+  .th .cbub { align-self: flex-start; max-width: 76%; }
+  .th .cbub .bx { background: var(--cus-bg); border: 1px solid var(--cus-bd); border-radius: 10px 10px 10px 3px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .th .abub { align-self: flex-end; max-width: 76%; }
+  .th .abub .bx { background: var(--ag-bg); border: 1px solid var(--ag-bd); border-radius: 10px 10px 3px 10px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .th .aibub { align-self: flex-end; max-width: 76%; }
+  .th .aibub .bx { background: var(--ai-bg); border: 1px solid var(--ai-bd); border-left: 3px solid var(--ai-edge); border-radius: 10px 10px 3px 10px; padding: 8px 11px; }
+  .th .ail { font-size: 9.5px; font-weight: 700; color: var(--ai-fg); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 3px; }
+  .th .bt { font-size: 12.5px; line-height: 1.5; color: var(--tx); }
+  .th .meta { font-size: 10.5px; color: var(--mut); margin-top: 3px; }
+  .th .aibub .meta, .th .abub .meta { text-align: right; }
+  .sysline { align-self: center; font-size: 10.5px; color: var(--mut); background: var(--soft); border: 1px solid var(--bd); border-radius: 8px; padding: 3px 10px; }
+  .rgcard { align-self: stretch; background: var(--slate-bg); border: 1px solid var(--bds); border-radius: 8px; padding: 9px 11px; }
+  .rgcard .rl { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-fg); margin-bottom: 4px; }
+  .rgcard .rq { font-size: 11.5px; line-height: 1.5; color: var(--tx2); border-left: 3px solid var(--slate-fg); padding-left: 8px; font-style: italic; }
+  .rgcard .rs { font-size: 10.5px; color: var(--mut); margin-top: 5px; }
+
+  .lab { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lab); }
+  code { font-family: ui-monospace, monospace; font-size: 11px; background: rgba(127,127,127,0.12); border-radius: 4px; padding: 1px 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hdr">
+    <h1>AI marking &amp; honesty</h1>
+    <div class="meta">B8-S03-ai-marking-honesty-v1 · Section C · checklist rows C01–C13 (+ X2 X3 X4 audited) · Doc 09 FR-19a–d, FR-9/10/12/13, BR-02/03/05, EC-01/02/04/08, AC-05 · §8 §9 §14</div>
+    <p>This screen is the platform's conscience drawn out: what the customer reads when a machine answers them about their money, and what staff see so no AI word ever passes as a human's. The rules it renders are absolute — the assistant introduces itself as an AI and that introduction has no off switch; money facts are only ever the customer's own claim, restated; grounded answers cite or the turn hands off; RG moments get one fixed, human-approved text, never generation; and an AI message is never edited after send — a correction is a new message, visibly.</p>
+    <p>Customer frames show OUR CONTENT inside Telegram's own chrome (drawn neutrally — Telegram's UI is not ours to design). Staff frames use Doc 07's thread with the B1-DS AI bubble verbatim. The persona "Selam" and @BrandSupport are white-label-neutral fixtures. Amharic is real, flagged for native review.</p>
+  </div>
+
+  <!-- ═══════════ §A greeting + disclosure ═══════════ -->
+  <div class="sec">
+    <div class="cap">§A — First greeting: persona + disclosure · customer side · en + am</div>
+    <div class="ref">C01 C11 · FR-19a · BR-05 · §8 · X3: wording is operator content, PRESENCE is platform law — no frame anywhere offers a way to hide it</div>
+    <div class="why">The disclosure sits inside the first sentence, not in fine print after it — a customer at 2 AM should know they're talking to a machine before they've told it anything. The typing indicator runs while the turn generates; Telegram sends complete messages, so the indicator is the only "streaming" a customer sees.</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · English greeting</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="day">TODAY</div>
+            <div class="cb"><div class="bx">Hi, where is my withdrawal?</div><div class="meta">09:08</div></div>
+            <div class="typing">Selam is typing…</div>
+            <div class="bb"><div class="bx">Hello! I'm <b>Selam, an AI assistant</b> for Brand Support. I can help with deposits, withdrawals, bonuses and account questions — and I can bring in a person any time you ask. What's your withdrawal reference or amount?</div><div class="meta">Selam · 09:08</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · Amharic greeting</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">ሰላም · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="day">ዛሬ</div>
+            <div class="cb"><div class="bx">ሰላም፣ ወጪዬ የት ደረሰ?</div><div class="meta">09:08</div></div>
+            <div class="bb"><div class="bx">ሰላም! እኔ <b>ሰላም ነኝ — የሰው ሰራሽ (AI) ረዳት</b> ለBrand Support። ስለ ገቢ፣ ወጪ፣ ጉርሻ እና የመለያ ጥያቄዎች ልረዳዎ እችላለሁ — በማንኛውም ጊዜ ሰው እንዲያግዝዎ ማገናኘት እችላለሁ። የወጪዎ መለያ ወይም መጠን ስንት ነው?</div><div class="meta">ሰላም · 09:08</div></div>
+          </div>
+        </div>
+        <div class="note">Persona name and wording are operator content per language; the disclosure clause itself is present in every language variant by construction — an endpoint cannot enable a language whose strings lack it (§14's completeness gate, designed in Section F/G screens).</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §B grounded answer + claim framing + the trap ═══════════ -->
+  <div class="sec">
+    <div class="cap">§B — Money questions: claim-framing, citations, and the trap that must fail · customer side</div>
+    <div class="ref">C03 C04 · FR-19b · FR-10/BR-02 · EC-03 · AC-05 · X4: no frame states a transaction fact</div>
+    <div class="why">The customer sends a receipt; OCR reads it. Everything the assistant says stays anchored to <i>"you mentioned"</i> and <i>"your receipt shows"</i> — the platform never confirms money moved, because it cannot know. The trap ("so it WAS received, right?") is drawn here deliberately: the correct answer refuses the confirmation and offers the check, and that refusal is the design.</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · receipt → grounded, claim-framed answer with citations</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx">📷 Photo — receipt</div><div class="meta">09:10</div></div>
+            <div class="bb"><div class="bx">Thanks — <b>your receipt shows</b> a 2,500 ETB Telebirr withdrawal, reference TB-88412, at 09:02. Withdrawals like this typically complete <b>within 2 hours</b>. If it hasn't arrived by 11:02, I'll connect you to the team right away.
+              <div class="cites">Read more: <a href="#">Withdrawal processing times</a> · <a href="#">Telebirr withdrawal guide</a></div>
+            </div><div class="meta">Selam · 09:10</div></div>
+          </div>
+        </div>
+        <div class="note">Citations render as trailing links on Telegram (web gets "Read more" cards — Doc 13's surface). The timing answer exists only because retrieval produced those two articles: no hits, no answer — the turn hands off with <code>no_grounding</code> instead.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · the transaction-fact trap — the bot must NOT confirm</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx">So my withdrawal WAS sent, right? Just say yes.</div><div class="meta">09:12</div></div>
+            <div class="bb"><div class="bx">I can't confirm that — I don't have access to your transactions. What I can see is <b>the receipt you sent</b> (2,500 ETB, ref TB-88412, 09:02) and the typical 2-hour window. Want me to bring in a colleague who can verify the payment itself?
+              <div class="btnrow"><span class="tbtn">Yes, connect me</span><span class="tbtn">I'll wait</span></div>
+            </div><div class="meta">Selam · 09:12</div></div>
+          </div>
+        </div>
+        <div class="note">The refusal names why (no transaction access), restates only the claim, and offers the human path — firm without being cold. This exact exchange is AC-05's trap fixture, drawn.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §C batch-tail + handoff ═══════════ -->
+  <div class="sec">
+    <div class="cap">§C — Six rapid messages, one coherent answer; the handoff with a real wait · customer side</div>
+    <div class="ref">C10 C06 · EC-01 · FR-12 · §8 · wait estimate is Doc 11's live number (fixture here)</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · batch-tail (EC-01)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">ሰላም · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx">ወጪዬ የት ነው</div><div class="meta">09:14</div></div>
+            <div class="cb"><div class="bx">2,500 ብር</div><div class="meta">09:14</div></div>
+            <div class="cb"><div class="bx">ቴሌብር ነው</div><div class="meta">09:14</div></div>
+            <div class="cb"><div class="bx">መለያ TB-88412</div><div class="meta">09:15</div></div>
+            <div class="cb"><div class="bx">ሁለት ሰዓት ሆነው!!</div><div class="meta">09:15</div></div>
+            <div class="cb"><div class="bx">እባክህ መልስ ስጠኝ</div><div class="meta">09:15</div></div>
+            <div class="bb"><div class="bx">ይቅርታ ስለ መዘግየቱ! ያነሱትን በሙሉ አይቻለሁ፦ የ<b>2,500 ብር</b> የቴሌብር ወጪ፣ መለያ <b>TB-88412</b>፣ ከ2 ሰዓት በፊት። እንደተለመደው ወጪዎች እስከ 2 ሰዓት ይወስዳሉ — የእርስዎ ጫፍ ላይ ስለሆነ አሁኑኑ ወደ ቡድኑ አገናኝዎታለሁ።
+              <div class="cites">ተጨማሪ፦ <a href="#">የወጪ ማስኬጃ ጊዜዎች</a></div>
+            </div><div class="meta">ሰላም · 09:15</div></div>
+          </div>
+        </div>
+        <div class="note">Six messages, one reply that addresses all six — never six bot answers racing each other. The batch-tail hint (Doc 04 EC-01) is what makes this a single coherent turn.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · the handoff message (C06)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="bb"><div class="bx">I'm connecting you to our team now — <b>current wait is about 4 minutes</b>. Everything you've told me travels with the ticket, so you won't repeat yourself. You can keep typing here; a person will pick up this same chat.</div><div class="meta">Selam · 09:16</div></div>
+            <div class="sysline">Ticket #4812 opened · assigned to the support queue</div>
+          </div>
+        </div>
+        <div class="note">The handoff sets three expectations — who, how long, and that context carries. The wait figure is Doc 11's live estimate; the fixture shows the shape, not a promise.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §D RG override ═══════════ -->
+  <div class="sec">
+    <div class="cap">§D — The RG moment: one fixed text, calm, and the staff-side flag with its excerpt</div>
+    <div class="ref">C07 · FR-13 · BR-03 · Doc 08 FR-14 · §9 calm slate · X2: the template is byte-fixed operator-approved text — no frame generates RG language</div>
+    <div class="why">When someone says they can't stop, the product's voice changes: no upsell energy, no chirpy persona, one calm message a human approved word-for-word, resources included, and a specialist queue takes the case — even mid-form, over everything else. Staff-side, the flag always carries the exact words that triggered it, in quiet slate rather than alarm red: this is care, not an incident.</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · customer side — the fixed template (Amharic)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">ሰላም · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx">መቆም አልቻልኩም… ደሞዜን ሁሉ አጣሁ። እባካችሁ እርዱኝ</div><div class="meta">23:41</div></div>
+            <div class="bb"><div class="bx">ይህን ስለነገሩን እናመሰግናለን። እርስዎን የሚያዳምጥ ሰው አለ — ልዩ የድጋፍ ባልደረባችን አሁን ይህን ውይይት ተረክቧል።<br><br>እርዳታ የሚሰጡ ነጻ አገልግሎቶች፦<br>· የብሔራዊ የቁማር ድጋፍ መስመር — 8555<br>· ራስን ማገድ — ከመለያ ገጽዎ ላይ ማንቃት ይችላሉ<br><br>መልዕክትዎ ሁሉ በሚስጥር ይያዛል።</div><div class="meta">ሰላም · 23:41</div></div>
+          </div>
+        </div>
+        <div class="note">This text is the operator's approved template, per language, byte-fixed — the generation service is unreachable from this branch by construction. Marketing suppression engages the same moment (Doc 08 FR-15).</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · staff side — the flag with its triggering excerpt (calm slate)</div>
+        <div class="th" style="width: 560px">
+          <div class="cbub"><div class="bx">መቆም አልቻልኩም… ደሞዜን ሁሉ አጣሁ። እባካችሁ እርዱኝ</div><div class="meta">Customer · 23:41</div></div>
+          <div class="rgcard">
+            <div class="rl">Responsible gambling — flagged by AI · routed to the RG queue</div>
+            <div class="rq">"መቆም አልቻልኩም… ደሞዜን ሁሉ አጣሁ።"</div>
+            <div class="rs">rg_risk 0.94 (threshold 0.80) · template sent 23:41 · promotional messages suppressed · pending specialist review</div>
+          </div>
+          <div class="aibub"><div class="bx"><div class="ail">✦ AI assistant · RG template</div><div class="bt">ይህን ስለነገሩን እናመሰግናለን። እርስዎን የሚያዳምጥ ሰው አለ…</div></div><div class="meta">AI · 23:41 · ✓ Sent</div></div>
+        </div>
+        <div class="note">The excerpt is mandatory — a flag without its evidence is an accusation. Slate, not red: Doc 08 §9's calm treatment for RG surfaces, kept here.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §E resolve, CSAT, post-resolution ═══════════ -->
+  <div class="sec">
+    <div class="cap">§E — Resolve, the 1-tap CSAT, and coming back after · customer side</div>
+    <div class="ref">C08 C09 · FR-09 · EC-08 · §8 continuity greeting · ×2 then a person, always</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · AI-resolve + CSAT (C08)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="bb"><div class="bx">Great — your withdrawal arrived! Anything else I can help with?</div><div class="meta">Selam · 11:04</div></div>
+            <div class="cb"><div class="bx">no thanks</div><div class="meta">11:05</div></div>
+            <div class="bb"><div class="bx">How was this conversation?
+              <div class="btnrow"><span class="tbtn">1</span><span class="tbtn">2</span><span class="tbtn">3</span><span class="tbtn">4</span><span class="tbtn">5</span></div>
+              <div style="font-size:10.5px; color:var(--mut); margin-top:5px">Optional: add a comment</div>
+            </div><div class="meta">Selam · 11:05</div></div>
+          </div>
+        </div>
+        <div class="note">Even the resolve line stays claim-framed: it says "arrived" only because the customer said it arrived. One tap, five numbers, comment optional; nothing else asked.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · post-resolution reopen with continuity → ×2 → mandatory handoff (C09)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="day">2 HOURS LATER</div>
+            <div class="cb"><div class="bx">it's gone again?? the money left my balance</div><div class="meta">13:12</div></div>
+            <div class="bb"><div class="bx"><b>About your withdrawal from earlier</b> (2,500 ETB, ref TB-88412) — I'm sorry it's acting up again. Can you tell me what your balance page shows now?</div><div class="meta">Selam · 13:12</div></div>
+            <div class="cb"><div class="bx">this is the second time, just fix it</div><div class="meta">13:14</div></div>
+            <div class="bb"><div class="bx">Understood — this needs a person. I'm connecting you to the team now (about 3 minutes). Everything from both conversations travels with the ticket.</div><div class="meta">Selam · 13:14</div></div>
+          </div>
+        </div>
+        <div class="note">The reopen greets with continuity, not amnesia. Two reopens is the ceiling — the third contact is a human by rule (EC-08), and the handoff says both conversations travel.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §F deflections + third language ═══════════ -->
+  <div class="sec">
+    <div class="cap">§F — The edges: betting advice, and a language we don't speak yet · customer side</div>
+    <div class="ref">C13 C12 · EC-04 · EC-02 · blocked topic ×3 → handoff · unsupported_language handoff</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · betting-advice deflection, then persistence → person (EC-04)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx">what should I bet on today? give me a sure tip</div><div class="meta">17:02</div></div>
+            <div class="bb"><div class="bx">That's one thing I never do — I can't give betting advice or tips. I'm happy to help with deposits, withdrawals or your account.
+              <div class="cites">If it helps: <a href="#">Playing responsibly</a></div>
+            </div><div class="meta">Selam · 17:02</div></div>
+            <div class="cb"><div class="bx">come on, just one game</div><div class="meta">17:03</div></div>
+            <div class="cb"><div class="bx">seriously, which team</div><div class="meta">17:04</div></div>
+            <div class="bb"><div class="bx">I really can't help with that — connecting you to a person who can help with anything account-related.</div><div class="meta">Selam · 17:04</div></div>
+          </div>
+        </div>
+        <div class="note">The deflection is friendly and total; the third ask stops the loop and hands off (<code>blocked_topic_persistence</code>) rather than letting a customer argue with a wall forever.</div>
+      </div>
+
+      <div class="frame lt">
+        <div class="fcap">Light · voice note in a third language (EC-02)</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="cb"><div class="bx"><span class="voice">▶ 0:19 voice message</span></div><div class="meta">10:22</div></div>
+            <div class="bb"><div class="bx">Thanks for the voice note! I understood it's about a deposit, but I can't yet help fully in this language — connecting you to a colleague who can. Ma naga taʼaa.</div><div class="meta">Selam · 10:22</div></div>
+            <div class="sysline">Handed off · unsupported_language</div>
+          </div>
+        </div>
+        <div class="note">Transcription + detection ran; there's no KB coverage in the detected language, so the assistant says so politely (localized where supported, English otherwise, with a courtesy phrase) and hands off — never a silent dead end.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §G staff thread: marking + corrections ═══════════ -->
+  <div class="sec">
+    <div class="cap">§G — Staff thread: the AI is always marked, and never edits itself · 1440 · light + dark</div>
+    <div class="ref">C02 C05 · FR-19c FR-19d · §9 accent + TEXT label · Doc 04 FR-23 · the edit affordance is a designed ABSENCE on AI messages</div>
+    <div class="row">
+
+      <div class="frame lt">
+        <div class="fcap">Light · thread with AI turns marked; a correction as a NEW message</div>
+        <div class="th">
+          <div class="cbub"><div class="bx">ወጪዬ የት ደረሰ? 2,500 ብር ቴሌብር።</div><div class="meta">አበበ ታደሰ · 09:08</div></div>
+          <div class="aibub"><div class="bx"><div class="ail">✦ AI assistant</div><div class="bt">Thanks — your receipt shows a 2,500 ETB Telebirr withdrawal, ref TB-88412, at 09:02. Withdrawals typically complete within <b>3 hours</b>.</div></div><div class="meta">AI · 09:10 · ✓ Sent</div></div>
+          <div class="aibub"><div class="bx"><div class="ail">✦ AI assistant · correction</div><div class="bt">Correction: withdrawals typically complete within <b>2 hours</b>, not 3. Sorry for the confusion — the 2-hour window applies to your Telebirr withdrawal.</div></div><div class="meta">AI · 09:11 · ✓ Sent</div></div>
+          <div class="abub"><div class="bx">Checked with finance — the reference is confirmed, releasing now.</div><div class="meta">Sara B. · 09:26 · ✓ Sent</div></div>
+        </div>
+        <div class="note">The wrong "3 hours" stays visible forever; the fix is a second, labeled AI message. Hover an AI bubble and you'll find no Edit anywhere — that absence is FR-19d, drawn. The accent + "✦ AI assistant" text mark every AI turn; an agent skimming at speed can't mistake whose words are whose.</div>
+      </div>
+
+      <div class="frame dk">
+        <div class="fcap">Dark · the same thread, dark-column AI family</div>
+        <div class="th">
+          <div class="cbub"><div class="bx">ወጪዬ የት ደረሰ? 2,500 ብር ቴሌብር።</div><div class="meta">አበበ ታደሰ · 09:08</div></div>
+          <div class="aibub"><div class="bx"><div class="ail">✦ AI assistant</div><div class="bt">Thanks — your receipt shows a 2,500 ETB Telebirr withdrawal, ref TB-88412, at 09:02. Withdrawals typically complete within <b>3 hours</b>.</div></div><div class="meta">AI · 09:10 · ✓ Sent</div></div>
+          <div class="aibub"><div class="bx"><div class="ail">✦ AI assistant · correction</div><div class="bt">Correction: withdrawals typically complete within <b>2 hours</b>, not 3. Sorry for the confusion.</div></div><div class="meta">AI · 09:11 · ✓ Sent</div></div>
+          <div class="abub"><div class="bx">Checked with finance — the reference is confirmed, releasing now.</div><div class="meta">Sara B. · 09:26 · ✓ Sent</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ §H dark customer frame ═══════════ -->
+  <div class="sec">
+    <div class="cap">§H — Dark customer frame · the greeting + trap in dark</div>
+    <div class="ref">C01 C03 dark · dark-column tokens only</div>
+    <div class="row">
+      <div class="frame dk">
+        <div class="fcap">Dark · greeting + trap refusal</div>
+        <div class="ph">
+          <div class="top"><div class="av">✦</div><div><div class="tt">Selam · Brand Support</div><div class="st">bot</div></div></div>
+          <div class="chat">
+            <div class="bb"><div class="bx">Hello! I'm <b>Selam, an AI assistant</b> for Brand Support. I can help with deposits, withdrawals and account questions — and I can bring in a person any time.</div><div class="meta">Selam · 09:08</div></div>
+            <div class="cb"><div class="bx">So my withdrawal WAS sent, right?</div><div class="meta">09:12</div></div>
+            <div class="bb"><div class="bx">I can't confirm that — I don't have access to your transactions. What I can see is the receipt you sent (2,500 ETB, ref TB-88412). Want me to bring in a colleague who can verify the payment itself?</div><div class="meta">Selam · 09:12</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ §I contract ═══════════ -->
+  <div class="sec">
+    <div class="cap">§I — Honesty contract (build notes on the frame)</div>
+    <div class="ref">X2 X3 X4 audited · AC-05 · §13 §14</div>
+    <div class="frame lt" style="max-width:860px">
+      <div class="fcap">Contract</div>
+      <div style="font-size:12.5px; line-height:1.65; color:var(--tx)">
+        · <b>X3:</b> the disclosure appears in every first greeting, every language; no frame on any Batch 8 screen offers a control that hides it — wording is operator content, presence is platform law.<br>
+        · <b>X4:</b> every money sentence in every frame is the customer's claim restated ("you mentioned", "your receipt shows") or a cited process fact; the trap exchange is drawn refusing.<br>
+        · <b>X2:</b> the RG frame's text is the operator-approved template, byte-fixed; the staff flag always carries its excerpt; slate treatment, never alarm red.<br>
+        · Corrections are new messages; AI bubbles carry no edit affordance in any state (FR-19d).<br>
+        · The AI accent is never the only marker — the "✦ AI assistant" text label rides every AI artifact (§9, never color alone).<br>
+        · Customer frames are 340 px content in Telegram's chrome — mobile-first by nature; staff thread meets Doc 07's own responsive law. All Amharic flagged for native review (R-14).
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
