@@ -13,4 +13,9 @@ return [
         'unknown' => 'ይህ ጽሑፍ ከአሁን በኋላ አይገኝም።',
         'read_current' => 'ወቅታዊውን እትም ያንብቡ',
     ],
+    'notify' => [
+        'review_requested' => 'ጽሑፍ ለግምገማ ቀርቧል',
+        'changes_requested' => 'በጽሑፍዎ ላይ ለውጦች ተጠይቀዋል',
+        'lock_taken_over' => 'ሌላ ሰው የጽሑፍዎን አርትዖት ተረክቧል',
+    ],
 ];

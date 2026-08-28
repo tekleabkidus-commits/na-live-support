@@ -2212,15 +2212,23 @@ entries:
   #    honest planned-manual entries, each naming the approved-plan step whose
   #    suite flips it. A row here never claims coverage that does not exist.
   - ac_ref: "Doc10 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Kb/WorkflowTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED — flips at S10 step 4 to tests/Feature/Kb/WorkflowTest.php: the workflow matrix (transitions, self-publish collapse, request-changes loop, archive/un-archive) with permissions, events and badges.
+      FLIPPED AT S10 STEP 4 as the plan scheduled: the matrix — submit, request
+      changes (comment, back to draft), approve → publish (version minted, event
+      emitted, index pending), unpublish, archive, un-archive; the self-publish
+      collapse audited by its own name and refused for a publisher without edit;
+      illegal edges 409; every door on its closed key; the sole-writer sweep.
+    gap: >-
+      PARTIAL: the BADGES (status pill, language dots) are the step-12 staff UI
+      [B9]; FR-03's outdated flip on source publish lands at step 8
+      (TranslationStateTest).
   - ac_ref: "Doc10 AC-02"
     suite_path: manual
     type: manual
@@ -2276,15 +2284,20 @@ entries:
     gap: >-
       PARTIAL: unpublish/archive/supersede/slug-change URL fixtures, slug-history redirects and version-pinned citation URLs flip at step 7 (tests/Feature/Kb/TombstoneTest.php).
   - ac_ref: "Doc10 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Kb/VersioningTest.php
+    type: automated
     tier: isolation
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S10 step 4 to tests/Feature/Kb/VersioningTest.php: DB-level immutable snapshots (grant physics), diff correctness on the block-edit fixture set, restore-creates-draft.
+      FLIPPED AT S10 STEP 4: publish snapshots are IMMUTABLE AT THE DATABASE —
+      the app role holds no UPDATE grant on kb_article_versions
+      (tests/Isolation/KbGrantPhysicsTest.php, sabotage #5 at migration level);
+      diff correctness on the block-edit fixture set (changed/added/removed by id,
+      positional fallback); restore writes a NEW DRAFT working copy and leaves
+      history and the published pointer untouched; 1k versions by cursor (NFR-04).
   - ac_ref: "Doc10 AC-08"
     suite_path: manual
     type: manual

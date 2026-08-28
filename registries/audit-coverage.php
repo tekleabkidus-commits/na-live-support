@@ -1149,4 +1149,100 @@ return [
         'required_fields' => ['variant_id', 'previous_holder_id', 'new_holder_id', 'party'],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 FR-07 submit (and EC-11\'s forced review) (S10 step 4).
+        'action_key' => 'kb.variant.submitted',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07 request changes (S10 step 4).
+        'action_key' => 'kb.variant.changes_requested',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07/FR-13 approve → publish (S10 step 4).
+        'action_key' => 'kb.variant.published',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['version_id', 'version', 'old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07 the collapsed review, audited by its own name (S10 step 4).
+        'action_key' => 'kb.variant.self_published',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['version_id', 'version', 'old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-13/EC-06 unpublish (chunks retire in-transaction) (S10 step 4).
+        'action_key' => 'kb.variant.unpublished',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-09 archive (S10 step 4).
+        'action_key' => 'kb.variant.archived',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-09 un-archive → draft (S10 step 4).
+        'action_key' => 'kb.variant.unarchived',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-08 restore-to-draft (S10 step 4).
+        'action_key' => 'kb.variant.restored',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['version_id', 'version'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 EC-11/SEC-04 HIGH-VISIBILITY — the leak surface changed; old/new + actor always (S10 step 4).
+        'action_key' => 'kb.article.visibility_changed',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['old', 'new', 'variants_to_review'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 BR-06/SEC-04 the override recorded on the version (S10 step 4).
+        'action_key' => 'kb.sanitizer.overridden',
+        'entity' => 'kb_article_version',
+        'actor_types' => ['staff'],
+        'required_fields' => ['flags', 'reason'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07 review thread (S10 step 4).
+        'action_key' => 'kb.review.commented',
+        'entity' => 'kb_review_comment',
+        'actor_types' => ['staff'],
+        'required_fields' => ['variant_id', 'block_anchor'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07 review thread (S10 step 4).
+        'action_key' => 'kb.review.resolved',
+        'entity' => 'kb_review_comment',
+        'actor_types' => ['staff'],
+        'required_fields' => [],
+        'owning_doc' => 'Doc10',
+    ],
 ];

@@ -204,4 +204,28 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc09',
     ],
+    [
+        // Doc 10 FR-07: a variant was submitted for review (reviewers) (S10 step 4; registered BEFORE its producer ships — the S23 C3 discipline; bell delivery = a Doc 07 projector packet at the checkpoint).
+        'category_key' => 'notify.kb.review_requested',
+        'label_i18n_key' => 'kb.notify.review_requested',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-07: a reviewer requested changes (the author) (S10 step 4; registered BEFORE its producer ships — the S23 C3 discipline; bell delivery = a Doc 07 projector packet at the checkpoint).
+        'category_key' => 'notify.kb.changes_requested',
+        'label_i18n_key' => 'kb.notify.changes_requested',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-05/T-07: your editing lock was taken over (the displaced holder) (S10 step 4; registered BEFORE its producer ships — the S23 C3 discipline; bell delivery = a Doc 07 projector packet at the checkpoint).
+        'category_key' => 'notify.kb.lock_taken_over',
+        'label_i18n_key' => 'kb.notify.lock_taken_over',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc10',
+    ],
 ];

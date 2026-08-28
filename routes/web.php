@@ -115,6 +115,36 @@ Route::middleware([
         ->middleware('permission:kb.articles.edit')->name('kb.editor.lock.release');
     Route::post('variants/{variantId}/lock/takeover', [App\Http\Controllers\Kb\KbEditorController::class, 'takeover'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.lock.taken_over'])->name('kb.editor.lock.takeover');
+
+    // S10 step 4 — workflow (FR-07), versions (FR-08), the review thread, the ONE visibility door (EC-11).
+    Route::post('variants/{variantId}/submit', [App\Http\Controllers\Kb\KbWorkflowController::class, 'submit'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.submitted'])->name('kb.workflow.submit');
+    Route::post('variants/{variantId}/request-changes', [App\Http\Controllers\Kb\KbWorkflowController::class, 'requestChanges'])
+        ->middleware(['permission:kb.articles.publish', 'audit:kb.variant.changes_requested'])->name('kb.workflow.request_changes');
+    Route::post('variants/{variantId}/publish', [App\Http\Controllers\Kb\KbWorkflowController::class, 'publish'])
+        ->middleware('permission:kb.articles.publish')->name('kb.workflow.publish'); // audits kb.variant.published OR self_published — the domain door writes it (exempt with reason)
+    Route::post('variants/{variantId}/unpublish', [App\Http\Controllers\Kb\KbWorkflowController::class, 'unpublish'])
+        ->middleware(['permission:kb.articles.publish', 'audit:kb.variant.unpublished'])->name('kb.workflow.unpublish');
+    Route::post('variants/{variantId}/archive', [App\Http\Controllers\Kb\KbWorkflowController::class, 'archive'])
+        ->middleware(['permission:kb.articles.publish', 'audit:kb.variant.archived'])->name('kb.workflow.archive');
+    Route::post('variants/{variantId}/unarchive', [App\Http\Controllers\Kb\KbWorkflowController::class, 'unarchive'])
+        ->middleware(['permission:kb.articles.publish', 'audit:kb.variant.unarchived'])->name('kb.workflow.unarchive');
+    Route::post('articles/{articleId}/visibility', [App\Http\Controllers\Kb\KbWorkflowController::class, 'visibility'])
+        ->middleware(['permission:kb.articles.publish', 'audit:kb.article.visibility_changed'])->name('kb.workflow.visibility');
+    Route::get('variants/{variantId}/comments', [App\Http\Controllers\Kb\KbWorkflowController::class, 'comments'])
+        ->middleware('permission:kb.articles.edit')->name('kb.review.comments');
+    Route::post('variants/{variantId}/comments', [App\Http\Controllers\Kb\KbWorkflowController::class, 'comment'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.review.commented'])->name('kb.review.comment');
+    Route::post('comments/{commentId}/resolve', [App\Http\Controllers\Kb\KbWorkflowController::class, 'resolveComment'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.review.resolved'])->name('kb.review.resolve');
+    Route::get('variants/{variantId}/versions', [App\Http\Controllers\Kb\KbVersionController::class, 'history'])
+        ->middleware('permission:kb.articles.edit')->name('kb.versions.history');
+    Route::get('versions/{versionId}', [App\Http\Controllers\Kb\KbVersionController::class, 'show'])
+        ->middleware('permission:kb.articles.edit')->name('kb.versions.show');
+    Route::get('versions/{versionId}/diff', [App\Http\Controllers\Kb\KbVersionController::class, 'diff'])
+        ->middleware('permission:kb.articles.edit')->name('kb.versions.diff');
+    Route::post('versions/{versionId}/restore', [App\Http\Controllers\Kb\KbVersionController::class, 'restore'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.restored'])->name('kb.versions.restore');
 });
 
 // Doc 09 FR-18 — the AI Backoffice (S09 step 12, Option A [B8]). Same staff

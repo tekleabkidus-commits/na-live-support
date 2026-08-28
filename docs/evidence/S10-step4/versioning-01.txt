@@ -1,0 +1,30 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+NFR-04 history page (1k versions, limit 100): 17.9 ms dev-indicative
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\VersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit publish mints versions 1..n with author/note/hash; the diff pair[39m[90m…[39m [90m8.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 determinism + the diff fixture set: identical content → ide[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-04: 1,000 versions on one variant list by cursor (limit ≤ 10[39m[90m…[39m [90m0.20s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\VersioningTest[22m [90m>[39m it NFR-04: 1,000 ver… [41;1m TypeError [49;22m  
+[39;1m  count(): Argument #1 ($value) must be of type Countable|array, null given[39;22m
+
+  at [32mtests/Feature/Kb/VersioningTest.php[39m:[32m79[39m
+     75▕     $cursor = $page->json('next_cursor');
+     76▕     while ($cursor !== null && $seen < 1000) {
+     77▕         bindTenant($s['tenant']);
+     78▕         $next = $this->actingAs($s['admin'], 'staff')->getJson('https://localhost/admin/kb/variants/'.$a['variant_id'].'/versions?limit=100&cursor='.urlencode($cursor));
+  ➜  79▕         $seen += count($next->json('data'));
+     80▕         $cursor = $next->json('next_cursor');
+     81▕     }
+     82▕     expect($seen)->toBe(1000);
+     83▕     $this->actingAs($s['admin'], 'staff')->getJson('https://localhost/admin/kb/variants/'.$a['variant_id'].'/versions?page=2')->assertStatus(400); // C-05: offset pagination refused
+
+  [33m1   [39m[39;1mtests/Feature/Kb/VersioningTest.php[39;22m:[39;1m79[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (29 assertions)[39m
+  [90mDuration:[39m [39m8.67s[39m
+
+EXIT 2

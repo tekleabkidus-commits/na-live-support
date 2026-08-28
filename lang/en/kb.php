@@ -22,4 +22,9 @@ return [
         'unknown' => 'This article is no longer available.',
         'read_current' => 'Read the current version',
     ],
+    'notify' => [
+        'review_requested' => 'Article submitted for review',
+        'changes_requested' => 'Changes requested on your article',
+        'lock_taken_over' => 'Someone took over editing your article',
+    ],
 ];

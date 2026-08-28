@@ -1,0 +1,18 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\KbGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m7.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07/T-06 physics: kb_article_versions and kb_slug_history carr[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 10 table and both kb_chunks partitions are FORCE[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-B: kb_chunks is LIST-partitioned by audience into exactly p[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 3 + FLAG B: the ONLY non-PK unique on kb_chunks[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG-2 / FLAG B static sweep: no ON CONFLICT or upsert() in app/[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\Sabotage05Probe[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 runtime: a published version cannot be rewritten in place[39m[90m  [39m [90m0.29s[39m  
+
+  [90mTests:[39m    [32;1m8 passed[39;22m[90m (93 assertions)[39m
+  [90mDuration:[39m [39m8.17s[39m
+
+EXIT 0

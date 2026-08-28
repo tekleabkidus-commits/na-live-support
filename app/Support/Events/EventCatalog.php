@@ -817,6 +817,26 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc15/Reporting'],
             'description' => 'FR-17/FR-21: a manager\'s daily digest was written — Doc 07 mints exactly one notify.ai.digest bell row for recipient_id.',
         ],
+
+        // ── Doc 10 (S10 step 4; the plan's six-event family — identifiers only, Q7) ──
+        'kb.article.published' => [
+            'schema_version' => 1,
+            // FR-13: the publish event the durable index consumer rides (step 6);
+            // ai_usable is the CATEGORY flag at publish time (FLAG 3's re-derivation).
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'version_id', 'language', 'audience', 'ai_usable'],
+            'producers' => ['Doc10/Transitions'],
+            'consumers' => ['Doc10/KbIndexMaintenance', 'Doc10/TranslationState', 'Doc10/KbSearchIndexer', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 10 FR-13: a variant was published — humans see it immediately; the index consumer chunks, sanitizes, embeds and swaps the retrieval generation; siblings recompute translation state (FR-03).',
+        ],
+        'kb.retrieval.updated' => [
+            'schema_version' => 1,
+            // FR-13: emitted after the ONE-statement generation swap (or a retire);
+            // status names which — current | retired | failed.
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'version_id', 'retrieval_generation', 'status'],
+            'producers' => ['Doc10/KbIndexMaintenance'],
+            'consumers' => ['Doc09/Retrieval', 'Doc15/Reporting'],
+            'description' => 'Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) or was retired — Doc 09 caches invalidate; Doc 15 counts index freshness.',
+        ],
         'ai.config.published' => [
             'schema_version' => 1,
             // Q7 split: identifiers and categories only — payload CONTENT

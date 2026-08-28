@@ -28,3 +28,15 @@ function kbScene(bool $aiUsable = true): array
 
     return ['tenant' => $tenant, 'tenant_id' => $tenantId, 'admin' => $admin, 'category_id' => $category->json('id')];
 }
+
+/** An article with one paragraph in its working copy, via the real doors. @return array{article_id: string, variant_id: string} */
+function kbArticle(array $s, string $title = '[FIXTURE] Deposits', string $audience = 'public'): array
+{
+    $created = test()->actingAs($s['admin'], 'staff')->postJson('https://localhost/admin/kb/articles', ['category_id' => $s['category_id'], 'audience' => $audience, 'source_language' => 'en', 'title' => $title]);
+    $created->assertStatus(201);
+    bindTenant($s['tenant']);
+    test()->actingAs($s['admin'], 'staff')->putJson('https://localhost/admin/kb/variants/'.$created->json('variant_id').'/working-copy', ['content' => ['blocks' => [['id' => 'b1', 'type' => 'paragraph', 'text' => '[FIXTURE] Deposits with telebirr settle within 30 minutes.']]]])->assertOk();
+    bindTenant($s['tenant']);
+
+    return ['article_id' => $created->json('article_id'), 'variant_id' => $created->json('variant_id')];
+}

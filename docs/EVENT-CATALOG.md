@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-105 event(s).
+107 event(s).
 
 ## `agent.status_changed`
 
@@ -382,6 +382,24 @@ FR-22/FR-01: profile attributes changed (display_name, language, country, tags�
 - **Payload:** `tenant_id`, `customer_id`, `changed`
 - **Producers:** Doc08/CustomerProfile
 - **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
+
+## `kb.article.published`
+
+Doc 10 FR-13: a variant was published — humans see it immediately; the index consumer chunks, sanitizes, embeds and swaps the retrieval generation; siblings recompute translation state (FR-03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `language`, `audience`, `ai_usable`
+- **Producers:** Doc10/Transitions
+- **Consumers:** Doc10/KbIndexMaintenance, Doc10/TranslationState, Doc10/KbSearchIndexer, Doc15/Reporting, Doc17/Audit
+
+## `kb.retrieval.updated`
+
+Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) or was retired — Doc 09 caches invalidate; Doc 15 counts index freshness.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `retrieval_generation`, `status`
+- **Producers:** Doc10/KbIndexMaintenance
+- **Consumers:** Doc09/Retrieval, Doc15/Reporting
 
 ## `media.infected`
 

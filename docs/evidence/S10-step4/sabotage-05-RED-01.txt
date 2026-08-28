@@ -1,0 +1,103 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\KbGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m7.64s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07/T-06 physics: kb_article_versions and kb_slug_history carr[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 10 table and both kb_chunks partitions are FORCE[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-B: kb_chunks is LIST-partitioned by audience into exactly p[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 3 + FLAG B: the ONLY non-PK unique on kb_chunks[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG-2 / FLAG B static sweep: no ON CONFLICT or upsert() in app/[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\Sabotage05Probe[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-07 runtime: a published version cannot be rewritten in place[39m[90m  [39m [90m0.29s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\KbGrantPhysicsTest[22m [90m>[39m it R-19b/ADR-0003: the app r…   
+[39;1m  kb_article_versions UPDATE denied set drifted from SCHEMA AMENDMENT 4 (found: article_id, audience_at_publish, author_id, content_hash, created_at, id, language, note, published_at, sanitizer_flags, sanitizer_override, slug, summary, tenant_id, variant_id, version)
+Failed asserting that two arrays are identical.
+  [39;22m[32m     0 => 'article_id',[39m[39;1m
+  [39;22m[32m     1 => 'audience_at_publish',[39m[39;1m
+  [39;22m[32m     2 => 'author_id',[39m[39;1m
+  [39;22m[31m-    3 => 'content',[39m[39;1m
+  [39;22m[31m-    4 => 'content_hash',[39m[39;1m
+  [39;22m[31m-    5 => 'created_at',[39m[39;1m
+  [39;22m[31m-    6 => 'id',[39m[39;1m
+  [39;22m[31m-    7 => 'language',[39m[39;1m
+  [39;22m[31m-    8 => 'note',[39m[39;1m
+  [39;22m[31m-    9 => 'published_at',[39m[39;1m
+  [39;22m[31m-    10 => 'sanitizer_flags',[39m[39;1m
+  [39;22m[31m-    11 => 'sanitizer_override',[39m[39;1m
+  [39;22m[31m-    12 => 'slug',[39m[39;1m
+  [39;22m[31m-    13 => 'summary',[39m[39;1m
+  [39;22m[31m-    14 => 'tenant_id',[39m[39;1m
+  [39;22m[31m-    15 => 'title',[39m[39;1m
+  [39;22m[31m-    16 => 'variant_id',[39m[39;1m
+  [39;22m[31m-    17 => 'version',[39m[39;1m
+  [39;22m[32m+    3 => 'content_hash',[39m[39;1m
+  [39;22m[32m+    4 => 'created_at',[39m[39;1m
+  [39;22m[32m+    5 => 'id',[39m[39;1m
+  [39;22m[32m+    6 => 'language',[39m[39;1m
+  [39;22m[32m+    7 => 'note',[39m[39;1m
+  [39;22m[32m+    8 => 'published_at',[39m[39;1m
+  [39;22m[32m+    9 => 'sanitizer_flags',[39m[39;1m
+  [39;22m[32m+    10 => 'sanitizer_override',[39m[39;1m
+  [39;22m[32m+    11 => 'slug',[39m[39;1m
+  [39;22m[32m+    12 => 'summary',[39m[39;1m
+  [39;22m[32m+    13 => 'tenant_id',[39m[39;1m
+  [39;22m[32m+    14 => 'variant_id',[39m[39;1m
+  [39;22m[32m+    15 => 'version',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/KbGrantPhysicsTest.php[39m:[32m93[39m
+     89▕                 }
+     90▕             }
+     91▕             sort($denied);
+     92▕             $expected = DOC10_DENIED_COLUMNS[$table][$privilege];
+  ➜  93▕             expect($denied)->toBe($expected === '*' ? $columns : $expected, sprintf('%s %s denied set drifted from SCHEMA AMENDMENT 4 (found: %s)', $table, $privilege, implode(', ', $denied)));
+     94▕         }
+     95▕     }
+     96▕ });
+     97▕
+
+  [33m1   [39m[39;1mtests/Isolation/KbGrantPhysicsTest.php[39;22m:[39;1m93[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\KbGrantPhysicsTest[22m [90m>[39m it AC-07/T-06 physics: kb_ar…   
+[39;1m  kb_article_versions has column-level UPDATE grants for app
+Failed asserting that 2 is identical to 0.[39;22m
+
+  at [32mtests/Isolation/KbGrantPhysicsTest.php[39m:[32m105[39m
+    101▕         $row = DB::selectOne("SELECT has_table_privilege('app', ?, 'UPDATE') AS ok", [$table]);
+    102▕         expect($row->ok)->toBeFalse("{$table} is updatable by app — immutability is gone");
+    103▕         /** @var object{n: int|string} $cols */
+    104▕         $cols = DB::selectOne("SELECT count(*) AS n FROM information_schema.column_privileges WHERE grantee = 'app' AND table_name = ? AND privilege_type = 'UPDATE'", [$table]);
+  ➜ 105▕         expect((int) $cols->n)->toBe(0, "{$table} has column-level UPDATE grants for app");
+    106▕     }
+    107▕ });
+    108▕ 
+    109▕ it('ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10 table nor on either kb_chunks partition — and the refusal EXECUTES', function (): void {
+
+  [33m1   [39m[39;1mtests/Isolation/KbGrantPhysicsTest.php[39;22m:[39;1m105[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\Sabotage05Probe[22m [90m>[39m it AC-07… [41;1m AssertionFailedError [49;22m  
+[39;1m  history was rewritten in place[39;22m
+
+  at [32mtests/Feature/Kb/Sabotage05Probe.php[39m:[32m10[39m
+      6▕ it('AC-07 runtime: a published version cannot be rewritten in place', function (): void {
+      7▕     $s = kbScene(); $a = kbArticle($s);
+      8▕     $v = $this->actingAs($s['admin'], 'staff')->postJson('https://localhost/admin/kb/variants/'.$a['variant_id'].'/publish'); $v->assertOk();
+      9▕     bindTenant($s['tenant']);
+  ➜  10▕     try { DB::transaction(static fn () => DB::table('kb_article_versions')->where('id', $v->json('version_id'))->update(['content' => '{"blocks":[]}'])); $this->fail('history was rewritten in place'); }
+     11▕     catch (Illuminate\Database\QueryException $e) { expect($e->getMessage())->toContain('permission denied'); }
+     12▕ });
+     13▕
+
+  [33m1   [39m[39;1mtests/Feature/Kb/Sabotage05Probe.php[39;22m:[39;1m10[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (79 assertions)[39m
+  [90mDuration:[39m [39m8.38s[39m
+
+EXIT 1
