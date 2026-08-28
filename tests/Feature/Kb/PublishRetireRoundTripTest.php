@@ -44,8 +44,10 @@ function rtQueryDriver(array ...$vectors): void
     config(['ai.default_routing.embeddings' => [['provider' => 'fake-embed', 'model' => 'e']]]);
 }
 
-it('binds the resolver contract to the chunk-state implementation (step 1; step 7 rebinds behind the same interface)', function (): void {
-    expect(app(CitationResolver::class))->toBeInstanceOf(ChunkStateCitationResolver::class);
+it('binds the resolver contract behind ONE interface (step 1 bound the chunk-state implementation; step 7 rebound the truth-fed one — the contract never moved)', function (): void {
+    bindTenant(createTenant());
+    expect(app(CitationResolver::class))->toBeInstanceOf(App\Domain\Kb\Tombstones\VersionedCitationResolver::class)
+        ->and((new ChunkStateCitationResolver)->resolve('018f6b2e-0000-7000-8000-00000000ffff'))->toBe(CitationState::Unknown);
 });
 
 it('round trip: index → served + Current → retire → not served, row survives, Retired (never 404) → app DELETE refused → unknown ref resolves Unknown', function (): void {

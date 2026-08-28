@@ -2288,17 +2288,22 @@ entries:
       a 409 and an override REASON publishes with the decision recorded ON the
       version + audited (BR-06/SEC-04). Sabotage #7 (sanitizer stubbed) executed.
   - ac_ref: "Doc10 AC-06"
-    suite_path: tests/Feature/Kb/PublishRetireRoundTripTest.php
+    suite_path: tests/Feature/Kb/TombstoneTest.php
     type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      SEEDED AT S10 STEP 1 with the safety floor: the publish → retire ROUND TRIP over the existing Doc 09 door — retire flips retrievable (never deletes; the app-role DELETE refusal is the positive control), and a citation to the retired ref resolves Retired through the FR-16 CitationResolver contract — never a 404.
-    gap: >-
-      PARTIAL: unpublish/archive/supersede/slug-change URL fixtures, slug-history redirects and version-pinned citation URLs flip at step 7 (tests/Feature/Kb/TombstoneTest.php).
+      FLIPPED AT S10 STEP 7: unpublish, archive, supersede and slug-change fixtures
+      ALL resolve (tombstone with/without a current link, or a 301 through slug
+      history) — zero 404s on once-cited URLs; citation URLs embed the version id
+      and answer SS-04 in one lookup; EC-06 collision auto-suffixes with both URLs
+      alive; EC-07's cited-before-unpublish pins the exact version; C-10 absence
+      for internal articles. Sabotage #8 (slug history ignored) executed. The
+      customer-facing RENDERING of the tombstone is Doc 13's ([D13]) over these
+      resolvers.
   - ac_ref: "Doc10 AC-07"
     suite_path: tests/Feature/Kb/VersioningTest.php
     type: automated

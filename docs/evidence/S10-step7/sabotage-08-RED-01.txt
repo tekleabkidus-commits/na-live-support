@@ -1,0 +1,28 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\TombstoneTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the truth-fed resolver at step 7 and legacy chunk refs sti[39m[90m…[39m [90m5.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06/SS-04: supersede → the old citation is Retired WITH a link[39m[90m…[39m [90m0.34s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-06/EC-06: a slug change keeps the OLD URL working (redirect vi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an internal article's citation and slug are ABSENT (unknow[39m[90m…[39m [90m0.11s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\TombstoneTest[22m [90m>[39m it T-06/EC-06: a slug change kee…   
+[39;1m  Expected response status code [301] but received 200.
+Failed asserting that 200 is identical to 301.[39;22m
+
+  at [32mtests/Feature/Kb/TombstoneTest.php[39m:[32m71[39m
+     67▕     $this->actingAs($s['admin'], 'staff')->patchJson($url.'/meta', ['slug' => 'fixture-bonus-terms'])->assertOk();
+     68▕     bindTenant($s['tenant']);
+     69▕     expect(DB::table('kb_slug_history')->where('slug', 'fixture-bonus-rules')->where('language', 'en')->exists())->toBeTrue('the old slug is remembered');
+     70▕     $old = $this->actingAs($s['admin'], 'staff')->getJson('https://localhost/admin/kb/resolve/en/fixture-bonus-rules');
+  ➜  71▕     $old->assertStatus(301)->assertJson(['state' => 'redirect', 'redirect_to' => '/kb/en/fixture-bonus-terms']);
+     72▕     $this->actingAs($s['admin'], 'staff')->getJson('https://localhost/admin/kb/resolve/en/fixture-bonus-terms')->assertOk()->assertJson(['state' => 'current']);
+     73▕ 
+     74▕     // EC-06: another article takes the retired slug → auto-suffixed; both URLs resolve.
+     75▕     bindTenant($s['tenant']);
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (48 assertions)[39m
+  [90mDuration:[39m [39m5.72s[39m
+
+EXIT 1

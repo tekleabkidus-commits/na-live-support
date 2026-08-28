@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Domain\Ai\Chatbot\ChatbotTurn;
+use App\Domain\Ai\Guards\FixturesOnlyEgress;
+use App\Domain\Ai\Providers\FakeDriver;
+use App\Domain\Ai\Providers\ProviderRegistry;
+use App\Domain\Ai\Providers\ProviderResponse;
+use App\Domain\Ai\Retrieval\HybridRetriever;
+use App\Domain\Ai\Retrieval\KbIndexer;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * Doc 10 FR-15 / SEC-01 / T-08 / AC-04 — STRUCTURAL index separation (STOP-B as ruled): the
+ * chatbot's retrieval path is bound to the PUBLIC PARTITION BY TABLE NAME (a constructor
+ * fact, no widening parameter anywhere on that path); Copilot reads the parent. Three-way
+ * proof: (a) physics — an internal chunk is unreachable from the public partition
+ * regardless of any WHERE; (b) Copilot reaches both; (c) the falsification — a deliberately
+ * mis-written query filter on the chatbot-bound instance STILL cannot return internal rows;
+ * plus the static half — ChatbotTurn never passes includeInternal and resolves the
+ * public-bound retriever from the container.
+ */
+function sepVector(): array { $v = array_fill(0, 1024, 0.0); $v[3] = 1.0; return $v; }
+function sepDriver(): void
+{
+    $driver = new FakeDriver(new FixturesOnlyEgress);
+    $driver->queue(new ProviderResponse('', 0, 0, [], [sepVector()]));
+    app(ProviderRegistry::class)->swap('fake-embed', $driver);
+    config(['ai.default_routing.embeddings' => [['provider' => 'fake-embed', 'model' => 'e']]]);
+}
+
+it('(a) physics + (b) Copilot + (c) the falsification: an internal chunk never reaches the chatbot-bound retriever, even with a mis-written filter; Copilot sees both', function (): void {
+    bindTenant(createTenant());
+    $indexer = app(KbIndexer::class);
+    $pub = '018f6b2e-0000-7000-8000-00000000a0a1';
+    $int = '018f6b2e-0000-7000-8000-00000000a0b2';
+    $indexer->index($pub, 0, 'en', '[FIXTURE] Deposits with telebirr settle within 30 minutes.', 'public', true, sepVector());
+    $indexer->index($int, 0, 'en', '[FIXTURE] INTERNAL: deposits with telebirr — escalate disputes above 50,000 ETB to finance.', 'internal', true, sepVector());
+
+    // (a) physics: the partition cannot yield an internal row, WHERE or no WHERE.
+    expect((int) DB::table('kb_chunks_public')->count())->toBe(1)
+        ->and((int) DB::table('kb_chunks_public')->where('audience', 'internal')->count())->toBe(0)
+        ->and((int) DB::table('kb_chunks_public')->whereRaw('true')->count())->toBe(1)
+        ->and((int) DB::table('kb_chunks_internal')->count())->toBe(1);
+
+    // (b) Copilot (the parent-bound retriever) reaches both.
+    sepDriver();
+    $copilot = app(HybridRetriever::class)->retrieve('[FIXTURE] telebirr deposits', ['en'], includeInternal: true);
+    expect(array_column($copilot['chunks'], 'article_ref'))->toContain($pub)->toContain($int);
+
+    // (c) the falsification: the chatbot-bound instance with the WRONG filter (includeInternal: true) still returns no internal row.
+    sepDriver();
+    $chatbot = new HybridRetriever(app(App\Domain\Ai\Orchestrator\AiOrchestrator::class), 'kb_chunks_public');
+    $wrong = $chatbot->retrieve('[FIXTURE] telebirr deposits', ['en'], includeInternal: true);
+    expect(array_column($wrong['chunks'], 'article_ref'))->toContain($pub)->not->toContain($int);
+});
+
+it('static half: ChatbotTurn never names includeInternal, and the container hands ChatbotTurn a retriever bound to kb_chunks_public', function (): void {
+    $source = (string) file_get_contents(base_path('app/Domain/Ai/Chatbot/ChatbotTurn.php'));
+    expect(str_contains($source, 'includeInternal'))->toBeFalse('ChatbotTurn can express the widening parameter');
+    $retriever = app()->when(ChatbotTurn::class)->needs(HybridRetriever::class) ? app()->make(HybridRetriever::class, []) : null; // shape check only
+    $bound = (new ReflectionClass(app(ChatbotTurn::class)))->getProperty('retriever')->getValue(app(ChatbotTurn::class));
+    $table = (new ReflectionProperty($bound, 'table'))->getValue($bound);
+    expect($table)->toBe('kb_chunks_public');
+});

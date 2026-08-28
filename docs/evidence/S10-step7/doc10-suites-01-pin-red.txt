@@ -1,0 +1,142 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\AiUsableRederivationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FLAG 3 closed by ruling: the chunk flag IS the category flag at[39m[90m… [39m [90m5.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02/BR-03/§14: an Amharic-first article gets a transliterated[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: moving an article into a non-ai_usable category retires i[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\CategoryTreeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: depth 3 is the ceiling (4 refused), names are per languag[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: a category holding articles is NOT deleted — the refusal[39m[90m… [39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ChunkerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: summary is chunk 0, heading paths prefix the rest, the SAM[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 cost fixture: a minor edit to ONE section changes only that[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08 + the target: a 20,000-word article chunks into ~target-si[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\GenerationSwapTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the swap is ONE statement: generation 2 lands non-retrievable be[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 5: only the PLATFORM-role prune removes a super[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\IndexRebuildTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit kb:index-rebuild reindexes both partitions' hnsw + gin indexes c[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\LocksTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit locks: first acquire wins, the second editor is refused naming t[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-05: with the lock service down every lock door answers mode=o[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\PublishPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer is REGISTERED for kb.article.published on[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/T-05: publish → consumer → chunks (summary = chunk 0, head[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 cost: a re-publish with one changed section re-embeds ONLY t[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: embeddings DOWN → generation N+1 lands but is NOT swapped[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 stage-kill chaos + idempotency: a kill after embed leaves[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: two variants (en + am) publish independently — one provid[39m[90m…[39m [90m0.16s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\PublishRetireRoundTripTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit binds the resolver contract to the chunk-state implementation (s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit round trip: index → served + Current → retire → not served, row[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\SanitizerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the shared package (step 5) — never the unbound placeholde[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 shared fixture suite: every poisoned fixture flags the off[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06 at the door: flags → 409 with the sentences; an override r[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\TombstoneTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the truth-fed resolver at step 7 and legacy chunk refs sti[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06/SS-04: supersede → the old citation is Retired WITH a link[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06/EC-06: a slug change keeps the OLD URL working (redirect vi[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an internal article's citation and slug are ABSENT (unknow[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VersionImmutabilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 runtime: a published version cannot be rewritten in place[39m[90m  [39m [90m0.09s[39m  
+
+NFR-04 history page (1k versions, limit 100): 13.4 ms dev-indicative
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit publish mints versions 1..n with author/note/hash; the diff pair[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 determinism + the diff fixture set: identical content → ide[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: 1,000 versions on one variant list by cursor (limit ≤ 10[39m[90m…[39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VisibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: internal → public through the door = high-visibility audi[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG A sole-writer sweep: Visibility.php is the ONLY file under[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WorkflowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: the matrix — submit → request changes (comment, back to d[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 self-publish collapse: edit+publish on one person publishe[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-10: with kb.require_alt on, a PUBLIC publish with an image la[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sole-writer sweep (the Doc 06 status-writer class): Transitions.[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WorkingCopyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit autosave: working copy + DB stamp, no version minted; recover re[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\KbEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six t[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: every kb.* event a Doc 10 job consumes durably carries[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\KbGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07/T-06 physics: kb_article_versions and kb_slug_history carr[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 10 table and both kb_chunks partitions are FORCE[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-B: kb_chunks is LIST-partitioned by audience into exactly p[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 3 + FLAG B: the ONLY non-PK unique on kb_chunks[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG-2 / FLAG B static sweep: no ON CONFLICT or upsert() in app/[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\KbOneIndexerDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every row the door writes carries strip provenance, and[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\AiGoldenConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: every golden dialog yields its expected action type (or i[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (the trap clause, task level): the transaction-fact trap N[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Golden\RgDistressAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f[39m[90m…[39m [90m2.71s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a non-fixture user payload outside production — the plan[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the refusal is leak-proof: the exception message never carries t[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows a fixture-tagged user payload outside production[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit system-role content is exempt (operator/platform material, never[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an untagged embeddings input and allows a tagged one[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses non-string user content without a tag anywhere in it (ov[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit production is the carve-out: untagged payloads flow (the only en[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\PublishRetireRoundTripTest[22m [90m>[39m it binds the resolv…   
+[39;1m  Failed asserting that an instance of class App\Domain\Kb\Tombstones\VersionedCitationResolver is an instance of class App\Domain\Kb\Tombstones\ChunkStateCitationResolver.[39;22m
+
+  at [32mtests/Feature/Kb/PublishRetireRoundTripTest.php[39m:[32m48[39m
+     44▕     config(['ai.default_routing.embeddings' => [['provider' => 'fake-embed', 'model' => 'e']]]);
+     45▕ }
+     46▕ 
+     47▕ it('binds the resolver contract to the chunk-state implementation (step 1; step 7 rebinds behind the same interface)', function (): void {
+  ➜  48▕     expect(app(CitationResolver::class))->toBeInstanceOf(ChunkStateCitationResolver::class);
+     49▕ });
+     50▕ 
+     51▕ it('round trip: index → served + Current → retire → not served, row survives, Retired (never 404) → app DELETE refused → unknown ref resolves Unknown', function (): void {
+     52▕     $tenant = createTenant();
+
+  [33m1   [39m[39;1mtests/Feature/Kb/PublishRetireRoundTripTest.php[39;22m:[39;1m48[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m69 passed[39;22m[90m (1223 assertions)[39m
+  [90mDuration:[39m [39m13.62s[39m
+

@@ -99,6 +99,10 @@ final class ArticleWriter
                 $variantRow['slug'] = $this->uniqueSlug($slug, $variant->language, $variant->id);
             }
             if ($variantRow !== []) {
+                // T-06/EC-06: a slug change keeps the OLD slug alive in kb_slug_history (append-only) — old URLs redirect.
+                if (isset($variantRow['slug']) && $variantRow['slug'] !== $variant->slug) {
+                    DB::table('kb_slug_history')->insert(['id' => (string) new UuidV7, 'tenant_id' => $this->context->tenantId(), 'article_id' => $variant->article_id, 'variant_id' => $variant->id, 'language' => $variant->language, 'slug' => $variant->slug]);
+                }
                 DB::table('kb_article_variants')->where('id', $variant->id)->update($variantRow + ['updated_at' => DB::raw('clock_timestamp()')]);
             }
             $articleRow = [];

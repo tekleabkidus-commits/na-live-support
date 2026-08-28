@@ -145,6 +145,12 @@ Route::middleware([
         ->middleware('permission:kb.articles.edit')->name('kb.versions.diff');
     Route::post('versions/{versionId}/restore', [App\Http\Controllers\Kb\KbVersionController::class, 'restore'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.restored'])->name('kb.versions.restore');
+
+    // S10 step 7 — the tombstone/citation resolve doors (FR-16/T-06/EC-06/EC-07/SS-04; the widget/Telegram renderers consume the same resolvers).
+    Route::get('cite/{articleId}/{versionId}', [App\Http\Controllers\Kb\KbResolveController::class, 'citation'])
+        ->middleware('permission:tickets.view')->name('kb.resolve.citation');
+    Route::get('resolve/{language}/{slug}', [App\Http\Controllers\Kb\KbResolveController::class, 'slug'])
+        ->middleware('permission:tickets.view')->name('kb.resolve.slug');
 });
 
 // Doc 09 FR-18 — the AI Backoffice (S09 step 12, Option A [B8]). Same staff
