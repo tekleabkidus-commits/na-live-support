@@ -122,6 +122,7 @@ return [
     'kb.editor.lock.acquire' => 'Doc 10 T-07: a TTL presence key in redis-volatile (the inbox.status.heartbeat precedent); the TAKEOVER door audits both parties.',
     'kb.editor.lock.heartbeat' => 'Doc 10 T-07: a TTL refresh in redis-volatile — no durable state mutates.',
     'kb.editor.lock.release' => 'Doc 10 T-07: releasing one\'s own presence key — no durable state mutates.',
+    'kb.insert_link' => 'Doc 10 FR-12 (S10 step 7b): the act is EVENTED (kb.article.inserted_by_agent through the outbox — Doc 15 counts it); an audit row per composer insert would duplicate the analytics stream for a non-privileged, non-destructive act.',
     'kb.workflow.publish' => 'Doc 10 FR-07 (S10 step 4): ONE door, TWO audit names — Transitions::publish writes kb.variant.published (approve) OR kb.variant.self_published (the collapsed review) itself, plus kb.sanitizer.overridden when BR-06 applies; a single declared key cannot name both (the ConfigVersions::publish precedent).',
     'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',

@@ -151,6 +151,10 @@ Route::middleware([
         ->middleware('permission:tickets.view')->name('kb.resolve.citation');
     Route::get('resolve/{language}/{slug}', [App\Http\Controllers\Kb\KbResolveController::class, 'slug'])
         ->middleware('permission:tickets.view')->name('kb.resolve.slug');
+
+    // S10 step 7b packet P3: the insert-as-link ACT (FR-14's own key gates the insert; the event, not the render).
+    Route::post('insert-link', [App\Http\Controllers\Kb\KbInsertLinkController::class, 'store'])
+        ->middleware('permission:ai.copilot.insert_draft')->name('kb.insert_link');
 });
 
 // Doc 09 FR-18 — the AI Backoffice (S09 step 12, Option A [B8]). Same staff

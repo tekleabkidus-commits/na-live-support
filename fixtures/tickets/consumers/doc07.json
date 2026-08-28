@@ -1,7 +1,7 @@
 {
   "doc": "Doc07",
-  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
-  "note": "TIGHTENED at S07 step 2 (the fixture's own rule: the consuming session tightens when it builds). The ListProjector is RECOMPUTE-FROM-TRUTH: an event is a TRIGGER naming which tickets to recompute; every VALUE is re-read from canonical rows, so the read-slice per ticket.* event is the id set only. Two entries stay at Doc 06's curated slice pending their consumer: ticket.bulk_completed and ticket.escalation_rerouted (the FR-26 bell fanout, S07 step 12 \u2014 they tighten in that commit). A producer removing or renaming any `reads` key still breaks this document; a schema_version bump here must be reconciled deliberately.",
+  "spec": "Doc 06 NFR-06/T-09 — consumer contract (S22 step 8)",
+  "note": "TIGHTENED at S07 step 2 (the fixture's own rule: the consuming session tightens when it builds). The ListProjector is RECOMPUTE-FROM-TRUTH: an event is a TRIGGER naming which tickets to recompute; every VALUE is re-read from canonical rows, so the read-slice per ticket.* event is the id set only. Two entries stay at Doc 06's curated slice pending their consumer: ticket.bulk_completed and ticket.escalation_rerouted (the FR-26 bell fanout, S07 step 12 — they tighten in that commit). A producer removing or renaming any `reads` key still breaks this document; a schema_version bump here must be reconciled deliberately.",
   "entries": [
     {
       "event": "ticket.assigned",

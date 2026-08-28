@@ -17,10 +17,17 @@ use Throwable;
  * vector is available (sidecar down, FS-02 posture) the keyword half
  * serves alone and the result says so — the caller's grounding rule does
  * the rest (no citation, no answer).
+ *
+ * S10 step 7 (STOP-B packet, countersigned): the TABLE is a constructor fact.
+ * The chatbot path is bound to the PUBLIC PARTITION `kb_chunks_public` (the
+ * Doc 10 KbServiceProvider's contextual binding for ChatbotTurn) — a partition
+ * cannot yield an internal row, so `includeInternal` is meaningless there and
+ * no parameter on that path can widen it; Copilot keeps the parent.
  */
 final class HybridRetriever
 {
-    public function __construct(private readonly AiOrchestrator $orchestrator) {}
+    /** @param literal-string $table */
+    public function __construct(private readonly AiOrchestrator $orchestrator, private readonly string $table = 'kb_chunks') {}
 
     /**
      * @param  list<string>  $languages  the fallback chain, most specific first
@@ -36,7 +43,7 @@ final class HybridRetriever
             $vector = null;
         }
 
-        $builder = DB::table('kb_chunks')
+        $builder = DB::table($this->table)
             ->where('retrievable', true)
             ->where('ai_usable', true)
             ->whereIn('language', $languages === [] ? ['en'] : $languages);

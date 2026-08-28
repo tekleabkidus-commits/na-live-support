@@ -53,6 +53,7 @@ final class Transitions
             $this->expect($variant->status, ['draft'], 'submit');
             DB::update('UPDATE kb_article_variants SET status = ?, submitted_at = clock_timestamp(), updated_at = clock_timestamp() WHERE id = ?', ['in_review', $variantId]);
             $this->audit->record('kb.variant.submitted', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => 'draft'], 'new' => ['status' => 'in_review']], actorId: $actorId);
+            $this->events->publish('kb.variant.submitted', ['tenant_id' => $this->context->tenantId(), 'article_id' => $variant->article_id, 'variant_id' => $variantId, 'actor_id' => $actorId]); // P4 (A-44 amendment)
         });
     }
 
@@ -61,8 +62,9 @@ final class Transitions
         DB::transaction(function () use ($variantId, $actorId, $comment, $blockAnchor): void {
             $variant = $this->lock($variantId);
             $this->expect($variant->status, ['in_review'], 'request changes');
-            $this->comments->add($variantId, $variant->current_version_id, $blockAnchor, $comment, $actorId);
+            $commentId = $this->comments->add($variantId, $variant->current_version_id, $blockAnchor, $comment, $actorId);
             DB::update('UPDATE kb_article_variants SET status = ?, updated_at = clock_timestamp() WHERE id = ?', ['draft', $variantId]);
+            $this->events->publish('kb.variant.changes_requested', ['tenant_id' => $this->context->tenantId(), 'article_id' => $variant->article_id, 'variant_id' => $variantId, 'actor_id' => $actorId, 'comment_id' => $commentId]); // P4 (A-44 amendment)
             $this->audit->record('kb.variant.changes_requested', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => 'in_review'], 'new' => ['status' => 'draft']], actorId: $actorId);
         });
     }

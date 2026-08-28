@@ -24,5 +24,10 @@ final class KbServiceProvider extends ServiceProvider
         // run sentence by sentence — ONE shared package, one rule set, one fixture suite.
         // Sabotage #7 rebinds UnboundSanitizer here and AC-05 goes red.
         $this->app->bind(\App\Domain\Kb\Sanitizer\PublishSanitizer::class, \App\Domain\Kb\Sanitizer\SharedPublishSanitizer::class);
+        // STOP-B (S10 step 7b, packet P1 countersigned): the chatbot's retriever is bound to the
+        // PUBLIC PARTITION by table name — a constructor fact, no widening parameter on that path.
+        $this->app->when(\App\Domain\Ai\Chatbot\ChatbotTurn::class)
+            ->needs(\App\Domain\Ai\Retrieval\HybridRetriever::class)
+            ->give(static fn (\Illuminate\Contracts\Foundation\Application $app): \App\Domain\Ai\Retrieval\HybridRetriever => new \App\Domain\Ai\Retrieval\HybridRetriever($app->make(\App\Domain\Ai\Orchestrator\AiOrchestrator::class), 'kb_chunks_public'));
     }
 }

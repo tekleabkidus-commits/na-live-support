@@ -9,6 +9,10 @@ use InvalidArgumentException;
 /**
  * FR-01's task catalog — the twelve v1 tasks, CLOSED (matching
  * ai_decisions' task CHECK; both grow only by migration + amendment).
+ * S10 step 7b (packet P5, a filed SCHEMA AMENDMENT 3 addition, countersigned):
+ * FIFTEEN — Doc 10 FR-06's three staff-only authoring tasks join
+ * (kb_draft_from_source, kb_faq_variants, kb_draft_from_conversations);
+ * Doc 10's Translate rides `translate`, Simplify rides `improve_text`.
  * Each declares tier (fast = classification-grade, strong =
  * drafting-grade), max_tokens, timeout, retries, and whether output is
  * customer-visible (the stricter guardrail set — FR-01's own axis).
@@ -29,6 +33,10 @@ final class TaskCatalog
         'qa_prescore' => ['tier' => 'fast', 'max_tokens' => 300, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
         'daily_digest' => ['tier' => 'strong', 'max_tokens' => 800, 'timeout_s' => 60, 'retries' => 1, 'customer_visible' => false],
         'anomaly_scan' => ['tier' => 'fast', 'max_tokens' => 400, 'timeout_s' => 60, 'retries' => 1, 'customer_visible' => false],
+        // Doc 10 FR-06 (S10 packet P5): staff-only authoring — AI assists, humans publish (BR-02).
+        'kb_draft_from_source' => ['tier' => 'strong', 'max_tokens' => 1200, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
+        'kb_faq_variants' => ['tier' => 'fast', 'max_tokens' => 400, 'timeout_s' => 15, 'retries' => 1, 'customer_visible' => false],
+        'kb_draft_from_conversations' => ['tier' => 'strong', 'max_tokens' => 1200, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
     ];
 
     /** @return array{tier: string, max_tokens: int, timeout_s: int, retries: int, customer_visible: bool} */

@@ -391,6 +391,22 @@ final class ListProjector
             'ai.digest.ready' => ($to = self::strOr($payload, 'recipient_id')) !== '' && in_array($to, $this->holdersOf('reports.supervisor.live', []), true)
                 ? [[$to, 'notify.ai.digest', null, ['decision_id' => self::strOr($payload, 'decision_id')]]]
                 : [],
+            // ── S10 step 7b packet P4 (countersigned; the A-44 amendment's three kb events):
+            //    the S09 packet-2 shape — exact recipients, never the actor, identifiers only.
+            'kb.variant.submitted' => array_map(
+                fn (string $userId): array => [$userId, 'notify.kb.review_requested', null, [
+                    'article_id' => self::strOr($payload, 'article_id'), 'variant_id' => self::strOr($payload, 'variant_id'),
+                ]],
+                $this->holdersOf('kb.articles.publish', [self::strOr($payload, 'actor_id')]),
+            ),
+            'kb.variant.changes_requested' => ($to = $this->kbSubmitterOf(self::strOr($payload, 'variant_id'), self::strOr($payload, 'actor_id'))) !== null
+                ? [[$to, 'notify.kb.changes_requested', null, [
+                    'article_id' => self::strOr($payload, 'article_id'), 'variant_id' => self::strOr($payload, 'variant_id'), 'comment_id' => self::strOr($payload, 'comment_id'),
+                ]]]
+                : [],
+            'kb.lock.taken_over' => ($to = self::strOr($payload, 'previous_holder_id')) !== '' && $to !== self::strOr($payload, 'new_holder_id')
+                ? [[$to, 'notify.kb.lock_taken_over', null, ['variant_id' => self::strOr($payload, 'variant_id')]]]
+                : [],
             // ai.provider.health_changed is DELIBERATELY not an arm: Doc 07's
             // health banner reads it live; a bell row per flap would be noise.
             default => [],
@@ -407,6 +423,15 @@ final class ListProjector
                 'payload' => json_encode(['event_id' => $eventId] + $extra, JSON_THROW_ON_ERROR),
             ]);
         }
+    }
+
+    /** P4: the variant's SUBMITTER (the latest kb.variant.submitted audit actor) — the payload stays the countersigned five keys. */
+    private function kbSubmitterOf(string $variantId, string $actorId): ?string
+    {
+        /** @var object{actor_id: string|null}|null $row */
+        $row = DB::table('audit_log')->where('action_key', 'kb.variant.submitted')->where('entity_id', $variantId)->orderByDesc('occurred_at')->first(['actor_id']);
+
+        return $row === null || ! is_string($row->actor_id) || $row->actor_id === '' || $row->actor_id === $actorId ? null : $row->actor_id;
     }
 
     /**

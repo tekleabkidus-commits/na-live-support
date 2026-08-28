@@ -20,6 +20,7 @@ use App\Domain\Ai\Retrieval\HybridRetriever;
 use App\Domain\Conversations\Adapters\AdapterRegistry;
 use App\Domain\Conversations\Adapters\SupportsTyping;
 use App\Domain\Conversations\Outbound\ComposeOutbound;
+use App\Domain\Kb\Tombstones\CitationLinks;
 use App\Models\Conversation;
 use App\Support\Events\EventPublisher;
 use App\Support\Settings\SettingsRepository;
@@ -80,6 +81,7 @@ final class ChatbotTurn
         private readonly ConfigVersions $configs,
         private readonly BlockedTopics $blockedTopics,
         private readonly FlowStateProvider $flows,
+        private readonly CitationLinks $citationLinks, // S10 step 7b packet P2 (countersigned): version-pinned citation URLs
         private readonly AdapterRegistry $adapters,
         private readonly SettingsRepository $settings,
         private readonly FirstGreeting $greeting,
@@ -230,6 +232,7 @@ final class ChatbotTurn
             $citations = is_array($payload['citations'] ?? null) ? array_values(array_filter($payload['citations'], 'is_string')) : [];
             $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversationId, $language, $this->renderAnswer($conversation, $answerText, $citations)), 'answer:'.$classificationDecisionId);
             $decisionId = $this->log($classificationDecisionId, $conversation, $messageId, $language, $classification, $assembled, $result, 'answer', null, $started, ['citations' => $citations, 'kb_shown' => $citations]);
+            $this->citedByAi($citations, $conversationId, $decisionId, $language);
 
             return ['action' => 'answer', 'decision_id' => $decisionId];
         }
@@ -324,6 +327,27 @@ final class ChatbotTurn
     }
 
     /**
+     * S10 packet P2 (Doc 10 FR-12): kb.article.cited_by_ai per Doc 10 article cited — identifiers
+     * only, through the outbox in a transaction; refs with no article row (fixtures) emit nothing;
+     * no citation → no event (the negative control).
+     *
+     * @param  list<string>  $citations
+     */
+    private function citedByAi(array $citations, string $conversationId, string $decisionId, string $language): void
+    {
+        foreach ($citations as $ref) {
+            $link = $this->citationLinks->forArticle($ref, $language);
+            if ($link === null) {
+                continue;
+            }
+            DB::transaction(fn () => $this->events->publish('kb.article.cited_by_ai', [
+                'tenant_id' => $this->context->tenantId(), 'article_id' => $ref, 'version_id' => $link['version_id'],
+                'conversation_id' => $conversationId, 'decision_id' => $decisionId,
+            ]));
+        }
+    }
+
+    /**
      * FR-27/T-04: citations render per channel capability — trailing links when no buttons.
      *
      * @param  list<string>  $citations
@@ -333,7 +357,14 @@ final class ChatbotTurn
         if ($citations === []) {
             return $text;
         }
-        $lines = array_map(static fn (string $ref): string => '📄 '.$ref, $citations);
+        // S10 packet P2 (Doc 10 FR-14/T-06): a Doc 10 article renders as its version-pinned
+        // URL; a ref with no article row (the golden fixtures) keeps the bare ref — the control.
+        $language = is_string($conversation->getAttribute('language')) ? $conversation->getAttribute('language') : null;
+        $lines = array_map(function (string $ref) use ($language): string {
+            $link = $this->citationLinks->forArticle($ref, $language);
+
+            return '📄 '.($link === null ? $ref : $link['url']);
+        }, $citations);
 
         return $text."\n\n".implode("\n", $lines);
     }

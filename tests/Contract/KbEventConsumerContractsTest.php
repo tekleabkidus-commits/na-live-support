@@ -19,13 +19,18 @@ use App\Support\Events\EventCatalog;
 |    is deliberately EMPTY (fixtures/tickets/consumers/doc10.json).
 */
 
+// S10 step 7b packet P4: the A-44 amendment GREW the family 6 → 9 (submitted /
+// changes_requested / lock.taken_over — the notification arms' triggers).
 const KB_EVENT_FAMILY = [
     'kb.article.cited_by_ai',
     'kb.article.inserted_by_agent',
     'kb.article.published',
     'kb.article.viewed',
     'kb.feedback.received',
+    'kb.lock.taken_over',
     'kb.retrieval.updated',
+    'kb.variant.changes_requested',
+    'kb.variant.submitted',
 ];
 
 const KB_FORBIDDEN_PAYLOAD_KEYS = ['content', 'body', 'text', 'summary', 'title', 'excerpt', 'comment', 'blocks'];
@@ -44,7 +49,7 @@ it('FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six the plan enum
     $registered = array_values(array_intersect(KB_EVENT_FAMILY, $catalogued));
     // Steps 4/6 register the two retrieval-side events; steps 10/11 add the four analytics events. The family never grows past six.
     expect(array_diff($catalogued, KB_EVENT_FAMILY))->toBe([], 'a kb.* event outside the closed family: '.implode(', ', array_diff($catalogued, KB_EVENT_FAMILY)));
-    expect($registered)->toContain('kb.article.published')->toContain('kb.retrieval.updated');
+    expect($registered)->toContain('kb.article.published')->toContain('kb.retrieval.updated')->toContain('kb.variant.submitted')->toContain('kb.lock.taken_over')->toContain('kb.article.cited_by_ai')->toContain('kb.article.inserted_by_agent');
     foreach ($catalogued as $name) {
         $definition = EventCatalog::definition($name);
         expect(array_intersect($definition['payload'], KB_FORBIDDEN_PAYLOAD_KEYS))->toBe([], $name.' carries text on the bus');

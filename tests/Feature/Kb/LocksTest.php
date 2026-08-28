@@ -57,7 +57,7 @@ it('FS-05: with the lock service down every lock door answers mode=optimistic (n
             throw new RuntimeException('connection refused');
         }
     };
-    app()->instance(Locks::class, new Locks(app(App\Support\Tenancy\TenantContext::class), $dead, app(App\Support\Settings\SettingsRepository::class), app(App\Support\Audit\AuditLogger::class)));
+    app()->instance(Locks::class, new Locks(app(App\Support\Tenancy\TenantContext::class), $dead, app(App\Support\Settings\SettingsRepository::class), app(App\Support\Audit\AuditLogger::class), app(App\Support\Events\EventPublisher::class)));
 
     $this->actingAs($admin, 'staff')->postJson('https://localhost/admin/kb/variants/'.$variantId.'/lock')->assertOk()->assertJson(['mode' => 'optimistic', 'acquired' => false]);
     $this->actingAs($admin, 'staff')->postJson('https://localhost/admin/kb/variants/'.$variantId.'/lock/heartbeat')->assertOk()->assertJson(['mode' => 'optimistic']);

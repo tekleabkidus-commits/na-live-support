@@ -6,6 +6,7 @@ namespace App\Domain\Kb\Editor;
 
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
+use App\Support\Events\EventPublisher;
 use App\Support\Settings\SettingsRepository;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Contracts\Redis\Factory as RedisFactory;
@@ -26,6 +27,7 @@ final class Locks
         private readonly RedisFactory $redis,
         private readonly SettingsRepository $settings,
         private readonly AuditLogger $audit,
+        private readonly EventPublisher $events,
     ) {}
 
     private function key(string $variantId): string
@@ -110,10 +112,13 @@ final class Locks
             throw new LockUnavailable('lock service unavailable (FS-05)', previous: $e);
         }
         $payload = ['variant_id' => $variantId, 'previous_holder_id' => $previous, 'new_holder_id' => $userId];
-        $this->audit->record('kb.lock.taken_over', 'kb_article_variant', $variantId, AuditActor::Staff, $payload + ['party' => 'taker'], actorId: $userId);
-        if ($previous !== null && $previous !== $userId) {
-            $this->audit->record('kb.lock.taken_over', 'kb_article_variant', $variantId, AuditActor::Staff, $payload + ['party' => 'holder'], actorId: $previous);
-        }
+        \Illuminate\Support\Facades\DB::transaction(function () use ($payload, $variantId, $userId, $previous): void {
+            $this->audit->record('kb.lock.taken_over', 'kb_article_variant', $variantId, AuditActor::Staff, $payload + ['party' => 'taker'], actorId: $userId);
+            if ($previous !== null && $previous !== $userId) {
+                $this->audit->record('kb.lock.taken_over', 'kb_article_variant', $variantId, AuditActor::Staff, $payload + ['party' => 'holder'], actorId: $previous);
+                $this->events->publish('kb.lock.taken_over', ['tenant_id' => $this->context->tenantId(), 'variant_id' => $variantId, 'previous_holder_id' => $previous, 'new_holder_id' => $userId]); // P4 (A-44 amendment)
+            }
+        });
 
         return $previous;
     }

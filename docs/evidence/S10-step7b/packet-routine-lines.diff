@@ -1,0 +1,125 @@
+diff --git a/app/Support/Events/ConsumerRegistry.php b/app/Support/Events/ConsumerRegistry.php
+index e0695e9..9c9c261 100644
+--- a/app/Support/Events/ConsumerRegistry.php
++++ b/app/Support/Events/ConsumerRegistry.php
+@@ -63,6 +63,10 @@ final class ConsumerRegistry
+         // S09 packet 2 (countersigned): Doc 09's notification categories reach the bell
+         // through Doc 07's projector — kill-switch flips, anomaly alerts, digests.
+         // ai.provider.health_changed is DELIBERATELY NOT projected (Doc 07's banner reads it).
++        // S10 step 7b packet P4: the three kb notification arms (the A-44 amendment's events).
++        'kb.variant.submitted' => [ListProjectorConsumer::class],
++        'kb.variant.changes_requested' => [ListProjectorConsumer::class],
++        'kb.lock.taken_over' => [ListProjectorConsumer::class],
+         'ai.killswitch.changed' => [ListProjectorConsumer::class],
+         'ai.anomaly.detected' => [ListProjectorConsumer::class],
+         'ai.digest.ready' => [ListProjectorConsumer::class],
+diff --git a/app/Support/Events/EventCatalog.php b/app/Support/Events/EventCatalog.php
+index 8b8ac48..61f1ee8 100644
+--- a/app/Support/Events/EventCatalog.php
++++ b/app/Support/Events/EventCatalog.php
+@@ -828,6 +828,48 @@ final class EventCatalog
+             'consumers' => ['Doc10/KbIndexMaintenance', 'Doc10/TranslationState', 'Doc10/KbSearchIndexer', 'Doc15/Reporting', 'Doc17/Audit'],
+             'description' => 'Doc 10 FR-13: a variant was published — humans see it immediately; the index consumer chunks, sanitizes, embeds and swaps the retrieval generation; siblings recompute translation state (FR-03).',
+         ],
++        'kb.article.cited_by_ai' => [
++            'schema_version' => 1,
++            // P2 (S10 step 7b): one event per Doc 10 article the chatbot cited — the
++            // version pin makes SS-04's forensics a join, not a search.
++            'payload' => ['tenant_id', 'article_id', 'version_id', 'conversation_id', 'decision_id'],
++            'producers' => ['Doc09/ChatbotTurn'],
++            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
++            'description' => 'Doc 10 FR-12: the chatbot cited this article version in this conversation (deflection attribution joins on it — the formula is Doc 15\'s).',
++        ],
++        'kb.article.inserted_by_agent' => [
++            'schema_version' => 1,
++            // P3 (S10 step 7b): the agent's ACT — emitted by the Doc 10 insert-link door
++            // at the click, never on render (BR-01 untouched: inserting is not sending).
++            'payload' => ['tenant_id', 'article_id', 'version_id', 'conversation_id', 'agent_id'],
++            'producers' => ['Doc10/KbInsertLink'],
++            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
++            'description' => 'Doc 10 FR-12: an agent inserted this article as a link into the composer (Copilot FR-14).',
++        ],
++        // ── P4 (S10 step 7b): the A-44 amendment, GRANTED — kb.* 6 → 9. Identifiers only;
++        //    each emitted inside its door's existing transaction; the Doc 07 projector's
++        //    three arms deliver the registered notify.kb.* categories.
++        'kb.variant.submitted' => [
++            'schema_version' => 1,
++            'payload' => ['tenant_id', 'article_id', 'variant_id', 'actor_id'],
++            'producers' => ['Doc10/Transitions'],
++            'consumers' => ['Doc07/Inbox'],
++            'description' => 'Doc 10 FR-07: a variant entered review — reviewers (kb.articles.publish holders, minus the actor) get notify.kb.review_requested.',
++        ],
++        'kb.variant.changes_requested' => [
++            'schema_version' => 1,
++            'payload' => ['tenant_id', 'article_id', 'variant_id', 'actor_id', 'comment_id'],
++            'producers' => ['Doc10/Transitions'],
++            'consumers' => ['Doc07/Inbox'],
++            'description' => 'Doc 10 FR-07: a reviewer sent a variant back with a comment — the submitter (resolved from the audit trail) gets notify.kb.changes_requested.',
++        ],
++        'kb.lock.taken_over' => [
++            'schema_version' => 1,
++            'payload' => ['tenant_id', 'variant_id', 'previous_holder_id', 'new_holder_id'],
++            'producers' => ['Doc10/Locks'],
++            'consumers' => ['Doc07/Inbox'],
++            'description' => 'Doc 10 FR-05/T-07: an editing lock was taken over — the displaced holder gets notify.kb.lock_taken_over.',
++        ],
+         'kb.retrieval.updated' => [
+             'schema_version' => 1,
+             // FR-13: emitted after the ONE-statement generation swap (or a retire);
+diff --git a/fixtures/tickets/consumers/doc07.json b/fixtures/tickets/consumers/doc07.json
+index aa23d52..4f42f6e 100644
+--- a/fixtures/tickets/consumers/doc07.json
++++ b/fixtures/tickets/consumers/doc07.json
+@@ -1,7 +1,7 @@
+ {
+   "doc": "Doc07",
+-  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+-  "note": "TIGHTENED at S07 step 2 (the fixture's own rule: the consuming session tightens when it builds). The ListProjector is RECOMPUTE-FROM-TRUTH: an event is a TRIGGER naming which tickets to recompute; every VALUE is re-read from canonical rows, so the read-slice per ticket.* event is the id set only. Two entries stay at Doc 06's curated slice pending their consumer: ticket.bulk_completed and ticket.escalation_rerouted (the FR-26 bell fanout, S07 step 12 \u2014 they tighten in that commit). A producer removing or renaming any `reads` key still breaks this document; a schema_version bump here must be reconciled deliberately.",
++  "spec": "Doc 06 NFR-06/T-09 — consumer contract (S22 step 8)",
++  "note": "TIGHTENED at S07 step 2 (the fixture's own rule: the consuming session tightens when it builds). The ListProjector is RECOMPUTE-FROM-TRUTH: an event is a TRIGGER naming which tickets to recompute; every VALUE is re-read from canonical rows, so the read-slice per ticket.* event is the id set only. Two entries stay at Doc 06's curated slice pending their consumer: ticket.bulk_completed and ticket.escalation_rerouted (the FR-26 bell fanout, S07 step 12 — they tighten in that commit). A producer removing or renaming any `reads` key still breaks this document; a schema_version bump here must be reconciled deliberately.",
+   "entries": [
+     {
+       "event": "ticket.assigned",
+@@ -220,6 +220,40 @@
+         "tenant_id",
+         "ticket_id"
+       ]
++    },
++    {
++      "event": "kb.variant.submitted",
++      "consumer": "Doc07/Inbox",
++      "schema_version": 1,
++      "reads": [
++        "tenant_id",
++        "article_id",
++        "variant_id",
++        "actor_id"
++      ]
++    },
++    {
++      "event": "kb.variant.changes_requested",
++      "consumer": "Doc07/Inbox",
++      "schema_version": 1,
++      "reads": [
++        "tenant_id",
++        "article_id",
++        "variant_id",
++        "actor_id",
++        "comment_id"
++      ]
++    },
++    {
++      "event": "kb.lock.taken_over",
++      "consumer": "Doc07/Inbox",
++      "schema_version": 1,
++      "reads": [
++        "tenant_id",
++        "variant_id",
++        "previous_holder_id",
++        "new_holder_id"
++      ]
+     }
+   ]
+-}
+\ No newline at end of file
++}

@@ -50,6 +50,7 @@ final class CopilotPanel
         private readonly HybridRetriever $retriever,
         private readonly SimilarTickets $similar,
         private readonly RealtimePusher $pusher,
+        private readonly \App\Domain\Kb\Tombstones\CitationLinks $citationLinks, // S10 packet P3 (countersigned): title + version-pinned url on the KB card
     ) {}
 
     /** @return array<string, mixed> */
@@ -117,7 +118,7 @@ final class CopilotPanel
         $kb = [];
         try {
             $retrieval = $this->retriever->retrieve($query, array_values(array_unique([$language, 'en'])), includeInternal: true, topK: 3);
-            $kb = array_map(static fn (array $c): array => ['article_ref' => $c['article_ref'], 'excerpt' => mb_substr($c['content'], 0, 160)], $retrieval['chunks']);
+            $kb = array_map(fn (array $c): array => ['article_ref' => $c['article_ref'], 'excerpt' => mb_substr($c['content'], 0, 160)] + ($this->citationLinks->forArticle($c['article_ref'], $language) ?? []), $retrieval['chunks']);
             if ($retrieval['degraded']) {
                 $notices[] = 'ai.copilot.notice.retrieval_degraded';
             }

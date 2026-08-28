@@ -74,7 +74,9 @@ it('STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php — every o
             // The prune deletes ONLY through the platform connection (the app role holds no DELETE).
             expect(str_contains($source, "DB::connection('pgsql_platform')"))->toBeTrue("{$path} deletes kb_chunks outside the platform connection");
         }
-        expect(preg_match('/\$table\s*=\s*[\'"]kb_chunks[\'"]/', $source))->toBe(0, "{$path} maps kb_chunks as an Eloquent model — a second door");
+        // The Eloquent convention is `protected $table` — a readonly constructor fact (P1's
+        // HybridRetriever table binding) is not a model mapping.
+        expect(preg_match('/protected\s+\$table\s*=\s*[\'"]kb_chunks[\'"]/', $source))->toBe(0, "{$path} maps kb_chunks as an Eloquent model — a second door");
     }
     expect($writers)->toBe(['app/Domain/Ai/Retrieval/KbIndexer.php'], 'a second route into kb_chunks exists: '.implode(', ', $writers))
         ->and($deleters)->toBe([KB_PLATFORM_DELETER], 'a deleter of kb_chunks beside the platform-role prune: '.implode(', ', $deleters));

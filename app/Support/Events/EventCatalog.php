@@ -828,6 +828,48 @@ final class EventCatalog
             'consumers' => ['Doc10/KbIndexMaintenance', 'Doc10/TranslationState', 'Doc10/KbSearchIndexer', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'Doc 10 FR-13: a variant was published — humans see it immediately; the index consumer chunks, sanitizes, embeds and swaps the retrieval generation; siblings recompute translation state (FR-03).',
         ],
+        'kb.article.cited_by_ai' => [
+            'schema_version' => 1,
+            // P2 (S10 step 7b): one event per Doc 10 article the chatbot cited — the
+            // version pin makes SS-04's forensics a join, not a search.
+            'payload' => ['tenant_id', 'article_id', 'version_id', 'conversation_id', 'decision_id'],
+            'producers' => ['Doc09/ChatbotTurn'],
+            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
+            'description' => 'Doc 10 FR-12: the chatbot cited this article version in this conversation (deflection attribution joins on it — the formula is Doc 15\'s).',
+        ],
+        'kb.article.inserted_by_agent' => [
+            'schema_version' => 1,
+            // P3 (S10 step 7b): the agent's ACT — emitted by the Doc 10 insert-link door
+            // at the click, never on render (BR-01 untouched: inserting is not sending).
+            'payload' => ['tenant_id', 'article_id', 'version_id', 'conversation_id', 'agent_id'],
+            'producers' => ['Doc10/KbInsertLink'],
+            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
+            'description' => 'Doc 10 FR-12: an agent inserted this article as a link into the composer (Copilot FR-14).',
+        ],
+        // ── P4 (S10 step 7b): the A-44 amendment, GRANTED — kb.* 6 → 9. Identifiers only;
+        //    each emitted inside its door's existing transaction; the Doc 07 projector's
+        //    three arms deliver the registered notify.kb.* categories.
+        'kb.variant.submitted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'actor_id'],
+            'producers' => ['Doc10/Transitions'],
+            'consumers' => ['Doc07/Inbox'],
+            'description' => 'Doc 10 FR-07: a variant entered review — reviewers (kb.articles.publish holders, minus the actor) get notify.kb.review_requested.',
+        ],
+        'kb.variant.changes_requested' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'actor_id', 'comment_id'],
+            'producers' => ['Doc10/Transitions'],
+            'consumers' => ['Doc07/Inbox'],
+            'description' => 'Doc 10 FR-07: a reviewer sent a variant back with a comment — the submitter (resolved from the audit trail) gets notify.kb.changes_requested.',
+        ],
+        'kb.lock.taken_over' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'variant_id', 'previous_holder_id', 'new_holder_id'],
+            'producers' => ['Doc10/Locks'],
+            'consumers' => ['Doc07/Inbox'],
+            'description' => 'Doc 10 FR-05/T-07: an editing lock was taken over — the displaced holder gets notify.kb.lock_taken_over.',
+        ],
         'kb.retrieval.updated' => [
             'schema_version' => 1,
             // FR-13: emitted after the ONE-statement generation swap (or a retire);

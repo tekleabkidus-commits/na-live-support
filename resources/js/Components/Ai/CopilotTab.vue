@@ -94,9 +94,25 @@ async function onDiscard(): Promise<void> {
     card.value = null;
 }
 
-function insertKbLink(ref_: string): void {
-    // FR-14 "insert-as-link": the article ref as a citation line (Doc 10 renders the link target).
-    props.insert('📄 ' + ref_, 'kb_link', '');
+async function insertKbLink(item: { article_ref: string; url?: string; title?: string; version_id?: string }): Promise<void> {
+    // FR-14 "insert-as-link" (S10 packet P3): the agent's ACT — Doc 10's door records it
+    // (kb.article.inserted_by_agent, on INSERT never on render) and returns the line to
+    // insert; a legacy ref with no article behind it still inserts the bare ref.
+    if (!item.url || !props.conversationId) {
+        props.insert('📄 ' + item.article_ref, 'kb_link', '');
+        return;
+    }
+    try {
+        const response = await fetch('/admin/kb/insert-link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
+            body: JSON.stringify({ article_id: item.article_ref, version_id: item.version_id, conversation_id: props.conversationId }),
+        });
+        const data = (await response.json()) as { text?: string };
+        props.insert(data.text ?? '📄 ' + (item.title ?? item.article_ref) + ' ' + item.url, 'kb_link', '');
+    } catch {
+        props.insert('📄 ' + (item.title ?? item.article_ref) + ' ' + item.url, 'kb_link', '');
+    }
 }
 
 const noticeText = (key: string): string =>
@@ -318,14 +334,14 @@ defineExpose({ loadPanel });
                         class="flex items-start gap-2 text-xs"
                     >
                         <span class="min-w-0 flex-1" :style="{ color: 'var(--ds-text-secondary)' }"
-                            ><span class="font-mono text-[10px]">{{ item.article_ref }}</span> —
+                            ><span v-if="item.title">{{ item.title }}</span><span v-else class="font-mono text-[10px]">{{ item.article_ref }}</span> —
                             {{ item.excerpt }}</span
                         >
                         <button
                             type="button"
                             class="shrink-0 underline"
                             :style="{ color: 'var(--ds-ai-fg)' }"
-                            @click="insertKbLink(item.article_ref)"
+                            @click="insertKbLink(item)"
                         >
                             {{ t.insert_link }}
                         </button>

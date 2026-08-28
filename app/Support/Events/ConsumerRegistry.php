@@ -63,6 +63,10 @@ final class ConsumerRegistry
         // S09 packet 2 (countersigned): Doc 09's notification categories reach the bell
         // through Doc 07's projector — kill-switch flips, anomaly alerts, digests.
         // ai.provider.health_changed is DELIBERATELY NOT projected (Doc 07's banner reads it).
+        // S10 step 7b packet P4: the three kb notification arms (the A-44 amendment's events).
+        'kb.variant.submitted' => [ListProjectorConsumer::class],
+        'kb.variant.changes_requested' => [ListProjectorConsumer::class],
+        'kb.lock.taken_over' => [ListProjectorConsumer::class],
         'ai.killswitch.changed' => [ListProjectorConsumer::class],
         'ai.anomaly.detected' => [ListProjectorConsumer::class],
         'ai.digest.ready' => [ListProjectorConsumer::class],

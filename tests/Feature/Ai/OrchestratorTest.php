@@ -26,11 +26,12 @@ beforeEach(function (): void {
     Cache::flush();
 });
 
-it('FR-01: the task catalog is CLOSED at twelve, matching the ai_decisions CHECK list exactly', function (): void {
+it('FR-01: the task catalog is CLOSED at fifteen (twelve + Doc 10 FR-06\'s three by the S10 packet-P5 amendment), matching the ai_decisions CHECK list exactly', function (): void {
     expect(array_keys(TaskCatalog::TASKS))->toBe([
         'classify_message', 'chatbot_turn', 'draft_reply', 'improve_text',
         'summarize_thread', 'translate', 'transcribe_voice', 'ocr_receipt',
         'generate_subject', 'qa_prescore', 'daily_digest', 'anomaly_scan',
+        'kb_draft_from_source', 'kb_faq_variants', 'kb_draft_from_conversations',
     ])->and(fn () => TaskCatalog::definition('invented_task'))->toThrow(InvalidArgumentException::class);
 });
 

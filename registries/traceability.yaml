@@ -2259,17 +2259,23 @@ entries:
       [D19] staging half — the probe's assertion is the same test's, run on the
       staging schedule.
   - ac_ref: "Doc10 AC-04"
-    suite_path: tests/Security/KbOneIndexerDoorTest.php
+    suite_path: tests/Security/KbIndexSeparationTest.php
     type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      SEEDED AT S10 STEP 1 with the safety floor: the ONE-INDEXER-DOOR proof (static sweep — KbIndexer.php is the only writer of kb_chunks; runtime — every row carries strip provenance) is the precondition AC-04's "only sanitized, published content reachable" rests on.
-    gap: >-
-      PARTIAL: the chunk contract fields (article id, language, heading path, version id) and the STRUCTURAL internal/public separation flip at step 7 (tests/Security/KbIndexSeparationTest.php, the three-way T-08 proof per the STOP-B ruling).
+      COMPLETED AT S10 STEP 7b (packet P1, countersigned): chunks carry article
+      id, language, heading path and version id (FR-14, RetrievalTest); only
+      public+ai_usable+published content is reachable from the chatbot index —
+      STRUCTURALLY: the chatbot's retriever is bound to the kb_chunks_public
+      partition BY TABLE NAME (a constructor fact; no widening parameter on the
+      path), proven three ways incl. the falsification leg (a mis-written
+      includeInternal filter still yields no internal row) and statically
+      (ChatbotTurn never names includeInternal; reflection pins the bound
+      table). Sabotage #4 (rebound to the parent) executed red→restored.
   - ac_ref: "Doc10 AC-05"
     suite_path: tests/Feature/Kb/SanitizerTest.php
     type: automated

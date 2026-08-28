@@ -1,0 +1,29 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\KbIndexSeparationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit (a) physics + (b) Copilot + (c) the falsification: an internal c[39m[90m…[39m [90m6.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit static half: ChatbotTurn never names includeInternal, and the co[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\KbIndexSeparationTest[22m [90m>[39m it static half: ChatbotTur…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'kb_chunks_public'[39m[39;1m
+  [39;22m[32m+'kb_chunks'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/KbIndexSeparationTest.php[39m:[32m66[39m
+     62▕     bindTenant(createTenant());
+     63▕     $turn = app(ChatbotTurn::class);
+     64▕     $prop = (new ReflectionClass($turn))->getProperty('retriever');
+     65▕     $bound = $prop->getValue($turn);
+  ➜  66▕     expect((new ReflectionProperty($bound, 'table'))->getValue($bound))->toBe('kb_chunks_public');
+     67▕     expect((new ReflectionProperty(app(HybridRetriever::class), 'table'))->getValue(app(HybridRetriever::class)))->toBe('kb_chunks', 'Copilot and everyone else keep the parent');
+     68▕ });
+     69▕
+
+  [33m1   [39m[39;1mtests/Security/KbIndexSeparationTest.php[39;22m:[39;1m66[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m6.42s[39m
+
+EXIT 1

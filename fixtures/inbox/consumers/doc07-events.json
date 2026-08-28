@@ -130,6 +130,40 @@
         "decision_id",
         "recipient_id"
       ]
+    },
+    {
+      "event": "kb.variant.submitted",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "article_id",
+        "variant_id",
+        "actor_id"
+      ]
+    },
+    {
+      "event": "kb.variant.changes_requested",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "article_id",
+        "variant_id",
+        "actor_id",
+        "comment_id"
+      ]
+    },
+    {
+      "event": "kb.lock.taken_over",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "variant_id",
+        "previous_holder_id",
+        "new_holder_id"
+      ]
     }
   ]
 }

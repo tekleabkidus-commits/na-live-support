@@ -20,7 +20,7 @@ export type CopilotCard = {
     citations?: string[];
     confidence?: number;
     notices?: string[];
-    kb?: { article_ref: string; excerpt: string }[];
+    kb?: { article_ref: string; excerpt: string; url?: string; title?: string; version_id?: string }[];
     regenerations?: { used: number; limit: number };
     reason?: string;
     source_language?: string;
@@ -36,7 +36,7 @@ export type CopilotPanel = {
     } | null;
     summary: string | null;
     summary_state: 'refreshing' | 'fresh' | 'empty';
-    kb: { article_ref: string; excerpt: string }[];
+    kb: { article_ref: string; excerpt: string; url?: string; title?: string; version_id?: string }[];
     similar_tickets: {
         ticket_id: string;
         number: number | null;

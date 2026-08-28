@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-107 event(s).
+112 event(s).
 
 ## `agent.status_changed`
 
@@ -383,6 +383,24 @@ FR-22/FR-01: profile attributes changed (display_name, language, country, tags�
 - **Producers:** Doc08/CustomerProfile
 - **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
 
+## `kb.article.cited_by_ai`
+
+Doc 10 FR-12: the chatbot cited this article version in this conversation (deflection attribution joins on it — the formula is Doc 15's).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `version_id`, `conversation_id`, `decision_id`
+- **Producers:** Doc09/ChatbotTurn
+- **Consumers:** Doc10/Analytics, Doc15/Reporting
+
+## `kb.article.inserted_by_agent`
+
+Doc 10 FR-12: an agent inserted this article as a link into the composer (Copilot FR-14).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `version_id`, `conversation_id`, `agent_id`
+- **Producers:** Doc10/KbInsertLink
+- **Consumers:** Doc10/Analytics, Doc15/Reporting
+
 ## `kb.article.published`
 
 Doc 10 FR-13: a variant was published — humans see it immediately; the index consumer chunks, sanitizes, embeds and swaps the retrieval generation; siblings recompute translation state (FR-03).
@@ -392,6 +410,15 @@ Doc 10 FR-13: a variant was published — humans see it immediately; the index c
 - **Producers:** Doc10/Transitions
 - **Consumers:** Doc10/KbIndexMaintenance, Doc10/TranslationState, Doc10/KbSearchIndexer, Doc15/Reporting, Doc17/Audit
 
+## `kb.lock.taken_over`
+
+Doc 10 FR-05/T-07: an editing lock was taken over — the displaced holder gets notify.kb.lock_taken_over.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `variant_id`, `previous_holder_id`, `new_holder_id`
+- **Producers:** Doc10/Locks
+- **Consumers:** Doc07/Inbox
+
 ## `kb.retrieval.updated`
 
 Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) or was retired — Doc 09 caches invalidate; Doc 15 counts index freshness.
@@ -400,6 +427,24 @@ Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) o
 - **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `retrieval_generation`, `status`
 - **Producers:** Doc10/KbIndexMaintenance
 - **Consumers:** Doc09/Retrieval, Doc15/Reporting
+
+## `kb.variant.changes_requested`
+
+Doc 10 FR-07: a reviewer sent a variant back with a comment — the submitter (resolved from the audit trail) gets notify.kb.changes_requested.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `actor_id`, `comment_id`
+- **Producers:** Doc10/Transitions
+- **Consumers:** Doc07/Inbox
+
+## `kb.variant.submitted`
+
+Doc 10 FR-07: a variant entered review — reviewers (kb.articles.publish holders, minus the actor) get notify.kb.review_requested.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `actor_id`
+- **Producers:** Doc10/Transitions
+- **Consumers:** Doc07/Inbox
 
 ## `media.infected`
 

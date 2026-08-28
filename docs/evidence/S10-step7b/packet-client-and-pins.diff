@@ -1,0 +1,116 @@
+diff --git a/app/Domain/Ai/Orchestrator/TaskCatalog.php b/app/Domain/Ai/Orchestrator/TaskCatalog.php
+index b6991c0..4fc500e 100644
+--- a/app/Domain/Ai/Orchestrator/TaskCatalog.php
++++ b/app/Domain/Ai/Orchestrator/TaskCatalog.php
+@@ -9,6 +9,10 @@
+ /**
+  * FR-01's task catalog — the twelve v1 tasks, CLOSED (matching
+  * ai_decisions' task CHECK; both grow only by migration + amendment).
++ * S10 step 7b (packet P5, a filed SCHEMA AMENDMENT 3 addition, countersigned):
++ * FIFTEEN — Doc 10 FR-06's three staff-only authoring tasks join
++ * (kb_draft_from_source, kb_faq_variants, kb_draft_from_conversations);
++ * Doc 10's Translate rides `translate`, Simplify rides `improve_text`.
+  * Each declares tier (fast = classification-grade, strong =
+  * drafting-grade), max_tokens, timeout, retries, and whether output is
+  * customer-visible (the stricter guardrail set — FR-01's own axis).
+@@ -29,6 +33,10 @@ final class TaskCatalog
+         'qa_prescore' => ['tier' => 'fast', 'max_tokens' => 300, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
+         'daily_digest' => ['tier' => 'strong', 'max_tokens' => 800, 'timeout_s' => 60, 'retries' => 1, 'customer_visible' => false],
+         'anomaly_scan' => ['tier' => 'fast', 'max_tokens' => 400, 'timeout_s' => 60, 'retries' => 1, 'customer_visible' => false],
++        // Doc 10 FR-06 (S10 packet P5): staff-only authoring — AI assists, humans publish (BR-02).
++        'kb_draft_from_source' => ['tier' => 'strong', 'max_tokens' => 1200, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
++        'kb_faq_variants' => ['tier' => 'fast', 'max_tokens' => 400, 'timeout_s' => 15, 'retries' => 1, 'customer_visible' => false],
++        'kb_draft_from_conversations' => ['tier' => 'strong', 'max_tokens' => 1200, 'timeout_s' => 30, 'retries' => 1, 'customer_visible' => false],
+     ];
+ 
+     /** @return array{tier: string, max_tokens: int, timeout_s: int, retries: int, customer_visible: bool} */
+diff --git a/resources/js/Components/Ai/CopilotTab.vue b/resources/js/Components/Ai/CopilotTab.vue
+index 0cd66ab..07be864 100644
+--- a/resources/js/Components/Ai/CopilotTab.vue
++++ b/resources/js/Components/Ai/CopilotTab.vue
+@@ -94,9 +94,25 @@ async function onDiscard(): Promise<void> {
+     card.value = null;
+ }
+ 
+-function insertKbLink(ref_: string): void {
+-    // FR-14 "insert-as-link": the article ref as a citation line (Doc 10 renders the link target).
+-    props.insert('📄 ' + ref_, 'kb_link', '');
++async function insertKbLink(item: { article_ref: string; url?: string; title?: string; version_id?: string }): Promise<void> {
++    // FR-14 "insert-as-link" (S10 packet P3): the agent's ACT — Doc 10's door records it
++    // (kb.article.inserted_by_agent, on INSERT never on render) and returns the line to
++    // insert; a legacy ref with no article behind it still inserts the bare ref.
++    if (!item.url || !props.conversationId) {
++        props.insert('📄 ' + item.article_ref, 'kb_link', '');
++        return;
++    }
++    try {
++        const response = await fetch('/admin/kb/insert-link', {
++            method: 'POST',
++            headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
++            body: JSON.stringify({ article_id: item.article_ref, version_id: item.version_id, conversation_id: props.conversationId }),
++        });
++        const data = (await response.json()) as { text?: string };
++        props.insert(data.text ?? '📄 ' + (item.title ?? item.article_ref) + ' ' + item.url, 'kb_link', '');
++    } catch {
++        props.insert('📄 ' + (item.title ?? item.article_ref) + ' ' + item.url, 'kb_link', '');
++    }
+ }
+ 
+ const noticeText = (key: string): string =>
+@@ -318,14 +334,14 @@ defineExpose({ loadPanel });
+                         class="flex items-start gap-2 text-xs"
+                     >
+                         <span class="min-w-0 flex-1" :style="{ color: 'var(--ds-text-secondary)' }"
+-                            ><span class="font-mono text-[10px]">{{ item.article_ref }}</span> —
++                            ><span v-if="item.title">{{ item.title }}</span><span v-else class="font-mono text-[10px]">{{ item.article_ref }}</span> —
+                             {{ item.excerpt }}</span
+                         >
+                         <button
+                             type="button"
+                             class="shrink-0 underline"
+                             :style="{ color: 'var(--ds-ai-fg)' }"
+-                            @click="insertKbLink(item.article_ref)"
++                            @click="insertKbLink(item)"
+                         >
+                             {{ t.insert_link }}
+                         </button>
+diff --git a/resources/js/Components/Ai/copilotApi.ts b/resources/js/Components/Ai/copilotApi.ts
+index 36b89c3..a2f37cc 100644
+--- a/resources/js/Components/Ai/copilotApi.ts
++++ b/resources/js/Components/Ai/copilotApi.ts
+@@ -20,7 +20,7 @@ export type CopilotCard = {
+     citations?: string[];
+     confidence?: number;
+     notices?: string[];
+-    kb?: { article_ref: string; excerpt: string }[];
++    kb?: { article_ref: string; excerpt: string; url?: string; title?: string; version_id?: string }[];
+     regenerations?: { used: number; limit: number };
+     reason?: string;
+     source_language?: string;
+@@ -36,7 +36,7 @@ export type CopilotPanel = {
+     } | null;
+     summary: string | null;
+     summary_state: 'refreshing' | 'fresh' | 'empty';
+-    kb: { article_ref: string; excerpt: string }[];
++    kb: { article_ref: string; excerpt: string; url?: string; title?: string; version_id?: string }[];
+     similar_tickets: {
+         ticket_id: string;
+         number: number | null;
+diff --git a/tests/Feature/Ai/OrchestratorTest.php b/tests/Feature/Ai/OrchestratorTest.php
+index 6bda0eb..271897e 100644
+--- a/tests/Feature/Ai/OrchestratorTest.php
++++ b/tests/Feature/Ai/OrchestratorTest.php
+@@ -26,11 +26,12 @@ function fakeChainConfig(array $chain): void
+     Cache::flush();
+ });
+ 
+-it('FR-01: the task catalog is CLOSED at twelve, matching the ai_decisions CHECK list exactly', function (): void {
++it('FR-01: the task catalog is CLOSED at fifteen (twelve + Doc 10 FR-06\'s three by the S10 packet-P5 amendment), matching the ai_decisions CHECK list exactly', function (): void {
+     expect(array_keys(TaskCatalog::TASKS))->toBe([
+         'classify_message', 'chatbot_turn', 'draft_reply', 'improve_text',
+         'summarize_thread', 'translate', 'transcribe_voice', 'ocr_receipt',
+         'generate_subject', 'qa_prescore', 'daily_digest', 'anomaly_scan',
++        'kb_draft_from_source', 'kb_faq_variants', 'kb_draft_from_conversations',
+     ])->and(fn () => TaskCatalog::definition('invented_task'))->toThrow(InvalidArgumentException::class);
+ });
+ 
