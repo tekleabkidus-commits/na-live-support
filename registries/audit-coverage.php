@@ -1245,4 +1245,28 @@ return [
         'required_fields' => [],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 A-43 (S10 step 8): article delete is SOFT — the row survives, chunks retire, tombstones resolve.
+        'action_key' => 'kb.article.deleted',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['soft'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 §14 / FR-06 (S10 step 8): one-click AI-translate-all — the request, with the languages it queued.
+        'action_key' => 'kb.article.translate_all_requested',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['source_variant_id', 'languages', 'variant_ids'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-06 Translate variant (S10 step 8): the queued job wrote an AI draft's working copy (never a status).
+        'action_key' => 'kb.variant.ai_translated',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['system'],
+        'required_fields' => ['article_id', 'source_variant_id', 'language', 'decision_id'],
+        'owning_doc' => 'Doc10',
+    ],
 ];

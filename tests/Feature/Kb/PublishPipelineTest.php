@@ -56,7 +56,9 @@ function runPublishConsumer(string $variantId): string
 }
 
 it('ADR 0011: the consumer is REGISTERED for kb.article.published on the ai-background family', function (): void {
-    expect(ConsumerRegistry::consumersFor('kb.article.published'))->toBe([KbIndexMaintenanceConsumer::class]);
+    // S10 step 8: the FR-03 translation-state consumer joined the same event — the pin moves WITH the
+    // registry, same commit (the S07/S09 precedent). Index maintenance stays first; nothing else grows silently.
+    expect(ConsumerRegistry::consumersFor('kb.article.published'))->toBe([KbIndexMaintenanceConsumer::class, App\Jobs\Kb\KbTranslationStateConsumer::class]);
 });
 
 it('FR-13/T-05: publish → consumer → chunks (summary = chunk 0, heading paths), embedded, swapped in one statement, index current, kb.retrieval.updated emitted; the chatbot serves the new version with its version pin; unpublish retires', function (): void {

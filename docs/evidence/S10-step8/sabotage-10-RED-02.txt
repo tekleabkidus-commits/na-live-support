@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\TranslationStateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-02: the matrix — source publish → published siblings outdated[39m[90m…[39m [90m7.71s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-05: the OUTDATED exact-language variant serves (stale-but-pub[39m[90m…[39m [90m0.29s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\TranslationStateTest[22m [90m>[39m it BR-05: the OUTDATED ex…   
+[39;1m  BR-05: outdated am serves the am reader
+Failed asserting that two strings are identical.
+  [39;22m[31m-'01a048bd-1604-77f4-95e3-0323a43dbe43'[39m[39;1m
+  [39;22m[32m+'01a048bd-15dd-7a55-8a46-24cf74e31460'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/TranslationStateTest.php[39m:[32m74[39m
+     70▕     bindTenant($s['tenant']);
+     71▕     tsConsume($a['variant_id']);
+     72▕     $resolver = app(VariantForLanguage::class);
+     73▕     $served = $resolver->resolve($a['article_id'], ['am', 'en']);
+  ➜  74▕     expect($served['variant_id'])->toBe($am->json('variant_id'), 'BR-05: outdated am serves the am reader')
+     75▕         ->and($served['translation_state'])->toBe('outdated')->and($served['served_language_matches'])->toBeTrue();
+     76▕     $missing = $resolver->resolve($a['article_id'], ['om', 'en']);
+     77▕     expect($missing['variant_id'])->toBe($a['variant_id'], 'missing om falls back down the chain')->and($missing['served_language_matches'])->toBeFalse();
+     78▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Kb/TranslationStateTest.php[39;22m:[39;1m74[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (23 assertions)[39m
+  [90mDuration:[39m [39m8.06s[39m
+
+EXIT 1

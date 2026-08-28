@@ -33,7 +33,7 @@ it('FR-02/BR-03/§14: an Amharic-first article gets a transliterated slug, varia
     bindTenant($s['tenant']);
 
     $columns = array_map(fn ($r) => $r->column_name, DB::select("SELECT column_name FROM information_schema.columns WHERE table_name = 'kb_article_variants'"));
-    expect($columns)->not->toContain('audience', 'BR-03 is physics: no per-variant audience column exists');
+    expect($columns)->not->toContain('audience'); // BR-03 is physics: no per-variant audience column exists
     DB::table('kb_article_variants')->where('id', $en->json('variant_id'))->update(['status' => 'published']);
     $shown = $this->actingAs($admin, 'staff')->getJson('https://localhost/admin/kb/articles/'.$created->json('article_id'));
     expect(array_column($shown->json('variants'), 'status', 'language'))->toBe(['am' => 'draft', 'en' => 'published'])

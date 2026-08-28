@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Kb\Articles;
 
+use App\Domain\Ai\Retrieval\KbIndexer;
 use App\Domain\Kb\Categories\CategoryTree;
 use App\Domain\Kb\Slug\Slugger;
 use App\Support\Audit\AuditActor;
@@ -31,6 +32,7 @@ final class ArticleWriter
         private readonly AuditLogger $audit,
         private readonly Slugger $slugger,
         private readonly CategoryTree $categories,
+        private readonly KbIndexer $indexer,
     ) {}
 
     /**
@@ -135,6 +137,19 @@ final class ArticleWriter
                 $this->categories->applyAiUsable($articleId, (bool) $target->ai_usable);
             }
             $this->audit->record('kb.article.moved', 'kb_article', $articleId, AuditActor::Staff, ['old' => ['category_id' => $article->category_id], 'new' => ['category_id' => $categoryId], 'ai_usable_changed' => (bool) $target->ai_usable !== $sourceUsable], actorId: $actorId);
+        });
+    }
+
+    /** A-43 (approved): SOFT delete — the row survives (grant physics forbids DELETE), chunks retire, tombstones keep resolving. */
+    public function delete(string $articleId, string $actorId): void
+    {
+        DB::transaction(function () use ($articleId, $actorId): void {
+            $updated = DB::table('kb_articles')->where('id', $articleId)->whereNull('deleted_at')->update(['deleted_at' => DB::raw('clock_timestamp()'), 'updated_at' => DB::raw('clock_timestamp()')]);
+            if ($updated === 0) {
+                throw new InvalidArgumentException('unknown article');
+            }
+            $this->indexer->retire($articleId);
+            $this->audit->record('kb.article.deleted', 'kb_article', $articleId, AuditActor::Staff, ['soft' => true], actorId: $actorId);
         });
     }
 

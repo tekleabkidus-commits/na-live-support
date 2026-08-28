@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\WorkflowTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit sole-writer sweep (the Doc 06 status-writer class): Transitions.[39m[90m…[39m [90m6.00s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\WorkflowTest[22m [90m>[39m it sole-writer sweep (the Doc 06…    
+[39;1m  a second status writer: app/Domain/Kb/Workflow/RogueStatusWriter.php, app/Domain/Kb/Workflow/Transitions.php
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'app/Domain/Kb/Workflow/Transitions.php',[39m[39;1m
+  [39;22m[32m+    0 => 'app/Domain/Kb/Workflow/RogueStatusWriter.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Domain/Kb/Workflow/Transitions.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/WorkflowTest.php[39m:[32m109[39m
+    105▕         if ($writesStatus) {
+    106▕             $writers[] = $rel;
+    107▕         }
+    108▕     }
+  ➜ 109▕     expect($writers)->toBe(['app/Domain/Kb/Workflow/Transitions.php'], 'a second status writer: '.implode(', ', $writers));
+    110▕ });
+    111▕
+
+  [33m1   [39m[39;1mtests/Feature/Kb/WorkflowTest.php[39;22m:[39;1m109[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m6.07s[39m
+
+EXIT 1

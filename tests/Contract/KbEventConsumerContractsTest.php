@@ -49,6 +49,7 @@ it('FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six the plan enum
     $registered = array_values(array_intersect(KB_EVENT_FAMILY, $catalogued));
     // Steps 4/6 register the two retrieval-side events; steps 10/11 add the four analytics events. The family never grows past six.
     expect(array_diff($catalogued, KB_EVENT_FAMILY))->toBe([], 'a kb.* event outside the closed family: '.implode(', ', array_diff($catalogued, KB_EVENT_FAMILY)));
+    // tenant.provisioned is Doc 01's event; Doc 10's consumer of it is pinned below with the rest.
     expect($registered)->toContain('kb.article.published')->toContain('kb.retrieval.updated')->toContain('kb.variant.submitted')->toContain('kb.lock.taken_over')->toContain('kb.article.cited_by_ai')->toContain('kb.article.inserted_by_agent');
     foreach ($catalogued as $name) {
         $definition = EventCatalog::definition($name);
@@ -69,7 +70,7 @@ it('ADR 0011: every kb.* event a Doc 10 job consumes durably carries a fixture e
     }
     sort($events);
     $fixture = kbConsumerFixture('fixtures/kb/consumers/doc10-events.json');
-    $pinned = array_column($fixture['entries'], 'event');
+    $pinned = array_values(array_unique(array_column($fixture['entries'], 'event')));
     sort($pinned);
     expect($events)->toBe($pinned, 'a Doc 10 durable consumer without a contract fixture (or a stale fixture)');
     foreach ($fixture['entries'] as $entry) {

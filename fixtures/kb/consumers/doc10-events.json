@@ -7,7 +7,29 @@
       "event": "kb.article.published",
       "consumer": "Doc10/KbIndexMaintenance",
       "schema_version": 1,
-      "reads": ["tenant_id", "variant_id", "version_id"]
+      "reads": [
+        "tenant_id",
+        "variant_id",
+        "version_id"
+      ]
+    },
+    {
+      "event": "kb.article.published",
+      "consumer": "Doc10/TranslationState",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "article_id",
+        "language"
+      ]
+    },
+    {
+      "event": "tenant.provisioned",
+      "consumer": "Doc10/KnowledgeBaseSeeder",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id"
+      ]
     }
   ]
 }

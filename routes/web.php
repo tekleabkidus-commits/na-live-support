@@ -94,10 +94,14 @@ Route::middleware([
 
     Route::post('articles', [App\Http\Controllers\Kb\KbArticleController::class, 'store'])
         ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.articles.store');
+    Route::delete('articles/{articleId}', [App\Http\Controllers\Kb\KbArticleController::class, 'destroy'])
+        ->middleware(['permission:kb.articles.delete', 'audit:kb.article.deleted'])->name('kb.articles.destroy');
     Route::get('articles/{articleId}', [App\Http\Controllers\Kb\KbArticleController::class, 'show'])
         ->middleware('permission:tickets.view')->name('kb.articles.show');
     Route::post('articles/{articleId}/variants', [App\Http\Controllers\Kb\KbArticleController::class, 'addVariant'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.created'])->name('kb.articles.variants.store');
+    Route::post('articles/{articleId}/translate-all', [App\Http\Controllers\Kb\KbArticleController::class, 'translateAll'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.article.translate_all_requested'])->name('kb.articles.translate_all'); // §14 one click; FR-06's key
     Route::post('articles/{articleId}/move', [App\Http\Controllers\Kb\KbArticleController::class, 'move'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.article.moved'])->name('kb.articles.move');
     Route::patch('variants/{variantId}/meta', [App\Http\Controllers\Kb\KbArticleController::class, 'updateMeta'])

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Kb;
 
 use App\Domain\Kb\Articles\ArticleWriter;
+use App\Domain\Kb\Translation\SourceHasNoContent;
+use App\Domain\Kb\Translation\TranslateAll;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Support\Problem\ErrorCode;
@@ -48,6 +50,34 @@ final class KbArticleController extends Controller
         }
 
         return new JsonResponse($created, 201);
+    }
+
+    /** A-43: soft delete under kb.articles.delete. */
+    public function destroy(Request $request, string $articleId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        try {
+            $this->writer->delete($articleId, $user->identifier());
+        } catch (InvalidArgumentException) {
+            return ProblemDetails::response(ErrorCode::ResourceNotFound, 404, 'not found');
+        }
+
+        return new JsonResponse(['deleted' => true]);
+    }
+
+    /** §14 / FR-06 Translate variant: one click → an AI DRAFT per missing active language, queued (BR-02: nothing publishes). */
+    public function translateAll(Request $request, string $articleId, TranslateAll $translateAll): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        try {
+            return new JsonResponse($translateAll->run($articleId, $user->identifier()), 202);
+        } catch (InvalidArgumentException) {
+            return ProblemDetails::response(ErrorCode::ResourceNotFound, 404, 'not found');
+        } catch (SourceHasNoContent $e) {
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, $e->getMessage());
+        }
     }
 
     public function show(Request $request, string $articleId): JsonResponse

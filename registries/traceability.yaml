@@ -2230,15 +2230,20 @@ entries:
       [B9]; FR-03's outdated flip on source publish lands at step 8
       (TranslationStateTest).
   - ac_ref: "Doc10 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Kb/TranslationStateTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S10 step 8 to tests/Feature/Kb/TranslationStateTest.php: the translation-state matrix: source publish flips siblings to outdated ≤ 5 s, missing-vs-outdated fallback (BR-05), per-variant independence (EC-04).
+      FLIPPED AT S10 STEP 8: the matrix — a SOURCE publish flips published
+      siblings to outdated through the durable consumer (event-driven, never a
+      scan; redelivery a no-op); a sibling publish flips itself current; drafts
+      stay missing; BR-05 — the outdated exact-language variant SERVES and the
+      chain applies only to missing (VariantForLanguage); EC-01 — the open
+      working copy survives a source publish; EC-04 independence.
   - ac_ref: "Doc10 AC-03"
     suite_path: tests/Feature/Kb/PublishPipelineTest.php
     type: automated
