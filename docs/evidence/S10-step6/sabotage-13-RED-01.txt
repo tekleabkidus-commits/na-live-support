@@ -1,0 +1,57 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\KbEventConsumerContractsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit ADR 0011: every kb.* event a Doc 10 job consumes durably carries[39m[90m…[39m [90m7.32s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\PublishPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit ADR 0011: the consumer is REGISTERED for kb.article.published on[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\KbEventConsumerContractsTest[22m [90m>[39m it ADR 0011: every…    
+[39;1m  a Doc 10 durable consumer without a contract fixture (or a stale fixture)
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'kb.article.published',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Contract/KbEventConsumerContractsTest.php[39m:[32m69[39m
+     65▕     sort($events);
+     66▕     $fixture = kbConsumerFixture('fixtures/kb/consumers/doc10-events.json');
+     67▕     $pinned = array_column($fixture['entries'], 'event');
+     68▕     sort($pinned);
+  ➜  69▕     expect($events)->toBe($pinned, 'a Doc 10 durable consumer without a contract fixture (or a stale fixture)');
+     70▕     foreach ($fixture['entries'] as $entry) {
+     71▕         $definition = EventCatalog::definition($entry['event']);
+     72▕         expect($entry['schema_version'])->toBe($definition['schema_version'])
+     73▕             ->and(array_diff($entry['reads'], $definition['payload']))->toBe([], $entry['event'].' fixture reads a key the payload does not carry');
+
+  [33m1   [39m[39;1mtests/Contract/KbEventConsumerContractsTest.php[39;22m:[39;1m69[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\PublishPipelineTest[22m [90m>[39m it ADR 0011: the consumer…    
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'App\Jobs\Kb\KbIndexMaintenanceConsumer',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/PublishPipelineTest.php[39m:[32m59[39m
+     55▕     return $row->id;
+     56▕ }
+     57▕ 
+     58▕ it('ADR 0011: the consumer is REGISTERED for kb.article.published on the ai-background family', function (): void {
+  ➜  59▕     expect(ConsumerRegistry::consumersFor('kb.article.published'))->toBe([KbIndexMaintenanceConsumer::class]);
+     60▕ });
+     61▕ 
+     62▕ it('FR-13/T-05: publish → consumer → chunks (summary = chunk 0, heading paths), embedded, swapped in one statement, index current, kb.retrieval.updated emitted; the chatbot serves the new version with its version pin; unpublish retires', function (): void {
+     63▕     $s = kbScene();
+
+  [33m1   [39m[39;1mtests/Feature/Kb/PublishPipelineTest.php[39;22m:[39;1m59[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m7.48s[39m
+
+EXIT 1

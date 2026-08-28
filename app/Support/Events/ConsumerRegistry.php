@@ -77,6 +77,14 @@ final class ConsumerRegistry
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
         'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class],
+        // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
+        //    kb.article.published — chunk → sanitize (the one door) → embed changed
+        //    chunks → ONE-statement generation swap → kb.retrieval.updated. Idempotent
+        //    on event_id (an already-serving version is a no-op); embeddings down →
+        //    throws → retry/re-drive (FS-01). Contract fixture: fixtures/kb/consumers/
+        //    doc10-events.json; ticket roster deliberately empty (doc10.json). This is
+        //    the [D10] close of Doc 09 FR-10 (BS:57) and T-05 (BS:88).
+        'kb.article.published' => [\App\Jobs\Kb\KbIndexMaintenanceConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],

@@ -1,0 +1,13 @@
+{
+  "doc": "Doc10",
+  "spec": "Doc 10 FR-13 / Doc 06 NFR-06 — consumer contracts for Doc 10's durable consumption (S10 step 6; ADR 0011). Every consumer reads identifiers only and re-fetches truth under its own tenancy (SEC-07/Q7).",
+  "note": "KbIndexMaintenanceConsumer reads variant_id + version_id and re-reads the version snapshot, the article's audience and the category's ai_usable from the rows — never article text from the bus. A superseded version (a later publish/unpublish won) is a no-op; an already-serving version is a no-op (idempotent on event_id in substance).",
+  "entries": [
+    {
+      "event": "kb.article.published",
+      "consumer": "Doc10/KbIndexMaintenance",
+      "schema_version": 1,
+      "reads": ["tenant_id", "variant_id", "version_id"]
+    }
+  ]
+}

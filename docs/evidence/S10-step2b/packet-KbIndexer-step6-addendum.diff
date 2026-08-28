@@ -1,0 +1,17 @@
+diff --git a/app/Domain/Ai/Retrieval/KbIndexer.php b/app/Domain/Ai/Retrieval/KbIndexer.php
+index eeaacec..9fa4739 100644
+--- a/app/Domain/Ai/Retrieval/KbIndexer.php
++++ b/app/Domain/Ai/Retrieval/KbIndexer.php
+@@ -85,7 +85,11 @@ public function index(
+             ->where('variant_id', $variantId)->where('retrieval_generation', $generation)->where('chunk_index', $chunkIndex)
+             ->first(['id', 'audience']);
+         if ($existing !== null && $existing->audience === $audience) {
+-            DB::table('kb_chunks')->where('id', $existing->id)->update(array_diff_key($row, ['audience' => 1, 'variant_id' => 1]));
++            // Re-index rewrites in place through the app's UPDATE grant ONLY (SCHEMA AMENDMENT 4):
++            // identity columns never move — the grant refuses them, so they are not named.
++            DB::table('kb_chunks')->where('id', $existing->id)->update(array_intersect_key($row, array_flip([
++                'content', 'provenance', 'embedding', 'language', 'ai_usable', 'retrievable', 'heading_path', 'sanitizer_flags', 'version_id', 'retrieval_generation', 'updated_at',
++            ])));
+ 
+             return $existing->id;
+         }

@@ -2240,15 +2240,24 @@ entries:
     justification: >-
       PLANNED — flips at S10 step 8 to tests/Feature/Kb/TranslationStateTest.php: the translation-state matrix: source publish flips siblings to outdated ≤ 5 s, missing-vs-outdated fallback (BR-05), per-variant independence (EC-04).
   - ac_ref: "Doc10 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Kb/PublishPipelineTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED — flips at S10 step 6 to tests/Feature/Kb/PublishAtomicityTest.php: the stage-kill chaos proof of the human/retrieval generation split (NFR-06); the week-long staging probe half rides [D19].
+      FLIPPED AT S10 STEP 6: the stage-kill chaos proof — a kill after chunk and
+      after embed leaves humans PUBLISHED and retrieval on the previous
+      generation ONLY (never a mix); the re-driven consumer completes the ONE-
+      statement swap; a second delivery is a no-op (idempotent on event_id);
+      FS-01 (embeddings down → no swap, index pending, previous generation
+      serves, retry swaps on recovery); EC-04 independent variants.
+    gap: >-
+      PARTIAL: NFR-06's "consistency probe green for a week in staging" is the
+      [D19] staging half — the probe's assertion is the same test's, run on the
+      staging schedule.
   - ac_ref: "Doc10 AC-04"
     suite_path: tests/Security/KbOneIndexerDoorTest.php
     type: automated

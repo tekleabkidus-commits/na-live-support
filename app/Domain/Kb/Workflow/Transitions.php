@@ -142,6 +142,7 @@ final class Transitions
             $this->expect($variant->status, ['published'], 'unpublish');
             $this->indexer->retireVariant($variantId);
             DB::update('UPDATE kb_article_variants SET status = ?, index_status = ?, updated_at = clock_timestamp() WHERE id = ?', ['draft', 'none', $variantId]);
+            $this->retrievalRetired($variant);
             $this->audit->record('kb.variant.unpublished', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => 'published'], 'new' => ['status' => 'draft']], actorId: $actorId);
         });
     }
@@ -154,6 +155,7 @@ final class Transitions
             $this->expect($variant->status, ['published', 'draft', 'in_review'], 'archive');
             $this->indexer->retireVariant($variantId);
             DB::update('UPDATE kb_article_variants SET status = ?, index_status = ?, updated_at = clock_timestamp() WHERE id = ?', ['archived', 'none', $variantId]);
+            $this->retrievalRetired($variant);
             $this->audit->record('kb.variant.archived', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => $variant->status], 'new' => ['status' => 'archived']], actorId: $actorId);
         });
     }
@@ -198,6 +200,16 @@ final class Transitions
         }
 
         return $missing;
+    }
+
+    /** FR-13/T-05: retirement is evented too (Doc 09 caches invalidate; Doc 15 counts) — same transaction as the flip. */
+    private function retrievalRetired(object $variant): void
+    {
+        /** @var object{id: string, article_id: string, current_version_id: string|null} $variant */
+        $this->events->publish('kb.retrieval.updated', [
+            'tenant_id' => $this->context->tenantId(), 'article_id' => $variant->article_id, 'variant_id' => $variant->id,
+            'version_id' => $variant->current_version_id ?? '', 'retrieval_generation' => 0, 'status' => 'retired',
+        ]);
     }
 
     /** @return object{id: string, article_id: string, language: string, status: string, working_copy: string, current_version_id: string|null} */

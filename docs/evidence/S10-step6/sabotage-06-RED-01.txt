@@ -1,0 +1,94 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\PublishPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer is REGISTERED for kb.article.published on[39m[90m…[39m [90m7.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/T-05: publish → consumer → chunks (summary = chunk 0, head[39m[90m…[39m [90m0.55s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §12 cost: a re-publish with one changed section re-embeds ONLY t[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: embeddings DOWN → generation N+1 lands but is NOT swapped[39m[90m…[39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 stage-kill chaos + idempotency: a kill after embed leaves[39m[90m… [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: two variants (en + am) publish independently — one provid[39m[90m…[39m [90m0.35s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\GenerationSwapTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit the swap is ONE statement: generation 2 lands non-retrievable be[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 5: only the PLATFORM-role prune removes a super[39m[90m…[39m [90m0.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\PublishPipelineTest[22m [90m>[39m it §12 cost: a re-publish…    
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => Array &1 [[39m[39;1m
+  [39;22m[32m         0 => 1,[39m[39;1m
+  [39;22m[31m-        1 => false,[39m[39;1m
+  [39;22m[32m+        1 => true,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     1 => Array &2 [[39m[39;1m
+  [39;22m[32m         0 => 1,[39m[39;1m
+  [39;22m[31m-        1 => false,[39m[39;1m
+  [39;22m[32m+        1 => true,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     2 => Array &3 [[39m[39;1m
+  [39;22m[32m         0 => 1,[39m[39;1m
+  [39;22m[31m-        1 => false,[39m[39;1m
+  [39;22m[32m+        1 => true,[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m     3 => Array &4 [[39m[39;1m
+  [39;22m[32m         0 => 2,[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/PublishPipelineTest.php[39m:[32m114[39m
+    110▕     bindTenant($s['tenant']);
+    111▕     runPublishConsumer($a['variant_id']);
+    112▕     expect(count($driver->seen) - $callsAfterFirst)->toBe(1, 'only the changed Limits chunk re-embedded');
+    113▕     $states = DB::table('kb_chunks')->where('variant_id', $a['variant_id'])->orderBy('retrieval_generation')->orderBy('chunk_index')->get(['retrieval_generation', 'retrievable', 'version_id'])->map(fn ($r) => [(int) $r->retrieval_generation, (bool) $r->retrievable])->all();
+  ➜ 114▕     expect($states)->toBe([[1, false], [1, false], [1, false], [2, true], [2, true], [2, true]]);
+    115▕ });
+    116▕ 
+    117▕ it('FS-01: embeddings DOWN → generation N+1 lands but is NOT swapped, index stays pending, the previous generation keeps serving, the consumer throws (retry/re-drive); on recovery the retry swaps', function (): void {
+    118▕     $s = kbScene();
+
+  [33m1   [39m[39;1mtests/Feature/Kb/PublishPipelineTest.php[39;22m:[39;1m114[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\PublishPipelineTest[22m [90m>[39m it AC-03 stage-kill chaos…    
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 2,[39m[39;1m
+  [39;22m[32m+    0 => 1,[39m[39;1m
+  [39;22m[32m+    2 => 2,[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/PublishPipelineTest.php[39m:[32m174[39m
+    170▕         expect($serving)->toBe([1], "after a kill at {$stage}: retrieval serves generation 1 only — never a mix")
+    171▕             ->and(DB::table('kb_article_variants')->where('id', $a['variant_id'])->value('status'))->toBe('published');
+    172▕     }
+    173▕     $eventId = runPublishConsumer($a['variant_id']); // the re-drive
+  ➜ 174▕     expect(DB::table('kb_chunks')->where('variant_id', $a['variant_id'])->where('retrievable', true)->pluck('retrieval_generation')->unique()->all())->toBe([2]);
+    175▕     $before = DB::table('kb_chunks')->where('variant_id', $a['variant_id'])->count();
+    176▕     (new KbIndexMaintenanceConsumer($eventId))->handle(app(PublishPipeline::class)); // second delivery
+    177▕     expect(DB::table('kb_chunks')->where('variant_id', $a['variant_id'])->count())->toBe($before)
+    178▕         ->and(DB::table('kb_article_variants')->where('id', $a['variant_id'])->value('retrieval_generation'))->toBe(2);
+
+  [33m1   [39m[39;1mtests/Feature/Kb/PublishPipelineTest.php[39;22m:[39;1m174[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\GenerationSwapTest[22m [90m>[39m it the swap is ONE statemen…   
+[39;1m  Failed asserting that 2 is identical to 4.[39;22m
+
+  at [32mtests/Feature/Kb/GenerationSwapTest.php[39m:[32m74[39m
+     70▕     DB::enableQueryLog();
+     71▕     $flipped = $indexer->swap($variant, 2);
+     72▕     $updates = array_values(array_filter(DB::getQueryLog(), static fn (array $q): bool => str_starts_with(strtolower($q['query']), 'update') && str_contains($q['query'], 'kb_chunks')));
+     73▕     DB::disableQueryLog();
+  ➜  74▕     expect($flipped)->toBe(4)->and($updates)->toHaveCount(1, 'the swap must be ONE statement (NFR-06: no mixed generation is ever observable)');
+     75▕ 
+     76▕     $states = DB::table('kb_chunks')->where('variant_id', $variant)->orderBy('retrieval_generation')->orderBy('chunk_index')->get(['retrieval_generation', 'retrievable'])->map(fn ($r) => [(int) $r->retrieval_generation, (bool) $r->retrievable])->all();
+     77▕     expect($states)->toBe([[1, false], [1, false], [2, true], [2, true]]);
+     78▕     $after = app(HybridRetriever::class)->retrieve('[FIXTURE] telebirr deposits settle', ['en']);
+
+  [33m1   [39m[39;1mtests/Feature/Kb/GenerationSwapTest.php[39;22m:[39;1m74[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m5 passed[39;22m[90m (72 assertions)[39m
+  [90mDuration:[39m [39m9.82s[39m
+
+EXIT 1

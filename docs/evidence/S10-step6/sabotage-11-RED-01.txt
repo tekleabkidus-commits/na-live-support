@@ -1,0 +1,25 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\WorkflowTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-10: with kb.require_alt on, a PUBLIC publish with an image la[39m[90m…[39m [90m8.01s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\WorkflowTest[22m [90m>[39m it AC-10: with kb.require_alt on,…   
+[39;1m  Expected response status code [409] but received 200.
+Failed asserting that 200 is identical to 409.[39;22m
+
+  at [32mtests/Feature/Kb/WorkflowTest.php[39m:[32m77[39m
+     73▕     $a = kbArticle($s);
+     74▕     $url = 'https://localhost/admin/kb/variants/'.$a['variant_id'];
+     75▕     $this->actingAs($s['admin'], 'staff')->putJson($url.'/working-copy', ['content' => ['blocks' => [['id' => 'img1', 'type' => 'image', 'storage_key' => 't/x/1.png', 'alt' => ''], ['id' => 'img2', 'type' => 'image', 'storage_key' => 't/x/2.png', 'alt' => 'Deposit screen'], ['id' => 'img3', 'type' => 'image', 'storage_key' => 't/x/3.png']]]])->assertOk();
+     76▕     $blocked = $this->actingAs($s['admin'], 'staff')->postJson($url.'/publish');
+  ➜  77▕     $blocked->assertStatus(409);
+     78▕     expect($blocked->json('missing_alt'))->toBe(['img1', 'img3']);
+     79▕ 
+     80▕     $this->actingAs($s['admin'], 'staff')->putJson($url.'/working-copy', ['content' => ['blocks' => [['id' => 'img1', 'type' => 'image', 'storage_key' => 't/x/1.png', 'alt' => 'Telebirr menu']]]])->assertOk();
+     81▕     $this->actingAs($s['admin'], 'staff')->postJson($url.'/publish')->assertOk();
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m8.07s[39m
+
+EXIT 1
