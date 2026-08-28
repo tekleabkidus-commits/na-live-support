@@ -96,8 +96,10 @@ it('sole-writer sweep (the Doc 06 status-writer class): Transitions.php is the O
         $source = (string) php_strip_whitespace($file->getPathname());
         $rel = str_replace(base_path().'/', '', $file->getPathname());
         $touchesVariants = str_contains($source, 'kb_article_variants');
-        $writesStatus = preg_match('/UPDATE\s+kb_article_variants\s+SET\s+status\s*=/i', $source) === 1
-            || (preg_match('/[\'"]status[\'"]\s*=>/', $source) === 1 && $touchesVariants && preg_match('/->update\(/', $source) === 1 && ! str_contains($rel, 'Articles/ArticleWriter.php'));
+        // Raw SQL naming the column, or a builder ->update([...]) array carrying 'status' =>
+        // on a file that touches the variants table (an event payload's 'status' key is not a write).
+        $writesStatus = preg_match('/UPDATE\s+kb_article_variants\s+SET[^;]*\bstatus\s*=/i', $source) === 1
+            || ($touchesVariants && preg_match('/->update\(\s*\[[^\]]*[\'"]status[\'"]\s*=>/s', $source) === 1);
         if ($writesStatus) {
             $writers[] = $rel;
         }

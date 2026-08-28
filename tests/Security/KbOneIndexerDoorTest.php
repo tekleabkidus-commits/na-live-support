@@ -44,12 +44,12 @@ function kbChunkMentions(): array
 
 function kbChunkWrites(string $source): bool
 {
-    // A file writes the table if it names it AND carries a builder write verb,
-    // or raw SQL that mutates it. Reads (select/where/selectRaw) are legal.
-    foreach (KB_WRITE_VERBS as $verb) {
-        if (str_contains($source, $verb)) {
-            return true;
-        }
+    // Statement-precise: a builder write verb chained on DB::table('kb_chunks') …, or raw
+    // SQL that mutates the table. A file that READS kb_chunks and writes another table
+    // (the publish pipeline) is not a door; a plant like DB::table('kb_chunks')->insert IS.
+    $verbs = 'insert|insertOrIgnore|insertGetId|update|updateOrInsert|upsert|truncate|increment|decrement';
+    if (preg_match('/table\(\s*[\'"]kb_chunks[\'"]\s*\)[^;]*->('.$verbs.')\(/s', $source) === 1) {
+        return true;
     }
 
     return preg_match('/\b(INSERT\s+INTO|UPDATE|TRUNCATE)\s+kb_chunks\b/i', $source) === 1;
@@ -57,7 +57,8 @@ function kbChunkWrites(string $source): bool
 
 function kbChunkDeletes(string $source): bool
 {
-    return str_contains($source, '->delete(') || preg_match('/\bDELETE\s+FROM\s+kb_chunks\b/i', $source) === 1;
+    return preg_match('/table\(\s*[\'"]kb_chunks[\'"]\s*\)[^;]*->delete\(/s', $source) === 1
+        || preg_match('/\bDELETE\s+FROM\s+kb_chunks\b/i', $source) === 1;
 }
 
 it('STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php — every other mention is read-only; no Eloquent model maps the table', function (): void {

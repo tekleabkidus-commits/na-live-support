@@ -19,8 +19,9 @@ final class KbServiceProvider extends ServiceProvider
         // FR-16: the citation resolver contract; step 7 rebinds the
         // version+slug-history implementation behind the same interface.
         $this->app->bind(CitationResolver::class, ChunkStateCitationResolver::class);
-        // T-03/BR-06: the publish-time sanitizer contract — step 4 binds the loud
-        // placeholder; step 5 rebinds the shared package (sabotage #7 reverts this line).
-        $this->app->bind(\App\Domain\Kb\Sanitizer\PublishSanitizer::class, \App\Domain\Kb\Sanitizer\UnboundSanitizer::class);
+        // T-03/BR-06 (step 5): the publish-time sanitizer is Doc 09's InstructionStripper
+        // run sentence by sentence — ONE shared package, one rule set, one fixture suite.
+        // Sabotage #7 rebinds UnboundSanitizer here and AC-05 goes red.
+        $this->app->bind(\App\Domain\Kb\Sanitizer\PublishSanitizer::class, \App\Domain\Kb\Sanitizer\SharedPublishSanitizer::class);
     }
 }

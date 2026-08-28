@@ -1,0 +1,33 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\KbOneIndexerDoorTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php[39m[90m…[39m [90m6.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every row the door writes carries strip provenance, and[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\KbOneIndexerDoorTest[22m [90m>[39m it STATIC: the ONLY writer…    
+[39;1m  a second route into kb_chunks exists: app/Domain/Ai/Retrieval/KbIndexer.php, app/Domain/Kb/Rogue/RogueChunkWriter.php
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => 'app/Domain/Ai/Retrieval/KbIndexer.php',[39m[39;1m
+  [39;22m[32m+    1 => 'app/Domain/Kb/Rogue/RogueChunkWriter.php',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/KbOneIndexerDoorTest.php[39m:[32m79[39m
+     75▕             expect(str_contains($source, "DB::connection('pgsql_platform')"))->toBeTrue("{$path} deletes kb_chunks outside the platform connection");
+     76▕         }
+     77▕         expect(preg_match('/\$table\s*=\s*[\'"]kb_chunks[\'"]/', $source))->toBe(0, "{$path} maps kb_chunks as an Eloquent model — a second door");
+     78▕     }
+  ➜  79▕     expect($writers)->toBe(['app/Domain/Ai/Retrieval/KbIndexer.php'], 'a second route into kb_chunks exists: '.implode(', ', $writers))
+     80▕         ->and($deleters)->toBe([KB_PLATFORM_DELETER], 'a deleter of kb_chunks beside the platform-role prune: '.implode(', ', $deleters));
+     81▕     expect(count(kbChunkMentions()))->toBeGreaterThanOrEqual(2, 'the sweep found almost nothing — vacuous');
+     82▕ });
+     83▕
+
+  [33m1   [39m[39;1mtests/Security/KbOneIndexerDoorTest.php[39;22m:[39;1m79[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (18 assertions)[39m
+  [90mDuration:[39m [39m6.39s[39m
+
+EXIT 1

@@ -1,0 +1,78 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\SanitizerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the shared package (step 5) — never the unbound placeholde[39m[90m…[39m [90m8.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 shared fixture suite: every poisoned fixture flags the off[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06 at the door: flags → 409 with the sentences; an override r[39m[90m…[39m [90m0.65s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\ChunkerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit T-02: summary is chunk 0, heading paths prefix the rest, the SAM[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit §12 cost fixture: a minor edit to ONE section changes only that[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-08 + the target: a 20,000-word article chunks into ~target-si[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiInjectionRedTeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #3: an answer echoing system-layer text is FLAGGED by the[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the immutable layer's own text is the leak detector's corpus — a[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\ChunkerTest[22m [90m>[39m it T-02: sum… [41;1m MissingTenantContext [49;22m  
+[39;1m  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).[39;22m
+
+  at [32mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39m:[32m37[39m
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39;22m:[39;1m37[39;22m
+  [33m2   [39m[39;1mapp/Support/Tenancy/TenantContext.php[39;22m:[39;1m71[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\ChunkerTest[22m [90m>[39m it §12 cost…  [41;1m MissingTenantContext [49;22m  
+[39;1m  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).[39;22m
+
+  at [32mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39m:[32m37[39m
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39;22m:[39;1m37[39;22m
+  [33m2   [39m[39;1mapp/Support/Tenancy/TenantContext.php[39;22m:[39;1m71[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\ChunkerTest[22m [90m>[39m it EC-08 + t… [41;1m MissingTenantContext [49;22m  
+[39;1m  No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or socket connection, from server-controlled context only — never from request input (FR-04).[39;22m
+
+  at [32mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39m:[32m37[39m
+     33▕     }
+     34▕ 
+     35▕     public static function forRead(): self
+     36▕     {
+  ➜  37▕         return new self(
+     38▕             'No tenant context is bound (Doc 01 T-05). Resolution happens once per request, job or '
+     39▕             .'socket connection, from server-controlled context only — never from request input (FR-04).',
+     40▕         );
+     41▕     }
+
+  [33m1   [39m[39;1mapp/Support/Tenancy/Exceptions/MissingTenantContext.php[39;22m:[39;1m37[39;22m
+  [33m2   [39m[39;1mapp/Support/Tenancy/TenantContext.php[39;22m:[39;1m71[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m9 passed[39;22m[90m (68 assertions)[39m
+  [90mDuration:[39m [39m9.44s[39m
+
+EXIT 2

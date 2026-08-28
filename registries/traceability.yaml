@@ -2262,15 +2262,22 @@ entries:
     gap: >-
       PARTIAL: the chunk contract fields (article id, language, heading path, version id) and the STRUCTURAL internal/public separation flip at step 7 (tests/Security/KbIndexSeparationTest.php, the three-way T-08 proof per the STOP-B ruling).
   - ac_ref: "Doc10 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Kb/SanitizerTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S10 step 5 to tests/Feature/Kb/SanitizerTest.php: the shared Doc 09 AC-07 fixture suite + the guide-style EC-09 false-positive fixtures + overrides recorded on versions.
+      FLIPPED AT S10 STEP 5: the publish-time sanitizer is Doc 09's
+      InstructionStripper (ONE shared package, one rule set) run sentence by
+      sentence; the shared fixture suite (fixtures/kb/sanitizer/guide-style.json —
+      Doc 09 AC-07's poisoned chunk included) flags every injection's sentence;
+      the guide-style EC-09 fixtures (en + am, user-directed imperatives) flag
+      NOTHING; parity with the index-time stripper asserted; at the door flags are
+      a 409 and an override REASON publishes with the decision recorded ON the
+      version + audited (BR-06/SEC-04). Sabotage #7 (sanitizer stubbed) executed.
   - ac_ref: "Doc10 AC-06"
     suite_path: tests/Feature/Kb/PublishRetireRoundTripTest.php
     type: automated
