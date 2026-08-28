@@ -1,0 +1,55 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+[0m
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Ai/CopilotTab.vue[24m
+   [2m97:36[22m  [33mwarning[39m  Replace `·article_ref:·string;·url?:·string;·title?:·string;·version_id?:·string·` with `⏎····article_ref:·string;⏎····url?:·string;⏎····title?:·string;⏎····version_id?:·string;⏎`                                                                                                                                                                                                                                                                                                                                                       [2mprettier/prettier[22m
+  [2m108:23[22m  [33mwarning[39m  Replace `·'Content-Type':·'application/json',·Accept:·'application/json',·'X-Requested-With':·'XMLHttpRequest',·'X-XSRF-TOKEN':·decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'')` with `⏎················'Content-Type':·'application/json',⏎················Accept:·'application/json',⏎················'X-Requested-With':·'XMLHttpRequest',⏎················'X-XSRF-TOKEN':·decodeURIComponent(⏎····················document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'',⏎················),⏎···········`  [2mprettier/prettier[22m
+  [2m109:35[22m  [33mwarning[39m  Replace `·article_id:·item.article_ref,·version_id:·item.version_id,·conversation_id:·props.conversationId` with `⏎················article_id:·item.article_ref,⏎················version_id:·item.version_id,⏎················conversation_id:·props.conversationId,⏎···········`                                                                                                                                                                                                                                                         [2mprettier/prettier[22m
+  [2m112:22[22m  [33mwarning[39m  Replace `data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,·'kb_link',·''` with `⏎············data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,⏎············'kb_link',⏎············'',⏎········`                                                                                                                                                                                                                                                                                               [2mprettier/prettier[22m
+  [2m337:76[22m  [33mwarning[39m  Replace `><span·v-else·class="font-mono·text-[10px]">{{·item.article_ref·}}</span>·—` with `⏎····························><span·v-else·class="font-mono·text-[10px]">{{⏎································item.article_ref⏎····························}}</span>`                                                                                                                                                                                                                                                                           [2mprettier/prettier[22m
+  [2m338:28[22m  [33mwarning[39m  Insert `·—`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Ai/copilotApi.ts[24m
+  [2m23:11[22m  [33mwarning[39m  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  [2mprettier/prettier[22m
+  [2m39:10[22m  [33mwarning[39m  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Customers/CustomerPanel.vue[24m
+  [2m433:38[22m  [33mwarning[39m  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-text-muted)'` with `⏎································borderColor:·'var(--ds-border-strong)',⏎································color:·'var(--ds-text-muted)',⏎···························`  [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Inbox/OperationDialog.vue[24m
+   [2m49:58[22m  [33mwarning[39m  Replace `·assignees:·{·id:·string;·name:·string·}[]` with `⏎····················assignees:·{·id:·string;·name:·string·}[];⏎···············`                                                                                                                                                                                         [2mprettier/prettier[22m
+  [2m125:31[22m  [33mwarning[39m  Replace `·v-model="path"·type="radio"·value="supervisor_review"·data-testid="path-supervisor"` with `⏎····························v-model="path"⏎····························type="radio"⏎····························value="supervisor_review"⏎····························data-testid="path-supervisor"⏎·······················`  [2mprettier/prettier[22m
+  [2m223:36[22m  [33mwarning[39m  Insert `⏎···························`                                                                                                                                                                                                                                                                                               [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Inbox/SplitUnmergeDialog.vue[24m
+   [2m68:28[22m  [33mwarning[39m  Replace `1,·Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000)` with `⏎········1,⏎········Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000),⏎····`                                  [2mprettier/prettier[22m
+   [2m76:17[22m  [33mwarning[39m  Replace `·props.kind·===·'split'·?·`/inbox/t/${props.ticketId}/split`` with `⏎········props.kind·===·'split'⏎············?·`/inbox/t/${props.ticketId}/split`⏎···········`                                                                 [2mprettier/prettier[22m
+  [2m313:38[22m  [33mwarning[39m  Replace `·background:·'var(--ds-text-ink)',·color:·'var(--ds-page-bg)'` with `⏎································background:·'var(--ds-text-ink)',⏎································color:·'var(--ds-page-bg)',⏎···························`  [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Inbox/Thread/ThreadPane.vue[24m
+  [2m674:13[22m  [33mwarning[39m  Attribute "v-if" should go before "ref"  [2mvue/attributes-order[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Components/Inbox/TicketPanel.vue[24m
+  [2m947:19[22m  [33mwarning[39m  Replace `(can.tickets_escalate·||·can.tickets_spam_mark)·&&·ticket.status·!==·'spam'·&&·ticket.status·!==·'closed'` with `⏎················(can.tickets_escalate·||·can.tickets_spam_mark)·&&⏎················ticket.status·!==·'spam'·&&⏎················ticket.status·!==·'closed'⏎············`  [2mprettier/prettier[22m
+  [2m976:26[22m  [33mwarning[39m  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-danger-strong)'` with `⏎····················borderColor:·'var(--ds-border-strong)',⏎····················color:·'var(--ds-danger-strong)',⏎···············`                                                                       [2mprettier/prettier[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Pages/Admin/Rbac/PendingGrants.vue[24m
+  [2m26:5[22m  [33mwarning[39m  Prop "four_eyes_enabled" is not in camelCase  [2mvue/prop-name-casing[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Pages/Admin/Rbac/RolesList.vue[24m
+  [2m27:5[22m  [33mwarning[39m  Prop "soft_limit" is not in camelCase  [2mvue/prop-name-casing[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Pages/Conversations/DeadLetters.vue[24m
+  [2m27:5[22m  [33mwarning[39m  Prop "next_cursor" is not in camelCase  [2mvue/prop-name-casing[22m
+
+[4m/home/kidus/projects/na-live-support/.claude/worktrees/s10-step8/resources/js/Pages/Inbox/Workspace.vue[24m
+  [2m1588:21[22m  [33mwarning[39m  Attribute "v-if" should go before "ref"  [2mvue/attributes-order[22m
+  [2m1890:25[22m  [33mwarning[39m  Attribute "v-if" should go before "ref"  [2mvue/attributes-order[22m
+
+[33m[1m✖ 23 problems (0 errors, 23 warnings)[22m[39m
+[33m[1m  0 errors and 20 warnings potentially fixable with the `--fix` option.[22m[39m
+[0m
+npx vue-tsc --noEmit
+LINT EXIT 0

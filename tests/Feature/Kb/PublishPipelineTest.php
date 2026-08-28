@@ -9,6 +9,7 @@ use App\Domain\Ai\Providers\ProviderResponse;
 use App\Domain\Ai\Retrieval\HybridRetriever;
 use App\Domain\Kb\Publish\PublishPipeline;
 use App\Jobs\Kb\KbIndexMaintenanceConsumer;
+use App\Jobs\Kb\KbTranslationStateConsumer;
 use App\Support\Events\ConsumerRegistry;
 use Illuminate\Support\Facades\DB;
 
@@ -55,8 +56,8 @@ function runPublishConsumer(string $variantId): string
     return $row->id;
 }
 
-it('ADR 0011: the consumer is REGISTERED for kb.article.published on the ai-background family', function (): void {
-    expect(ConsumerRegistry::consumersFor('kb.article.published'))->toBe([KbIndexMaintenanceConsumer::class]);
+it('ADR 0011: the consumer is REGISTERED for kb.article.published on the ai-background family (S10 step 8: beside the translation-state consumer — the pin moves WITH the registry, same commit)', function (): void {
+    expect(ConsumerRegistry::consumersFor('kb.article.published'))->toBe([KbIndexMaintenanceConsumer::class, KbTranslationStateConsumer::class]);
 });
 
 it('FR-13/T-05: publish → consumer → chunks (summary = chunk 0, heading paths), embedded, swapped in one statement, index current, kb.retrieval.updated emitted; the chatbot serves the new version with its version pin; unpublish retires', function (): void {

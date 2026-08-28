@@ -68,7 +68,7 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // designed, and the pin moves WITH the registry change, again.
         // S09 step 11: GenerateTicketSubject joined ticket.created (Doc 06 FR-03's generation half) — the pin moves WITH the registry, same commit.
         ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator (S07 step 2 / S08 steps 3 and 8 / S09 step 11)')
-        ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([], 'no other event has grown a consumer silently');
+        ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class], 'S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
 });
 
 test('ADR 0011: relaying a mapped event queues the consumer once — event id, tenant and correlation stamped — and a relay re-run re-dispatches nothing', function () {

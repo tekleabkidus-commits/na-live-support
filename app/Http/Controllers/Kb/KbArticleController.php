@@ -50,6 +50,20 @@ final class KbArticleController extends Controller
         return new JsonResponse($created, 201);
     }
 
+    /** A-43: soft delete under kb.articles.delete. */
+    public function destroy(Request $request, string $articleId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        try {
+            $this->writer->delete($articleId, $user->identifier());
+        } catch (InvalidArgumentException) {
+            return ProblemDetails::response(ErrorCode::ResourceNotFound, 404, 'not found');
+        }
+
+        return new JsonResponse(['deleted' => true]);
+    }
+
     public function show(Request $request, string $articleId): JsonResponse
     {
         /** @var User $user */

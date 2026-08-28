@@ -1245,4 +1245,12 @@ return [
         'required_fields' => [],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 A-43 (S10 step 8): article delete is SOFT — the row survives, chunks retire, tombstones resolve.
+        'action_key' => 'kb.article.deleted',
+        'entity' => 'kb_article',
+        'actor_types' => ['staff'],
+        'required_fields' => ['soft'],
+        'owning_doc' => 'Doc10',
+    ],
 ];

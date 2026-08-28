@@ -88,7 +88,11 @@ final class ConsumerRegistry
         //    throws → retry/re-drive (FS-01). Contract fixture: fixtures/kb/consumers/
         //    doc10-events.json; ticket roster deliberately empty (doc10.json). This is
         //    the [D10] close of Doc 09 FR-10 (BS:57) and T-05 (BS:88).
-        'kb.article.published' => [\App\Jobs\Kb\KbIndexMaintenanceConsumer::class],
+        'kb.article.published' => [\App\Jobs\Kb\KbIndexMaintenanceConsumer::class, \App\Jobs\Kb\KbTranslationStateConsumer::class],
+        // Doc 10 FR-04 (S10 step 8; A-45 AS RULED): the catalog's DECLARED tenant.provisioned
+        // consumer, implemented — the starter set seeds right after activation (the disclosed
+        // millisecond asynchrony). The ReopenConsumerDrillTest empty pin moves in THIS commit.
+        'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],

@@ -94,6 +94,8 @@ Route::middleware([
 
     Route::post('articles', [App\Http\Controllers\Kb\KbArticleController::class, 'store'])
         ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.articles.store');
+    Route::delete('articles/{articleId}', [App\Http\Controllers\Kb\KbArticleController::class, 'destroy'])
+        ->middleware(['permission:kb.articles.delete', 'audit:kb.article.deleted'])->name('kb.articles.destroy');
     Route::get('articles/{articleId}', [App\Http\Controllers\Kb\KbArticleController::class, 'show'])
         ->middleware('permission:tickets.view')->name('kb.articles.show');
     Route::post('articles/{articleId}/variants', [App\Http\Controllers\Kb\KbArticleController::class, 'addVariant'])
