@@ -102,6 +102,15 @@ Route::middleware([
         ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.created'])->name('kb.articles.variants.store');
     Route::post('articles/{articleId}/translate-all', [App\Http\Controllers\Kb\KbArticleController::class, 'translateAll'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.article.translate_all_requested'])->name('kb.articles.translate_all'); // §14 one click; FR-06's key
+    // FR-06 AI tools (step 9): drafts are born here and finished on the ai queue — no publish path exists on these routes.
+    Route::post('drafts/from-source', [App\Http\Controllers\Kb\KbAuthoringController::class, 'fromSource'])
+        ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.drafts.from_source');
+    Route::post('drafts/from-conversations', [App\Http\Controllers\Kb\KbAuthoringController::class, 'fromConversations'])
+        ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.drafts.from_conversations'); // Doc 09 FR-20's one click (ids-only seam)
+    Route::post('variants/{variantId}/ai/simplify', [App\Http\Controllers\Kb\KbAuthoringController::class, 'simplify'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.ai_requested'])->name('kb.ai.simplify');
+    Route::post('variants/{variantId}/ai/faq', [App\Http\Controllers\Kb\KbAuthoringController::class, 'faqVariants'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.ai_requested'])->name('kb.ai.faq');
     Route::post('articles/{articleId}/move', [App\Http\Controllers\Kb\KbArticleController::class, 'move'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.article.moved'])->name('kb.articles.move');
     Route::patch('variants/{variantId}/meta', [App\Http\Controllers\Kb\KbArticleController::class, 'updateMeta'])

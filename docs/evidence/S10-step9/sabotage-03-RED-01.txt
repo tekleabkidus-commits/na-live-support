@@ -1,0 +1,101 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\KbAiNeverPublishesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit STATIC: no AI authoring path writes status, names a publish tran[39m[90m…[39m [90m7.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every AI-accented variant on record is a draft — no pub[39m[90m…[39m [90m0.39s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\AiAuthoringTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit draft-from-source: 202 + an AI-born draft; the job writes accent[39m[90m…[39m [90m0.28s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit simplify + FAQ variants: rewrite in place (every text block acce[39m[90m…[39m [90m0.33s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit US-06 / SS-03 / [D10] rows 2+5: the Doc 09 top-10 cluster (ids o[39m[90m…[39m [90m0.76s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\KbAiNeverPublishesTest[22m [90m>[39m it STATIC: no AI authorin…   
+[39;1m  an AI path can publish: {"app\/Jobs\/Kb\/KbAuthoringJob.php":["status_sql","published_literal"]}
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    'app/Jobs/Kb/KbAuthoringJob.php' => Array &1 [[39m[39;1m
+  [39;22m[32m+        0 => 'status_sql',[39m[39;1m
+  [39;22m[32m+        1 => 'published_literal',[39m[39;1m
+  [39;22m[32m+    ],[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/KbAiNeverPublishesTest.php[39m:[32m66[39m
+     62▕     foreach (KB_AI_PATHS as $path) {
+     63▕         if (file_exists(base_path($path))) {
+     64▕             $present++;
+     65▕         }
+  ➜  66▕         expect(kbAiPublishPatterns($path))->toBe([], 'an AI path can publish: '.json_encode(kbAiPublishPatterns($path)));
+     67▕     }
+     68▕     expect($present)->toBeGreaterThan(0, 'non-vacuity: at least one AI path exists on disk');
+     69▕ });
+     70▕
+
+  [33m1   [39m[39;1mtests/Security/KbAiNeverPublishesTest.php[39;22m:[39;1m66[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\AiAuthoringTest[22m [90m>[39m it draft-from-source: 202 + an…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'draft'[39m[39;1m
+  [39;22m[32m+'published'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/AiAuthoringTest.php[39m:[32m52[39m
+     48▕     $driver = copilotDriver(new ProviderResponse(aiDraftJson('[FIXTURE] Bonus terms explained', [['type' => 'heading', 'text' => '[FIXTURE] Wagering'], ['type' => 'paragraph', 'text' => '[FIXTURE] You must wager 5x the bonus.'], ['type' => 'list', 'text' => '[FIXTURE] Key dates', 'items' => ['[FIXTURE] Expires after 30 days']]]), 300, 120));
+     49▕     runAuthoringJob(new KbAuthoringJob('kb_draft_from_source', $vid, $creator->identifier(), ['text' => $body['text']]));
+     50▕     $row = DB::table('kb_article_variants')->where('id', $vid)->first(['status', 'title', 'summary', 'working_copy']);
+     51▕     $blocks = json_decode((string) $row->working_copy, true)['blocks'];
+  ➜  52▕     expect($row->status)->toBe('draft')->and($row->title)->toBe('[FIXTURE] Bonus terms explained')->and($row->summary)->toContain('one line')
+     53▕         ->and(count($blocks))->toBe(3)->and(array_unique(array_column($blocks, 'ai')))->toBe([true], 'every produced block is AI-accented')->and($blocks[2]['items'][0])->toContain('30 days')
+     54▕         ->and(DB::table('ai_decisions')->where('task', 'kb_draft_from_source')->value('action'))->toBe('draft_written')
+     55▕         ->and(DB::table('audit_log')->where('action_key', 'kb.variant.ai_drafted')->where('entity_id', $vid)->exists())->toBeTrue()
+     56▕         ->and($driver->seen[0]['messages'][0]['content'])->toContain('never invent, convert or round');
+
+  [33m1   [39m[39;1mtests/Feature/Kb/AiAuthoringTest.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\AiAuthoringTest[22m [90m>[39m it simplify + FAQ variants: re…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'draft'[39m[39;1m
+  [39;22m[32m+'published'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/AiAuthoringTest.php[39m:[32m92[39m
+     88▕     runAuthoringJob(new KbAuthoringJob('kb_faq_variants', $a['variant_id'], $editor->identifier()));
+     89▕     $blocks = json_decode((string) DB::table('kb_article_variants')->where('id', $a['variant_id'])->value('working_copy'), true)['blocks'];
+     90▕     expect(count($blocks))->toBe(2)->and($blocks[1]['type'])->toBe('callout')->and($blocks[1]['label_key'])->toBe('kb.blocks.also_asked')->and($blocks[1]['items'])->toHaveCount(2)->and($blocks[1]['ai'])->toBeTrue()
+     91▕         ->and(__('kb.blocks.also_asked'))->toBe('Also asked')
+  ➜  92▕         ->and(DB::table('kb_article_variants')->where('id', $a['variant_id'])->value('status'))->toBe('draft');
+     93▕     runAuthoringJob(new KbAuthoringJob('kb_faq_variants', $a['variant_id'], $editor->identifier()));
+     94▕     expect(count(json_decode((string) DB::table('kb_article_variants')->where('id', $a['variant_id'])->value('working_copy'), true)['blocks']))->toBe(2, 'redelivery appends nothing');
+     95▕ 
+     96▕     // A dropped digit on simplify is refused (strict both ways).
+
+  [33m1   [39m[39;1mtests/Feature/Kb/AiAuthoringTest.php[39;22m:[39;1m92[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\AiAuthoringTest[22m [90m>[39m it US-06 / SS-03 / [D10] rows…    
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'draft'[39m[39;1m
+  [39;22m[32m+'published'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Kb/AiAuthoringTest.php[39m:[32m146[39m
+    142▕     $driver = copilotDriver(new ProviderResponse(aiDraftJson('[FIXTURE] Bonus questions', [['type' => 'heading', 'text' => '[FIXTURE] Is the bonus valid on live bets?'], ['type' => 'paragraph', 'text' => '[FIXTURE] Operator: describe live-bet eligibility.'], ['type' => 'heading', 'text' => '[FIXTURE] Why did my bonus expire?'], ['type' => 'paragraph', 'text' => '[FIXTURE] Operator: state the expiry rule.']]), 400, 200));
+    143▕     runAuthoringJob(new KbAuthoringJob('kb_draft_from_conversations', $vid, $admin->identifier(), ['message_ids' => $messageIds, 'intent' => 'bonuses']));
+    144▕     $row = DB::table('kb_article_variants')->where('id', $vid)->first(['status', 'title', 'translation_source', 'working_copy']);
+    145▕     $blocks = json_decode((string) $row->working_copy, true)['blocks'];
+  ➜ 146▕     expect($row->status)->toBe('draft')->and($row->translation_source)->toBe('ai')->and($row->title)->toBe('[FIXTURE] Bonus questions')
+    147▕         ->and(array_column(array_filter($blocks, fn ($b) => $b['type'] === 'heading'), 'text'))->toHaveCount(2)
+    148▕         ->and($driver->seen[0]['messages'][1]['content'])->toContain('is the bonus valid on live bets?') /* the customer text reached the model from the SERVER read */
+    149▕         ->and(DB::table('ai_decisions')->where('task', 'kb_draft_from_conversations')->value('action'))->toBe('draft_written');
+    150▕     $decision = DB::table('ai_decisions')->where('task', 'kb_draft_from_conversations')->first(['response_payload']);
+
+  [33m1   [39m[39;1mtests/Feature/Kb/AiAuthoringTest.php[39;22m:[39;1m146[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (43 assertions)[39m
+  [90mDuration:[39m [39m9.58s[39m
+
+EXIT 1

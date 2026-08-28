@@ -39,7 +39,7 @@ final class ArticleWriter
      * @param  list<string>  $tags
      * @return array{article_id: string, variant_id: string, slug: string}
      */
-    public function create(string $categoryId, string $audience, string $sourceLanguage, string $title, string $actorId, array $tags = [], bool $seeded = false, ?string $seededFingerprint = null): array
+    public function create(string $categoryId, string $audience, string $sourceLanguage, string $title, string $actorId, array $tags = [], bool $seeded = false, ?string $seededFingerprint = null, string $translationSource = 'human'): array
     {
         if (! in_array($audience, ['public', 'internal'], true)) {
             throw new InvalidArgumentException('audience is public or internal (FR-02/BR-03)');
@@ -50,13 +50,13 @@ final class ArticleWriter
         }
         $articleId = (string) new UuidV7;
 
-        return DB::transaction(function () use ($articleId, $categoryId, $audience, $sourceLanguage, $title, $actorId, $tags, $seeded, $seededFingerprint): array {
+        return DB::transaction(function () use ($articleId, $categoryId, $audience, $sourceLanguage, $title, $actorId, $tags, $seeded, $seededFingerprint, $translationSource): array {
             DB::table('kb_articles')->insert([
                 'id' => $articleId, 'tenant_id' => $this->context->tenantId(), 'category_id' => $categoryId, 'audience' => $audience,
                 'source_language' => $sourceLanguage, 'tags' => json_encode($tags, JSON_THROW_ON_ERROR),
                 'seeded' => $seeded, 'seeded_fingerprint' => $seededFingerprint, 'created_by' => $actorId,
             ]);
-            $variant = $this->insertVariant($articleId, $sourceLanguage, $title);
+            $variant = $this->insertVariant($articleId, $sourceLanguage, $title, $translationSource); // FR-06: an AI-born source variant is accented from birth
             $this->audit->record('kb.article.created', 'kb_article', $articleId, AuditActor::Staff, ['audience' => $audience, 'source_language' => $sourceLanguage, 'seeded' => $seeded], actorId: $actorId);
 
             return ['article_id' => $articleId] + $variant;

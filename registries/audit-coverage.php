@@ -1269,4 +1269,20 @@ return [
         'required_fields' => ['article_id', 'source_variant_id', 'language', 'decision_id'],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 FR-06 (S10 step 9): a staff member asked an AI tool for a draft/rewrite/FAQ (identifiers + counts only).
+        'action_key' => 'kb.variant.ai_requested',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => ['task'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 FR-06 (S10 step 9): the ai-queue job wrote an accented draft's working copy (never a status).
+        'action_key' => 'kb.variant.ai_drafted',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['system'],
+        'required_fields' => ['article_id', 'task', 'decision_id'],
+        'owning_doc' => 'Doc10',
+    ],
 ];

@@ -22,6 +22,9 @@ return [
         'unknown' => 'This article is no longer available.',
         'read_current' => 'Read the current version',
     ],
+    'blocks' => [
+        'also_asked' => 'Also asked', // FR-06 FAQ variants — the appended block's label (step 9)
+    ],
     'notify' => [
         'review_requested' => 'Article submitted for review',
         'changes_requested' => 'Changes requested on your article',

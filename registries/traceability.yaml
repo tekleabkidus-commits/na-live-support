@@ -2341,15 +2341,20 @@ entries:
     justification: >-
       PLANNED — flips at S10 step 10 to tests/Feature/Kb/FeedbackTest.php: FR-12 events with EC-10 dedupe; the stats header reconciled against a Doc 15 fixture (rendering [D15]).
   - ac_ref: "Doc10 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/KbAiNeverPublishesTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S10 step 9 to tests/Feature/Kb/AiAuthoringTest.php: every FR-06 tool yields an AI-accented draft, never publishes (static + runtime — KbAiNeverPublishesTest), draft-from-conversations end-to-end on a Doc 09 cluster fixture.
+      FLIPPED AT S10 STEP 9: static (no AI path writes status / names a
+      transition; positive control = Transitions.php) + runtime (every AI-born
+      variant is a draft, no publish audit/event); tests/Feature/Kb/AiAuthoringTest.php
+      drives all five FR-06 tools (translate = TranslateAllTest, step 8) — accented
+      drafts, digit guards, and draft-from-conversations end-to-end on a Doc 09
+      cluster fixture through the ids-only seam.
   - ac_ref: "Doc10 AC-10"
     suite_path: manual
     type: manual

@@ -13,6 +13,9 @@ return [
         'unknown' => 'ይህ ጽሑፍ ከአሁን በኋላ አይገኝም።',
         'read_current' => 'ወቅታዊውን እትም ያንብቡ',
     ],
+    'blocks' => [
+        'also_asked' => 'እንዲሁም የሚጠየቁ', // FR-06 FAQ variants — the appended block's label (step 9)
+    ],
     'notify' => [
         'review_requested' => 'ጽሑፍ ለግምገማ ቀርቧል',
         'changes_requested' => 'በጽሑፍዎ ላይ ለውጦች ተጠይቀዋል',
