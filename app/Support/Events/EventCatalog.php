@@ -885,6 +885,15 @@ final class EventCatalog
             'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
             'description' => 'Doc 10 FR-11/FR-12/EC-10: a deduplicated score landed (latest wins per visitor per article) — score is a category (-1|1), the comment never rides the bus.',
         ],
+        // A-48 GRANTED IN PART (batch-C countersign, 2026-08-29): this event enters by filed amendment;
+        // kb.article.deflection_attributed was REFUSED (deflection is Doc 15's metric — [D15]).
+        'kb.feedback.anomaly' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'visitor_bucket', 'refused_count'],
+            'producers' => ['Doc10/FeedbackWriter'],
+            'consumers' => ['Doc15/Reporting'],
+            'description' => 'Doc 10 EC-10/SEC-05: a visitor hit the feedback rate limit (feedback bombing signal for Doc 15). ONE event per visitor bucket per day — the flood the limiter refuses must never reappear on the bus; visitor_bucket is a truncated re-hash, never an identity; refused_count is the day\'s running total at emit time.',
+        ],
         'kb.retrieval.updated' => [
             'schema_version' => 1,
             // FR-13: emitted after the ONE-statement generation swap (or a retire);

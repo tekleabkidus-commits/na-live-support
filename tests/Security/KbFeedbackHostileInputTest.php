@@ -35,8 +35,27 @@ it('rate limit per visitor per hour: the (N+1)th write is refused as rate_limite
     expect(DB::table('kb_feedback')->where('variant_id', $a['variant_id'])->count())->toBe(1, 'dedupe held throughout: one row for the bomber')
         ->and(DB::table('kb_feedback')->where('variant_id', $a['variant_id'])->value('score'))->toBe(-1) /* the refused attempt changed nothing — the latest ACCEPTED (-1, i=2) wins */
         ->and(app(App\Domain\Kb\Feedback\VisitorLimiter::class)->anomaliesToday())->toBe(1);
+
+    // A-48 (granted in part): the FIRST refusal armed Doc 15 — identifiers + a truncated re-hash,
+    // never the visitor hash itself; a SECOND refusal the same day adds NO second event.
+    $anomaly = DB::table('outbox')->where('name', 'kb.feedback.anomaly')->first();
+    expect($anomaly)->not->toBeNull();
+    $payload = json_decode((string) $anomaly->payload, true);
+    $keys = array_keys($payload);
+    sort($keys);
+    expect($keys)->toBe(['article_id', 'refused_count', 'tenant_id', 'variant_id', 'visitor_bucket'])
+        ->and($payload['variant_id'])->toBe($a['variant_id'])->and($payload['refused_count'])->toBe(1)
+        ->and($payload['visitor_bucket'])->not->toBe('bomber')->and(strlen($payload['visitor_bucket']))->toBe(8);
+    try {
+        $w->customer($a['variant_id'], 'bomber', 1, null, 'widget');
+        $this->fail('still limited');
+    } catch (FeedbackRefused) {
+    }
+    expect(DB::table('outbox')->where('name', 'kb.feedback.anomaly')->count())->toBe(1, 'one event per visitor bucket per day — the flood never reaches the bus');
+
     $w->customer($a['variant_id'], 'someone-else', 1, null, 'telegram');
-    expect(DB::table('kb_feedback')->where('variant_id', $a['variant_id'])->count())->toBe(2);
+    expect(DB::table('kb_feedback')->where('variant_id', $a['variant_id'])->count())->toBe(2)
+        ->and(DB::table('outbox')->where('name', 'kb.feedback.anomaly')->count())->toBe(1, 'an accepted write is no anomaly');
 });
 
 it('length cap + inert storage: an over-cap comment is refused (too_long, nothing written); scripts, handlers and javascript: URLs are stripped at write; the table carries a visitor HASH and no customer identity', function (): void {

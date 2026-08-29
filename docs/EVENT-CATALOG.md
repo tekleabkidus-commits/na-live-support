@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-114 event(s).
+115 event(s).
 
 ## `agent.status_changed`
 
@@ -418,6 +418,15 @@ Doc 10 FR-12: a published article was rendered on a surface (widget | telegram |
 - **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `language`, `surface`, `conversation_id`
 - **Producers:** Doc10/UsageEvents
 - **Consumers:** Doc10/Analytics, Doc15/Reporting
+
+## `kb.feedback.anomaly`
+
+Doc 10 EC-10/SEC-05: a visitor hit the feedback rate limit (feedback bombing signal for Doc 15). ONE event per visitor bucket per day — the flood the limiter refuses must never reappear on the bus; visitor_bucket is a truncated re-hash, never an identity; refused_count is the day's running total at emit time.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `visitor_bucket`, `refused_count`
+- **Producers:** Doc10/FeedbackWriter
+- **Consumers:** Doc15/Reporting
 
 ## `kb.feedback.received`
 

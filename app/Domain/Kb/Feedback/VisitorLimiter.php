@@ -42,6 +42,15 @@ final class VisitorLimiter
         return is_numeric($v) ? (int) $v : 0;
     }
 
+    /**
+     * A-48 (granted in part): true exactly ONCE per visitor per UTC day — the kb.feedback.anomaly
+     * emit gate, so a bombing run puts one event on the bus, not one per refused attempt.
+     */
+    public function firstRefusalToday(string $visitorHash): bool
+    {
+        return $this->cache->increment('kb:feedback:anomaly-flag:'.$visitorHash.':'.gmdate('Ymd'), 1, 86400 + 3600, 'ttl-only: the day rolls') === 1;
+    }
+
     public function commentCap(): int
     {
         $raw = $this->settings->get('kb.feedback.comment_max_chars');

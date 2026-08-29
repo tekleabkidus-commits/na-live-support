@@ -47,13 +47,21 @@ final class FeedbackWriter
             throw new InvalidArgumentException('score is -1 or 1');
         }
         $comment = $this->cleanComment($comment);
-        if (! $this->limiter->allow($visitorHash)) {
-            throw new FeedbackRefused('rate_limited', 'feedback rate limit reached for this visitor');
-        }
         /** @var object{id: string, article_id: string, status: string}|null $variant */
         $variant = DB::table('kb_article_variants')->where('id', $variantId)->first(['id', 'article_id', 'status']);
         if ($variant === null || $variant->status !== 'published') {
             throw new InvalidArgumentException('unknown or unpublished variant');
+        }
+        if (! $this->limiter->allow($visitorHash)) {
+            // A-48 (granted in part, batch-C countersign): the FIRST refusal of a visitor's day arms
+            // Doc 15 — one event per bucket per day, identifiers + a truncated re-hash only.
+            if ($this->limiter->firstRefusalToday($visitorHash)) {
+                $this->events->publish('kb.feedback.anomaly', [
+                    'tenant_id' => $this->context->tenantId(), 'article_id' => $variant->article_id, 'variant_id' => $variant->id,
+                    'visitor_bucket' => substr(hash('sha256', 'kb-anomaly:'.$visitorHash), 0, 8), 'refused_count' => $this->limiter->anomaliesToday(),
+                ]);
+            }
+            throw new FeedbackRefused('rate_limited', 'feedback rate limit reached for this visitor');
         }
 
         return DB::transaction(function () use ($variant, $visitorHash, $score, $comment, $source): array {

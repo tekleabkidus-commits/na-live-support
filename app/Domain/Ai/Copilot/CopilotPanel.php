@@ -51,6 +51,7 @@ final class CopilotPanel
         private readonly SimilarTickets $similar,
         private readonly RealtimePusher $pusher,
         private readonly \App\Domain\Kb\Tombstones\CitationLinks $citationLinks, // S10 packet P3 (countersigned): title + version-pinned url on the KB card
+        private readonly \App\Domain\Kb\Search\CopilotKbBlend $blend, // S10 packet P6 (countersigned): FR-17 — retrieval first, keyword fills to three
     ) {}
 
     /** @return array<string, mixed> */
@@ -118,7 +119,9 @@ final class CopilotPanel
         $kb = [];
         try {
             $retrieval = $this->retriever->retrieve($query, array_values(array_unique([$language, 'en'])), includeInternal: true, topK: 3);
-            $kb = array_map(fn (array $c): array => ['article_ref' => $c['article_ref'], 'excerpt' => mb_substr($c['content'], 0, 160)] + ($this->citationLinks->forArticle($c['article_ref'], $language) ?? []), $retrieval['chunks']);
+            // P6: the map's INPUT is the FR-17 blend (retrieval chunks first, keyword hits fill to three,
+            // published-only, Meilisearch down → retrieval-only); the P3 decoration per item is unchanged.
+            $kb = array_map(fn (array $c): array => ['article_ref' => $c['article_ref'], 'excerpt' => $c['excerpt']] + ($this->citationLinks->forArticle($c['article_ref'], $language) ?? []), $this->blend->top3($query, $retrieval['chunks'], $language));
             if ($retrieval['degraded']) {
                 $notices[] = 'ai.copilot.notice.retrieval_degraded';
             }

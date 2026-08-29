@@ -21,11 +21,15 @@ use App\Support\Events\EventCatalog;
 
 // S10 step 7b packet P4: the A-44 amendment GREW the family 6 → 9 (submitted /
 // changes_requested / lock.taken_over — the notification arms' triggers).
+// S10 step 10b: A-48 GRANTED IN PART grew it 9 → 10 (kb.feedback.anomaly — the EC-10
+// bombing signal, one event per visitor bucket per day; kb.article.deflection_attributed
+// was REFUSED: deflection is Doc 15's metric, the inputs stay header facts — [D15]).
 const KB_EVENT_FAMILY = [
     'kb.article.cited_by_ai',
     'kb.article.inserted_by_agent',
     'kb.article.published',
     'kb.article.viewed',
+    'kb.feedback.anomaly',
     'kb.feedback.received',
     'kb.lock.taken_over',
     'kb.retrieval.updated',
