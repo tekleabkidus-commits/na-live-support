@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Kb\Workflow;
 
 use App\Domain\Ai\Retrieval\KbIndexer;
+use App\Domain\Kb\Cache\KbCaches;
+use App\Domain\Kb\Media\ArticleMedia;
 use App\Domain\Kb\Review\ReviewComments;
 use App\Domain\Kb\Sanitizer\PublishSanitizer;
 use App\Domain\Kb\Versioning\Versions;
@@ -44,6 +46,8 @@ final class Transitions
         private readonly KbIndexer $indexer,
         private readonly SettingsRepository $settings,
         private readonly CapabilityMapProvider $verdicts,
+        private readonly ArticleMedia $media,
+        private readonly KbCaches $caches,
     ) {}
 
     public function submit(string $variantId, string $actorId): void
@@ -78,7 +82,7 @@ final class Transitions
      */
     public function publish(string $variantId, \App\Models\User $actor, ?string $note = null, ?array $sanitizerOverride = null): array
     {
-        return DB::transaction(function () use ($variantId, $actor, $note, $sanitizerOverride): array {
+        $result = DB::transaction(function () use ($variantId, $actor, $note, $sanitizerOverride): array {
             $variant = $this->lock($variantId);
             $this->expect($variant->status, ['draft', 'in_review', 'published'], 'publish');
             $selfPublished = $variant->status === 'draft';
@@ -100,6 +104,12 @@ final class Transitions
                 if ($missing !== []) {
                     throw new TransitionRefused('public publish blocked: images without alt text (kb.require_alt)', ['missing_alt' => $missing]);
                 }
+            }
+
+            // EC-05 (step 11): a publish whose image files are gone (retention-deleted) is refused and LISTS them.
+            $gone = $this->media->missingMedia($content);
+            if ($gone !== []) {
+                throw new TransitionRefused('publish blocked: image files no longer exist — re-upload or remove the blocks (EC-05)', ['missing_media' => $gone]);
             }
 
             // T-03/BR-06: flags surface to the publisher; an override is recorded ON the version.
@@ -134,6 +144,9 @@ final class Transitions
 
             return ['version_id' => $minted['version_id'], 'version' => $minted['version'], 'self_published' => $selfPublished, 'flags' => $flags, 'index' => $indexStatus];
         });
+        $this->purgeAfterCommit($variantId); // T-05/FS-03: post-commit, never fatal, TTL-bounded on failure
+
+        return $result;
     }
 
     /** Published → Draft; the chunks retire IN THIS TRANSACTION (EC-06's flip, never a delete). */
@@ -147,6 +160,7 @@ final class Transitions
             $this->retrievalRetired($variant);
             $this->audit->record('kb.variant.unpublished', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => 'published'], 'new' => ['status' => 'draft']], actorId: $actorId);
         });
+        $this->purgeAfterCommit($variantId);
     }
 
     /** FR-09 (step 8 wires archive/un-archive fully): the matrix edge lives here so the status writer stays ONE class. */
@@ -160,6 +174,7 @@ final class Transitions
             $this->retrievalRetired($variant);
             $this->audit->record('kb.variant.archived', 'kb_article_variant', $variantId, AuditActor::Staff, ['old' => ['status' => $variant->status], 'new' => ['status' => 'archived']], actorId: $actorId);
         });
+        $this->purgeAfterCommit($variantId);
     }
 
     public function unarchive(string $variantId, string $actorId): void
@@ -184,6 +199,19 @@ final class Transitions
         }
 
         return count($ids);
+    }
+
+    /**
+     * T-05/FS-03: purge the article's renders + the browse tree after a consumption-changing
+     * edge commits. Failure is DEGRADED, never fatal — kb.render_cache_ttl_seconds (≤ 300)
+     * bounds the staleness, and KbCaches reported it.
+     */
+    private function purgeAfterCommit(string $variantId): void
+    {
+        $articleId = DB::table('kb_article_variants')->where('id', $variantId)->value('article_id');
+        if (is_string($articleId)) {
+            $this->caches->purgeArticle($articleId);
+        }
     }
 
     /**

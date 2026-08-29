@@ -29,5 +29,20 @@ final class KbServiceProvider extends ServiceProvider
         $this->app->when(\App\Domain\Ai\Chatbot\ChatbotTurn::class)
             ->needs(\App\Domain\Ai\Retrieval\HybridRetriever::class)
             ->give(static fn (\Illuminate\Contracts\Foundation\Application $app): \App\Domain\Ai\Retrieval\HybridRetriever => new \App\Domain\Ai\Retrieval\HybridRetriever($app->make(\App\Domain\Ai\Orchestrator\AiOrchestrator::class), 'kb_chunks_public'));
+        // FR-05/SEC-02 (step 11): article media rides Doc 04's pipeline — same disk, same SSE
+        // posture, same scan and serve halves; only the kb key shape is Doc 10's (disclosed).
+        $this->app->bind(\App\Domain\Kb\Media\ArticleMedia::class, function (\Illuminate\Contracts\Foundation\Application $app): \App\Domain\Kb\Media\ArticleMedia {
+            /** @var \Illuminate\Config\Repository $config */
+            $config = $app->make('config');
+
+            return new \App\Domain\Kb\Media\ArticleMedia(
+                $app->make(\Illuminate\Contracts\Filesystem\Factory::class),
+                $app->make(\App\Support\Tenancy\TenantContext::class),
+                $app->make(\App\Domain\Conversations\Media\ClamdClient::class),
+                $app->make(\App\Domain\Conversations\Media\MediaStore::class),
+                $config->string('media.disk'),
+                $config->boolean('media.sse'),
+            );
+        });
     }
 }

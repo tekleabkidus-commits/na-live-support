@@ -52,6 +52,14 @@ return [
     'auth.widget.session' => 'FR-21 issuance mutates Redis only; §4.8\'s closed event set has no visitor event (step-10 ruling). Refusals emit the widget.origin_blocked security metric instead.',
     'auth.widget.broadcast' => 'Reverb channel authorization: grants a socket subscription, mutates nothing durable; the visitor channel callback is the enforcement point (FR-21).',
     'auth.widget.preflight' => 'CORS preflight catch-all: answers OPTIONS with headers only; no credential is even readable at preflight time (T-06).',
+    // Doc 10 FR-18 (S10 step 11): reads mutate nothing; the two visitor writes have their OWN records —
+    // feedback lands in kb_feedback + kb.feedback.received on the bus (Q7 shape; a visitor is no staff
+    // actor for the audit trail), and views land as kb.article.viewed events (FR-12's analytics record).
+    'kb.widget.categories' => 'Read-only browse of the cached public tree; mutates nothing.',
+    'kb.widget.search' => 'Read-only keyword search; SEC-06 — the query is deliberately stored NOWHERE, an audit row would violate that.',
+    'kb.widget.article' => 'Read; the kb.article.viewed EVENT is the record (FR-12) — an audit row per customer read would be noise, and no staff actor exists.',
+    'kb.widget.feedback' => 'The kb_feedback row + kb.feedback.received event ARE the durable record (EC-10 dedupe arbiter); no staff actor exists for an audit row.',
+    'kb.widget.media' => 'Read-only redirect to a signed URL for public published article media; mutates nothing.',
 
     /*
      | Doc 02's two uniform-response request routes (SEC-01/AC-01). Both answer

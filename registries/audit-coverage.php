@@ -1301,4 +1301,12 @@ return [
         'required_fields' => ['variant_id'],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 FR-05/SEC-02 (S10 step 11): a staff editor uploaded an article image (scanned clean before storage).
+        'action_key' => 'kb.article.media_uploaded',
+        'entity' => 'kb_article_variant',
+        'actor_types' => ['staff'],
+        'required_fields' => [],
+        'owning_doc' => 'Doc10',
+    ],
 ];

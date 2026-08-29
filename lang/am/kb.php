@@ -21,4 +21,11 @@ return [
         'changes_requested' => 'በጽሑፍዎ ላይ ለውጦች ተጠይቀዋል',
         'lock_taken_over' => 'ሌላ ሰው የጽሑፍዎን አርትዖት ተረክቧል',
     ],
+    'flow' => [ // FR-19/BR-04 (step 11): the bot-menu contract's labels — rendering is Doc 05/12's
+        'category_title' => 'የእገዛ ርዕሶች፦ :name',
+        'category_empty' => 'እዚህ ገና ጽሑፎች የሉም።',
+        'category_unknown' => 'ይህ ርዕስ ከአሁን በኋላ አይገኝም።',
+        'article_summary' => ':summary — ተጨማሪ ያንብቡ፦ :link',
+        'start_chat' => 'ከእኛ ጋር ይወያዩ',
+    ],
 ];

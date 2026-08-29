@@ -30,4 +30,11 @@ return [
         'changes_requested' => 'Changes requested on your article',
         'lock_taken_over' => 'Someone took over editing your article',
     ],
+    'flow' => [ // FR-19/BR-04 (step 11): the bot-menu contract's labels — rendering is Doc 05/12's
+        'category_title' => 'Help topics: :name',
+        'category_empty' => 'No articles here yet.',
+        'category_unknown' => 'This topic is no longer available.',
+        'article_summary' => ':summary — read more: :link',
+        'start_chat' => 'Chat with us',
+    ],
 ];

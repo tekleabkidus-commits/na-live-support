@@ -113,6 +113,10 @@ Route::middleware([
         ->middleware(['permission:tickets.view', 'audit:kb.feedback.noted'])->name('kb.feedback.note'); // FR-11: any staff member
     Route::post('feedback/{feedbackId}/action', [App\Http\Controllers\Kb\KbFeedbackController::class, 'action'])
         ->middleware(['permission:kb.feedback.view', 'audit:kb.feedback.actioned'])->name('kb.feedback.action');
+    // FR-05/SEC-02 (step 11): article image upload — scan → store → signed editing URL; the
+    // customer-facing path is the widget media door (public+published enforced there).
+    Route::post('variants/{variantId}/media', [App\Http\Controllers\Kb\KbMediaController::class, 'store'])
+        ->middleware(['permission:kb.articles.edit', 'audit:kb.article.media_uploaded'])->name('kb.media.store');
     // FR-06 AI tools (step 9): drafts are born here and finished on the ai queue — no publish path exists on these routes.
     Route::post('drafts/from-source', [App\Http\Controllers\Kb\KbAuthoringController::class, 'fromSource'])
         ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.drafts.from_source');

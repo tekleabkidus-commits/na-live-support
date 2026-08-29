@@ -117,4 +117,11 @@ return [
     'auth.widget.context' => 'Resolution probe on the visitor surface: reports the visitor\'s own resolved context; visitor-token + cookie authenticated (widget guard).',
     'auth.widget.broadcast' => 'Reverb auth for the visitor\'s OWN channels only (FR-21); enforced by the channel callback comparing principal to channel name, not by a permission key.',
     'auth.widget.preflight' => 'CORS preflight catch-all (T-06): no credential, no principal, headers-only response.',
+    // Doc 10 FR-18 (S10 step 11): the widget Help tab — the exemptions' shape inherited exactly as
+    // promised above (visitor-token scoped; PUBLIC + PUBLISHED content only, enforced in the read model).
+    'kb.widget.categories' => 'Visitor surface (FR-18): public published browse tree only; no staff principal exists (BR-06).',
+    'kb.widget.search' => 'Visitor surface (FR-18): keyword search hard-filtered to visibility=public status=published index-side; no widening parameter exists.',
+    'kb.widget.article' => 'Visitor surface (FR-18): HelpContent serves public+published current versions only; internal/draft/unknown all 404 (C-10).',
+    'kb.widget.feedback' => 'Visitor surface (FR-11/SEC-05): the visitor principal IS the dedupe hash; rate-limited + length-capped + inert-stored by the step-10 writer.',
+    'kb.widget.media' => 'Visitor surface (FR-05): serves only files of public articles with a published variant; signing rotates behind the stable path.',
 ];

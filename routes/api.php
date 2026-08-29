@@ -499,6 +499,23 @@ Route::group([], function (): void {
                 Route::get('context', [IngressProbeController::class, 'show'])
                     ->name('auth.widget.context');
 
+                /*
+                 | ── Doc 10 FR-18 (S10 step 11): the widget Help tab's API — the first real
+                 | endpoints mounted on this stack (the mounting this group's docblock
+                 | anticipates). PUBLIC + PUBLISHED content only; the visitor principal is
+                 | the feedback hash; rendering is Doc 13's ([D13]).
+                 */
+                Route::get('kb/categories', [App\Http\Controllers\Widget\KbHelpController::class, 'categories'])
+                    ->name('kb.widget.categories');
+                Route::get('kb/search', [App\Http\Controllers\Widget\KbHelpController::class, 'search'])
+                    ->name('kb.widget.search');
+                Route::get('kb/articles/{articleId}', [App\Http\Controllers\Widget\KbHelpController::class, 'article'])
+                    ->name('kb.widget.article');
+                Route::post('kb/feedback', [App\Http\Controllers\Widget\KbHelpController::class, 'feedback'])
+                    ->name('kb.widget.feedback');
+                Route::get('kb/media/{articleId}/{file}', [App\Http\Controllers\Widget\KbHelpController::class, 'media'])
+                    ->name('kb.widget.media');
+
                 // FR-21's "that visitor's own Reverb channels": the widget
                 // surface's OWN broadcasting-auth door. The visitor channel in
                 // routes/channels.php names the widget guard; the staff door

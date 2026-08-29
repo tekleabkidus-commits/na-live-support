@@ -1,0 +1,19 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Security\EnumerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body for an existing and a non-existing[39m[90m…[39m [90m9.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical body regardless of which TENANT the add[39m[90m…[39m [90m1.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit spends the same work across 0, 1 and N candidate paths (AC-01 ti[39m[90m…[39m [90m8.87s[39m  
+  [33;1m-[39;22m[90m [39m[90mit does the password-verification work even when no account matches[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never reveals which of several tenants the address belongs to, e[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns a byte-identical reset-request body across 0, 1 and N ca[39m[90m…[39m [90m0.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers reset requests at the fixed floor whatever matched — and[39m[90m…[39m [90m2.19s[39m  
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.492 ms   p99   1.346 ms   max   2.178 ms   budget(p99) 0.3 ms   OVER
+  [dev-hardware-indicative] NFR-01 cold map rebuild      p50   3.360 ms   p99   4.372 ms   max   4.499 ms   budget(p99) 20.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\RbacBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil[39m[90m…[39m [90m1.22s[39m  
+
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (29 assertions)[39m
+  [90mDuration:[39m [39m24.23s[39m
+
