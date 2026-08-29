@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { dismissCoachMarks } from './support/coach';
 
 /*
  * Doc 10 S10 step 12 ([B9]) — the staff KB surfaces, functional-state proofs:
@@ -103,6 +104,22 @@ test('editor: the INTERNAL banner on an internal article; the sanitizer flags pa
     await page.getByTestId('kb-publish-confirm').click();
     // The DOOR refused (alt gate) and the dialog lists the block — AC-10 made visible.
     await expect(page.getByTestId('kb-missing-alt')).toContainText('img1');
+});
+
+test('P8 (countersigned): the shell reaches the KB — ⌘K, type "knowledge", the one nav action navigates to /admin/kb', async ({
+    page,
+}) => {
+    await login(page);
+    await page.goto('/inbox');
+    await dismissCoachMarks(page);
+    await page.keyboard.press('ControlOrMeta+k');
+    await expect(page.getByTestId('command-palette')).toBeVisible();
+    await page.getByTestId('palette-input').fill('knowledge');
+    const action = page.locator('[data-action="open-kb"]');
+    await expect(action).toBeVisible();
+    await action.click();
+    await page.waitForURL((url) => url.pathname === '/admin/kb');
+    await expect(page.getByTestId('kb-pane-categories')).toBeVisible();
 });
 
 test('history lists the immutable version; the tombstone page answers Current for a live citation and Retired for a retired one — never a 404', async ({

@@ -124,6 +124,35 @@ final class MenuDesigner
         return (bool) $this->redis->connection(self::CONNECTION)->command('exists', [$this->cacheKey($menuId)]);
     }
 
+    /**
+     * P7 (S10 COUNTERSIGNED, 2026-08-30): bind a button's target — the door Doc 12's builder UI
+     * will mount. KB kinds validate EXISTENCE against the kb tables at bind time ONLY (published-
+     * ness is render-time truth: an article that later unpublishes degrades at render via the
+     * tombstone key, never strands the menu). The widened CHECK is the physics behind this
+     * validation; refs stay opaque (SEC-05 — never executed as flow ids). Upsert on (bot, key):
+     * re-binding a button replaces its target.
+     */
+    public function bindTarget(string $botId, string $key, string $targetType, ?string $targetRef): void
+    {
+        if ($targetType === 'kb_article' || $targetType === 'kb_category') {
+            $table = $targetType === 'kb_article' ? 'kb_articles' : 'kb_categories';
+            $exists = $targetRef !== null
+                && DB::table($table)->where('id', $targetRef)->whereNull('deleted_at')->exists();
+            if (! $exists) {
+                throw new DomainException(sprintf('FR-19: a %s target must name an existing row (existence only — published-ness is render-time truth).', $targetType));
+            }
+        }
+        $existing = DB::table('telegram_flow_targets')->where('bot_id', $botId)->where('key', $key)->value('id');
+        if (is_string($existing)) {
+            DB::table('telegram_flow_targets')->where('id', $existing)->update(['target_type' => $targetType, 'target_ref' => $targetRef]);
+        } else {
+            DB::table('telegram_flow_targets')->insert([
+                'id' => (string) Str::uuid7(), 'tenant_id' => $this->context->tenantId(),
+                'bot_id' => $botId, 'key' => $key, 'target_type' => $targetType, 'target_ref' => $targetRef,
+            ]);
+        }
+    }
+
     /** @param list<array{row: int, buttons: list<array{label: string, target_key: string}>}> $definition */
     private function validate(array $definition): void
     {

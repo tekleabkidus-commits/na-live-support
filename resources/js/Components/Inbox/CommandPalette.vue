@@ -64,6 +64,9 @@ const actions = computed(() => {
     }
     rows.push({ id: 'toggle-density', label: props.t.action_toggle_density ?? '' });
     rows.push({ id: 'set-away', label: props.t.action_set_away ?? '' });
+    // P8 (S10 countersigned): the shell's one KB nav entry. tickets.view gates the target route
+    // (and this whole workspace), so no extra render gate exists to fail closed on.
+    rows.push({ id: 'open-kb', label: props.t.action_open_kb ?? '' });
     return rows;
 });
 

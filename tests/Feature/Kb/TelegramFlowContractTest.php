@@ -58,3 +58,43 @@ it('FR-19/BR-04: a category renders numbered public-published options (one per a
         expect(Lang::has($key, 'en'))->toBeTrue($key.' en')->and(Lang::has($key, 'am'))->toBeTrue($key.' am');
     }
 });
+
+it('P7 (countersigned): the widened CHECK accepts kb targets bound through MenuDesigner::bindTarget (existence-only validation; re-bind replaces); an unknown kb id refuses at bind; garbage kinds refuse by PHYSICS; an unbound/stale target degrades at render, never a 500', function (): void {
+    $s = kbScene();
+    $designer = app(App\Domain\Telegram\Direct\MenuDesigner::class);
+    $a = kbArticle($s, '[FIXTURE] Bindable article');
+    $this->actingAs($s['admin'], 'staff')->postJson('https://localhost/admin/kb/variants/'.$a['variant_id'].'/publish')->assertOk();
+    bindTenant($s['tenant']);
+    $botId = (string) Illuminate\Support\Str::uuid7();
+    Illuminate\Support\Facades\DB::table('telegram_bots')->insert([
+        'id' => $botId, 'tenant_id' => $s['tenant_id'], 'telegram_bot_id' => random_int(1_000_000_000, 9_999_999_999),
+        'username' => 'kbflowbot', 'display_name' => '[FIXTURE] KB Flow Bot', 'mode' => 'direct',
+    ]);
+
+    // Bind both kb kinds; re-bind replaces the target on the same (bot, key), same row.
+    $designer->bindTarget($botId, 'help-article', 'kb_article', $a['article_id']);
+    $designer->bindTarget($botId, 'help-topics', 'kb_category', $s['category_id']);
+    expect(Illuminate\Support\Facades\DB::table('telegram_flow_targets')->where('bot_id', $botId)->count())->toBe(2);
+    $rowId = Illuminate\Support\Facades\DB::table('telegram_flow_targets')->where('key', 'help-article')->value('id');
+    $designer->bindTarget($botId, 'help-article', 'kb_category', $s['category_id']);
+    expect(Illuminate\Support\Facades\DB::table('telegram_flow_targets')->where('key', 'help-article')->value('id'))->toBe($rowId)
+        ->and(Illuminate\Support\Facades\DB::table('telegram_flow_targets')->where('bot_id', $botId)->count())->toBe(2);
+
+    // Existence-only at bind: an unknown kb id refuses (published-ness stays render-time truth).
+    expect(fn () => $designer->bindTarget($botId, 'bad', 'kb_article', '018f6b2e-0000-7000-8000-00000000dead'))
+        ->toThrow(DomainException::class);
+
+    // The CHECK is the physics: a kind outside the widened set refuses at the constraint
+    // (savepoint-wrapped so the refusal never poisons the test transaction — the house pattern).
+    expect(fn () => Illuminate\Support\Facades\DB::transaction(fn () => Illuminate\Support\Facades\DB::table('telegram_flow_targets')->insert([
+        'id' => (string) Illuminate\Support\Str::uuid7(), 'tenant_id' => $s['tenant_id'],
+        'bot_id' => $botId, 'key' => 'rogue', 'target_type' => 'sms_blast', 'target_ref' => null,
+    ])))->toThrow(Illuminate\Database\QueryException::class);
+
+    // The negative control: a target whose article DISAPPEARED after binding degrades at render
+    // with the tombstone/unknown keys — the renderer never throws, the menu never strands.
+    $renderer = app(KbFlowRenderer::class);
+    $gone = $renderer->forArticle('018f6b2e-0000-7000-8000-00000000dead', ['en']);
+    expect($gone['tombstone_key'])->toBe('kb.tombstone.retired')->and($gone['link'])->toBeNull();
+    expect($renderer->forCategory('018f6b2e-0000-7000-8000-00000000dead', ['en'])['empty_key'])->toBe('kb.flow.category_unknown');
+});

@@ -309,6 +309,7 @@ return [
         'action_resolve' => 'ቲኬት :number ፍታ',
         'action_toggle_density' => 'ጥግግት ቀያይር',
         'action_set_away' => 'እራሴን ራቅ አድርግ',
+        'action_open_kb' => 'የእውቀት ማዕከልን ክፈት', // P8 (S10 countersigned)
         'hint_move' => 'አንቀሳቅስ',
         'hint_open' => 'ክፈት',
         'recent_label' => 'የቅርብ ጊዜ፦',

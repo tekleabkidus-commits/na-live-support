@@ -491,6 +491,10 @@ function onPaletteMessage(payload: { conversationId: string; messageId: string }
 // on the active thread; Away rides the FR-28 status door.
 async function onPaletteAction(id: string): Promise<void> {
     paletteOpen.value = false;
+    if (id === 'open-kb') {
+        window.location.href = '/admin/kb'; // P8 (S10 countersigned): the KB manager
+        return;
+    }
     if (id === 'toggle-density') {
         setDensity(density.value === 'comfortable' ? 'compact' : 'comfortable');
         return;
