@@ -1285,4 +1285,20 @@ return [
         'required_fields' => ['article_id', 'task', 'decision_id'],
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 10 FR-11 (S10 step 10): a staff member left an internal feedback note on a variant (the note text stays in the row, not the audit).
+        'action_key' => 'kb.feedback.noted',
+        'entity' => 'kb_feedback',
+        'actor_types' => ['staff'],
+        'required_fields' => ['variant_id'],
+        'owning_doc' => 'Doc10',
+    ],
+    [
+        // Doc 10 §7 stats header (S10 step 10): a feedback item was marked actioned by a kb.feedback.view holder.
+        'action_key' => 'kb.feedback.actioned',
+        'entity' => 'kb_feedback',
+        'actor_types' => ['staff'],
+        'required_fields' => ['variant_id'],
+        'owning_doc' => 'Doc10',
+    ],
 ];

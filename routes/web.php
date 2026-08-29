@@ -102,6 +102,17 @@ Route::middleware([
         ->middleware(['permission:kb.articles.edit', 'audit:kb.variant.created'])->name('kb.articles.variants.store');
     Route::post('articles/{articleId}/translate-all', [App\Http\Controllers\Kb\KbArticleController::class, 'translateAll'])
         ->middleware(['permission:kb.articles.edit', 'audit:kb.article.translate_all_requested'])->name('kb.articles.translate_all'); // §14 one click; FR-06's key
+    // FR-17 staff search + §7 stats/feedback + FR-11 staff notes (step 10). Search is a READ (SEC-06: the query is stored nowhere).
+    Route::get('search', [App\Http\Controllers\Kb\KbSearchController::class, 'index'])
+        ->middleware('permission:tickets.view')->name('kb.search');
+    Route::get('articles/{articleId}/stats', [App\Http\Controllers\Kb\KbFeedbackController::class, 'stats'])
+        ->middleware('permission:kb.feedback.view')->name('kb.articles.stats');
+    Route::get('articles/{articleId}/feedback', [App\Http\Controllers\Kb\KbFeedbackController::class, 'index'])
+        ->middleware('permission:kb.feedback.view')->name('kb.articles.feedback');
+    Route::post('variants/{variantId}/feedback/note', [App\Http\Controllers\Kb\KbFeedbackController::class, 'note'])
+        ->middleware(['permission:tickets.view', 'audit:kb.feedback.noted'])->name('kb.feedback.note'); // FR-11: any staff member
+    Route::post('feedback/{feedbackId}/action', [App\Http\Controllers\Kb\KbFeedbackController::class, 'action'])
+        ->middleware(['permission:kb.feedback.view', 'audit:kb.feedback.actioned'])->name('kb.feedback.action');
     // FR-06 AI tools (step 9): drafts are born here and finished on the ai queue — no publish path exists on these routes.
     Route::post('drafts/from-source', [App\Http\Controllers\Kb\KbAuthoringController::class, 'fromSource'])
         ->middleware(['permission:kb.articles.create', 'audit:kb.article.created'])->name('kb.drafts.from_source');

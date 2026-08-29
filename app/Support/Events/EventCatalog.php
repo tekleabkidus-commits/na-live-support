@@ -870,13 +870,28 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox'],
             'description' => 'Doc 10 FR-05/T-07: an editing lock was taken over — the displaced holder gets notify.kb.lock_taken_over.',
         ],
+        // ── Doc 10 FR-12 (S10 step 10): the two analytics events the plan's family names — identifiers + categories only (Q7).
+        'kb.article.viewed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'version_id', 'language', 'surface', 'conversation_id'],
+            'producers' => ['Doc10/UsageEvents'],
+            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
+            'description' => 'Doc 10 FR-12: a published article was rendered on a surface (widget | telegram | staff | copilot); conversation_id (nullable) is the deflection-attribution key Doc 15 joins on.',
+        ],
+        'kb.feedback.received' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'article_id', 'variant_id', 'feedback_id', 'source', 'score', 'has_comment'],
+            'producers' => ['Doc10/FeedbackWriter'],
+            'consumers' => ['Doc10/Analytics', 'Doc15/Reporting'],
+            'description' => 'Doc 10 FR-11/FR-12/EC-10: a deduplicated score landed (latest wins per visitor per article) — score is a category (-1|1), the comment never rides the bus.',
+        ],
         'kb.retrieval.updated' => [
             'schema_version' => 1,
             // FR-13: emitted after the ONE-statement generation swap (or a retire);
             // status names which — current | retired | failed.
             'payload' => ['tenant_id', 'article_id', 'variant_id', 'version_id', 'retrieval_generation', 'status'],
             'producers' => ['Doc10/KbIndexMaintenance'],
-            'consumers' => ['Doc09/Retrieval', 'Doc15/Reporting'],
+            'consumers' => ['Doc09/Retrieval', 'Doc10/KbSearchIndexer', 'Doc15/Reporting'],
             'description' => 'Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) or was retired — Doc 09 caches invalidate; Doc 15 counts index freshness.',
         ],
         'ai.config.published' => [

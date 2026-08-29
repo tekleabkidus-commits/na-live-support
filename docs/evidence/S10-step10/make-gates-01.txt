@@ -1,0 +1,28 @@
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   FAIL
+      no-channel-conditionals: app/Domain/Kb/Feedback/FeedbackWriter.php:44:        if (! in_array($score, [-1, 1], true) || ! in_array($source, ['widget', 'telegram'], true)) {
+      no-channel-conditionals: FAIL (1 violation(s)). Channel behavior belongs behind the Channel Adapter contract (Doc 04 T-09, invariant N-20).
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             FAIL
+      event-catalog: FAIL — docs/EVENT-CATALOG.md is out of sync with App\Support\Events\EventCatalog.
+      The catalog is the integration contract for Docs 04-17; a stale one tells a consumer team a payload shape no producer emits.
+      Run: php ci/event-catalog.php --write
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 12 passed, 2 failed, 0 skipped.
+FAILED: no-channel-conditionals event-catalog
+make: *** [Makefile:97: gates] Error 1

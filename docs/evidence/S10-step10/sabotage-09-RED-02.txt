@@ -1,0 +1,73 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\FeedbackTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit EC-10 dedupe: one score per visitor per article, latest wins (ro[39m[90m…[39m [90m9.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-08: the stats header reconciles against the Doc 15 input fixt[39m[90m…[39m [90m0.71s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\KbFeedbackHostileInputTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rate limit per visitor per hour: the (N+1)th write is refused as[39m[90m…[39m [90m0.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit length cap + inert storage: an over-cap comment is refused (too_[39m[90m…[39m [90m0.75s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\FeedbackTest[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "kb_feedback_visitor_dedupe" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "kb_feedback" ("id", "tenant_id", "article_id", "variant_id", "source", "visitor_hash", "staff_id", "score", "comment") values (01a04e9c-c11b-7d56-ae1f-78cf56aaecba, 01a04e9c-bd70-731d-9a4c-721731f20713, 01a04e9c-bf03-73c1-9330-d3dad3d3f0f5, 01a04e9c-bf06-7305-823a-8615996a068c, widget, visitor-hash-1, ?, 1, ?))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m70[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\FeedbackTest[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "kb_feedback_visitor_dedupe" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "kb_feedback" ("id", "tenant_id", "article_id", "variant_id", "source", "visitor_hash", "staff_id", "score", "comment") values (01a04e9c-c40e-74fe-a9b4-ae72ebe659df, 01a04e9c-c16a-72af-9587-f447b599cfba, 01a04e9c-c1e5-74e8-9e81-0cf3f5a5a008, 01a04e9c-c1e8-7743-a373-b6b607e8cbc6, widget, visitor-v2, ?, 1, ?))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m70[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\KbFeedbackHost[22m… [41;1m UniqueConstraintViolationException [49;22m  
+[39;1m  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "kb_feedback_visitor_dedupe" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "kb_feedback" ("id", "tenant_id", "article_id", "variant_id", "source", "visitor_hash", "staff_id", "score", "comment") values (01a04e9c-c696-7331-9316-d49041d19427, 01a04e9c-c454-72b2-bab5-53c8be6682b9, 01a04e9c-c49f-7efe-950b-783ebd3a9aed, 01a04e9c-c4a4-7398-bc1b-33ac742b9d66, widget, bomber, ?, 1, ?))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m70[39;22m
+      [2m+3 vendor frames [22m
+  [33m11  [39m[39;1mapp/Domain/Kb/Feedback/FeedbackWriter.php[39;22m:[39;1m59[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (28 assertions)[39m
+  [90mDuration:[39m [39m11.37s[39m
+

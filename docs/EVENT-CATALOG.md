@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-112 event(s).
+114 event(s).
 
 ## `agent.status_changed`
 
@@ -410,6 +410,24 @@ Doc 10 FR-13: a variant was published — humans see it immediately; the index c
 - **Producers:** Doc10/Transitions
 - **Consumers:** Doc10/KbIndexMaintenance, Doc10/TranslationState, Doc10/KbSearchIndexer, Doc15/Reporting, Doc17/Audit
 
+## `kb.article.viewed`
+
+Doc 10 FR-12: a published article was rendered on a surface (widget | telegram | staff | copilot); conversation_id (nullable) is the deflection-attribution key Doc 15 joins on.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `language`, `surface`, `conversation_id`
+- **Producers:** Doc10/UsageEvents
+- **Consumers:** Doc10/Analytics, Doc15/Reporting
+
+## `kb.feedback.received`
+
+Doc 10 FR-11/FR-12/EC-10: a deduplicated score landed (latest wins per visitor per article) — score is a category (-1|1), the comment never rides the bus.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `article_id`, `variant_id`, `feedback_id`, `source`, `score`, `has_comment`
+- **Producers:** Doc10/FeedbackWriter
+- **Consumers:** Doc10/Analytics, Doc15/Reporting
+
 ## `kb.lock.taken_over`
 
 Doc 10 FR-05/T-07: an editing lock was taken over — the displaced holder gets notify.kb.lock_taken_over.
@@ -426,7 +444,7 @@ Doc 10 FR-13/T-05: the retrieval index for a variant changed generation (swap) o
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `article_id`, `variant_id`, `version_id`, `retrieval_generation`, `status`
 - **Producers:** Doc10/KbIndexMaintenance
-- **Consumers:** Doc09/Retrieval, Doc15/Reporting
+- **Consumers:** Doc09/Retrieval, Doc10/KbSearchIndexer, Doc15/Reporting
 
 ## `kb.variant.changes_requested`
 

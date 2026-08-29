@@ -1,0 +1,26 @@
+{
+  "doc": "Doc10 AC-08 → Doc 15 input contract (S10 step 10). SYNTHETIC. The events below are replayed onto one article; the header MUST reconcile to `expected`. Doc 15 inherits this file as the input side of its deflection formula ([D15]); the formula itself is not asserted here.",
+  "events": [
+    {"name": "kb.article.viewed", "surface": "widget", "conversation": "c1", "ticket_within_24h": false},
+    {"name": "kb.article.viewed", "surface": "widget", "conversation": "c2", "ticket_within_24h": true},
+    {"name": "kb.article.viewed", "surface": "telegram", "conversation": null, "ticket_within_24h": false},
+    {"name": "kb.article.viewed", "surface": "staff", "conversation": null, "ticket_within_24h": false},
+    {"name": "kb.article.cited_by_ai", "conversation": "c3", "ticket_within_24h": false},
+    {"name": "kb.article.cited_by_ai", "conversation": "c4", "ticket_within_24h": true},
+    {"name": "kb.article.inserted_by_agent", "conversation": "c5"}
+  ],
+  "feedback": [
+    {"visitor": "v1", "score": 1, "comment": "[FIXTURE] helpful"},
+    {"visitor": "v2", "score": -1, "comment": null},
+    {"visitor": "v2", "score": 1, "comment": null},
+    {"visitor": "v3", "score": 1, "comment": null}
+  ],
+  "expected": {
+    "views": {"widget": 2, "telegram": 1, "staff": 1, "copilot": 0},
+    "citations": 2,
+    "inserts": 1,
+    "feedback": {"up": 3, "down": 0, "helpful_pct": 100, "comments": 1},
+    "deflection_candidates": 2,
+    "note": "v2 voted twice — latest wins (EC-10): up 3 / down 0; c2 and c4 raised tickets within 24 h → not candidates; c1 + c3 are"
+  }
+}

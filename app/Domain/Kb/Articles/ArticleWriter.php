@@ -6,12 +6,14 @@ namespace App\Domain\Kb\Articles;
 
 use App\Domain\Ai\Retrieval\KbIndexer;
 use App\Domain\Kb\Categories\CategoryTree;
+use App\Domain\Kb\Search\KbSearchDocuments;
 use App\Domain\Kb\Slug\Slugger;
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use Symfony\Component\Uid\UuidV7;
 
@@ -33,6 +35,7 @@ final class ArticleWriter
         private readonly Slugger $slugger,
         private readonly CategoryTree $categories,
         private readonly KbIndexer $indexer,
+        private readonly KbSearchDocuments $search,
     ) {}
 
     /**
@@ -50,7 +53,7 @@ final class ArticleWriter
         }
         $articleId = (string) new UuidV7;
 
-        return DB::transaction(function () use ($articleId, $categoryId, $audience, $sourceLanguage, $title, $actorId, $tags, $seeded, $seededFingerprint, $translationSource): array {
+        $created = DB::transaction(function () use ($articleId, $categoryId, $audience, $sourceLanguage, $title, $actorId, $tags, $seeded, $seededFingerprint, $translationSource): array {
             DB::table('kb_articles')->insert([
                 'id' => $articleId, 'tenant_id' => $this->context->tenantId(), 'category_id' => $categoryId, 'audience' => $audience,
                 'source_language' => $sourceLanguage, 'tags' => json_encode($tags, JSON_THROW_ON_ERROR),
@@ -61,6 +64,9 @@ final class ArticleWriter
 
             return ['article_id' => $articleId] + $variant;
         });
+        $this->reindex($created['variant_id']);
+
+        return $created;
     }
 
     /** @return array{variant_id: string, slug: string} */
@@ -71,12 +77,15 @@ final class ArticleWriter
             throw new InvalidArgumentException('unknown article');
         }
 
-        return DB::transaction(function () use ($articleId, $language, $title, $actorId, $translationSource): array {
+        $variant = DB::transaction(function () use ($articleId, $language, $title, $actorId, $translationSource): array {
             $variant = $this->insertVariant($articleId, $language, $title, $translationSource);
             $this->audit->record('kb.variant.created', 'kb_article_variant', $variant['variant_id'], AuditActor::Staff, ['article_id' => $articleId, 'language' => $language, 'translation_source' => $translationSource], actorId: $actorId);
 
             return $variant;
         });
+        $this->reindex($variant['variant_id']);
+
+        return $variant;
     }
 
     /**
@@ -118,6 +127,7 @@ final class ArticleWriter
             }
             $this->audit->record('kb.variant.updated', 'kb_article_variant', $variant->id, AuditActor::Staff, ['fields' => array_keys($variantRow + $articleRow)], actorId: $actorId);
         });
+        $this->reindex($variant->id);
     }
 
     /** EC-02: a move into a non-ai_usable category retires the chunks on the unpublish path; back into one marks them pending. */
@@ -151,6 +161,21 @@ final class ArticleWriter
             $this->indexer->retire($articleId);
             $this->audit->record('kb.article.deleted', 'kb_article', $articleId, AuditActor::Staff, ['soft' => true], actorId: $actorId);
         });
+        /** @var list<string> $variantIds */
+        $variantIds = DB::table('kb_article_variants')->where('article_id', $articleId)->pluck('id')->all();
+        foreach ($variantIds as $variantId) {
+            $this->reindex($variantId); // a deleted article's documents leave the keyword index (the builder reads deleted_at)
+        }
+    }
+
+    /** FR-17/FS-02: the keyword index follows the doors AFTER commit; Meilisearch down never fails a door (the durable indexer catches up on publish). */
+    private function reindex(string $variantId): void
+    {
+        try {
+            $this->search->writeFor($variantId);
+        } catch (\Throwable $e) {
+            Log::warning('kb.search.index_deferred', ['variant_id' => $variantId, 'error' => $e->getMessage()]);
+        }
     }
 
     /** @return array{variant_id: string, slug: string} */

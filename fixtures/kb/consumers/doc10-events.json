@@ -30,6 +30,25 @@
       "reads": [
         "tenant_id"
       ]
+    },
+    {
+      "event": "kb.article.published",
+      "consumer": "Doc10/KbSearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "variant_id"
+      ]
+    },
+    {
+      "event": "kb.retrieval.updated",
+      "consumer": "Doc10/KbSearchIndexer",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "variant_id",
+        "status"
+      ]
     }
   ]
 }
