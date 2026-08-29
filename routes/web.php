@@ -79,6 +79,14 @@ Route::middleware([
     'tenant.state:staff',
     App\Http\Middleware\ApplyUserLocale::class,
 ])->prefix('admin/kb')->group(function (): void {
+    // S10 step 12 ([B9]): the staff surfaces — Inertia renders over the proven doors; no logic here.
+    Route::get('/', [App\Http\Controllers\Kb\KbUiController::class, 'manager'])
+        ->middleware('permission:tickets.view')->name('kb.ui.manager');
+    Route::get('variants/{variantId}/edit', [App\Http\Controllers\Kb\KbUiController::class, 'editor'])
+        ->middleware('permission:kb.articles.edit')->name('kb.ui.editor');
+    Route::get('variants/{variantId}/history-page', [App\Http\Controllers\Kb\KbUiController::class, 'history'])
+        ->middleware('permission:kb.articles.edit')->name('kb.ui.history');
+
     Route::get('categories', [App\Http\Controllers\Kb\KbCategoryController::class, 'index'])
         ->middleware('permission:tickets.view')->name('kb.categories.index'); // every staff member browses the tree
     Route::post('categories', [App\Http\Controllers\Kb\KbCategoryController::class, 'store'])

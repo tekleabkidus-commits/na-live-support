@@ -22,7 +22,7 @@ final class KbResolveController extends Controller
 {
     public function __construct(private readonly VersionedCitationResolver $citations, private readonly SlugResolver $slugs) {}
 
-    public function citation(Request $request, string $articleId, string $versionId): JsonResponse
+    public function citation(Request $request, string $articleId, string $versionId): JsonResponse|\Inertia\Response
     {
         $facts = $this->citations->citation($articleId, $versionId)->toArray();
         if (! $this->mayRead($request, $articleId)) {
@@ -30,8 +30,16 @@ final class KbResolveController extends Controller
         }
 
         $key = $facts['tombstone_key'];
+        $payload = $facts + ['tombstone' => __(is_string($key) ? $key : 'kb.tombstone.unknown')];
 
-        return new JsonResponse($facts + ['tombstone' => __(is_string($key) ? $key : 'kb.tombstone.unknown')]);
+        // S10 step 12 ([B9]; inherited row 5's per-door interim): a browser landing on a
+        // citation link gets the Tombstone page — the labeled-degrade render (mandate §5);
+        // fetch/JSON callers (the chatbot render tests, Copilot) keep the JSON contract.
+        if (! $request->expectsJson()) {
+            return \Inertia\Inertia::render('Kb/Tombstone', $payload + ['t' => __('kb.manager')]);
+        }
+
+        return new JsonResponse($payload);
     }
 
     public function slug(Request $request, string $language, string $slug): JsonResponse
