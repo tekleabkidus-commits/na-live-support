@@ -270,6 +270,7 @@ onMounted(async () => {
                 <textarea
                     v-if="b.type === 'paragraph'"
                     v-model="b.text"
+                    :aria-label="(t.block_paragraph ?? '') + ' #' + i"
                     :data-testid="'kb-block-' + b.id"
                     rows="3"
                     class="w-full rounded border px-2 py-1 text-sm"
@@ -281,6 +282,7 @@ onMounted(async () => {
                 <input
                     v-else-if="b.type === 'image'"
                     v-model="b.alt"
+                    :aria-label="(t.block_image ?? '') + ' #' + i"
                     :data-testid="'kb-alt-' + b.id"
                     :placeholder="t.block_image"
                     class="w-full rounded border px-2 py-1 text-sm"

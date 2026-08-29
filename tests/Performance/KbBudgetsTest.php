@@ -13,6 +13,28 @@ require_once __DIR__.'/../Feature/Kb/KbSceneHelpers.php';
  * container — a necessary condition, never the sufficient one. The widget leg (≤ 200 ms, CDN-cached
  * tree) is [D18]/[D13].
  */
+it('§12 legs, dev-indicative (step 13): publish ≤ 30 s and the block-aware diff ≤ 500 ms at dev scale — the 50k-chunk and L2 legs stay [D19]', function (): void {
+    $s = kbScene();
+    $a = kbArticle($s, '[FIXTURE] Perf article');
+    $transitions = app(App\Domain\Kb\Workflow\Transitions::class);
+    $admin = $s['admin'];
+
+    // Publish, measured over three mints (a re-publish from published is the FR-07 edge).
+    $publish = measure(function () use ($transitions, $a, $admin): void {
+        $transitions->publish($a['variant_id'], $admin);
+    }, 3);
+    assertBudget('kb publish door (§12 ≤30 s)', $publish, 30000.0);
+
+    // The block-aware diff between the first two minted versions.
+    /** @var list<object{id: string}> $versions */
+    $versions = Illuminate\Support\Facades\DB::table('kb_article_versions')->where('variant_id', $a['variant_id'])->orderBy('version')->limit(2)->get(['id'])->all();
+    $versionsApi = app(App\Domain\Kb\Versioning\Versions::class);
+    $diff = measure(function () use ($versionsApi, $versions): void {
+        $versionsApi->diffBetween($versions[0]->id, $versions[1]->id);
+    }, 10);
+    assertBudget('kb block diff (§12 ≤500 ms)', $diff, 500.0);
+});
+
 it('meets NFR-03 indicatively: staff search ≤120 ms p95 at 200 indexed variants (Doc 19 owns 5k)', function (): void {
     $s = kbScene();
     $docs = app(KbSearchDocuments::class);

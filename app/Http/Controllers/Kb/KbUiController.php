@@ -84,7 +84,9 @@ final class KbUiController extends Controller
 
         return Inertia::render('Admin/Kb/Editor', [
             't' => __('kb.manager'),
-            'variant' => (array) $variant + ['working_copy' => $workingCopy],
+            // array union keeps the LEFT key — the decoded copy MUST win over the row's raw JSON string
+            // (the step-9 honest trail's + trap; caught by the §14 browser leg).
+            'variant' => ['working_copy' => $workingCopy] + (array) $variant,
             'article' => (array) $article,
             'siblings' => array_map(fn (object $s): array => (array) $s, $siblings),
             'flags' => $flags,
