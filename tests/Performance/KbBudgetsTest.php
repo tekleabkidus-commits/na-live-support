@@ -19,10 +19,19 @@ it('§12 legs, dev-indicative (step 13): publish ≤ 30 s and the block-aware di
     $transitions = app(App\Domain\Kb\Workflow\Transitions::class);
     $admin = $s['admin'];
 
+    // NFR-02 (close-out addition — the plan's autosave leg): the working-copy door at dev scale.
+    $copy = app(App\Domain\Kb\Editor\WorkingCopy::class);
+    $autosave = measure(function () use ($copy, $a): void {
+        $copy->save($a['variant_id'], ['blocks' => [['id' => 'b1', 'type' => 'paragraph', 'text' => '[FIXTURE] autosave perf pass '.random_int(1, 1_000_000)]]]);
+    }, 10);
+    reportBudget('kb autosave door (NFR-02 ≤2 s)', 2000.0, $autosave);
+    assertBudget('kb autosave door (NFR-02 ≤2 s)', $autosave, 2000.0);
+
     // Publish, measured over three mints (a re-publish from published is the FR-07 edge).
     $publish = measure(function () use ($transitions, $a, $admin): void {
         $transitions->publish($a['variant_id'], $admin);
     }, 3);
+    reportBudget('kb publish door (§12 ≤30 s)', 30000.0, $publish);
     assertBudget('kb publish door (§12 ≤30 s)', $publish, 30000.0);
 
     // The block-aware diff between the first two minted versions.
@@ -32,6 +41,7 @@ it('§12 legs, dev-indicative (step 13): publish ≤ 30 s and the block-aware di
     $diff = measure(function () use ($versionsApi, $versions): void {
         $versionsApi->diffBetween($versions[0]->id, $versions[1]->id);
     }, 10);
+    reportBudget('kb block diff (§12 ≤500 ms)', 500.0, $diff);
     assertBudget('kb block diff (§12 ≤500 ms)', $diff, 500.0);
 });
 
