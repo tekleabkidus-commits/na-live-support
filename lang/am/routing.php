@@ -12,6 +12,15 @@ declare(strict_types=1);
 */
 
 return [
+    'estimate' => [
+        // FR-13 / A-52 / SEC-05 — the band vocabulary (J15): bands only, never counts or names.
+        'band' => [
+            'short' => 'ወደ 5 ደቂቃ ገደማ',
+            'medium' => 'ወደ 20 ደቂቃ ገደማ',
+            'long' => 'ከአንድ ሰዓት በላይ',
+            'off_hours' => 'በ :time ስንከፍት',
+        ],
+    ],
     'notify' => [
         'broadcast' => 'ከተቆጣጣሪ የተላከ መልእክት',
         'no_skill_match' => 'የክህሎት ወረፋ የሚመጥን ሰው ሳይኖር እየጠበቀ ነው',

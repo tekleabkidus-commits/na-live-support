@@ -28,7 +28,7 @@ return [
         'first' => 'Hi! :disclosure for this support team — a human colleague is one message away whenever you need one.',
     ],
     'handoff' => [
-        'template' => 'Thanks for your message. A member of our team will be with you shortly.',
+        'template' => 'Thanks for your message. A member of our team will be with you shortly — :queue_wait.',
     ],
     'notify' => [
         'anomaly' => 'AI anomaly alert',

@@ -84,7 +84,7 @@ final class HandoffDecision
             ), 'handoff:'.$triggerDecisionId);
 
             if ($sendTemplate) {
-                $template = __('ai.handoff.template', [], $language);
+                $template = __('ai.handoff.template', ['queue_wait' => app(\App\Domain\Routing\Estimator\QueueWaitVariable::class)->forConversation($conversation->identifier(), $language)], $language);   // P-C4 (S11 step 8): [D11]'s live band phrase joins the template — bands only, never a count (SEC-05)
                 // FR-19a: even a handoff-first conversation hears the disclosure.
                 $this->outbound->compose($conversation, 'ai', null, 'text', $this->greeting->prefixIfFirst($conversation->identifier(), $language, is_string($template) ? $template : (string) __('ai.handoff.template', [], 'en')), 'handoff:'.$triggerDecisionId);
             }

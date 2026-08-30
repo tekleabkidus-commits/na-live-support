@@ -1,0 +1,171 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\EstimatorTest
+  ⨯ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 8.12s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.21s  
+  ⨯ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.27s  
+  ⨯ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.54s  
+  ⨯ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.27s  
+
+   FAIL  Tests\Feature\Routing\HoursTest
+  ⨯ it FR-14 / A-53: the fixture-shaped contract — default always open,… 0.19s  
+  ✓ it EC-09 NO CLIFF: outside the department's hours an Online agent i… 0.39s  
+
+   FAIL  Tests\Security\EstimatorLeakageTest
+  ✓ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 0.23s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.19s  
+  ⨯ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.03s  
+
+[dev-hardware-indicative] NFR-05 menu publish propagation: 9.53 ms (budget 10000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\DirectSurfaceTest
+  ✓ it FR-25 /status: reads REAL Doc 06 ticket data through the tickets… 0.08s  
+  ✓ it FR-25 /human: emits telegram.handoff_requested (the Doc 09/06 se… 0.07s  
+  ✓ it FR-25/§14 /language completeness gate: a COMPLETE language is li… 0.08s  
+  ✓ it FR-28: a template renders variables; {{queue_wait}} is Doc 11's…  0.08s  
+  ✓ it FR-05 business mode: a direct message gets the redirect reply, w… 0.08s  
+  ✓ it BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin… 0.04s  
+  ✓ it FR-05 direct mode: a business update is flagged unconfigured_sou… 0.04s  
+  ✓ it FR-06: leaving business mode with active connections needs typed… 0.08s  
+  ✓ it FR-27/T-06/NFR-05: publish is versioned with instant rollback, a… 0.11s  
+  ✓ it FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced        0.09s  
+  ✓ it FR-26: the payload grammar — src-{source}[_ctx-{context}] parses… 0.03s  
+  ✓ it SEC-05: the length cap fires BEFORE the grammar — a 65-char payl… 0.04s  
+  ✓ it FR-26: record is FIRST-WINS and redelivery-idempotent (C-09); th… 0.08s  
+  ✓ it SEC-05: a payload is NEVER executed as a flow id — the tokens ar… 0.08s  
+  ✓ it FR-26 end to end: a direct /start deep link through the REAL rou… 0.09s  
+
+   PASS  Tests\Feature\Ai\ChatbotTurnTest
+  ✓ it FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it… 0.29s  
+  ✓ it AC-02/BR-02 (sabotage #8 target): a money question with NO retri… 0.40s  
+  ✓ it EC-05: an out-of-enum action → ONE repair retry → still invented… 0.26s  
+  ✓ it FR-12: customer requests a human → the FR-11 packet via Doc 06's… 0.25s  
+  ✓ it FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep… 0.56s  
+  ✓ it EC-04: betting advice → the deflection TEMPLATE (never generated… 0.60s  
+  ✓ it FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim… 1.26s  
+  ✓ it FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i… 0.30s  
+  ✓ it AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form…  0.23s  
+  ✓ it EC-01 (AC-01's pipeline clause): a six-message burst yields ONE…  0.31s  
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 0.17s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.19s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.29s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.37s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.35s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.33s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.46s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.41s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.21s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.45s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\EstimatorTest > it FR-13 / A-52: bands from…   
+  Failed asserting that 3 is identical to 2.
+
+  at tests/Feature/Routing/EstimatorTest.php:75
+     71▕         $counters->record($general, $epoch - $i * 60);
+     72▕     }
+     73▕     $d = app(Estimator::class)->detail($general, null, $noon);
+     74▕     expect($d['position'])->toBe(4)->and($d['throughput30'])->toBe(6)->and($d['raw_minutes'])->toBe(20.0)->and($d['band'])->toBe('medium');
+  ➜  75▕     expect(app(Estimator::class)->detail($general, $t2->identifier(), $noon)['position'])->toBe(2)
+     76▕         ->and(app(Estimator::class)->detail($general, $t1->identifier(), $noon)['position'])->toBe(1);
+     77▕     for ($i = 0; $i < 24; $i++) {
+     78▕         $counters->record($general, $epoch - ($i % 29) * 60);
+     79▕     }
+
+  1   tests/Feature/Routing/EstimatorTest.php:75
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\EstimatorTest > it FS-03: a corrupted count…   
+  Failed asserting that null is identical to 0.
+
+  at tests/Feature/Routing/EstimatorTest.php:126
+    122▕ 
+    123▕     Illuminate\Support\Facades\Artisan::call('routing:rebuild');
+    124▕     expect(Illuminate\Support\Facades\Artisan::output())->toContain('FS-03 heal');
+    125▕     app(BandMapper::class)->forget($general);
+  ➜ 126▕     expect($counters->throughput30($general, $epoch))->toBe(0)
+    127▕         ->and(app(Estimator::class)->forQueue($general, $noon))->toBe(['band' => 'medium', 'degraded' => false]);
+    128▕ });
+    129▕ 
+    130▕ it('T-06: the cached endpoint answers {band, degraded} — nothing else in the shape — and holds its answer within cache_seconds; the counters are fed from ticket.assigned through the consumer, deduplicated per event id', function () {
+
+  1   tests/Feature/Routing/EstimatorTest.php:126
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\EstimatorTest > it T-06: the cached endpoin…   
+  C-09: the redelivered event double-counted (or the assignment did not count)
+Failed asserting that 0 is identical to 1.
+
+  at tests/Feature/Routing/EstimatorTest.php:150
+    146▕     $clock = DB::selectOne('SELECT EXTRACT(EPOCH FROM clock_timestamp())::bigint AS s');
+    147▕     $before = app(Counters::class)->throughput30($general, (int) $clock->s);
+    148▕     (new AssignmentStatsConsumer($eventId))->handle(app(App\Domain\Routing\Capacity\AssignmentStats::class), app(Counters::class));
+    149▕     (new AssignmentStatsConsumer($eventId))->handle(app(App\Domain\Routing\Capacity\AssignmentStats::class), app(Counters::class));
+  ➜ 150▕     expect(app(Counters::class)->throughput30($general, (int) $clock->s))->toBe($before + 1, 'C-09: the redelivered event double-counted (or the assignment did not count)');
+    151▕ });
+    152▕ 
+    153▕ it('FR-14 / US-01: the {{queue_wait}} provider gives the localized BAND PHRASE — a waiting ticket by its own position, a pre-ticket conversation by the tenant default queue, off-hours as "when we open at HH:MM" (en + am)', function () {
+    154▕     [, $general, $payments, $noon] = estimatorScene();
+
+  1   tests/Feature/Routing/EstimatorTest.php:150
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\EstimatorTest > it FR-14 / US-01: the {{que…   
+  Failed asserting that two strings are identical.
+  -'2026-09-02T08:00:00+00:00'
+  +'2026-09-02T05:00:00+00:00'
+  
+
+  at tests/Feature/Routing/EstimatorTest.php:166
+    162▕     expect($provider->forConversation($ticket->conversation_id, 'en'))->toBe(__('routing.estimate.band.medium', [], 'en'));
+    163▕     // Off hours (payments 08–22 tenant-local): the phrase names the opening time.
+    164▕     $night = new DateTimeImmutable('2026-09-01 23:30:00', new DateTimeZone('UTC'));
+    165▕     $detail = app(Estimator::class)->detail($payments, null, $night);
+  ➜ 166▕     expect($detail['band'])->toBe('off_hours')->and($detail['opens_at'])->toBe('2026-09-02T08:00:00+00:00');
+    167▕     expect($provider->phrase('off_hours', 'en', $detail['opens_at']))->toBe('when we open at 08:00')
+    168▕         ->and($provider->phrase('off_hours', 'am', $detail['opens_at']))->toContain('08:00');
+    169▕     // Inside hours the same queue bands normally.
+    170▕     expect(app(Estimator::class)->detail($payments, null, $noon)['band'])->not->toBe('off_hours');
+
+  1   tests/Feature/Routing/EstimatorTest.php:166
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\HoursTest > it FR-14 / A-53: the fixture-sh…   
+  Failed asserting that true is false.
+
+  at tests/Feature/Routing/HoursTest.php:38
+     34▕     expect($hours->windowFor($general)['close'])->toBe('24:00')
+     35▕         ->and($hours->isOpen($general, $night))->toBeTrue()
+     36▕         ->and($hours->isOpen($payments, $noon))->toBeTrue()
+     37▕         ->and($hours->isOpen($payments, $night))->toBeFalse()
+  ➜  38▕         ->and($hours->isOpen($payments, $dawn))->toBeFalse()
+     39▕         ->and($hours->nextOpen($payments, $night)->format(DateTimeInterface::ATOM))->toBe('2026-09-02T08:00:00+00:00')
+     40▕         ->and($hours->nextOpen($payments, $dawn)->format(DateTimeInterface::ATOM))->toBe('2026-09-01T08:00:00+00:00')
+     41▕         ->and($hours->nextOpen($payments, $noon))->toEqual($noon)
+     42▕         ->and($hours->nextOpen($general, $night))->toEqual($night);
+
+  1   tests/Feature/Routing/HoursTest.php:38
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\EstimatorLeakageTest > it SEC-05 structural: the c…   
+  forQueue/forTicket no longer return the exact two-key shape
+Failed asserting that 1 is identical to 2.
+
+  at tests/Security/EstimatorLeakageTest.php:86
+     82▕ 
+     83▕ it('SEC-05 structural: the customer-facing shape is a CONSTANT of the source — the endpoint and the Estimator\'s forQueue/forTicket build arrays of exactly the two keys', function () {
+     84▕     $endpoint = (string) file_get_contents(app_path('Domain/Routing/Estimator/EstimateEndpoint.php'));
+     85▕     $estimator = (string) file_get_contents(app_path('Domain/Routing/Estimator/Estimator.php'));
+  ➜  86▕     expect(preg_match_all("/return \\['band' => [^,]+, 'degraded' => [^\\]]+\\];/", $estimator))->toBe(2, 'forQueue/forTicket no longer return the exact two-key shape')
+     87▕         ->and(preg_match("/return \\['band' => [^,]+, 'degraded' => [^\\]]+\\];/", $endpoint))->toBe(1);
+     88▕     foreach (['eligible', 'agents', 'name', 'user_id'] as $word) {
+     89▕         expect(str_contains($endpoint, "'{$word}"))->toBeFalse('the endpoint mentions '.$word);
+     90▕     }
+
+  1   tests/Security/EstimatorLeakageTest.php:86
+
+
+  Tests:    6 failed, 39 passed (272 assertions)
+  Duration: 19.34s
+

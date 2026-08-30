@@ -226,7 +226,7 @@ final class RoutingPipeline
         }
 
         $queuedAtSeconds = is_string($ticketFacts['queued_at']) ? (int) strtotime($ticketFacts['queued_at']) : time();
-        $this->waiting->add($queueId, $ticket->identifier(), WaitingSets::score($pos['starved'], $pos['score'], $queuedAtSeconds));
+        $this->waiting->add($queueId, $ticket->identifier(), WaitingSets::score($pos['starved'], $pos['rule_score'], $queuedAtSeconds));
         $record->step('wait', ['queue_id' => $queueId, 'position' => $this->waiting->position($queueId, $ticket->identifier())], 'waiting in queue — re-evaluated on the next availability event (FR-08 step 5)');
         $recordId = $record->close('waiting', $queueId, $departmentId, null);
 

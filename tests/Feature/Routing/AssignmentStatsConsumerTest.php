@@ -31,12 +31,12 @@ it('recomputes FROM TRUTH: a manual claim, a pending move and an unassign each d
     app(AssignTicket::class)->claim($ticket, $agent);
     $assigned = relayOutboxRow('ticket.assigned');   // the REAL published payload, relayed in-harness
 
-    (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class));
+    (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class), app(App\Domain\Routing\Estimator\Counters::class));
     $row = fn () => DB::table('agent_assignment_stats')->where('user_id', $agent->identifier())->first();
     expect((int) $row()->open_assigned)->toBe(1)->and((int) $row()->pending_customer_assigned)->toBe(0);
 
     // Replay: the same event twice converges (recompute, not increment).
-    (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class));
+    (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class), app(App\Domain\Routing\Estimator\Counters::class));
     expect((int) $row()->open_assigned)->toBe(1);
 
     // Pending move: pending_customer counts separately (FR-06's exclusion is READ-side).
@@ -57,6 +57,6 @@ it('recomputes FROM TRUTH: a manual claim, a pending move and an unassign each d
 
 it('a redelivered event whose ticket no longer names the agent still converges; an unknown event id is a no-op', function () {
     createTenant();
-    (new AssignmentStatsConsumer('00000000-0000-7000-8000-0000000000aa'))->handle(app(AssignmentStats::class));
+    (new AssignmentStatsConsumer('00000000-0000-7000-8000-0000000000aa'))->handle(app(AssignmentStats::class), app(App\Domain\Routing\Estimator\Counters::class));
     expect(DB::table('agent_assignment_stats')->count())->toBe(0);
 });

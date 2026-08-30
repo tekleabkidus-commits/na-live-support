@@ -1,0 +1,104 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Routing\EstimatorTest
+  ✓ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 8.12s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.15s  
+  ✓ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.43s  
+  ✓ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.60s  
+  ✓ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.29s  
+
+   PASS  Tests\Feature\Routing\HoursTest
+  ✓ it FR-14 / A-53: the fixture-shaped contract — default always open,… 0.17s  
+  ✓ it EC-09 NO CLIFF: outside the department's hours an Online agent i… 0.36s  
+
+   PASS  Tests\Security\EstimatorLeakageTest
+  ✓ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 0.38s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.35s  
+  ✓ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.05s  
+
+[dev-hardware-indicative] NFR-05 menu publish propagation: 3.42 ms (budget 10000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\DirectSurfaceTest
+  ✓ it FR-25 /status: reads REAL Doc 06 ticket data through the tickets… 0.08s  
+  ✓ it FR-25 /human: emits telegram.handoff_requested (the Doc 09/06 se… 0.06s  
+  ✓ it FR-25/§14 /language completeness gate: a COMPLETE language is li… 0.08s  
+  ✓ it FR-28: a template renders variables; {{queue_wait}} is Doc 11's…  0.11s  
+  ✓ it FR-05 business mode: a direct message gets the redirect reply, w… 0.12s  
+  ✓ it BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin… 0.03s  
+  ✓ it FR-05 direct mode: a business update is flagged unconfigured_sou… 0.04s  
+  ✓ it FR-06: leaving business mode with active connections needs typed… 0.06s  
+  ✓ it FR-27/T-06/NFR-05: publish is versioned with instant rollback, a… 0.06s  
+  ✓ it FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced        0.05s  
+  ✓ it FR-26: the payload grammar — src-{source}[_ctx-{context}] parses… 0.03s  
+  ✓ it SEC-05: the length cap fires BEFORE the grammar — a 65-char payl… 0.03s  
+  ✓ it FR-26: record is FIRST-WINS and redelivery-idempotent (C-09); th… 0.07s  
+  ✓ it SEC-05: a payload is NEVER executed as a flow id — the tokens ar… 0.07s  
+  ✓ it FR-26 end to end: a direct /start deep link through the REAL rou… 0.09s  
+
+   PASS  Tests\Feature\Ai\ChatbotTurnTest
+  ✓ it FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it… 0.27s  
+  ✓ it AC-02/BR-02 (sabotage #8 target): a money question with NO retri… 0.25s  
+  ✓ it EC-05: an out-of-enum action → ONE repair retry → still invented… 0.31s  
+  ✓ it FR-12: customer requests a human → the FR-11 packet via Doc 06's… 0.32s  
+  ✓ it FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep… 0.37s  
+  ✓ it EC-04: betting advice → the deflection TEMPLATE (never generated… 0.39s  
+  ✓ it FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim… 1.16s  
+  ✓ it FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i… 0.22s  
+  ✓ it AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form…  0.23s  
+  ✓ it EC-01 (AC-01's pipeline clause): a six-message burst yields ONE…  0.43s  
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 0.38s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.29s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.25s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.23s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.29s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.15s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.27s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.32s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.24s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.47s  
+
+   FAIL  Tests\Feature\Routing\AssignmentStatsConsumerTest
+  ✓ it is registered as a DURABLE consumer of the four assignment-shape… 0.06s  
+  ⨯ it recomputes FROM TRUTH: a manual claim, a pending move and an una… 0.05s  
+  ⨯ it a redelivered event whose ticket no longer names the agent still… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignmentStatsConsumerTest > it rec…  Error   
+  Call to undefined function assignmentFixture()
+
+  at tests/Feature/Routing/AssignmentStatsConsumerTest.php:30
+     26▕     expect(ConsumerRegistry::consumersFor('ticket.created'))->not->toContain(AssignmentStatsConsumer::class);
+     27▕ });
+     28▕ 
+     29▕ it('recomputes FROM TRUTH: a manual claim, a pending move and an unassign each drive the counters; a REPLAY of the same event converges (C-09); rebuild == the same truth (FS-01)', function () {
+  ➜  30▕     [$ticket, $agent] = assignmentFixture(['tickets.view', 'tickets.assign', 'tickets.assign_self', 'tickets.status.change']);
+     31▕     app(AssignTicket::class)->claim($ticket, $agent);
+     32▕     $assigned = relayOutboxRow('ticket.assigned');   // the REAL published payload, relayed in-harness
+     33▕ 
+     34▕     (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class));
+
+  1   tests/Feature/Routing/AssignmentStatsConsumerTest.php:30
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignmentStatsConsumer…  ArgumentCountError   
+  Too few arguments to function App\Jobs\Routing\AssignmentStatsConsumer::handle(), 1 passed in /app/tests/Feature/Routing/AssignmentStatsConsumerTest.php on line 60 and exactly 2 expected
+
+  at app/Jobs/Routing/AssignmentStatsConsumer.php:30
+     26▕     {
+     27▕         return 'automation';
+     28▕     }
+     29▕ 
+  ➜  30▕     public function handle(AssignmentStats $stats, \App\Domain\Routing\Estimator\Counters $counters): void
+     31▕     {
+     32▕         /** @var object{id: string, name: string, payload: string}|null $event */
+     33▕         $event = DB::table('events')->where('id', $this->eventId)->first();
+     34▕         if ($event === null) {
+
+  1   app/Jobs/Routing/AssignmentStatsConsumer.php:30
+  2   tests/Feature/Routing/AssignmentStatsConsumerTest.php:60
+
+
+  Tests:    2 failed, 46 passed (295 assertions)
+  Duration: 19.03s
+

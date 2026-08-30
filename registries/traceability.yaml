@@ -2457,15 +2457,15 @@ entries:
     justification: >-
       PLANNED — flips at S11 step 5 (record completeness + T-08 replay = same outcome) and step 11b (supervisor rendering C09–C11; SEC-02 elision per role — RoutingRecordElisionTest). Target suite: tests/Feature/Routing/DecisionRecordTest.php.
   - ac_ref: "Doc11 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/EstimatorTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 8: band mapping + hysteresis fixtures, off-hours band (fixture-shaped hours contract [D12]), SEC-05 leakage assertions (EstimatorLeakageTest: no counts/names in any customer-facing payload). Target suite: tests/Feature/Routing/EstimatorTest.php.
+      FLIPPED AT S11 STEP 8: band mapping + hysteresis fixtures (A-52; every instant injected), depth-only/degraded (FS-03) with the routing:rebuild heal, the cached endpoint's two-key shape, the consumer-fed counters (C-09 dedupe), the off-hours band from the fixture-shaped hours contract [D12] (HoursTest: the EC-09 no-cliff proof); SEC-05 leakage by ABSENCE in tests/Security/EstimatorLeakageTest.php (sabotage #9 red there).
   - ac_ref: "Doc11 AC-10"
     suite_path: manual
     type: manual

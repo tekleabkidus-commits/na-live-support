@@ -17,6 +17,15 @@ declare(strict_types=1);
 */
 
 return [
+    'estimate' => [
+        // FR-13 / A-52 / SEC-05 — the band vocabulary (J15): bands only, never counts or names.
+        'band' => [
+            'short' => 'about 5 minutes',
+            'medium' => 'about 20 minutes',
+            'long' => 'over an hour',
+            'off_hours' => 'when we open at :time',
+        ],
+    ],
     'notify' => [
         'broadcast' => 'Broadcast from a supervisor',
         'no_skill_match' => 'A skill queue is holding with nobody to match',

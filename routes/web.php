@@ -310,6 +310,11 @@ Route::middleware([
 | tickets.view (FR-06's own words); share/unshare on views.share (the
 | addition of record) with the audit: middleware (SEC-03 — actor + target).
 */
+// Doc 11 T-06 / SEC-05 (S11 step 8): the cached estimate door — bands only.
+Route::middleware(['auth:staff', 'tenant:staff_session', 'tenant.state:staff'])
+    ->get('internal/routing/estimate/{queueId}', [App\Http\Controllers\Routing\EstimateController::class, 'show'])
+    ->middleware('permission:tickets.view')->name('internal.routing.estimate');
+
 Route::middleware([
     'auth:staff',
     'tenant:staff_session',

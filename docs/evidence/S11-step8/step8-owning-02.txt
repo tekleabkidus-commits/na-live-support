@@ -1,0 +1,244 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+[dev-hardware-indicative] NFR-05 menu publish propagation: 10.09 ms (budget 10000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\DirectSurfaceTest
+  ✓ it FR-25 /status: reads REAL Doc 06 ticket data through the tickets… 8.26s  
+  ✓ it FR-25 /human: emits telegram.handoff_requested (the Doc 09/06 se… 0.07s  
+  ✓ it FR-25/§14 /language completeness gate: a COMPLETE language is li… 0.06s  
+  ✓ it FR-28: a template renders variables; {{queue_wait}} is Doc 11's…  0.10s  
+  ✓ it FR-05 business mode: a direct message gets the redirect reply, w… 0.07s  
+  ✓ it BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin… 0.02s  
+  ✓ it FR-05 direct mode: a business update is flagged unconfigured_sou… 0.02s  
+  ✓ it FR-06: leaving business mode with active connections needs typed… 0.05s  
+  ✓ it FR-27/T-06/NFR-05: publish is versioned with instant rollback, a… 0.27s  
+  ✓ it FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced        0.10s  
+  ✓ it FR-26: the payload grammar — src-{source}[_ctx-{context}] parses… 0.03s  
+  ✓ it SEC-05: the length cap fires BEFORE the grammar — a 65-char payl… 0.03s  
+  ✓ it FR-26: record is FIRST-WINS and redelivery-idempotent (C-09); th… 0.06s  
+  ✓ it SEC-05: a payload is NEVER executed as a flow id — the tokens ar… 0.05s  
+  ✓ it FR-26 end to end: a direct /start deep link through the REAL rou… 0.07s  
+
+   PASS  Tests\Feature\Ai\ActionSchemaTest
+  ✓ it EC-05: an action outside the closed enum is DISCARDED, never exe… 0.05s  
+  ✓ it EC-05: malformed output (non-object, or missing required fields)… 0.04s  
+  ✓ it BR-02/AC-02: an answer WITHOUT a citation is refused by the sche… 0.03s  
+  ✓ it FR-12/Q7: handoff reasons come from the CLOSED category list — f… 0.03s  
+  ✓ it the five legal actions all validate with their required fields    0.03s  
+
+   PASS  Tests\Feature\Ai\AiBellDeliveryTest
+  ✓ it ai.killswitch.changed → every live ai.killswitch holder EXCEPT t… 0.91s  
+  ✓ it ai.anomaly.detected → every live reports.supervisor.live holder,… 1.09s  
+  ✓ it ai.digest.ready → its ONE recipient and only while they still ho… 1.72s  
+  ✓ it ai.provider.health_changed is DELIBERATELY not projected into th… 0.05s  
+
+   PASS  Tests\Feature\Ai\AiI18nParityTest
+  ✓ it en and am ai.php carry the same key set; every :param in en appe… 0.05s  
+  ✓ it the R-14 queue file lists every machine-authored am ai.* key exa… 0.05s  
+
+   PASS  Tests\Feature\Ai\AiQueueTest
+  ✓ it ADR 0017 (amended): ai and ai-background are SEPARATE supervisor… 0.05s  
+  ✓ it FR-03: the per-tenant semaphore admits to the registered cap and… 0.07s  
+  ✓ it FR-03: the semaphore is per-tenant — one tenant at cap starves n… 0.11s  
+  ✓ it the ai.concurrency.per_tenant setting is registered with platfor… 0.04s  
+
+   PASS  Tests\Feature\Ai\ArtifactOutcomeTest
+  ✓ it FR-16 inserted_unedited: insert (gated ai.copilot.insert_draft)…  0.92s  
+  ✓ it FR-16 inserted_edited{diff_ref}: the agent edits before sending…  0.77s  
+  ✓ it FR-16 discarded: the discard door records it; a discarded artifa… 0.72s  
+  ✓ it FR-14 gating: insert WITHOUT ai.copilot.insert_draft is refused…  0.80s  
+  ✓ it FR-16: a non-usable row (low_confidence / refused) cannot be ins… 0.71s  
+
+   PASS  Tests\Feature\Ai\BackofficeConfigTest
+  ✓ it persona: draft → preview (queued on ai-background, the DRAFT per… 0.86s  
+  ✓ it guardrails: draft → publish writes the SEC-05 audit row (ai.conf… 0.66s  
+  ✓ it thresholds/scope (BR-07, US-06): simulate returns before/after/d… 0.70s  
+  ✓ it kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli… 0.66s  
+  ✓ it permissions: every Backoffice door is gated by its closed key —…  0.76s  
+
+   PASS  Tests\Feature\Ai\ChatbotTurnTest
+  ✓ it FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it… 0.23s  
+  ✓ it AC-02/BR-02 (sabotage #8 target): a money question with NO retri… 0.33s  
+  ✓ it EC-05: an out-of-enum action → ONE repair retry → still invented… 0.28s  
+  ✓ it FR-12: customer requests a human → the FR-11 packet via Doc 06's… 0.26s  
+  ✓ it FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep… 0.36s  
+  ✓ it EC-04: betting advice → the deflection TEMPLATE (never generated… 0.58s  
+  ✓ it FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim… 0.65s  
+  ✓ it FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i… 0.17s  
+  ✓ it AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form…  0.20s  
+  ✓ it EC-01 (AC-01's pipeline clause): a six-message burst yields ONE…  0.42s  
+
+   PASS  Tests\Feature\Ai\ClassifyPipelineTest
+  ✓ it FR-06/FR-07: the consumer classifies the burst and records the d… 0.19s  
+  ✓ it EC-01: only the confirmed batch TAIL classifies — a superseded a… 0.22s  
+  ✓ it C-09: a redelivered event changes nothing — one decision, howeve… 0.15s  
+  ✓ it FR-11 (Doc 04): a quarantined inbound gets NO classification — n… 0.06s  
+  ✓ it T-06: the two-stage RG confirmation runs ONLY past the screening… 0.13s  
+  ✓ it FR-07 (filed interpretation, S09 step 14): a second customer mes… 0.74s  
+
+   PASS  Tests\Feature\Ai\ComposerActionsTest
+  ✓ it FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a… 0.64s  
+  ✓ it FR-14 guardrail notice: a money-intent draft WITHOUT a citation…  0.57s  
+  ✓ it FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule…  0.54s  
+  ✓ it FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)… 0.56s  
+  ✓ it FR-15 doors: every composer action is QUEUED (202 + request id,…  0.61s  
+  ✓ it C-10: an out-of-scope conversation answers the 404 pattern on ev… 0.49s  
+
+   PASS  Tests\Feature\Ai\ConfigVersioningTest
+  ✓ it FR-04: draft -> publish -> the single active version; a second p… 0.06s  
+  ✓ it FR-04: rollback REPUBLISHES the old payload as a NEW version; hi… 0.07s  
+  ✓ it FR-04: only a draft publishes — a superseded version is republis… 0.05s  
+  ✓ it flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte… 1.49s  
+
+   PASS  Tests\Feature\Ai\CopilotPanelTest
+  ✓ it FR-14 chips: intent / sentiment / urgency / confidence from the…  0.63s  
+  ✓ it FR-14 debounce: repeated panel reads within 10 s dispatch ONE re… 0.68s  
+  ✓ it EC-09: regenerate ×3 exhausted → the card LOCKS to the low-confi… 0.74s  
+  ✓ it EC-09 cooldown: a regenerate inside the cooldown window is refus… 0.66s  
+  ✓ it FS-01 / AC-09 (Copilot half): with the provider chain exhausted…  0.70s  
+  ✓ it the request-poll door (T-04's socket fallback): pending until th… 0.69s  
+
+   PASS  Tests\Feature\Ai\DecisionAccessTest
+  ✓ it SEC-06: the door serves the curated allowlist — the payload pair… 0.10s  
+  ✓ it SEC-06: without ai.decisions.view the door refuses                0.08s  
+  ✓ it C-05: the cursor walks the log without overlap or gap             0.10s  
+  ✓ it the split's other half stands: the platform connection CAN read…  0.22s  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.017 ms   max   0.240 ms   budget(p99) 3.0 ms   WITHIN
+
+   PASS  Tests\Feature\Ai\DecisionLogTest
+  ✓ it FR-20: record + flush lands the row with layer_hashes carrying t… 0.06s  
+  ✓ it FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE… 0.07s  
+  ✓ it T-08: the enrichment pen writes outcome + meta from the CLOSED c… 0.05s  
+  ✓ it NFR-05 (dev-hardware-indicative): record() stages within the 3 m… 0.06s  
+
+   PASS  Tests\Feature\Ai\FailoverDrillTest
+  ✓ it FS-01: primary fails → breaker trips → DEGRADED (transition-only… 0.08s  
+  ✓ it FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t… 0.05s  
+  ✓ it FS-01: auto-resume — a success after DOWN publishes HEALTHY once… 0.04s  
+  ✓ it EC-11: a policy refusal on benign content is detected as provide… 0.03s  
+
+   PASS  Tests\Feature\Ai\HonestyTest
+  ✓ it AC-05 (sabotage #10 target): a persona publishes ONLY if every d… 0.60s  
+  ✓ it FR-19a wording vs presence: guardrails may REWORD the disclosure… 0.84s  
+  ✓ it N-08 / BR-05 ABSENCE: no registered setting, no config kind, no…  0.03s  
+  ✓ it FR-19d: an AI-authored message is never edited post-send — Doc 0… 0.51s  
+
+   PASS  Tests\Feature\Ai\KillSwitchTest
+  ✓ it AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e… 0.06s  
+  ✓ it AC-08: a channel-wide switch covers every endpoint on that chann… 0.09s  
+  ✓ it SEC-05: every flip is audited with actor + old/new and evented w… 0.06s  
+  ✓ it SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP… 1.21s  
+  ✓ it FR-07 enablement (SwitchesAndFlags): scope config ON + no switch… 0.08s  
+  ✓ it the scope grid is a singleton per combination — a second flip UP… 0.07s  
+
+   PASS  Tests\Feature\Ai\LanguageGateTest
+  ✓ it §14: the launch pair publishes; a third language with NO templat… 0.59s  
+  ✓ it §14: a language becomes enableable ONLY once a guardrails overri… 0.49s  
+  ✓ it §14 in the turn: a customer writing in a language the endpoint d… 0.65s  
+
+   PASS  Tests\Feature\Ai\NormalizeTest
+  ✓ it the guard extends to MEDIA egress: outside production a real med… 0.08s  
+  ✓ it FR-05: a voice note gains its transcript_ref through the Doc 04…  0.08s  
+  ✓ it FR-05: a receipt image gains ocr_ref with per-field confidence    0.07s  
+  ✓ it FS-03: a provider outage leaves the media item UNTOUCHED and the… 0.09s  
+
+   PASS  Tests\Feature\Ai\OrchestratorTest
+  ✓ it FR-01: the task catalog is CLOSED at fifteen (twelve + Doc 10 FR… 0.04s  
+  ✓ it T-01: the fallback chain falls through a failing provider to the… 0.05s  
+  ✓ it T-01: an OPEN breaker skips its provider without spending a call… 0.05s  
+  ✓ it THE STEP-3 ASSERTION: no egress path skips the guard — every Pro… 0.03s  
+  ✓ it FR-02: a PUBLISHED provider_routing config overrides the seed —…  0.07s  
+
+   PASS  Tests\Feature\Ai\PayloadReductionJobTest
+  ✓ it SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre… 0.21s  
+
+   PASS  Tests\Feature\Ai\PromptAssemblyTest
+  ✓ it T-02: the system layer STARTS with the immutable honesty layer a… 0.06s  
+  ✓ it T-02/STEP-0.2 ruling: the hardened identity and language rules a… 0.03s  
+  ✓ it BR-05/N-08: no config kind and no registered setting can disable… 0.06s  
+  ✓ it T-03: customer content is fenced and role-separated; a crafted m… 0.05s  
+  ✓ it T-03: retrieved chunks arrive fenced with provenance and the ind… 0.05s  
+  ✓ it SEC-02: user-turn PII is masked positionally with the masking ma… 0.04s  
+
+   PASS  Tests\Feature\Ai\ProviderSwitchDoorTest
+  ✓ it R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana… 0.10s  
+  ✓ it the switch door: 403 without the key; GET answers the model map;… 0.64s  
+
+   PASS  Tests\Feature\Ai\QuotaEnforcementTest
+  ✓ it RULED EDIT obligation: headroom() mirrors allow()'s own counter…  0.06s  
+  ✓ it T-07: every orchestrator call accumulates the provider's ACTUAL…  0.08s  
+  ✓ it EC-12 (sabotage #12 target): inside the reserve band NEW turns a… 0.11s  
+  ✓ it EC-12: the band itself refuses — at 96% used a new turn is refus… 0.07s  
+  ✓ it COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE… 0.07s  
+  ✓ it NFR-06: the registered reserve and rate-card settings exist with… 0.07s  
+
+   PASS  Tests\Feature\Ai\RetrievalTest
+  ✓ it T-03 at index time: the planted imperative is stripped and the p… 0.05s  
+  ✓ it T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran… 0.08s  
+  ✓ it EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s… 0.08s  
+  ✓ it FS-02 posture: with no query vector available the keyword half s… 0.07s  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+   PASS  Tests\Feature\Ai\RgEvalHarnessTest
+  ✓ it the corpus is the shipped 50: half risk, half healthy, both lang… 0.04s  
+  ✓ it NFR-07: at the shipped rg_min the scripted realistic scorer meet… 0.03s  
+  ✓ it the harness CAN fail: a miscalibrated threshold drops precision…  0.03s  
+
+   PASS  Tests\Feature\Ai\RgOverrideTest
+  ✓ it FR-13 + [D09] FR-14 close: the override writes the flag THROUGH…  0.15s  
+  ✓ it BR-03/AC-04: the customer receives the operator template BYTE FO… 0.25s  
+  ✓ it N-10 STRUCTURAL: the RG override cannot reach the generation ser… 0.03s  
+  ✓ it FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti… 0.09s  
+  ✓ it FR-18: a PUBLISHED guardrails rg_template overrides the seeded w… 0.06s  
+  ✓ it C-09: a redelivered event fires the override ONCE — one flag, on… 0.16s  
+  ✓ it [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re… 0.20s  
+
+   PASS  Tests\Feature\Ai\SimilarTicketsTest
+  ✓ it T-05/FR-14: top-3 by cosine over resolved-ticket summaries, the…  1.67s  
+  ✓ it T-05 scope AT QUERY TIME: an Own-scoped agent sees ONLY tickets…  1.31s  
+  ✓ it T-05 nightly: the embedder summarizes + embeds resolved tickets…  0.66s  
+
+   PASS  Tests\Feature\Ai\SimulationParityTest
+  ✓ it AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)…  1.51s  
+  ✓ it BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok… 0.08s  
+
+   PASS  Tests\Feature\Ai\StreamingTest
+  ✓ it T-04 client: an SSE response is parsed delta-by-delta in order,…  0.04s  
+  ✓ it §13 sentence chunker: Latin and Ethiopic terminators both bound…  0.03s  
+  ✓ it T-04 relay: token-sized deltas become SENTENCE frames on the age… 0.56s  
+  ✓ it T-04 job: CopilotTaskJob runs the stream end-to-end and ends in…  0.59s  
+
+   PASS  Tests\Feature\Ai\SubjectGenerationTest
+  ✓ it FR-03: a subjectless ticket gets a generated subject through Sub… 0.63s  
+  ✓ it FR-03: a ticket that ALREADY has a staff subject is never overwr… 1.01s  
+  ✓ it FR-03: the 80-character cap and one-line normalization hold; an…  1.07s  
+
+   PASS  Tests\Feature\Ai\SupervisorTest
+  ✓ it FR-17/US-05: withdrawal complaints tripling in the last hour vs…  1.21s  
+  ✓ it FR-17 sentiment watch: a conversation whose latest classificatio… 0.85s  
+  ✓ it FR-17 qa_prescore: samples yesterday's resolved tickets once eac… 0.74s  
+  ✓ it FR-17 daily_digest: six bullets per manager (reports.supervisor.… 0.86s  
+  ✓ it FS-01 (AC-09's last rung) + FR-18: with every provider of the ch… 0.83s  
+  ✓ it the supervisor FEED is the decision-log door filtered by surface… 0.80s  
+
+   PASS  Tests\Feature\Ai\TranslateSendTest
+  ✓ it (b)+(d): a translate send carries channel_meta.ai_translation {a… 0.62s  
+  ✓ it (d): an EDITED translation still carries the original and the ve… 0.63s  
+  ✓ it (c) default-preserving, TESTED: a reply WITHOUT ai_artifact_id w… 0.63s  
+  ✓ it (c) negative controls: wrong-owner artifact, missing ai.copilot.… 1.31s  
+
+   PASS  Tests\Feature\Ai\TranslateTest
+  ✓ it §14 validator unit: same digits in any order pass; a reordered d… 0.04s  
+  ✓ it §14 (sabotage #14 target): a translation that ALTERS a digit is…  0.63s  
+  ✓ it §14: the repair retry SUCCEEDING yields the artifact — digits ve… 0.58s  
+  ✓ it EC-10 mixed-language input: the dominant script decides the sour… 0.51s  
+  ✓ it SEC-02 on staff text: a phone number in the agent's draft never…  0.51s  
+
+   PASS  Tests\Feature\Ai\WeeklyOutputsTest
+  ✓ it top unanswerable: no_grounding handoffs and locked regenerations… 0.61s  
+  ✓ it calibration curve: confidence buckets vs outcomes over chatbot +… 0.58s  
+  ✓ it RG precision queue delegates to RgCalibration (the [D09] EC-06 r… 0.70s  
+
+  Tests:    165 passed (1352 assertions)
+  Duration: 67.09s
+

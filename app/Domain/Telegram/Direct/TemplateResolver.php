@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 /**
  * FR-28: per-bot per-language operator template content with {{variable}}
  * interpolation. Variables whose data source EXISTS resolve from the passed
- * context; a variable whose data source is UNBUILT ({{queue_wait}} — the
- * wait-time estimate is Doc 11/15's, not yet built) resolves through a STATED
- * SEAM FIXTURE, never a silent blank (the plan's obligation 7).
+ * context; {{queue_wait}} is Doc 11's `QueueWaitVariable` band phrase since S11
+ * step 8 (P-C4) — the call site passes it; the seam fixture it once resolved
+ * through is retired (the plan's obligation 7, closed).
  */
 final class TemplateResolver
 {
@@ -28,10 +28,9 @@ final class TemplateResolver
      * @var array<string, string>
      */
     private const SEAM_FIXTURES = [
-        // queue_wait: the estimated wait is Doc 11's queue model / Doc 15's
-        // metric — unbuilt. Until then the template renders this stated seam
-        // value, never an empty {{queue_wait}}.
-        'queue_wait' => 'a few minutes',
+        // queue_wait: RETIRED at S11 step 8 (P-C4, countersigned) — the source is Doc 11's
+        // `Routing/Estimator/QueueWaitVariable::forConversation()` (the band phrase, SEC-05);
+        // the handoff/off-hours call site passes it as a real variable when it renders.
     ];
 
     /**

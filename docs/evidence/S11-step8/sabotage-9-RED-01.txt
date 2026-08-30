@@ -1,0 +1,34 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\EstimatorLeakageTest
+  ⨯ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 6.98s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.16s  
+  ✓ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.03s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\EstimatorLeakageTest > it SEC-05: GET /internal/ro…   
+  the customer-facing shape grew a key: band,degraded,eligible_agents
+Failed asserting that two arrays are identical.
+   Array &0 [
+       0 => 'band',
+       1 => 'degraded',
+  +    2 => 'eligible_agents',
+   ]
+  
+
+  at tests/Security/EstimatorLeakageTest.php:43
+     39▕ 
+     40▕     $response = $this->actingAs($viewer, 'staff')->getJson('https://localhost/internal/routing/estimate/'.$queue);
+     41▕     $response->assertStatus(200);
+     42▕     $payload = (array) $response->json();
+  ➜  43▕     expect(array_keys($payload))->toBe(ESTIMATE_PAYLOAD_KEYS, 'the customer-facing shape grew a key: '.implode(',', array_keys($payload)));
+     44▕     foreach (array_keys($payload) as $key) {
+     45▕         expect(preg_match(LEAK_KEY_PATTERN, $key) === 1 && ! in_array($key, ESTIMATE_PAYLOAD_KEYS, true))->toBeFalse('leaking key '.$key);
+     46▕     }
+     47▕     expect(is_string($payload['band']))->toBeTrue()->and(is_bool($payload['degraded']))->toBeTrue();
+
+  1   tests/Security/EstimatorLeakageTest.php:43
+
+
+  Tests:    1 failed, 2 passed (19 assertions)
+  Duration: 7.24s
+

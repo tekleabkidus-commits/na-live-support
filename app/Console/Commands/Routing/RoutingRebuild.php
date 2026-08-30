@@ -21,7 +21,7 @@ final class RoutingRebuild extends Command
 
     protected $description = 'Doc 11 FS-01: rebuild agent_assignment_stats (and, from step 6, the waiting ZSETs) from database truth for the bound tenant';
 
-    public function handle(AssignmentStats $stats, WaitingSets $waiting, PositionInQueue $position, \App\Domain\Routing\Temporary\ExpiryZset $expiry): int
+    public function handle(AssignmentStats $stats, WaitingSets $waiting, PositionInQueue $position, \App\Domain\Routing\Temporary\ExpiryZset $expiry, \App\Domain\Routing\Estimator\Counters $counters): int
     {
         $n = $stats->rebuild();
         $this->info(sprintf('routing:rebuild — %d agent counter(s) recomputed from tickets', $n));
@@ -32,13 +32,17 @@ final class RoutingRebuild extends Command
             $pos = $position->compute($row->queue_id, ['id' => $row->id, 'priority' => $row->priority, 'reopened_count' => (int) $row->reopened_count, 'customer_id' => $row->customer_id, 'queued_at' => $row->queued_at, 'tags' => []], $now);
             $queuedAt = is_string($row->queued_at) ? (int) strtotime($row->queued_at) : time();
 
-            return WaitingSets::score($pos['starved'], $pos['score'], $queuedAt);
+            return WaitingSets::score($pos['starved'], $pos['rule_score'], $queuedAt);
         });
         $this->info(sprintf('routing:rebuild — %d waiting member(s) restored from tickets; RR pointers fall back to their DB checkpoints (fairness restart noted)', $m));
 
         // T-07/FS-01 (step 7): the expiry ZSET REPLACED from the live temporary rows (one member per override).
         $k = $expiry->rebuild();
         $this->info(sprintf('routing:rebuild — %d temporary-membership expiry member(s) restored', $k));
+
+        // FS-03 (step 8): corrupted estimator counters HEAL on rebuild — every bucket dropped, honest counts return.
+        $h = $counters->heal((int) $now->format('U'));
+        $this->info(sprintf('routing:rebuild — %d estimator bucket(s) dropped (FS-03 heal)', $h));
 
         return self::SUCCESS;
     }

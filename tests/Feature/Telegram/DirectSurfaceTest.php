@@ -97,14 +97,18 @@ it('FR-25/§14 /language completeness gate: a COMPLETE language is listed, an IN
     expect($languages)->not->toContain('am');
 });
 
-it('FR-28: a template renders variables; an UNBUILT source ({{queue_wait}}) resolves through a STATED seam fixture, never blank', function (): void {
+it('FR-28: a template renders variables; {{queue_wait}} is Doc 11\'s live band phrase (the S11 step-8 P-C4 inversion of the stated-seam pin — S20 precedent)', function (): void {
     $f = directFixture();
     seedTemplate($f['bot'], 'en', 'handoff', 'Hi {{first_name}}, a human joins in {{queue_wait}}.');
+    // The call site passes the provider's phrase (bands only, SEC-05); the seam fixture is retired.
+    $phrase = app(App\Domain\Routing\Estimator\QueueWaitVariable::class)->forConversation((string) Str::uuid7(), 'en');
 
-    $rendered = app(TemplateResolver::class)->render($f['bot'], 'en', 'handoff', ['first_name' => 'Sam']);
+    $rendered = app(TemplateResolver::class)->render($f['bot'], 'en', 'handoff', ['first_name' => 'Sam', 'queue_wait' => $phrase]);
 
-    expect($rendered)->toBe('Hi Sam, a human joins in a few minutes.')
-        ->and($rendered)->not->toContain('{{queue_wait}}', 'the unbuilt source resolves via the seam fixture, never a silent blank');
+    expect($phrase)->toBe(__('routing.estimate.band.long', [], 'en'))   // no ticket, nobody assigned in the window: the honest band
+        ->and($rendered)->toBe('Hi Sam, a human joins in '.$phrase.'.')
+        ->and($rendered)->not->toContain('{{queue_wait}}')
+        ->and($rendered)->not->toContain('a few minutes', 'the retired seam fixture still renders');
 });
 
 it('FR-05 business mode: a direct message gets the redirect reply, which MUST carry a tappable link (BR-06)', function (): void {

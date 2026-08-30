@@ -109,4 +109,30 @@ final class HoursContract
 
         return $hm >= $window['open'] && ($window['close'] === '24:00' || $hm < $window['close']);
     }
+
+    /**
+     * FR-14's "when we open at HH:MM": the next opening instant at or after `$at` (tenant-local
+     * evaluation, returned in UTC) — today's open if still ahead, else the next drawn day's.
+     * An always-open window answers `$at` itself.
+     */
+    public function nextOpen(?string $departmentId, DateTimeImmutable $at): DateTimeImmutable
+    {
+        $window = $this->windowFor($departmentId);
+        $tz = $this->timezone();
+        $local = $at->setTimezone($tz);
+        if (preg_match('/^(\d{2}):(\d{2})$/', $window['open'], $m) !== 1) {
+            return $at;
+        }
+        for ($day = 0; $day <= 7; $day++) {
+            $candidate = $local->modify(sprintf('+%d day', $day))->setTime((int) $m[1], (int) $m[2], 0);
+            if (! in_array((int) $candidate->format('N'), $window['days'], true)) {
+                continue;
+            }
+            if ($candidate > $local || $this->isOpen($departmentId, $at)) {
+                return ($candidate > $local ? $candidate : $local)->setTimezone(new DateTimeZone('UTC'));
+            }
+        }
+
+        return $at;
+    }
 }

@@ -30,7 +30,7 @@ final class PositionInQueue
 
     /**
      * @param  array<string, mixed>  $ticket  id, priority, reopened_count, customer_id, queued_at, tags
-     * @return array{score: int, starved: bool, boosts_applied: list<string>, age_seconds: int, cap_minutes: int, matched: list<string>}
+     * @return array{score: int, rule_score: int, starved: bool, boosts_applied: list<string>, age_seconds: int, cap_minutes: int, matched: list<string>}
      */
     public function compute(string $queueId, array $ticket, ?DateTimeImmutable $now = null): array
     {
@@ -53,6 +53,10 @@ final class PositionInQueue
 
         return [
             'score' => $scored['score'],
+            // The ZSET score carries the RULE boosts only (S11 step 8): the age term is whole seconds
+            // evaluated at each ticket's OWN scoring instant, so two same-second tickets scored across a
+            // tick would swap (the EstimatorTest position red); FIFO among equals is the queued_at term.
+            'rule_score' => $scored['score'] - min($scored['age_seconds'], 999),
             'starved' => $starved,
             'boosts_applied' => $scored['boosts_applied'],
             'age_seconds' => $scored['age_seconds'],

@@ -27,7 +27,7 @@ final class AssignmentStatsConsumer extends OutboxConsumer
         return 'automation';
     }
 
-    public function handle(AssignmentStats $stats): void
+    public function handle(AssignmentStats $stats, \App\Domain\Routing\Estimator\Counters $counters): void
     {
         /** @var object{id: string, name: string, payload: string}|null $event */
         $event = DB::table('events')->where('id', $this->eventId)->first();
@@ -39,6 +39,28 @@ final class AssignmentStatsConsumer extends OutboxConsumer
         foreach ($this->agentIds($event->name, $payload) as $userId) {
             $stats->recompute($userId);
         }
+        // Doc 11 T-06 (S11 step 8): every assignment (routed, claimed, manual) feeds the queue's
+        // rolling estimator counter — deduplicated on the event id (C-09), the queue read from the ticket.
+        $this->countAssignment($counters);
+    }
+
+    private function countAssignment(\App\Domain\Routing\Estimator\Counters $counters): void
+    {
+        $event = DB::table('events')->where('id', $this->eventId)->first();
+        if ($event === null || $event->name !== 'ticket.assigned') {
+            return;
+        }
+        $payload = is_string($event->payload) ? (array) json_decode($event->payload, true) : [];
+        if (! is_string($payload['new_assignee_id'] ?? null) || ! is_string($payload['ticket_id'] ?? null)) {
+            return;
+        }
+        $queueId = DB::table('tickets')->where('id', $payload['ticket_id'])->value('queue_id');
+        if (! is_string($queueId)) {
+            return;
+        }
+        /** @var object{s: string} $clock */
+        $clock = DB::selectOne('SELECT EXTRACT(EPOCH FROM clock_timestamp())::bigint AS s');
+        $counters->record($queueId, (int) $clock->s, (string) $this->eventId);
     }
 
     /** @param  array<string, mixed>  $payload
