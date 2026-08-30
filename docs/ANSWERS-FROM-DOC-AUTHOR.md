@@ -2624,3 +2624,51 @@ NORMAL-risk key, so Doc 03's four-eyes (FR-08b) can never leave a pull-in strand
 state (the door refuses `pull_in_pending` if it ever did). The override row is the AUDITED
 expiry anchor (rbac.override.added / .expired) and the single source the routing rows hang on;
 the router holds no grant authority of its own (SEC-03). Implemented in `Routing/Temporary/PullIn`.
+
+### A-57 (FILED INTERPRETATION, S11 step 7, advisor-ordered filing 2026-08-30). ONE LIVE PULL-IN PER AGENT
+
+Doc 11 FR-15 says a pull-in "add[s] an agent to a queue temporarily … creating the Doc 03
+temporary grant"; SCHEMA AMENDMENT 5 makes `temporary ⇔ override_id` the single source; Doc 03
+holds ONE live override per user+permission (partial unique) and `OverrideAdministration::add()`
+REPLACES a live one. The document is silent on an agent pulled into TWO queues at once. A second
+concurrent pull-in would therefore revoke the first queue's grant and leave its rows hanging on
+a revoked override until their `expires_at` — the single-source promise broken silently.
+INTERPRETATION: the door refuses `pull_in_active` naming the live queue; the supervisor ends the
+first pull-in or waits for its expiry (US-03 moves an agent INTO one queue for the evening).
+Implemented in `Routing/Temporary/PullIn::create()`; `TemporaryMembershipTest` pins it.
+REOPENER: if a tenant needs one agent temporarily in two queues, the shape is one override per
+(user, queue) under a different key per queue — a Doc 03 catalog question (the catalog is
+CLOSED at 114), not a Doc 11 one; filed, not chosen.
+
+### A-58 (FILED INTERPRETATION, S11 step 8, advisor-ordered filing 2026-08-30). The depth-only heuristic's number
+
+A-52 names the FS-03 fallback ("depth-only heuristic + `degraded: true`") and the no-data case
+("no throughput data → depth-only") but no minutes-per-position figure, and Doc 11 T-06/FR-13
+give none. INTERPRETATION: `BandMapper::DEPTH_ONLY_MINUTES_PER_TICKET = 10` — one position ahead
+≈ ten minutes, so an empty queue with no recent assignments bands "about 20 minutes" (medium),
+never "~5" (a promise the router cannot know it keeps) and never "over an hour" (a cliff for a
+queue that is merely quiet). A class constant, not a setting: nothing tenant-editable, nothing
+registered (settings.php's routing.estimator.* stays at the three the amendment named).
+REOPENER: Doc 15's observed-wait metrics may later calibrate it; if it becomes tenant-tunable
+it enters `registries/settings.php` by amendment, not by a silent literal.
+
+### SCHEMA AMENDMENT 5 — ADDITION 1 (S11 step 9; P-C1 COUNTERSIGNED 2026-08-30 with conditions; FILED BEFORE the migration lands, the B1-split law)
+
+**14. `rescue_flags` (FR-16 a/c, AC-06; Doc 07 FR-05's Rescue population).** `id` uuid PK
+(UUIDv7); `tenant_id` uuid NOT NULL FK; `ticket_id` uuid NOT NULL FK `tickets`; `reason` text
+NOT NULL CHECK IN ('heartbeat_lost', 'orphaned'); `flagged_at` timestamptz(6) NOT NULL DEFAULT
+`clock_timestamp()` — R-19b: ordering-relevant (the Rescue view's sort), app-UNWRITABLE on both
+INSERT and UPDATE; `cleared_at` timestamptz(6) nullable — app-writable on UPDATE (the clearing
+instant is a state flip, not an ordering key; asserted by grant); `auto_returned` boolean NOT NULL
+DEFAULT false — app-writable on UPDATE; `created_at` timestamptz(6) NOT NULL DEFAULT
+`clock_timestamp()`, app-denied. GRANTS: `INSERT (id, tenant_id, ticket_id, reason)`;
+`UPDATE (cleared_at, auto_returned)`; **NO DELETE** (the 42501 control executes in
+`RoutingGrantPhysicsTest`). FORCED RLS + `tenant_isolation`. Partial unique
+`(tenant_id, ticket_id) WHERE cleared_at IS NULL` — one LIVE flag per ticket (the
+second-live-flag refusal executes). Index `(tenant_id, flagged_at) WHERE cleared_at IS NULL`
+(the Rescue sort). The `unreachable` condition stays Doc 05's `tickets.channel_unreachable`
+(no duplication — P-C1's own words). A flag is CLEARED (never deleted) when the agent returns
+(heartbeat_lost) or the ticket is placed (orphaned) or a supervisor acts; `auto_returned`
+records that `routing.rescue.auto` returned it. `rescue.flagged{reason}` on INSERT;
+`rescue.auto_returned` on the return. Hot-table rule: not a hot table (no CONCURRENTLY needed).
+
