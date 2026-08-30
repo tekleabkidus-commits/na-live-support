@@ -1,0 +1,67 @@
+
+Running 3 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS (30.1s)
+  ✘  2 [chromium] › tests/Browser/structure-admin.spec.ts:81:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant (30.1s)
+  ✓  3 [chromium] › tests/Browser/structure-admin.spec.ts:99:1 › J07–J15 on the Queues tab: strategy badges icon+text, the REAL rotation preview, the dashed temporary chip with countdown, the locked starvation row (no controls, caption associated), vip source warning, tags, the skill panel with the live hold, the J15 bands; light AND dark axe-clean; §C/§D: identical controls at 375 (5.7s)
+
+
+  1) [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-move-up="fixture-routing"]')
+        - locator resolved to <button disabled type="button" data-move-up="fixture-routing" aria-label="Move Fixture Routing up" class="h-[26px] w-[26px] flex-none rounded border text-[11px]"> ↑ </button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        54 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      66 |     // Reorder by the MOVE BUTTON (drag equivalent, §13) — position persists across reload.
+      67 |     const before = await page.locator('[data-department-row]').allInnerTexts();
+    > 68 |     await page.locator('[data-move-up="fixture-routing"]').click();
+         |                                                            ^
+      69 |     await page.waitForLoadState('networkidle');
+      70 |     await openOrganization(page);
+      71 |     const after = await page.locator('[data-department-row]').allInnerTexts();
+        at /home/kidus/projects/na-live-support/tests/Browser/structure-admin.spec.ts:68:60
+
+    Error Context: test-results/structure-admin-J01-J02-J0-09840--reorder-works-and-PERSISTS-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/structure-admin.spec.ts:81:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#login-email')
+
+
+      48 | ): Promise<void> {
+      49 |     await page.goto('/login');
+    > 50 |     await page.locator('#login-email').fill(ADMIN_EMAIL);
+         |                                        ^
+      51 |     await page.locator('#login-password').fill(PASSWORD);
+      52 |     await page.getByTestId('login-submit').click();
+      53 |     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+        at openOrganization (/home/kidus/projects/na-live-support/tests/Browser/structure-admin.spec.ts:50:40)
+        at /home/kidus/projects/na-live-support/tests/Browser/structure-admin.spec.ts:94:5
+
+    Error Context: test-results/structure-admin-J04-J06-th-94239-t-through-the-one-act-grant-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS 
+    [chromium] › tests/Browser/structure-admin.spec.ts:81:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant 
+  1 passed (1.3m)

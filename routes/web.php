@@ -28,6 +28,29 @@ Route::middleware([
     'tenant.state:staff',
     App\Http\Middleware\ApplyUserLocale::class,
 ])->prefix('admin')->group(function (): void {
+    // Doc 11 §8 (S11 step 12): Backoffice → Organization (B5-S09 J01–J15). Reads under the manage
+    // keys (§8's own audience); every mutation door reuses the step-3b writers, which audit themselves.
+    Route::get('organization', [App\Http\Controllers\Admin\OrgScreensController::class, 'show'])
+        ->middleware('permission:org.queues.manage')->name('org.screens.organization');
+    Route::post('organization/departments/{departmentId}', [App\Http\Controllers\Admin\OrgScreensController::class, 'updateDepartment'])
+        ->middleware(['permission:org.departments.manage', 'audit:org.department.updated'])->name('org.screens.department.update');
+    Route::post('organization/departments/{departmentId}/reorder', [App\Http\Controllers\Admin\OrgScreensController::class, 'reorderDepartment'])
+        ->middleware(['permission:org.departments.manage', 'audit:org.department.reordered'])->name('org.screens.department.reorder');
+    Route::post('organization/departments/{departmentId}/access', [App\Http\Controllers\Admin\OrgScreensController::class, 'giveAccess'])
+        ->middleware(['permission:org.departments.manage', 'audit:org.department.access_granted'])->name('org.screens.department.access');
+    Route::post('organization/queues', [App\Http\Controllers\Admin\OrgScreensController::class, 'createQueue'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.queue.created'])->name('org.screens.queue.create');
+    Route::post('organization/queues/{queueId}', [App\Http\Controllers\Admin\OrgScreensController::class, 'updateQueue'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.queue.updated'])->name('org.screens.queue.update');
+    // add/remove are SEPARATE doors: each declares the exact audit action its writer records.
+    Route::post('organization/queues/{queueId}/members/add', [App\Http\Controllers\Admin\OrgScreensController::class, 'queueMemberAdd'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.queue.member_added'])->name('org.screens.queue.member.add');
+    Route::post('organization/queues/{queueId}/members/remove', [App\Http\Controllers\Admin\OrgScreensController::class, 'queueMemberRemove'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.queue.member_removed'])->name('org.screens.queue.member.remove');
+    Route::post('organization/teams/{teamId}/members/add', [App\Http\Controllers\Admin\OrgScreensController::class, 'teamMemberAdd'])
+        ->middleware(['permission:org.teams.manage', 'audit:org.team.member_added'])->name('org.screens.team.member.add');
+    Route::post('organization/teams/{teamId}/members/remove', [App\Http\Controllers\Admin\OrgScreensController::class, 'teamMemberRemove'])
+        ->middleware(['permission:org.teams.manage', 'audit:org.team.member_removed'])->name('org.screens.team.member.remove');
     Route::get('roles', [App\Http\Controllers\Admin\RbacScreensController::class, 'roles'])
         ->middleware('permission:admin.roles.view')
         ->name('rbac.screens.roles');

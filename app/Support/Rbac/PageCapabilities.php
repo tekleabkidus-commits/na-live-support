@@ -30,6 +30,10 @@ final class PageCapabilities
         ],
         // Doc 04 FS-05 (R-17 class-2 fill): the re-drive button renders only
         // for holders of the key that gates the re-drive route (A-6).
+        // Doc 11 §8 (S11 step 12): Backoffice → Organization — the keys its controls render against.
+        'Admin/Org/Organization' => [
+            'org.departments.manage', 'org.teams.manage', 'org.queues.manage', 'org.queues.pull_in',
+        ],
         'Conversations/DeadLetters' => [
             'tickets.reply',
         ],

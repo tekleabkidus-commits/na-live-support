@@ -1,0 +1,29 @@
+
+Running 3 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS (3.3s)
+  ✓  2 [chromium] › tests/Browser/structure-admin.spec.ts:83:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant (2.9s)
+  ✓  3 [chromium] › tests/Browser/structure-admin.spec.ts:102:1 › J07–J15 on the Queues tab: strategy badges icon+text, the REAL rotation preview, the dashed temporary chip with countdown, the locked starvation row (no controls, caption associated), vip source warning, tags, the skill panel with the live hold, the J15 bands; light AND dark axe-clean; §C/§D: identical controls at 375 (6.2s)
+
+
+  1) [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      72 |     await expect(page.getByTestId('org-departments')).toBeVisible();
+      73 |     const after = await page.locator('[data-department-row]').allInnerTexts();
+    > 74 |     expect(after.findIndex((t) => t.includes('Fixture Routing'))).toBeGreaterThan(
+         |                                                                   ^
+      75 |         before.findIndex((t) => t.includes('Fixture Routing')),
+      76 |     );
+      77 |     // Detail: the hours REF (the [D12] display slot) + the danger zone.
+        at /home/kidus/projects/na-live-support/tests/Browser/structure-admin.spec.ts:74:67
+
+    Error Context: test-results/structure-admin-J01-J02-J0-09840--reorder-works-and-PERSISTS-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS 
+  2 passed (21.2s)

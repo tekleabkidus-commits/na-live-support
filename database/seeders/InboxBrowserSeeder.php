@@ -137,6 +137,7 @@ final class InboxBrowserSeeder extends Seeder
         // and the R-20 trigger still stamps these updates like any other.
         $healedTicketIds = $this->healListScene($agent);
         $this->seedQueueViewScene($agent);
+        $this->seedStructureAdminScene($agent);
 
         // CLOCK-BEARING fixture state decays between runs (a 45-minute
         // window seeded this morning is expired by lunch — the capture run
@@ -268,6 +269,76 @@ final class InboxBrowserSeeder extends Seeder
             // call would park the ticket as an FS-04 engine error (the honest net, doing its job).
             DB::transaction(static fn () => $pipeline->route($ticket, 'created', ['explicit_department_id' => $deptId, 'explicit_queue_id' => $queueId]));
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
+        }
+    }
+
+    /**
+     * S11 step 12 (B5-S09): the structure-admin scene — a team whose member cannot reach the
+     * fixture department (the J06 warning), a temporary member with a live countdown (§9 chip),
+     * a vip boost (EC-05's source warning), routing tags, and a skill queue holding (J09/J14).
+     * Fixed ids; every seed re-asserts (heal).
+     */
+    private function seedStructureAdminScene(User $agent): void
+    {
+        $tenantId = app(TenantContext::class)->tenantId();
+        $deptId = '00000000-0000-7000-8000-00000000d011';
+        $queueId = '00000000-0000-7000-8000-00000000d012';
+        $teamId = '00000000-0000-7000-8000-00000000d013';
+        $skillQueueId = '00000000-0000-7000-8000-00000000d014';
+        // A SECOND department so the reorder proof has a target (J02's move buttons need a neighbour).
+        $dept2 = '00000000-0000-7000-8000-00000000d015';
+        $queue2 = '00000000-0000-7000-8000-00000000d016';
+        if (! DB::table('departments')->where('id', $dept2)->exists()) {
+            DB::table('departments')->insert(['id' => $dept2, 'tenant_id' => $tenantId, 'name' => json_encode(['en' => 'Fixture Secondary', 'am' => 'ፊክስቸር ሁለተኛ'], JSON_THROW_ON_ERROR), 'slug' => 'fixture-secondary', 'default_queue_id' => null, 'position' => 5]);
+        }
+        if (! DB::table('queues')->where('id', $queue2)->exists()) {
+            DB::table('queues')->insert(['id' => $queue2, 'tenant_id' => $tenantId, 'department_id' => $dept2, 'name' => 'Fixture secondary queue', 'position' => 0]);
+        }
+        DB::table('departments')->where('id', $dept2)->update(['default_queue_id' => $queue2, 'is_active' => true, 'deleted_at' => null, 'position' => 5]);   // heal BOTH positions: a prior reorder spec leaves them swapped
+        DB::table('queues')->where('id', $queue2)->update(['is_active' => true, 'deleted_at' => null]);
+        // Heal the reorder: the spec moves fixture-routing down; each seed puts it back first.
+        DB::table('departments')->where('id', $deptId)->update(['position' => 0]);
+
+        // The queue's drawn facts: vip boost + tags on the fixture queue.
+        DB::table('queues')->where('id', $queueId)->update([
+            'priority_rules' => json_encode(['urgent_priority', 'vip'], JSON_THROW_ON_ERROR),
+            'routing_tags' => '{payments,kyc}',
+            'capacity_per_agent' => 5,
+        ]);
+        if (! DB::table('queues')->where('id', $skillQueueId)->exists()) {
+            DB::table('queues')->insert(['id' => $skillQueueId, 'tenant_id' => $tenantId, 'department_id' => $deptId, 'name' => 'Fixture skill queue', 'position' => 1, 'assignment_strategy' => 'skill_based', 'skill_matchers' => json_encode([['language' => true]], JSON_THROW_ON_ERROR), 'skill_fallback' => 'wait']);
+        }
+        DB::table('queues')->where('id', $skillQueueId)->update(['is_active' => true, 'deleted_at' => null, 'assignment_strategy' => 'skill_based', 'skill_fallback' => 'wait']);
+        if (! DB::table('teams')->where('id', $teamId)->exists()) {
+            DB::table('teams')->insert(['id' => $teamId, 'tenant_id' => $tenantId, 'name' => 'Fixture night shift']);
+        }
+        DB::table('teams')->where('id', $teamId)->update(['deleted_at' => null]);
+        if (! DB::table('queue_teams')->where('queue_id', $queueId)->where('team_id', $teamId)->exists()) {
+            DB::table('queue_teams')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'queue_id' => $queueId, 'team_id' => $teamId]);
+        }
+        // The BLIND team member: Dept-scoped, no access row to the fixture department (J06's shape).
+        $blind = User::query()->where('email', 'org-blind@fixture.example')->first();
+        if (! $blind instanceof User) {
+            $blind = User::factory()->create(['email' => 'org-blind@fixture.example', 'name' => 'Fixture Blind Member']);
+        }
+        $role = \App\Models\Role::query()->firstOrCreate(['name' => 'Fixture Org Blind'], ['color' => 'role-agent', 'permissions' => ['tickets.view'], 'scopes' => ['tickets' => 'Dept', 'conversations' => 'All', 'customers' => 'All', 'reports' => 'All']]);
+        $blind->forceFill(['role_id' => $role->getKey()])->save();
+        DB::table('user_departments')->where('user_id', $blind->identifier())->whereNull('ended_at')->update(['ended_at' => DB::raw('clock_timestamp()')]);   // heal: the give-access spec re-grants
+        app(\App\Support\Rbac\CapabilityCacheInvalidator::class)->forgetUser($blind);
+        if (! DB::table('team_members')->where('team_id', $teamId)->where('user_id', $blind->identifier())->exists()) {
+            DB::table('team_members')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'team_id' => $teamId, 'user_id' => $blind->identifier(), 'is_lead' => false]);
+        }
+        // The temporary member (dashed chip): live override + queue row, future expiry.
+        $temp = User::query()->where('email', 'org-temp@fixture.example')->first();
+        if (! $temp instanceof User) {
+            $temp = User::factory()->create(['email' => 'org-temp@fixture.example', 'name' => 'Fixture Temp Member']);
+        }
+        $live = DB::table('queue_members')->where('queue_id', $queueId)->where('user_id', $temp->identifier())->where('kind', 'temporary')->whereNull('ended_at')->whereRaw('expires_at > clock_timestamp()')->exists();
+        if (! $live) {
+            $oid = (string) Str::uuid7();
+            DB::table('user_permission_overrides')->insert(['id' => $oid, 'tenant_id' => $tenantId, 'user_id' => $temp->identifier(), 'permission' => 'tickets.assign_self', 'effect' => 'allow', 'reason' => 'browser structure-admin scene', 'granted_by' => $agent->identifier(), 'expires_at' => DB::raw("clock_timestamp() + interval '2 hours'")]);
+            DB::table('queue_members')->where('queue_id', $queueId)->where('user_id', $temp->identifier())->whereNull('ended_at')->update(['ended_at' => DB::raw('clock_timestamp()')]);
+            DB::table('queue_members')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'queue_id' => $queueId, 'user_id' => $temp->identifier(), 'kind' => 'temporary', 'granted_by' => $agent->identifier(), 'override_id' => $oid, 'expires_at' => DB::raw("clock_timestamp() + interval '2 hours'")]);
         }
     }
 
