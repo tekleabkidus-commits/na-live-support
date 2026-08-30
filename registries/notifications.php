@@ -228,4 +228,36 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc10',
     ],
+    [
+        // Doc 11 FR-15: a supervisor's broadcast note to queue members (S11; registered BEFORE its producer ships — the S23 C3 discipline; DELIVERY is Doc 16's [D16]).
+        'category_key' => 'notify.routing.broadcast',
+        'label_i18n_key' => 'routing.notify.broadcast',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-11 / EC-04: a wait-fallback skill queue has held past routing.skill.no_match_alert_minutes (supervisors) (S11; delivery [D16]).
+        'category_key' => 'notify.routing.no_skill_match',
+        'label_i18n_key' => 'routing.notify.no_skill_match',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16: a ticket entered the Rescue view (heartbeat loss / unreachable / orphan) (S11; delivery [D16]).
+        'category_key' => 'notify.routing.rescue_flagged',
+        'label_i18n_key' => 'routing.notify.rescue_flagged',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 BR-07: the same pull-in recurred routing.pull_in.recurrence_hint times in a week — the "make permanent?" nudge, in-app only, never an auto-conversion (S11).
+        'category_key' => 'notify.routing.pull_in_recurring',
+        'label_i18n_key' => 'routing.notify.pull_in_recurring',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc11',
+    ],
 ];

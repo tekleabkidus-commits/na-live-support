@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\NoPollingLoopTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted polling loop — the positive control (sabotage[39m[90m… [39m [90m5.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists[39m[90m… [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit pins the scheduled routing commands to exactly the two the docum[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\NoPollingLoopTest[22m [90m>[39m it pins the scheduled routing…    
+[39;1m  a scheduled routing command outside the allowlist is a polling loop by another name: routing:scan
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'routing:scan',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/NoPollingLoopTest.php[39m:[32m105[39m
+    101▕     }
+    102▕     sort($routing);
+    103▕     $unexpected = array_values(array_diff($routing, ROUTING_SCHEDULED_ALLOWLIST));
+    104▕ 
+  ➜ 105▕     expect($unexpected)->toBe([], 'a scheduled routing command outside the allowlist is a polling loop by another name: '.implode(', ', $unexpected));
+    106▕ });
+    107▕
+
+  [33m1   [39m[39;1mtests/Security/NoPollingLoopTest.php[39;22m:[39;1m105[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m5.47s[39m
+

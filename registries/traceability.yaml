@@ -2369,3 +2369,110 @@ entries:
     status: partial
     justification: >-
       PLANNED — flips at S10 step 6 to tests/Feature/Kb/PublishPipelineTest.php: the alt-text gate (kb.require_alt on) blocks public publish with missing alts and lists them.
+
+  # ---------------------------------------------------------------------------
+  # Doc 11 — Departments, Teams, Queues & Routing (S11; plan of record 9e2fe85).
+  # Rows opened at the step-1 commit (enforcement begins the moment the Doc 11
+  # BUILD-STATUS row leaves NOT STARTED); each PLANNED row names the step that
+  # flips it and the suite it flips to. A row here never claims coverage that
+  # does not exist.
+  - ac_ref: "Doc11 AC-01"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 5: FR-08 order fixtures (fixtures/routing/fr08-order.json) — explicit > AI-accepted > connection-tag seam > tenant default; rule-tag > default queue; RG finality (RgFinalityTest, step 1); boost ordering; starvation exemption (StarvationCapPropertyTest, step 1). Target suite: tests/Feature/Routing/DecisionOrderTest.php.
+  - ac_ref: "Doc11 AC-02"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 6: RR fairness over join/leave/skip sequences (T-04), load tiebreak determinism (LoadBasedTest), skill matcher + both fallbacks incl. EC-04's cap interaction (SkillBasedTest). Target suite: tests/Feature/Routing/RoundRobinSpliceTest.php.
+  - ac_ref: "Doc11 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 4: pending_customer exclusion toggle + per-user override (CapacityTest) + the concurrent-load race with ZERO over-capacity assignments (the STOP-A packet's commit-time FOR UPDATE check). Target suite: tests/Feature/Routing/CapacityRaceTest.php.
+  - ac_ref: "Doc11 AC-04"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 6 to PARTIAL [D19]: agent-frees-slot → next assignment measured at dev scale (≤ 2 s p95 indicative); the L2 figure is Doc 19's load environment. Target suite: tests/Performance/RoutingBudgetsTest.php.
+  - ac_ref: "Doc11 AC-05"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 7: pull-in → Doc 03 grant linkage (override_id CHECK), expiry via sweep AND assignment-time check proven INDEPENDENTLY (each path disabled in turn; the A-50 department half too), the 3× recurrence hint (BR-07). Target suite: tests/Feature/Routing/TemporaryMembershipTest.php.
+  - ac_ref: "Doc11 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 9: heartbeat-loss, unreachable and orphan fixtures populate the Doc 07 Rescue view per FR-16; auto-return per routing.rescue.auto. Target suite: tests/Feature/Routing/RescueTest.php.
+  - ac_ref: "Doc11 AC-07"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 10: reference inventories complete (seeded cross-references discovered), chunked execution within NFR-05 at dev scale, sibling-intake isolation measured, RG special-case enforced; wizard UI arc at step 13. Target suite: tests/Feature/Org/RestructureTest.php.
+  - ac_ref: "Doc11 AC-08"
+    suite_path: manual
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 5 (record completeness + T-08 replay = same outcome) and step 11b (supervisor rendering C09–C11; SEC-02 elision per role — RoutingRecordElisionTest). Target suite: tests/Feature/Routing/DecisionRecordTest.php.
+  - ac_ref: "Doc11 AC-09"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 8: band mapping + hysteresis fixtures, off-hours band (fixture-shaped hours contract [D12]), SEC-05 leakage assertions (EstimatorLeakageTest: no counts/names in any customer-facing payload). Target suite: tests/Feature/Routing/EstimatorTest.php.
+  - ac_ref: "Doc11 AC-10"
+    suite_path: manual
+    type: manual
+    tier: property
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED — flips at S11 step 6: generated org snapshots + ticket streams replayed twice → identical assignments; wired into the CI routing package. Target suite: tests/Property/RoutingDeterminismHarnessTest.php.

@@ -1309,4 +1309,296 @@ return [
         'required_fields' => [],
         'owning_doc' => 'Doc10',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 11 — Departments, Teams, Queues & Routing (S11; plan of record 9e2fe85)
+    |--------------------------------------------------------------------------
+    | Registered at the step-1 commit BEFORE any producer ships (the S23 C3
+    | discipline). Routing DECISIONS themselves are not audit rows: they are
+    | INSERT-only routing_decisions records (FR-17) and the ticket.routed event
+    | feeds Doc 17 (FR-19). SEC-06: routing.starvation_boosted and routing.rg_routed
+    | are standard; routing.manual_reassign with from_queue_is_rg=true is the
+    | HIGH-VISIBILITY class.
+    */
+    [
+        // Doc 11 FR-01: a department was created (org.departments.manage).
+        'action_key' => 'org.department.created',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['department_id', 'name'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-01/FR-18: fields, default queue, hours-override ref, active flag; rename is free (references are by id).
+        'action_key' => 'org.department.updated',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['department_id', 'changed'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 §8: reorderable list (move buttons, §13).
+        'action_key' => 'org.department.reordered',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['department_id', 'old_position', 'new_position'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-18/FR-01: the wizard's tombstone step; the RG case names its replacement target (SEC-06 high-visibility).
+        'action_key' => 'org.department.deleted',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['department_id', 'replacement_rg_queue_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-04 / A-50 point 5: J04's 'Give access' — ONE transaction writes the user_departments row AND the default-queue membership under this ONE action.
+        'action_key' => 'org.department.access_granted',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['user_id', 'department_id', 'queue_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-04 / A-50: department access ended (ended_at), never deleted.
+        'action_key' => 'org.department.access_revoked',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['user_id', 'department_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-02 (org.teams.manage).
+        'action_key' => 'org.team.created',
+        'entity' => 'team',
+        'actor_types' => ['staff'],
+        'required_fields' => ['team_id', 'name'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-02.
+        'action_key' => 'org.team.updated',
+        'entity' => 'team',
+        'actor_types' => ['staff'],
+        'required_fields' => ['team_id', 'changed'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-02/FR-18: tombstone.
+        'action_key' => 'org.team.deleted',
+        'entity' => 'team',
+        'actor_types' => ['staff'],
+        'required_fields' => ['team_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-02.
+        'action_key' => 'org.team.member_added',
+        'entity' => 'team',
+        'actor_types' => ['staff'],
+        'required_fields' => ['team_id', 'user_id', 'is_lead'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-02.
+        'action_key' => 'org.team.member_removed',
+        'entity' => 'team',
+        'actor_types' => ['staff'],
+        'required_fields' => ['team_id', 'user_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03 (org.queues.manage).
+        'action_key' => 'org.queue.created',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'department_id', 'assignment_strategy'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03: name, position, capacity, fallback, tags, is_rg.
+        'action_key' => 'org.queue.updated',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'changed'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03/FR-09..11: strategy flips are named so the record reads 'strategy changed', not 'updated'.
+        'action_key' => 'org.queue.strategy_changed',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'old_strategy', 'new_strategy'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-12/§8: the ordered boost list (the starvation cap is NOT in it — BR-01).
+        'action_key' => 'org.queue.boosts_changed',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'old_rules', 'new_rules'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03/FR-08 step 2: routing tags.
+        'action_key' => 'org.queue.tags_changed',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'old_tags', 'new_tags'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 §8.
+        'action_key' => 'org.queue.reordered',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'old_position', 'new_position'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-18: stops intake; the rules that fall to the department default are LISTED in the entry (the J17 warning's own data).
+        'action_key' => 'org.queue.deactivated',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'rules_falling_to_default'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-18/NFR-05: the wizard's tombstone after the chunked move; EC-06's ZSET migration rides it.
+        'action_key' => 'org.queue.deleted',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'moved_to_queue_id', 'moved_count'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03: direct or via team.
+        'action_key' => 'org.queue.member_added',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'user_id', 'via'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-03: membership ended (ended_at).
+        'action_key' => 'org.queue.member_removed',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'user_id', 'via'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-18/SEC-04: one entry PER CHUNK, executed under the operator admin's LIVE permissions (Doc 03 job semantics) — the re-resolution instant is recorded.
+        'action_key' => 'org.restructure.executed',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['wizard', 'target_id', 'chunk', 'chunk_total', 'actor_permissions_resolved_at'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-15/SEC-03: the pull-in's grant IS the Doc 03 override row (audited there too under rbac.override.added); this entry names the queue side (org.queues.pull_in, bounded to the granter's scope — SEC-01).
+        'action_key' => 'routing.pull_in.created',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'user_id', 'override_id', 'expires_at'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 T-07/EC-07: expiry (system, via sweep or assignment-time check) or manual end (staff).
+        'action_key' => 'routing.pull_in.ended',
+        'entity' => 'queue',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['queue_id', 'user_id', 'override_id', 'cause'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-15/BR-03/SEC-06: manual reassignment bypasses strategy and is always attributed; when from_queue_is_rg the entry is the HIGH-VISIBILITY class (BR-02's one exception, RG-permitted staff only).
+        'action_key' => 'routing.manual_reassign',
+        'entity' => 'ticket',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'old_assignee_id', 'new_assignee_id', 'from_queue_is_rg'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-15: broadcast note to queue members (supervision.broadcast); the note's delivery is Doc 16's — recipient_count only, never the text.
+        'action_key' => 'routing.broadcast_sent',
+        'entity' => 'queue',
+        'actor_types' => ['staff'],
+        'required_fields' => ['queue_id', 'recipient_count'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-12/NFR-06/SEC-06: standard audit — the cap fired.
+        'action_key' => 'routing.starvation_boosted',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'queue_id', 'waited_seconds', 'cap_minutes'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-08 step 2/SEC-06: standard audit — RG intake forced to the is_rg queue (source = ai|flag).
+        'action_key' => 'routing.rg_routed',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'rg_queue_id', 'source'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16 a/b/c: heartbeat_lost | channel_unreachable | orphaned.
+        'action_key' => 'routing.rescue.flagged',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'reason'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16a: returned to queue with a system note (routing.rescue.auto on).
+        'action_key' => 'routing.rescue.auto_returned',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'queue_id', 'previous_assignee_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16c/EC-06: the terminal net.
+        'action_key' => 'routing.orphan_moved',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'deleted_queue_id', 'default_queue_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FS-04: parked in the department default with an error record — never lost, never looping; the state is queryable.
+        'action_key' => 'routing.engine_error_parked',
+        'entity' => 'ticket',
+        'actor_types' => ['system'],
+        'required_fields' => ['ticket_id', 'default_queue_id', 'error_class'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-06/US-07: per-user capacity override (routing.capacity.user).
+        'action_key' => 'routing.capacity_override.set',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['user_id', 'capacity', 'reason'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-06.
+        'action_key' => 'routing.capacity_override.removed',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['user_id'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-11/T-05/R-04: admin-managed skills on the profile.
+        'action_key' => 'user_skills.updated',
+        'entity' => 'user',
+        'actor_types' => ['staff'],
+        'required_fields' => ['user_id', 'languages', 'department_ids'],
+        'owning_doc' => 'Doc11',
+    ],
 ];

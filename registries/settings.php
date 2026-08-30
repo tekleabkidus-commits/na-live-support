@@ -803,4 +803,129 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc10',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 11 — Departments, Teams, Queues & Routing (S11; plan of record 9e2fe85)
+    |--------------------------------------------------------------------------
+    | Every key the document names. NOTHING here can disable the starvation cap
+    | (N-12): `routing.starvation.minutes` is required|integer|min:1 — no
+    | nullable, no zero, no absent; the VALUE is a setting, the EXISTENCE is
+    | absolute. RG finality and the routing record have no setting at all.
+    */
+    [
+        // Doc 11 FR-03/FR-06: concurrent open-assigned tickets per agent, the queue default.
+        'key' => 'routing.capacity.default',
+        'type' => 'int',
+        'default' => 5,
+        'validation' => 'required|integer|min:1|max:50',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-06: whether pending_customer tickets consume a capacity slot (default off).
+        'key' => 'routing.capacity.count_pending',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-12 / NFR-06 / BR-01: the age cap — any ticket waiting longer jumps
+        // to the queue head regardless of boosts. The VALUE is tunable; the cap itself
+        // is never removable: min:1, never nullable (StarvationCapPropertyTest).
+        'key' => 'routing.starvation.minutes',
+        'type' => 'int',
+        'default' => 30,
+        'validation' => 'required|integer|min:1|max:1440',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16a: minutes after heartbeat loss before held tickets are flagged in Rescue.
+        'key' => 'routing.rescue.minutes',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:1|max:240',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-16a: auto-return flagged tickets to their queue with a system note.
+        'key' => 'routing.rescue.auto',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 EC-08: reopened ticket waits this long for its previous (Away) assignee.
+        // 0 = no courtesy hold (still a value — the setting never disappears).
+        'key' => 'routing.reopen.wait_for_previous',
+        'type' => 'int',
+        'default' => 15,
+        'validation' => 'required|integer|min:0|max:240',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-08 step 1: apply the AI's suggested department (on) or route to
+        // General and flag (off).
+        'key' => 'routing.ai.autoaccept',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 T-06 / §12: the estimator endpoint's cache TTL (NFR-04 staleness ≤ 30 s).
+        'key' => 'routing.estimator.cache_seconds',
+        'type' => 'int',
+        'default' => 30,
+        'validation' => 'required|integer|min:5|max:30',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 NFR-04 (A-52): a band changes only past this % of the band width.
+        'key' => 'routing.estimator.hysteresis_pct',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:0|max:50',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-13 (A-52, the frozen J15 bands): raw-minute thresholds for
+        // "~5 min" (< short) / "~20 min" (short..medium) / "over an hour" (> medium).
+        'key' => 'routing.estimator.band_thresholds_minutes',
+        'type' => 'json',
+        'default' => ['short' => 8, 'medium' => 35],
+        'validation' => 'required|array',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 FR-11 / EC-04: minutes a wait-fallback skill queue holds before
+        // routing.no_skill_match fires (the SLA-aware input is Doc 12's [D12]).
+        'key' => 'routing.skill.no_match_alert_minutes',
+        'type' => 'int',
+        'default' => 15,
+        'validation' => 'required|integer|min:1|max:240',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc11',
+    ],
+    [
+        // Doc 11 BR-07: the same pull-in recurring this many times in a week nudges
+        // "make permanent?" — a hint, never an auto-conversion.
+        'key' => 'routing.pull_in.recurrence_hint',
+        'type' => 'int',
+        'default' => 3,
+        'validation' => 'required|integer|min:2|max:20',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc11',
+    ],
 ];

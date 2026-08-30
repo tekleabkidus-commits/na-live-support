@@ -1,0 +1,52 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\RoutingNeverWritesTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted direct ticket write at all — the positive cont[39m[90m…[39m [90m5.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/§21: no file in the routing package writes a ticket row or[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Doc 06 status physics green beside this one: the sole[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoPollingLoopTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted polling loop — the positive control (sabotage[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the scheduled routing commands to exactly the two the docum[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\StarvationCapPropertyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit P1: the cap VALUE cannot be null, zero, negative, absent or non-[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: for 500 generated boost stacks, the plain ticket past the ca[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: below the cap the score orders — a plain ticket never outran[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4 (EC-04): at the cap the language requirement drops and the re[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no off-switch: no setting key in the registry can disable th[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\StarvationCapPropertyTest[22m [90m>[39m it P1: the cap VALUE c…   
+[39;1m  Expected: [39;22m[31mThe routing.starvation.minutes field is required.[39m[39;1m
+
+  To contain: [39;22m[32mthe cap accepted NULL[39m
+
+  at [32mtests/Property/StarvationCapPropertyTest.php[39m:[32m60[39m
+     56▕         ->and($definition['default'])->toBe(30);
+     57▕ 
+     58▕     foreach ([null, 0, -1, -30, '', 'off', 'null', false, 0.5] as $poison) {
+     59▕         expect(fn () => $registry->validate(StarvationCap::SETTING, $poison))
+  ➜  60▕             ->toThrow(ValidationException::class, sprintf('the cap accepted %s', var_export($poison, true)));
+     61▕         expect(fn () => (new StarvationCap($registry))->minutes(is_int($poison) ? $poison : 0))
+     62▕             ->toThrow(ValidationException::class);
+     63▕     }
+     64▕
+
+  [33m1   [39m[39;1mtests/Property/StarvationCapPropertyTest.php[39;22m:[39;1m60[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m19 passed[39;22m[90m (1057 assertions)[39m
+  [90mDuration:[39m [39m7.26s[39m
+

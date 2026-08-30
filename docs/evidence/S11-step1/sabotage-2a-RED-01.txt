@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\StarvationCapPropertyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit P1: the cap VALUE cannot be null, zero, negative, absent or non-[39m[90m…[39m [90m5.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: for 500 generated boost stacks, the plain ticket past the ca[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: below the cap the score orders — a plain ticket never outran[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4 (EC-04): at the cap the language requirement drops and the re[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no off-switch: no setting key in the registry can disable th[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\StarvationCapPropertyTest[22m [90m>[39m it P1: the cap VALUE c…   
+[39;1m  Expected: [39;22m[31mnullable|integer|max:1440[39m[39;1m
+
+  To contain: [39;22m[32mrequired[39m
+
+  at [32mtests/Property/StarvationCapPropertyTest.php[39m:[32m52[39m
+     48▕     $registry = app(SettingsRegistry::class);
+     49▕     $definition = $registry->definition(StarvationCap::SETTING);
+     50▕ 
+     51▕     // The registered rule string is the physics: required + integer + min:1.
+  ➜  52▕     expect($definition['validation'])->toContain('required')
+     53▕         ->and($definition['validation'])->toContain('integer')
+     54▕         ->and($definition['validation'])->toMatch('/min:1(\||$)/')
+     55▕         ->and($definition['validation'])->not->toContain('nullable')
+     56▕         ->and($definition['default'])->toBe(30);
+
+  [33m1   [39m[39;1mtests/Property/StarvationCapPropertyTest.php[39;22m:[39;1m52[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (1011 assertions)[39m
+  [90mDuration:[39m [39m6.50s[39m
+

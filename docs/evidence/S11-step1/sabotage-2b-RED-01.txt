@@ -1,0 +1,50 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\StarvationCapPropertyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P1: the cap VALUE cannot be null, zero, negative, absent or non-[39m[90m…[39m [90m5.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit P2: for 500 generated boost stacks, the plain ticket past the ca[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: below the cap the score orders — a plain ticket never outran[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit P4 (EC-04): at the cap the language requirement drops and the re[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no off-switch: no setting key in the registry can disable th[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\StarvationCapPropertyTest[22m [90m>[39m it P2: for 500 generat…   
+[39;1m  iteration 0: a boost stack buried the starved ticket — the cap is not exempt
+Failed asserting that two strings are identical.
+  [39;22m[31m-'plain-starved'[39m[39;1m
+  [39;22m[32m+'boosted-1'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Property/StarvationCapPropertyTest.php[39m:[32m124[39m
+    120▕         $tickets[] = ['id' => 'plain-starved', 'queued_at' => $now->modify('-'.($cap * 60).' seconds'), 'matched' => []];
+    121▕         shuffle($tickets);
+    122▕ 
+    123▕         $order = orderWaiting($tickets, $orderedRules, $now, $cap);
+  ➜ 124▕         expect($order[0])->toBe('plain-starved', "iteration $i: a boost stack buried the starved ticket — the cap is not exempt");
+    125▕     }
+    126▕ });
+    127▕ 
+    128▕ it('P3: below the cap the score orders — a plain ticket never outranks a boosted one (the promotion is real, not vacuous)', function () {
+
+  [33m1   [39m[39;1mtests/Property/StarvationCapPropertyTest.php[39;22m:[39;1m124[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\StarvationCapPropertyTest[22m [90m>[39m it P4 (EC-04): at the…    
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Property/StarvationCapPropertyTest.php[39m:[32m162[39m
+    158▕         'requirement_dropped' => $starved,
+    159▕         'outcome' => $starved ? 'language requirement dropped at the cap (BR-01 over matching)' : 'hold for a match',
+    160▕     ];
+    161▕ 
+  ➜ 162▕     expect($starved)->toBeTrue()
+    163▕         ->and($record['starved'])->toBeTrue()
+    164▕         ->and($record['requirement_dropped'])->toBeTrue()
+    165▕         ->and($record['outcome'])->toContain('dropped');
+    166▕
+
+  [33m1   [39m[39;1mtests/Property/StarvationCapPropertyTest.php[39;22m:[39;1m162[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (533 assertions)[39m
+  [90mDuration:[39m [39m5.55s[39m
+
