@@ -2417,15 +2417,15 @@ entries:
     justification: >-
       PLANNED — flips at S11 step 6 to PARTIAL [D19]: agent-frees-slot → next assignment measured at dev scale (≤ 2 s p95 indicative); the L2 figure is Doc 19's load environment. Target suite: tests/Performance/RoutingBudgetsTest.php.
   - ac_ref: "Doc11 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/TemporaryMembershipTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 7: pull-in → Doc 03 grant linkage (override_id CHECK), expiry via sweep AND assignment-time check proven INDEPENDENTLY (each path disabled in turn; the A-50 department half too), the 3× recurrence hint (BR-07). Target suite: tests/Feature/Routing/TemporaryMembershipTest.php.
+      FLIPPED AT S11 STEP 7: pull-in → Doc 03 grant linkage through OverrideAdministration (tickets.assign_self, A-56; the three rows on ONE override_id, one transaction); expiry via the sweep AND the assignment-time resolver check proven INDEPENDENTLY (PATH A: sweep never run, resolver refuses — sabotage #8b red; PATH B: sweep alone ends the rows — sabotage #8c red; #8a green by design); recurrence hint at 3× (BR-07) as a key, nothing converted. The HTTP doors + SEC-01 matrix: tests/Feature/Routing/SupervisorOpsTest.php.
   - ac_ref: "Doc11 AC-06"
     suite_path: manual
     type: manual

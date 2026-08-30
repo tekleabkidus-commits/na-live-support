@@ -42,6 +42,11 @@ Schedule::command('rbac:expire-overrides')->everyFifteenMinutes();
 // correctness — but noise every minute forever is still noise.
 Schedule::command('tickets:timers-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 11 T-07: the 1-minute temporary-membership expiry sweep — a deadline-ZSET timer
+// (the Doc 06 shape above), NOT a queue poll; NoPollingLoopTest's allowlist names it.
+// Cleanup only: the resolver's DB-time check is the security (FS-05).
+Schedule::command('routing:expiry-sweep')->everyMinute()->withoutOverlapping();
+
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();

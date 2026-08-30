@@ -425,6 +425,17 @@ Route::middleware([
     // Doc 11 FR-17/SEC-02 (S11 step 5): the routing-record read door (elision by role inside RecordReader).
     Route::get('t/{ticketId}/routing/{recordId}', [App\Http\Controllers\Routing\RoutingRecordController::class, 'show'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.routing_record');
+    // Doc 11 FR-15 / SEC-01 (S11 step 7): the supervisor doors — reassign (bypasses strategy,
+    // attributed), pull-in (Doc 03 grant through OverrideAdministration, SEC-03), its manual
+    // end, broadcast ([D16] contract-only). Force status is Doc 07's door above (inbox.status.force).
+    Route::post('t/{ticketId}/reassign', [App\Http\Controllers\Routing\SupervisorOpsController::class, 'reassign'])
+        ->middleware(['permission:supervision.reassign', 'audit:routing.manual_reassign'])->name('inbox.ticket.reassign');
+    Route::post('queues/{queueId}/pull-in', [App\Http\Controllers\Routing\SupervisorOpsController::class, 'pullIn'])
+        ->middleware(['permission:org.queues.pull_in', 'audit:routing.pull_in.created'])->name('inbox.queue.pull_in');
+    Route::post('queues/{queueId}/pull-in/{userId}/end', [App\Http\Controllers\Routing\SupervisorOpsController::class, 'endPullIn'])
+        ->middleware(['permission:org.queues.pull_in', 'audit:routing.pull_in.ended'])->name('inbox.queue.pull_in.end');
+    Route::post('queues/{queueId}/broadcast', [App\Http\Controllers\Routing\SupervisorOpsController::class, 'broadcast'])
+        ->middleware(['permission:supervision.broadcast', 'audit:routing.broadcast_sent'])->name('inbox.queue.broadcast');
     Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])
         ->middleware('permission:tickets.assign')->name('inbox.assignees');
     Route::get('tags/suggest', [App\Http\Controllers\Inbox\TicketActionsController::class, 'suggestTags'])

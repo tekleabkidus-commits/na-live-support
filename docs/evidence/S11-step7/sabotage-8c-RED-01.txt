@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\TemporaryMembershipTest
+  ⨯ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 7.47s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMembershipTest > it T-07 — PATH B…    
+  CLEANUP LAG: the sweep did not end the queue row
+Failed asserting that 0 is identical to 1.
+
+  at tests/Feature/Routing/TemporaryMembershipTest.php:211
+    207▕ 
+    208▕     $sweep = app(ExpirySweep::class);
+    209▕     expect($sweep->sweepOne($tenantId, $overrideId))->toBe('ended');
+    210▕ 
+  ➜ 211▕     expect(DB::table('queue_members')->where('override_id', $overrideId)->whereNotNull('ended_at')->count())->toBe(1, 'CLEANUP LAG: the sweep did not end the queue row')
+    212▕         ->and(DB::table('user_departments')->where('override_id', $overrideId)->whereNotNull('ended_at')->count())->toBe(1, 'CLEANUP LAG: the sweep did not end the department row')
+    213▕         ->and(DB::table('queue_members')->where('override_id', $overrideId)->count())->toBe(1, 'FLAG C: the row was deleted');
+    214▕     $event = json_decode((string) DB::table('outbox')->where('name', 'queue.temporary_grant.expired')->orderByDesc('id')->value('payload'), true);
+    215▕     expect($event['override_id'])->toBe($overrideId)->and($event['cause'])->toBe('expired')->and($event['queue_id'])->toBe($queue);
+
+  1   tests/Feature/Routing/TemporaryMembershipTest.php:211
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 7.54s
+

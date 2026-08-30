@@ -1,0 +1,44 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 7.46s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.18s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.25s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.27s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.19s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.16s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.27s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.29s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.20s  
+  ⨯ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.42s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.30s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.31s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.31s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.28s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.22s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.05s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMembershipTest > i…  QueryException   
+  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select distinct "assignee_id" from "tickets" where "assignee_id" is not null)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      +6 vendor frames 
+  7   app/Domain/Routing/Capacity/AssignmentStats.php:58
+  8   app/Console/Commands/Routing/RoutingRebuild.php:26
+
+
+  Tests:    1 failed, 15 passed (154 assertions)
+  Duration: 11.24s
+

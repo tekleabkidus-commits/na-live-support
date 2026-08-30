@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\TemporaryMembershipTest
+  ⨯ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 8.88s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMembershipTest > it T-07 / FS-05 —…   
+  an expired pull-in received an assignment
+Failed asserting that '01a05325-fcb4-70dc-af63-0ac47f811e8a' is null.
+
+  at tests/Feature/Routing/TemporaryMembershipTest.php:198
+    194▕     [, $conversation] = conversationFixture();
+    195▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent, departmentId: $payments));
+    196▕     app(RoutingPipeline::class)->route($ticket, 'created', ['explicit_department_id' => $payments]);
+    197▕     app(QueueDispatcher::class)->run($queue);
+  ➜ 198▕     expect(DB::table('tickets')->where('id', $ticket->identifier())->value('assignee_id'))->toBeNull('an expired pull-in received an assignment');
+    199▕     expect(DB::table('queue_members')->where('override_id', $overrideId)->whereNull('ended_at')->count())->toBe(1, 'the resolver path must not depend on ending rows');
+    200▕ });
+    201▕ 
+    202▕ it('T-07 — PATH B ALONE (the sweep, resolver untouched): the due member ends BOTH rows jointly (ended_at, never deleted), publishes queue.temporary_grant.expired{cause=expired}, audits routing.pull_in.ended (system) and drops its timer member; a second pass is a no-op (sabotage #8c red here)', function () {
+
+  1   tests/Feature/Routing/TemporaryMembershipTest.php:198
+
+
+  Tests:    1 failed (8 assertions)
+  Duration: 9.00s
+

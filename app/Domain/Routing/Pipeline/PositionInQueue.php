@@ -32,15 +32,17 @@ final class PositionInQueue
      * @param  array<string, mixed>  $ticket  id, priority, reopened_count, customer_id, queued_at, tags
      * @return array{score: int, starved: bool, boosts_applied: list<string>, age_seconds: int, cap_minutes: int, matched: list<string>}
      */
-    public function compute(string $queueId, array $ticket): array
+    public function compute(string $queueId, array $ticket, ?DateTimeImmutable $now = null): array
     {
         $rulesRaw = DB::table('queues')->where('id', $queueId)->value('priority_rules');
         /** @var list<mixed> $rules */
         $rules = is_string($rulesRaw) ? array_values((array) json_decode($rulesRaw, true)) : [];
         $matched = $this->matcher->matches($ticket);
-        /** @var object{t: string} $clock */
-        $clock = DB::selectOne('SELECT clock_timestamp() AS t');
-        $now = new DateTimeImmutable($clock->t, new DateTimeZone('UTC'));
+        // `$now` is DB time (C-11). A caller scoring MANY tickets in one pass (routing:rebuild,
+        // FS-01) passes ONE instant for all of them: the age term is whole seconds, so two
+        // tickets queued in the same second scored across a clock tick would otherwise swap
+        // order — the S11 step-7 RebuildDrillTest red (NFR-03; the fix is one clock per pass).
+        $now ??= $this->dbNow();
         $queuedAtRaw = $ticket['queued_at'] ?? null;
         $queuedAt = is_string($queuedAtRaw) ? new DateTimeImmutable($queuedAtRaw) : $now;
         $capMinutes = $this->settings->get(StarvationCap::SETTING);
@@ -57,5 +59,13 @@ final class PositionInQueue
             'cap_minutes' => $capMinutes,
             'matched' => $matched,
         ];
+    }
+
+    public function dbNow(): DateTimeImmutable
+    {
+        /** @var object{t: string} $clock */
+        $clock = DB::selectOne('SELECT clock_timestamp() AS t');
+
+        return new DateTimeImmutable($clock->t, new DateTimeZone('UTC'));
     }
 }

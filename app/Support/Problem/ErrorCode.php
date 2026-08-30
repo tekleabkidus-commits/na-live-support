@@ -172,6 +172,10 @@ enum ErrorCode: string
     case KbSaveConflict = 'kb_save_conflict';
     case KbCategoryHasArticles = 'kb_category_has_articles';
 
+    // ── Doc 11 (S11 step 7): the supervisor doors' stable refusal — `refusal_code`
+    //    carries the specific reason (pull_in_active, expiry_in_past, rg_staff_required …).
+    case RoutingRefused = 'routing_refused';
+
     /**
      * The i18n key for this code's human-readable title (C-08/N-03).
      *

@@ -1,0 +1,2466 @@
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan octane:reload
+
+   INFO  Reloading workers...  
+
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml restart worker scheduler reverb
+ Container na-live-support-reverb-1 Restarting 
+ Container na-live-support-scheduler-1 Restarting 
+ Container na-live-support-worker-1 Restarting 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-worker-1 Started 
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml up -d --wait app worker scheduler reverb
+ Container na-live-support-scheduler-1 Running 
+ Container na-live-support-reverb-1 Running 
+ Container na-live-support-redis-durable-1 Running 
+ Container na-live-support-redis-volatile-1 Running 
+ Container na-live-support-worker-1 Running 
+ Container na-live-support-app-1 Running 
+ Container na-live-support-postgres-1 Running 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-app-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-scheduler-1 Waiting 
+ Container na-live-support-reverb-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-worker-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-app-1 Healthy 
+ Container na-live-support-reverb-1 Healthy 
+ Container na-live-support-worker-1 Healthy 
+ Container na-live-support-scheduler-1 Healthy 
+Octane reloaded; worker/scheduler/reverb restarted and healthy.
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec app ./vendor/bin/pest --exclude-group=soak
+
+   PASS  Tests\Unit\Auth\SafeReturnUrlTest
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both…  0.01s  
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "protocol-relative"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant /\"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant \/"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "any interior backslash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "triple slash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "scheme with no slash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "CR-LF (header injection material)"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "other control characters"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "origin lookalike host"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "empty string"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "bare origin prefix without separator"
+  ✓ it refuses non-strings without dying
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "plain path"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with query"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with fragment"
+  ✓ it reduces a same-origin ABSOLUTE URL to its local path — the shape the framework guest redirect stores
+
+   PASS  Tests\Unit\Conversations\AdapterRegistryTest
+  ✓ a registered channel resolves its adapter and queue families         0.02s  
+  ✓ an unregistered channel refuses by name
+  ✓ double registration refuses — one channel, one adapter
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true                                                    0.01s  
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Admin\TagManagerTest
+  ✓ R-22 page door: /admin/tags serves the REAL inventory (name + count… 7.36s  
+  ✓ R-22 rewrite door: the rename runs THROUGH the engine (historical r… 0.20s  
+  ✓ R-22 refusals: blank and same-tag answer 422 validation-shaped (C-0… 0.23s  
+  ✓ R-22 mid-rewrite resume THROUGH the door: a killed run's half-done…  0.23s  
+
+   PASS  Tests\Feature\Ai\ActionSchemaTest
+  ✓ it EC-05: an action outside the closed enum is DISCARDED, never exe… 0.03s  
+  ✓ it EC-05: malformed output (non-object, or missing required fields)… 0.03s  
+  ✓ it BR-02/AC-02: an answer WITHOUT a citation is refused by the sche… 0.05s  
+  ✓ it FR-12/Q7: handoff reasons come from the CLOSED category list — f… 0.05s  
+  ✓ it the five legal actions all validate with their required fields    0.04s  
+
+   PASS  Tests\Feature\Ai\AiBellDeliveryTest
+  ✓ it ai.killswitch.changed → every live ai.killswitch holder EXCEPT t… 2.73s  
+  ✓ it ai.anomaly.detected → every live reports.supervisor.live holder,… 2.92s  
+  ✓ it ai.digest.ready → its ONE recipient and only while they still ho… 2.46s  
+  ✓ it ai.provider.health_changed is DELIBERATELY not projected into th… 0.03s  
+
+   PASS  Tests\Feature\Ai\AiI18nParityTest
+  ✓ it en and am ai.php carry the same key set; every :param in en appe… 0.07s  
+  ✓ it the R-14 queue file lists every machine-authored am ai.* key exa… 0.03s  
+
+   PASS  Tests\Feature\Ai\AiQueueTest
+  ✓ it ADR 0017 (amended): ai and ai-background are SEPARATE supervisor… 0.04s  
+  ✓ it FR-03: the per-tenant semaphore admits to the registered cap and… 0.09s  
+  ✓ it FR-03: the semaphore is per-tenant — one tenant at cap starves n… 0.08s  
+  ✓ it the ai.concurrency.per_tenant setting is registered with platfor… 0.06s  
+
+   PASS  Tests\Feature\Ai\ArtifactOutcomeTest
+  ✓ it FR-16 inserted_unedited: insert (gated ai.copilot.insert_draft)…  0.78s  
+  ✓ it FR-16 inserted_edited{diff_ref}: the agent edits before sending…  0.84s  
+  ✓ it FR-16 discarded: the discard door records it; a discarded artifa… 0.74s  
+  ✓ it FR-14 gating: insert WITHOUT ai.copilot.insert_draft is refused…  0.83s  
+  ✓ it FR-16: a non-usable row (low_confidence / refused) cannot be ins… 0.67s  
+
+   PASS  Tests\Feature\Ai\BackofficeConfigTest
+  ✓ it persona: draft → preview (queued on ai-background, the DRAFT per… 0.87s  
+  ✓ it guardrails: draft → publish writes the SEC-05 audit row (ai.conf… 0.82s  
+  ✓ it thresholds/scope (BR-07, US-06): simulate returns before/after/d… 0.74s  
+  ✓ it kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli… 0.82s  
+  ✓ it permissions: every Backoffice door is gated by its closed key —…  0.86s  
+
+   PASS  Tests\Feature\Ai\ChatbotTurnTest
+  ✓ it FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it… 0.22s  
+  ✓ it AC-02/BR-02 (sabotage #8 target): a money question with NO retri… 0.35s  
+  ✓ it EC-05: an out-of-enum action → ONE repair retry → still invented… 0.32s  
+  ✓ it FR-12: customer requests a human → the FR-11 packet via Doc 06's… 0.23s  
+  ✓ it FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep… 0.38s  
+  ✓ it EC-04: betting advice → the deflection TEMPLATE (never generated… 0.33s  
+  ✓ it FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim… 0.94s  
+  ✓ it FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i… 0.21s  
+  ✓ it AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form…  0.13s  
+  ✓ it EC-01 (AC-01's pipeline clause): a six-message burst yields ONE…  0.25s  
+
+   PASS  Tests\Feature\Ai\ClassifyPipelineTest
+  ✓ it FR-06/FR-07: the consumer classifies the burst and records the d… 0.15s  
+  ✓ it EC-01: only the confirmed batch TAIL classifies — a superseded a… 0.19s  
+  ✓ it C-09: a redelivered event changes nothing — one decision, howeve… 0.16s  
+  ✓ it FR-11 (Doc 04): a quarantined inbound gets NO classification — n… 0.07s  
+  ✓ it T-06: the two-stage RG confirmation runs ONLY past the screening… 0.13s  
+  ✓ it FR-07 (filed interpretation, S09 step 14): a second customer mes… 0.62s  
+
+   PASS  Tests\Feature\Ai\ComposerActionsTest
+  ✓ it FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a… 0.49s  
+  ✓ it FR-14 guardrail notice: a money-intent draft WITHOUT a citation…  0.50s  
+  ✓ it FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule…  0.57s  
+  ✓ it FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)… 0.60s  
+  ✓ it FR-15 doors: every composer action is QUEUED (202 + request id,…  0.62s  
+  ✓ it C-10: an out-of-scope conversation answers the 404 pattern on ev… 0.66s  
+
+   PASS  Tests\Feature\Ai\ConfigVersioningTest
+  ✓ it FR-04: draft -> publish -> the single active version; a second p… 0.09s  
+  ✓ it FR-04: rollback REPUBLISHES the old payload as a NEW version; hi… 0.07s  
+  ✓ it FR-04: only a draft publishes — a superseded version is republis… 0.06s  
+  ✓ it flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte… 1.53s  
+
+   PASS  Tests\Feature\Ai\CopilotPanelTest
+  ✓ it FR-14 chips: intent / sentiment / urgency / confidence from the…  0.52s  
+  ✓ it FR-14 debounce: repeated panel reads within 10 s dispatch ONE re… 0.73s  
+  ✓ it EC-09: regenerate ×3 exhausted → the card LOCKS to the low-confi… 0.60s  
+  ✓ it EC-09 cooldown: a regenerate inside the cooldown window is refus… 0.59s  
+  ✓ it FS-01 / AC-09 (Copilot half): with the provider chain exhausted…  0.57s  
+  ✓ it the request-poll door (T-04's socket fallback): pending until th… 0.62s  
+
+   PASS  Tests\Feature\Ai\DecisionAccessTest
+  ✓ it SEC-06: the door serves the curated allowlist — the payload pair… 0.11s  
+  ✓ it SEC-06: without ai.decisions.view the door refuses                0.07s  
+  ✓ it C-05: the cursor walks the log without overlap or gap             0.10s  
+  ✓ it the split's other half stands: the platform connection CAN read…  0.17s  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.017 ms   max   0.690 ms   budget(p99) 3.0 ms   WITHIN
+
+   PASS  Tests\Feature\Ai\DecisionLogTest
+  ✓ it FR-20: record + flush lands the row with layer_hashes carrying t… 0.04s  
+  ✓ it FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE… 0.06s  
+  ✓ it T-08: the enrichment pen writes outcome + meta from the CLOSED c… 0.04s  
+  ✓ it NFR-05 (dev-hardware-indicative): record() stages within the 3 m… 0.06s  
+
+   PASS  Tests\Feature\Ai\FailoverDrillTest
+  ✓ it FS-01: primary fails → breaker trips → DEGRADED (transition-only… 0.09s  
+  ✓ it FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t… 0.04s  
+  ✓ it FS-01: auto-resume — a success after DOWN publishes HEALTHY once… 0.04s  
+  ✓ it EC-11: a policy refusal on benign content is detected as provide… 0.03s  
+
+   PASS  Tests\Feature\Ai\HonestyTest
+  ✓ it AC-05 (sabotage #10 target): a persona publishes ONLY if every d… 0.61s  
+  ✓ it FR-19a wording vs presence: guardrails may REWORD the disclosure… 0.66s  
+  ✓ it N-08 / BR-05 ABSENCE: no registered setting, no config kind, no…  0.03s  
+  ✓ it FR-19d: an AI-authored message is never edited post-send — Doc 0… 0.48s  
+
+   PASS  Tests\Feature\Ai\KillSwitchTest
+  ✓ it AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e… 0.06s  
+  ✓ it AC-08: a channel-wide switch covers every endpoint on that chann… 0.06s  
+  ✓ it SEC-05: every flip is audited with actor + old/new and evented w… 0.04s  
+  ✓ it SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP… 1.20s  
+  ✓ it FR-07 enablement (SwitchesAndFlags): scope config ON + no switch… 0.09s  
+  ✓ it the scope grid is a singleton per combination — a second flip UP… 0.09s  
+
+   PASS  Tests\Feature\Ai\LanguageGateTest
+  ✓ it §14: the launch pair publishes; a third language with NO templat… 0.50s  
+  ✓ it §14: a language becomes enableable ONLY once a guardrails overri… 0.52s  
+  ✓ it §14 in the turn: a customer writing in a language the endpoint d… 0.62s  
+
+   PASS  Tests\Feature\Ai\NormalizeTest
+  ✓ it the guard extends to MEDIA egress: outside production a real med… 0.07s  
+  ✓ it FR-05: a voice note gains its transcript_ref through the Doc 04…  0.08s  
+  ✓ it FR-05: a receipt image gains ocr_ref with per-field confidence    0.07s  
+  ✓ it FS-03: a provider outage leaves the media item UNTOUCHED and the… 0.08s  
+
+   PASS  Tests\Feature\Ai\OrchestratorTest
+  ✓ it FR-01: the task catalog is CLOSED at fifteen (twelve + Doc 10 FR… 0.03s  
+  ✓ it T-01: the fallback chain falls through a failing provider to the… 0.05s  
+  ✓ it T-01: an OPEN breaker skips its provider without spending a call… 0.05s  
+  ✓ it THE STEP-3 ASSERTION: no egress path skips the guard — every Pro… 0.03s  
+  ✓ it FR-02: a PUBLISHED provider_routing config overrides the seed —…  0.06s  
+
+   PASS  Tests\Feature\Ai\PayloadReductionJobTest
+  ✓ it SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre… 0.17s  
+
+   PASS  Tests\Feature\Ai\PromptAssemblyTest
+  ✓ it T-02: the system layer STARTS with the immutable honesty layer a… 0.07s  
+  ✓ it T-02/STEP-0.2 ruling: the hardened identity and language rules a… 0.04s  
+  ✓ it BR-05/N-08: no config kind and no registered setting can disable… 0.08s  
+  ✓ it T-03: customer content is fenced and role-separated; a crafted m… 0.05s  
+  ✓ it T-03: retrieved chunks arrive fenced with provenance and the ind… 0.05s  
+  ✓ it SEC-02: user-turn PII is masked positionally with the masking ma… 0.05s  
+
+   PASS  Tests\Feature\Ai\ProviderSwitchDoorTest
+  ✓ it R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana… 0.09s  
+  ✓ it the switch door: 403 without the key; GET answers the model map;… 0.70s  
+
+   PASS  Tests\Feature\Ai\QuotaEnforcementTest
+  ✓ it RULED EDIT obligation: headroom() mirrors allow()'s own counter…  0.05s  
+  ✓ it T-07: every orchestrator call accumulates the provider's ACTUAL…  0.07s  
+  ✓ it EC-12 (sabotage #12 target): inside the reserve band NEW turns a… 0.07s  
+  ✓ it EC-12: the band itself refuses — at 96% used a new turn is refus… 0.06s  
+  ✓ it COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE… 0.05s  
+  ✓ it NFR-06: the registered reserve and rate-card settings exist with… 0.06s  
+
+   PASS  Tests\Feature\Ai\RetrievalTest
+  ✓ it T-03 at index time: the planted imperative is stripped and the p… 0.05s  
+  ✓ it T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran… 0.07s  
+  ✓ it EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s… 0.06s  
+  ✓ it FS-02 posture: with no query vector available the keyword half s… 0.06s  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+   PASS  Tests\Feature\Ai\RgEvalHarnessTest
+  ✓ it the corpus is the shipped 50: half risk, half healthy, both lang… 0.03s  
+  ✓ it NFR-07: at the shipped rg_min the scripted realistic scorer meet… 0.03s  
+  ✓ it the harness CAN fail: a miscalibrated threshold drops precision…  0.03s  
+
+   PASS  Tests\Feature\Ai\RgOverrideTest
+  ✓ it FR-13 + [D09] FR-14 close: the override writes the flag THROUGH…  0.17s  
+  ✓ it BR-03/AC-04: the customer receives the operator template BYTE FO… 0.25s  
+  ✓ it N-10 STRUCTURAL: the RG override cannot reach the generation ser… 0.03s  
+  ✓ it FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti… 0.08s  
+  ✓ it FR-18: a PUBLISHED guardrails rg_template overrides the seeded w… 0.06s  
+  ✓ it C-09: a redelivered event fires the override ONCE — one flag, on… 0.16s  
+  ✓ it [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re… 0.16s  
+
+   PASS  Tests\Feature\Ai\SimilarTicketsTest
+  ✓ it T-05/FR-14: top-3 by cosine over resolved-ticket summaries, the…  1.50s  
+  ✓ it T-05 scope AT QUERY TIME: an Own-scoped agent sees ONLY tickets…  1.19s  
+  ✓ it T-05 nightly: the embedder summarizes + embeds resolved tickets…  0.56s  
+
+   PASS  Tests\Feature\Ai\SimulationParityTest
+  ✓ it AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)…  1.42s  
+  ✓ it BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok… 0.06s  
+
+   PASS  Tests\Feature\Ai\StreamingTest
+  ✓ it T-04 client: an SSE response is parsed delta-by-delta in order,…  0.04s  
+  ✓ it §13 sentence chunker: Latin and Ethiopic terminators both bound…  0.03s  
+  ✓ it T-04 relay: token-sized deltas become SENTENCE frames on the age… 0.63s  
+  ✓ it T-04 job: CopilotTaskJob runs the stream end-to-end and ends in…  0.56s  
+
+   PASS  Tests\Feature\Ai\SubjectGenerationTest
+  ✓ it FR-03: a subjectless ticket gets a generated subject through Sub… 0.55s  
+  ✓ it FR-03: a ticket that ALREADY has a staff subject is never overwr… 1.00s  
+  ✓ it FR-03: the 80-character cap and one-line normalization hold; an…  0.98s  
+
+   PASS  Tests\Feature\Ai\SupervisorTest
+  ✓ it FR-17/US-05: withdrawal complaints tripling in the last hour vs…  1.36s  
+  ✓ it FR-17 sentiment watch: a conversation whose latest classificatio… 0.76s  
+  ✓ it FR-17 qa_prescore: samples yesterday's resolved tickets once eac… 0.82s  
+  ✓ it FR-17 daily_digest: six bullets per manager (reports.supervisor.… 0.92s  
+  ✓ it FS-01 (AC-09's last rung) + FR-18: with every provider of the ch… 0.69s  
+  ✓ it the supervisor FEED is the decision-log door filtered by surface… 0.70s  
+
+   PASS  Tests\Feature\Ai\TranslateSendTest
+  ✓ it (b)+(d): a translate send carries channel_meta.ai_translation {a… 0.55s  
+  ✓ it (d): an EDITED translation still carries the original and the ve… 0.57s  
+  ✓ it (c) default-preserving, TESTED: a reply WITHOUT ai_artifact_id w… 0.52s  
+  ✓ it (c) negative controls: wrong-owner artifact, missing ai.copilot.… 1.21s  
+
+   PASS  Tests\Feature\Ai\TranslateTest
+  ✓ it §14 validator unit: same digits in any order pass; a reordered d… 0.04s  
+  ✓ it §14 (sabotage #14 target): a translation that ALTERS a digit is…  0.61s  
+  ✓ it §14: the repair retry SUCCEEDING yields the artifact — digits ve… 0.50s  
+  ✓ it EC-10 mixed-language input: the dominant script decides the sour… 0.51s  
+  ✓ it SEC-02 on staff text: a phone number in the agent's draft never…  0.49s  
+
+   PASS  Tests\Feature\Ai\WeeklyOutputsTest
+  ✓ it top unanswerable: no_grounding handoffs and locked regenerations… 0.66s  
+  ✓ it calibration curve: confidence buckets vs outcomes over chatbot +… 0.48s  
+  ✓ it RG precision queue delegates to RgCalibration (the [D09] EC-06 r… 0.48s  
+
+   PASS  Tests\Feature\Auth\ActionTokenTest
+  ✓ it issues a 256-bit token, stores only its SHA-256, and resolves it… 0.21s  
+  ✓ it refuses cross-purpose redemption both ways (bound to purpose)     0.19s  
+  ✓ it is single-use: consume() wins exactly once, and a consumed token… 0.20s  
+  ✓ it dies when the account email changes after issuance (bound to ema… 0.17s  
+  ✓ it dies at expiry, two-sided at the DB-time boundary                 0.17s  
+  ✓ it supersedes the previous live token on reissue — EC-04 as physics… 0.18s  
+  ✓ it refuses garbage shapes without touching the door                  0.16s  
+  ✓ it refuses a token whose owner was disabled after issuance           0.18s  
+
+   PASS  Tests\Feature\Auth\ApiTokenLifecycleTest
+  ✓ it mints a personal token that AUTHENTICATES the bearer surface (FR… 0.20s  
+  ✓ it stores only the SHA-256 — the plaintext exists in exactly one re… 0.19s  
+  ✓ it surfaces last_used_at after a bearer request (FR-18 "last-used d… 0.21s  
+  ✓ it revokes a token individually, after proving it worked (FR-18 "in… 0.20s  
+  ✓ it refuses expiry choices outside FR-18's fixed set, and "none" onc… 0.21s  
+  ✓ it refuses abilities that are not registered permission keys (FR-18… 0.18s  
+  ✓ it answers a never-issued token with 401 invalid_token (FR-20)       0.19s  
+  ✓ it answers a missing Authorization header with the same 401 invalid… 0.16s  
+  ✓ it answers an EXPIRED token with 401 token_expired — the one distin… 0.18s  
+  ✓ it renders revoked-token and disabled-owner refusals BYTE-IDENTICAL… 0.34s  
+  ✓ it never lets a session cookie satisfy the bearer surface (T-02; sa… 0.18s  
+  ✓ it never lets a bearer token satisfy the staff session surface (T-0… 0.19s  
+  ✓ it audits and publishes creation and revocation (§4.8: auth.token.c… 0.21s  
+  ✓ it keeps two tenants' tokens fully apart — each resolves only its o… 0.34s  
+
+   PASS  Tests\Feature\Auth\BreachCheckTest
+  ✓ it sends exactly the 5-char SHA-1 prefix — never the password, its…  0.04s  
+  ✓ it flags a breached password on a suffix hit and lets the policy re… 0.28s  
+  ✓ it does not flag a clean password, and treats a padded zero-count d… 0.03s  
+  ✓ it fails OPEN on timeout, with the named metric — an outage never b… 0.03s  
+  ✓ it fails OPEN on a non-2xx, with the failure class in the metric     0.03s  
+  ✓ it fails OPEN when no endpoint is configured, without dialling anyt… 0.03s  
+  ✓ it makes zero calls when the tenant has turned the check off (FR-15… 0.29s  
+  ✓ it never logs anything password-derived on any path (SEC-08)         0.03s  
+
+   PASS  Tests\Feature\Auth\DeviceRegistrationTest
+  ✓ it records a device on first login: fingerprint, parsed label, IP,…  0.55s  
+  ✓ it a repeat login from the same machine UPDATES the row instead of…  0.77s  
+  ✓ it a different browser is a different device (T-03: family is a fin… 0.82s  
+  ✓ it a browser UPGRADE is NOT a new device (family, not version, is h… 0.84s  
+  ✓ it an address outside the database stores IP only — the row-level h… 0.53s  
+  ✓ it NFR-04: a CORRUPT GeoIP database never blocks a login             0.56s  
+
+   PASS  Tests\Feature\Auth\GeoIpTest
+  ✓ it positive control: the official MaxMind reader resolves the stub'… 0.03s  
+  ✓ it resolves a city with per-locale names and English fallback (§14)  0.02s  
+  ✓ it returns a country-only location for the city-less network         0.02s  
+  ✓ it returns null for an address the database does not know            0.03s  
+  ✓ it FS-04: a CORRUPT database degrades to null with the named metric… 0.03s  
+  ✓ it FS-04: a MISSING database file degrades the same way              0.03s  
+  ✓ it an UNCONFIGURED database is a quiet null — no metric spam from u… 0.04s  
+  ✓ it heals without a restart when a corrupt file is replaced (the un-… 0.04s  
+
+   PASS  Tests\Feature\Auth\InvitationTest
+  ✓ it walks FR-17 end to end: invited cannot log in, sets a password o… 1.35s  
+  ✓ it honours the 7-day validity, two-sided (FR-17)                     0.21s  
+  ✓ it invalidates the old link on self-service resend and answers unif… 0.83s  
+  ✓ it offers no structural path for anyone to choose a password for so… 0.06s  
+  ✓ it completes the profile on accept: name and language persist with…  0.46s  
+  ✓ it refuses a locale outside {en, am} loudly, spends nothing, and le… 0.47s  
+  ✓ it leaves the profile untouched when the PASSWORD is refused — no u… 0.20s  
+  ✓ it prefills the profile fields from what the admin already entered…  0.20s  
+
+   PASS  Tests\Feature\Auth\IpAllowlistTest
+  ✓ it matches exact IPs and CIDR ranges, v4 and v6, and fails closed o… 0.03s  
+  ✓ it refuses a CORRECT credential from an off-list IP with the GENERI… 0.55s  
+  ✓ it admits the same credential from an on-list IP, and leaves NULL-a… 1.10s  
+
+   PASS  Tests\Feature\Auth\LockoutTest
+  ✓ it gives the generic message for failures 1 to 4 and does not lock…  1.34s  
+  ✓ it locks the account on the 5th failure (AC-02)                      1.59s  
+  ✓ it refuses the CORRECT password while locked, without saying it is…  1.78s  
+  ✓ it audits every lockout transition (AC-02: admin unlock audited, an… 1.78s  
+  ✓ it rolls the window: failures older than auth.lockout.window do not… 0.20s  
+  ✓ it expires the lock after auth.lockout.duration without anyone inte… 0.04s  
+  ✓ it counts a failed attempt against EVERY candidate account for that… 1.88s  
+  ✓ it lets a victim always unlock via password reset, per account (EC-… 2.16s  
+  ✓ it registers the EC-11 captcha threshold setting even though no ven… 0.03s  
+  ✓ it throttles per IP independently of any account, including address… 6.31s  
+
+   PASS  Tests\Feature\Auth\LoginFlowTest
+  ✓ it signs a staff user in with the correct password (FR-01)           0.66s  
+  ✓ it binds the tenant discovered from the account (Doc 01 FR-03a)      0.72s  
+  ✓ it refuses the wrong password                                        0.64s  
+  ✓ it refuses when one email AND password verify in two tenants, recor… 0.67s  
+
+   PASS  Tests\Feature\Auth\LoginPageTest
+  ✓ it renders the card for a guest with nothing account-shaped in the…  0.04s  
+  ✓ it redirects an already-authenticated user away from the card inste… 0.06s  
+  ✓ it re-enters the 2FA step on reload while a challenge is pending (§… 0.07s  
+  ✓ it shows the FR-11 expired notice exactly when the lifetime middlew… 0.05s  
+  ✓ it walks FR-11 end to end: expiry redirects to the card, flags the…  0.10s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.05s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.06s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.05s  
+  ✓ it refuses the ruled return-URL shapes through the real page (owner… 0.06s  
+  ✓ it POSITIVE CONTROL: a legitimate stored return path survives the g… 0.05s  
+  ✓ it carries EC-01's time-sync help sentence into the challenge copy,… 0.08s  
+
+   PASS  Tests\Feature\Auth\MachineTokenTest
+  ✓ it creates a service-account-bound machine token that authenticates… 0.51s  
+  ✓ it reuses an existing service account by name instead of minting a…  0.52s  
+  ✓ it never lets a service account log in — refused at the SQL resolve… 1.28s  
+  ✓ it rotates with an overlap window: both tokens live until the expli… 0.41s  
+  ✓ it attributes a machine token's scope denial to its VISIBLE service… 0.45s  
+  ✓ it does not manage personal tokens through the machine surface — 40… 0.33s  
+
+   PASS  Tests\Feature\Auth\PasswordMailTest
+  ✓ it queues the reset mail on the mail family with tries=6 and the wi… 0.33s  
+  ✓ it pins the recipient locale at dispatch: user preference first      0.43s  
+  ✓ it falls back to the tenant default language when the user has no p… 0.43s  
+  ✓ it renders complete localized content in BOTH launch languages, wit… 0.07s  
+  ✓ it queues the invitation mail with the same FS-02 posture            0.07s  
+
+   PASS  Tests\Feature\Auth\PasswordPolicyTest
+  ✓ it refuses below the default 12 minimum and accepts at it, naming t… 0.42s  
+  ✓ it follows the tenant's own min_length setting (T-10)                0.42s  
+  ✓ it cannot be weakened below BR-05's platform floor of 10 — refused…  0.35s  
+  ✓ it ignores composition by default (length over composition) and enf… 0.52s  
+  ✓ it refuses reuse of the current password and each of the last N, an… 2.74s  
+  ✓ it writes a history row per change with the PRE-change hash (the mi… 0.81s  
+  ✓ it mutates nothing when policy refuses — no hash change, no history… 0.24s  
+  ✓ it never fires at the spec default of 0, however old the password    0.25s  
+  ✓ it confines an expired password to the change surface, two-sided at… 0.91s  
+
+   PASS  Tests\Feature\Auth\PasswordResetFlowTest
+  ✓ it runs the whole FR-16 journey: request → email → new password → o… 1.38s  
+  ✓ it keeps the token ALIVE through a policy failure and kills it on s… 0.75s  
+  ✓ it revokes every session on completion (FR-16's "all sessions revok… 0.73s  
+  ✓ it unlocks EXACTLY the account the token was bound to — R-6, with t… 2.62s  
+  ✓ it mints nothing for invited or disabled accounts, behind the ident… 0.88s  
+  ✓ it changes the password from a live session with FR-14's keep-curre… 1.31s  
+
+   PASS  Tests\Feature\Auth\RememberRecallerTest
+  ✓ it signs the user back in from the remember cookie when the session… 0.56s  
+  ✓ it NEGATIVE CONTROL: a recaller whose token no longer matches the s… 0.53s  
+
+   PASS  Tests\Feature\Auth\RouteRegistrationTest
+  ✓ it has removed the Doc 01 deferral and keeps Fortify auto-registrat… 0.03s  
+  ✓ it offers no self-registration route in v1                           0.03s  
+  ✓ it maps or exempts every route in the permission registry (permissi… 0.04s  
+  ✓ it declares a registered audit action on every mutating route (audi… 0.03s  
+
+   PASS  Tests\Feature\Auth\SecuritySessionsApiTest
+  ✓ it lists the caller's sessions with digests, metadata, and FS-04's…  0.07s  
+  ✓ it revokes one of the caller's other sessions by digest (FR-12, US-… 0.12s  
+  ✓ it refuses an unknown digest with 404 — expired-meanwhile and never… 0.10s  
+  ✓ it cannot revoke ANOTHER user's session by digest — the list is sco… 0.13s  
+  ✓ it revoke-others kills every planted session, audits the bulk actio… 0.16s  
+  ✓ it revoke-others with NOTHING to revoke still succeeds and still au… 0.10s  
+  ✓ it FR-11 WIRING: a session past its absolute limit is refused, not…  0.09s  
+
+   PASS  Tests\Feature\Auth\SessionCookieFlagsTest
+  ✓ it issues the staff session cookie HttpOnly, Secure and SameSite=La… 0.08s  
+  ✓ it POSITIVE CONTROL: the flag assertions read the live config→cooki… 0.05s  
+
+   PASS  Tests\Feature\Auth\SessionDeadlineTest
+  ✓ it answers 404 with no session — C-10's indistinguishable refusal,…  0.04s  
+  ✓ it rolls the idle clock by being called, and NEVER touches the abso… 0.07s  
+  ✓ it reports the ABSOLUTE clock as the effective deadline when it is…  0.06s  
+
+   PASS  Tests\Feature\Auth\SessionEvictionOrderTest
+  ✓ R-23/FR-10: six logins in ONE second evict the genuinely oldest, no… 0.04s  
+  ✓ R-23: the score is INTEGER microseconds — exact as an IEEE double,…  0.03s  
+  ✓ R-23: a true same-microsecond tie still yields a TOTAL order — the…  0.04s  
+  ✓ R-23: legacy whole-second scores still sort as OLDER than post-cuto… 0.07s  
+
+   PASS  Tests\Feature\Auth\SessionLifetimeTest
+  ✓ it reads FR-11 defaults from the settings registry                   0.04s  
+  ✓ it expires an idle session at the boundary and not one minute befor… 0.03s  
+  ✓ it expires a session at the absolute limit however recently it was…  0.03s  
+  ✓ it kills a CONTINUOUSLY ACTIVE session at the absolute limit (the s… 0.04s  
+  ✓ it treats a session with no recorded marks as live, not expired      0.04s  
+  ✓ it stamps an unstamped authenticated session with an absolute clock… 0.20s  
+
+   PASS  Tests\Feature\Auth\TenantHintOverrideTest
+  ✓ it serves the override to the request that set it (positive control… 0.04s  
+  ✓ it does NOT serve a previous request's override to a new request th… 0.03s  
+
+   PASS  Tests\Feature\Auth\TokenPruneTest
+  ✓ it prunes expired tokens across tenants and touches nothing else (F… 0.58s  
+  ✓ it scans on the documented partial index and runs nightly (FS-05 "i… 0.03s  
+
+   PASS  Tests\Feature\Auth\TokenScopeIntersectionTest
+  ✓ it refuses the write with 403 NAMING settings.edit while the SAME t… 0.24s  
+  ✓ it audits and publishes the denial (auth.token.scope_denied, BR-03…  0.25s  
+  ✓ it never lets a token EXCEED its owner — an ability the owner lacks… 0.24s  
+  ✓ it propagates permission loss within T-05's 10-second cache bound —… 0.32s  
+  ✓ it drops the cached verdict on revocation rather than serving it ou… 0.19s  
+
+   PASS  Tests\Feature\Auth\TwoFactorChallengeTest
+  ✓ it the login half: a correct password on a 2FA account yields 401 t… 1.56s  
+  ✓ it positive control: the challenge half establishes a session for a… 1.17s  
+  ✓ it AC-03: ±1 step accepted, ±2 rejected — exact boundaries, injecte… 0.02s  
+  ✓ it a wrong code is refused and the account is NOT signed in          1.23s  
+  ✓ it FR-07: the FIFTH failure voids the attempt, counts ONE failure t… 1.20s  
+  ✓ it AC-03: a recovery code signs in ONCE, reports the remaining coun… 2.19s  
+  ✓ it R-4: the ≤2-codes banner flag comes from the store, after real c… 1.97s  
+  ✓ it a user DISABLED mid-challenge is refused by the same pipe the pa… 1.16s  
+  ✓ it a challenge with no pending state is told to start with the pass… 1.26s  
+  ✓ it demands exactly one proof: both or neither is a validation error… 1.20s  
+
+   PASS  Tests\Feature\Auth\TwoFactorEnrolmentTest
+  ✓ it FR-06: begin → confirm with a valid code → active, with 8 single… 1.14s  
+  ✓ it SEC-03: stored recovery codes are argon2id digests, and no respo… 1.07s  
+  ✓ it refuses to activate on a wrong code — a mis-scanned QR must not…  0.10s  
+  ✓ it EC-10: two tabs, one winner — the superseded tab gets its DESIGN… 1.16s  
+  ✓ it begin is REFUSED while 2FA is active — otherwise it would be a c… 1.26s  
+  ✓ it FR-14: enabling 2FA revokes the user's OTHER sessions, sparing t… 1.04s  
+  ✓ it disable demands a CURRENT code; a wrong one changes nothing       1.12s  
+  ✓ it regeneration mints a fresh batch and the OLD batch is dead (FR-0… 2.99s  
+  ✓ it FR-08: admin reset — typed name enforced server-side, target ses… 1.10s  
+
+   PASS  Tests\Feature\Auth\TwoFactorRoleEnforcementTest
+  ✓ it stamps the grace anchor on first subject encounter and lets the…  0.08s  
+  ✓ it locks a past-grace member out of every screen EXCEPT enrolment/s… 0.13s  
+  ✓ it leaves unlisted roles, enrolled users and empty settings untouch… 0.10s  
+
+   PASS  Tests\Feature\Auth\UserDisableTest
+  ✓ it disables a user: tokens revoked, sessions gone, everything audit… 0.26s  
+  ✓ it is ALL-OR-NOTHING: an injected failure between the user write an… 0.21s  
+  ✓ it backstop 1 — the bearer door refuses a disabled owner's UNREVOKE… 0.20s  
+  ✓ it backstop 2 — staff rehydration refuses a disabled user whose ses… 0.19s  
+
+   PASS  Tests\Feature\Auth\UserLocaleTest
+  ✓ it positive control: the en and am strings this suite compares actu… 0.03s  
+  ✓ it serves a locale-less user in English (the chain's final hop, unc… 0.08s  
+  ✓ it I-5: a user whose locale is am is served Amharic on an ordinary…  0.09s  
+  ✓ it restores the worker locale after the request (the Octane leak, D… 0.13s  
+  ✓ it ignores a malformed users.locale instead of dying or traversing   0.08s  
+  ✓ it guest cookie hop: locale=am renders the login card in Amharic; e… 0.04s  
+  ✓ it holds the cookie to EXACT membership in {en, am} — a shape-plaus… 0.04s  
+  ✓ it users.locale ALWAYS beats the cookie for an authenticated reques… 0.08s  
+
+   PASS  Tests\Feature\Auth\WebhookHmacTest
+  ✓ it accepts a correctly signed DLR (FR-24 — the positive control)     0.08s  
+  ✓ it refuses a wrong signature and a tampered body alike (FR-24)       0.11s  
+  ✓ it refuses a captured signature behind a fresh nonce — the HMAC cov… 0.10s  
+  ✓ it enforces the ±300 s window at its exact boundaries, with an inje… 0.12s  
+  ✓ it spends a nonce exactly once: the identical request replayed is r… 0.08s  
+  ✓ it never lets an unsigned caller burn a nonce out of the cache (spe… 0.08s  
+  ✓ it refuses unconfigured keys and absent headers with the same byte-… 0.13s  
+  ✓ it fails CLOSED on replay-cache outage while the Redis-free surface… 0.10s  
+  ✓ it nonce single-use survives the window boundary honestly: expiry i… 0.07s  
+
+   PASS  Tests\Feature\Auth\WebhookSecretTest
+  ✓ it accepts the probe with the correct secret header (FR-23 — the po… 0.10s  
+  ✓ it refuses a mismatched secret: 403, nothing processed, metric incr… 0.07s  
+  ✓ it renders mismatch, absent header and unconfigured key byte-identi… 0.10s  
+  ✓ it never invokes the handler on a refused request — proven by a spy… 0.10s  
+  ✓ it rate-limits per KEY: one flooding bot never starves its sibling…  0.55s  
+  ✓ it establishes no session and sets no cookie on any outcome (FR-25…  0.09s  
+
+   PASS  Tests\Feature\Auth\WidgetSessionTest
+  ✓ it issues a working visitor session to an allowed origin (FR-21 — t… 0.07s  
+  ✓ it slides the 30-day TTL on every authenticated touch (FR-21 "slidi… 0.10s  
+  ✓ it refuses a disallowed origin at the server layer, issuing NOTHING… 0.08s  
+  ✓ it refuses at the server layer with the CORS layer REMOVED — AC-06…  0.08s  
+  ✓ it withholds the CORS grant even when the server layer waves everyt… 0.06s  
+  ✓ it refuses an allowed origin wrapped by a disallowed ancestor (EC-0… 0.07s  
+  ✓ it treats a top-level page (no ancestors) as allowed (EC-08)         0.06s  
+  ✓ it refuses when the Origin header and the declared origin disagree   0.08s  
+  ✓ it judges a non-browser caller by its declared origin — no Origin h… 0.10s  
+  ✓ it pins the wildcard dot boundary: *.brand.com never admits evil-br… 0.10s  
+  ✓ it compares ports exactly and refuses http origins outright (ruling… 0.10s  
+  ✓ it refuses a widget key with no widget record — fail-closed, same s… 0.07s  
+  ✓ it resolves nothing for an unknown widget key — 404, never 403 (C-1… 0.06s  
+  ✓ it answers a genuine preflight permissively and a bare OPTIONS with… 0.03s  
+  ✓ it keeps two tenants' widgets invisible to each other (N-01, the st… 0.07s  
+
+   PASS  Tests\Feature\Auth\WidgetTokenTheftTest
+  ✓ it rotates the cookie on every /session refresh, keeping visitor an… 0.16s  
+  ✓ it never lets a bare token act as its visitor — API requests get 40… 0.12s  
+  ✓ it silently issues a FRESH identity to a token without its cookie o… 0.09s  
+  ✓ it gives a visitor who cleared cookies a fresh identity with no pat… 0.08s  
+  ✓ it offers NO store operation that accepts a caller-chosen visitor i… 0.03s  
+  ✓ it refuses a token minted under one widget when presented under a s… 0.11s  
+  ✓ it refuses to plant a staff User behind the widget guard even delib… 0.21s  
+  ✓ it carries a WidgetVisitor principal that fails loudly if treated a… 0.03s  
+
+   PASS  Tests\Feature\Conversations\ConversationSchemaTest
+  ✓ FR-01: the same channel identity always resolves to the same conver… 0.05s  
+  ✓ FR-01: the identity unique index refuses a duplicate at the databas… 0.04s  
+  ✓ FR-09: an unregistered channel is refused by the repository boundar… 0.03s  
+  ✓ FR-04: the open-ticket slot claims atomically and refuses a second…  0.04s  
+  ✓ FR-04: release is holder-only — a stale ticket cannot clobber the s… 0.04s  
+  ✓ FR-06: a body over 16 KB is refused by CHECK constraint, not by val… 0.05s  
+  ✓ FR-05/SEC-07 row shadow: kind=note must be is_internal and nothing…  0.04s  
+  ✓ FR-13 shape: outbound rows must carry a delivery state; inbound row… 0.04s  
+  ✓ FR-03: the app role cannot DELETE conversations, messages, or revis… 0.03s  
+  ✓ FR-07: a same-second burst orders stably by (created_at, id) across… 0.25s  
+
+   PASS  Tests\Feature\Conversations\DeadLetterTest
+  ✓ FS-05: tries is exactly 3 — the crash-loop budget is a frozen contr… 0.03s  
+  ✓ FS-05: a poison message parks with its FULL payload, error, and aud… 0.06s  
+  ✓ FS-05: the conversation continues around a parked item — later inbo… 0.09s  
+  ✓ FR-03f: a job with no tenant does not park — the framework failed-j… 0.07s  
+  ✓ FS-05: re-drive flips the row (audited, DB time) and dispatches ont… 0.08s  
+  ✓ FS-05/EC-03: a re-driven message SURVIVES a pre-claimed dedupe slot… 0.09s  
+  ✓ FS-05: a second re-drive refuses — dead_letter_not_parked, row hist… 0.09s  
+  ✓ A-6: the page is gated conversations.view; the re-drive is gated ti… 0.20s  
+
+   PASS  Tests\Feature\Conversations\DeliveryStateMachineTest
+  ✓ AC-02 legal half: every FR-13 edge moves the row, with its event wh… 0.17s  
+  ✓ AC-02 illegal half: every pair OUTSIDE the diagram is rejected — en… 0.29s  
+  ✓ EC-05: a post-send channel invalidation is an ANNOTATION on the sen… 0.06s  
+  ✓ FR-13: inbound rows have no delivery lifecycle — the machine refuse… 0.05s  
+
+   PASS  Tests\Feature\Conversations\EditDeleteTranscriptTest
+  ✓ AC-06: customer edit + delete round-trip preserves originals; the f… 0.12s  
+  ✓ FR-21: a channel redelivery carrying a KNOWN external id becomes a…  0.11s  
+  ✓ FR-22: staff edit rides the capability interface, revises, audits,…  0.08s  
+  ✓ FR-22: staff delete requires the telegram.message.delete permission… 0.10s  
+  ✓ FR-22: a channel whose capability is off has NO staff edit path      0.09s  
+  ✓ FR-23: AI messages are never edited or deleted post-send — correcti… 0.07s  
+  ✓ FR-24/US-04: the transcript excludes notes by default, carries the…  0.09s  
+  ✓ FR-24: including notes takes BOTH flags — the double-confirm is str… 0.09s  
+  ✓ FR-24 PDF (ADR 0009): renders with the embedded Ethiopic font — Amh… 0.12s  
+
+   PASS  Tests\Feature\Conversations\FailureScenariosTest
+  ✓ FS-01: outage accumulates in queued with the lane intact, health go… 0.21s  
+  ✓ FS-01: the health signal is transition-only — a second outage failu… 0.06s  
+  ✓ FS-02: storage outage → text unaffected, media held "attachment pen… 0.52s  
+  ✓ FS-02: a storage outage outlasting x3 goes terminal failed with the… 0.46s  
+  ✓ FS-03: a media backlog cannot slow text — jobs land on the isolated… 0.12s  
+  ✓ FS-03: the isolation is supervisor physics — every queue family has… 0.03s  
+
+   PASS  Tests\Feature\Conversations\InboundPipelineTest
+  ✓ FR-10 step 1: the webhook ACKs 202 and enqueues to the channel inbo… 0.08s  
+  ✓ FR-10 step 1: an unregistered channel 404s indistinguishably (C-10)… 0.04s  
+  ✓ SEC-05 (Doc 01): the quota gate runs before the enqueue              0.04s  
+  ✓ FR-10 end-to-end: one inbound becomes shell customer + conversation… 0.07s  
+  ✓ FR-01: the same sender again lands in the SAME conversation and cus… 0.09s  
+  ✓ EC-03: a duplicate webhook delivery is dropped silently — one row,…  0.08s  
+  ✓ T-03: the dedupe slot admits its own claimant again (job retry) and… 0.03s  
+  ✓ FR-11: inbound on a blocked conversation is stored quarantined with… 0.09s  
+  ✓ BR-05: a suspended tenant past the accrual window gets ACK-but-summ… 0.06s  
+  ✓ BR-05: a suspended tenant INSIDE the window still stores in full (U… 0.09s  
+  ✓ EC-01: a 10-message burst confirms exactly ONE batch tail — the las… 0.19s  
+
+   PASS  Tests\Feature\Conversations\LaneFifoTest
+  ✓ FR-15: a lane sends in compose order, one attempt per cycle          0.12s  
+  ✓ FR-15: a failed(retryable) head BLOCKS the lane — the message behin… 0.09s  
+  ✓ FR-15: past the 10-minute cap the lane SKIPS — head demoted, conver… 0.11s  
+  ✓ §12 fairness: a hot lane cannot starve idle lanes — one attempt per… 0.18s  
+
+   PASS  Tests\Feature\Conversations\LocalizationAccessibilityTest
+  ✓ §14: the detector separates the two launch scripts and refuses to g… 0.03s  
+  ✓ §14: language is stored per message on BOTH directions of the threa… 0.05s  
+  ✓ §13: every stored image carries an alt slot, and staff can write it… 0.06s  
+
+   PASS  Tests\Feature\Conversations\MediaPipelineTest
+  ✓ AC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr… 0.20s  
+  ✓ AC-05 EICAR: infected — event with signature, bytes never stored, a… 0.14s  
+  ✓ AC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec… 0.18s  
+  ✓ EC-11: clamd down → held in scanning; the third unavailable attempt… 0.15s  
+  ✓ EC-11: the 15-minute hold cap quarantines even before three attempt… 0.10s  
+  ✓ T-05: a clean voice note emits media.needs_transcript with its stor… 0.24s  
+  ✓ SEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli… 0.09s  
+
+   PASS  Tests\Feature\Conversations\MessagePartitionTest
+  ✓ it finds every existing messages partition enabled, forced, and pol… 0.05s  
+  ✓ it protects messages partitions the MAINTENANCE COMMAND creates, no… 0.27s  
+  ✓ it monitor goes RED when a future messages partition is missing, an… 0.24s  
+  ✓ it monitor goes RED when any row sits in messages_default — FS-04's… 0.26s  
+  ✓ it maintain NEVER drops an old messages partition — retention is th… 0.13s  
+
+   PASS  Tests\Feature\Conversations\NodeKillReplayDrillTest
+  ✓ SS-04 / Doc01 AC-03: an inbound worker killed after the dedupe clai… 0.11s  
+  ✓ SS-04: an inbound worker killed after the persist commits produces…  0.11s  
+  ✓ FR-21 still holds after the idempotency fix: a GENUINE customer edi… 0.10s  
+  ✓ SS-04: a lane worker killed mid-send reconciles from recorded truth… 0.09s  
+  ✓ SS-04: a mid-send kill with NO recorded acceptance re-queues for re… 0.09s  
+  ✓ SS-04 / Doc01 AC-03: a 1k-message replay with each worker class ki… 24.92s  
+
+   PASS  Tests\Feature\Conversations\NotesTypingDraftsTest
+  ✓ FR-17: a note persists internal-only with note.added + audit, and a… 0.07s  
+  ✓ AC-04 runtime half: the compose path REFUSES kind=note before any r… 0.05s  
+  ✓ FR-18: staff composing signals the adapter at most once per 4 s win… 0.05s  
+  ✓ FR-18: the typing signal is capability-gated — a channel that canno… 0.06s  
+  ✓ EC-12: customer typing auto-expires by TTL physics — a dead Reverb…  0.05s  
+  ✓ T-07: one draft per (user, conversation) — saves upsert, the unique… 0.06s  
+  ✓ EC-06: last-writer-wins — the device holding a STALE updated_at los… 0.06s  
+  ✓ FR-20: cleared on send — a tombstone (the table cannot DELETE), and… 0.06s  
+  ✓ FR-26: draft.saved is LOCAL ONLY — absent from the catalog, so the…  0.05s  
+
+   PASS  Tests\Feature\Conversations\OutboundPipelineTest
+  ✓ FR-12: compose writes the queued row + message.queued event and dis… 0.05s  
+  ✓ FR-13 happy path: queued → sending → sent, external id recorded, la… 0.10s  
+  ✓ T-03: recomposing with the same idempotency key finds the ORIGINAL…  0.06s  
+  ✓ BR-02: composing INTO a blocked conversation refuses with conversat… 0.04s  
+  ✓ EC-04: blocked BETWEEN compose and send → canceled with reason, pre… 0.08s  
+  ✓ FR-13/FR-14 retryable path: backoff schedule stamps 1s then 5s; suc… 0.13s  
+  ✓ FR-13: the fifth failed attempt goes failed_final with message.fail… 0.14s  
+  ✓ FR-14: a non-retryable class goes failed_final IMMEDIATELY with its… 0.07s  
+  ✓ FR-16: over-limit sends WAIT in queued and drain once the bucket re… 0.11s  
+  ✓ FR-13: manual retry re-enters queued from failed_final and sends on… 0.12s  
+
+   PASS  Tests\Feature\Conversations\RealtimeBlockingTest
+  ✓ FR-03: block and unblock emit their events and audit entries; a dou… 0.08s  
+  ✓ FR-25: every push carries v:1 on the tenant-namespaced channel       0.06s  
+  ✓ FR-25: a payload over 32 KB is REFUSED — media rides as signed URLs… 0.06s  
+  ✓ SEC-06: outside production, a payload naming a FOREIGN tenant id re… 0.06s  
+  ✓ T-06: subscribe requires conversations.view AND scope — refusals ar… 0.07s  
+  ✓ FR-26: every named event exists in the catalog; draft.saved does no… 0.03s  
+
+   PASS  Tests\Feature\Conversations\RetentionTest
+  ✓ AC-09: the run drops exactly the eligible partition, copies held ro… 0.58s  
+
+   PASS  Tests\Feature\Customers\BettingFieldsTest
+  ✓ it FR-16: values write through the door — event carries NAMES only…  0.15s  
+  ✓ it EC-09: a RETIRED field is READ-ONLY — the write REFUSES (422), b… 0.14s  
+  ✓ it T-04's player_id half: a stored player_id is SEARCHABLE — the in… 0.55s  
+  ✓ it §14: every seeded field label and the staff-collected/retired mi… 0.08s  
+
+   PASS  Tests\Feature\Customers\BlockingCascadeTest
+  ✓ it SABOTAGE-16 CONTROL #3 (inverted R-19): blocked_at is a BYTE-COP… 0.11s  
+  ✓ it AC-06: the cascade quiets EVERY channel, unblock restores — and…  0.14s  
+  ✓ it AC-06 (the mid-cascade clause, sabotage #8's subject): a convers… 0.08s  
+  ✓ it FS-04: a PARTIAL cascade (crash mid-way) leaves the guard holdin… 0.12s  
+  ✓ it EC-07 (the documented limitation): a blocked customer's brand-ne… 0.09s  
+  ✓ it A-37 noops both directions: blocking a blocked customer and unbl… 0.08s  
+  ✓ it THE OWED CYCLE (step-7 acceptance): block → unblock → RE-block →… 0.22s  
+  ✓ it THE RACED WITHDRAW (fold ownership): a conversation blocked betw… 0.21s  
+
+   PASS  Tests\Feature\Customers\CustomerExportTest
+  ✓ it SEC-04: the full journey — request audited at the door, the job…  0.22s  
+  ✓ it SEC-06: the verdict is re-checked IN THE JOB — a revocation betw… 0.14s  
+  ✓ it FS-05: a crash between build and put leaves NOTHING — no object,… 0.20s  
+  ✓ it A-38/[D17]: erasure INITIATION rides customers.delete with a man… 0.16s  
+  ✓ it H06 (step 12): the profile page REPORTS a pending erasure — requ… 0.14s  
+
+   PASS  Tests\Feature\Customers\CustomerNotesTest
+  ✓ it FR-17: adds notes through the door with author + audit + event;…  0.18s  
+  ✓ it N-04 STRUCTURALLY (sabotage #15's subject): NOTHING in the outbo… 0.06s  
+  ✓ it BR-07: the notes-stay-on-profile onboarding copy ships as i18n S… 0.06s  
+  ✓ it FR-17: an empty body is refused at the service boundary           0.07s  
+
+   PASS  Tests\Feature\Customers\CustomerSearchIndexerTest
+  ✓ it indexes a customer from a customer.created delivery — and a REPL… 0.84s  
+  ✓ it REFRESHES the scope arrays on ticket.assigned — assignment grant… 1.18s  
+  ✓ it REMOVES the tombstone on customer.merged (BR-05: tombstones redi… 1.30s  
+
+   PASS  Tests\Feature\Customers\CustomerTabBadgeTest
+  ✓ it E03/BR-03: the badge answers FALSE for a viewer without customer… 0.20s  
+  ✓ it NFR-06 THROUGH THE BADGE PATH: a direct flag flip answers FRESH…  0.11s  
+  ✓ it T-03/EC-01: customer.merged recomputes every list row carrying t… 0.82s  
+  ✓ it the retired doc08-customer-badge seam has NO code path left — th… 0.06s  
+
+   PASS  Tests\Feature\Customers\DirectoryTest
+  ✓ it FS-01: Meilisearch down → the dead-port drill — a LABELED degrad… 0.14s  
+  ✓ it FR-20/EC-08: the table door — rows ordered last-contact DESC NUL… 0.21s  
+  ✓ it G03/SEC-01/BR-03: for a viewer WITHOUT customers.rg_flag.view th… 0.20s  
+  ✓ it C-05: cursor pages walk the whole set exactly once — dated rows,… 0.18s  
+  ✓ it FR-20 scope: an Own-scoped viewer's table AND count hold only cu… 0.18s  
+  ✓ it G04: a hit found by a RENAMED username explains itself — matched… 0.54s  
+  ✓ it FR-01: a customer named only by their CHANNEL still renders and…  0.57s  
+
+   PASS  Tests\Feature\Customers\FilesGalleryTest
+  ✓ it FR-19: lists ALL the customer's inbound media flattened per item… 0.20s  
+  ✓ it FR-19 / closing row 4a: a CLEAN item signs through Doc 04's own…  0.20s  
+
+   PASS  Tests\Feature\Customers\IdentityBackfillTest
+  ✓ it gives a shared phone to the OLDER customer, preserves the loser…  0.11s  
+  ✓ it breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne… 0.10s  
+  ✓ it is idempotent — a second run changes nothing                      0.11s  
+  ✓ it REFUSES loudly on an unmapped channel, naming it                  0.07s  
+  ✓ it mirrors customers.username into the telegram identity metadata —… 0.10s  
+  ✓ it drop gate: green after the backfill, RED for a value with no per… 0.10s  
+  ✓ it RULING 1: a legacy-shaped straggler written AFTER the first back… 0.11s  
+  ✓ it enforce re-normalizes a backfilled phone to E.164 (ADR 0014), pr… 0.11s  
+  ✓ it enforce REFUSES when normalization would fuse two customers — me… 0.12s  
+  ✓ it RIDER: an identity-less customer derives created_source from its… 0.09s  
+  ✓ it RIDER: a customer with neither identities nor conversations stil… 0.08s  
+
+   PASS  Tests\Feature\Customers\IdentityInvariantsTest
+  ✓ it refuses a direct-SQL duplicate (tenant, type, value) on the uniq… 0.11s  
+  ✓ it REFUSES a legacy NULL-typed insert after enforce — the C-12 wind… 0.07s  
+  ✓ it ADDITION 8 (condition 1b): every WRITER mirrors the legacy pair…  0.10s  
+
+   PASS  Tests\Feature\Customers\InactiveHintTest
+  ✓ it fires for a deleted-account customer: the last three sends on th… 0.10s  
+  ✓ it ONLY there: two failures → null; three failures then one sent →…  0.14s  
+  ✓ it the chip's strings exist in both launch languages (C-08)          0.03s  
+
+   PASS  Tests\Feature\Customers\LinkUnlinkTest
+  ✓ it FR-09: a staff-linked phone stores E.164, source=staff, DB-time…  0.08s  
+  ✓ it FR-09/AC-02 (the block half): the value on ANOTHER customer refu… 0.14s  
+  ✓ it linking the SAME value to the SAME customer is the A-37 noop — t… 0.16s  
+  ✓ it AC-04: the typed confirmation and the executed move come from ON… 0.17s  
+  ✓ it EC-05: unlinking the ONLY identity is allowed — the profile keep… 0.10s  
+  ✓ it A-42's consequence: a phone identity anchors NO conversations —…  0.08s  
+  ✓ it C-10: a mismatched customer/identity pairing answers 404 — indis… 0.13s  
+
+   PASS  Tests\Feature\Customers\LocalizationParityTest
+  ✓ it §14: the en and am customers catalogs are structurally identical… 0.03s  
+
+   PASS  Tests\Feature\Customers\MergeCollisionTest
+  ✓ it FR-12: both sides open → the NEWER open ticket is auto-flagged l… 0.14s  
+  ✓ it one side only open → nothing is flagged (no collision exists)     0.11s  
+  ✓ it EC-12: combined open linked_work beyond Doc 06's cap of 3 → BLOC… 0.10s  
+
+   PASS  Tests\Feature\Customers\MergeFlowTest
+  ✓ it FR-11/FR-12: the full flow — chosen fields apply, tags/notes/fil… 0.17s  
+  ✓ it SEC-02: a merge without a reason refuses before anything moves    0.07s  
+  ✓ it chain law: a tombstone can take part in NO merge — its only path… 0.12s  
+
+   PASS  Tests\Feature\Customers\MergeSagaTest
+  ✓ it FS-02: a crash AFTER the tickets chunk compensates back to the p… 0.16s  
+  ✓ it FS-02: a crash after the FIRST chunk compensates identically — t… 0.23s  
+
+   PASS  Tests\Feature\Customers\MergeUndoTest
+  ✓ it AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot… 0.23s  
+  ✓ it EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil… 0.21s  
+  ✓ it FR-13: past the 30-day window the merge is PERMANENT, and a reve… 0.16s  
+
+   PASS  Tests\Feature\Customers\PanelEndpointTest
+  ✓ it T-07: the aggregate answers header + identities (provenance ALWA… 0.23s  
+  ✓ it SEC-01 THROUGH THE PANEL PATH: the unpermitted header carries NO… 0.17s  
+  ✓ it C-10: a cross-tenant panel fetch is a 404, indistinguishable fro… 0.16s  
+  ✓ it BR-05 SERVER HALF: a tombstoned customer's panel carries merged_… 0.20s  
+
+   PASS  Tests\Feature\Customers\ProfileFieldsTest
+  ✓ it FR-01: a staff write to language/country is STICKY — sources sta… 0.16s  
+  ✓ it EC-11: simultaneous edits are LAST-WRITE-WINS with the honest co… 0.11s  
+  ✓ it A-37: the unchanged-value autosave is the SERVICE's own noop — n… 0.16s  
+  ✓ it EC-10: the detected-latest disagreement is DERIVED data (chip),…  0.26s  
+  ✓ it FR-02/BR-06: the customer schema carries NO consent or marketing… 0.10s  
+
+   PASS  Tests\Feature\Customers\ResolverMatrixTest
+  ✓ it A-40: every channel the AdapterRegistry knows has an identity-ty… 0.14s  
+  ✓ it AC-01 create-shell: a first contact mints a shell + typed identi… 0.12s  
+  ✓ it AC-01 exact-match: the second contact returns the SAME customer,… 0.10s  
+  ✓ it AC-01 / FR-06 username change: display refreshes and the OLD nam… 0.14s  
+  ✓ it AC-01 NO CROSS-TYPE AUTO-LINK (BR-02, the document's sharpest pr… 0.13s  
+  ✓ it Doc 05 EC-04 CLOSING (identity-resolution half): the same Telegr… 0.14s  
+  ✓ it AC-01 RACE: six forked processes race the same first message — e… 0.47s  
+  ✓ it T-02 THE SPECULATIVE WINDOW (amendment addition 8): a loser raci… 1.61s  
+
+   PASS  Tests\Feature\Customers\RgStorageTest
+  ✓ it SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at… 0.14s  
+  ✓ it FR-14 set (staff): flag + provenance columns, history row, outbo… 0.12s  
+  ✓ it FR-14 set (ai, the [D09] fixture): actor NULL by the schema's ow… 0.10s  
+  ✓ it FR-15/EC-06 clear: permission + reason, history keeps BOTH rows…  0.12s  
+  ✓ it AC-B4-02 (server half): the history exports WHOLE — authors, rea… 0.13s  
+
+   PASS  Tests\Feature\Customers\RollupConsumerTest
+  ✓ it recomputes every rollup from truth, with N-14 riding the ONE Met… 0.17s  
+  ✓ it SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT… 0.09s  
+  ✓ it C-09: the consumer is idempotent on event_id — a redelivery reco… 0.13s  
+  ✓ it resolves the ticket.* family's customer from the TICKET ROW (tru… 0.10s  
+  ✓ it NFR-05: drift() names a manufactured non-decay drift, recompute…  0.13s  
+  ✓ it RULING A: window decay (stored > recomputed) heals QUIETLY, but…  0.14s  
+
+   PASS  Tests\Feature\Customers\RollupStalenessTest
+  ✓ it FS-03/H07: quiet stack ≠ outage — an aged beat with NO pending r… 0.13s  
+  ✓ it FS-03: the consumer BEATS on every applied event — and the panel… 0.18s  
+
+   PASS  Tests\Feature\Customers\TombstoneTest
+  ✓ it BR-05: a MERGED profile's page RESOLVES as the tombstone surface… 0.34s  
+
+   PASS  Tests\Feature\Foundation\ColdSummaryRetentionTest
+  ✓ it stamps every lifecycle timestamp from its single writer, in DB t… 0.12s  
+  ✓ it accrues in full inside the retention window and cold beyond it (… 0.10s  
+  ✓ it moves the boundary when the platform changes the retention setti… 0.12s  
+  ✓ it never cold-summarises a tenant that is not suspended, however ol… 0.09s  
+  ✓ it resolves a suspended tenant with NO suspended_at to full accrual… 0.10s  
+  ✓ it keeps exactly count + last pointer, per channel, atomically (BR-… 0.09s  
+  ✓ it refuses to record with no tenant bound                            0.06s  
+
+   PASS  Tests\Feature\Foundation\CursorPaginationTest
+  ✓ it walks an entire collection in strictly ascending UUIDv7 order wi… 0.11s  
+  ✓ it shapes the page as data + next_cursor, with next_cursor null on…  0.07s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.04s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.03s  
+  ✓ it rejects offset-family parameters BY NAME (C-05: offset paginatio… 0.04s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('101')   0.03s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('0')     0.03s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('-5')    0.03s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('abc')   0.05s  
+  ✓ it rejects a limit above 100, below 1, or non-integer with ('3.5')   0.04s  
+  ✓ it rejects a cursor this API never issued with ('not-base64!!!')     0.04s  
+  ✓ it rejects a cursor this API never issued with ('aGVsbG8')           0.05s  
+  ✓ it rejects a cursor this API never issued with ('djE6bm90LWEtdXVpZA… 0.05s  
+  ✓ it renders pagination misuse as a 400 invalid_pagination problem (C… 0.07s  
+  ✓ it keeps the cursor opaque: the row id never appears in the cursor…  0.07s  
+
+   PASS  Tests\Feature\Foundation\FeatureRegistryTest
+  ✓ it enumerates every registered flag with the full schema Doc 16 ren… 0.11s  
+  ✓ it resolves a registered flag to its default for the bound tenant    0.07s  
+  ✓ it throws on an unregistered flag — shadow flags cannot ship         0.04s  
+  ✓ it throws MissingTenantContext when no tenant is bound — a flag dec… 0.03s  
+  ✓ it scopes flag decisions per tenant: activating for tenant A change… 0.04s  
+  ✓ it never lets a registered flag key appear in a migration (N-19: fl… 0.03s  
+
+   PASS  Tests\Feature\Foundation\I18nFallbackTest
+  ✓ it renders EVERY shipped key in Amharic: no key leakage, telemetry…  0.13s  
+  ✓ it falls back user → TENANT DEFAULT → English, in that order (C-08)  0.08s  
+  ✓ it records telemetry per key and locale when a hop misses, then ser… 0.05s  
+  ✓ it dedupes telemetry per process so a hot loop cannot flood the log… 0.05s  
+  ✓ it returns the key and records EVERY hop when nothing can serve it   0.04s  
+  ✓ it is the translator actually bound — the chain is not an opt-in he… 0.05s  
+
+   PASS  Tests\Feature\Foundation\PartitionMaintenanceTest
+  ✓ it agrees with the migration about partition names, for the months…  0.07s  
+  ✓ it creates only the missing future months, idempotently (EC-10)      0.20s  
+  ✓ it drops partitions beyond the 13-month retention, with a logged me… 0.23s  
+  ✓ it runs partitions:maintain end-to-end, idempotently                 0.08s  
+
+   PASS  Tests\Feature\Foundation\PartitionMonitorTest
+  ✓ it monitor passes on a healthy window (EC-10)                        0.08s  
+  ✓ it monitor goes RED when a future partition is missing, and maintai… 0.19s  
+  ✓ it monitor goes RED when any row sits in the DEFAULT partition (EC-… 0.29s  
+
+   PASS  Tests\Feature\Foundation\QuotaTest
+  ✓ it admits under the limit and refuses over it with a 429 naming the… 0.07s  
+  ✓ it does not let a refused attempt consume capacity                   0.09s  
+  ✓ it raises the internal alert exactly once per window, at 80% (NFR-0… 0.08s  
+  ✓ it blocks forward writes and destroys nothing when a limit drops be… 0.07s  
+  ✓ it enforces the cumulative storage quota from the durable ledger, i… 0.06s  
+  ✓ it persists counters to the ledger and repairs a flushed counter fr… 0.39s  
+  ✓ it fails OPEN for staff and CLOSED for public ingestion when meteri… 0.06s  
+
+   WARN  Tests\Feature\Foundation\SettingsApiTest
+  ✓ it lists every setting with its i18n keys and default flag           0.15s  
+  ✓ it writes a setting and returns the new version token                0.16s  
+  ✓ it returns RFC 9457 problem-details for an unregistered key          0.11s  
+  ✓ it returns 422 problem-details with per-field errors on invalid inp… 0.12s  
+  ✓ it returns 403 when a tenant surface writes a platform-owned settin… 0.11s  
+  ✓ it returns 409 with the winning value on a concurrent write (EC-06)  0.22s  
+  ✓ it resets a setting to its registered default                        0.16s  
+  ✓ it records the audit entry a mutating route declares                 0.13s  
+  - it fails loudly if a declared audit action is not written → The sta… 0.05s  
+
+   PASS  Tests\Feature\Foundation\SettingsEngineTest
+  ✓ it returns the registered default when a tenant has no override      0.06s  
+  ✓ it returns the override once written, and the default again after r… 0.09s  
+  ✓ it refuses to read or write an unregistered key (FR-07)              0.06s  
+  ✓ it refuses a tenant-surface write to a platform-owned setting        0.07s  
+  ✓ it validates against the registered rule                             0.09s  
+  ✓ it audits every change old to new (FR-07)                            0.08s  
+  ✓ it encrypts an encrypted-string at rest and never exposes it in bul… 0.09s  
+  ✓ it keeps settings isolated between tenants                           0.09s  
+  ✓ it detects a concurrent write, audits both, and signals the loser (… 0.09s  
+  ✓ it falls back to the database when Redis is unreachable, and never…  0.11s  
+  ✓ it encodes and decodes every registered type                         0.04s  
+
+   PASS  Tests\Feature\Foundation\TenantCacheTest
+  ✓ it prefixes every key with the bound tenant, so two tenants cannot…  0.10s  
+  ✓ it is never the source of truth: a lost entry reloads from the load… 0.07s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.06s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.06s  
+  ✓ it refuses a write with no TTL worth the name (C-07: TTL mandatory)… 0.04s  
+  ✓ it refuses a write that does not name its invalidation event (C-07:… 0.04s  
+  ✓ it refuses a suffix that tries to smuggle its own prefix             0.05s  
+  ✓ it throws MissingTenantContext when no tenant is bound — there is n… 0.03s  
+  ✓ it confines the pre-context exception to the t:keymap: namespace     0.03s  
+
+   PASS  Tests\Feature\HealthEndpointTest
+  ✓ the application boots and answers the health route                   0.06s  
+
+   PASS  Tests\Feature\Inbox\BulkJobDoorsTest
+  ✓ it the id-based submit door: "3 selected · Close" executes through…  0.23s  
+  ✓ it C15 failure rows + retry: a failed item is named by TICKET NUMBE… 0.50s  
+  ✓ it C15's Stop: the running loop OBSERVES the latch before each item… 0.35s  
+  ✓ it C16's consequence line is SERVER truth: mint returns open_window… 1.88s  
+
+   PASS  Tests\Feature\Inbox\ComposerEndpointTest
+  ✓ it MODE SAFETY IS STRUCTURAL (AC-05's integration half, the Doc 04…  0.65s  
+  ✓ it FR-21: send-and-set-status executes reply THEN transition in ord… 0.90s  
+  ✓ it Doc 06 EC-08 (the closing row's prompt): replying on a RESOLVED…  0.62s  
+  ✓ it FR-22 drafts: save round-trips; the send CLEARS the draft (tombs… 0.71s  
+  ✓ it FR-05/BR-03 (ruling (c), step 14): a staff reply through the doo… 1.53s  
+  ✓ it A-37 (the D8 guard ruling), BOTH DIRECTIONS EXECUTED: a same-sta… 0.67s  
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 0.04s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.13s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.12s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.07s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.06s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.04s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 1.25s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  1.21s  
+
+   PASS  Tests\Feature\Inbox\ListEndpointTest
+  ✓ it SCHEMA AMENDMENT 1 RIDER (i) — DISCHARGED HERE, CITED: last_read… 0.60s  
+  ✓ it the marker never moves BACKWARD (LWW guarded in message-stamp sp… 0.60s  
+  ✓ it the markRead HTTP door rides views.manage (R-26 AMENDMENT, the F… 0.66s  
+  ✓ it FR-12/C-05: cursor pages are disjoint, exhaustive and ordered (u… 6.61s  
+  ✓ it the per-viewer overlay: unread counts from the marker boundary (… 1.04s  
+  ✓ it the overlay excludes the VIEWER'S OWN replies from unread — whil… 0.55s  
+  ✓ it FR-10 sort override: ?sort=priority serves urgent-first with a w… 2.23s  
+  ✓ it Doc 05 EC-04, the closing row's LIST half: one customer on TWO c… 0.28s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.57s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.60s  
+  ✓ it S09 POST-CLOSE RULING — tombstones never serve the list: a DELET… 0.20s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 1.23s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.95s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.10s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 1.00s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.96s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 1.03s  
+  ✓ it registers the projector for its 29 events in the ConsumerRegistr… 0.05s  
+  ✓ it FR-26 fanout: ticket.assigned mints the NEW assignee's bell row…  1.76s  
+  ✓ it FR-26 fanout: escalation rows to the TARGET (escalation-to-me) a… 2.14s  
+  ✓ it FR-26 fanout: window-closing rows to the open ticket's assignee;… 0.54s  
+
+   PASS  Tests\Feature\Inbox\LocalizationParityTest
+  ✓ it §14: the en and am inbox catalogs are structurally identical — e… 0.07s  
+  ✓ it §14: no am value is an untranslated copy of its en sibling beyon… 0.04s  
+
+   PASS  Tests\Feature\Inbox\MergeDoorsTest
+  ✓ it MERGE PREVIEW is server-computed machinery truth: newest-activit… 0.31s  
+  ✓ it MERGE refusals are the machinery's own, C-04-shaped: a cross-cus… 0.24s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 1.99s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.57s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 3.98s  
+
+   PASS  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 1.69s  
+  ✓ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.38s  
+  ✓ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.16s  
+  ✓ it FR-08: view order persists per user through the prefs door, merg… 0.20s  
+  ✓ it R-26/A-34: Read Only cannot WRITE views (the SEV-1, flipped by t… 0.70s  
+
+   PASS  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 2.61s  
+  ✓ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.22s  
+  ✓ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 78.42s  
+  ✓ it the HTTP doors: both ride views.manage (the R-26 principle, thir… 1.68s  
+  ✓ it R-26 third application, the EXECUTED refusal: a Read Only-shaped… 1.42s  
+
+   PASS  Tests\Feature\Inbox\StatusNotificationsTest
+  ✓ it FR-28: set-own transitions write the row + publish agent.status_… 0.13s  
+  ✓ it FR-28 heartbeat physics: online with a live TTL key stays online… 0.15s  
+  ✓ it FR-28 force door: supervision.agent_status.force flips ANOTHER a… 0.25s  
+  ✓ it R-26 AMENDMENT fifth+sixth siblings, refusals EXECUTED: a view-o… 0.28s  
+  ✓ it FR-26: the bell lists the viewer's rows newest-first with the un… 0.21s  
+
+   PASS  Tests\Feature\Inbox\SyncGoldenTest
+  ✓ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  0.19s  
+  ✓ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.21s  
+  ✓ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 1.54s  
+  ✓ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.15s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.90s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 1.73s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 1.80s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.63s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 1.66s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 2.17s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 3.55s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 1.13s  
+
+   PASS  Tests\Feature\Inbox\TenantBindingRestoreTest
+  ✓ it A-35 diff assertion: the ruled edit is IN the middleware — captu… 0.08s  
+  ✓ it A-35 restore semantics under the SYNC driver: an inline job bind… 0.07s  
+  ✓ it A-35 worker shape unchanged: with NO prior binding the finally s… 0.06s  
+
+   PASS  Tests\Feature\Inbox\ThreadEndpointTest
+  ✓ it FR-14: the thread page carries messages (notes included, quarant… 0.68s  
+  ✓ it EC-01 (sabotage #15's proof): a MISSING conversation and an OUT-… 0.63s  
+  ✓ it Doc 04 EC-08: ?anchor returns the WINDOW containing the anchor m… 0.70s  
+  ✓ it §9 print (SEC-05): the note gate is ABSOLUTE — internal-note con… 0.62s  
+  ✓ it B12-S02: the history door — capability holders get the preserved… 0.77s  
+
+   PASS  Tests\Feature\Inbox\TicketActionDoorsTest
+  ✓ it claim door: assigns the actor, recomputes the row, and the RACE…  0.33s  
+  ✓ it unassign door (the mobile undo): returns the ticket to the queue… 0.32s  
+  ✓ it assign door: assigns a named target; a disabled or unknown targe… 0.27s  
+  ✓ it priority door: flips through ChangePriority (audit is the servic… 0.30s  
+  ✓ it tags door: add + remove in one request through TicketTags; sugge… 0.48s  
+  ✓ it assignees directory: active human staff only — disabled and serv… 0.27s  
+  ✓ it C-10: an out-of-scope ticket answers the 404-PATTERN on every ac… 0.22s  
+  ✓ it B12 timeline door (step 14): serves the relayed events newest-fi… 0.20s  
+  ✓ it B13 subject door (step 14): a staff edit lands through SubjectWr… 0.24s  
+
+   PASS  Tests\Feature\Inbox\TicketOperationDoorsTest
+  ✓ it spam + unspam doors: mark flips the machine through the owning s… 0.28s  
+  ✓ it escalate + deescalate doors: supervisor review with the ≥10-char… 0.23s  
+  ✓ it transfer door: moves the ticket to the OPAQUE destination id (ex… 0.19s  
+  ✓ it split door: mints the linked ticket from selected messages; the…  0.61s  
+  ✓ it reopen door (C9): carries the REAL written reason into the close… 0.33s  
+  ✓ it unmerge door (C7): reverses through the owning service (source b… 0.38s  
+  ✓ it follow-up door (C9 lapsed — ruling 2026-08-13, the DOCUMENT wins… 0.36s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.09s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.09s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 1.68s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  1.79s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.05s  
+
+   PASS  Tests\Feature\Kb\AiAuthoringTest
+  ✓ it draft-from-source: 202 + an AI-born draft; the job writes accent… 1.52s  
+  ✓ it simplify + FAQ variants: rewrite in place (every text block acce… 1.61s  
+  ✓ it US-06 / SS-03 / [D10] rows 2+5: the Doc 09 top-10 cluster (ids o… 1.56s  
+
+   PASS  Tests\Feature\Kb\AiUsableRederivationTest
+  ✓ it FLAG 3 closed by ruling: the chunk flag IS the category flag at…  0.81s  
+
+   PASS  Tests\Feature\Kb\ArchiveTest
+  ✓ it FR-09: archive retires chunks + events + audits + tombstones; th… 0.78s  
+
+   PASS  Tests\Feature\Kb\ArticleDeleteTest
+  ✓ it A-43: delete → soft, chunks retired, citations tombstone, audite… 0.82s  
+
+   PASS  Tests\Feature\Kb\ArticleMediaTest
+  ✓ it SEC-02/FR-05: a clean upload scans then stores (signed editing U… 0.69s  
+  ✓ it FR-05: the widget media door serves ONLY public+published articl… 0.77s  
+
+   PASS  Tests\Feature\Kb\ArticleModelTest
+  ✓ it FR-02/BR-03/§14: an Amharic-first article gets a transliterated…  0.95s  
+  ✓ it EC-02: moving an article into a non-ai_usable category retires i… 0.54s  
+
+   PASS  Tests\Feature\Kb\CachesTest
+  ✓ it T-05: the tree and renders are served FROM CACHE (a poisoned ent… 0.61s  
+  ✓ it FS-03: a failing purge is DEGRADED — the publish still succeeds,… 0.45s  
+
+   PASS  Tests\Feature\Kb\CategoryTreeTest
+  ✓ it FR-01: depth 3 is the ceiling (4 refused), names are per languag… 0.19s  
+  ✓ it EC-03: a category holding articles is NOT deleted — the refusal…  0.56s  
+
+   PASS  Tests\Feature\Kb\ChunkerTest
+  ✓ it T-02: summary is chunk 0, heading paths prefix the rest, the SAM… 0.06s  
+  ✓ it §12 cost fixture: a minor edit to ONE section changes only that…  0.05s  
+  ✓ it EC-08 + the target: a 20,000-word article chunks into ~target-si… 0.11s  
+
+   PASS  Tests\Feature\Kb\FeedbackTest
+  ✓ it EC-10 dedupe: one score per visitor per article, latest wins (ro… 1.01s  
+  ✓ it AC-08: the stats header reconciles against the Doc 15 input fixt… 1.18s  
+
+   PASS  Tests\Feature\Kb\GenerationSwapTest
+  ✓ it the swap is ONE statement: generation 2 lands non-retrievable be… 0.14s  
+  ✓ it STOP-A condition 5: only the PLATFORM-role prune removes a super… 0.13s  
+
+   PASS  Tests\Feature\Kb\IndexRebuildTest
+  ✓ it kb:index-rebuild reindexes both partitions' hnsw + gin indexes c… 0.21s  
+
+   PASS  Tests\Feature\Kb\KbBellDeliveryTest
+  ✓ it kb.variant.submitted → every kb.articles.publish holder EXCEPT t… 0.65s  
+  ✓ it kb.variant.changes_requested → the SUBMITTER only (resolved from… 0.72s  
+
+   PASS  Tests\Feature\Kb\KbCitationRenderTest
+  ✓ it P2: a real article cites as 📄 /kb/cite/{article}/{version} + kb… 1.01s  
+  ✓ it P6: the Copilot kb card fills to three — retrieval first, keywor… 2.94s  
+
+   PASS  Tests\Feature\Kb\KbI18nParityTest
+  ✓ it C-08: every kb.* key exists in BOTH en and am, no empty values,…  0.05s  
+
+   PASS  Tests\Feature\Kb\KbInsertLinkTest
+  ✓ it P3: the door emits the event with the version pin and returns th… 0.73s  
+
+   PASS  Tests\Feature\Kb\LocksTest
+  ✓ it locks: first acquire wins, the second editor is refused naming t… 0.75s  
+  ✓ it FS-05: with the lock service down every lock door answers mode=o… 0.57s  
+
+   PASS  Tests\Feature\Kb\PublishPipelineTest
+  ✓ it ADR 0011: the consumer is REGISTERED for kb.article.published on… 0.04s  
+  ✓ it FR-13/T-05: publish → consumer → chunks (summary = chunk 0, head… 1.01s  
+  ✓ it §12 cost: a re-publish with one changed section re-embeds ONLY t… 0.73s  
+  ✓ it FS-01: embeddings DOWN → generation N+1 lands but is NOT swapped… 0.76s  
+  ✓ it AC-03 stage-kill chaos + idempotency: a kill after embed leaves…  0.72s  
+  ✓ it EC-04: two variants (en + am) publish independently — one provid… 0.98s  
+
+   PASS  Tests\Feature\Kb\PublishRetireRoundTripTest
+  ✓ it binds the resolver contract behind ONE interface (step 1 bound t… 0.05s  
+  ✓ it round trip: index → served + Current → retire → not served, row…  0.13s  
+
+   PASS  Tests\Feature\Kb\SanitizerTest
+  ✓ it binds the shared package (step 5) — never the unbound placeholde… 0.06s  
+  ✓ it AC-05 shared fixture suite: every poisoned fixture flags the off… 0.03s  
+  ✓ it BR-06 at the door: flags → 409 with the sentences; an override r… 0.97s  
+
+   PASS  Tests\Feature\Kb\StaffSearchTest
+  ✓ it FR-17: publish → indexer → hits on title/body/tags; internal abs… 2.36s  
+  ✓ it FS-02: Meilisearch unreachable → unavailable:true (no 500, no em… 0.11s  
+  ✓ it Copilot blend: retrieval chunks first (deduped by article), keyw… 2.67s  
+
+   PASS  Tests\Feature\Kb\StarterSeedingTest
+  ✓ it FR-04: the consumer seeds five DRAFTS in the tenant default lang… 2.20s  
+
+   PASS  Tests\Feature\Kb\TelegramFlowContractTest
+  ✓ it FR-19/BR-04: a category renders numbered public-published option… 1.82s  
+  ✓ it P7 (countersigned): the widened CHECK accepts kb targets bound t… 0.59s  
+
+   PASS  Tests\Feature\Kb\TombstoneTest
+  ✓ it binds the truth-fed resolver at step 7 and legacy chunk refs sti… 0.03s  
+  ✓ it AC-06/SS-04: supersede → the old citation is Retired WITH a link… 0.69s  
+  ✓ it T-06/EC-06: a slug change keeps the OLD URL working (redirect vi… 1.31s  
+  ✓ it C-10: an internal article's citation and slug are ABSENT (unknow… 0.58s  
+
+   PASS  Tests\Feature\Kb\TranslateAllTest
+  ✓ it §14: one click → an am DRAFT born translation_source=ai + one qu… 1.20s  
+  ✓ it §14 guard: altered digits → refused, working copy stays EMPTY (a… 1.22s  
+
+   PASS  Tests\Feature\Kb\TranslationStateTest
+  ✓ it AC-02: the matrix — source publish → published siblings outdated… 1.42s  
+  ✓ it BR-05: the OUTDATED exact-language variant serves (stale-but-pub… 0.93s  
+
+   PASS  Tests\Feature\Kb\VersionImmutabilityTest
+  ✓ it AC-07 runtime: a published version cannot be rewritten in place   0.52s  
+
+NFR-04 history page (1k versions, limit 100): 16.2 ms dev-indicative
+
+   PASS  Tests\Feature\Kb\VersioningTest
+  ✓ it publish mints versions 1..n with author/note/hash; the diff pair… 0.61s  
+  ✓ it T-02 determinism + the diff fixture set: identical content → ide… 0.03s  
+  ✓ it NFR-04: 1,000 versions on one variant list by cursor (limit ≤ 10… 0.69s  
+
+   PASS  Tests\Feature\Kb\VisibilityTest
+  ✓ it EC-11: internal → public through the door = high-visibility audi… 0.57s  
+  ✓ it FLAG A sole-writer sweep: Visibility.php is the ONLY file under…  0.07s  
+
+   PASS  Tests\Feature\Kb\WidgetHelpContractTest
+  ✓ it FR-18/US-04: browse → search → article (viewed event) → 👎 feedb… 2.03s  
+  ✓ it SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p… 1.06s  
+  ✓ it FS-02: Meilisearch unreachable → unavailable:true with start_cha… 0.12s  
+
+   PASS  Tests\Feature\Kb\WorkflowTest
+  ✓ it AC-01: the matrix — submit → request changes (comment, back to d… 0.73s  
+  ✓ it FR-07 self-publish collapse: edit+publish on one person publishe… 0.54s  
+  ✓ it AC-10: with kb.require_alt on, a PUBLIC publish with an image la… 0.97s  
+  ✓ it sole-writer sweep (the Doc 06 status-writer class): Transitions.… 0.05s  
+
+   PASS  Tests\Feature\Kb\WorkingCopyTest
+  ✓ it autosave: working copy + DB stamp, no version minted; recover re… 0.55s  
+
+   PASS  Tests\Feature\Org\DepartmentAccessTest
+  ✓ it grants department access AND default-queue membership in ONE tra… 0.09s  
+  ✓ it a partial write is IMPOSSIBLE: a failure at the queue half rolls… 0.07s  
+  ✓ it revoke ENDS both direct rows (never deletes) under org.departmen… 0.09s  
+  ✓ it refuses a department without a default queue (EC-10) — nothing w… 0.05s  
+
+   PASS  Tests\Feature\Org\EffectiveMembersTest
+  ✓ it A-50 obligation 1: department access without queue membership is… 0.11s  
+  ✓ it FR-04: effective agents = direct ∪ via-team ∪ unexpired temporar… 0.16s  
+
+   PASS  Tests\Feature\Org\OrganizationSeederTest
+  ✓ it seeds EXACTLY FR-01's nine departments, in order, each with one…  0.11s  
+  ✓ it is idempotent and never overwrites an operator-edited seed: a re… 0.12s  
+  ✓ it rides ProvisioningStep::Organization — ordered after DefaultRole… 0.03s  
+  ✓ it runs inside a real provisioning: a tenant provisioned through Te… 0.25s  
+
+   PASS  Tests\Feature\Org\StructureWritersTest
+  ✓ it FR-01/EC-10: a department is created WITH its default queue in o… 0.07s  
+  ✓ it FR-03/BR-01/FLAG B: the boost list is ordered, known and duplica… 0.07s  
+  ✓ it FR-03: is_rg is at most one per tenant — the second is refused w… 0.08s  
+  ✓ it FR-18/EC-10: deactivating a department's DEFAULT queue is refuse… 0.07s  
+  ✓ it FR-02: teams span departments through queues; members added/remo… 0.11s  
+
+   PASS  Tests\Feature\Rbac\CapabilityCacheTest
+  ✓ it serves the map from cache within the TTL and rebuilds after expl… 0.07s  
+  ✓ it bypasses the cache for R-04's highest-sensitivity keys — revocat… 0.07s  
+  ✓ it pins both composed TTLs at 10 s — the FS-02 bounds are 10 s sess… 0.03s  
+  ✓ it busts Doc 02's per-token scope cache in the same invalidation —…  0.06s  
+  ✓ it keeps VERDICTS BYTE-IDENTICAL with the cache store dead, logs th… 0.05s  
+  ✓ it stores PRIMITIVES ONLY — verdicts, never objects or secrets (SEC… 0.06s  
+  ✓ it degrades within the FS-01 latency budget shape: per-request DB r… 0.08s  
+
+   PASS  Tests\Feature\Rbac\CatalogSnapshotTest
+  ✓ it registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the v… 0.03s  
+  ✓ it marks high-risk exactly where §4.1 writes "(high)" plus ai.provi… 0.03s  
+  ✓ it pins the scope dimension of every key: 47 scoped (46 per the §4.… 0.07s  
+  ✓ it keeps the four Doc 02-era entries under their exact registered n… 0.03s  
+  ✓ it resolves every label and description i18n key in BOTH launch lan… 0.04s  
+  ✓ it groups every key under one of the fourteen §4.1 modules, each wi… 0.03s  
+  ✓ it treats an unknown key as a programming error, never a verdict (B… 0.03s  
+
+   PASS  Tests\Feature\Rbac\ExpireOverridesTest
+  ✓ it tidies expired overrides: revoke(cause=expired) + outbox event +… 0.20s  
+  ✓ it Doc 11 T-07/EC-07 / A-50 obligation 4 (S11 step 3): the temporar… 0.27s  
+
+   PASS  Tests\Feature\Rbac\JobReResolutionTest
+  ✓ it runs a demoted user's queued action under POST-demotion rights (… 0.26s  
+
+   PASS  Tests\Feature\Rbac\PrecedenceMatrixTest
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.07s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.06s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.06s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.06s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.05s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.06s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.07s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.05s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.05s  
+  ✓ it produces the normative verdict for every precedence cell (AC-02)… 0.05s  
+  ✓ it denies EVERYTHING for a user with no role — implicit deny is the… 0.04s  
+  ✓ it never enforces an orphan DB key, and defaults a granted-nowhere…  0.05s  
+  ✓ it carries the granter and expiry on override verdicts — the explor… 0.05s  
+  ✓ it lets an override change the VERB only — the scope map stays the…  0.06s  
+  ✓ it fails closed on a scoped module missing from the role's scope ma… 0.04s  
+
+   PASS  Tests\Feature\Rbac\RbacAdminBehaviorsTest
+  ✓ it gives the EC-03 loser a 409 carrying the winner's state to re-ap… 0.13s  
+  ✓ it refuses an override without a ≥10-char reason, and audits the re… 0.16s  
+  ✓ it warns when more users than rbac.override.warn_threshold carry an… 0.10s  
+  ✓ it stops an editor granting keys they do not hold when rbac.strict_… 0.14s  
+  ✓ it answers the explorer with verdict + WHY: source, granter and exp… 0.11s  
+
+   PASS  Tests\Feature\Rbac\RbacStorageTest
+  ✓ it enforces one role per user as PHYSICS: a single column exists an… 0.05s  
+  ✓ it keeps role names unique per tenant among LIVE roles, and frees t… 0.05s  
+  ✓ it refuses a hard DELETE from the app role on all three rbac tables… 0.04s  
+  ✓ it enables AND forces RLS with a tenant policy on all three rbac ta… 0.04s  
+  ✓ it allows at most one LIVE override per user and permission, and fr… 0.04s  
+  ✓ it rejects garbage effect and revoke_cause values at the schema lay… 0.04s  
+  ✓ it refuses self-approval on pending grants BY TABLE CONSTRAINT, and… 0.07s  
+  ✓ it requires a subject: a role pending grant without a role, or with… 0.04s  
+  ✓ it logs and IGNORES orphan DB keys — never enforces them (T-01, FS-… 0.18s  
+  ✓ it reports a healthy catalog as empty — the check is quiet when not… 0.05s  
+
+   PASS  Tests\Feature\Rbac\ReadOnlySweepTest
+  ✓ it lets the seeded Read Only template accept ZERO writes across eve… 2.03s  
+
+   PASS  Tests\Feature\Rbac\RoleSeederTest
+  ✓ it seeds the nine Appendix B templates through REAL provisioning, f… 0.25s  
+  ✓ it pins the ratified grant constraints: SA=all keys (114 since S10…  0.09s  
+  ✓ it is idempotent: provisioning-style double seed yields ONE consist… 0.09s  
+  ✓ it NEVER overwrites an edited template, updates an untouched one on… 0.19s  
+  ✓ it emits rbac.role.created through the outbox and writes the audit…  0.08s  
+
+   PASS  Tests\Feature\Rbac\RouteCoverageSweepTest
+  ✓ it refuses EVERY permission-declared staff route to an under-privil… 3.19s  
+  ✓ it POSITIVE CONTROL: a holder passes the same middleware on the sam… 0.07s  
+  ✓ it masks object existence on out-of-scope reads — 404, never 403, f… 0.10s  
+
+   PASS  Tests\Feature\Rbac\SafetyRailsTest
+  ✓ it blocks demoting the LAST admin-pair holder, naming who else hold… 0.12s  
+  ✓ it blocks a ROLE EDIT that would strip the pair from its last holde… 0.11s  
+  ✓ it blocks disabling the last admin THROUGH the UserDisabler route (… 0.12s  
+  ✓ it blocks deleting an assigned role with the count, and deletes an…  0.12s  
+  ✓ it routes a high-risk grant through a DISTINCT second admin when fo… 0.16s  
+  ✓ it REFUSES to enable four-eyes with fewer than two approval-rights…  0.08s  
+
+   PASS  Tests\Feature\Rbac\ScopeFixtureTest
+  ✓ it produces the EXACT visible set for each scope level on list quer… 0.15s  
+  ✓ it answers the OBJECT check with the same implementation as the lis… 0.12s  
+  ✓ it resolves Team scope with NO team to the empty set — fails closed… 0.14s  
+  ✓ it resolves a scope map SILENT about the module to the empty set (N… 0.09s  
+  ✓ it keeps the TEST-ONLY EmptyMembership control fail-closed — Team/D… 0.08s  
+  ✓ it AC-03 RE-PROOF: OrgMembership over REAL rows yields the SAME exa… 0.12s  
+
+   PASS  Tests\Feature\Routing\AssignBySystemDoorTest
+  ✓ it is UNREACHABLE from HTTP: no route action names assignBySystem,…  0.04s  
+  ✓ it assigns as the SYSTEM: assignee set, FR-05 new → open through th… 0.09s  
+  ✓ it carries FR-15's as-if-assigned check exactly as the staff path:…  0.10s  
+  ✓ it loses the FR-16 race to a manual claim that landed first (BR-03:… 0.14s  
+
+   PASS  Tests\Feature\Routing\AssignmentStatsConsumerTest
+  ✓ it is registered as a DURABLE consumer of the four assignment-shape… 0.05s  
+  ✓ it recomputes FROM TRUTH: a manual claim, a pending move and an una… 0.20s  
+  ✓ it a redelivered event whose ticket no longer names the agent still… 0.06s  
+
+   PASS  Tests\Feature\Routing\CapacityRaceTest
+  ✓ it AC-03 (1): capacity C admits exactly C assignments; the C+1th an… 0.33s  
+  ✓ it AC-03 (2): the commit path WAITS on the stats row lock held by a… 0.87s  
+  ✓ it FR-06: pending_customer does not consume a slot unless count_pen… 0.31s  
+
+   PASS  Tests\Feature\Routing\ConnectionRoutingTagSeamTest
+  ✓ it reads the fixture in local/testing and returns null for unknown…  0.03s  
+
+   PASS  Tests\Feature\Routing\DecisionOrderTest
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ex… 0.30s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.30s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.24s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "co… 0.20s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "te… 0.35s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ru… 0.34s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "de… 0.30s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.31s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.24s  
+
+   PASS  Tests\Feature\Routing\DecisionRecordTest
+  ✓ it FR-17/BR-06: every automatic routing writes a COMPLETE record —…  0.21s  
+  ✓ it waits honestly (BR-05): no online agent → outcome waiting, the t… 0.15s  
+  ✓ it FS-04: an engine exception PARKS the ticket in the department de… 0.18s  
+  ✓ it SEC-02: the read door ELIDES per-agent facts for a viewer withou… 0.32s  
+
+   PASS  Tests\Feature\Routing\DispatcherTest
+  ✓ it FS-02: the head is READ, not removed — a dying worker leaves the… 0.26s  
+  ✓ it EC-01/EC-03: two waiting tickets, one free slot — exactly one is… 0.31s  
+  ✓ it the AvailabilityConsumer is the dispatcher's ONLY trigger (durab… 0.25s  
+
+   PASS  Tests\Feature\Routing\EligibilityTest
+  ✓ it FR-05/BR-05: only ONLINE members with a free slot are routable;…  0.15s  
+  ✓ it FR-06/US-07: capacity = queue rule ?? routing.capacity.default;…  0.13s  
+  ✓ it FR-14/EC-09: hours never touch eligibility — an Online agent at…  0.14s  
+
+   PASS  Tests\Feature\Routing\LoadBasedTest
+  ✓ it orders by load, then by last_assigned_at (never-assigned first),… 0.06s  
+
+   PASS  Tests\Feature\Routing\RebuildDrillTest
+  ✓ it FS-01: after the ZSETs and pointers are FLUSHED, routing:rebuild… 0.34s  
+
+   PASS  Tests\Feature\Routing\RgFinalityTest
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r… 0.03s  
+  ✓ it FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex… 0.03s  
+
+   PASS  Tests\Feature\Routing\RoundRobinSpliceTest
+  ✓ it rotates fairly, splices on join/leave without resetting, and ski… 0.06s  
+
+   PASS  Tests\Feature\Routing\SkillBasedTest
+  ✓ it filters to skill-matching agents then load-based among them (US-… 0.13s  
+  ✓ it nearest_skill: no language match → the language requirement drop… 0.10s  
+  ✓ it wait: no language match → HOLD (no candidates) with the online/s… 0.13s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.41s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.43s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.47s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.42s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.23s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.06s  
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 0.31s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.30s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.40s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.36s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.31s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.23s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.39s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.36s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.31s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.50s  
+
+   PASS  Tests\Feature\Routing\TriggersTest
+  ✓ it is registered DURABLY on the five trigger events (ADR 0011) — ex… 0.06s  
+  ✓ it created: a new ticket with no department reaches the tenant defa… 0.28s  
+  ✓ it transferred: the new department is explicit; the router assigns…  0.36s  
+  ✓ it unassigned: a manual unassign (ticket.assigned with a null new a… 0.41s  
+  ✓ it deactivation hand-back (EC-06) and reopened-with-inactive-assign… 0.43s  
+
+   PASS  Tests\Feature\Telegram\BotProvisioningTest
+  ✓ it FR-01: register validates via getMe, mints key + credential + bo… 0.09s  
+  ✓ it FR-03/SEC-02: re-register ROTATES both credentials — new key, ne… 0.17s  
+  ✓ it FR-04: archiving refuses while non-revoked connections exist wit… 0.16s  
+  ✓ it FR-01: a token whose getMe answers without id/username is reject… 0.07s  
+  ✓ it FR-25: registration registers the five fixed commands via setMyC… 0.15s  
+
+[dev-hardware-indicative] NFR-04 connection-state reflection: 9.13 ms (budget 5000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\ConnectionLifecycleTest
+  ✓ it SEC-04 NEVER-ROUTES (sabotage #8): a business message on an UNCO… 0.16s  
+  ✓ it SEC-04: once the admin CONFIRMS, the same connection routes — ac… 0.17s  
+  ✓ it EC-11: the THREE REAL captured updates upsert to ONE row, idempo… 0.11s  
+  ✓ it EC-02: two admins racing the connect converge on ONE registry ro… 0.10s  
+  ✓ it EC-03: can_reply=false saves as PAUSED with inbound still flowin… 0.16s  
+  ✓ it EC-01: a wrong-account rejection deletes the pending row so the…  0.17s  
+  ✓ it EC-05: the account renames; the connection row updates forward f… 0.16s  
+  ✓ it FR-10 + inherited row 2: a revoke flags open tickets channel_unr… 0.21s  
+  ✓ it FS-04: >3 transitions/hour collapse notifications into a digest…  0.24s  
+  ✓ it NFR-04: connection state reflects an update in ≤5 s (indicative,… 0.17s  
+  ✓ it EC-06: bot removed from Business AND token revoked in the same m… 0.20s  
+
+[dev-hardware-indicative] NFR-05 menu publish propagation: 8.82 ms (budget 10000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\DirectSurfaceTest
+  ✓ it FR-25 /status: reads REAL Doc 06 ticket data through the tickets… 0.11s  
+  ✓ it FR-25 /human: emits telegram.handoff_requested (the Doc 09/06 se… 0.07s  
+  ✓ it FR-25/§14 /language completeness gate: a COMPLETE language is li… 0.09s  
+  ✓ it FR-28: a template renders variables; an UNBUILT source ({{queue_… 0.10s  
+  ✓ it FR-05 business mode: a direct message gets the redirect reply, w… 0.09s  
+  ✓ it BR-06 (sabotage #14): a redirect template WITHOUT a tappable lin… 0.07s  
+  ✓ it FR-05 direct mode: a business update is flagged unconfigured_sou… 0.04s  
+  ✓ it FR-06: leaving business mode with active connections needs typed… 0.09s  
+  ✓ it FR-27/T-06/NFR-05: publish is versioned with instant rollback, a… 0.13s  
+  ✓ it FR-27: the menu limits (≤12 buttons, rows ≤3) are enforced        0.06s  
+  ✓ it FR-26: the payload grammar — src-{source}[_ctx-{context}] parses… 0.04s  
+  ✓ it SEC-05: the length cap fires BEFORE the grammar — a 65-char payl… 0.03s  
+  ✓ it FR-26: record is FIRST-WINS and redelivery-idempotent (C-09); th… 0.09s  
+  ✓ it SEC-05: a payload is NEVER executed as a flow id — the tokens ar… 0.13s  
+  ✓ it FR-26 end to end: a direct /start deep link through the REAL rou… 0.12s  
+
+   PASS  Tests\Feature\Telegram\ErrorClassificationTest
+  ✓ it AC-05: every recorded Telegram error maps to the exact frozen re… 0.06s  
+  ✓ it FR-18: a transport failure (no HTTP answer) is network_error, re… 0.04s  
+  ✓ it EC-08: a 429 whose retry_after fits the window RETRIES; one that… 0.04s  
+  ✓ it EC-08 retryAfter is carried on a within-window rate-limit so the… 0.04s  
+[dev-hardware-indicative] FR-29 rollup pass: 28.3 ms (budget 1000 ms) WITHIN
+
+   PASS  Tests\Feature\Telegram\HealthRollupTest
+  ✓ it FR-29: the rollup reads the registered thresholds — 60% failed i… 0.15s  
+  ✓ it A-22 TRANSITION-ONLY: apply(down) emits ONE closed v2 event + au… 0.11s  
+  ✓ it FS-01 convergence: down writes the sweep-pause redis key; recove… 0.07s  
+  ✓ it FS-02 POSITIVE CONTROL: pending growth + silence past threshold…  0.03s  
+  ✓ it FS-02 through the POLL: getWebhookInfo growth on a silent normal… 0.09s  
+  ✓ it NFR (FR-29 rollup ≤1 s): evaluate + panel metrics + apply comple… 0.21s  
+  ✓ it FR-22 wiring: the telegram:window-sweep command sweeps a due win… 0.07s  
+
+   PASS  Tests\Feature\Telegram\InboundMappingTest
+  ✓ it AC-01: message-bearing types map to the exact contract shape, en… 0.04s  
+  ✓ it FR-13: every media kind maps with the OPAQUE A-26 reference — la… 0.05s  
+  ✓ it EC-11 fixture integrity: the three REAL captured updates share O… 0.03s  
+
+   PASS  Tests\Feature\Telegram\InboundPipelineTest
+  ✓ it FR-11: a text message rides route → router → dedupe → identity →… 0.17s  
+  ✓ it FR-12: an edit lands on the FR-21 revision path; deleted_busines… 0.27s  
+  ✓ it FR-13/A-26: a document rides the FULL chain — opaque ref persist… 0.28s  
+  ✓ it A-26 condition 2: resolution happens PER FETCH ATTEMPT — an expi… 0.34s  
+  ✓ it A-26 condition 3: Telegram's "file is too big" classifies throug… 0.26s  
+  ✓ it SEC-06/T-05: the nonce is single-use — a REPLAY answers the neut… 0.12s  
+  ✓ it FR-14: a callback ACKs via answerCallbackQuery — valid silently,… 0.21s  
+  ✓ it FR-15: my_chat_member kicked/member publish telegram.bot_blocked… 0.16s  
+  ✓ it T-03: a business message FROM the connection owner carries owner… 0.25s  
+
+   PASS  Tests\Feature\Telegram\OutboundSendTest
+  ✓ it FR-16: send maps kind → method and carries business_connection_i… 0.04s  
+  ✓ it FR-17: terminal success is "Sent" with the channel message id —…  0.03s  
+  ✓ it FR-19: typing is best-effort — a send-action failure is silently… 0.03s  
+  ✓ it FR-16: text over max_text splits at WORD boundaries into part i/… 0.04s  
+  ✓ it FR-16: a single word longer than the budget is hard-split, never… 0.05s  
+  ✓ it EC-09 (sabotage #15): a resume recomputes the SAME segments and…  0.04s  
+
+   PASS  Tests\Feature\Telegram\OwnerPhoneAttributionTest
+  ✓ it T-03/BR-03: an owner reply from the phone attributes as agent un… 0.16s  
+  ✓ it SPOOF CONTROL (sabotage #20): a business_message whose from.id i… 0.20s  
+  ✓ it A-27 condition 5: a non-owner customer message is byte-identical… 0.16s  
+  ✓ it EC-05: the account renames; a LATER owner reply shows the new di… 0.22s  
+
+   PASS  Tests\Feature\Telegram\RateLimiterTest
+  ✓ it FR-20/AC-06: the per-chat bucket allows the burst then paces at…  0.08s  
+  ✓ it FR-20: the per-bot bucket (25/s) caps across chats — a bot canno… 0.08s  
+  ✓ it R-05: a 429 penalty slows the per-bot refill for 60 s (adaptive…  0.17s  
+  ✓ it T-08: the check-and-consume is atomic — concurrent-shaped calls…  0.07s  
+
+   PASS  Tests\Feature\Telegram\TelegramBotApiTest
+  ✓ it T-02/SEC-07: a call rides the egress proxy to the Bot API and re… 0.06s  
+  ✓ it maps an ok:false answer to TelegramApiError carrying status and…  0.04s  
+  ✓ it SEC-07 PIN (sabotage #11): a dead proxy means a dead client — a…  0.05s  
+  ✓ it T-07: fileUrl embeds the token by design and is documented a sec… 0.04s  
+  ✓ it A-19: bot_token is ciphertext at rest, decrypts through the mode… 0.08s  
+
+   PASS  Tests\Feature\Telegram\WebhookRouteTest
+  ✓ it FR-02: a valid path-key + secret rides the S15 stack to a 202 AC… 0.13s  
+  ✓ it SEC-02: a wrong secret and a missing secret answer the byte-iden… 0.15s  
+  ✓ it T-02 ORDER PROOF: an unknown key answers 404 even with a well-fo… 0.13s  
+  ✓ it T-02: the declared middleware order is exactly the S15 contract…  0.06s  
+  ✓ it SEC-02 rotation consequence: after re-register, the OLD key answ… 0.14s  
+
+   PASS  Tests\Feature\Telegram\WindowCalibrationTest
+  ✓ it FR-21 (plan row 4): the window computes from the message DB-time… 0.11s  
+  ✓ it T-04: the ZSET score is INTEGER microseconds (R-23 family princi… 0.11s  
+  ✓ it EC-14: a window_expired error BEFORE the computed expiry TIGHTEN… 0.10s  
+  ✓ it BR-05: tightening is allowed but EXTENDING beyond the observed w… 0.11s  
+
+   PASS  Tests\Feature\Telegram\WindowReopenConsumerTest
+  ✓ it ADR 0011: WindowReopenConsumer is registered for message.receive… 0.05s  
+  ✓ it FR-24: a customer message on an EXPIRED window reopens it (→ ope… 0.12s  
+  ✓ it FR-23: an OWNER-PHONE (agent) message does NOT reopen the window… 0.09s  
+  ✓ it C-09 + FS-02 catch-up: re-driving the SAME event reopens EXACTLY… 0.15s  
+
+   PASS  Tests\Feature\Telegram\WindowSweepTest
+  ✓ it FS-01 (BEFORE trust): the sweep does NOT expire a window while t… 0.11s  
+  ✓ it FS-01: when health RECOVERS, the next sweep expires it (recomput… 0.13s  
+  ✓ it FR-22: the sweep emits closing (≤2h) and expired (past) on TRANS… 0.08s  
+  ✓ it FS-05: after the ZSET is lost, the rebuilder repopulates it from… 0.07s  
+
+   PASS  Tests\Feature\Tickets\AssignmentClaimTest
+  ✓ FR-16/US-01: the loser of a claim race is told WHO won, not just th… 0.13s  
+  ✓ FR-16: the same person claiming twice is a double-click, not a race  0.14s  
+  ✓ FR-05: the first assignment opens a new ticket, through the transit… 0.15s  
+  ✓ FR-15: an assignee who cannot see the ticket is refused with assign… 0.12s  
+  ✓ FR-15: every change emits ticket.assigned {old, new, by} — includin… 0.13s  
+  ✓ FR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur… 0.20s  
+  ✓ FR-05: an implicit claim never fails the reply it rode in on         0.13s  
+  ✓ EC-06: a deactivated assignee hands back every OPEN-family ticket,…  0.30s  
+
+[NFR-04 indicative] 200-item tag batch: 2.55s
+
+   PASS  Tests\Feature\Tickets\BulkOperationsTest
+  ✓ AC-07: a mixed batch yields EXACT per-item allow/deny — the close o… 0.32s  
+  ✓ EC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it… 0.38s  
+  ✓ AC-07: a 200-item batch completes with 200 per-item progress events… 3.38s  
+  ✓ FR-25: submit refuses an unknown action, an over-cap batch, unknown… 0.09s  
+
+   PASS  Tests\Feature\Tickets\ChannelScopeReproofTest
+  ✓ T-06 ADMIT: an Own-scoped agent may subscribe to a conversation the… 0.15s  
+  ✓ T-06 DENY: the same Own-scoped agent is refused on a conversation t… 0.15s  
+  ✓ T-06 DENY: unassigning takes the subscription right away again       0.15s  
+  ✓ T-06 INVERTED (S11 step 3, Packet 3 — A-50; the S20 inversion prece… 0.31s  
+  ✓ T-06: an All-scoped agent still subscribes, and conversations.view…  0.13s  
+
+[SS-02 indicative] 39-source consolidation: 1.12s
+
+   PASS  Tests\Feature\Tickets\ConsolidationDrillTest
+  ✓ SS-02: forty near-identical tickets consolidate to one master in on… 2.17s  
+
+   PASS  Tests\Feature\Tickets\CreationPathsTest
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.09s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-14: the offline form is tagged offline by the path itself, not b… 0.11s  
+  ✓ FR-12: an open-family ticket blocks a second create and hands back…  0.10s  
+  ✓ FR-13: an idempotency key makes a replayed create return the SAME t… 0.12s  
+  ✓ AC-02 (concurrent half): concurrent creates on one conversation yie… 0.57s  
+  ✓ FR-21: a split target takes NO open slot — the one sanctioned multi… 0.13s  
+  ✓ FR-03: a subject given at creation is marked staff-authored; an abs… 0.11s  
+
+   PASS  Tests\Feature\Tickets\EdgeSemanticsTest
+  ✓ EC-07: two agents resolving at once — the second identical-target c… 0.09s  
+  ✓ EC-07, the raced half: a transition validated against a STALE statu… 0.08s  
+  ✓ EC-08: after automation resolves mid-composition, "send and reopen"… 0.15s  
+  ✓ EC-10: channel_unreachable on a pending_customer ticket changes no…  0.18s  
+
+   PASS  Tests\Feature\Tickets\FollowersPriorityTagsTest
+  ✓ FR-17: a priority change is evented with old/new; a no-op change is… 0.11s  
+  ✓ FR-17: staff need tickets.priority.change; automation and AI need n… 0.09s  
+  ✓ FR-17: a fifth priority is refused, by the enum and by the database  0.11s  
+  ✓ FR-18: staff follow themselves with tickets.follow; adding someone…  0.17s  
+  ✓ FR-18: a follower who cannot see the ticket is refused — notificati… 0.16s  
+  ✓ FR-18: unfollowing removes the row and events it; the events are th… 0.11s  
+  ✓ FR-19: tags are free-form per tenant, de-duplicated, and removable   0.15s  
+  ✓ FR-19: tagging needs tickets.tags.manage, and a blank tag is not a…  0.17s  
+  ✓ FR-19: autocomplete offers the tenant's own tags, prefix-matched     0.13s  
+  ✓ T-07: the rename is chunked, resumable, historical, and audited wit… 0.37s  
+  ✓ T-07: the rewrite needs tickets.tags.manage and refuses a blank ren… 0.07s  
+
+   PASS  Tests\Feature\Tickets\HandoffPacketTest
+  ✓ AC-08: a ticket is created from the Doc 09 fixture with the packet…  0.09s  
+  ✓ AC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,…  0.07s  
+  ✓ BR-02: the transcript anchor is a LINK — no message is moved, copie… 0.08s  
+  ✓ FR-11: the normative contract is ENFORCED before the immutable inse… 0.06s  
+  ✓ FR-11: the packet keeps its OWN copy of the suggestion, so an overr… 0.07s  
+
+   PASS  Tests\Feature\Tickets\InvariantAuditTest
+  ✓ FS-05: a clean platform passes the audit with exit 0                 0.04s  
+  ✓ FS-05 positive control: seeded violations make the auditor FIRE — n… 0.28s  
+
+   PASS  Tests\Feature\Tickets\LocalizationSweepTest
+  ✓ §14: every refusal code the Tickets domain can raise has a fail.* k… 0.07s  
+  ✓ §14/§13: the fixed vocabularies are complete in both languages, and… 0.03s  
+
+   PASS  Tests\Feature\Tickets\MergeUnmergeTest
+  ✓ AC-04: merge moves links and unions sets; unmerge within 24 h resto… 0.23s  
+  ✓ a resolved source's armed timer is cancelled by the merge and resto… 0.19s  
+  ✓ SEC-06: a cross-customer merge is refused server-side with cross_cu… 0.15s  
+  ✓ SEC-01: an actor who cannot see the merge target is refused target_… 0.11s  
+  ✓ A-13: a closed ticket may be a merge TARGET but never a source; a s… 0.21s  
+  ✓ A-14: a merged source refuses every ordinary door (merged_supersede… 0.17s  
+  ✓ EC-03: merged_into chains resolve to the final survivor, and a mid-… 0.22s  
+  ✓ FS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi… 0.27s  
+  ✓ A-13: unmerge refuses open_ticket_exists when the source conversati… 0.24s  
+  ✓ A-13: an assignee deactivated while the source sat merged is handed… 0.27s  
+  ✓ unmerging a ticket that is not merged refuses with not_merged        0.12s  
+
+   PASS  Tests\Feature\Tickets\MetricTimestampsTest
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.47s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.41s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.27s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.37s  
+  ✓ FR-24: first_response_at IS the signal message's own database times… 0.09s  
+  ✓ FR-24: agent_first_response_at counts the first public HUMAN reply,… 0.11s  
+  ✓ FR-24 + C-09: a redelivered reply cannot move an existing stamp (fi… 0.11s  
+  ✓ FR-24: the trigger REFUSES an internal note as a first-response sig… 0.07s  
+  ✓ FR-24: the trigger REFUSES a pre-ticket message and a message from…  0.13s  
+  ✓ FR-24: a customer message is not a response at all                   0.08s  
+  ✓ R-19b strengthening 2: last_status_changed_at is born from clock_ti… 0.10s  
+  ✓ R-19b strengthening 2 (behavioural): a fresh ticket's status clock…  0.08s  
+
+   PASS  Tests\Feature\Tickets\MidActionPermissionExpiryTest
+  ✓ EC-02: a transition permitted by a temporary override is refused on… 0.16s  
+  ✓ EC-02: while the SAME override is live, the very same transition su… 0.14s  
+  ✓ EC-02: a plain role denial carries no attribution — there is no gra… 0.09s  
+
+   PASS  Tests\Feature\Tickets\ReopenAutoCloseTest
+  ✓ FR-07: after the auto-close window of customer silence, the sweep c… 0.35s  
+  ✓ EC-01: a persisted customer reply beats the due sweep — no close, n… 0.24s  
+  ✓ FR-10: a customer message on a resolved ticket reopens it unconditi… 0.09s  
+  ✓ EC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se… 0.58s  
+  ✓ AC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no… 0.20s  
+  ✓ AC-03: reopen onto a DEACTIVATED assignee hands the ticket back to…  0.24s  
+  ✓ FR-08: staff reopen of a closed ticket needs tickets.reopen AND a r… 0.25s  
+  ✓ the consumer does nothing when the conversation already holds an op… 0.12s  
+  ✓ reopenFromCustomerMessage on a wrong-status ticket throws the FR-08… 0.09s  
+  ✓ R-03: the window arithmetic is exact across DST-change dates — the…  0.07s  
+  ✓ R-03 end-to-end: a reopen window that spans the October DST switch…  0.50s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.07s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.29s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.19s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.57s  
+
+   PASS  Tests\Feature\Tickets\ResolveRequirementsTest
+  ✓ FR-06: a bare resolve with no public reply and no note is refused (… 0.13s  
+  ✓ FR-06: an explicit resolution note satisfies the substance requirem… 0.16s  
+  ✓ FR-06: a prior public staff reply satisfies the requirement with no… 0.14s  
+  ✓ FR-06: an AI public reply is substance too — the definition is FR-2… 0.12s  
+  ✓ FR-06: with tickets.resolve.requires_reply off, a bare resolve is a… 0.12s  
+  ✓ FR-07/T-03: entering resolved arms the auto-close timer at EXACTLY…  0.14s  
+  ✓ ticket.resolved / ticket.closed / ticket.reopened ride EVERY door o… 0.22s  
+
+   PASS  Tests\Feature\Tickets\SpamDispositionTest
+  ✓ FR-09: marking spam takes the machine edge, stamps the actor, exclu… 0.16s  
+  ✓ FR-09: the separately-confirmed conversation block rides Doc 04's o… 0.15s  
+  ✓ FR-09: unmark within 7 days restores the PRIOR status from event hi… 0.16s  
+  ✓ FR-09: unmark within 7 days restores the PRIOR status from event hi… 0.18s  
+  ✓ EC-09: unmark on day 8 is refused with the terminality explanation,… 0.40s  
+  ✓ EC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti… 0.46s  
+  ✓ A-17: while the spam is still UNMARKABLE, a customer message takes…  0.15s  
+  ✓ FR-09: the machine edge refuses a mark without tickets.spam.mark, a… 0.06s  
+
+   PASS  Tests\Feature\Tickets\SplitTest
+  ✓ AC-05: the split target carries linked_work + origin_ticket_id, tak… 0.12s  
+  ✓ EC-04: the fourth live linked-work split is refused with guidance,…  0.20s  
+  ✓ FR-21: a selection containing another conversation's message is ref… 0.09s  
+  ✓ FR-21: tickets.split is required, and an empty selection is refused  0.09s  
+
+   PASS  Tests\Feature\Tickets\StatusWriterEncapsulationTest
+  ✓ it can see the sanctioned writer at all — the positive control for…  0.03s  
+  ✓ it has exactly one file in app/ that writes a ticket status (NFR-03… 0.17s  
+  ✓ it routes every status write through the transition service, which…  0.10s  
+  ✓ it offers no mass-assignment path to status on the Ticket model      0.03s  
+  ✓ it binds the service and repository as ordinary singleton-resolvabl… 0.03s  
+
+   PASS  Tests\Feature\Tickets\SubjectTest
+  ✓ FR-03: Doc 09's seam writes the subject and marks it ai-authored     0.07s  
+  ✓ FR-03: the AI seam never overwrites a subject that already exists    0.05s  
+  ✓ FR-03: a staff edit needs tickets.edit, and the source label follow… 0.10s  
+  ✓ FR-03: a subject may be absent but may not be blanked to an empty s… 0.07s  
+  ✓ EC-11: a failed generation leaves the subject NULL — no sentinel, n… 0.09s  
+
+   PASS  Tests\Feature\Tickets\TicketSchemaTest
+  ✓ FR-01/A-7: the tickets column inventory is exactly the filed interp… 0.05s  
+  ✓ R-19b: every DB-time column is timestamptz at microsecond precision… 0.05s  
+  ✓ R-01: the database refuses a ninth status — the machine is platform… 0.04s  
+  ✓ FR-01 CHECKs: priority, source, subject_source and pending_reason e… 0.05s  
+  ✓ FR-02: ticket numbers are unique per tenant at the database layer,…  0.04s  
+
+   PASS  Tests\Feature\Tickets\TicketTranscriptExportTest
+  ✓ A-18 anchors basis: an anchored ticket exports EXACTLY what its ran… 0.55s  
+  ✓ A-18 lifetime basis: an unanchored ticket exports its tenure — pre-… 0.56s  
+  ✓ the gate is Doc 04's, re-checked at export: without conversations.t… 0.12s  
+
+   PASS  Tests\Feature\Tickets\TimerPhysicsTest
+  ✓ FS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid… 0.49s  
+  ✓ a stale candidate — the ticket long since moved on — is dropped by…  0.10s  
+  ✓ a candidate whose score lies about dueness is DEFERRED: the column…  0.14s  
+  ✓ SS-03: changing tickets.autoclose.hours applies to FUTURE resolutio… 0.14s  
+  ✓ BR-07: the sweep HOLDS an unreachable customer's due timer — refuse… 0.37s  
+
+   PASS  Tests\Feature\Tickets\TransferEscalateTest
+  ✓ FR-22: a transfer changes the department, keeps the status, retains… 0.17s  
+  ✓ FR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne… 0.19s  
+  ✓ SEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR…  0.15s  
+  ✓ FR-23: escalation writes the {path, reason, target, at, by} payload… 0.18s  
+  ✓ FR-23/BR-06: a short reason is refused by the edge (reason_too_shor… 0.11s  
+  ✓ FR-23: a named target who is disabled is refused escalation_target_… 0.12s  
+  ✓ FR-23: de-escalation returns to open with the actor's note, clears…  0.16s  
+  ✓ EC-05: deactivating a named target re-routes the escalation to supe… 0.22s  
+
+   PASS  Tests\Feature\Tickets\TransitionMatrixTest
+  ✓ AC-01 clause 1: every legal cell succeeds, changing status and emit… 0.74s  
+  ✓ AC-01 clause 2: every illegal cell is refused with illegal_transiti… 1.00s  
+  ✓ AC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n… 0.26s  
+  ✓ FR-04: a permission the actor lacks refuses the transition, naming…  0.07s  
+  ✓ FR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara… 0.10s  
+  ✓ FR-04: staff reopen of a closed ticket needs a reason, and spam mar… 0.10s  
+  ✓ BR-07: an unreachable customer is never AUTO-resolved or auto-close… 0.18s  
+  ✓ FR-04: system, AI and automation actors transition without a user a… 0.13s  
+  ✓ FR-10: leaving and entering the open family moves Doc 04's open-tic… 0.13s  
+  ✓ SS-04: the matrix is data, so the legal-target list a UI renders co… 0.04s  
+  ✓ FR-01/§4.2 (S07 step 14): the pending reason RIDES THE TRANSITION —… 0.21s  
+
+   PASS  Tests\Contract\AdapterConformance\FakeAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.05s  
+  ✓ dedupe key is stable for identical payloads                          0.03s  
+  ✓ dedupe keys differ across distinct payloads                          0.07s  
+  ✓ normalization is pure per item and never reorders                    0.04s  
+  ✓ channel timestamp survives as metadata                               0.03s  
+  ✓ an adapter cannot emit an internal note                              0.03s  
+  ✓ send success reports state sent                                      0.07s  
+  ✓ error classification matches the frozen table                        0.04s  
+  ✓ capability matrix gates every operation                              0.06s  
+  ✓ health answers with the contract shape                               0.05s  
+  ✓ send paths accept only deliverable payloads                          0.05s  
+
+   PASS  Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.03s  
+  ✓ dedupe key is stable for identical payloads                          0.03s  
+  ✓ dedupe keys differ across distinct payloads                          0.03s  
+  ✓ normalization is pure per item and never reorders                    0.03s  
+  ✓ channel timestamp survives as metadata                               0.03s  
+  ✓ an adapter cannot emit an internal note                              0.04s  
+  ✓ send success reports state sent                                      0.04s  
+  ✓ error classification matches the frozen table                        0.05s  
+  ✓ capability matrix gates every operation                              0.03s  
+  ✓ health answers with the contract shape                               0.04s  
+  ✓ send paths accept only deliverable payloads                          0.04s  
+
+   PASS  Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest
+  ✓ SS-02: the second adapter implements ONLY the base contract — the m… 0.07s  
+  ✓ SS-02: the whole inbound pipeline works on the second adapter uncha… 0.09s  
+  ✓ SS-02: the whole outbound pipeline works on the second adapter unch… 0.09s  
+  ✓ SS-02: the capability envelope binds the core, not conditionals — a… 0.12s  
+
+   PASS  Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.05s  
+  ✓ dedupe key is stable for identical payloads                          0.05s  
+  ✓ dedupe keys differ across distinct payloads                          0.05s  
+  ✓ normalization is pure per item and never reorders                    0.05s  
+  ✓ channel timestamp survives as metadata                               0.05s  
+  ✓ an adapter cannot emit an internal note                              0.03s  
+  ✓ send success reports state sent                                      0.03s  
+  ✓ error classification matches the frozen table                        0.03s  
+  ✓ capability matrix gates every operation                              0.05s  
+  ✓ health answers with the contract shape                               0.03s  
+  ✓ send paths accept only deliverable payloads                          0.03s  
+
+   PASS  Tests\Contract\AiEventConsumerContractsTest
+  ✓ FR-21: the ai.* family is CLOSED at seven (six + the approved rule-… 0.03s  
+  ✓ Q7/SEC-06: every ai.* payload is identifiers + closed categories —…  0.02s  
+  ✓ FR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata… 0.03s  
+  ✓ ai.decision.logged is SAMPLED by a registered platform setting (FR-… 0.03s  
+  ✓ fidelity: every Doc 09 fixture entry matches the catalog — event ex… 0.03s  
+  ✓ completeness: every event the registry maps to an App\Jobs\Ai durab… 0.06s  
+
+   PASS  Tests\Contract\CustomerEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.05s  
+  ✓ completeness: every event the registry maps to a Doc 08 durable con… 0.03s  
+  ✓ the rollup consumer is registered for the customer merge family — t… 0.03s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.03s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.04s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.05s  
+
+   PASS  Tests\Contract\KbEventConsumerContractsTest
+  ✓ it FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six t… 0.07s  
+  ✓ it ADR 0011: every kb.* event a Doc 10 job consumes durably carries… 0.03s  
+
+   PASS  Tests\Contract\RoutingEventConsumerContractsTest
+  ✓ the routing family is exactly EIGHTEEN events (FR-19; grown only by… 0.03s  
+  ✓ completeness: every routing-family event has a contract entry in EV… 0.03s  
+  ✓ fidelity: every fixture entry names a real catalog relationship, re… 0.04s  
+  ✓ Doc 11's own durable consumers are contracted: the availability con… 0.03s  
+
+   PASS  Tests\Contract\TicketEventConsumerContractsTest
+  ✓ NFR-06 completeness: every ticket.* event has a contract entry in E… 0.04s  
+  ✓ NFR-06 fidelity: every fixture entry names a real relationship, rea… 0.05s  
+  ✓ T-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia… 0.03s  
+
+   PASS  Tests\Integration\AsTenantAbortSurfacingTest
+  ✓ it surfaces the REAL error when the callback aborts the transaction… 0.03s  
+  ✓ it still restores the previous binding on the normal path            0.04s  
+
+   WARN  Tests\Integration\EmbeddingsSidecarProbeTest
+  - it ADR 0018 probe: real text → 1024-dim unit vectors; a cross-language paraphrase sits closer than an unrelated sentence (bge-m3 cosine sanity) → AI_EMBEDDINGS_LIVE=1 runs this against the real ADR 0018 sidecar (compose profile `embeddings`); CI stays on the fake driver.
+  - it the retrieval seam against the REAL sidecar: KbIndexer embeds with no fixture vector, HybridRetriever answers un-degraded with the semantically nearest chunk first → AI_EMBEDDINGS_LIVE=1 runs this against the real ADR 0018 sidecar (compose profile `embeddings`); CI stays on the fake driver.
+
+   WARN  Tests\Integration\SessionRevocationSocketTest
+  ✓ it deletes the session key and drops it from the index when revoked… 0.18s  
+  - it publishes session.revoked so other nodes learn about it (T-04) →… 0.03s  
+  ✓ it closes a live Reverb socket within 2 seconds of revocation (AC-0… 0.28s  
+  ✓ it Doc 01 EC-03: suspending a tenant kills its LIVE sessions, not j… 0.20s  
+  ✓ it leaves OTHER tenants' sessions untouched when one tenant is susp… 0.32s  
+
+   PASS  Tests\Integration\StackSmokeTest
+  ✓ every port compose.yaml publishes has a real listener on the host    0.06s  
+  ✓ host-published database ports reach the stack containers, not a hos… 0.05s  
+  ✓ the running app server answers /up over TLS with a chain that valid… 0.08s  
+  ✓ the app serves NOTHING over cleartext: :80 only redirects (SEC-06)   0.03s  
+  ✓ the app certificate covers every name the stack addresses it by      0.05s  
+  ✓ postgres role physics: app cannot bypass RLS, platform_admin is the… 0.07s  
+  ✓ app credentials cannot authenticate as platform_admin                0.03s  
+  ✓ both redis instances respond and are distinct servers with opposite… 0.03s  
+  ✓ horizon supervises all twelve queue families                         0.03s  
+  ✓ reverb accepts a websocket connection over WSS with a validated cha… 0.09s  
+
+   PASS  Tests\Isolation\AiGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app role denied set per table and privilege…  0.15s  
+  ✓ it ADR 0003: app holds no DELETE on any Doc 09 table                 0.04s  
+  ✓ it N-01: every Doc 09 table is FORCED row-level security with the t… 0.06s  
+  ✓ it the messages lesson: EVERY ai_decisions partition carries its ow… 0.04s  
+  ✓ it AiDecisionPartitions: the window is idempotent and a created mon… 0.36s  
+  ✓ it flag 2 (countersigned): no ON CONFLICT statement ever targets ai… 0.08s  
+
+   PASS  Tests\Isolation\ConcurrentProvisioningTest
+  ✓ it provisions a tenant through every step and ends active exactly o… 0.20s  
+  ✓ it is idempotent when run twice sequentially (EC-05 retry case)      0.28s  
+  ✓ it is idempotent when the job is dispatched twice (double-click / q… 0.26s  
+  ✓ it refuses to run a job that carries no tenant context (FR-03f)      0.05s  
+  ✓ it halts cleanly between steps when the tenant is suspended mid-fli… 0.23s  
+  ✓ it lets exactly one of two concurrent workers claim a step (AC-05)   0.22s  
+
+   PASS  Tests\Isolation\CrossTenantAccessTest
+  ✓ it discovers every tenant-scoped table from the schema rather than…  0.04s  
+  ✓ it returns zero rows for direct SQL against another tenant, on ever… 0.21s  
+  ✓ it refuses to write a row stamped with another tenant, on every wri… 0.05s  
+  ✓ it returns 404 rather than 403 for another tenant's row (SEC-06)     0.06s  
+
+   PASS  Tests\Isolation\CustomerGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 08 table matches t… 0.23s  
+  ✓ it rg_flag_history is INSERT-ONLY for app — no UPDATE or DELETE at…  0.07s  
+  ✓ it DELETE is revoked for app on every customer table, the S20 pair…  0.07s  
+  ✓ it the three ordering timestamps carry the clock_timestamp() defaul… 0.07s  
+  ✓ it every Doc 08 table has FORCED row-level security with the tenant… 0.07s  
+  ✓ it type/value/source and customers.created_source are NOT NULL afte… 0.07s  
+  ✓ it the (tenant, type, value) unique index exists on customer_identi… 0.06s  
+  ✓ it ADDITION 8: the arbiter is the ONLY non-PK unique index on custo… 0.08s  
+  ✓ it THE GRANT DELTA'S REPLACEMENT CONTROL (step-6 countersign): cust… 0.07s  
+
+   PASS  Tests\Isolation\ForgedTenantIdFuzzTest
+  ✓ it ignores forged tenant_id in body, query and header across 500 re… 2.64s  
+  ✓ it resolves the same tenant with and without a forged tenant_id      0.08s  
+
+   PASS  Tests\Isolation\GrantPhysicsTest
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.05s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.05s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.06s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.03s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.04s  
+  ✓ it denies the app role DELETE on every tenant-scoped table (BR-02/N… 0.07s  
+  ✓ it denies the app role UPDATE on audit_log (N-13: append-only by gr… 0.04s  
+  ✓ it denies the app role SELECT on the tenant_keys hash column (SEC-0… 0.04s  
+  ✓ it ships no timestamp column without a timezone (NFR-08/C-03: every… 0.05s  
+  ✓ it keeps after_commit TRUE on the durable queue connection (C-06/EC… 0.03s  
+  ✓ it stores no recovery code in a readable form (SEC-03/BR-02/Q6: has… 0.04s  
+  ✓ it keeps every credential column out of reach of a plaintext read (… 0.06s  
+  ✓ it denies the app role INSERT and UPDATE on messages.created_at, an… 0.06s  
+  ✓ it denies the app role INSERT and UPDATE on messages.created_at, an… 0.05s  
+  ✓ it keeps the platform role able to write historical rows (retention… 0.06s  
+
+   PASS  Tests\Isolation\InboxGrantPhysicsTest
+  ✓ it R-19b: the app-denied column set of every Doc 07 table matches t… 0.17s  
+  ✓ it nothing Doc 07 stores is app-deletable — DELETE denied on all se… 0.05s  
+  ✓ it every Doc 07 table carries FORCED row-level security with the te… 0.05s  
+  ✓ it the db-time defaults are clock_timestamp(), never now() — pg_att… 0.05s  
+  ✓ it row 9 discharged (C2): events is append-only for app — INSERT de… 0.11s  
+
+   PASS  Tests\Isolation\KbGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app role denied set per table and privilege…  0.24s  
+  ✓ it AC-07/T-06 physics: kb_article_versions and kb_slug_history carr… 0.06s  
+  ✓ it ADR 0003 / STOP-A condition 5: app holds no DELETE on any Doc 10… 0.05s  
+  ✓ it N-01: every Doc 10 table and both kb_chunks partitions are FORCE… 0.05s  
+  ✓ it STOP-B: kb_chunks is LIST-partitioned by audience into exactly p… 0.03s  
+  ✓ it STOP-A condition 3 + FLAG B: the ONLY non-PK unique on kb_chunks… 0.03s  
+  ✓ it FLAG-2 / FLAG B static sweep: no ON CONFLICT or upsert() in app/… 0.06s  
+
+   WARN  Tests\Isolation\OctaneConnectionLifecycleTest
+  ✓ it leaves app.tenant_id unset on a fresh connection                  0.04s  
+  ✓ it clears the variable when the context is cleared, so a reused con… 0.05s  
+  ✓ it makes an unscoped query fail loudly rather than return rows once… 0.04s  
+  - it re-applies the variable when a bound connection is re-establishe… 0.03s  
+  ✓ it does not touch the database from the connection hook when no ten… 0.03s  
+
+   WARN  Tests\Isolation\OutboxChaosTest
+  ✓ it never publishes an event for a write that rolled back (T-03)      0.05s  
+  - it refuses to publish outside a transaction (T-03) → The test harne… 0.03s  
+  ✓ it delivers a committed event even though the relay crashed before…  0.22s  
+  ✓ it produces one event, not two, when a crashed relay re-processes t… 0.21s  
+  ✓ it relays in UUIDv7 order, which is causal order without a wall clo… 0.25s  
+  ✓ it reports lag from the OLDEST unrelayed row, so a stuck row is vis… 0.19s  
+
+   PASS  Tests\Isolation\PreTenantLookupTest
+  ✓ it resolves the same email in TWO tenants with no tenant bound (Q1:… 0.31s  
+  ✓ it is the ONLY pre-tenant path: a direct read of users with no tena… 0.28s  
+  ✓ it grants no lasting cross-tenant visibility after it is used        0.31s  
+  ✓ it matches an exact address only — it cannot be walked to enumerate… 0.30s  
+  ✓ it returns no 2FA secret and no recovery material to the login path  0.29s  
+  ✓ it resolves a bearer token with no tenant bound, and refuses a dire… 0.31s  
+  ✓ it reports a revoked, expired or disabled-owner token as such rathe… 0.29s  
+  ✓ it answers an unknown token with zero rows, indistinguishable from…  0.29s  
+  ✓ it keeps both doors owned by the NOLOGIN key_resolver role (ADR 000… 0.04s  
+
+   PASS  Tests\Isolation\RlsCoverageTest
+  ✓ it finds every existing events partition enabled, forced, and polic… 0.05s  
+  ✓ it protects partitions the MAINTENANCE COMMAND creates, not only th… 0.11s  
+
+   PASS  Tests\Isolation\RoutingGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app role denied set per table and privilege…  0.19s  
+  ✓ it FR-17/BR-06 physics: routing_decisions carries NO app UPDATE gra… 0.07s  
+  ✓ it ADR 0003 / FLAG C: app holds no DELETE on departments, teams, qu… 0.04s  
+  ✓ it N-01: every Doc 11 table is FORCED row-level security with the t… 0.05s  
+  ✓ it FR-03 physics: is_rg is at most one per tenant (partial unique),… 0.05s  
+  ✓ it FLAG F / FLAG G: the two stamping triggers exist as PLAIN plpgsq… 0.04s  
+
+   PASS  Tests\Isolation\SequenceAllocatorTest
+  ✓ it allocates 1, 2, 3 … per (tenant, name), and tenants never share…  0.06s  
+  ✓ it rolls the counter back with the owning transaction, so the seque… 0.04s  
+  ✓ it allocates in a single atomic statement — no app-side read exists… 0.04s  
+  ✓ it refuses to allocate outside a transaction (C-01: the owning tran… 0.22s  
+  ✓ it throws MissingTenantContext when no tenant is bound               0.03s  
+  ✓ it serialises two concurrent allocators on the row lock: no duplica… 1.27s  
+
+   PASS  Tests\Isolation\SuspendedTenantMatrixTest
+  ✓ it behaves exactly per FR-05 on every entry surface, in every tenan… 0.46s  
+  ✓ it shows a non-dismissable banner key when a surface is refused for… 0.06s  
+  ✓ it revokes every key when a tenant is archived (FR-05)               0.07s  
+
+   PASS  Tests\Isolation\TelegramGrantPhysicsTest
+  ✓ it R-19b: the app role cannot NAME any DB-time column on a Doc 05 t… 0.17s  
+  ✓ it FR-04: bots and menus are archived, never dropped — DELETE denie… 0.07s  
+  ✓ it SEC-02 posture: menu versions are INSERT-only for the app — no U… 0.06s  
+  ✓ it FR-26: acquisitions are WRITE-ONCE for the app — no UPDATE, no D… 0.05s  
+  ✓ it NFR-04: the transition trigger exists, is BEFORE UPDATE, and its… 0.04s  
+  ✓ it every Doc 05 table carries FORCED row-level security with the te… 0.05s  
+
+   PASS  Tests\Isolation\TenantBindingSurfacesTest
+  ✓ it binds the console to exactly the tenant named by --tenant (T-05)  0.06s  
+  ✓ it refuses a console run with no --tenant BEFORE any model is touch… 0.03s  
+  ✓ it gives an unknown --tenant the same TenantNotResolved as every ot… 0.05s  
+  ✓ it resumes a stuck provisioning via tenant:provision-retry, idempot… 0.21s  
+  ✓ it authorizes a socket channel from the USER record and binds both…  0.05s  
+  ✓ it refuses a channel addressed to another tenant, identically to on… 0.06s  
+  ✓ it refuses sockets for a suspended tenant — realtime is a staff sur… 0.05s  
+
+   PASS  Tests\Isolation\TenantScopeTest
+  ✓ it filters reads to the bound tenant                                 0.05s  
+  ✓ it auto-fills tenant_id on create from the context, never from the…  0.06s  
+  ✓ it throws when a tenant-scoped model is read with no bound context   0.03s  
+  ✓ it throws when a tenant-scoped model is created with no bound conte… 0.04s  
+  ✓ it throws when a model loaded under one tenant is saved under anoth… 0.04s  
+  ✓ it scopes the tenants table to the bound tenant so one tenant canno… 0.04s  
+  ✓ it refuses to rebind a context that is already bound                 0.04s  
+  ✓ it refuses a platform operation while a tenant is bound (SEC-02)     0.04s  
+
+   PASS  Tests\Isolation\TicketGrantPhysicsTest
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.04s  
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.06s  
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.04s  
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.04s  
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.04s  
+  ✓ it denies the app role DELETE on every Doc 06 table except ticket_f… 0.04s  
+  ✓ it keeps DELETE on ticket_followers as the one deliberate exception… 0.04s  
+  ✓ it denies the app role UPDATE entirely on the immutable stores (SEC… 0.04s  
+  ✓ it denies the app role UPDATE entirely on the immutable stores (SEC… 0.04s  
+  ✓ it denies the app role INSERT and UPDATE on exactly the tickets DB-… 0.09s  
+  ✓ it denies the app role INSERT and UPDATE on exactly the tickets DB-… 0.07s  
+  ✓ it fills every DB-time column from clock_timestamp() and never from… 0.05s  
+  ✓ it denies the app role INSERT on exactly ticket_merge_snapshots.cre… 0.05s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.04s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.04s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.04s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.04s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.07s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.05s  
+  ✓ it enables and FORCEs RLS with a policy on every Doc 06 table with…  0.05s  
+  ✓ it refuses an app insert that NAMES created_at, and an app update t… 0.05s  
+  ✓ it refuses an app DELETE behaviourally, not only in the catalog (BR… 0.05s  
+
+   PASS  Tests\Isolation\TicketNumberingConcurrencyTest
+  ✓ it gives 100 concurrent creates 100 unique numbers, with zero dupli… 2.44s  
+  ✓ it answers a contention spike with backpressure and NEVER a duplica… 2.29s  
+  ✓ it lets a rolled-back create take its number with it — gaps are acc… 0.31s  
+
+   PASS  Tests\Isolation\TicketOpenFamilyInvariantTest
+  ✓ T-02: every open-family pair on one conversation is refused by the…  0.16s  
+  ✓ FR-10: resolved, closed and spam are NOT open-family — they coexist… 0.05s  
+  ✓ FR-21: linked_work rows are exempt from the index — the one sanctio… 0.05s  
+  ✓ AC-02: the direct-SQL bypass fails on the index even for the RLS-by… 0.18s  
+
+   PASS  Tests\Isolation\TwoLayerIndependenceTest
+  ✓ it contains cross-tenant reads with the Eloquent scope REMOVED (RLS… 0.06s  
+  ✓ it contains cross-tenant reads with RLS PERMITTING the other tenant… 0.04s  
+
+   PASS  Tests\Security\AiContextAllowlistTest
+  ✓ it SEC-04/BR-06: planted RG flag content and staff notes NEVER ente… 0.06s  
+  ✓ it SEC-04: the exclusion holds through the FULL assembled prompt, a… 0.04s  
+  ✓ it the allowlist is honest in the OTHER direction: language, prior-… 0.05s  
+
+   PASS  Tests\Security\AiEgressGuardTest
+  ✓ it refuses a non-fixture user payload outside production — the plan… 0.03s  
+  ✓ it the refusal is leak-proof: the exception message never carries t… 0.03s  
+  ✓ it allows a fixture-tagged user payload outside production           0.03s  
+  ✓ it system-role content is exempt (operator/platform material, never… 0.03s  
+  ✓ it refuses an untagged embeddings input and allows a tagged one      0.04s  
+  ✓ it refuses non-string user content without a tag anywhere in it (ov… 0.06s  
+  ✓ it production is the carve-out: untagged payloads flow (the only en… 0.05s  
+
+   PASS  Tests\Security\AiInjectionRedTeamTest
+  ✓ it AC-07 #1: a recorded out-of-enum action (transfer_funds) is DISC… 0.08s  
+  ✓ it AC-07 #2: a poisoned KB chunk is defused AT INDEX TIME — the pla… 0.04s  
+  ✓ it AC-07 #3: an answer echoing system-layer text is FLAGGED by the…  0.05s  
+  ✓ it AC-07 #4: a fence-escape attempt stays INSIDE the fenced user tu… 0.03s  
+  ✓ it AC-07 #5: recorded uncited betting "advice" dies on BR-02's cita… 0.05s  
+  ✓ it the immutable layer's own text is the leak detector's corpus — a… 0.03s  
+
+   PASS  Tests\Security\CopilotNeverAutoSendTest
+  ✓ it STATIC (BR-01, sabotage #7 target): no Copilot source names an o… 0.05s  
+  ✓ it STATIC: the Copilot controller's and jobs' constructor graph con… 0.03s  
+  ✓ it RUNTIME (AC-06): a suggested reply + improve + translate + summa… 0.92s  
+  ✓ it RUNTIME: the job that generates a draft has no send either — run… 0.77s  
+
+   PASS  Tests\Security\CustomerSearchScopeTest
+  ✓ it AC-07 layer 1: tenant A NEVER sees tenant B's indexed customers…  0.79s  
+  ✓ it AC-07 layer 2: the customers-module scope filter is INJECTED ser… 0.95s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  0.74s  
+  ✓ it AC-07: HISTORICAL usernames hit (FR-06) — a renamed Telegram ide… 0.85s  
+  ✓ it AC-07 / §14: Amharic name search returns the expected customers…  2.41s  
+
+   PASS  Tests\Security\DuplicateHintScopeTest
+  ✓ it SEC-05: the hint is COUNT + scope-checked links — All-scope gets… 0.17s  
+  ✓ it SEC-05 through the DOOR: the card's hint payload is {count, link… 0.17s  
+  ✓ it no player_id on the customer → no hint at all (null, not a zero-… 0.12s  
+
+   WARN  Tests\Security\EnumerationTest
+  ✓ it returns a byte-identical body for an existing and a non-existing… 0.81s  
+  ✓ it returns a byte-identical body regardless of which TENANT the add… 1.30s  
+  ✓ it spends the same work across 0, 1 and N candidate paths (AC-01 ti… 9.39s  
+  - it does the password-verification work even when no account matches… 0.03s  
+  ✓ it never reveals which of several tenants the address belongs to, e… 0.52s  
+  ✓ it returns a byte-identical reset-request body across 0, 1 and N ca… 0.92s  
+  ✓ it answers reset requests at the fixed floor whatever matched — and… 2.15s  
+
+   WARN  Tests\Security\HttpsRefusalTest
+  ✓ it refuses a cleartext request in the testing environment            0.05s  
+  ✓ it refuses a cleartext API request with the problem-details shape    0.03s  
+  ✓ it serves the same request over TLS                                  0.03s  
+  ✓ it refuses cleartext even when the app believes it is production     0.03s  
+  - it honours a trusted proxy's X-Forwarded-Proto rather than double-r… 0.03s  
+  ✓ it marks the session cookie secure and http-only in every environme… 0.03s  
+
+   PASS  Tests\Security\InboxSearchScopeTest
+  ✓ it AC-09 layer 1: tenant A's search NEVER returns tenant B's indexe… 1.12s  
+  ✓ it AC-09 layer 2: the Own-scope filter is INJECTED server-side — no… 2.17s  
+  ✓ it SEC-02: the HTTP door accepts a QUERY STRING and nothing else —…  1.01s  
+  ✓ it FS-03: Meilisearch down → inline "unavailable", never a 500 — an… 0.50s  
+  ✓ it RULING D1: Meilisearch down → the palette answers its OWN unavai… 0.09s  
+  ✓ it RULING D2 (the recorded behavior change): a viewer WITHOUT custo… 0.54s  
+  ✓ it RULING D4/SCOPE: an Own-scoped viewer's palette shows ONLY their… 0.86s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 1.18s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.47s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  1.48s  
+
+   PASS  Tests\Security\KbAiNeverPublishesTest
+  ✓ it STATIC: no AI authoring path writes status, names a publish tran… 0.03s  
+  ✓ it RUNTIME: every AI-accented variant on record is a draft — no pub… 0.48s  
+
+   PASS  Tests\Security\KbFeedbackHostileInputTest
+  ✓ it rate limit per visitor per hour: the (N+1)th write is refused as… 0.56s  
+  ✓ it length cap + inert storage: an over-cap comment is refused (too_… 0.66s  
+
+   PASS  Tests\Security\KbIndexSeparationTest
+  ✓ it (a) physics + (b) Copilot + (c) the falsification: an internal c… 0.10s  
+  ✓ it static half: ChatbotTurn never names includeInternal, and the co… 0.04s  
+
+   PASS  Tests\Security\KbInertRenderTest
+  ✓ it SEC-03: hostile markup dies at save — the working copy, the mint… 0.56s  
+
+   PASS  Tests\Security\KbOneIndexerDoorTest
+  ✓ it STATIC: the ONLY writer of kb_chunks under app/ is KbIndexer.php… 0.09s  
+  ✓ it RUNTIME: every row the door writes carries strip provenance, and… 0.07s  
+
+   PASS  Tests\Security\LogScrubberTest
+  ✓ it SEC-08: every configured channel carries SecurityLogTap — null a… 0.03s  
+  ✓ it scrubs secret-shaped keys on the rendered sink and passes benign… 0.03s  
+  ✓ it scrubs the webhook auth headers in nested access-log shapes (ste… 0.03s  
+  ✓ it never scrubs identifier suffixes — token_id and key_id stay trac… 0.04s  
+  ✓ it SEC-08/C-14: every rendered record carries trace_id and tenant_i… 0.07s  
+  ✓ it a real refused request logs WITH a trace_id and WITHOUT the pres… 0.12s  
+  ✓ it AC-08: seeded credentials from every real flow are absent from t… 4.80s  
+
+   PASS  Tests\Security\MembershipTransitionTest
+  ✓ it PRE-BINDING: with the real tables POPULATED, EmptyMembership sti… 0.18s  
+  ✓ it POST-BINDING: OrgMembership yields EXACTLY the expected sets — d… 0.15s  
+  ✓ it the production container binds OrgMembership (the seam is real),… 0.03s  
+  ✓ it A-50 obligation 2 — DIVERGENCE: a teammate ASSIGNED a ticket in…  0.17s  
+  ✓ it obligation 6 — the production WIRING binds OrgMembership, and Em… 0.04s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.10s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.04s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.06s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.03s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.09s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.03s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.07s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.03s  
+
+   PASS  Tests\Security\NoImpersonationTest
+  ✓ it exposes no impersonation route                                    0.06s  
+  ✓ it registers no impersonation permission, setting, flag, or notific… 0.06s  
+  ✓ it contains no impersonation class or file in the application tree   0.04s  
+
+   PASS  Tests\Security\NoPollingLoopTest
+  ✓ it can see a planted polling loop — the positive control (sabotage…  0.07s  
+  ✓ it FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists…  0.05s  
+  ✓ it pins the scheduled routing commands to exactly the two the docum… 0.03s  
+
+   PASS  Tests\Security\NoVerifiedAffordanceTest
+  ✓ it has no verified-shaped column on any customer table (schema swee… 0.03s  
+  ✓ it has no verified-named component anywhere in the client tree (BR-… 0.03s  
+  ✓ it keeps the customer UI namespaces and customers.* lang files free… 0.02s  
+  ✓ it keeps the Customers server namespaces free of any verified API f… 0.04s  
+
+   PASS  Tests\Security\NoteIsolationTest
+  ✓ DeliverableKind is exactly the seven customer-content kinds — no no… 0.04s  
+  ✓ the single kind-conversion point refuses note and system, and maps…  0.06s  
+  ✓ a channel cannot originate a note: NormalizedInbound refuses kind=n… 0.04s  
+  ✓ DeliverablePayload is constructible only through kind-safe named co… 0.04s  
+  ✓ no adapter-namespace method accepts message kinds or message rows —… 0.04s  
+
+   PASS  Tests\Security\PhoneEmailScrubberPatternsTest
+  ✓ it SEC-03: near-miss controls survive to the sink — the scanner and… 0.05s  
+  ✓ it SEC-03: phone and email VALUES under innocent keys never reach t… 0.05s  
+  ✓ it SEC-03: phone and email VALUES inside the message string itself…  0.04s  
+  ✓ it SEC-03: benign context survives — UUIDs, timezone offsets, _id k… 0.05s  
+  ✓ it SEC-03: the four DB sinks — per-sink plant→detect→rollback contr… 0.18s  
+
+   PASS  Tests\Security\PlaceInQueueOneDoorTest
+  ✓ it can see a planted queue_id writer — the positive control          0.05s  
+  ✓ it T-02/A-49: exactly one file under app/ writes tickets.queue_id —… 0.33s  
+
+   PASS  Tests\Security\RgVisibilityTest
+  ✓ it SEC-01/BR-03: an unpermitted payload NEVER NAMES the rg columns…  0.11s  
+  ✓ it the permitted payload carries the rg block, values intact         0.11s  
+  ✓ it NFR-06/AC-B4-01: RG reads are FRESH against a warm cache — an in… 0.13s  
+  ✓ it AC-05: the history is immutable LIVE — app UPDATE and DELETE bot… 0.09s  
+  ✓ it T-05: Doc 03's capability cache already bypasses customers.rg_fl… 0.09s  
+
+   PASS  Tests\Security\RoutingNeverWritesTicketsTest
+  ✓ it can see a planted direct ticket write at all — the positive cont… 0.06s  
+  ✓ it T-02/§21: no file in the routing package writes a ticket row or…  0.09s  
+  ✓ it keeps the Doc 06 status physics green beside this one: the sole…  0.05s  
+
+   PASS  Tests\Security\SecretsNeverSerializeTest
+  ✓ it AC-08/C-13: seeded credentials never serialize into jobs, outbox… 4.68s  
+  ✓ it AC-08: the events sink, after a real committed relay run, carrie… 4.86s  
+  ✓ it C-13 model pins: no Doc 02-minted credential column serializes o… 0.05s  
+
+   PASS  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.08s  
+  ✓ it carries the full T-07 header set on an authenticated staff API r… 0.10s  
+  ✓ it carries the full T-07 header set on an error response             0.03s  
+  ✓ it rotates the CSP nonce on every request                            0.03s  
+
+   WARN  Tests\Security\SessionFixationTest
+  - it regenerates the session id when the password is accepted (SEC-04… 0.04s  
+  - it does not carry pre-login session data into the authenticated ses… 0.03s  
+  - it regenerates again after the 2FA challenge (SEC-04, boundary 2) →… 0.04s  
+  ✓ it writes a signed tenant hint at login that matches the account te… 0.82s  
+  ✓ it POSITIVE CONTROL: an authenticated request with a MATCHING hint…  0.27s  
+  - it treats a MISMATCHED tenant hint as no session (Q7) → NOT PROVEN:… 0.03s  
+  - it treats a TAMPERED or ABSENT tenant hint as no session (Q7) → NOT… 0.03s  
+  ✓ it signs and verifies only intact values                             0.04s  
+
+   PASS  Tests\Security\TelegramScrubberPatternsTest
+  ✓ it NFR-06: a bot-token-shaped VALUE under an innocent key never rea… 0.06s  
+  ✓ it NFR-06: a token inside the MESSAGE string is scrubbed — free tex… 0.06s  
+  ✓ it T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or… 0.04s  
+
+   PASS  Tests\Security\TelegramSecurityTest
+  ✓ it SEC-01: no screen props ever carry the stored token — bots, heal… 0.10s  
+  ✓ it SEC-01: the model itself hides the token from serialization (the… 0.09s  
+  ✓ it SEC-03 POSITIVE CONTROLS: phones, contact payloads and forwarded… 0.04s  
+  ✓ it SEC-03/EC-12: RawUpdateLog stores raw but READS masked — and no…  0.07s  
+  ✓ it FR-30 BOTH WAYS: simulate-window-expiry expires a real window ou… 0.11s  
+  ✓ it SEC-03 permission DENY: without telegram.health.view the health…  0.15s  
+
+   PASS  Tests\Security\WebhookComparatorPinTest
+  ✓ it compares the header secret and the HMAC through hash_equals, pin… 0.05s  
+  ✓ it spends replay nonces through an atomic SET NX, pinned at the sou… 0.03s  
+
+   PASS  Tests\Security\WidgetPartitionTest
+  ✓ it refuses a valid visitor session on the staff and bearer surfaces… 0.12s  
+  ✓ it refuses staff credentials on the widget surface (BR-06, staff →…  0.26s  
+  ✓ it gives the widget guard no user provider to misconfigure (BR-06 s… 0.04s  
+  ✓ it authorizes a visitor onto exactly their own Reverb channel and n… 0.19s  
+  ✓ it refuses the widget broadcasting door to anyone who is not a visi… 0.27s  
+
+   PASS  Tests\Property\RoutingDeterminismHarnessTest
+  ✓ it T-08: 300 generated snapshots + ticket streams replayed twice yi… 0.16s  
+  ✓ it the REAL LoadBased strategy agrees with the documented simulatio… 0.04s  
+
+   PASS  Tests\Property\StarvationCapPropertyTest
+  ✓ it P1: the cap VALUE cannot be null, zero, negative, absent or non-… 0.08s  
+  ✓ it P2: for 500 generated boost stacks, the plain ticket past the ca… 1.47s  
+  ✓ it P3: below the cap the score orders — a plain ticket never outran… 0.25s  
+  ✓ it P4 (EC-04): at the cap the language requirement drops and the re… 0.06s  
+  ✓ it has no off-switch: no setting key in the registry can disable th… 0.04s  
+
+[ORDERKEY PROBE] composed at : 2026-01-01 00:00:10.123456
+[ORDERKEY PROBE] stored ts    : 2026-08-30 15:27:19.512462+00
+
+[ORDERKEY PROBE] forward clock — composed: a-first,b-second,c-third,d-fourth
+[ORDERKEY PROBE] forward clock — stored  : a-first,b-second,c-third,d-fourth
+
+[ORDERKEY PROBE] written created_at values : 2026-08-30 15:27:00 | 2026-08-30 15:27:02 | 2026-08-30 15:26:58
+[ORDERKEY PROBE] microtime() backsteps      : 0   <- the OLD instrument
+[ORDERKEY PROBE] created_at  backsteps      : 1   <- the REAL precondition
+
+[ORDERKEY PROBE] 435ms backstep, 1s lane gap — composed: lane-msg-1,lane-msg-2,lane-msg-3-after-435ms-backstep
+[ORDERKEY PROBE] 435ms backstep, 1s lane gap — stored  : lane-msg-1,lane-msg-2,lane-msg-3-after-435ms-backstep
+[ORDERKEY PROBE] slot 0  ts=2026-08-30 15:27:20.020902+00  body=a-first
+[ORDERKEY PROBE] slot 1  ts=2026-08-30 15:27:20.039519+00  body=b-second
+[ORDERKEY PROBE] slot 2  ts=2026-08-30 15:27:20.057668+00  body=c-third
+[ORDERKEY PROBE] slot 3  ts=2026-08-30 15:27:20.074126+00  body=d-fourth-after-backstep
+[ORDERKEY PROBE] back-step — composed: a-first,b-second,c-third,d-fourth-after-backstep
+[ORDERKEY PROBE] back-step — stored  : a-first,b-second,c-third,d-fourth-after-backstep
+[ORDERKEY PROBE] INVERTED? false
+
+
+   PASS  Tests\Property\ThreadOrderingKeyProbeTest
+  ✓ FACT 1 (INVERTED at R-19): created_at is DB time at full precision,… 0.11s  
+  ✓ NEGATIVE CONTROL: a forward-only clock keeps the thread in compose…  0.13s  
+  ✓ INSTRUMENT VALIDITY (INVERTED at R-19): neither clock writes create… 0.12s  
+  ✓ THRESHOLD: a backstep SMALLER than the gap between two same-lane me… 0.14s  
+  ✓ POSITIVE CONTROL (INVERTED at R-19): a backward app-clock step no l… 0.16s  
+  [dev-hardware-indicative] NFR-05 decision write        p50   3.658 ms   p99   5.407 ms   max   6.122 ms   budget(p99) 3.0 ms   OVER
+  [dev-hardware-indicative] §12 retrieval p95-class (2k chunks) p50  17.193 ms   p99  32.045 ms   max  32.115 ms   budget(p99) 120.0 ms   WITHIN
+  [dev-hardware-indicative] §12 simulation (2k decisions) p50  15.198 ms   p99  18.671 ms   max  18.671 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-02 classification pipeline overhead p50  37.174 ms   p99  66.286 ms   max  66.286 ms   budget(p99) 1200.0 ms   WITHIN
+
+   PASS  Tests\Performance\AiBudgetsTest
+  ✓ NFR-05: staging + flushing one decision record costs ≤ 3 ms p99 (th… 1.44s  
+  ✓ §12 retrieval: hybrid (vector + keyword) top-5 over 2k fixture chu… 17.10s  
+  ✓ §12 simulation: one day of 2k classification decisions recomputes ≤… 1.65s  
+  ✓ NFR-02 pipeline OVERHEAD: persist-first → consumer → classification… 5.18s  
+  [dev-hardware-indicative] NFR-01 webhook ACK (burst)   p50   4.547 ms   p99   7.990 ms   max  10.516 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] §12 thread page (50 msgs)   p50   2.377 ms   p99   5.790 ms   max   6.631 ms   budget(p99) 120.0 ms   WITHIN
+
+   PASS  Tests\Performance\ConversationsBudgetsTest
+  ✓ SS-01/NFR-01 indicatively: the webhook edge ACKs within budget unde… 1.54s  
+  ✓ §12 indicatively: a 50-message thread page reads within the paginat… 0.97s  
+  [dev-hardware-indicative] resolver hit p99 (NFR-01)    p50   1.848 ms   p99   3.028 ms   max  17.935 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] rollup HANDLER p99 (§12 line) p50   4.279 ms   p99   8.164 ms   max  14.475 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] recompute (repair unit, no §12 budget) p50   1.881 ms   p99   4.373 ms   max   6.172 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] cascade 50 conversations: 381 ms (spec ≤3000 ms)
+  [dev-hardware-indicative] customers_index search p99 (NFR-04 dev-scale) p50   6.769 ms   p99  11.230 ms   max  16.724 ms   budget(p99) 750.0 ms   WITHIN
+  [dev-hardware-indicative] panel header build p99 (NFR-03/§12) p50   4.631 ms   p99   8.688 ms   max  15.683 ms   budget(p99) 600.0 ms   WITHIN
+  [dev-hardware-indicative] customer tab badge read p99 (vs Doc 07 NFR-01 1500 ms) p50   3.255 ms   p99   6.021 ms   max   8.989 ms   budget(p99) 7500.0 ms   WITHIN
+
+   PASS  Tests\Performance\CustomerBudgetsTest
+  ✓ it NFR-01 indicatively: the resolver HIT path (every inbound messag… 3.74s  
+  ✓ it §12 indicatively: the per-event HANDLER inside 5 ms×tier, and t… 13.58s  
+  ✓ it §12 indicatively: the blocking cascade over 50 conversations ins… 0.52s  
+  ✓ it NFR-04 indicatively: customers_index search round-trip at dev s… 63.63s  
+  ✓ it NFR-03/§12 indicatively: the T-07 header build (payload + identi… 9.89s  
+  ✓ it THE RULED MEASUREMENT (escalation #3 part 2): the per-viewer no-… 6.63s  
+  [dev-hardware-indicative] tenant resolution (NFR-02)   p50   0.622 ms   p99   1.961 ms   max   3.054 ms   budget(p99) 1.0 ms   OVER
+  [dev-hardware-indicative] settings cached read (NFR-03) p50   0.117 ms   p99   0.809 ms   max   3.795 ms   budget(p99) 0.5 ms   OVER
+  [dev-hardware-indicative] events table insert (§12)   p50   1.090 ms   p99   2.474 ms   max   7.619 ms   budget(p99) 1.0 ms   OVER
+  [dev-hardware-indicative] outbox publish (NFR-04)      p50   1.224 ms   p99   2.316 ms   max   3.207 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] registry cold-load (§12)    once   0.568 ms   budget 50.0 ms   WITHIN
+
+   PASS  Tests\Performance\FoundationBudgetsTest
+  ✓ it meets the §12 budgets on dev hardware: resolution ≤1ms, settings… 6.69s  
+  ✓ it cold-loads the settings registry within 50 ms (§12)               0.07s  
+  [dev-hardware-indicative] §12 projector recompute (≤500ms p95; +200ms publish rides the same call) p50  26.587 ms   p99  36.338 ms   max  37.639 ms   budget(p99) 500.0 ms   WITHIN
+  [dev-hardware-indicative] §12 view recompute, 300 candidates (spec: 50k ≤ 5000ms — Doc 19 at scale) p50   1.466 ms   p99   2.180 ms   max   2.180 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 search tickets+messages via proxy (tickets ≤150ms / messages ≤300ms) p50  17.713 ms   p99  22.360 ms   max  22.360 ms   budget(p99) 300.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sync 500-event replay via SyncReader (≤250ms p95) p50   6.237 ms   p99   7.858 ms   max   7.858 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] Doc 06 §12 merge preview, 2x500 messages (≤400ms) p50  18.481 ms   p99  27.301 ms   max  27.301 ms   budget(p99) 400.0 ms   WITHIN
+
+   PASS  Tests\Performance\InboxBudgetsTest
+  ✓ §12: projector lag — one event-driven recompute (row rebuild from t… 5.67s  
+  ✓ §12: saved-view recompute at in-suite scale completes within the 5… 10.19s  
+  ✓ §12: search p95 through the ONE proxy path — tickets ≤ 150 ms, mess… 2.62s  
+  ✓ §12: the sync endpoint replays a 500-event backlog ≤ 250 ms p95 — T… 3.81s  
+  ✓ Doc 06 §12 BUCKET CLOSED: merge preview over two 500-message timeli… 1.72s  
+  [dev-hardware-indicative] kb autosave door (NFR-02 ≤2 s) p50   2.766 ms   p99   5.155 ms   max   5.155 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] kb publish door (§12 ≤30 s) p50   8.091 ms   p99   8.587 ms   max   8.587 ms   budget(p99) 30000.0 ms   WITHIN
+  [dev-hardware-indicative] kb block diff (§12 ≤500 ms) p50   1.684 ms   p99   3.546 ms   max   3.546 ms   budget(p99) 500.0 ms   WITHIN
+
+   PASS  Tests\Performance\KbBudgetsTest
+  ✓ it §12 legs, dev-indicative (step 13): publish ≤ 30 s and the block… 1.46s  
+  ✓ it meets NFR-03 indicatively: staff search ≤120 ms p95 at 200 index… 0.57s  
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.414 ms   p99   1.345 ms   max   1.701 ms   budget(p99) 0.3 ms   OVER
+  [dev-hardware-indicative] NFR-01 cold map rebuild      p50   2.352 ms   p99   4.149 ms   max   4.217 ms   budget(p99) 20.0 ms   WITHIN
+
+   PASS  Tests\Performance\RbacBudgetsTest
+  ✓ it meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil… 0.91s  
+  [dev-hardware-indicative] CONTROL trivial SELECT       p50   0.331 ms   p99   1.432 ms   max   2.609 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @   5 tickets+msgs p50   1.978 ms   p99   4.267 ms   max  10.284 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @  20 tickets+msgs p50   1.860 ms   p99   4.725 ms   max  14.170 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @  80 tickets+msgs p50   1.807 ms   p99   4.431 ms   max   7.145 ms   budget(p99) 5.0 ms   WITHIN
+  [dev-hardware-indicative] recompute @ 320 tickets+msgs p50   2.086 ms   p99   5.404 ms   max  10.797 ms   budget(p99) 5.0 ms   OVER
+
+   PASS  Tests\Performance\RollupTailCharacterizationTest
+  ✓ it RULING 1: trivial-statement control + volume sweep, printed sid… 18.96s  
+
+  [dev-hardware-indicative] NFR-01 routing decision (steps 1–4)  p50   76.5 ms  p99  115.0 ms  budget(p99) 50 ms  OVER
+  [dev-hardware-indicative] NFR-02 availability reaction (20 assigned)  3125.8 ms  budget(p95) 2000 ms  OVER
+
+   PASS  Tests\Performance\RoutingBudgetsTest
+  ✓ it meets NFR-01/NFR-02 indicatively: a routing decision and an avai… 5.27s  
+  [dev-hardware-indicative] NFR-01 normalization         p50   0.005 ms   p99   0.007 ms   max   0.092 ms   budget(p99) 30.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 send (our half)       p50   0.001 ms   p99   0.002 ms   max   0.002 ms   budget(p99) 80.0 ms   WITHIN
+  [dev-hardware-indicative] §12 webhook ACK             p50  12.193 ms   p99  21.578 ms   max  21.578 ms   budget(p99) 250.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep 10k-armed/20-due: 72 ms (pro-rated budget 2000 ms from 50k ≤ 10 s) WITHIN
+
+   PASS  Tests\Performance\TelegramBudgetsTest
+  ✓ it NFR-01: adapter normalization overhead ≤30 ms (dev-hardware-indi… 0.03s  
+  ✓ it NFR-01: adapter send overhead (our half) ≤80 ms (dev-hardware-in… 0.05s  
+  ✓ it §12: webhook ACK single-request cost p99 ≤250 ms on the REAL rou… 2.05s  
+  ✓ it NFR-03/§12: sweep at 10k armed / 20 due inside the pro-rated bud… 0.22s  
+  [dev-hardware-indicative] NFR-01 transition            p50  10.369 ms   p99  17.332 ms   max  67.017 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-02 merge+unmerge round   p50  54.600 ms   p99  69.512 ms   max  69.512 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-04 bulk 200              p50 2054.451 ms   p99 2054.451 ms   max 2054.451 ms   budget(p99) 30000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep (10k armed/20 due) p50 436.573 ms   p99 436.573 ms   max 436.573 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 tag autocomplete @5k    p50  10.469 ms   p99  13.886 ms   max  14.170 ms   budget(p99) 80.0 ms   WITHIN
+
+   PASS  Tests\Performance\TicketsBudgetsTest
+  ✓ NFR-01: a single transition commits within budget (p99 ≤ 25 ms)      4.68s  
+  ✓ NFR-02: a merge + unmerge ROUND completes within the single-operati… 1.60s  
+  ✓ NFR-04: a 200-item bulk batch completes within budget (≤ 30 s), lin… 3.64s  
+  ✓ §12: the timer sweep is O(due), not O(armed) — 10k armed candidates… 2.03s  
+  ✓ §12: tag autocomplete answers within budget at 5k distinct tags (p9… 2.76s  
+  [dev-hardware-indicative] NFR-01 TOTP verify           p50   0.011 ms   p99   0.028 ms   max   0.244 ms   budget(p99) 150.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 recovery-code verify  p50 118.680 ms   p99 126.719 ms   max 126.719 ms   budget(p99) 150.0 ms   WITHIN
+
+   PASS  Tests\Performance\TwoFactorBudgetsTest
+  ✓ it verifies 2FA within NFR-01's 150 ms p99 (dev-hardware-indicative… 9.57s  
+
+   PASS  Tests\Golden\AiGoldenConversationTest
+  ✓ it AC-01: every golden dialog yields its expected action type (or i… 0.10s  
+  ✓ it AC-05 (the trap clause, task level): the transaction-fact trap N… 0.07s  
+
+   PASS  Tests\Golden\RgDistressAuditTest
+  ✓ it SS-03: 50 seeded distress dialogs -> template-only, RG-routed, f… 4.27s  
+
+  Tests:    13 skipped, 1641 passed (28117 assertions)
+  Duration: 805.02s
+
+MAKE TEST EXIT=0

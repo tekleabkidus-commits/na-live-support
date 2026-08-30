@@ -2611,3 +2611,16 @@ names none, and a setting that could point at a deleted or defaultless departmen
 second EC-10 net to keep honest. A tenant with NO live department is FS-04's parked state, not
 a silent route. Implemented as `Routing/Intake/TenantDefaultDepartment`; the AI-suggestion-off
 branch ("off=General+flag") resolves through the same class with `ai_flagged` in the record.
+
+### A-56 (FILED INTERPRETATION, S11 step 7). A pull-in's Doc 03 grant carries `tickets.assign_self`
+
+Doc 11 FR-15 says a pull-in "creat[es] the Doc 03 temporary grant"; Doc 03 FR-09 says pull-ins
+"create system-generated scoped grants expiring at shift end". Neither names the permission KEY
+the grant carries — the membership itself lives in Doc 11's tables (queue_members /
+user_departments, linked by override_id, SCHEMA AMENDMENT 5's single-source CHECK). INTERPRETATION:
+the override row grants `tickets.assign_self` (allow) — the one capability a pulled-in agent
+plausibly lacks and needs for the shift (claiming from the queue they were pulled into); it is a
+NORMAL-risk key, so Doc 03's four-eyes (FR-08b) can never leave a pull-in stranded in a pending
+state (the door refuses `pull_in_pending` if it ever did). The override row is the AUDITED
+expiry anchor (rbac.override.added / .expired) and the single source the routing rows hang on;
+the router holds no grant authority of its own (SEC-03). Implemented in `Routing/Temporary/PullIn`.

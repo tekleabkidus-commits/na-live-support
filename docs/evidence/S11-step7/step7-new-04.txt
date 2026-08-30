@@ -1,0 +1,25 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 7.22s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.17s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.23s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.27s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.21s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.16s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.24s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.26s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.18s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.36s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.34s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.27s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.28s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.27s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.20s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.05s  
+
+  Tests:    16 passed (156 assertions)
+  Duration: 10.76s
+

@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\TemporaryMembershipTest
+  ⨯ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 6.95s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMembershipTest > it T-07 / FS-05 —…   
+  AC-05: an expired temporary member is still effective before the sweep
+Failed asserting that true is false.
+
+  at tests/Feature/Routing/TemporaryMembershipTest.php:191
+    187▕ 
+    188▕     expect(DB::table('queue_members')->where('override_id', $overrideId)->whereNull('ended_at')->count())->toBe(1, 'precondition: the sweep must NOT have run');
+    189▕     // HARDENED (S11 step 7 honest trail): `toContain($needle, $message)` treats the message as a SECOND
+    190▕     // needle, so `->not->toContain(id, 'msg')` is always green — an invalid green caught by the 8b probe.
+  ➜ 191▕     expect(in_array($agent->identifier(), app(EffectiveMembers::class)->eligible($queue), true))->toBeFalse('AC-05: an expired temporary member is still effective before the sweep')
+    192▕         ->and(in_array($agent->identifier(), array_column(app(RoutableAgents::class)->forQueue($queue), 'user_id'), true))->toBeFalse('AC-05: an expired temporary member is still routable before the sweep')
+    193▕         ->and(in_array($payments, app(OrgMembership::class)->departmentIdsFor($agent), true))->toBeFalse('AC-05: expired department access still resolves before the sweep');
+    194▕ 
+    195▕     // And the dispatcher, with a ticket waiting, assigns nothing to them.
+
+  1   tests/Feature/Routing/TemporaryMembershipTest.php:191
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 7.02s
+

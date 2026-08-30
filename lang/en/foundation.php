@@ -39,6 +39,7 @@ return [
         'kb_lock_held' => 'Someone else is editing this article',
         'kb_save_conflict' => 'The article changed since your last save',
         'kb_category_has_articles' => 'The category still holds articles',
+        'routing_refused' => 'The routing operation was refused',
         // Titles for the RFC 9457 `code` enum (T-07). Short, human, and safe to
         // translate — clients branch on `code`, never on these.
         'quota_exceeded' => 'Usage limit reached',

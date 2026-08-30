@@ -40,6 +40,7 @@ return [
         'kb_lock_held' => 'ሌላ ሰው ይህን ጽሑፍ እያረመ ነው',
         'kb_save_conflict' => 'ከመጨረሻው ማስቀመጥዎ በኋላ ጽሑፉ ተቀይሯል',
         'kb_category_has_articles' => 'ምድቡ አሁንም ጽሑፎችን ይዟል',
+        'routing_refused' => 'የመስመር አሠራሩ ተከልክሏል',
         'quota_exceeded' => 'የአጠቃቀም ገደብ ተደርሷል',
         'tenant_state_forbidden' => 'ለዚህ የሥራ ቦታ አይገኝም',
         'unregistered_setting' => 'ያልታወቀ ማስተካከያ',

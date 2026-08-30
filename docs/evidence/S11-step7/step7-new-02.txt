@@ -1,0 +1,61 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 8.78s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.16s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.38s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.22s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.35s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.19s  
+  ⨯ it EC-07: expiry mid-conversation — the assignment already made PER… 0.19s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.42s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.19s  
+  ⨯ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.43s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.32s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.31s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.30s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.46s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.24s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.08s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMember…  BindingResolutionException   
+  Target class [AssignTicket] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1144
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      +6 vendor frames 
+  7   tests/Feature/Routing/TemporaryMembershipTest.php:246
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\TemporaryMembershipTest > i…  LogicException   
+  PlatformConnection::run() was called with tenant 01a05323-d986-71a1-869e-f7104c17d442 bound (Doc 01 SEC-02: application tenant traffic can never reach the platform_admin role). A cross-tenant read from inside a tenant request is never legitimate — if this is a platform operation, it does not belong on a tenant-resolved code path.
+
+  at app/Support/Tenancy/PlatformConnection.php:50
+     46▕     {
+     47▕         $context = app(TenantContext::class);
+     48▕ 
+     49▕         if ($context->isBound()) {
+  ➜  50▕             throw new LogicException(sprintf(
+     51▕                 'PlatformConnection::run() was called with tenant %s bound (Doc 01 SEC-02: application '
+     52▕                 .'tenant traffic can never reach the platform_admin role). A cross-tenant read from '
+     53▕                 .'inside a tenant request is never legitimate — if this is a platform operation, it does '
+     54▕                 .'not belong on a tenant-resolved code path.',
+
+  1   app/Support/Tenancy/PlatformConnection.php:50
+  2   app/Domain/Routing/Temporary/ExpiryZset.php:83
+
+
+  Tests:    2 failed, 14 passed (150 assertions)
+  Duration: 13.12s
+

@@ -1,0 +1,11 @@
+{
+  "_comment": "Doc 11 FR-15 broadcast → Doc 16 DELIVERY CONTRACT ([D16]; P-C5 ruled as filed 2026-08-30: contract-only, no bell rows written by Doc 11). `Routing/Manual/Broadcast::send()` returns exactly these keys; `recipients` are the queue's FR-04 effective members (ids only — SEC-02/SEC-05: never names); `category` is the registered notification category (registries/notifications.php) whose 3-layer opt model Doc 16 applies at delivery. Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc16/Notifications",
+  "shape": {
+    "queue_id": "uuid",
+    "recipients": ["uuid"],
+    "category": "notify.routing.broadcast",
+    "note": "string (the supervisor's text; NEVER audited — routing.broadcast_sent carries recipient_count only)"
+  },
+  "keys": ["queue_id", "recipients", "category", "note"]
+}
