@@ -1,0 +1,124 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m5.83s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\CapacityRaceTest[22m [90m>[39m it AC-03 (1): cap… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/CapacityRaceTest.php[39m:[32m45[39m
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  [33m1   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m45[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m74[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\CapacityRaceTest[22m [90m>[39m it AC-03 (2): the… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/CapacityRaceTest.php[39m:[32m45[39m
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  [33m1   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m45[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m94[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\CapacityRaceTest[22m [90m>[39m it FR-06: pending… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/CapacityRaceTest.php[39m:[32m45[39m
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  [33m1   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m45[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m122[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\AssignBySystemDoorTest[22m [90m>[39m it assigns…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/AssignBySystemDoorTest.php[39m:[32m33[39m
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  [33m1   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m33[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m59[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\AssignBySystemDoorTest[22m [90m>[39m it carries…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/AssignBySystemDoorTest.php[39m:[32m33[39m
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  [33m1   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m33[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m90[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\AssignBySystemDoorTest[22m [90m>[39m it loses th… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Routing/AssignBySystemDoorTest.php[39m:[32m33[39m
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  [33m1   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m33[39;22m
+  [33m2   [39m[39;1mtests/Feature/Routing/AssignBySystemDoorTest.php[39;22m:[39;1m103[39;22m
+
+
+  [90mTests:[39m    [31;1m6 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (365 assertions)[39m
+  [90mDuration:[39m [39m6.02s[39m
+

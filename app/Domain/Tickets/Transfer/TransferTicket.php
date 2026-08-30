@@ -49,9 +49,16 @@ final class TransferTicket
         private readonly MembershipSource $membership,
         private readonly EventPublisher $events,
         private readonly AuditLogger $audit,
+        private readonly \App\Domain\Tickets\Placement\PlaceInQueue $placement,
     ) {}
 
-    public function transfer(Ticket $ticket, string $departmentId, User $actor): Ticket
+    /**
+     * @param  string|null  $queueId  FR-22's queue half (S11 STOP-A packet): when a transfer names a
+     *                                queue, PlaceInQueue — the one queue_id writer — places it inside
+     *                                this transaction; null keeps the ticket queue-less (routing's
+     *                                transferred trigger re-places it, Doc 11 FR-07).
+     */
+    public function transfer(Ticket $ticket, string $departmentId, User $actor, ?string $queueId = null): Ticket
     {
         if (! $this->verdicts->verdictFor($actor, 'tickets.department.change')->allowed) {
             throw new DomainException('tickets.department.change is required (FR-22).');
@@ -72,7 +79,7 @@ final class TransferTicket
         $assigneeId = $ticket->assignee_id;
         $retained = $assigneeId !== null && $this->assigneeRetained($assigneeId, $departmentId);
 
-        return DB::transaction(function () use ($ticket, $departmentId, $actor, $oldDepartmentId, $assigneeId, $retained): Ticket {
+        return DB::transaction(function () use ($ticket, $departmentId, $actor, $oldDepartmentId, $assigneeId, $retained, $queueId): Ticket {
             $update = ['department_id' => $departmentId, 'updated_at' => DB::raw('clock_timestamp()')];
 
             if ($assigneeId !== null && ! $retained) {
@@ -81,6 +88,10 @@ final class TransferTicket
 
             Ticket::query()->whereKey($ticket->identifier())->update($update);
             $ticket->refresh();
+
+            if ($queueId !== null) {
+                $this->placement->place($ticket, $queueId, $actor, 'transfer');
+            }
 
             if ($assigneeId !== null && ! $retained) {
                 // FR-15: "every change emits ticket.assigned" — the reset is a change.

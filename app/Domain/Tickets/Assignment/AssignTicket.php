@@ -46,6 +46,10 @@ final class AssignTicket
         private readonly SettingsRepository $settings,
         private readonly EventPublisher $events,
         private readonly AuditLogger $audit,
+        // S11 STOP-A packet (Doc 11 FR-05/EC-01/EC-03): the commit-time capacity check,
+        // an interface here, Doc 11's RoutingCapacity behind it. Only the system door
+        // consults it; the staff doors are unchanged.
+        private readonly AssignmentCapacity $capacity,
     ) {}
 
     /** FR-15's "others" door — `tickets.assign`. */
@@ -62,6 +66,27 @@ final class AssignTicket
         $this->requirePermission($actor, 'tickets.assign_self');
 
         return $this->write($ticket, $actor, $actor, claimOnly: true);
+    }
+
+    /**
+     * Doc 11 T-02 / A-49 — THE SYSTEM DOOR (S11 STOP-A packet, countersigned 2026-08-30).
+     * Routing's ONLY way to place work on a person: the same FR-15 as-if-assigned scope
+     * check as the staff doors (A-11: Own is satisfied by the assignment; Team/Dept must
+     * match the ticket's department — real now that Doc 11 binds membership); the same
+     * FR-16 race guard (claimOnly: the UPDATE … WHERE assignee_id IS NULL IS the race — a
+     * manual claim landing first wins, BR-03); the same FR-05 new → open through the
+     * transition service, with TransitionContext::system(). PLUS the Doc 11 commit-time
+     * capacity check INSIDE this transaction (AssignmentCapacity — FOR UPDATE on the
+     * agent's stats row; over capacity → AtCapacity, the ticket row untouched).
+     *
+     * Audited as ticket.assigned with actorType=System, actorId=null and the routing
+     * decision id in the payload (BR-06). No permission check — TransitionActor::System's
+     * own rule: the path is server-internal; AssignBySystemDoorTest proves no route
+     * reaches it.
+     */
+    public function assignBySystem(Ticket $ticket, User $assignee, RoutingCommit $commit): Ticket
+    {
+        return $this->write($ticket, $assignee, null, claimOnly: true, commit: $commit);
     }
 
     /**
@@ -90,7 +115,7 @@ final class AssignTicket
         });
     }
 
-    private function write(Ticket $ticket, User $assignee, User $actor, bool $claimOnly): Ticket
+    private function write(Ticket $ticket, User $assignee, ?User $actor, bool $claimOnly, ?RoutingCommit $commit = null): Ticket
     {
         // FR-15's intersection, on the ASSIGNEE — and asked as "would they see it
         // ONCE ASSIGNED", not "do they see it now". The present-tense question is
@@ -103,7 +128,13 @@ final class AssignTicket
 
         $previous = $ticket->assignee_id;
 
-        return DB::transaction(function () use ($ticket, $assignee, $actor, $claimOnly, $previous): Ticket {
+        return DB::transaction(function () use ($ticket, $assignee, $actor, $claimOnly, $previous, $commit): Ticket {
+            if ($commit !== null) {
+                // Doc 11 FR-05/EC-01/EC-03: the check that SERIALIZES the race — the stats
+                // row is locked and re-read inside THIS transaction (AC-03: zero over-capacity).
+                $this->capacity->reserveOrThrow($assignee, $commit);
+            }
+
             $query = Ticket::query()->whereKey($ticket->identifier());
 
             if ($claimOnly) {
@@ -132,13 +163,18 @@ final class AssignTicket
             }
 
             $ticket->refresh();
-            $this->record($ticket, $previous, $assignee->identifier(), $actor);
+            $this->record($ticket, $previous, $assignee->identifier(), $actor, $commit);
 
             // FR-05: first assignment opens a `new` ticket. Through the transition
             // service — the only writer — so the FR-24 stamps, the event and the
-            // FR-10 invariant all still happen.
+            // FR-10 invariant all still happen. A system assignment (routing) opens it
+            // as the system actor (TransitionActor::System — recorded, not permission-checked).
             if ($ticket->status() === TicketStatus::New) {
-                $this->transitions->transition($ticket, TicketStatus::Open, TransitionContext::staff($actor));
+                $this->transitions->transition(
+                    $ticket,
+                    TicketStatus::Open,
+                    $actor === null ? TransitionContext::system('routing') : TransitionContext::staff($actor),
+                );
                 $ticket->refresh();
             }
 
@@ -188,29 +224,31 @@ final class AssignTicket
         }
     }
 
-    private function record(Ticket $ticket, ?string $old, ?string $new, User $actor): void
+    private function record(Ticket $ticket, ?string $old, ?string $new, ?User $actor, ?RoutingCommit $commit = null): void
     {
-        // FR-15: "Every change emits ticket.assigned {old, new, by}."
+        // FR-15: "Every change emits ticket.assigned {old, new, by}." The catalog KEYS are
+        // unchanged; `by` is null for a system (routing) assignment — disclosed at the S11
+        // step-2c landing, the consuming fixtures read the key and pin no non-null.
         $this->events->publish('ticket.assigned', [
             'tenant_id' => $ticket->getAttribute('tenant_id'),
             'ticket_id' => $ticket->identifier(),
             'conversation_id' => $ticket->conversation_id,
             'old_assignee_id' => $old,
             'new_assignee_id' => $new,
-            'by' => $actor->identifier(),
+            'by' => $actor?->identifier(),
         ]);
 
         $this->audit->record(
             actionKey: 'ticket.assigned',
             entity: 'ticket',
             entityId: $ticket->identifier(),
-            actorType: AuditActor::Staff,
+            actorType: $actor === null ? AuditActor::System : AuditActor::Staff,
             payload: [
                 'ticket_id' => $ticket->identifier(),
                 'old_assignee_id' => $old,
                 'new_assignee_id' => $new,
-            ],
-            actorId: $actor->identifier(),
+            ] + ($commit === null ? [] : ['routing_decision_id' => $commit->decisionId]),
+            actorId: $actor?->identifier(),
         );
     }
 }

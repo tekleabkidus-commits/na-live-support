@@ -318,6 +318,12 @@ final class TenantProvisioner
             // semantics (the seeder's own contract — see RoleSeeder).
             ProvisioningStep::DefaultRoles => app(\App\Domain\Rbac\RoleSeeder::class)->seed(),
 
+            // Doc 11 (S11) filled its step: the FR-01 seeded department set, each with one
+            // default queue (EC-10's defaultless-department net holds from birth); the RG
+            // department with the is_rg queue; idempotent under this class's retry semantics
+            // (seeded_fingerprint — an operator-edited seed is never overwritten, BR-04).
+            ProvisioningStep::Organization => app(\App\Domain\Org\Seeding\OrganizationSeeder::class)->seed(),
+
             // The remaining seams. Recorded as completed with nothing created, because Doc 01
             // owns the sequencing and the idempotency while Docs 10/12 own the contents.
             // Logged at debug so a developer wondering why a step produced nothing finds the

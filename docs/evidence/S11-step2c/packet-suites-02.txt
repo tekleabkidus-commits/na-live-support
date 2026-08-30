@@ -1,0 +1,399 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m5.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\OrganizationSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds EXACTLY FR-01's nine departments, in order, each with one[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent and never overwrites an operator-edited seed: a re[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rides ProvisioningStep::Organization — ordered after DefaultRole[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs inside a real provisioning: a tenant provisioned through Te[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\PlaceInQueueOneDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted queue_id writer — the positive control[39m[90m         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/A-49: exactly one file under app/ writes tickets.queue_id —[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\RoutingNeverWritesTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted direct ticket write at all — the positive cont[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/§21: no file in the routing package writes a ticket row or[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Doc 06 status physics green beside this one: the sole[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.13s[39m  
+
+[NFR-04 indicative] 200-item tag batch: 0.95s
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\BulkOperationsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a mixed batch yields EXACT per-item allow/deny — the close o[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-07: a 200-item batch completes with 200 per-item progress events[39m[90m…[39m [90m1.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: submit refuses an unknown action, an over-cap batch, unknown[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ChannelScopeReproofTest[39m
+  [32;1m✓[39;22m[90m [39m[90mT-06 ADMIT: an Own-scoped agent may subscribe to a conversation the[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: the same Own-scoped agent is refused on a conversation t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: unassigning takes the subscription right away again[39m[90m      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membe[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: an All-scoped agent still subscribes, and conversations.view[39m[90m… [39m [90m0.05s[39m  
+
+[SS-02 indicative] 39-source consolidation: 0.34s
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ConsolidationDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-02: forty near-identical tickets consolidate to one master in on[39m[90m…[39m [90m0.73s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\EdgeSemanticsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-07: two agents resolving at once — the second identical-target c[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-07, the raced half: a transition validated against a STALE statu[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-08: after automation resolves mid-composition, "send and reopen"[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-10: channel_unreachable on a pending_customer ticket changes no[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\FollowersPriorityTagsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a priority change is evented with old/new; a no-op change is[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: staff need tickets.priority.change; automation and AI need n[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a fifth priority is refused, by the enum and by the database[39m[90m [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: staff follow themselves with tickets.follow; adding someone[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: a follower who cannot see the ticket is refused — notificati[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: unfollowing removes the row and events it; the events are th[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tags are free-form per tenant, de-duplicated, and removable[39m[90m  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: tagging needs tickets.tags.manage, and a blank tag is not a[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-19: autocomplete offers the tenant's own tags, prefix-matched[39m[90m    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rename is chunked, resumable, historical, and audited wit[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: the rewrite needs tickets.tags.manage and refuses a blank ren[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\HandoffPacketTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-08: a ticket is created from the Doc 09 fixture with the packet[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-02: the transcript anchor is a LINK — no message is moved, copie[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the normative contract is ENFORCED before the immutable inse[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: the packet keeps its OWN copy of the suggestion, so an overr[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\InvariantAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-05: a clean platform passes the audit with exit 0[39m[90m                [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05 positive control: seeded violations make the auditor FIRE — n[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\LocalizationSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§14: every refusal code the Tickets domain can raise has a fail.* k[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§14/§13: the fixed vocabularies are complete in both languages, and[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MergeUnmergeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-04: merge moves links and unions sets; unmerge within 24 h resto[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma resolved source's armed timer is cancelled by the merge and resto[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: a cross-customer merge is refused server-side with cross_cu[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: an actor who cannot see the merge target is refused target_[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: a closed ticket may be a merge TARGET but never a source; a s[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-14: a merged source refuses every ordinary door (merged_supersede[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: merged_into chains resolve to the final survivor, and a mid-[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: unmerge refuses open_ticket_exists when the source conversati[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-13: an assignee deactivated while the source sat merged is handed[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90munmerging a ticket that is not merged refuses with not_merged[39m[90m       [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MidActionPermissionExpiryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a transition permitted by a temporary override is refused on[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: while the SAME override is live, the very same transition su[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: a plain role denial carries no attribution — there is no gra[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenAutoCloseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-07: after the auto-close window of customer silence, the sweep c[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-01: a persisted customer reply beats the due sweep — no close, n[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: a customer message on a resolved ticket reopens it unconditi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-03: reopen onto a DEACTIVATED assignee hands the ticket back to[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-08: staff reopen of a closed ticket needs tickets.reopen AND a r[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe consumer does nothing when the conversation already holds an op[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreopenFromCustomerMessage on a wrong-status ticket throws the FR-08[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03: the window arithmetic is exact across DST-change dates — the[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-03 end-to-end: a reopen window that spans the October DST switch[39m[90m… [39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ResolveRequirementsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a bare resolve with no public reply and no note is refused ([39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an explicit resolution note satisfies the substance requirem[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a prior public staff reply satisfies the requirement with no[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an AI public reply is substance too — the definition is FR-2[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: with tickets.resolve.requires_reply off, a bare resolve is a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-07/T-03: entering resolved arms the auto-close timer at EXACTLY[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mticket.resolved / ticket.closed / ticket.reopened ride EVERY door o[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SpamDispositionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-09: marking spam takes the machine edge, stamps the actor, exclu[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the separately-confirmed conversation block rides Doc 04's o[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09: unmark on day 8 is refused with the terminality explanation,[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-17: while the spam is still UNMARKABLE, a customer message takes[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the machine edge refuses a mark without tickets.spam.mark, a[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SplitTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-05: the split target carries linked_work + origin_ticket_id, tak[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-04: the fourth live linked-work split is refused with guidance,[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a selection containing another conversation's message is ref[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: tickets.split is required, and an empty selection is refused[39m[90m [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SubjectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-03: Doc 09's seam writes the subject and marks it ai-authored[39m[90m    [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: the AI seam never overwrites a subject that already exists[39m[90m   [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a staff edit needs tickets.edit, and the source label follow[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject may be absent but may not be blanked to an empty s[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: a failed generation leaves the subject NULL — no sentinel, n[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-01/A-7: the tickets column inventory is exactly the filed interp[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b: every DB-time column is timestamptz at microsecond precision[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-01: the database refuses a ninth status — the machine is platform[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01 CHECKs: priority, source, subject_source and pending_reason e[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-02: ticket numbers are unique per tenant at the database layer,[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TicketTranscriptExportTest[39m
+  [32;1m✓[39;22m[90m [39m[90mA-18 anchors basis: an anchored ticket exports EXACTLY what its ran[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-18 lifetime basis: an unanchored ticket exports its tenure — pre-[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe gate is Doc 04's, re-checked at export: without conversations.t[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TimerPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma stale candidate — the ticket long since moved on — is dropped by[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma candidate whose score lies about dueness is DEFERRED: the column[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-03: changing tickets.autoclose.hours applies to FUTURE resolutio[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: the sweep HOLDS an unreachable customer's due timer — refuse[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to th[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: a Dept-scoped ACTOR cannot transfer into a department outsi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 1: every legal cell succeeds, changing status and emit[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 2: every illegal cell is refused with illegal_transiti[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: a permission the actor lacks refuses the transition, naming[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: staff reopen of a closed ticket needs a reason, and spam mar[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-07: an unreachable customer is never AUTO-resolved or auto-close[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: system, AI and automation actors transition without a user a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10: leaving and entering the open family moves Doc 04's open-tic[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: the matrix is data, so the legal-target list a UI renders co[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01/§4.2 (S07 step 14): the pending reason RIDES THE TRANSITION —[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\TicketOperationDoorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit spam + unspam doors: mark flips the machine through the owning s[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit escalate + deescalate doors: supervisor review with the ≥10-char[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit transfer door: moves the ticket to the OPAQUE destination id (ex[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit split door: mints the linked ticket from selected messages; the[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reopen door (C9): carries the REAL written reason into the close[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit unmerge door (C7): reverses through the owning service (source b[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit follow-up door (C9 lapsed — ruling 2026-08-13, the DOCUMENT wins[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\ConcurrentProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit provisions a tenant through every step and ends active exactly o[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent when run twice sequentially (EC-05 retry case)[39m[90m     [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent when the job is dispatched twice (double-click / q[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to run a job that carries no tenant context (FR-03f)[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halts cleanly between steps when the tenant is suspended mid-fli[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets exactly one of two concurrent workers claim a step (AC-05)[39m[90m  [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\TenantBindingSurfacesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the console to exactly the tenant named by --tenant (T-05)[39m[90m [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a console run with no --tenant BEFORE any model is touch[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives an unknown --tenant the same TenantNotResolved as every ot[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resumes a stuck provisioning via tenant:provision-retry, idempot[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a socket channel from the USER record and binds both[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a channel addressed to another tenant, identically to on[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses sockets for a suspended tenant — realtime is a staff sur[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\ColdSummaryRetentionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stamps every lifecycle timestamp from its single writer, in DB t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit accrues in full inside the retention window and cold beyond it ([39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit moves the boundary when the platform changes the retention setti[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never cold-summarises a tenant that is not suspended, however ol[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a suspended tenant with NO suspended_at to full accrual[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps exactly count + last pointer, per channel, atomically (BR-[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to record with no tenant bound[39m[90m                           [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\CursorPaginationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit walks an entire collection in strictly ascending UUIDv7 order wi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit shapes the page as data + next_cursor, with next_cursor null on[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('101')[39m[90m  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('0')[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('-5')[39m[90m   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('abc')[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('3.5')[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('not-base64!!!')[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('aGVsbG8')[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('djE6bm90LWEtdXVpZA[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders pagination misuse as a 400 invalid_pagination problem (C[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the cursor opaque: the row id never appears in the cursor[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\FeatureRegistryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit enumerates every registered flag with the full schema Doc 16 ren[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a registered flag to its default for the bound tenant[39m[90m   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws on an unregistered flag — shadow flags cannot ship[39m[90m        [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound — a flag dec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scopes flag decisions per tenant: activating for tenant A change[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a registered flag key appear in a migration (N-19: fl[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\I18nFallbackTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders EVERY shipped key in Amharic: no key leakage, telemetry[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back user → TENANT DEFAULT → English, in that order (C-08)[39m[90m [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit records telemetry per key and locale when a hop misses, then ser[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dedupes telemetry per process so a hot loop cannot flood the log[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the key and records EVERY hop when nothing can serve it[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is the translator actually bound — the chain is not an opt-in he[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\PartitionMaintenanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit agrees with the migration about partition names, for the months[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates only the missing future months, idempotently (EC-10)[39m[90m     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drops partitions beyond the 13-month retention, with a logged me[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs partitions:maintain end-to-end, idempotently[39m[90m                [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\PartitionMonitorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit monitor passes on a healthy window (EC-10)[39m[90m                       [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when a future partition is missing, and maintai[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when any row sits in the DEFAULT partition (EC-[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.03s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Feature\Foundation\SettingsApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit lists every setting with its i18n keys and default flag[39m[90m          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit writes a setting and returns the new version token[39m[90m               [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns RFC 9457 problem-details for an unregistered key[39m[90m         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 422 problem-details with per-field errors on invalid inp[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 403 when a tenant surface writes a platform-owned settin[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 409 with the winning value on a concurrent write (EC-06)[39m[90m [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resets a setting to its registered default[39m[90m                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit records the audit entry a mutating route declares[39m[90m                [39m [90m0.07s[39m  
+  [33;1m-[39;22m[90m [39m[90mit fails loudly if a declared audit action is not written[39m[90m [39m[33m→ The sta[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\SettingsEngineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns the registered default when a tenant has no override[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the override once written, and the default again after r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to read or write an unregistered key (FR-07)[39m[90m             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a tenant-surface write to a platform-owned setting[39m[90m       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit validates against the registered rule[39m[90m                            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every change old to new (FR-07)[39m[90m                           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encrypts an encrypted-string at rest and never exposes it in bul[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps settings isolated between tenants[39m[90m                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit detects a concurrent write, audits both, and signals the loser ([39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back to the database when Redis is unreachable, and never[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encodes and decodes every registered type[39m[90m                        [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\TenantCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit prefixes every key with the bound tenant, so two tenants cannot[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is never the source of truth: a lost entry reloads from the load[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write that does not name its invalidation event (C-07:[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a suffix that tries to smuggle its own prefix[39m[90m            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound — there is n[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit confines the pre-context exception to the t:keymap: namespace[39m[90m    [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RoleSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the nine Appendix B templates through REAL provisioning, f[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the ratified grant constraints: SA=all keys (114 since S10[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent: provisioning-style double seed yields ONE consist[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEVER overwrites an edited template, updates an untouched one on[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit emits rbac.role.created through the outbox and writes the audit[39m[90m… [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\CapacityRaceTest[22m [90m>[39m it AC-03… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42704]: Undefined object: 7 ERROR:  unrecognized configuration parameter "app.tenant_id" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: SELECT 1 FROM agent_assignment_stats WHERE user_id = 01a05256-278a-72d5-a5e2-f134d0eec31c FOR UPDATE)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+4 vendor frames [22m
+  [33m5   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m102[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m280 passed[39;22m[90m (8819 assertions)[39m
+  [90mDuration:[39m [39m27.48s[39m
+

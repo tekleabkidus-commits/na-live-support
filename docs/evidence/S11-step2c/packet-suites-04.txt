@@ -1,0 +1,56 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m6.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to th[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: a Dept-scoped ACTOR cannot transfer into a department outsi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\CapacityRaceTest[22m [90m>[39m it… [41;1m AssertionFailedError [49;22m  
+[39;1m  the assignment did not wait on the lock — it read a stale count[39;22m
+
+  at [32mtests/Feature/Routing/CapacityRaceTest.php[39m:[32m109[39m
+    105▕         DB::statement("SET lock_timeout = '400ms'");
+    106▕         $started = microtime(true);
+    107▕         try {
+    108▕             app(AssignTicket::class)->assignBySystem($more[0], $agent, commitFor(5));
+  ➜ 109▕             $this->fail('the assignment did not wait on the lock — it read a stale count');
+    110▕         } catch (QueryException $e) {
+    111▕             expect($e->getMessage())->toContain('lock timeout');
+    112▕             expect(microtime(true) - $started)->toBeGreaterThan(0.35);
+    113▕         }
+
+  [33m1   [39m[39;1mtests/Feature/Routing/CapacityRaceTest.php[39;22m:[39;1m109[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m25 passed[39;22m[90m (494 assertions)[39m
+  [90mDuration:[39m [39m7.73s[39m
+

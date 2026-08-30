@@ -80,6 +80,7 @@ return [
             'tenant_record' => 'Creating workspace',
             'default_settings' => 'Applying default settings',
             'default_roles' => 'Setting up roles',
+            'organization' => 'Setting up departments and queues',
             'sla_policy' => 'Applying service targets',
             'business_hours' => 'Setting business hours',
             'knowledge_base' => 'Preparing the knowledge base',

@@ -39,6 +39,14 @@ enum ProvisioningStep: string
     /** SEAM: Doc 03 seeds the default role set. */
     case DefaultRoles = 'default_roles';
 
+    /**
+     * Doc 11 FR-01 (S11 STOP-C.1 packet, countersigned 2026-08-30): the seeded department set,
+     * each with one default queue (OrganizationSeeder). Runs AFTER roles and BEFORE SLA/hours
+     * so the tenant default department EXISTS before the tenant is Active — FR-08 step 1's
+     * terminal fallback is never absent for the first ticket.
+     */
+    case Organization = 'organization';
+
     /** SEAM: Doc 12 owns SLA policies. */
     case SlaPolicy = 'sla_policy';
 
@@ -62,6 +70,7 @@ enum ProvisioningStep: string
             self::TenantRecord,
             self::DefaultSettings,
             self::DefaultRoles,
+            self::Organization,
             self::SlaPolicy,
             self::BusinessHours,
             self::KnowledgeBase,
@@ -83,9 +92,12 @@ enum ProvisioningStep: string
      */
     public function isSeamAwaitingItsModule(): bool
     {
+        // DISCLOSED RIDER (S11 STOP-C.1 packet): DefaultRoles (Doc 03, S19) and KnowledgeBase
+        // (Doc 10, S10) are FILLED seams that still reported `true` here — a pre-existing
+        // staleness corrected in passing, its own line in the commit message.
         return match ($this) {
-            self::DefaultRoles, self::SlaPolicy, self::BusinessHours, self::KnowledgeBase => true,
-            self::TenantRecord, self::DefaultSettings => false,
+            self::SlaPolicy, self::BusinessHours => true,
+            self::TenantRecord, self::DefaultSettings, self::DefaultRoles, self::Organization, self::KnowledgeBase => false,
         };
     }
 
@@ -95,6 +107,7 @@ enum ProvisioningStep: string
         return match ($this) {
             self::TenantRecord, self::DefaultSettings => 'Doc01',
             self::DefaultRoles => 'Doc03',
+            self::Organization => 'Doc11',
             self::SlaPolicy, self::BusinessHours => 'Doc12',
             self::KnowledgeBase => 'Doc10',
         };

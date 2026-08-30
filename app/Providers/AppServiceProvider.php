@@ -68,6 +68,12 @@ class AppServiceProvider extends ServiceProvider
             \App\Support\Rbac\Scopes\MembershipSource::class,
             \App\Support\Rbac\Scopes\EmptyMembership::class,
         );
+        // Doc 11 (S11 STOP-A packet): Doc 06's commit-time capacity interface, Doc 11's
+        // database-serialized implementation behind it (agent_assignment_stats FOR UPDATE).
+        $this->app->bind(
+            \App\Domain\Tickets\Assignment\AssignmentCapacity::class,
+            \App\Domain\Routing\Capacity\RoutingCapacity::class,
+        );
 
         $this->app->extend('translator', function (Translator $translator): TelemetricTranslator {
             $replacement = new TelemetricTranslator($translator->getLoader(), $translator->getLocale());

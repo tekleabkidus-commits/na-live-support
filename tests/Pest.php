@@ -228,7 +228,16 @@ function cleanupTenants(array $tenantIds): void
 
     $platform = DB::connection('pgsql_platform');
 
+    // Doc 11 (SCHEMA AMENDMENT 5, S11 step 2c — the committed-fixture lock proof found
+    // cleanup blind to the new tables): departments ↔ queues reference each other
+    // (default_queue_id is deferrable), so the department side is cleared first.
+    $platform->table('departments')->whereIn('tenant_id', $tenantIds)->update(['default_queue_id' => null]);
+
     foreach ([
+        // Doc 11: decisions reference tickets; memberships/stats/skills/capacity reference
+        // users and queues; queue_teams reference teams; queues reference departments.
+        'routing_decisions', 'agent_assignment_stats', 'user_routing_capacity', 'user_skills',
+        'queue_members', 'user_departments', 'queue_teams', 'team_members', 'queues', 'departments', 'teams',
         // Doc 09 (SCHEMA AMENDMENT 3): nothing references the ai tables, and
         // ai_ticket_summaries references tickets — so all five go first.
         'ai_decisions', 'ai_config_versions', 'ai_kill_switches', 'kb_chunks',

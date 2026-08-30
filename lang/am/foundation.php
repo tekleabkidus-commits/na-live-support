@@ -77,6 +77,7 @@ return [
             'tenant_record' => 'የሥራ ቦታ በመፍጠር ላይ',
             'default_settings' => 'ነባሪ ማስተካከያዎችን በመተግበር ላይ',
             'default_roles' => 'ሚናዎችን በማዘጋጀት ላይ',
+            'organization' => 'ክፍሎችንና ወረፋዎችን በማዘጋጀት ላይ',
             'sla_policy' => 'የአገልግሎት ዒላማዎችን በመተግበር ላይ',
             'business_hours' => 'የሥራ ሰዓቶችን በማዘጋጀት ላይ',
             'knowledge_base' => 'የእውቀት ማከማቻውን በማዘጋጀት ላይ',
