@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
 import { dismissCoachMarks } from './support/coach';
+import { settleList } from './support/settle';
 
 /*
  * S07 step 14 — B2-S03's property panel, unit B9: the R4 Ticket tab renders
@@ -398,11 +399,17 @@ test('D7–D10: the race and system surfaces — a lost claim swaps the avatar i
     await page.keyboard.press('m');
     await page.keyboard.press('g');
     await page.keyboard.press('u');
+    // R-D11-1 (S11 step 0.3): the Unassigned list re-keys its rows while the
+    // seeded projection + the view switch land — click only once the order
+    // is stable, or the click target detaches under the pointer (the
+    // recorded 0i signature: "element was detached from the DOM, retrying").
+    await settleList(page, 'unassigned');
     await page
         .locator('[data-ticket]', { hasText: 'Kidist Haile' })
         .locator('[data-role="row-open"]')
         .click();
     await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4802');
+    await settleList(page, 'unassigned');
     await page
         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
         .locator('[data-role="row-open"]')

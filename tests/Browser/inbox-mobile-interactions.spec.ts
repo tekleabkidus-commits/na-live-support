@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { expect, Page, test } from '@playwright/test';
+import { settleList } from './support/settle';
 
 /*
  * S07 step 13 — B2-S01's mobile interactions (Doc 07 §8, Doc 06 §9's 25
@@ -248,6 +249,10 @@ test('EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another
     }
     // Any open thread works — the FIRST my_open row, same one in both tabs
     // (fixture rows get consumed across local runs; the id pins the pair).
+    // R-D11-1 (S11 step 0.3): the store's order is empty until the first
+    // fetch lands — wait for a rendered, settled list before reading it
+    // (the recorded 0i signature: order[0] read as null on first attempt).
+    await settleList(page);
     const target = await page.evaluate(() => window.__inboxList.state().order[0] ?? null);
     expect(target).not.toBeNull();
     await page.locator(`[data-ticket="${target}"]`).locator('[data-role="row-open"]').click();
@@ -256,6 +261,7 @@ test('EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another
     const pageB = await context.newPage();
     await pageB.setViewportSize({ width: 1440, height: 900 });
     await pageB.goto('/inbox');
+    await settleList(pageB);
     await pageB.locator(`[data-ticket="${target}"]`).locator('[data-role="row-open"]').click();
     await expect(pageB.getByTestId('composer')).toBeVisible();
 
