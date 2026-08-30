@@ -2342,3 +2342,260 @@ validation rule); `kb.mega_article_warn_words` int 5000; `kb.chunk_target_tokens
 (min 100, max 1000). None disables the one door, the alt gate or the sanitizer
 (`FORBIDDEN_SETTING_PATTERNS` extended with `kb.*sanitizer*` and `kb.*indexer*` in the
 same commit, so `registry:check` refuses such a key by mechanism).
+
+## S11 (Doc 11) — SCHEMA AMENDMENT 5 (filed at step 2a, BEFORE any migration exists — the B1-split law; needs advisor countersign; STOP-A/B/C/D rulings of 2026-08-30 folded, plan of record 9e2fe85)
+
+The Doc 11 schema, complete: NINE new tables + the countersigned delta to Doc 06's `tickets`
+(STOP-A packet) + one read-side line on Doc 07's `ticket_list_items`. Every column
+R-19b-analyzed; ADR-0003 grant physics; FORCED RLS + `tenant_isolation` on every table;
+`REVOKE DELETE` where the document forbids deletion; DB time only (C-11); `APP_WRITABLE`
+split stated per table; interpretations FLAGGED (⚑) for the countersign rather than chosen
+silently. No migration ships until this returns countersigned. UUIDv7 ids, non-null
+`tenant_id` FK to `tenants`, `created_at`/`updated_at` timestamptz(6) `clock_timestamp()`
+defaults, app INSERT-denied on `created_at` everywhere (R-19b) — stated once, true below.
+
+**1. `departments` (FR-01, FR-18, EC-10, BR-04, STOP-C.1).** `name` jsonb NOT NULL
+(per-language `{lang: text}` — "i18n-capable operator content"); `slug` text NOT NULL;
+`description` jsonb; `position` int NOT NULL default 0 (int ordering key, not a clock);
+`default_queue_id` uuid nullable, FK to `queues` added in the SAME migration batch AFTER
+`queues` exists (deferrable circular FK; EC-10's "defaultless department" is refused at the
+SERVICE save door — a department is BORN without a queue for one statement, so the column
+stays nullable and the writer, not the DB, is the net; ⚑ FLAG A: countersign confirms the
+service-level refusal + its sabotage over a NOT NULL that would make seeding impossible);
+`business_hours_override_ref` text nullable — **[D12] seam column: stored, never read here**;
+`is_active` bool NOT NULL default true; `seeded` bool NOT NULL default false +
+`seeded_fingerprint` text nullable (the RoleSeeder/BR-07-of-Doc-10 contract: an edited seed
+is never overwritten); `deleted_at` timestamptz nullable (FR-18 delete = tombstone after the
+wizard has moved every reference; **REVOKE DELETE** — SS-03's "zero orphaned tickets" is
+physics: a department row cannot vanish under a ticket's FK). UNIQUE (tenant_id, slug)
+WHERE deleted_at IS NULL. GRANTS: INSERT (minus created_at, deleted_at); UPDATE (name, slug,
+description, position, default_queue_id, business_hours_override_ref, is_active,
+seeded_fingerprint, deleted_at, updated_at); REVOKE DELETE.
+
+**2. `teams` (FR-02).** `name` text NOT NULL; `description` text; `deleted_at` nullable.
+UNIQUE (tenant_id, name) WHERE deleted_at IS NULL. GRANTS: INSERT (minus created_at,
+deleted_at); UPDATE (name, description, deleted_at, updated_at); REVOKE DELETE (a team's
+identity is referenced by saved views' `shared_to_id` and reports — tombstone).
+
+**3. `team_members` (FR-02).** `team_id` FK NOT NULL; `user_id` FK NOT NULL; `is_lead` bool
+NOT NULL default false. UNIQUE (tenant_id, team_id, user_id). GRANTS: INSERT (minus
+created_at); UPDATE (is_lead, updated_at); **DELETE GRANTED** (a membership is a fact that
+ends; `org.team.member_removed` audits it).
+
+**4. `queues` (FR-03, FR-09, FR-11, FR-12, FR-18, T-01, T-04, EC-10).** `department_id` FK
+NOT NULL; `name` text NOT NULL; `position` int NOT NULL default 0; `assignment_strategy`
+text NOT NULL CHECK (round_robin|load_based|skill_based) default 'round_robin';
+`capacity_per_agent` smallint nullable CHECK (> 0) — NULL = setting
+`routing.capacity.default`; `priority_rules` jsonb NOT NULL default '[]' (the ORDERED boost
+list, FR-12 — the starvation cap is NOT an element: it lives in the setting and the engine,
+so no row can omit or reorder it; ⚑ FLAG B: countersign confirms the cap is structurally
+absent from the list); `skill_matchers` jsonb NOT NULL default '[]' (T-05 declarative
+config); `skill_fallback` text NOT NULL CHECK (nearest_skill|wait) default 'nearest_skill';
+`routing_tags` text[] NOT NULL default '{}' + GIN; `is_rg` bool NOT NULL default false with
+**partial UNIQUE INDEX (tenant_id) WHERE is_rg** — "at most one per tenant" as physics;
+`is_active` bool NOT NULL default true; `rr_pointer_user_id` uuid nullable (T-04's DB
+checkpoint of the Redis pointer); `deleted_at` nullable. UNIQUE (tenant_id, department_id,
+name) WHERE deleted_at IS NULL. GRANTS: INSERT (minus created_at, deleted_at); UPDATE
+(department_id, name, position, assignment_strategy, capacity_per_agent, priority_rules,
+skill_matchers, skill_fallback, routing_tags, is_rg, is_active, rr_pointer_user_id,
+deleted_at, updated_at); REVOKE DELETE.
+
+**5. `queue_members` (FR-03, FR-04, FR-15, T-01, T-07, EC-07, SEC-03).** `queue_id` FK
+NOT NULL; `user_id` FK NOT NULL; `kind` text NOT NULL CHECK (direct|temporary);
+`granted_by` uuid nullable; `override_id` uuid nullable FK → `user_permission_overrides`;
+`expires_at` timestamptz(6) nullable; `ended_at` timestamptz(6) nullable. **CHECK
+`((kind = 'temporary') = (override_id IS NOT NULL)) AND ((kind = 'temporary') =
+(expires_at IS NOT NULL))`** — the SINGLE SOURCE: a temporary row cannot exist without its
+Doc 03 grant row, a direct row cannot carry one. UNIQUE (tenant_id, queue_id, user_id)
+WHERE ended_at IS NULL. GRANTS: INSERT (minus created_at, ended_at); UPDATE (ended_at,
+updated_at) — expiry ENDS a row, never rewrites its terms; **DELETE GRANTED for kind=direct
+ONLY via a row-level policy? NO — ⚑ FLAG C:** a per-kind DELETE grant is not expressible in
+grants; proposal: NO DELETE grant at all — a direct membership removal ALSO writes `ended_at`
+(uniform "ended" semantics, EC-07's persistence trivially holds for both kinds, the
+membership history stays queryable for Doc 15). Countersign chooses. Via-team membership is
+NOT a row here — it is derived from `team_members` × a queue's team links (table 6).
+
+**6. `queue_teams` (FR-03 "membership … via team").** `queue_id` FK; `team_id` FK. UNIQUE
+(tenant_id, queue_id, team_id). GRANTS: INSERT (minus created_at); no UPDATE; DELETE
+GRANTED (audited `org.queue.member_removed` with `via: team`). ⚑ FLAG D: T-01's list does
+not name this table; FR-03's "membership (agents; direct or via team)" needs a queue↔team
+link and `queue_members(user)` cannot hold a team. Countersign confirms the table or rules
+that team links ride `queue_members` with a nullable `team_id` (rejected here: it breaks
+the UNIQUE and the CHECK physics).
+
+**7. `user_departments` (A-50, Doc 03 FR-03 "departments the user belongs to", FR-04,
+FR-15 point 6).** `user_id` FK NOT NULL; `department_id` FK NOT NULL; `kind` CHECK
+(direct|temporary); `granted_by` nullable; `override_id` nullable FK; `expires_at`
+nullable; `ended_at` nullable; the SAME kind/override/expires CHECK as table 5. UNIQUE
+(tenant_id, user_id, department_id) WHERE ended_at IS NULL. GRANTS as table 5 (INSERT minus
+created_at/ended_at; UPDATE ended_at, updated_at; FLAG C applies).
+
+**8. `user_skills` (FR-11, T-05, R-04).** `user_id` FK NOT NULL; `languages` text[] NOT
+NULL default '{}' (codes from Doc 01 `ref_languages`, validated at the service); `department_ids`
+uuid[] NOT NULL default '{}' (department proficiencies); `reviewed_at` timestamptz(6)
+nullable (R-04's last-reviewed nudge — app-writable: it is a human act's stamp, not an
+ordering key; ⚑ FLAG E confirms). UNIQUE (tenant_id, user_id). GRANTS: INSERT (minus
+created_at); UPDATE (languages, department_ids, reviewed_at, updated_at); REVOKE DELETE.
+
+**9. `user_routing_capacity` (FR-06 `routing.capacity.user`, US-07).** `user_id` FK NOT
+NULL; `capacity` smallint NOT NULL CHECK (> 0); `set_by` uuid NOT NULL; `reason` text.
+UNIQUE (tenant_id, user_id). GRANTS: INSERT (minus created_at); UPDATE (capacity, set_by,
+reason, updated_at); DELETE GRANTED (removing an override restores the queue default;
+audited).
+
+**10. `routing_decisions` (FR-17, BR-06, AC-08, SEC-02, FS-04) — INSERT-ONLY BY GRANT.**
+`ticket_id` FK NOT NULL; `queue_id` uuid nullable; `department_id` uuid nullable;
+`trigger` text NOT NULL CHECK (created|transferred|unassigned|deactivated|reopened|
+automation|pull|availability|manual|rescue|orphan|engine_error); `outcome` text NOT NULL
+CHECK (assigned|waiting|parked_error|manual); `assigned_to` uuid nullable; `strategy` text
+nullable; `eligible_count` int nullable; `record` jsonb NOT NULL (the FR-17 shape:
+`{trigger, steps[{step,input,outcome}], strategy, eligible_count, boosts_applied,
+assigned_to|waiting}` — `record` carries user ids only, never names: SEC-02's elision is a
+render-time join, absence not redaction); `snapshot` jsonb NOT NULL (the T-08 replay input:
+eligible set, capacities, statuses, pointer, boosts — what the harness feeds back);
+`at` timestamptz(6) NOT NULL default clock_timestamp() (ORDERING-relevant: the timeline
+sorts by it — R-19a both directions). INDEX (tenant_id, ticket_id, at DESC). GRANTS:
+INSERT (minus at, created_at); **NO UPDATE grant at all; REVOKE DELETE** — the audit
+surface is physics. NOTE: this table carries NO `status` column by design, so the
+`ticket-status-writer` gate's per-file heuristic cannot trip on a Routing file that names
+`Ticket::` (its documented constraint).
+
+**11. `agent_assignment_stats` (FR-05, FR-06, FR-10, EC-01, EC-03, AC-03).** `user_id`
+FK NOT NULL; `open_assigned` int NOT NULL default 0 CHECK (>= 0) (open-family assigned
+count, pending_customer counted per the setting at READ time — the column holds the raw
+per-status breakdown: `open_assigned`, `pending_customer_assigned`); `last_assigned_at`
+timestamptz(6) nullable — ⚑ FLAG F: ORDERING-relevant (FR-10's tiebreak) → app-unwritable,
+stamped by a migrator-owned `BEFORE UPDATE` trigger when `open_assigned` increases (the
+R-20 trigger shape; plain plpgsql, not SECURITY DEFINER; writes NEW.* only). UNIQUE
+(tenant_id, user_id). GRANTS: INSERT (minus created_at, last_assigned_at); UPDATE
+(open_assigned, pending_customer_assigned, updated_at); REVOKE DELETE. The row is the
+`SELECT … FOR UPDATE` target of `assignBySystem`'s commit-time capacity check (STOP-A);
+rebuildable from `tickets` (`routing:rebuild`, FS-01).
+
+**12. `tickets` — THE DOC 06 DELTA (STOP-A/STOP-B as ruled; rides the assignBySystem
+packet's countersign).** ADD `queue_id` uuid nullable (FK → queues, NOT VALID then
+VALIDATE next release — C-12); ADD `queued_at` timestamptz(6) nullable and `routed_at`
+timestamptz(6) nullable — BOTH ordering/metric-relevant (queue position's FIFO base;
+NFR-06's max-wait; Doc 15 metrics) → app-unwritable, stamped by the EXISTING migrator-owned
+`tickets_stamp_transition()` trigger? NO — ⚑ FLAG G: that trigger fires BEFORE UPDATE on
+any column change and stamps on status transitions; queue placement is not a status
+transition. Proposal: a SECOND plain trigger `tickets_stamp_placement()` BEFORE UPDATE OF
+queue_id, assignee_id: `queued_at := clock_timestamp()` when `queue_id` changes to non-null
+and `assignee_id` is null; `routed_at := clock_timestamp()` when `assignee_id` changes from
+null to non-null. R-20's four-definer ceiling untouched (plain function). `department_id`
+gains FK → departments NOT VALID (the S06 "opaque ids until Doc 11" discharge), validated
+next release. `APP_WRITABLE_COLUMNS` gains `queue_id` only; `TicketGrantPhysicsTest`'s
+derived split updated in the same commit.
+
+**13. `ticket_list_items` — THE DOC 07 READ LINE.** No schema change: `queue_id` already
+exists ("Doc 11 seam, fixture-fed", migration L53). The projector's recompute reads
+`tickets.queue_id` instead of the fixture (Doc 07 packet, ≤ 3 lines, step 3).
+
+**Redis (not tables):** waiting ZSETs `t:{tenant}:routing:q:{queue}` (durable, score =
+effective priority + age function, integer µs); RR pointer `t:{tenant}:routing:rr:{queue}`
+(durable; DB checkpoint = `queues.rr_pointer_user_id`); expiry ZSET
+`t:{tenant}:routing:expiry` (durable, score = expires_at µs; members = `queue_members`/
+`user_departments` row ids); estimator counters `t:{tenant}:routing:est:{queue}` (volatile,
+TTL 35 min rolling buckets); estimate cache `t:{tenant}:routing:estimate:{queue}` (volatile,
+TTL = `routing.estimator.cache_seconds`). Every key rebuilds from DB truth (FS-01); none is
+the source of truth (C-07).
+
+**DELIBERATE NON-TABLES (so the countersign can refuse them if wrong):** routing tags on
+connections (STOP-C.3: fixture seam, Doc 05's column when Doc 05 reopens); business-hours
+calendars (Doc 12); SLA state (Doc 12; `ticket_list_items.sla_state` seam stays); a
+`department_members`-style link for TEAMS (teams span departments through their queues,
+FR-02 — no direct team↔department row); a `routing_events` table (FR-19 events ride the
+platform `events` table through the outbox, C-06); a broadcast-note table (FR-15's broadcast
+is an EVENT to Doc 16 — delivery/storage is Doc 16's).
+
+**Grant-physics proof:** `tests/Isolation/RoutingGrantPhysicsTest.php` (the
+KbGrantPhysicsTest shape) asserts, from `information_schema`, the exact denied sets per
+table and per privilege above, the `routing_decisions` no-UPDATE/no-DELETE physics, FORCED
+RLS + `tenant_isolation` on all eleven tables, the `is_rg` partial unique, both
+`queue_members`/`user_departments` CHECKs (a temporary row without an override is REFUSED at
+the DB), and the two trigger functions' existence and non-definer status.
+
+## S11 (Doc 11) — plan-approval rulings and filed interpretations (advisor-ruled / owner-ruled, 2026-08-30; plan of record 9e2fe85)
+
+Filed at plan approval, before implementation. The doc author has NOT been consulted. This
+record is canonical over any restatement in commits or BUILD-STATUS.
+
+### A-49 (FILED INTERPRETATION, STOP-A approved in direction). T-02's "commits through Doc 06's TicketTransitionService (actor=system)" means "through Doc 06's transition AND assignment doors"
+
+Doc 11 T-02 and §21 say routing "never writes ticket rows directly" and assignment
+"commits through Doc 06's TicketTransitionService (actor=system)". The built Doc 06
+assignment door is `AssignTicket` (which writes `assignee_id` and delegates its FR-05
+`new → open` step to the transition service); the transition service itself owns status
+only. INTERPRETATION: the service NAME is shorthand for Doc 06's write doors; the intent
+(§21: "committed-through-Doc-06") is honored by a system door on `AssignTicket`
+(`assignBySystem`, actor=system, audited, FR-15's as-if-assigned check per A-11 exactly as
+the staff path, the commit-time capacity check inside the same transaction) and a Doc
+06-owned `PlaceInQueue` door for `queue_id`. One status writer remains (the transition
+service, through the door's delegation). Routing holds no ticket write of any kind —
+`RoutingNeverWritesTicketsTest` (static, positive control) is the physics.
+
+### A-50 (FILED INTERPRETATION, COUNTERSIGNED with five proving obligations). Department access is a membership of its own — `user_departments`; team scope over tickets = the team's queue reach
+
+Points 1–8 as pasted in `docs/SESSION-11-APPROVED-PLAN.md` §0a (STOP-D), verbatim of
+record. Obligations bound: (1) independence fixtures (dept-row-without-queue and
+queue-without-dept-row; FR-04 fires on the second, badged by department); (2) divergence
+fixture — a teammate ASSIGNED a ticket outside the team's queue reach is NOT in Team scope;
+(3) J04's grant = ONE transaction, ONE audit action `org.department.access_granted`, a
+partial write impossible; (4) joint expiry of the three pull-in rows on one `override_id`,
+sweep disabled → assignment-time check still refuses; (5) AC-03 re-proof, exact sets, all
+four levels, real rows.
+**HONEST TRAIL (the session's own catch, no blame row):** the plan's first A-50 derived
+department access FROM queue membership; the advisor's representability question showed it
+could not express FR-04's config error or J04's "Give Verification access" (a queue member
+always "belongs to" the queue's department under the derivation). Corrected to the table
+before any code existed.
+**Doc 15 reopener note:** team REPORTS may later want assignee-based grouping — a METRIC
+question for Doc 15, not a scope change; named so no future sweep re-litigates point 3.
+
+### A-51 (FILED INTERPRETATION). FR-12's "effective priority score" and the cap outside it
+
+score = Σ weight(boost) over the queue's ORDERED `priority_rules` that match (position →
+weight, first = largest), added to an age term from `queued_at` (DB time, ADR 0010) so FIFO
+holds among equals. The starvation cap (`routing.starvation.minutes`) is NOT a weight: a
+ticket past the cap is promoted to the queue HEAD by a separate rule evaluated FIRST —
+"exempt from every other rule" (NFR-06) is structural, so no boost stack can out-score it.
+Both facts appear in the record (EC-04).
+
+### A-52 (FILED INTERPRETATION). FR-13's bands and hysteresis
+
+Bands from the frozen J15 frame (B5-S09): raw estimate < 8 min → "~5 min"; 8–35 → "~20
+min"; > 35 → "over an hour"; outside hours → "when we open at HH:MM" (tenant timezone, Doc
+01). Thresholds are the platform setting `routing.estimator.band_thresholds_minutes`.
+Hysteresis (NFR-04): a band changes only when the raw estimate crosses the boundary by ≥
+`routing.estimator.hysteresis_pct` (20) of the band's width AND ≥ 30 s have elapsed since
+the last change. Degraded (FS-03): depth-only heuristic + `degraded: true`, same band
+vocabulary. Customer-facing payload = `{band, degraded}` — nothing else exists in the shape
+(SEC-05 asserted by absence).
+
+### A-53 (FILED INTERPRETATION, [D12]). Pull-in's "expiry default shift-end via business hours"
+
+Doc 12's calendars are unbuilt. Default = the tenant-timezone end of the current day
+(23:59:59, Doc 01's timezone rules) from a fixture-shaped hours contract
+(`fixtures/routing/seams/doc12-hours.json`) — editable in the dialog (C03 draws the field).
+When Doc 12 lands, the contract's implementation swaps; the default's SOURCE changes, not
+the pull-in door. Filed as [D12] on FR-15's row.
+
+### A-54 (FILED INTERPRETATION). EC-08's courtesy hold rides Doc 06's timer pattern
+
+`routing.reopen.wait_for_previous` (default 15 min) arms a hold on the `TicketTimers`
+ZSET pattern (Doc 06's auto-close shape: column truth `tickets.reopen_hold_until`? NO —
+⚑ no new tickets column: the hold's truth is a `routing_decisions` row with
+`outcome=waiting` + `record.hold_until`, and the ZSET member is the decision id; the sweep
+re-verifies against that row). A REUSE of the pattern, not a new sweep species; the record
+shows the courtesy hold (EC-08's own words).
+
+### THE UNASSIGNED×OWN-SCOPE PIN — REVISIT CLOSED (OWNER RULING, 2026-08-30, STOP-E option 1)
+
+The pin's filed record is FIVE locations (advisor-ruled at S11 step 0; BUILD-STATUS's S11
+step-0 honest-trail line corrects R-D11-4's "S07 close prose" claim):
+`tests/Security/InboxSecurityTest.php:56-60`; `tests/Feature/Inbox/PerViewerCountsTest.php:104`
+(cf96c33); ANSWERS A-11; `docs/PROJECT-HANDOFF-v7.md:102`; `docs/PROJECT-HANDOFF-v10.md:140`.
+**RULING: THE PIN STANDS.** Unassigned remains EMPTY for Own-scoped agents; routing (Doc 11
+FR-08 step 4 / A-11) is what hands Own-scoped agents their work. The two pinned docblocks and
+`PerViewerCountsTest` stay byte-identical. **The S07 owner override is hereby exercised as
+KEEP.** The handoff-carried revisit line is resolved by this entry; no future kit carries it.
