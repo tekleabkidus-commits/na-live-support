@@ -21,7 +21,7 @@ final class RoutingRebuild extends Command
 
     protected $description = 'Doc 11 FS-01: rebuild agent_assignment_stats (and, from step 6, the waiting ZSETs) from database truth for the bound tenant';
 
-    public function handle(AssignmentStats $stats, WaitingSets $waiting, PositionInQueue $position, \App\Domain\Routing\Temporary\ExpiryZset $expiry, \App\Domain\Routing\Estimator\Counters $counters): int
+    public function handle(AssignmentStats $stats, WaitingSets $waiting, PositionInQueue $position, \App\Domain\Routing\Temporary\ExpiryZset $expiry, \App\Domain\Routing\Estimator\Counters $counters, \App\Domain\Routing\Rescue\RescueTimers $rescue, \App\Domain\Routing\Rescue\HeartbeatRescue $heartbeat, \App\Support\Tenancy\TenantContext $context): int
     {
         $n = $stats->rebuild();
         $this->info(sprintf('routing:rebuild — %d agent counter(s) recomputed from tickets', $n));
@@ -43,6 +43,10 @@ final class RoutingRebuild extends Command
         // FS-03 (step 8): corrupted estimator counters HEAL on rebuild — every bucket dropped, honest counts return.
         $h = $counters->heal((int) $now->format('U'));
         $this->info(sprintf('routing:rebuild — %d estimator bucket(s) dropped (FS-03 heal)', $h));
+
+        // FS-01 (step 10, the step-9 carry): the rescue timers REPLACED from truth (heartbeat deadlines + open holds).
+        $r = $rescue->rebuild($context->tenantId(), $heartbeat->minutes());
+        $this->info(sprintf('routing:rebuild — %d rescue timer(s) restored (heartbeat deadlines + courtesy holds)', $r));
 
         return self::SUCCESS;
     }

@@ -232,11 +232,14 @@ function cleanupTenants(array $tenantIds): void
     // cleanup blind to the new tables): departments ↔ queues reference each other
     // (default_queue_id is deferrable), so the department side is cleared first.
     $platform->table('departments')->whereIn('tenant_id', $tenantIds)->update(['default_queue_id' => null]);
+    // S11 step 2b's tickets_queue_fk / tickets_department_fk (SCHEMA AMENDMENT 5 item 12): tickets reference
+    // queues/departments — detach before the Doc 11 tables go (the same null-out shape as the default queue).
+    $platform->table('tickets')->whereIn('tenant_id', $tenantIds)->update(['queue_id' => null, 'department_id' => null]);
 
     foreach ([
         // Doc 11: decisions reference tickets; memberships/stats/skills/capacity reference
         // users and queues; queue_teams reference teams; queues reference departments.
-        'routing_decisions', 'agent_assignment_stats', 'user_routing_capacity', 'user_skills',
+        'rescue_flags', 'routing_decisions', 'agent_assignment_stats', 'user_routing_capacity', 'user_skills',
         'queue_members', 'user_departments', 'queue_teams', 'team_members', 'queues', 'departments', 'teams',
         // Doc 09 (SCHEMA AMENDMENT 3): nothing references the ai tables, and
         // ai_ticket_summaries references tickets — so all five go first.

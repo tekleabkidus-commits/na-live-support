@@ -1,0 +1,35 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Org\RestructureTest
+  ✓ it AC-07 / R-05 inventory-first: the queue preview discovers EVERY…  9.82s  
+  ✓ it AC-07 "the SAME query": a confirmation typed for a stale count i… 0.17s  
+  ✓ it FR-18 delete queue (empty-or-reassign): tickets move to the chos… 0.18s  
+  ✓ it FR-01 / FR-18 RG special-case: deleting the RG queue REQUIRES a…  0.20s  
+  ✓ it SS-03 / FR-18 delete department (the reorg): every ticket transf… 0.56s  
+  ✓ it SEC-04: the operator's permissions are re-resolved PER CHUNK — r… 0.27s  
+  ⨯ it NFR-05 dev-scale: a 10,000-ticket queue moves in chunks of 500… 272.89s  
+  ✓ it the wizard doors: preview 200 (computed confirmation), execute 2… 0.54s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Org\RestructureTest > it NFR-05 dev…  QueryException   
+  SQLSTATE[53200]: Out of memory: 7 ERROR:  out of shared memory
+HINT:  You might need to increase max_locks_per_transaction. (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "audit_log" ("id", "tenant_id", "action_key", "entity", "entity_id", "actor_type", "actor_id", "actor_label", "payload", "correlation_id") values (01a053e0-59ef-735d-9054-480d922775a6, 01a053dc-3c98-715f-aa45-0e8e02b0001a, ticket.transferred, ticket, 01a053dc-3f51-72db-aaff-2b1b7892fe43, staff, 01a053dc-3d1a-73c6-8512-52fc2e9608f5, ?, {"ticket_id":"01a053dc-3f51-72db-aaff-2b1b7892fe43","old_department_id":"01a053dc-3cb3-71fc-9d8c-9c3fe4528243","new_department_id":"01a053dc-3ccc-7107-a302-e5d3a5bf67c5","assignee_retained":false}, 01a053dc-3c98-715f-aa45-0e8e038c3420))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +6 vendor frames 
+  7   app/Support/Audit/AuditLogger.php:77
+  8   app/Domain/Tickets/Transfer/TransferTicket.php:132
+
+
+  Tests:    1 failed, 7 passed (83 assertions)
+  Duration: 284.70s
+

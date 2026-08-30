@@ -1492,6 +1492,14 @@ return [
         'owning_doc' => 'Doc11',
     ],
     [
+        // Doc 11 FR-18 (S11 step 10): the wizard door ACCEPTED an execution — validated against the live inventory, queued as RestructureJob (the per-chunk `org.restructure.executed` and the tombstones follow in the job).
+        'action_key' => 'org.restructure.submitted',
+        'entity' => 'department',
+        'actor_types' => ['staff'],
+        'required_fields' => ['wizard', 'target_id', 'confirmation'],
+        'owning_doc' => 'Doc11',
+    ],
+    [
         // Doc 11 FR-18/SEC-04: one entry PER CHUNK, executed under the operator admin's LIVE permissions (Doc 03 job semantics) — the re-resolution instant is recorded.
         'action_key' => 'org.restructure.executed',
         'entity' => 'department',

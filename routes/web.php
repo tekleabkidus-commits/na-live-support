@@ -310,6 +310,21 @@ Route::middleware([
 | tickets.view (FR-06's own words); share/unshare on views.share (the
 | addition of record) with the audit: middleware (SEC-03 — actor + target).
 */
+// Doc 11 FR-18 / AC-07 (S11 step 10): the restructure wizard doors — preview (inventory + computed confirmation),
+// execute (validated live, queued as RestructureJob, org.restructure.submitted audited), progress (per-chunk row).
+Route::middleware(['auth:staff', 'tenant:staff_session', 'tenant.state:staff'])->prefix('org')->group(function (): void {
+    Route::get('queues/{queueId}/delete', [App\Http\Controllers\Org\RestructureController::class, 'previewQueue'])
+        ->middleware('permission:org.queues.manage')->name('org.queue.delete.preview');
+    Route::post('queues/{queueId}/delete', [App\Http\Controllers\Org\RestructureController::class, 'executeQueue'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.restructure.submitted'])->name('org.queue.delete');
+    Route::get('departments/{departmentId}/delete', [App\Http\Controllers\Org\RestructureController::class, 'previewDepartment'])
+        ->middleware('permission:org.departments.manage')->name('org.department.delete.preview');
+    Route::post('departments/{departmentId}/delete', [App\Http\Controllers\Org\RestructureController::class, 'executeDepartment'])
+        ->middleware(['permission:org.departments.manage', 'audit:org.restructure.submitted'])->name('org.department.delete');
+    Route::get('restructure/{wizard}/{targetId}/progress', [App\Http\Controllers\Org\RestructureController::class, 'progress'])
+        ->middleware('permission:org.queues.manage')->name('org.restructure.progress');
+});
+
 // Doc 11 T-06 / SEC-05 (S11 step 8): the cached estimate door — bands only.
 Route::middleware(['auth:staff', 'tenant:staff_session', 'tenant.state:staff'])
     ->get('internal/routing/estimate/{queueId}', [App\Http\Controllers\Routing\EstimateController::class, 'show'])

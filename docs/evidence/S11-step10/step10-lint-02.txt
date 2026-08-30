@@ -1,0 +1,62 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Components/Ai/CopilotTab.vue
+   97:36  warning  Replace `·article_ref:·string;·url?:·string;·title?:·string;·version_id?:·string·` with `⏎····article_ref:·string;⏎····url?:·string;⏎····title?:·string;⏎····version_id?:·string;⏎`                                                                                                                                                                                                                                                                                                                                                       prettier/prettier
+  108:23  warning  Replace `·'Content-Type':·'application/json',·Accept:·'application/json',·'X-Requested-With':·'XMLHttpRequest',·'X-XSRF-TOKEN':·decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'')` with `⏎················'Content-Type':·'application/json',⏎················Accept:·'application/json',⏎················'X-Requested-With':·'XMLHttpRequest',⏎················'X-XSRF-TOKEN':·decodeURIComponent(⏎····················document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'',⏎················),⏎···········`  prettier/prettier
+  109:35  warning  Replace `·article_id:·item.article_ref,·version_id:·item.version_id,·conversation_id:·props.conversationId` with `⏎················article_id:·item.article_ref,⏎················version_id:·item.version_id,⏎················conversation_id:·props.conversationId,⏎···········`                                                                                                                                                                                                                                                         prettier/prettier
+  112:22  warning  Replace `data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,·'kb_link',·''` with `⏎············data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,⏎············'kb_link',⏎············'',⏎········`                                                                                                                                                                                                                                                                                               prettier/prettier
+  337:76  warning  Replace `><span·v-else·class="font-mono·text-[10px]">{{·item.article_ref·}}</span>·—` with `⏎····························><span·v-else·class="font-mono·text-[10px]">{{⏎································item.article_ref⏎····························}}</span>`                                                                                                                                                                                                                                                                           prettier/prettier
+  338:28  warning  Insert `·—`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Ai/copilotApi.ts
+  23:11  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+  39:10  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Customers/CustomerPanel.vue
+  433:38  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-text-muted)'` with `⏎································borderColor:·'var(--ds-border-strong)',⏎································color:·'var(--ds-text-muted)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/OperationDialog.vue
+   49:58  warning  Replace `·assignees:·{·id:·string;·name:·string·}[]` with `⏎····················assignees:·{·id:·string;·name:·string·}[];⏎···············`                                                                                                                                                                                         prettier/prettier
+  125:31  warning  Replace `·v-model="path"·type="radio"·value="supervisor_review"·data-testid="path-supervisor"` with `⏎····························v-model="path"⏎····························type="radio"⏎····························value="supervisor_review"⏎····························data-testid="path-supervisor"⏎·······················`  prettier/prettier
+  223:36  warning  Insert `⏎···························`                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/SplitUnmergeDialog.vue
+   68:28  warning  Replace `1,·Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000)` with `⏎········1,⏎········Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000),⏎····`                                  prettier/prettier
+   76:17  warning  Replace `·props.kind·===·'split'·?·`/inbox/t/${props.ticketId}/split`` with `⏎········props.kind·===·'split'⏎············?·`/inbox/t/${props.ticketId}/split`⏎···········`                                                                 prettier/prettier
+  313:38  warning  Replace `·background:·'var(--ds-text-ink)',·color:·'var(--ds-page-bg)'` with `⏎································background:·'var(--ds-text-ink)',⏎································color:·'var(--ds-page-bg)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/Thread/ThreadPane.vue
+  674:13  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/TicketPanel.vue
+  947:19  warning  Replace `(can.tickets_escalate·||·can.tickets_spam_mark)·&&·ticket.status·!==·'spam'·&&·ticket.status·!==·'closed'` with `⏎················(can.tickets_escalate·||·can.tickets_spam_mark)·&&⏎················ticket.status·!==·'spam'·&&⏎················ticket.status·!==·'closed'⏎············`  prettier/prettier
+  976:26  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-danger-strong)'` with `⏎····················borderColor:·'var(--ds-border-strong)',⏎····················color:·'var(--ds-danger-strong)',⏎···············`                                                                       prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Kb/Editor.vue
+  387:48  warning  Replace `⏎················{{·t.publish_outdated·}}·{{·outdatedLanguages·}}⏎············` with `{{·t.publish_outdated·}}·{{·outdatedLanguages·}}`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Inbox/Workspace.vue
+  1592:21  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+  1894:25  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Kb/Tombstone.vue
+   9:5  warning  Prop "article_id" is not in camelCase   vue/prop-name-casing
+  10:5  warning  Prop "version_id" is not in camelCase   vue/prop-name-casing
+  12:5  warning  Prop "current_url" is not in camelCase  vue/prop-name-casing
+
+✖ 27 problems (0 errors, 27 warnings)
+  0 errors and 21 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit

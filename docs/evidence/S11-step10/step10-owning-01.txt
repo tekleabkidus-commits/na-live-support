@@ -1,0 +1,369 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Tickets\AssignmentClaimTest
+  ✓ FR-16/US-01: the loser of a claim race is told WHO won, not just th… 9.20s  
+  ✓ FR-16: the same person claiming twice is a double-click, not a race  0.15s  
+  ✓ FR-05: the first assignment opens a new ticket, through the transit… 0.12s  
+  ✓ FR-15: an assignee who cannot see the ticket is refused with assign… 0.10s  
+  ✓ FR-15: every change emits ticket.assigned {old, new, by} — includin… 0.10s  
+  ✓ FR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur… 0.12s  
+  ✓ FR-05: an implicit claim never fails the reply it rode in on         0.08s  
+  ✓ EC-06: a deactivated assignee hands back every OPEN-family ticket,…  0.14s  
+
+[NFR-04 indicative] 200-item tag batch: 1.21s
+
+   PASS  Tests\Feature\Tickets\BulkOperationsTest
+  ✓ AC-07: a mixed batch yields EXACT per-item allow/deny — the close o… 0.17s  
+  ✓ EC-12/SEC-04: a permission revoked MID-BATCH fails the remaining it… 0.19s  
+  ✓ AC-07: a 200-item batch completes with 200 per-item progress events… 1.47s  
+  ✓ FR-25: submit refuses an unknown action, an over-cap batch, unknown… 0.05s  
+
+   PASS  Tests\Feature\Tickets\ChannelScopeReproofTest
+  ✓ T-06 ADMIT: an Own-scoped agent may subscribe to a conversation the… 0.06s  
+  ✓ T-06 DENY: the same Own-scoped agent is refused on a conversation t… 0.09s  
+  ✓ T-06 DENY: unassigning takes the subscription right away again       0.11s  
+  ✓ T-06 INVERTED (S11 step 3, Packet 3 — A-50; the S20 inversion prece… 0.19s  
+  ✓ T-06: an All-scoped agent still subscribes, and conversations.view…  0.07s  
+
+[SS-02 indicative] 39-source consolidation: 0.48s
+
+   PASS  Tests\Feature\Tickets\ConsolidationDrillTest
+  ✓ SS-02: forty near-identical tickets consolidate to one master in on… 1.07s  
+
+   PASS  Tests\Feature\Tickets\CreationPathsTest
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.04s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.05s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.04s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.05s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.04s  
+  ✓ FR-14: the offline form is tagged offline by the path itself, not b… 0.05s  
+  ✓ FR-12: an open-family ticket blocks a second create and hands back…  0.05s  
+  ✓ FR-13: an idempotency key makes a replayed create return the SAME t… 0.05s  
+  ✓ AC-02 (concurrent half): concurrent creates on one conversation yie… 0.25s  
+  ✓ FR-21: a split target takes NO open slot — the one sanctioned multi… 0.06s  
+  ✓ FR-03: a subject given at creation is marked staff-authored; an abs… 0.06s  
+
+   PASS  Tests\Feature\Tickets\EdgeSemanticsTest
+  ✓ EC-07: two agents resolving at once — the second identical-target c… 0.09s  
+  ✓ EC-07, the raced half: a transition validated against a STALE statu… 0.06s  
+  ✓ EC-08: after automation resolves mid-composition, "send and reopen"… 0.08s  
+  ✓ EC-10: channel_unreachable on a pending_customer ticket changes no…  0.09s  
+
+   PASS  Tests\Feature\Tickets\FollowersPriorityTagsTest
+  ✓ FR-17: a priority change is evented with old/new; a no-op change is… 0.11s  
+  ✓ FR-17: staff need tickets.priority.change; automation and AI need n… 0.10s  
+  ✓ FR-17: a fifth priority is refused, by the enum and by the database  0.08s  
+  ✓ FR-18: staff follow themselves with tickets.follow; adding someone…  0.09s  
+  ✓ FR-18: a follower who cannot see the ticket is refused — notificati… 0.07s  
+  ✓ FR-18: unfollowing removes the row and events it; the events are th… 0.07s  
+  ✓ FR-19: tags are free-form per tenant, de-duplicated, and removable   0.07s  
+  ✓ FR-19: tagging needs tickets.tags.manage, and a blank tag is not a…  0.07s  
+  ✓ FR-19: autocomplete offers the tenant's own tags, prefix-matched     0.08s  
+  ✓ T-07: the rename is chunked, resumable, historical, and audited wit… 0.17s  
+  ✓ T-07: the rewrite needs tickets.tags.manage and refuses a blank ren… 0.05s  
+
+   PASS  Tests\Feature\Tickets\HandoffPacketTest
+  ✓ AC-08: a ticket is created from the Doc 09 fixture with the packet…  0.05s  
+  ✓ AC-08/SEC-02: the packet is immutable at the DATABASE — no UPDATE,…  0.06s  
+  ✓ BR-02: the transcript anchor is a LINK — no message is moved, copie… 0.05s  
+  ✓ FR-11: the normative contract is ENFORCED before the immutable inse… 0.03s  
+  ✓ FR-11: the packet keeps its OWN copy of the suggestion, so an overr… 0.06s  
+
+   PASS  Tests\Feature\Tickets\InvariantAuditTest
+  ✓ FS-05: a clean platform passes the audit with exit 0                 0.05s  
+  ✓ FS-05 positive control: seeded violations make the auditor FIRE — n… 0.37s  
+
+   PASS  Tests\Feature\Tickets\LocalizationSweepTest
+  ✓ §14: every refusal code the Tickets domain can raise has a fail.* k… 0.03s  
+  ✓ §14/§13: the fixed vocabularies are complete in both languages, and… 0.03s  
+
+   PASS  Tests\Feature\Tickets\MergeUnmergeTest
+  ✓ AC-04: merge moves links and unions sets; unmerge within 24 h resto… 0.19s  
+  ✓ a resolved source's armed timer is cancelled by the merge and resto… 0.22s  
+  ✓ SEC-06: a cross-customer merge is refused server-side with cross_cu… 0.20s  
+  ✓ SEC-01: an actor who cannot see the merge target is refused target_… 0.14s  
+  ✓ A-13: a closed ticket may be a merge TARGET but never a source; a s… 0.23s  
+  ✓ A-14: a merged source refuses every ordinary door (merged_supersede… 0.17s  
+  ✓ EC-03: merged_into chains resolve to the final survivor, and a mid-… 0.26s  
+  ✓ FS-04: once the snapshot is pruned, unmerge refuses with unmerge_wi… 0.50s  
+  ✓ A-13: unmerge refuses open_ticket_exists when the source conversati… 0.20s  
+  ✓ A-13: an assignee deactivated while the source sat merged is handed… 0.26s  
+  ✓ unmerging a ticket that is not merged refuses with not_merged        0.10s  
+
+   PASS  Tests\Feature\Tickets\MetricTimestampsTest
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.53s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.36s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.28s  
+  ✓ AC-09: the golden lifecycle fixtures produce exactly the FR-24 valu… 0.38s  
+  ✓ FR-24: first_response_at IS the signal message's own database times… 0.09s  
+  ✓ FR-24: agent_first_response_at counts the first public HUMAN reply,… 0.08s  
+  ✓ FR-24 + C-09: a redelivered reply cannot move an existing stamp (fi… 0.10s  
+  ✓ FR-24: the trigger REFUSES an internal note as a first-response sig… 0.09s  
+  ✓ FR-24: the trigger REFUSES a pre-ticket message and a message from…  0.11s  
+  ✓ FR-24: a customer message is not a response at all                   0.06s  
+  ✓ R-19b strengthening 2: last_status_changed_at is born from clock_ti… 0.11s  
+  ✓ R-19b strengthening 2 (behavioural): a fresh ticket's status clock…  0.09s  
+
+   PASS  Tests\Feature\Tickets\MidActionPermissionExpiryTest
+  ✓ EC-02: a transition permitted by a temporary override is refused on… 0.16s  
+  ✓ EC-02: while the SAME override is live, the very same transition su… 0.09s  
+  ✓ EC-02: a plain role denial carries no attribution — there is no gra… 0.10s  
+
+   PASS  Tests\Feature\Tickets\ReopenAutoCloseTest
+  ✓ FR-07: after the auto-close window of customer silence, the sweep c… 0.55s  
+  ✓ EC-01: a persisted customer reply beats the due sweep — no close, n… 0.40s  
+  ✓ FR-10: a customer message on a resolved ticket reopens it unconditi… 0.16s  
+  ✓ EC-02: the boundary instant (closed_at + 7 d exactly) is IN; one se… 0.74s  
+  ✓ AC-03: reopen keeps an ACTIVE prior assignee (ticket.reopened re-no… 0.17s  
+  ✓ AC-03: reopen onto a DEACTIVATED assignee hands the ticket back to…  0.15s  
+  ✓ FR-08: staff reopen of a closed ticket needs tickets.reopen AND a r… 0.13s  
+  ✓ the consumer does nothing when the conversation already holds an op… 0.07s  
+  ✓ reopenFromCustomerMessage on a wrong-status ticket throws the FR-08… 0.05s  
+  ✓ R-03: the window arithmetic is exact across DST-change dates — the…  0.03s  
+  ✓ R-03 end-to-end: a reopen window that spans the October DST switch…  0.52s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.07s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.47s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.16s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.46s  
+
+   PASS  Tests\Feature\Tickets\ResolveRequirementsTest
+  ✓ FR-06: a bare resolve with no public reply and no note is refused (… 0.10s  
+  ✓ FR-06: an explicit resolution note satisfies the substance requirem… 0.12s  
+  ✓ FR-06: a prior public staff reply satisfies the requirement with no… 0.13s  
+  ✓ FR-06: an AI public reply is substance too — the definition is FR-2… 0.12s  
+  ✓ FR-06: with tickets.resolve.requires_reply off, a bare resolve is a… 0.15s  
+  ✓ FR-07/T-03: entering resolved arms the auto-close timer at EXACTLY…  0.14s  
+  ✓ ticket.resolved / ticket.closed / ticket.reopened ride EVERY door o… 0.19s  
+
+   PASS  Tests\Feature\Tickets\SpamDispositionTest
+  ✓ FR-09: marking spam takes the machine edge, stamps the actor, exclu… 0.13s  
+  ✓ FR-09: the separately-confirmed conversation block rides Doc 04's o… 0.12s  
+  ✓ FR-09: unmark within 7 days restores the PRIOR status from event hi… 0.15s  
+  ✓ FR-09: unmark within 7 days restores the PRIOR status from event hi… 0.13s  
+  ✓ EC-09: unmark on day 8 is refused with the terminality explanation,… 0.63s  
+  ✓ EC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti… 0.70s  
+  ✓ A-17: while the spam is still UNMARKABLE, a customer message takes…  0.17s  
+  ✓ FR-09: the machine edge refuses a mark without tickets.spam.mark, a… 0.10s  
+
+   PASS  Tests\Feature\Tickets\SplitTest
+  ✓ AC-05: the split target carries linked_work + origin_ticket_id, tak… 0.18s  
+  ✓ EC-04: the fourth live linked-work split is refused with guidance,…  0.21s  
+  ✓ FR-21: a selection containing another conversation's message is ref… 0.14s  
+  ✓ FR-21: tickets.split is required, and an empty selection is refused  0.13s  
+
+   PASS  Tests\Feature\Tickets\StatusWriterEncapsulationTest
+  ✓ it can see the sanctioned writer at all — the positive control for…  0.05s  
+  ✓ it has exactly one file in app/ that writes a ticket status (NFR-03… 0.19s  
+  ✓ it routes every status write through the transition service, which…  0.21s  
+  ✓ it offers no mass-assignment path to status on the Ticket model      0.04s  
+  ✓ it binds the service and repository as ordinary singleton-resolvabl… 0.04s  
+
+   PASS  Tests\Feature\Tickets\SubjectTest
+  ✓ FR-03: Doc 09's seam writes the subject and marks it ai-authored     0.10s  
+  ✓ FR-03: the AI seam never overwrites a subject that already exists    0.09s  
+  ✓ FR-03: a staff edit needs tickets.edit, and the source label follow… 0.12s  
+  ✓ FR-03: a subject may be absent but may not be blanked to an empty s… 0.07s  
+  ✓ EC-11: a failed generation leaves the subject NULL — no sentinel, n… 0.06s  
+
+   PASS  Tests\Feature\Tickets\TicketSchemaTest
+  ✓ FR-01/A-7: the tickets column inventory is exactly the filed interp… 0.04s  
+  ✓ R-19b: every DB-time column is timestamptz at microsecond precision… 0.04s  
+  ✓ R-01: the database refuses a ninth status — the machine is platform… 0.04s  
+  ✓ FR-01 CHECKs: priority, source, subject_source and pending_reason e… 0.04s  
+  ✓ FR-02: ticket numbers are unique per tenant at the database layer,…  0.04s  
+
+   PASS  Tests\Feature\Tickets\TicketTranscriptExportTest
+  ✓ A-18 anchors basis: an anchored ticket exports EXACTLY what its ran… 0.54s  
+  ✓ A-18 lifetime basis: an unanchored ticket exports its tenure — pre-… 0.57s  
+  ✓ the gate is Doc 04's, re-checked at export: without conversations.t… 0.14s  
+
+   PASS  Tests\Feature\Tickets\TimerPhysicsTest
+  ✓ FS-01: a lost ZSET only DELAYS auto-closes; rebuild restores candid… 0.40s  
+  ✓ a stale candidate — the ticket long since moved on — is dropped by…  0.09s  
+  ✓ a candidate whose score lies about dueness is DEFERRED: the column…  0.09s  
+  ✓ SS-03: changing tickets.autoclose.hours applies to FUTURE resolutio… 0.12s  
+  ✓ BR-07: the sweep HOLDS an unreachable customer's due timer — refuse… 0.76s  
+
+   PASS  Tests\Feature\Tickets\TransferEscalateTest
+  ✓ FR-22: a transfer changes the department, keeps the status, retains… 0.15s  
+  ✓ FR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne… 0.15s  
+  ✓ SEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR…  0.16s  
+  ✓ FR-23: escalation writes the {path, reason, target, at, by} payload… 0.16s  
+  ✓ FR-23/BR-06: a short reason is refused by the edge (reason_too_shor… 0.10s  
+  ✓ FR-23: a named target who is disabled is refused escalation_target_… 0.12s  
+  ✓ FR-23: de-escalation returns to open with the actor's note, clears…  0.16s  
+  ✓ EC-05: deactivating a named target re-routes the escalation to supe… 0.17s  
+
+   PASS  Tests\Feature\Tickets\TransitionMatrixTest
+  ✓ AC-01 clause 1: every legal cell succeeds, changing status and emit… 0.73s  
+  ✓ AC-01 clause 2: every illegal cell is refused with illegal_transiti… 0.95s  
+  ✓ AC-01 clause 3: a same-state call no-ops SUCCESSFULLY — no error, n… 0.22s  
+  ✓ FR-04: a permission the actor lacks refuses the transition, naming…  0.07s  
+  ✓ FR-04/FR-23/BR-06: escalation demands a reason of at least 10 chara… 0.08s  
+  ✓ FR-04: staff reopen of a closed ticket needs a reason, and spam mar… 0.14s  
+  ✓ BR-07: an unreachable customer is never AUTO-resolved or auto-close… 0.18s  
+  ✓ FR-04: system, AI and automation actors transition without a user a… 0.17s  
+  ✓ FR-10: leaving and entering the open family moves Doc 04's open-tic… 0.14s  
+  ✓ SS-04: the matrix is data, so the legal-target list a UI renders co… 0.04s  
+  ✓ FR-01/§4.2 (S07 step 14): the pending reason RIDES THE TRANSITION —… 0.21s  
+
+   PASS  Tests\Feature\Inbox\BulkJobDoorsTest
+  ✓ it the id-based submit door: "3 selected · Close" executes through…  0.37s  
+  ✓ it C15 failure rows + retry: a failed item is named by TICKET NUMBE… 0.39s  
+  ✓ it C15's Stop: the running loop OBSERVES the latch before each item… 0.26s  
+  ✓ it C16's consequence line is SERVER truth: mint returns open_window… 1.87s  
+
+   PASS  Tests\Feature\Inbox\ComposerEndpointTest
+  ✓ it MODE SAFETY IS STRUCTURAL (AC-05's integration half, the Doc 04…  0.52s  
+  ✓ it FR-21: send-and-set-status executes reply THEN transition in ord… 0.66s  
+  ✓ it Doc 06 EC-08 (the closing row's prompt): replying on a RESOLVED…  0.69s  
+  ✓ it FR-22 drafts: save round-trips; the send CLEARS the draft (tombs… 0.66s  
+  ✓ it FR-05/BR-03 (ruling (c), step 14): a staff reply through the doo… 1.44s  
+  ✓ it A-37 (the D8 guard ruling), BOTH DIRECTIONS EXECUTED: a same-sta… 0.64s  
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 0.05s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.14s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.13s  
+  ✓ it the app role writes events only through the default: naming occu… 0.05s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.14s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.08s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.03s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 1.26s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  1.08s  
+
+   PASS  Tests\Feature\Inbox\ListEndpointTest
+  ✓ it SCHEMA AMENDMENT 1 RIDER (i) — DISCHARGED HERE, CITED: last_read… 0.55s  
+  ✓ it the marker never moves BACKWARD (LWW guarded in message-stamp sp… 0.51s  
+  ✓ it the markRead HTTP door rides views.manage (R-26 AMENDMENT, the F… 0.68s  
+  ✓ it FR-12/C-05: cursor pages are disjoint, exhaustive and ordered (u… 2.90s  
+  ✓ it the per-viewer overlay: unread counts from the marker boundary (… 1.14s  
+  ✓ it the overlay excludes the VIEWER'S OWN replies from unread — whil… 0.57s  
+  ✓ it FR-10 sort override: ?sort=priority serves urgent-first with a w… 2.00s  
+  ✓ it Doc 05 EC-04, the closing row's LIST half: one customer on TWO c… 0.20s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.53s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.47s  
+  ✓ it S09 POST-CLOSE RULING — tombstones never serve the list: a DELET… 0.15s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 1.20s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.94s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.16s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.92s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 3.86s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 4.72s  
+  ✓ it registers the projector for its 31 events in the ConsumerRegistr… 0.05s  
+  ✓ it FR-26 fanout: ticket.assigned mints the NEW assignee's bell row…  1.65s  
+  ✓ it FR-26 fanout: escalation rows to the TARGET (escalation-to-me) a… 2.45s  
+  ✓ it FR-26 fanout: window-closing rows to the open ticket's assignee;… 0.92s  
+
+   PASS  Tests\Feature\Inbox\LocalizationParityTest
+  ✓ it §14: the en and am inbox catalogs are structurally identical — e… 0.05s  
+  ✓ it §14: no am value is an untranslated copy of its en sibling beyon… 0.03s  
+
+   PASS  Tests\Feature\Inbox\MergeDoorsTest
+  ✓ it MERGE PREVIEW is server-computed machinery truth: newest-activit… 0.56s  
+  ✓ it MERGE refusals are the machinery's own, C-04-shaped: a cross-cus… 0.24s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 1.76s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.52s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 4.37s  
+
+   PASS  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 2.23s  
+  ✓ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.31s  
+  ✓ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.24s  
+  ✓ it FR-08: view order persists per user through the prefs door, merg… 0.23s  
+  ✓ it R-26/A-34: Read Only cannot WRITE views (the SEV-1, flipped by t… 0.89s  
+
+   PASS  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 2.92s  
+  ✓ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.42s  
+  ✓ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 75.48s  
+  ✓ it the HTTP doors: both ride views.manage (the R-26 principle, thir… 1.56s  
+  ✓ it R-26 third application, the EXECUTED refusal: a Read Only-shaped… 1.25s  
+
+   PASS  Tests\Feature\Inbox\StatusNotificationsTest
+  ✓ it FR-28: set-own transitions write the row + publish agent.status_… 0.09s  
+  ✓ it FR-28 heartbeat physics: online with a live TTL key stays online… 0.14s  
+  ✓ it FR-28 force door: supervision.agent_status.force flips ANOTHER a… 0.23s  
+  ✓ it R-26 AMENDMENT fifth+sixth siblings, refusals EXECUTED: a view-o… 0.24s  
+  ✓ it FR-26: the bell lists the viewer's rows newest-first with the un… 0.16s  
+
+   PASS  Tests\Feature\Inbox\SyncGoldenTest
+  ✓ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  0.13s  
+  ✓ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.10s  
+  ✓ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 1.52s  
+  ✓ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.18s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.84s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 1.65s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 1.71s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.54s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 1.84s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 2.34s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 3.43s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 0.82s  
+
+   PASS  Tests\Feature\Inbox\TenantBindingRestoreTest
+  ✓ it A-35 diff assertion: the ruled edit is IN the middleware — captu… 0.04s  
+  ✓ it A-35 restore semantics under the SYNC driver: an inline job bind… 0.07s  
+  ✓ it A-35 worker shape unchanged: with NO prior binding the finally s… 0.06s  
+
+   PASS  Tests\Feature\Inbox\ThreadEndpointTest
+  ✓ it FR-14: the thread page carries messages (notes included, quarant… 0.58s  
+  ✓ it EC-01 (sabotage #15's proof): a MISSING conversation and an OUT-… 0.55s  
+  ✓ it Doc 04 EC-08: ?anchor returns the WINDOW containing the anchor m… 0.87s  
+  ✓ it §9 print (SEC-05): the note gate is ABSOLUTE — internal-note con… 0.65s  
+  ✓ it B12-S02: the history door — capability holders get the preserved… 0.67s  
+
+   PASS  Tests\Feature\Inbox\TicketActionDoorsTest
+  ✓ it claim door: assigns the actor, recomputes the row, and the RACE…  0.35s  
+  ✓ it unassign door (the mobile undo): returns the ticket to the queue… 0.30s  
+  ✓ it assign door: assigns a named target; a disabled or unknown targe… 0.30s  
+  ✓ it priority door: flips through ChangePriority (audit is the servic… 0.27s  
+  ✓ it tags door: add + remove in one request through TicketTags; sugge… 0.43s  
+  ✓ it assignees directory: active human staff only — disabled and serv… 0.25s  
+  ✓ it C-10: an out-of-scope ticket answers the 404-PATTERN on every ac… 0.29s  
+  ✓ it B12 timeline door (step 14): serves the relayed events newest-fi… 0.25s  
+  ✓ it B13 subject door (step 14): a staff edit lands through SubjectWr… 0.32s  
+
+   PASS  Tests\Feature\Inbox\TicketOperationDoorsTest
+  ✓ it spam + unspam doors: mark flips the machine through the owning s… 0.23s  
+  ✓ it escalate + deescalate doors: supervisor review with the ≥10-char… 0.21s  
+  ✓ it transfer door: moves the ticket to the OPAQUE destination id (ex… 0.24s  
+  ✓ it split door: mints the linked ticket from selected messages; the…  0.49s  
+  ✓ it reopen door (C9): carries the REAL written reason into the close… 0.27s  
+  ✓ it unmerge door (C7): reverses through the owning service (source b… 0.39s  
+  ✓ it follow-up door (C9 lapsed — ruling 2026-08-13, the DOCUMENT wins… 0.29s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.16s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.10s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 1.62s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  2.54s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.09s  
+
+   PASS  Tests\Security\PlaceInQueueOneDoorTest
+  ✓ it can see a planted queue_id writer — the positive control          0.06s  
+  ✓ it T-02/A-49: exactly one file under app/ writes tickets.queue_id —… 0.44s  
+
+   PASS  Tests\Feature\Rbac\ExpireOverridesTest
+  ✓ it tidies expired overrides: revoke(cause=expired) + outbox event +… 0.41s  
+  ✓ it Doc 11 T-07/EC-07 / A-50 obligation 4 (S11 step 3): the temporar… 0.35s  
+
+  Tests:    262 passed (2076 assertions)
+  Duration: 198.81s
+

@@ -1,0 +1,35 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Org\RestructureTest
+  ✓ it AC-07 / R-05 inventory-first: the queue preview discovers EVERY…  9.90s  
+  ✓ it AC-07 "the SAME query": a confirmation typed for a stale count i… 0.36s  
+  ✓ it FR-18 delete queue (empty-or-reassign): tickets move to the chos… 0.42s  
+  ✓ it FR-01 / FR-18 RG special-case: deleting the RG queue REQUIRES a…  0.24s  
+  ✓ it SS-03 / FR-18 delete department (the reorg): every ticket transf… 0.59s  
+  ✓ it SEC-04: the operator's permissions are re-resolved PER CHUNK — r… 0.26s  
+  ⨯ it NFR-05 dev-scale: a 10,000-ticket queue moves in chunks of 500 w… 1.16s  
+  ✓ it the wizard doors: preview 200 (computed confirmation), execute 2… 0.44s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Org\Restructure…  UniqueConstraintViolationException   
+  SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "tickets_tenant_number_unique" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "tickets" ("id", "tenant_id", "conversation_id", "customer_id", "number", "priority", "source", "subject", "subject_source", "department_id", "linked_work", "origin_ticket_id", "previous_ticket_id", "form_data", "idempotency_key", "updated_at") values (01a053db-ab67-72a8-85f4-58e2693b7026, 01a053db-a70f-7197-9f67-59972b3d1c07, 01a053db-ab5f-7176-9cd3-2521c7ee4c07, 01a053db-ab5e-732a-a502-7baa8980d047, 2, normal, agent, ?, ?, 01a053db-a724-7332-86f0-e920cb730451, 0, ?, ?, ?, ?, 2026-08-30 18:08:20.331242))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:601
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      +9 vendor frames 
+  10  app/Domain/Tickets/Creation/CreateTicket.php:133
+      +3 vendor frames 
+  14  app/Domain/Tickets/Creation/CreateTicket.php:79
+
+
+  Tests:    1 failed, 7 passed (83 assertions)
+  Duration: 13.49s
+

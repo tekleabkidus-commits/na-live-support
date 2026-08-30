@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Org\RestructureTest
+  ✓ it AC-07 / R-05 inventory-first: the queue preview discovers EVERY…  9.23s  
+  ⨯ it AC-07 "the SAME query": a confirmation typed for a stale count i… 0.42s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Org\RestructureTest > it AC-07 "the SAME query": a…    
+  Exception "App\Domain\Org\Restructure\RestructureRefused" not thrown.
+
+  at tests/Feature/Org/RestructureTest.php:111
+    107▕     expect($preview['confirmation'])->toBe('MOVE 1 TICKETS');
+    108▕     ticketInQueue($payments, $q);   // the world moved
+    109▕ 
+    110▕     expect(fn () => app(DeleteQueueWizard::class)->execute($q, ['target_queue_id' => $paymentsQueue], $preview['confirmation'], $operator))
+  ➜ 111▕         ->toThrow(RestructureRefused::class, 'confirmation_stale');
+    112▕     expect(DB::table('queues')->where('id', $q)->value('deleted_at'))->toBeNull('a stale confirmation executed');
+    113▕     $result = app(DeleteQueueWizard::class)->execute($q, ['target_queue_id' => $paymentsQueue], 'MOVE 2 TICKETS', $operator);
+    114▕     expect($result['moved'])->toBe(2);
+    115▕ });
+
+  1   tests/Feature/Org/RestructureTest.php:111
+
+
+  Tests:    1 failed, 1 passed (13 assertions)
+  Duration: 9.73s
+

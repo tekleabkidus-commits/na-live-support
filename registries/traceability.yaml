@@ -2377,45 +2377,45 @@ entries:
   # flips it and the suite it flips to. A row here never claims coverage that
   # does not exist.
   - ac_ref: "Doc11 AC-01"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/DecisionOrderTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 5: FR-08 order fixtures (fixtures/routing/fr08-order.json) — explicit > AI-accepted > connection-tag seam > tenant default; rule-tag > default queue; RG finality (RgFinalityTest, step 1); boost ordering; starvation exemption (StarvationCapPropertyTest, step 1). Target suite: tests/Feature/Routing/DecisionOrderTest.php.
+      FLIPPED AT THE S11 BATCH-C CHECKPOINT (advisor-ordered; the registry lagged its suite): the suite landed at step 5 (988f628) — FR-08 order fixtures (fixtures/routing/fr08-order.json), every precedence proven from the record's own steps, RG finality, boost ordering, the starvation exemption (StarvationCapPropertyTest, step 1 a904e14).
   - ac_ref: "Doc11 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/RoundRobinSpliceTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 6: RR fairness over join/leave/skip sequences (T-04), load tiebreak determinism (LoadBasedTest), skill matcher + both fallbacks incl. EC-04's cap interaction (SkillBasedTest). Target suite: tests/Feature/Routing/RoundRobinSpliceTest.php.
+      FLIPPED AT THE S11 BATCH-C CHECKPOINT (registry lag): the suite landed at step 6 (d60eac3) — T-04 join/leave splice without a fairness reset, Away skip keeps the turn, the DB checkpoint; LoadBasedTest + SkillBasedTest the sibling strategies.
   - ac_ref: "Doc11 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/CapacityRaceTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 4: pending_customer exclusion toggle + per-user override (CapacityTest) + the concurrent-load race with ZERO over-capacity assignments (the STOP-A packet's commit-time FOR UPDATE check). Target suite: tests/Feature/Routing/CapacityRaceTest.php.
+      FLIPPED AT THE S11 BATCH-C CHECKPOINT (registry lag): the suite landed at step 2c (0c93ece; the STOP-A packet) — the commit-time FOR UPDATE capacity check, ZERO over-capacity under the concurrent race; EligibilityTest at step 4 (1cd869d) for the pending toggle + per-user override. Sabotage #4 red here (step 9, second execution valid).
   - ac_ref: "Doc11 AC-04"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/DispatcherTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 6 to PARTIAL [D19]: agent-frees-slot → next assignment measured at dev scale (≤ 2 s p95 indicative); the L2 figure is Doc 19's load environment. Target suite: tests/Performance/RoutingBudgetsTest.php.
+      FLIPPED AT THE S11 BATCH-C CHECKPOINT (registry lag): the suite landed at step 6 (d60eac3) — dev-scale: FS-02 read-then-commit, EC-01/EC-03 one free slot → exactly one assigned, the AvailabilityConsumer as the ONLY trigger; NFR-02's 2 s reaction measured indicatively in Performance/RoutingBudgetsTest (L2 figures are [D19]).
   - ac_ref: "Doc11 AC-05"
     suite_path: tests/Feature/Routing/TemporaryMembershipTest.php
     type: automated
@@ -2437,25 +2437,25 @@ entries:
     justification: >-
       FLIPPED AT S11 STEP 9 + 9b: heartbeat-loss (timer → flag; with routing.rescue.auto the REAL return through Doc 06's unassignBySystem — P-C6 landed 9b — rescue record, note, rescue.auto_returned, Rescue view leaves in both forms, re-routed, slot freed), unreachable (immediate via Doc 05/07, never auto-acted), orphan (auto-move + note + audit) fixtures; the courtesy hold (EC-08) incl. the hold-expiry re-route in tests/Feature/Routing/ReopenHoldTest.php; the door's HTTP-unreachability in tests/Security/SystemReturnDoorTest.php.
   - ac_ref: "Doc11 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Org/RestructureTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 10: reference inventories complete (seeded cross-references discovered), chunked execution within NFR-05 at dev scale, sibling-intake isolation measured, RG special-case enforced; wizard UI arc at step 13. Target suite: tests/Feature/Org/RestructureTest.php.
+      FLIPPED AT S11 STEP 10: inventory complete (rules/bots/SLA seams + REAL saved views (SEC-04 redaction) + REAL ticket counts); the typed confirmation computed from the SAME query the execution acts on (confirmation_stale — sabotage #14 red there); chunked execution through Doc 06's doors with per-chunk live-permission re-resolution (permission_lost stops); the EC-06 ZSET migration; the RG special-case (replacement REQUIRED, becomes is_rg after the tombstone); SS-03's department split with zero orphans; NFR-05's 10k move dev-indicative (printed, asserted at a 2× ceiling) with sibling-intake isolation measured; the wizard doors + RestructureJob (job-as-user).
   - ac_ref: "Doc11 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/DecisionRecordTest.php
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED — flips at S11 step 5 (record completeness + T-08 replay = same outcome) and step 11b (supervisor rendering C09–C11; SEC-02 elision per role — RoutingRecordElisionTest). Target suite: tests/Feature/Routing/DecisionRecordTest.php.
+      FLIPPED IN PART AT THE S11 BATCH-C CHECKPOINT (registry lag): the record half landed at step 5 (988f628) — every automatic routing writes a record; replay through the T-08 harness (d60eac3) yields the same outcome. PARTIAL: the supervisor rendering (C09–C11) and SEC-02's per-role elision proof (RoutingRecordElisionTest) are step 11b's.
   - ac_ref: "Doc11 AC-09"
     suite_path: tests/Feature/Routing/EstimatorTest.php
     type: automated
@@ -2467,12 +2467,12 @@ entries:
     justification: >-
       FLIPPED AT S11 STEP 8: band mapping + hysteresis fixtures (A-52; every instant injected), depth-only/degraded (FS-03) with the routing:rebuild heal, the cached endpoint's two-key shape, the consumer-fed counters (C-09 dedupe), the off-hours band from the fixture-shaped hours contract [D12] (HoursTest: the EC-09 no-cliff proof); SEC-05 leakage by ABSENCE in tests/Security/EstimatorLeakageTest.php (sabotage #9 red there).
   - ac_ref: "Doc11 AC-10"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Property/RoutingDeterminismHarnessTest.php
+    type: automated
     tier: property
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED — flips at S11 step 6: generated org snapshots + ticket streams replayed twice → identical assignments; wired into the CI routing package. Target suite: tests/Property/RoutingDeterminismHarnessTest.php.
+      FLIPPED AT THE S11 BATCH-C CHECKPOINT (registry lag): the harness landed at step 6 (d60eac3) — 300 generated snapshots + streams replayed twice, shuffled inputs; the SAME-SECOND TIE case added at step 9 (e92bf57, advisor-ordered) with its control; runs in CI's routing package on every push.

@@ -1,7 +1,22 @@
 {
-  "_comment": "Doc 11 FR-18 / QueueWriter::rulesTargeting SEAM ([D12]): automation rules are Doc 12's; the deactivate/delete inventories list the rules that target a queue from this fixture-shaped contract in local/testing/ci and from Doc 12's tables later. Synthetic per CLAUDE.md §8.",
+  "_comment": "Doc 11 FR-18 / QueueWriter::rulesTargeting SEAM ([D12]): automation rules are Doc 12's; the deactivate/delete inventories list the rules that target a queue from this fixture-shaped contract in local/testing/ci and from Doc 12's tables later. Synthetic per CLAUDE.md §8. `sla_policies` (S11 step 10): the SLA-policy slice of the same [D12] contract for FR-18's inventory.",
   "rules": [
-    { "id": "fixture-rule-deposit-keyword", "name": "Deposit keyword → Deposits", "target_queue_id": "fixture-queue-deposits" },
-    { "id": "fixture-rule-vip-tag", "name": "VIP tag → VIP queue", "target_queue_id": "fixture-queue-vip" }
+    {
+      "id": "fixture-rule-deposit-keyword",
+      "name": "Deposit keyword → Deposits",
+      "target_queue_id": "fixture-queue-deposits"
+    },
+    {
+      "id": "fixture-rule-vip-tag",
+      "name": "VIP tag → VIP queue",
+      "target_queue_id": "fixture-queue-vip"
+    }
+  ],
+  "sla_policies": [
+    {
+      "id": "fixture-sla-payments-15m",
+      "name": "Payments first response 15 min",
+      "target_queue_id": "fixture-queue-payments"
+    }
   ]
 }

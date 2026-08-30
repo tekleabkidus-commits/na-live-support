@@ -71,4 +71,49 @@ final class RescueTimers
 
         return (int) $row->s;
     }
+
+    /**
+     * FS-01 (the step-9 carry, landed step 10): REPLACE this tenant's members from truth — heartbeat
+     * deadlines from `agent_statuses` rows that are away/heartbeat_lost with open assigned tickets
+     * (deadline = since + routing.rescue.minutes), holds from open `reopened/waiting` decisions whose
+     * `hold_until` is ahead and whose ticket still sits with `hold_for`.
+     */
+    public function rebuild(string $tenantId, int $rescueMinutes): int
+    {
+        $redis = Redis::connection(self::CONNECTION);
+        /** @var list<string> $members */
+        $members = $redis->zrange(self::ZSET, 0, -1);
+        foreach ($members as $member) {
+            if (str_starts_with($member, $tenantId.'|')) {
+                $redis->zrem(self::ZSET, $member);
+            }
+        }
+        $n = 0;
+        /** @var list<object{user_id: string, s: string}> $lost */
+        $lost = DB::select(
+            "SELECT a.user_id, (EXTRACT(EPOCH FROM a.since) + ? * 60)::bigint AS s
+               FROM agent_statuses a
+              WHERE a.status = 'away' AND a.reason = 'heartbeat_lost'
+                AND EXISTS (SELECT 1 FROM tickets t WHERE t.assignee_id = a.user_id AND t.status IN ('new','open','pending_customer','pending_internal','escalated'))",
+            [$rescueMinutes],
+        );
+        foreach ($lost as $row) {
+            $this->arm($tenantId, 'heartbeat', $row->user_id, (int) $row->s);
+            $n++;
+        }
+        /** @var list<object{id: string, s: string}> $holds */
+        $holds = DB::select(
+            "SELECT d.id, (d.snapshot->>'hold_until')::bigint AS s
+               FROM routing_decisions d JOIN tickets t ON t.id = d.ticket_id
+              WHERE d.trigger = 'reopened' AND d.outcome = 'waiting'
+                AND (d.snapshot->>'hold_until')::bigint > EXTRACT(EPOCH FROM clock_timestamp())
+                AND t.assignee_id::text = d.snapshot->>'hold_for'",
+        );
+        foreach ($holds as $row) {
+            $this->arm($tenantId, 'hold', $row->id, (int) $row->s);
+            $n++;
+        }
+
+        return $n;
+    }
 }
