@@ -85,7 +85,12 @@ final class ConsumerRegistry
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
         // events DELIBERATELY (FR-05/FR-06 counters, recompute-from-truth; contract fixture
         // fixtures/tickets/consumers/doc11.json tightened in the same commit).
-        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
+        // Doc 11 (S11 step 6): the AVAILABILITY consumer — the dispatcher's only trigger (T-03, no polling);
+        // agent.status_changed's FIRST real consumer (the [D11] seam on Doc 07 FR-28 closes here).
+        'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
+        'queue.membership_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
+        'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
+        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
         //    kb.article.published — chunk → sanitize (the one door) → embed changed
         //    chunks → ONE-statement generation swap → kb.retrieval.updated. Idempotent
@@ -101,7 +106,7 @@ final class ConsumerRegistry
         // consumer, implemented — the starter set seeds right after activation (the disclosed
         // millisecond asynchrony). The ReopenConsumerDrillTest empty pin moves in THIS commit.
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],

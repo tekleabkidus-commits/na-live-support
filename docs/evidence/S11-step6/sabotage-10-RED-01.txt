@@ -1,0 +1,36 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\RoundRobinSpliceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rotates fairly, splices on join/leave without resetting, and ski[39m[90m…[39m [90m5.75s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\RoundRobinSpliceTest[22m [90m>[39m it rotates fairly, s…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => '00000000-0000-7000-8000-00000000000c',[39m[39;1m
+  [39;22m[31m-    1 => '00000000-0000-7000-8000-00000000000d',[39m[39;1m
+  [39;22m[31m-    2 => '00000000-0000-7000-8000-00000000000a',[39m[39;1m
+  [39;22m[31m-    3 => '00000000-0000-7000-8000-00000000000b',[39m[39;1m
+  [39;22m[32m+    0 => '00000000-0000-7000-8000-00000000000a',[39m[39;1m
+  [39;22m[32m+    1 => '00000000-0000-7000-8000-00000000000b',[39m[39;1m
+  [39;22m[32m+    2 => '00000000-0000-7000-8000-00000000000c',[39m[39;1m
+  [39;22m[32m+    3 => '00000000-0000-7000-8000-00000000000d',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Routing/RoundRobinSpliceTest.php[39m:[32m33[39m
+     29▕     $rr->advance($queue, $a);
+     30▕     expect($rr->order($queue, ring([$a, $b, $c]), [])['candidates'])->toBe([$b, $c, $a]);
+     31▕     $rr->advance($queue, $b);
+     32▕     // JOIN: d joins — the pointer stays at b; the ring is spliced, next is c then d then a then b.
+  ➜  33▕     expect($rr->order($queue, ring([$a, $b, $c, $d]), [])['candidates'])->toBe([$c, $d, $a, $b]);
+     34▕     $rr->advance($queue, $c);
+     35▕     // SKIP (EC-02): d goes Away (absent from the routable set) — next is a, not a reset to the start.
+     36▕     expect($rr->order($queue, ring([$a, $b, $c]), [])['candidates'])->toBe([$a, $b, $c]);
+     37▕     $rr->advance($queue, $a);
+
+  [33m1   [39m[39;1mtests/Feature/Routing/RoundRobinSpliceTest.php[39;22m:[39;1m33[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (3 assertions)[39m
+  [90mDuration:[39m [39m5.81s[39m
+

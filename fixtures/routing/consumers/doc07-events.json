@@ -1,0 +1,165 @@
+{
+  "doc": "Doc07",
+  "spec": "Doc 11 FR-19 / Doc 06 NFR-06 shape — consumer contracts for the routing-family events (S11 step 6). Identifiers only, never names or record text (SEC-02/SEC-05).",
+  "note": "Declared at the catalog amendment (step 2b); each consuming session tightens its reads when it builds. Doc11/Routing entries are the availability consumer and the orphan path.",
+  "entries": [
+    {
+      "event": "org.department.created",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "department_id"
+      ]
+    },
+    {
+      "event": "org.department.updated",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "department_id"
+      ]
+    },
+    {
+      "event": "org.department.deleted",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "department_id"
+      ]
+    },
+    {
+      "event": "org.team.created",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "team_id"
+      ]
+    },
+    {
+      "event": "org.team.updated",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "team_id"
+      ]
+    },
+    {
+      "event": "org.team.deleted",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "team_id"
+      ]
+    },
+    {
+      "event": "org.queue.created",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id"
+      ]
+    },
+    {
+      "event": "org.queue.updated",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id"
+      ]
+    },
+    {
+      "event": "org.queue.deleted",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id"
+      ]
+    },
+    {
+      "event": "queue.membership_changed",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id",
+        "change",
+        "via"
+      ]
+    },
+    {
+      "event": "queue.temporary_grant.created",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id"
+      ]
+    },
+    {
+      "event": "queue.temporary_grant.expired",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id"
+      ]
+    },
+    {
+      "event": "ticket.routed",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "record_id",
+        "queue_id"
+      ]
+    },
+    {
+      "event": "ticket.waiting",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "queue"
+      ]
+    },
+    {
+      "event": "rescue.flagged",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "reason"
+      ]
+    },
+    {
+      "event": "rescue.auto_returned",
+      "consumer": "Doc07/Inbox",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "queue_id"
+      ]
+    }
+  ]
+}

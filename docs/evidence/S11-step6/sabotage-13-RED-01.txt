@@ -1,0 +1,40 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Property\RoutingDeterminismHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: 300 generated snapshots + ticket streams replayed twice yi[39m[90m…[39m [90m5.80s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the REAL LoadBased strategy agrees with the documented simulatio[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\LoadBasedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit orders by load, then by last_assigned_at (never-assigned first),[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Property\RoutingDeterminismHarnessTest[22m [90m>[39m it the REAL LoadBa…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => '00000000-0000-7000-8000-000000000064',[39m[39;1m
+  [39;22m[32m     1 => '00000000-0000-7000-8000-000000000067',[39m[39;1m
+  [39;22m[31m-    2 => '00000000-0000-7000-8000-000000000065',[39m[39;1m
+  [39;22m[31m-    3 => '00000000-0000-7000-8000-000000000068',[39m[39;1m
+  [39;22m[31m-    4 => '00000000-0000-7000-8000-000000000066',[39m[39;1m
+  [39;22m[31m-    5 => '00000000-0000-7000-8000-000000000069',[39m[39;1m
+  [39;22m[32m+    2 => '00000000-0000-7000-8000-000000000068',[39m[39;1m
+  [39;22m[32m+    3 => '00000000-0000-7000-8000-000000000065',[39m[39;1m
+  [39;22m[32m+    4 => '00000000-0000-7000-8000-000000000069',[39m[39;1m
+  [39;22m[32m+    5 => '00000000-0000-7000-8000-000000000066',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Property/RoutingDeterminismHarnessTest.php[39m:[32m115[39m
+    111▕         $snapshot[] = ['user_id' => sprintf('00000000-0000-7000-8000-%012x', 100 + $i), 'capacity' => 5, 'load' => $i % 3, 'free' => 5 - ($i % 3)];
+    112▕     }
+    113▕     $real = app(LoadBased::class)->order('q', $snapshot, [])['candidates'];
+    114▕     $sim = simulateLoadBased(array_map(fn ($a) => $a + ['last' => null], $snapshot));
+  ➜ 115▕     expect($real)->toBe($sim);
+    116▕ });
+    117▕
+
+  [33m1   [39m[39;1mtests/Property/RoutingDeterminismHarnessTest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (603 assertions)[39m
+  [90mDuration:[39m [39m5.92s[39m
+

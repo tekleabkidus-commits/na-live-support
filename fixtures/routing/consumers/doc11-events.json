@@ -1,0 +1,70 @@
+{
+  "doc": "Doc11",
+  "spec": "Doc 11 FR-19 / Doc 06 NFR-06 shape — consumer contracts for the routing-family events (S11 step 6). Identifiers only, never names or record text (SEC-02/SEC-05).",
+  "note": "Declared at the catalog amendment (step 2b); each consuming session tightens its reads when it builds. Doc11/Routing entries are the availability consumer and the orphan path.",
+  "entries": [
+    {
+      "event": "org.department.deleted",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "department_id"
+      ]
+    },
+    {
+      "event": "org.team.deleted",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "team_id"
+      ]
+    },
+    {
+      "event": "org.queue.deleted",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id"
+      ]
+    },
+    {
+      "event": "queue.membership_changed",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id",
+        "change",
+        "via"
+      ]
+    },
+    {
+      "event": "queue.temporary_grant.created",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id",
+        "override_id",
+        "expires_at"
+      ]
+    },
+    {
+      "event": "queue.temporary_grant.expired",
+      "consumer": "Doc11/Routing",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "queue_id",
+        "user_id",
+        "override_id",
+        "cause"
+      ]
+    }
+  ]
+}

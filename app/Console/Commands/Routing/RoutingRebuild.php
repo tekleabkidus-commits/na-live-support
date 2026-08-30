@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Routing;
 
 use App\Domain\Routing\Capacity\AssignmentStats;
+use App\Domain\Routing\Pipeline\PositionInQueue;
+use App\Domain\Routing\Waiting\WaitingSets;
 use Illuminate\Console\Command;
 
 /**
@@ -19,10 +21,19 @@ final class RoutingRebuild extends Command
 
     protected $description = 'Doc 11 FS-01: rebuild agent_assignment_stats (and, from step 6, the waiting ZSETs) from database truth for the bound tenant';
 
-    public function handle(AssignmentStats $stats): int
+    public function handle(AssignmentStats $stats, WaitingSets $waiting, PositionInQueue $position): int
     {
         $n = $stats->rebuild();
         $this->info(sprintf('routing:rebuild — %d agent counter(s) recomputed from tickets', $n));
+        // FS-01: the waiting sets REPLACED from tickets with the engine's own score; RR pointers
+        // read their DB checkpoint on the next order() (a fairness restart, noted here).
+        $m = $waiting->rebuild(function (object $row) use ($position): int {
+            $pos = $position->compute($row->queue_id, ['id' => $row->id, 'priority' => $row->priority, 'reopened_count' => (int) $row->reopened_count, 'customer_id' => $row->customer_id, 'queued_at' => $row->queued_at, 'tags' => []]);
+            $queuedAt = is_string($row->queued_at) ? (int) strtotime($row->queued_at) : time();
+
+            return WaitingSets::score($pos['starved'], $pos['score'], $queuedAt);
+        });
+        $this->info(sprintf('routing:rebuild — %d waiting member(s) restored from tickets; RR pointers fall back to their DB checkpoints (fairness restart noted)', $m));
 
         return self::SUCCESS;
     }

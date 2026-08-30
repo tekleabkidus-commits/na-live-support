@@ -13,6 +13,8 @@ use App\Domain\Routing\Record\RoutingDecisionRecord;
 use App\Domain\Routing\Rg\RgFinality;
 use App\Domain\Routing\Seams\ConnectionRoutingTagSource;
 use App\Domain\Routing\Strategies\AssignmentStrategy;
+use App\Domain\Routing\Strategies\RoundRobin;
+use App\Domain\Routing\Waiting\WaitingSets;
 use App\Domain\Tickets\Assignment\AlreadyClaimed;
 use App\Domain\Tickets\Assignment\AssigneeOutOfScope;
 use App\Domain\Tickets\Assignment\AssignTicket;
@@ -67,6 +69,8 @@ final class RoutingPipeline
         private readonly AssignTicket $assign,
         private readonly PlaceInQueue $placement,
         private readonly EffectiveMembers $members,
+        private readonly WaitingSets $waiting,
+        private readonly RoundRobin $roundRobin,
     ) {}
 
     /**
@@ -178,6 +182,7 @@ final class RoutingPipeline
         $ticketFacts = [
             'id' => $ticket->identifier(), 'priority' => (string) $ticket->priority, 'reopened_count' => (int) $ticket->reopened_count,
             'customer_id' => (string) $ticket->customer_id, 'queued_at' => $ticket->getAttribute('queued_at'), 'tags' => $this->ticketTags($ticket),
+            'conversation_id' => (string) $ticket->conversation_id,
         ];
         $pos = $this->position->compute($queueId, $ticketFacts);
         $record->boosts($pos['boosts_applied']);
@@ -203,6 +208,8 @@ final class RoutingPipeline
             try {
                 $this->assign->assignBySystem($ticket->fresh() ?? $ticket, $agent, $this->capacity->commitFor($record->id, $queueId));
                 $record->step('assign', ['candidate' => $userId], 'assigned (actor=system, Doc 06 door)');
+                $this->waiting->remove($queueId, $ticket->identifier());   // FS-02: removal ONLY after the commit
+                $this->roundRobin->advance($queueId, $userId);              // T-04: the pointer follows the assignment
                 $recordId = $record->close('assigned', $queueId, $departmentId, $userId);
 
                 return ['record_id' => $recordId, 'outcome' => 'assigned', 'queue_id' => $queueId, 'department_id' => $departmentId, 'assigned_to' => $userId];
@@ -218,7 +225,9 @@ final class RoutingPipeline
             }
         }
 
-        $record->step('wait', ['queue_id' => $queueId], 'waiting in queue — re-evaluated on the next availability event (FR-08 step 5)');
+        $queuedAtSeconds = is_string($ticketFacts['queued_at']) ? (int) strtotime($ticketFacts['queued_at']) : time();
+        $this->waiting->add($queueId, $ticket->identifier(), WaitingSets::score($pos['starved'], $pos['score'], $queuedAtSeconds));
+        $record->step('wait', ['queue_id' => $queueId, 'position' => $this->waiting->position($queueId, $ticket->identifier())], 'waiting in queue — re-evaluated on the next availability event (FR-08 step 5)');
         $recordId = $record->close('waiting', $queueId, $departmentId, null);
 
         return ['record_id' => $recordId, 'outcome' => 'waiting', 'queue_id' => $queueId, 'department_id' => $departmentId, 'assigned_to' => null];
