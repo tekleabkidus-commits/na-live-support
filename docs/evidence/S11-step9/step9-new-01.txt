@@ -1,0 +1,118 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\RescueTest
+  ✓ it FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig… 9.77s  
+  ✓ it FR-16a with routing.rescue.auto ON: the return needs the SystemR… 0.33s  
+  ✓ it FR-16b / AC-06 unreachable fixture: channel_unreachable populate… 0.31s  
+  ✓ it FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every… 0.34s  
+  ⨯ it P-C1 physics: one LIVE flag per ticket (the second refused by th… 0.29s  
+
+   PASS  Tests\Feature\Routing\ReopenHoldTest
+  ✓ it EC-08: a reopened ticket whose retained assignee is Away gets a…  0.54s  
+  ✓ it EC-08 expiry: still Away at the deadline → the re-route needs th… 0.33s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 3.29s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 1.66s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 1.22s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 1.54s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 2.07s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 4.27s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 1.00s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.52s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.48s  
+  ✓ it S09 POST-CLOSE RULING — tombstones never serve the list: a DELET… 0.16s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 1.19s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.83s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.14s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.85s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 0.88s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.81s  
+  ✓ it registers the projector for its 31 events in the ConsumerRegistr… 0.04s  
+  ✓ it FR-26 fanout: ticket.assigned mints the NEW assignee's bell row…  1.56s  
+  ✓ it FR-26 fanout: escalation rows to the TARGET (escalation-to-me) a… 2.04s  
+  ✓ it FR-26 fanout: window-closing rows to the open ticket's assignee;… 0.55s  
+
+   PASS  Tests\Isolation\RoutingGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app role denied set per table and privilege…  0.40s  
+  ✓ it FR-17/BR-06 physics: routing_decisions carries NO app UPDATE gra… 0.09s  
+  ✓ it ADR 0003 / FLAG C: app holds no DELETE on departments, teams, qu… 0.08s  
+  ✓ it N-01: every Doc 11 table is FORCED row-level security with the t… 0.09s  
+  ✓ it FR-03 physics: is_rg is at most one per tenant (partial unique),… 0.06s  
+  ✓ it FLAG F / FLAG G: the two stamping triggers exist as PLAIN plpgsq… 0.06s  
+
+   PASS  Tests\Security\NoPollingLoopTest
+  ✓ it can see a planted polling loop — the positive control (sabotage…  0.05s  
+  ✓ it FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists…  0.03s  
+  ✓ it pins the scheduled routing commands to exactly the two the docum… 0.05s  
+
+   PASS  Tests\Property\RoutingDeterminismHarnessTest
+  ✓ it T-08: 300 generated snapshots + ticket streams replayed twice yi… 0.22s  
+  ✓ it the REAL LoadBased strategy agrees with the documented simulatio… 0.04s  
+  ✓ it SAME-SECOND TIE (advisor-ordered, S11 step 9): two tickets queue… 0.05s  
+
+   PASS  Tests\Feature\Routing\TriggersTest
+  ✓ it is registered DURABLY on the five trigger events (ADR 0011) — ex… 0.06s  
+  ✓ it created: a new ticket with no department reaches the tenant defa… 0.26s  
+  ✓ it transferred: the new department is explicit; the router assigns…  0.38s  
+  ✓ it unassigned: a manual unassign (ticket.assigned with a null new a… 0.34s  
+  ✓ it deactivation hand-back (EC-06) and reopened-with-inactive-assign… 0.30s  
+
+   PASS  Tests\Contract\RoutingEventConsumerContractsTest
+  ✓ the routing family is exactly EIGHTEEN events (FR-19; grown only by… 0.03s  
+  ✓ completeness: every routing-family event has a contract entry in EV… 0.04s  
+  ✓ fidelity: every fixture entry names a real catalog relationship, re… 0.05s  
+  ✓ Doc 11's own durable consumers are contracted: the availability con… 0.05s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.08s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.30s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.22s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.51s  
+
+   PASS  Tests\Feature\Tickets\CreationPathsTest
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.10s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.10s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.07s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.11s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.12s  
+  ✓ FR-14: the offline form is tagged offline by the path itself, not b… 0.10s  
+  ✓ FR-12: an open-family ticket blocks a second create and hands back…  0.11s  
+  ✓ FR-13: an idempotency key makes a replayed create return the SAME t… 0.11s  
+  ✓ AC-02 (concurrent half): concurrent creates on one conversation yie… 0.56s  
+  ✓ FR-21: a split target takes NO open slot — the one sanctioned multi… 0.12s  
+  ✓ FR-03: a subject given at creation is marked staff-authored; an abs… 0.11s  
+
+   PASS  Tests\Feature\Tickets\AssignmentClaimTest
+  ✓ FR-16/US-01: the loser of a claim race is told WHO won, not just th… 0.18s  
+  ✓ FR-16: the same person claiming twice is a double-click, not a race  0.12s  
+  ✓ FR-05: the first assignment opens a new ticket, through the transit… 0.15s  
+  ✓ FR-15: an assignee who cannot see the ticket is refused with assign… 0.14s  
+  ✓ FR-15: every change emits ticket.assigned {old, new, by} — includin… 0.14s  
+  ✓ FR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur… 0.19s  
+  ✓ FR-05: an implicit claim never fails the reply it rode in on         0.17s  
+  ✓ EC-06: a deactivated assignee hands back every OPEN-family ticket,…  0.38s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\RescueTest > it P-C1 physics:…  PDOException   
+  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block
+
+  at vendor/laravel/framework/src/Illuminate/Database/Concerns/ManagesTransactions.php:172
+    168▕      * @throws \Throwable
+    169▕      */
+    170▕     protected function createSavepoint()
+    171▕     {
+  ➜ 172▕         $this->getPdo()->exec(
+    173▕             $this->queryGrammar->compileSavepoint('trans'.($this->transactions + 1))
+    174▕         );
+    175▕     }
+    176▕
+
+      +6 vendor frames 
+  7   tests/Feature/Routing/RescueTest.php:190
+
+
+  Tests:    1 failed, 70 passed (1058 assertions)
+  Duration: 44.13s
+

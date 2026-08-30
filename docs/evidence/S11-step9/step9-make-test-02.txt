@@ -1,0 +1,88 @@
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan octane:reload
+
+   INFO  Reloading workers...  
+
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml restart worker scheduler reverb
+ Container na-live-support-worker-1 Restarting 
+ Container na-live-support-scheduler-1 Restarting 
+ Container na-live-support-reverb-1 Restarting 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-worker-1 Started 
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml up -d --wait app worker scheduler reverb
+ Container na-live-support-postgres-1 Running 
+ Container na-live-support-redis-volatile-1 Running 
+ Container na-live-support-redis-durable-1 Running 
+ Container na-live-support-app-1 Running 
+ Container na-live-support-scheduler-1 Running 
+ Container na-live-support-worker-1 Running 
+ Container na-live-support-reverb-1 Running 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-app-1 Waiting 
+ Container na-live-support-scheduler-1 Waiting 
+ Container na-live-support-worker-1 Waiting 
+ Container na-live-support-reverb-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-app-1 Healthy 
+ Container na-live-support-reverb-1 Healthy 
+ Container na-live-support-worker-1 Healthy 
+ Container na-live-support-scheduler-1 Healthy 
+Octane reloaded; worker/scheduler/reverb restarted and healthy.
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec app ./vendor/bin/pest --exclude-group=soak
+
+   PASS  Tests\Unit\Auth\SafeReturnUrlTest
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "absolute URL"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "protocol-relative"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant /\"
+  ✓ it refuses the ruled shapes: absolute, protocol-relative, and both backslash variants with dataset "backslash variant \/"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "any interior backslash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four exam… 0.03s  
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "scheme with no slash"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "CR-LF (header injection material)"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "other control characters"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "origin lookalike host"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "empty string"
+  ✓ it refuses the CLASS those shapes belong to, not just the four examples with dataset "bare origin prefix without separator"
+  ✓ it refuses non-strings without dying
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "plain path"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with query"
+  ✓ it POSITIVE CONTROL: same-origin relative paths pass through untouched with dataset "path with fragment"
+  ✓ it reduces a same-origin ABSOLUTE URL to its local path — the shape the framework guest redirect stores
+
+   PASS  Tests\Unit\Conversations\AdapterRegistryTest
+  ✓ a registered channel resolves its adapter and queue families         0.03s  
+  ✓ an unregistered channel refuses by name
+  ✓ double registration refuses — one channel, one adapter
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+make: *** [Makefile:63: test] Error 130

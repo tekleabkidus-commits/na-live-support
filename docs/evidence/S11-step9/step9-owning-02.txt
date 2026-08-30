@@ -1,0 +1,161 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Inbox\BulkJobDoorsTest
+  ✓ it the id-based submit door: "3 selected · Close" executes through…  9.78s  
+  ✓ it C15 failure rows + retry: a failed item is named by TICKET NUMBE… 0.31s  
+  ✓ it C15's Stop: the running loop OBSERVES the latch before each item… 0.30s  
+  ✓ it C16's consequence line is SERVER truth: mint returns open_window… 1.62s  
+
+   PASS  Tests\Feature\Inbox\ComposerEndpointTest
+  ✓ it MODE SAFETY IS STRUCTURAL (AC-05's integration half, the Doc 04…  0.65s  
+  ✓ it FR-21: send-and-set-status executes reply THEN transition in ord… 0.86s  
+  ✓ it Doc 06 EC-08 (the closing row's prompt): replying on a RESOLVED…  0.71s  
+  ✓ it FR-22 drafts: save round-trips; the send CLEARS the draft (tombs… 0.77s  
+  ✓ it FR-05/BR-03 (ruling (c), step 14): a staff reply through the doo… 1.32s  
+  ✓ it A-37 (the D8 guard ruling), BOTH DIRECTIONS EXECUTED: a same-sta… 0.62s  
+
+   PASS  Tests\Feature\Inbox\EventsOccurredAtTreatmentTest
+  ✓ it diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the… 0.03s  
+  ✓ it A-33 byte-identical proof: every relayed event carries ITS outbo… 0.08s  
+  ✓ it B-1 positive control: the PK refusal ITSELF — a duplicate (id, o… 0.10s  
+  ✓ it the app role writes events only through the default: naming occu… 0.04s  
+
+   PASS  Tests\Feature\Inbox\HealthConsumerTest
+  ✓ it consumes transitions AS STATE — the payload word is stored verba… 0.07s  
+  ✓ it FS-02 drill: kill the consumer before any effect — no trace; re-… 0.05s  
+  ✓ it is structurally transition-only: the consumer names no heartbeat… 0.02s  
+
+   PASS  Tests\Feature\Inbox\InboxResilienceTest
+  ✓ it FS-01: projector down → lists FREEZE correct-as-of; the stalenes… 1.21s  
+  ✓ it FS-02: view ZSET loss → the read path REBUILDS ON MISS with the…  1.02s  
+
+   PASS  Tests\Feature\Inbox\ListEndpointTest
+  ✓ it SCHEMA AMENDMENT 1 RIDER (i) — DISCHARGED HERE, CITED: last_read… 0.46s  
+  ✓ it the marker never moves BACKWARD (LWW guarded in message-stamp sp… 0.54s  
+  ✓ it the markRead HTTP door rides views.manage (R-26 AMENDMENT, the F… 0.58s  
+  ✓ it FR-12/C-05: cursor pages are disjoint, exhaustive and ordered (u… 2.86s  
+  ✓ it the per-viewer overlay: unread counts from the marker boundary (… 0.85s  
+  ✓ it the overlay excludes the VIEWER'S OWN replies from unread — whil… 0.44s  
+  ✓ it FR-10 sort override: ?sort=priority serves urgent-first with a w… 2.12s  
+  ✓ it Doc 05 EC-04, the closing row's LIST half: one customer on TWO c… 0.25s  
+
+   PASS  Tests\Feature\Inbox\ListProjectorTest
+  ✓ it T-01: recomputes the row from truth — status, number, snippet, p… 0.61s  
+  ✓ it EC-11: a media-only last message stores the KIND as the placehol… 0.54s  
+  ✓ it S09 POST-CLOSE RULING — tombstones never serve the list: a DELET… 0.21s  
+  ✓ it FR-05 my_open: assignment adds to the assignee's set; REASSIGNME… 1.13s  
+  ✓ it C-09 by construction: the SAME event delivered twice recomputes…  0.87s  
+  ✓ it A-32 mentions: note.mentioned mints ONE bell row (the dedupe ind… 0.16s  
+  ✓ it FR-05 following: membership from ticket_followers truth; removal… 0.98s  
+  ✓ it FR-05 expiring windows + rescue: Doc 05's window states and unre… 1.05s  
+  ✓ it FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; r… 0.85s  
+  ✓ it registers the projector for its 31 events in the ConsumerRegistr… 0.07s  
+  ✓ it FR-26 fanout: ticket.assigned mints the NEW assignee's bell row…  1.53s  
+  ✓ it FR-26 fanout: escalation rows to the TARGET (escalation-to-me) a… 2.02s  
+  ✓ it FR-26 fanout: window-closing rows to the open ticket's assignee;… 0.56s  
+
+   PASS  Tests\Feature\Inbox\LocalizationParityTest
+  ✓ it §14: the en and am inbox catalogs are structurally identical — e… 0.08s  
+  ✓ it §14: no am value is an untranslated copy of its en sibling beyon… 0.06s  
+
+   PASS  Tests\Feature\Inbox\MergeDoorsTest
+  ✓ it MERGE PREVIEW is server-computed machinery truth: newest-activit… 0.51s  
+  ✓ it MERGE refusals are the machinery's own, C-04-shaped: a cross-cus… 0.27s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 2.03s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.45s  
+
+   PASS  Tests\Feature\Inbox\ReplayCountingTest
+  ✓ it replay-counting: a recorded stream into a COLD projector lands e… 3.76s  
+
+   PASS  Tests\Feature\Inbox\SavedViewsTest
+  ✓ it FR-06: create materializes the definition; update RECOMPUTES it;… 1.69s  
+  ✓ it AC-02 round-trip: share requires views.share (route-gated + audi… 0.28s  
+  ✓ it FR-06: the filter key set is CLOSED — an unknown key refuses wit… 0.16s  
+  ✓ it FR-08: view order persists per user through the prefs door, merg… 0.15s  
+  ✓ it R-26/A-34: Read Only cannot WRITE views (the SEV-1, flipped by t… 0.60s  
+
+   PASS  Tests\Feature\Inbox\SelectionTokensTest
+  ✓ it T-05: mint carries the TRUE count; execution resolves the CURREN… 2.87s  
+  ✓ it SEC-06: the token is USER-BOUND (a colleague gets the same silen… 1.40s  
+  ✓ it EC-05: a selection past the Doc 06 cap executes as QUEUED BATCH… 71.54s  
+  ✓ it the HTTP doors: both ride views.manage (the R-26 principle, thir… 1.39s  
+  ✓ it R-26 third application, the EXECUTED refusal: a Read Only-shaped… 1.32s  
+
+   PASS  Tests\Feature\Inbox\StatusNotificationsTest
+  ✓ it FR-28: set-own transitions write the row + publish agent.status_… 0.14s  
+  ✓ it FR-28 heartbeat physics: online with a live TTL key stays online… 0.14s  
+  ✓ it FR-28 force door: supervision.agent_status.force flips ANOTHER a… 0.19s  
+  ✓ it R-26 AMENDMENT fifth+sixth siblings, refusals EXECUTED: a view-o… 0.21s  
+  ✓ it FR-26: the bell lists the viewer's rows newest-first with the un… 0.18s  
+
+   PASS  Tests\Feature\Inbox\SyncGoldenTest
+  ✓ it B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as…  0.17s  
+  ✓ it B-4 watermark + long-transaction no-miss: a laggard stamped INSI… 0.19s  
+  ✓ it A-31 scope golden: a scope-excluded ticket's event NEVER reaches… 1.36s  
+  ✓ it T-07 overflow: past the bound the response INSTRUCTS a full refe… 0.18s  
+  ✓ it the HTTP contract: v:1 envelope with server_now (EC-07's anchor,… 0.70s  
+
+   PASS  Tests\Feature\Inbox\SystemViewMembershipTest
+  ✓ it My Open: assignee=me AND open-family — a resolved assignment and… 1.70s  
+  ✓ it Unassigned: scope-visible base = assignee ∅ AND open-family — an… 1.56s  
+  ✓ it Mentions (A-32 as ruled): unresolved from note.mentioned until t… 0.58s  
+  ✓ it Following: ticket_followers truth, any status; unfollow EXCLUDES… 1.65s  
+  ✓ it SLA at risk: warned/breached AND open-family (FR-05) — a breache… 1.86s  
+  ✓ it Expiring windows: closing/expired WITH open tickets (FR-05/Doc 0… 3.04s  
+  ✓ it Rescue: channel_unreachable=true (FR-05/Doc 05 FR-10) — clearing… 1.00s  
+
+   PASS  Tests\Feature\Inbox\TenantBindingRestoreTest
+  ✓ it A-35 diff assertion: the ruled edit is IN the middleware — captu… 0.06s  
+  ✓ it A-35 restore semantics under the SYNC driver: an inline job bind… 0.13s  
+  ✓ it A-35 worker shape unchanged: with NO prior binding the finally s… 0.04s  
+
+   PASS  Tests\Feature\Inbox\ThreadEndpointTest
+  ✓ it FR-14: the thread page carries messages (notes included, quarant… 0.57s  
+  ✓ it EC-01 (sabotage #15's proof): a MISSING conversation and an OUT-… 0.57s  
+  ✓ it Doc 04 EC-08: ?anchor returns the WINDOW containing the anchor m… 0.79s  
+  ✓ it §9 print (SEC-05): the note gate is ABSOLUTE — internal-note con… 0.59s  
+  ✓ it B12-S02: the history door — capability holders get the preserved… 0.62s  
+
+   PASS  Tests\Feature\Inbox\TicketActionDoorsTest
+  ✓ it claim door: assigns the actor, recomputes the row, and the RACE…  0.23s  
+  ✓ it unassign door (the mobile undo): returns the ticket to the queue… 0.24s  
+  ✓ it assign door: assigns a named target; a disabled or unknown targe… 0.25s  
+  ✓ it priority door: flips through ChangePriority (audit is the servic… 0.22s  
+  ✓ it tags door: add + remove in one request through TicketTags; sugge… 0.33s  
+  ✓ it assignees directory: active human staff only — disabled and serv… 0.22s  
+  ✓ it C-10: an out-of-scope ticket answers the 404-PATTERN on every ac… 0.25s  
+  ✓ it B12 timeline door (step 14): serves the relayed events newest-fi… 0.26s  
+  ✓ it B13 subject door (step 14): a staff edit lands through SubjectWr… 0.29s  
+
+   PASS  Tests\Feature\Inbox\TicketOperationDoorsTest
+  ✓ it spam + unspam doors: mark flips the machine through the owning s… 0.28s  
+  ✓ it escalate + deescalate doors: supervisor review with the ≥10-char… 0.38s  
+  ✓ it transfer door: moves the ticket to the OPAQUE destination id (ex… 0.26s  
+  ✓ it split door: mints the linked ticket from selected messages; the…  0.31s  
+  ✓ it reopen door (C9): carries the REAL written reason into the close… 0.18s  
+  ✓ it unmerge door (C7): reverses through the owning service (source b… 0.26s  
+  ✓ it follow-up door (C9 lapsed — ruling 2026-08-13, the DOCUMENT wins… 0.22s  
+
+   PASS  Tests\Feature\Inbox\ViewChannelAuthTest
+  ✓ it SEC-01: a viewer is admitted to exactly the channels their CURRE… 0.11s  
+  ✓ it SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo… 0.12s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 1.62s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  1.55s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.07s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.04s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.05s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.03s  
+
+   PASS  Tests\Security\PlaceInQueueOneDoorTest
+  ✓ it can see a planted queue_id writer — the positive control          0.04s  
+  ✓ it T-02/A-49: exactly one file under app/ writes tickets.queue_id —… 0.27s  
+
+  Tests:    108 passed (751 assertions)
+  Duration: 153.29s
+

@@ -83,6 +83,16 @@ final class ListProjector
             ? $payload['message_id']
             : null;
 
+        // P-C2 (S11 step 9): the two rescue arms — the event names the ticket; membership from the rows.
+        if (in_array($name, ['rescue.flagged', 'rescue.auto_returned'], true)) {
+            $flagged = $payload['ticket_id'] ?? null;
+            if (is_string($flagged)) {
+                $this->recomputeTicket($flagged);
+            }
+
+            return;
+        }
+
         if (in_array($name, ['telegram.connection.revoked', 'telegram.connection.active'], true)) {
             // The Doc 05 writer already flipped tickets.channel_unreachable in
             // its own transaction; re-sync every affected ticket from truth.
@@ -162,8 +172,10 @@ final class ListProjector
             ? $this->syncIn('expiring_windows', $ticketId, ViewZsets::toMicros((string) $row->window_expires_at), $row)
             : $this->syncOut('expiring_windows', $ticketId);
 
-        // rescue — channel_unreachable, any status (BR-07 keeps them open in practice).
-        $row->channel_unreachable
+        // rescue — channel_unreachable OR a live rescue flag (P-C2, S11 step 9: the SAME predicate as
+        // SystemViews::directQuery('rescue'); SystemViewMembershipTest holds the two forms equal), any status.
+        $rescued = (bool) $row->channel_unreachable || DB::table('rescue_flags')->where('ticket_id', $ticketId)->whereNull('cleared_at')->exists();
+        $rescued
             ? $this->syncIn('rescue', $ticketId, $activityMicros, $row)
             : $this->syncOut('rescue', $ticketId);
 
@@ -175,7 +187,7 @@ final class ListProjector
             'unassigned' => [$open && $row->assignee_id === null, ViewZsets::toMicros((string) $row->ticket_created_at)],
             'sla_at_risk' => [$open && in_array($row->sla_state, ['warned', 'breached'], true) && $row->sla_due_at !== null, $row->sla_due_at !== null ? ViewZsets::toMicros((string) $row->sla_due_at) : 0],
             'expiring_windows' => [$open && in_array($windowState, ['closing', 'expired'], true) && $row->window_expires_at !== null, $row->window_expires_at !== null ? ViewZsets::toMicros((string) $row->window_expires_at) : 0],
-            'rescue' => [(bool) $row->channel_unreachable, $activityMicros],
+            'rescue' => [$rescued, $activityMicros],
         ];
         foreach ($sharedMemberships as $view => [$inView, $score]) {
             foreach ($this->variants->signatures($view) as $signature) {

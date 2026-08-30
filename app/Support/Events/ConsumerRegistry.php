@@ -87,7 +87,13 @@ final class ConsumerRegistry
         // fixtures/tickets/consumers/doc11.json tightened in the same commit).
         // Doc 11 (S11 step 6): the AVAILABILITY consumer — the dispatcher's only trigger (T-03, no polling);
         // agent.status_changed's FIRST real consumer (the [D11] seam on Doc 07 FR-28 closes here).
-        'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
+        // S11 step 9 (Doc 11 FR-16a): RescueConsumer arms/disarms the heartbeat-rescue timer.
+        // S11 step 9 (Doc 11 FR-16c/EC-06): the orphan path on a deleted queue.
+        'org.queue.deleted' => [\App\Jobs\Routing\RescueConsumer::class],
+        // P-C2 (S11 step 9): the projector's two rescue arms.
+        'rescue.flagged' => [ListProjectorConsumer::class],
+        'rescue.auto_returned' => [ListProjectorConsumer::class],
+        'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Routing\RescueConsumer::class],
         'queue.membership_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class],
@@ -124,7 +130,7 @@ final class ConsumerRegistry
         //    the AI decisions that created the ticket (ai_decisions.ticket_id);
         //    contract fixture fixtures/tickets/consumers/doc09.json; the
         //    ReopenConsumerDrillTest pin moves in THIS commit.
-        'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Routing\TicketReopenedRouter::class],
+        'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Routing\TicketReopenedRouter::class, \App\Jobs\Routing\RescueConsumer::class],   // S11 step 9: EC-08 courtesy hold
         'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
         'ticket.closed' => [ListProjectorConsumer::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],

@@ -108,9 +108,15 @@ final class SystemViews
                 ->whereIn('t.status', self::OPEN_FAMILY)
                 ->selectRaw('t.id, c.reply_window_expires_at AS sort_at'),
 
+            // P-C2 (S11 step 9, countersigned): channel_unreachable OR a LIVE rescue flag (Doc 11 FR-16 a/c).
             'rescue' => DB::table('tickets as t')
                 ->join('conversations as c', 'c.id', '=', 't.conversation_id')
-                ->where('t.channel_unreachable', true)
+                ->where(static function (Builder $q): void {
+                    $q->where('t.channel_unreachable', true)
+                        ->orWhereExists(static function (Builder $sub): void {
+                            $sub->selectRaw('1')->from('rescue_flags as rf')->whereColumn('rf.ticket_id', 't.id')->whereNull('rf.cleared_at');
+                        });
+                })
                 ->selectRaw("t.id, {$lastActivity} AS sort_at"),
 
             default => throw new \InvalidArgumentException("unknown system view: {$view}"),

@@ -47,6 +47,10 @@ Schedule::command('tickets:timers-sweep')->everyMinute()->withoutOverlapping();
 // Cleanup only: the resolver's DB-time check is the security (FS-05).
 Schedule::command('routing:expiry-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 11 FR-16a / EC-08 (P-C3 amendment): the deadline sweep for heartbeat-lost rescue flags and
+// reopen courtesy holds — a timer, not a poll; allowlisted by the filed amendment.
+Schedule::command('routing:rescue-sweep')->everyMinute()->withoutOverlapping();
+
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();

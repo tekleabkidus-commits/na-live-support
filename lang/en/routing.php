@@ -17,6 +17,10 @@ declare(strict_types=1);
 */
 
 return [
+    'system' => [
+        // FR-16c: the orphan-move system note (persistSystemMarker code `routing_orphan_moved`, N-03).
+        'routing_orphan_moved' => 'Moved to the department default queue — its queue was deleted',
+    ],
     'estimate' => [
         // FR-13 / A-52 / SEC-05 — the band vocabulary (J15): bands only, never counts or names.
         'band' => [

@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Security\PlaceInQueueOneDoorTest
+  ✓ it can see a planted queue_id writer — the positive control          9.13s  
+  ✓ it T-02/A-49: exactly one file under app/ writes tickets.queue_id —… 0.33s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.05s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.05s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.05s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 2.10s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  1.52s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.08s  
+
+   PASS  Tests\Feature\Routing\RescueTest
+  ✓ it FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig… 0.57s  
+  ✓ it FR-16a with routing.rescue.auto ON: the return needs the SystemR… 0.23s  
+  ✓ it FR-16b / AC-06 unreachable fixture: channel_unreachable populate… 0.23s  
+  ✓ it FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every… 0.28s  
+  ✓ it P-C1 physics: one LIVE flag per ticket (the second refused by th… 0.25s  
+
+  Tests:    13 passed (170 assertions)
+  Duration: 14.96s
+

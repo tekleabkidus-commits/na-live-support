@@ -1,0 +1,50 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\CapacityRaceTest
+  ⨯ it AC-03 (1): capacity C admits exactly C assignments; the C+1th an… 7.91s  
+  ⨯ it AC-03 (2): the commit path WAITS on the stats row lock held by a… 0.13s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (1): capacity C…   
+  Failed asserting that two arrays are identical.
+   Array &0 [
+  -    'assigned' => 3,
+  -    'at_capacity' => 2,
+  +    'assigned' => 5,
+   ]
+  
+
+  at tests/Feature/Routing/CapacityRaceTest.php:87
+     83▕             expect($e->capacity)->toBe($capacity)->and($e->openAssigned)->toBe($capacity);
+     84▕         }
+     85▕     }
+     86▕ 
+  ➜  87▕     expect(array_count_values($outcomes))->toBe(['assigned' => $capacity, 'at_capacity' => 2]);
+     88▕     $assigned = DB::table('tickets')->whereIn('id', array_map(fn ($t) => $t->identifier(), $tickets))->whereNotNull('assignee_id')->count();
+     89▕     expect($assigned)->toBe($capacity, 'over-capacity assignment happened');
+     90▕     expect((int) DB::table('agent_assignment_stats')->where('user_id', $agent->identifier())->value('open_assigned'))->toBe($capacity);
+     91▕ });
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:87
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (2): the commit…   
+  the lock holder saw no committed stats row — the proof would be vacuous
+Failed asserting that actual size 0 matches expected size 1.
+
+  at tests/Feature/Routing/CapacityRaceTest.php:109
+    105▕     $other = DB::connection('pgsql_platform');
+    106▕     $other->beginTransaction();
+    107▕     /** @var list<object> $locked */
+    108▕     $locked = $other->select('SELECT id FROM agent_assignment_stats WHERE user_id = ? FOR UPDATE', [$agent->identifier()]);
+  ➜ 109▕     expect($locked)->toHaveCount(1, 'the lock holder saw no committed stats row — the proof would be vacuous');
+    110▕ 
+    111▕     try {
+    112▕         DB::statement("SET lock_timeout = '400ms'");
+    113▕         $started = microtime(true);
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:109
+
+
+  Tests:    2 failed (2 assertions)
+  Duration: 8.13s
+

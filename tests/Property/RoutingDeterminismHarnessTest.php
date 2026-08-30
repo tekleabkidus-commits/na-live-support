@@ -114,3 +114,34 @@ it('the REAL LoadBased strategy agrees with the documented simulation on the sam
     $sim = simulateLoadBased(array_map(fn ($a) => $a + ['last' => null], $snapshot));
     expect($real)->toBe($sim);
 });
+
+it('SAME-SECOND TIE (advisor-ordered, S11 step 9): two tickets queued in the same second with identical rules, scored at DIFFERENT instants a tick apart (the live pipeline\'s shape) keep the documented tiebreak — the RULE score only, then queued_at, then id — replayed twice and shuffled', function () {
+    $scorer = new BoostScorer;
+    $rules = ['urgent_priority', 'vip'];
+    $queuedAt = new DateTimeImmutable('2026-08-30 12:00:00', new DateTimeZone('UTC'));
+    $tickets = [['id' => 'tb', 'matched' => ['vip']], ['id' => 'ta', 'matched' => ['vip']], ['id' => 'tc', 'matched' => []]];
+    $replay = function (array $tickets) use ($scorer, $rules, $queuedAt): array {
+        $keys = [];
+        foreach ($tickets as $i => $t) {
+            // Each ticket scored at its OWN instant: 0, 1, 2 seconds after queueing — the age term differs per ticket.
+            $now = $queuedAt->modify(sprintf('+%d seconds', $i));
+            $scored = $scorer->score($rules, $t['matched'], $queuedAt, $now);
+            $ruleScore = $scored['score'] - min($scored['age_seconds'], 999);   // PositionInQueue::rule_score
+            $keys[$t['id']] = WaitingSets::score(false, $ruleScore, (int) $queuedAt->format('U'));
+        }
+        uksort($keys, fn ($a, $b) => $keys[$a] <=> $keys[$b] ?: strcmp($a, $b));
+
+        return array_keys($keys);
+    };
+    $first = $replay($tickets);
+    expect($first)->toBe(['ta', 'tb', 'tc'], 'vip-boosted first; among equals the id (uuid7 = creation order) decides; the scoring instant must not');
+    expect($replay($tickets))->toBe($first);
+    shuffle($tickets);
+    expect($replay($tickets))->toBe($first, 'input order changed the same-second order');
+    // The CONTROL: with the age term left INSIDE the score, the later-scored equal ticket jumps — the very defect the rule_score split removed.
+    $withAge = [];
+    foreach ([['id' => 'tb', 'matched' => ['vip']], ['id' => 'ta', 'matched' => ['vip']]] as $i => $t) {
+        $withAge[$t['id']] = WaitingSets::score(false, $scorer->score($rules, $t['matched'], $queuedAt, $queuedAt->modify(sprintf('+%d seconds', $i)))['score'], (int) $queuedAt->format('U'));
+    }
+    expect($withAge['ta'] < $withAge['tb'])->toBeTrue('the control did not reproduce the age-term swap');
+});

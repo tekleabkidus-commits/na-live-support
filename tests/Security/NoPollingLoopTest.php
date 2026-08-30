@@ -29,6 +29,11 @@ use Illuminate\Console\Scheduling\Schedule;
 const ROUTING_SCHEDULED_ALLOWLIST = [
     'routing:expiry-sweep',   // T-07: the 1-min temporary-membership expiry sweep
     'routing:consistency',    // FS-01: ZSET/DB mirror probe (rebuild on drift)
+    // P-C3 AMENDMENT (filed at the Batch B checkpoint, countersigned 2026-08-30, landed S11 step 9):
+    // FR-16a's "after routing.rescue.minutes" + EC-08's hold are DEADLINE TIMERS on a ZSET (the
+    // Doc 06 TicketTimers shape) — a 1-minute deadline sweep with an in-transaction re-check,
+    // NOT a queue poll; the dispatcher stays event-driven. The enumeration grows by this ONE entry.
+    'routing:rescue-sweep',
 ];
 
 /** @return list<string> */

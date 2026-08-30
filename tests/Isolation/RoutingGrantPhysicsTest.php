@@ -22,6 +22,7 @@ const DOC11_TABLES = [
     'departments', 'teams', 'team_members', 'queues', 'queue_teams', 'queue_members',
     'user_departments', 'user_skills', 'user_routing_capacity',
     'routing_decisions', 'agent_assignment_stats',
+    'rescue_flags',   // SCHEMA AMENDMENT 5 ADDITION 1 (P-C1, S11 step 9)
 ];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). '*' = every column. */
@@ -69,6 +70,10 @@ const DOC11_DENIED_COLUMNS = [
     'agent_assignment_stats' => [
         'INSERT' => ['created_at', 'last_assigned_at'],
         'UPDATE' => ['created_at', 'id', 'last_assigned_at', 'tenant_id', 'user_id'],
+    ],
+    'rescue_flags' => [
+        'INSERT' => ['auto_returned', 'cleared_at', 'created_at', 'flagged_at'],
+        'UPDATE' => ['created_at', 'flagged_at', 'id', 'reason', 'tenant_id', 'ticket_id'],
     ],
 ];
 
@@ -122,7 +127,7 @@ it('FR-17/BR-06 physics: routing_decisions carries NO app UPDATE grant at any le
 });
 
 it('ADR 0003 / FLAG C: app holds no DELETE on departments, teams, queues, queue_members, user_departments, user_skills, routing_decisions, agent_assignment_stats — and the 42501 control executes on both membership tables', function (): void {
-    foreach (['departments', 'teams', 'queues', 'queue_members', 'user_departments', 'user_skills', 'routing_decisions', 'agent_assignment_stats'] as $table) {
+    foreach (['departments', 'teams', 'queues', 'queue_members', 'user_departments', 'user_skills', 'routing_decisions', 'agent_assignment_stats', 'rescue_flags'] as $table) {
         /** @var object{ok: bool} $row */
         $row = DB::selectOne("SELECT has_table_privilege('app', ?, 'DELETE') AS ok", [$table]);
         expect($row->ok)->toBeFalse("app can DELETE from {$table}");

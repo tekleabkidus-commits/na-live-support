@@ -1,0 +1,64 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\CapacityRaceTest
+  ⨯ it AC-03 (1): capacity C admits exactly C assignments; the C+1th an… 7.44s  
+  ⨯ it AC-03 (2): the commit path WAITS on the stats row lock held by a… 0.04s  
+  ⨯ it FR-06: pending_customer does not consume a slot unless count_pen… 0.03s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (1): cap…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (2): the…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:98
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it FR-06: pending…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:134
+
+
+  Tests:    3 failed (0 assertions)
+  Duration: 7.61s
+

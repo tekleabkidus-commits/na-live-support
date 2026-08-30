@@ -2427,15 +2427,15 @@ entries:
     justification: >-
       FLIPPED AT S11 STEP 7: pull-in → Doc 03 grant linkage through OverrideAdministration (tickets.assign_self, A-56; the three rows on ONE override_id, one transaction); expiry via the sweep AND the assignment-time resolver check proven INDEPENDENTLY (PATH A: sweep never run, resolver refuses — sabotage #8b red; PATH B: sweep alone ends the rows — sabotage #8c red; #8a green by design); recurrence hint at 3× (BR-07) as a key, nothing converted. The HTTP doors + SEC-01 matrix: tests/Feature/Routing/SupervisorOpsTest.php.
   - ac_ref: "Doc11 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Routing/RescueTest.php
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED — flips at S11 step 9: heartbeat-loss, unreachable and orphan fixtures populate the Doc 07 Rescue view per FR-16; auto-return per routing.rescue.auto. Target suite: tests/Feature/Routing/RescueTest.php.
+      FLIPPED IN PART AT S11 STEP 9 (P-C1/P-C2/P-C3 landed): heartbeat-loss (timer → flag, both Rescue-view forms), unreachable (immediate via Doc 05/07, never auto-acted), orphan (auto-move + note + audit) fixtures; the courtesy hold (EC-08) in tests/Feature/Routing/ReopenHoldTest.php. PARTIAL: "correct auto-return behavior per setting" waits on the Doc 06 SYSTEM RETURN door (packet P-C6, docs/evidence/S11-step9/packet-P-C6-system-return.md) — the port's absence is proven LOUD, the leg lands at 9b under countersign.
   - ac_ref: "Doc11 AC-07"
     suite_path: manual
     type: manual
