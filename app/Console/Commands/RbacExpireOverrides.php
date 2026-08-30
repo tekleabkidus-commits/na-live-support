@@ -115,6 +115,29 @@ final class RbacExpireOverrides extends Command
                         return;
                     }
 
+                    // Doc 11 T-07/EC-07 (S11 step 3): the temporary queue/department rows linked
+                    // to this override END with it — ended_at, never deleted (FLAG C); made
+                    // assignments persist; each ended queue row publishes its expiry event.
+                    /** @var list<object{queue_id: string, user_id: string}> $endedQueues */
+                    $endedQueues = DB::table('queue_members')
+                        ->where('override_id', $override->getKey())
+                        ->whereNull('ended_at')
+                        ->get(['queue_id', 'user_id'])
+                        ->all();
+                    DB::table('queue_members')->where('override_id', $override->getKey())->whereNull('ended_at')
+                        ->update(['ended_at' => DB::raw('clock_timestamp()'), 'updated_at' => DB::raw('clock_timestamp()')]);
+                    DB::table('user_departments')->where('override_id', $override->getKey())->whereNull('ended_at')
+                        ->update(['ended_at' => DB::raw('clock_timestamp()'), 'updated_at' => DB::raw('clock_timestamp()')]);
+                    foreach ($endedQueues as $row) {
+                        $events->publish('queue.temporary_grant.expired', [
+                            'tenant_id' => $override->tenantId(),
+                            'queue_id' => $row->queue_id,
+                            'user_id' => $row->user_id,
+                            'override_id' => $override->identifier(),
+                            'cause' => 'expired',
+                        ]);
+                    }
+
                     $events->publish('rbac.override.expired', [
                         'tenant_id' => $override->tenantId(),
                         'user_id' => $override->user_id,

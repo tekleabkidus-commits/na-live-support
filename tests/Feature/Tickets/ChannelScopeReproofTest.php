@@ -27,10 +27,9 @@ use App\Support\Rbac\CapabilityCacheInvalidator;
 | only the ADMIT case proves anything changed — and only the DENY case proves nothing
 | silently widened while it did.
 |
-| Team/Dept are checked too: they must STILL be refused, because MembershipSource binds
-| to EmptyMembership until Doc 11 supplies real membership. A scope that started
-| answering "yes" here before Doc 11 exists would be the open-fall Doc 03's NFR-04
-| sabotage was written to catch.
+| Team/Dept are checked too: REFUSED without membership reach, ADMITTED with it — since S11
+| step 3 (Packet 3, A-50) MembershipSource binds OrgMembership; the pre-Doc 11 "still
+| refused" pin was INVERTED deliberately (the S20 precedent), its refusal half kept.
 */
 
 /** A role with a chosen ticket scope level, and a user holding it. */
@@ -111,28 +110,46 @@ test('T-06 DENY: unassigning takes the subscription right away again', function 
     );
 });
 
-test('T-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membership', function () {
-    // One conversation PER LEVEL, in one tenant: FR-10 allows a single open-family
-    // ticket per conversation, so reusing one conversation would test T-02 rather
-    // than the scope level.
+test('T-06 INVERTED (S11 step 3, Packet 3 — A-50; the S20 inversion precedent): Team and Dept scopes ADMIT with real membership reach and STAY REFUSED without it', function () {
+    // INVERSION, deliberate and cited: until S11 step 3 this test pinned "Team/Dept stay
+    // REFUSED until Doc 11 supplies membership". Doc 11 bound OrgMembership (A-50: Dept =
+    // user_departments; Team = the team's queue reach onto department_id). The refusal
+    // half is KEPT for an agent WITHOUT reach — no assertion weakened, one added.
     [$tenant] = creationFixture();
     $tenantId = $tenant->identifier();
+    $department = departmentFixture('Reach Department');
+    $queue = (string) DB::table('departments')->where('id', $department)->value('default_queue_id');
+    $mover = ticketActor(['tickets.department.change', 'tickets.view'], 'Fixture Mover Role');
 
     foreach (['Team', 'Dept'] as $level) {
-        $agent = scopedAgent($level, $level.' Still Closed');
+        $with = scopedAgent($level, $level.' With Reach');
+        $without = scopedAgent($level, $level.' Without Reach');
+        if ($level === 'Dept') {
+            DB::table('user_departments')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'user_id' => $with->identifier(), 'department_id' => $department, 'kind' => 'direct']);
+        } else {
+            $team = (string) Str::uuid7();
+            DB::table('teams')->insert(['id' => $team, 'tenant_id' => $tenantId, 'name' => 'Reach team '.$level]);
+            DB::table('queue_teams')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'queue_id' => $queue, 'team_id' => $team]);
+            DB::table('team_members')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'team_id' => $team, 'user_id' => $with->identifier()]);
+        }
+
         $conversation = anotherConversation($tenantId, strtolower($level).'-');
-
         $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+        app(App\Domain\Tickets\Transfer\TransferTicket::class)->transfer($ticket, $department, $mover);
+        $ticket->refresh();
 
-        // A Team/Dept-scoped role cannot even be ASSIGNED pre-Doc 11: the ticket's
-        // department is not in their (empty) membership, so FR-15's as-if-assigned
-        // check refuses. That refusal is itself the fail-closed behaviour under test.
-        expect(fn () => app(AssignTicket::class)->claim($ticket, $agent))
+        // WITHOUT reach: still refused at FR-15's as-if-assigned check, and the channel stays closed.
+        expect(fn () => app(AssignTicket::class)->claim($ticket, $without))
             ->toThrow(App\Domain\Tickets\Assignment\AssigneeOutOfScope::class);
+        expect(app(ConversationChannelGate::class)->authorize($without, $conversation->identifier()))->toBeFalse(
+            "{$level} scope admitted an agent with NO membership reach — the open-fall NFR-04 exists to catch",
+        );
 
-        expect(app(ConversationChannelGate::class)->authorize($agent, $conversation->identifier()))->toBeFalse(
-            "{$level} scope started admitting before Doc 11 supplied membership — this is the open-fall "
-            .'NFR-04 exists to catch',
+        // WITH reach: the claim lands and the channel admits.
+        app(AssignTicket::class)->claim($ticket->fresh(), $with);
+        // authorize() answers with the presence member info on ADMIT (array), false on refusal.
+        expect(app(ConversationChannelGate::class)->authorize($with, $conversation->identifier()))->toBeArray(
+            "{$level} scope with real membership reach was refused — the binding did not widen",
         );
     }
 });

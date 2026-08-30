@@ -55,7 +55,10 @@ final class ScopeSets
 
         return match ($level) {
             'Own' => $query->where($columns->owner, $user->identifier()),
-            'Team' => $this->membershipConstraint($query, $columns->team, $this->membership->teamIdsFor($user)),
+            // Doc 11 A-50 point 3 (S11 step 3): the id KIND follows the column's declaration.
+            'Team' => $this->membershipConstraint($query, $columns->team, $columns->teamColumnHolds === 'department'
+                ? $this->membership->teamReachDepartmentIdsFor($user)
+                : $this->membership->teamIdsFor($user)),
             'Dept' => $this->membershipConstraint($query, $columns->department, $this->membership->departmentIdsFor($user)),
             'All' => $query,
             default => $this->emptySet($query),

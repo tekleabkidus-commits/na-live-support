@@ -13,9 +13,17 @@ namespace App\Support\Rbac\Scopes;
  */
 final readonly class ScopeColumns
 {
+    /**
+     * @param  'team'|'department'  $teamColumnHolds  what the `team` column CONTAINS — team ids
+     *                                                (Doc 03's fixture table) or department ids
+     *                                                (tickets/list items: the team's queue reach,
+     *                                                Doc 11 A-50 point 3). ScopeSets picks the id
+     *                                                source by it.
+     */
     public function __construct(
         public string $owner,
         public string $team,
         public string $department,
+        public string $teamColumnHolds = 'team',
     ) {}
 }

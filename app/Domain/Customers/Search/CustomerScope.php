@@ -49,7 +49,8 @@ final class CustomerScope
         return match ($level) {
             'All' => 'all',
             'Own' => 'own:'.$viewer->identifier(),
-            'Team' => 'team:'.implode(',', $this->sorted($this->membership->teamIdsFor($viewer))),
+            // Doc 11 A-50 point 3 (S11 step 3): team:/dept: filter department_ids — reach ids here.
+            'Team' => 'team:'.implode(',', $this->sorted($this->membership->teamReachDepartmentIdsFor($viewer))),
             'Dept' => 'dept:'.implode(',', $this->sorted($this->membership->departmentIdsFor($viewer))),
             default => 'none',
         };

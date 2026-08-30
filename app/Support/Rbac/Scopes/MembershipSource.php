@@ -28,4 +28,13 @@ interface MembershipSource
 
     /** @return list<string> department ids the user belongs to */
     public function departmentIdsFor(User $user): array;
+
+    /**
+     * Doc 11 A-50 point 3 (S11 step 3, countersigned): departments of the queues the user's
+     * teams are members of — "records of the user's teams" for aggregates that carry a
+     * department column and no team column (tickets, list items, customers' ticket facets).
+     *
+     * @return list<string> department ids, sorted
+     */
+    public function teamReachDepartmentIdsFor(User $user): array;
 }

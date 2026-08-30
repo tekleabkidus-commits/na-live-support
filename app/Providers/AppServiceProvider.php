@@ -58,15 +58,18 @@ class AppServiceProvider extends ServiceProvider
         // missing-translation telemetry, replacing the stock single-fallback translator.
         // Doc 03 T-02/T-03: enforcement points resolve maps through the
         // provider seam — bound to the CACHED decorator (TTL 10 s + explicit
-        // invalidation; R-04 keys bypass); Team/Dept membership is EMPTY
-        // until Doc 11 binds real sources — fail closed, never open.
+        // invalidation; R-04 keys bypass); Team/Dept membership is REAL since
+        // S11 step 3 (the binding below).
         $this->app->bind(
             \App\Support\Rbac\CapabilityMapProvider::class,
             \App\Support\Rbac\CachedCapabilityMaps::class,
         );
+        // Doc 11 (S11 step 3, Packet 3 countersigned): THE REAL MEMBERSHIP SOURCE — the seam
+        // fail-closed since S19 is bound; the transition is MembershipTransitionTest's PRE/POST
+        // pair; EmptyMembership is the test-only control and must never return here.
         $this->app->bind(
             \App\Support\Rbac\Scopes\MembershipSource::class,
-            \App\Support\Rbac\Scopes\EmptyMembership::class,
+            \App\Domain\Org\Membership\OrgMembership::class,
         );
         // Doc 11 (S11 STOP-A packet): Doc 06's commit-time capacity interface, Doc 11's
         // database-serialized implementation behind it (agent_assignment_stats FOR UPDATE).

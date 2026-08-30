@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +70,10 @@ test('FR-22: a transfer changes the department, keeps the status, retains an All
     expect(DB::table('audit_log')->where('action_key', 'ticket.transferred')->where('entity_id', $ticket->identifier())->count())->toBe(1);
 });
 
-test('FR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to the queue, ticket.assigned emitted with null', function () {
+test('FR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assignee WITHOUT access to the destination is reset to the queue (ticket.assigned null) — and WITH access is RETAINED', function () {
+    // INVERSION, deliberate and cited: the pre-Doc 11 pin ("fails closed — EmptyMembership
+    // cannot contain the destination") keeps its refusal half for an assignee WITHOUT a
+    // user_departments row and gains the retained half for one WITH it.
     [, , $ticket] = ticketFixture('open');
     $actor = ticketActor(['tickets.department.change', 'tickets.view'], 'Fixture Transfer Role');
     $deptScoped = scopedActor(['tickets.view'], 'Dept', 'Fixture Dept-Scoped Role');
@@ -79,7 +83,7 @@ test('FR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to the que
     app(TransferTicket::class)->transfer($ticket, departmentFixture('Fixture Transfer Target'), $actor); // S11 step 2b
 
     $ticket->refresh();
-    expect($ticket->assignee_id)->toBeNull('EmptyMembership cannot contain the destination — the assignee must not silently keep invisible work');
+    expect($ticket->assignee_id)->toBeNull('the destination is outside the assignee\'s department access — the assignee must not silently keep invisible work');
 
     $assigned = DB::table('outbox')->where('name', 'ticket.assigned')->orderByDesc('id')->first();
     $payload = json_decode((string) $assigned->payload, true, 512, JSON_THROW_ON_ERROR);
@@ -88,16 +92,30 @@ test('FR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to the que
 
     $transferred = json_decode((string) DB::table('outbox')->where('name', 'ticket.transferred')->first()->payload, true, 512, JSON_THROW_ON_ERROR);
     expect($transferred['assignee_retained'])->toBeFalse();
+
+    // The retained half (S11 step 3): access to the destination keeps the assignee.
+    $retainedTarget = departmentFixture('Fixture Retained Target');
+    DB::table('user_departments')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $ticket->getAttribute('tenant_id'), 'user_id' => $deptScoped->identifier(), 'department_id' => $retainedTarget, 'kind' => 'direct']);
+    Ticket::query()->whereKey($ticket->identifier())->update(['assignee_id' => $deptScoped->identifier()]);
+    app(TransferTicket::class)->transfer($ticket->fresh(), $retainedTarget, $actor);
+    expect($ticket->fresh()->assignee_id)->toBe($deptScoped->identifier(), 'an assignee WITH department access was reset');
 });
 
-test('SEC-01: a Dept-scoped ACTOR cannot transfer into a department outside their (empty pre-Doc 11) membership', function () {
+test('SEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR cannot transfer into a department outside their membership — and CAN into one inside it', function () {
     [, , $ticket] = ticketFixture('open');
     $deptActor = scopedActor(['tickets.department.change', 'tickets.view'], 'Dept', 'Fixture Dept Actor Role');
 
+    // The refusal half, kept: no user_departments row for the destination.
     expect(fn () => app(TransferTicket::class)->transfer($ticket, departmentFixture('Fixture Transfer Target'), $deptActor)) // S11 step 2b
         ->toThrow(TransitionRefused::class, 'target_out_of_scope');
 
     expect($ticket->fresh()->department_id)->toBeNull();
+
+    // The admitted half (S11 step 3): the actor belongs to the destination.
+    $inside = departmentFixture('Fixture Inside Target');
+    DB::table('user_departments')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $ticket->getAttribute('tenant_id'), 'user_id' => $deptActor->identifier(), 'department_id' => $inside, 'kind' => 'direct']);
+    app(TransferTicket::class)->transfer($ticket->fresh(), $inside, $deptActor);
+    expect($ticket->fresh()->department_id)->toBe($inside);
 });
 
 // ── FR-23: escalate ──────────────────────────────────────────────────────────

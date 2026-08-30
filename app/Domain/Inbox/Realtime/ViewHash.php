@@ -47,7 +47,9 @@ final class ViewHash
         return match ($level) {
             'All' => 'all',
             'Own' => 'own:'.$user->identifier(),
-            'Team' => 'team:'.implode(',', $this->sorted($this->membership->teamIdsFor($user))),
+            // Doc 11 A-50 point 3 (S11 step 3): the variant filters department_id, so the
+            // team signature carries the team's queue-reach DEPARTMENT ids.
+            'Team' => 'team:'.implode(',', $this->sorted($this->membership->teamReachDepartmentIdsFor($user))),
             'Dept' => 'dept:'.implode(',', $this->sorted($this->membership->departmentIdsFor($user))),
             default => 'none',
         };

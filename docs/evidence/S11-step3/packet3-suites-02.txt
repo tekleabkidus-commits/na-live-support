@@ -1,0 +1,245 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\CapabilityCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serves the map from cache within the TTL and rebuilds after expl[39m[90m…[39m [90m8.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bypasses the cache for R-04's highest-sensitivity keys — revocat[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins both composed TTLs at 10 s — the FS-02 bounds are 10 s sess[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit busts Doc 02's per-token scope cache in the same invalidation —[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps VERDICTS BYTE-IDENTICAL with the cache store dead, logs th[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores PRIMITIVES ONLY — verdicts, never objects or secrets (SEC[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit degrades within the FS-01 latency budget shape: per-request DB r[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\CatalogSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the v[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks high-risk exactly where §4.1 writes "(high)" plus ai.provi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the scope dimension of every key: 47 scoped (46 per the §4.[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the four Doc 02-era entries under their exact registered n[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves every label and description i18n key in BOTH launch lan[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit groups every key under one of the fourteen §4.1 modules, each wi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats an unknown key as a programming error, never a verdict (B[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\ExpireOverridesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit tidies expired overrides: revoke(cause=expired) + outbox event +[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 11 T-07/EC-07 / A-50 obligation 4 (S11 step 3): the temporar[39m[90m…[39m [90m0.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\JobReResolutionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit runs a demoted user's queued action under POST-demotion rights ([39m[90m…[39m [90m0.45s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\PrecedenceMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces the normative verdict for every precedence cell (AC-02)[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies EVERYTHING for a user with no role — implicit deny is the[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never enforces an orphan DB key, and defaults a granted-nowhere[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries the granter and expiry on override verdicts — the explor[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets an override change the VERB only — the scope map stays the[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails closed on a scoped module missing from the role's scope ma[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RbacAdminBehaviorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives the EC-03 loser a 409 carrying the winner's state to re-ap[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an override without a ≥10-char reason, and audits the re[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit warns when more users than rbac.override.warn_threshold carry an[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stops an editor granting keys they do not hold when rbac.strict_[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers the explorer with verdict + WHY: source, granter and exp[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RbacStorageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit enforces one role per user as PHYSICS: a single column exists an[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps role names unique per tenant among LIVE roles, and frees t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a hard DELETE from the app role on all three rbac tables[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enables AND forces RLS with a tenant policy on all three rbac ta[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows at most one LIVE override per user and permission, and fr[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects garbage effect and revoke_cause values at the schema lay[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses self-approval on pending grants BY TABLE CONSTRAINT, and[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit requires a subject: a role pending grant without a role, or with[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit logs and IGNORES orphan DB keys — never enforces them (T-01, FS-[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reports a healthy catalog as empty — the check is quiet when not[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\ReadOnlySweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit lets the seeded Read Only template accept ZERO writes across eve[39m[90m…[39m [90m2.62s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RoleSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the nine Appendix B templates through REAL provisioning, f[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the ratified grant constraints: SA=all keys (114 since S10[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent: provisioning-style double seed yields ONE consist[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEVER overwrites an edited template, updates an untouched one on[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit emits rbac.role.created through the outbox and writes the audit[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RouteCoverageSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses EVERY permission-declared staff route to an under-privil[39m[90m…[39m [90m3.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: a holder passes the same middleware on the sam[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit masks object existence on out-of-scope reads — 404, never 403, f[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\SafetyRailsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit blocks demoting the LAST admin-pair holder, naming who else hold[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks a ROLE EDIT that would strip the pair from its last holde[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks disabling the last admin THROUGH the UserDisabler route ([39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks deleting an assigned role with the count, and deletes an[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes a high-risk grant through a DISTINCT second admin when fo[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES to enable four-eyes with fewer than two approval-rights[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\ScopeFixtureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit produces the EXACT visible set for each scope level on list quer[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers the OBJECT check with the same implementation as the lis[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves Team scope with NO team to the empty set — fails closed[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a scope map SILENT about the module to the empty set (N[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the TEST-ONLY EmptyMembership control fail-closed — Team/D[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 RE-PROOF: OrgMembership over REAL rows yields the SAME exa[39m[90m…[39m [90m0.19s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\MembershipTransitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit PRE-BINDING: with the real tables POPULATED, EmptyMembership sti[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST-BINDING: OrgMembership yields EXACTLY the expected sets — d[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the production container binds OrgMembership (the seam is real),[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit A-50 obligation 2 — DIVERGENCE: a teammate ASSIGNED a ticket in[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit obligation 6 — the production WIRING binds OrgMembership, and Em[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ChannelScopeReproofTest[39m
+  [32;1m✓[39;22m[90m [39m[90mT-06 ADMIT: an Own-scoped agent may subscribe to a conversation the[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: the same Own-scoped agent is refused on a conversation t[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06 DENY: unassigning takes the subscription right away again[39m[90m      [39m [90m0.20s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06 INVERTED (S11 step 3, Packet 3 — A-50; the S20 inversion prece[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: an All-scoped agent still subscribes, and conversations.view[39m[90m… [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\PerViewerCountsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: a shared saved view shows each viewer THEIR count — the[39m[90m… [39m [90m10.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04 on a SYSTEM view: the base unassigned set and an Own-scope[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\ViewChannelAuthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01: a viewer is admitted to exactly the channels their CURRE[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01: a SCOPE CHANGE breaks the previously valid hash — the fo[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\InboxSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows[39m[90m…[39m [90m3.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC posture: the hydration order is the ZSET's and out-of-scope[39m[90m… [39m [90m1.63s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\SyncGoldenTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B-4 ordering: events replay in (occurred_at, id) with UUIDv7 as[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B-4 watermark + long-transaction no-miss: a laggard stamped INSI[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-31 scope golden: a scope-excluded ticket's event NEVER reaches[39m[90m…[39m [90m1.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 overflow: past the bound the response INSTRUCTS a full refe[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the HTTP contract: v:1 envelope with server_now (EC-07's anchor,[39m[90m…[39m [90m0.81s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CustomerSearchScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 1: tenant A NEVER sees tenant B's indexed customers[39m[90m… [39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 layer 2: the customers-module scope filter is INJECTED ser[39m[90m…[39m [90m1.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: the HTTP door accepts a QUERY STRING and nothing else —[39m[90m… [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07: HISTORICAL usernames hit (FR-06) — a renamed Telegram ide[39m[90m…[39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 / §14: Amharic name search returns the expected customers[39m[90m… [39m [90m2.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\OrganizationSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds EXACTLY FR-01's nine departments, in order, each with one[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent and never overwrites an operator-edited seed: a re[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rides ProvisioningStep::Organization — ordered after DefaultRole[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs inside a real provisioning: a tenant provisioned through Te[39m[90m…[39m [90m0.36s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\MembershipTransitionTest[22m [90m>[39m it POST-BINDING: OrgMem…   
+[39;1m  Failed asserting that an array contains 'a FOREIGN or unknown department id resolved for direct: 01a05292-c91b-72ac-988b-919ea2e29490'.[39;22m
+
+  at [32mtests/Security/MembershipTransitionTest.php[39m:[32m114[39m
+    110▕     expect($source->departmentIdsFor($u['ended']))->toBe([], 'an ENDED access resolved');
+    111▕     expect($source->departmentIdsFor($u['nobody']))->toBe([])->and($source->teamIdsFor($u['nobody']))->toBe([]);
+    112▕     foreach ($u as $name => $user) {
+    113▕         foreach ($source->departmentIdsFor($user) as $id) {
+  ➜ 114▕             expect([$scene['d1'], $scene['d2']])->toContain($id, "a FOREIGN or unknown department id resolved for {$name}: {$id}");
+    115▕         }
+    116▕     }
+    117▕ });
+    118▕
+
+  [33m1   [39m[39;1mtests/Security/MembershipTransitionTest.php[39;22m:[39;1m114[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\MembershipTransitionTest[22m [90m>[39m it A-50 obli… [41;1m TypeError [49;22m  
+[39;1m  App\Domain\Tickets\Storage\TicketScope::visible(): Argument #2 ($ticketId) must be of type string, null given, called in /app/tests/Security/MembershipTransitionTest.php on line 143[39;22m
+
+  at [32mapp/Domain/Tickets/Storage/TicketScope.php[39m:[32m56[39m
+     52▕         );
+     53▕     }
+     54▕ 
+     55▕     /** Is this ticket inside the user's view scope RIGHT NOW? (SEC-01's re-check.) */
+  ➜  56▕     public function visible(User $user, string $ticketId): bool
+     57▕     {
+     58▕         return $this->scopes->objectVisible(
+     59▕             $this->ticketQuery(),
+     60▕             $ticketId,
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Storage/TicketScope.php[39;22m:[39;1m56[39;22m
+  [33m2   [39m[39;1mtests/Security/MembershipTransitionTest.php[39;22m:[39;1m143[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06 INVERTED (S1…   
+[39;1m  Team scope with real membership reach was refused — the binding did not widen
+Failed asserting that Array &0 [
+    'id' => '01a05292-cd58-714e-a13c-daa2a14ec846',
+    'name' => 'Aiden Padberg',
+] is true.[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m150[39m
+    146▕         );
+    147▕ 
+    148▕         // WITH reach: the claim lands and the channel admits.
+    149▕         app(AssignTicket::class)->claim($ticket->fresh(), $with);
+  ➜ 150▕         expect(app(ConversationChannelGate::class)->authorize($with, $conversation->identifier()))->toBeTrue(
+    151▕             "{$level} scope with real membership reach was refused — the binding did not widen",
+    152▕         );
+    153▕     }
+    154▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m150[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m131 passed[39;22m[90m (3391 assertions)[39m
+  [90mDuration:[39m [39m55.49s[39m
+

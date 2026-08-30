@@ -23,15 +23,17 @@ use App\Support\Rbac\Scopes\ScopeSets;
  *   Own  -> assignee_id     "assigned to the user" is what owning a ticket means here.
  *                           FR-15 makes assignment the thing that must intersect with
  *                           view scope, so the same column answers both questions.
- *   Team -> department_id   PLACEHOLDER, and deliberately the same column as Dept:
- *   Dept -> department_id   teams are Doc 11's structure and no team column exists yet.
+ *   Team -> department_id   BY DESIGN (Doc 11 A-50 point 3, S11 step 3): a ticket has no
+ *   Dept -> department_id   team; "records of the user's teams" are the tickets in the
+ *                           departments the team's queues serve, so the team column IS
+ *                           department_id and its id source is the team's queue REACH
+ *                           (MembershipSource::teamReachDepartmentIdsFor, declared by
+ *                           teamColumnHolds: 'department').
  *
- * TEAM/DEPT STILL FAIL CLOSED, and that is not an oversight. `MembershipSource` binds
- * to `EmptyMembership` in production until Doc 11 supplies real membership, so
- * ScopeSets resolves both levels to the EMPTY set — a Team-scoped role sees nothing
- * rather than everything. Doc 06 changes only the `Own` level from "structurally
- * impossible" to "real", which is the narrow, provable step; widening Team/Dept before
- * Doc 11 exists would be the open-fall Doc 03's NFR-04 sabotage was written to catch.
+ * TEAM/DEPT RESOLVE TO REAL ROWS since S11 step 3 (Packet 3, countersigned): `MembershipSource`
+ * binds to Doc 11's `OrgMembership` in production. The transition — fail-closed empty before,
+ * exactly the expected sets after, a foreign or expired row anywhere = red — is
+ * MembershipTransitionTest; `EmptyMembership` remains the test-only fail-closed control.
  */
 final class TicketScope
 {
@@ -46,6 +48,7 @@ final class TicketScope
             owner: 'assignee_id',
             team: 'department_id',
             department: 'department_id',
+            teamColumnHolds: 'department',   // Doc 11 A-50 point 3 (S11 step 3): the team's queue reach
         );
     }
 

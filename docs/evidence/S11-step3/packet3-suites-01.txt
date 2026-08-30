@@ -1,0 +1,16 @@
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  Class FixtureMembership contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (App\Support\Rbac\Scopes\MembershipSource::teamReachDepartmentIdsFor)[39;22m
+
+  at [32mtests/Feature/Rbac/ScopeFixtureTest.php[39m:[32m43[39m
+     39▕ 
+     40▕     protected $guarded = [];
+     41▕ }
+     42▕ 
+  ➜  43▕ final class FixtureMembership implements MembershipSource
+     44▕ {
+     45▕     /**
+     46▕      * @param  array<string, list<string>>  $teams
+     47▕      * @param  array<string, list<string>>  $departments
+

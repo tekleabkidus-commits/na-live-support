@@ -42,6 +42,7 @@ final class ListReadModel
         return new ScopeColumns(
             owner: 'assignee_id',
             team: 'department_id',
+            teamColumnHolds: 'department',   // Doc 11 A-50 point 3 (S11 step 3)
             department: 'department_id',
         );
     }

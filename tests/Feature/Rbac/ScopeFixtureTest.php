@@ -60,6 +60,12 @@ final class FixtureMembership implements MembershipSource
     {
         return $this->departments[$user->identifier()] ?? [];
     }
+
+    /** The fixture table's team column holds TEAM ids (teamColumnHolds default) — reach is unused here. */
+    public function teamReachDepartmentIdsFor(User $user): array
+    {
+        return [];
+    }
 }
 
 const SCOPE_COLUMNS = new ScopeColumns(owner: 'owner_id', team: 'team_id', department: 'department_id');
@@ -219,15 +225,76 @@ it('resolves a scope map SILENT about the module to the empty set (NFR-04 — mi
     });
 });
 
-it('gives the production pre-Doc 11 binding EMPTY membership — Team/Dept scoped roles see nothing yet (T-03 seam)', function () {
+it('keeps the TEST-ONLY EmptyMembership control fail-closed — Team/Dept scoped roles see nothing under it (T-03; since S11 step 3 the production binding is OrgMembership, asserted in MembershipTransitionTest)', function () {
     [$tenant, $users] = rbacScopeFixture();
 
     asTenant($tenant, function () use ($users): void {
-        // Rebind the real default over the fixture: the shipped platform has
-        // no membership sources until Doc 11.
+        // Rebind the control over the fixture: S11 step 3 (Packet 3, countersigned)
+        // moved production to OrgMembership; this class is now the fail-closed control.
         app()->instance(MembershipSource::class, new App\Support\Rbac\Scopes\EmptyMembership);
 
         expect(visibleLabels($users['team']))->toBe([])
             ->and(visibleLabels($users['dept']))->toBe([]);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Doc 11 A-50 obligation 5 (S11 step 3, Packet 3 countersigned): THE AC-03 RE-PROOF
+|--------------------------------------------------------------------------
+| The SAME exact sets, all four levels, against OrgMembership reading REAL rows —
+| teams/team_members (Team, the fixture table's team_id column holds team ids) and
+| departments/user_departments (Dept). The fixture cases above remain the contract; this
+| block is the living proof Doc 11 owed since S19 ("a bare DONE there is a false DONE").
+*/
+it('AC-03 RE-PROOF: OrgMembership over REAL rows yields the SAME exact visible sets at all four levels', function () {
+    $tenant = createTenant();
+
+    asTenant($tenant, function () use ($tenant): void {
+        $tenantId = $tenant->identifier();
+        $d1 = departmentFixture('D1');
+        $d2 = departmentFixture('D2');
+        $t1 = (string) Illuminate\Support\Str::uuid7();
+        $t2 = (string) Illuminate\Support\Str::uuid7();
+        DB::table('teams')->insert([
+            ['id' => $t1, 'tenant_id' => $tenantId, 'name' => 'T1'],
+            ['id' => $t2, 'tenant_id' => $tenantId, 'name' => 'T2'],
+        ]);
+
+        $mkRole = fn (string $name, array $scopes) => Role::create(['name' => $name, 'color' => 'accent-1', 'permissions' => ['tickets.view'], 'scopes' => $scopes]);
+        $mkUser = function (Role $role) {
+            $user = User::factory()->create();
+            $user->forceFill(['role_id' => $role->getKey()])->save();
+
+            return $user;
+        };
+        $users = [
+            'own' => $mkUser($mkRole('Real Own', ['tickets' => 'Own'])),
+            'team' => $mkUser($mkRole('Real Team', ['tickets' => 'Team'])),
+            'dept' => $mkUser($mkRole('Real Dept', ['tickets' => 'Dept'])),
+            'all' => $mkUser($mkRole('Real All', ['tickets' => 'All'])),
+        ];
+        DB::table('team_members')->insert(['id' => (string) Illuminate\Support\Str::uuid7(), 'tenant_id' => $tenantId, 'team_id' => $t1, 'user_id' => $users['team']->identifier()]);
+        DB::table('user_departments')->insert(['id' => (string) Illuminate\Support\Str::uuid7(), 'tenant_id' => $tenantId, 'user_id' => $users['dept']->identifier(), 'department_id' => $d1, 'kind' => 'direct']);
+
+        // PRODUCTION binding, not the fixture source.
+        app()->forgetInstance(MembershipSource::class);
+        expect(app(MembershipSource::class))->toBeInstanceOf(App\Domain\Org\Membership\OrgMembership::class);
+
+        $other = User::factory()->create();
+        $mkItem = fn (string $label, ?User $owner, ?string $team, ?string $dept) => ScopeFixtureItem::create([
+            'id' => fake()->uuid(), 'tenant_id' => $tenantId, 'owner_id' => $owner?->identifier(), 'team_id' => $team, 'department_id' => $dept, 'label' => $label,
+        ]);
+        $mkItem('i1', $users['own'], $t1, $d1);
+        $mkItem('i2', $other, $t1, $d1);
+        $mkItem('i3', $other, $t2, $d1);
+        $mkItem('i4', $other, $t2, $d2);
+        $mkItem('i5', $users['own'], $t2, $d2);
+        $mkItem('i6', $other, null, null);
+
+        expect(visibleLabels($users['own']))->toBe(['i1', 'i5'])
+            ->and(visibleLabels($users['team']))->toBe(['i1', 'i2'])
+            ->and(visibleLabels($users['dept']))->toBe(['i1', 'i2', 'i3'])
+            ->and(visibleLabels($users['all']))->toBe(['i1', 'i2', 'i3', 'i4', 'i5', 'i6']);
     });
 });
