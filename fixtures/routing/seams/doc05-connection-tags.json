@@ -1,0 +1,8 @@
+{
+  "_comment": "Doc 11 FR-08 step 1 SEAM (S11, STOP-C.3 ruled 2026-08-30): the CONNECTION-side routing tag is Doc 05 FR-08's (never built there); Doc 11 preserves the precedence slot ('conversation default (Doc 05 connection/bot routing tag)') and tests it AGAINST THESE ROWS. In production the ConnectionRoutingTagSource returns null (falls through to the tenant default department). Reopener filed on Doc 05's FR-08 BUILD-STATUS row. Synthetic data per CLAUDE.md §8 — no production identifiers.",
+  "connections": [
+    { "connection_id": "fixture-conn-payments", "routing_tag": "payments" },
+    { "connection_id": "fixture-conn-vip", "routing_tag": "vip" },
+    { "connection_id": "fixture-conn-untagged", "routing_tag": null }
+  ]
+}

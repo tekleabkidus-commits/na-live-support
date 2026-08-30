@@ -1,0 +1,7 @@
+{
+  "_comment": "Doc 11 FR-14 / FR-15 / A-53 SEAM (S11, [D12]): business-hours calendars are Doc 12's. This fixture-shaped contract is what HoursContract reads in local/testing; production returns 'always open' (no calendar) until Doc 12 lands — hours NEVER touch eligibility (EC-09), only the estimator band and the pull-in expiry default. Times are tenant-local (Doc 01 timezone rules). Synthetic per CLAUDE.md §8.",
+  "default": { "open": "08:00", "close": "22:00", "days": [1, 2, 3, 4, 5, 6, 7] },
+  "department_overrides": {
+    "fixture-dept-vip": { "open": "00:00", "close": "24:00", "days": [1, 2, 3, 4, 5, 6, 7] }
+  }
+}

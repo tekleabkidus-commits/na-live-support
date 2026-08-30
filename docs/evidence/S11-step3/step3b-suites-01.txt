@@ -1,0 +1,17 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  Class App\Support\Audit\AuditLogger@anonymous cannot extend final class App\Support\Audit\AuditLogger[39;22m
+
+  at [32mtests/Feature/Org/DepartmentAccessTest.php[39m:[32m47[39m
+     43▕     $agent = ticketActor(['tickets.view'], 'Fixture Access Agent');
+     44▕     $admin = ticketActor(['org.departments.manage'], 'Fixture Access Admin');
+     45▕ 
+     46▕     // Break the act AFTER both inserts: the audit recorder — inside the transaction — throws.
+  ➜  47▕     $throwing = new class(app(App\Support\Tenancy\TenantContext::class)) extends App\Support\Audit\AuditLogger
+     48▕     {
+     49▕         public function record(string $actionKey, string $entity, ?string $entityId, App\Support\Audit\AuditActor $actorType, array $payload, ?string $actorId = null, ?string $actorLabel = null, ?string $tenantId = null): void
+     50▕         {
+     51▕             throw new RuntimeException('audit sink down (fixture)');
+
