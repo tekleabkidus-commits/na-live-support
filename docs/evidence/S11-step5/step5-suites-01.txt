@@ -1,0 +1,19 @@
+
+  [41;1m Error [49;22m
+
+[39;1m  Call to undefined method Illuminate\Container\Container::basePath()[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Foundation/helpers.php[39m:[32m206[39m
+    202▕      * @param  string  $path
+    203▕      */
+    204▕     function base_path($path = ''): string
+    205▕     {
+  ➜ 206▕         return app()->basePath($path);
+    207▕     }
+    208▕ }
+    209▕ 
+    210▕ if (! function_exists('bcrypt')) {
+
+  [33m1   [39m[39;1mtests/Feature/Routing/DecisionOrderTest.php[39;22m:[39;1m45[39;22m
+
+

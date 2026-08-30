@@ -1,0 +1,62 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\DecisionRecordTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/BR-06: every automatic routing writes a COMPLETE record —[39m[90m… [39m [90m6.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit waits honestly (BR-05): no online agent → outcome waiting, the t[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: an engine exception PARKS the ticket in the department de[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: the read door ELIDES per-agent facts for a viewer withou[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\DecisionRecordTest[22m [90m>[39m it SEC-02: the read do…   
+[39;1m  assigned_to is present (even as null) for a non-supervision viewer — that is redaction, not absence
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Feature/Routing/DecisionRecordTest.php[39m:[32m121[39m
+    117▕     $reader = app(RecordReader::class);
+    118▕ 
+    119▕     $elided = $reader->forViewer($plain, $ticket->identifier(), $result['record_id']);
+    120▕     expect($elided)->not->toBeNull()
+  ➜ 121▕         ->and(array_key_exists('assigned_to', $elided))->toBeFalse('assigned_to is present (even as null) for a non-supervision viewer — that is redaction, not absence')
+    122▕         ->and(json_encode($elided))->not->toContain($agent->identifier(), 'an agent id leaked into the elided record');
+    123▕     foreach ($elided['steps'] as $s) {
+    124▕         expect(array_keys($s['input']))->not->toContain('candidate')->not->toContain('routable')->not->toContain('candidates');
+    125▕     }
+
+  [33m1   [39m[39;1mtests/Feature/Routing/DecisionRecordTest.php[39;22m:[39;1m121[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m30 passed[39;22m[90m (193 assertions)[39m
+  [90mDuration:[39m [39m8.28s[39m
+

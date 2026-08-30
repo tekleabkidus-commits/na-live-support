@@ -1704,3 +1704,35 @@ function relayOutboxRow(string $name): string
 
     return $row->id;
 }
+
+/**
+ * Doc 11 (S11 step 5): a SECOND conversation for the bound tenant, mirroring creationFixture()'s
+ * shape without minting a new tenant (the S11 step-2c catch: per-ticket creationFixture() calls put
+ * every ticket in a different tenant). Returns [tenant-id, Conversation].
+ *
+ * @return array{0: string, 1: App\Models\Conversation}
+ */
+function conversationFixture(): array
+{
+    $tenantId = app(TenantContext::class)->tenantId();
+    $customer = App\Models\Customer::query()->create([
+        'display_name' => 'Fixture Player',
+        'username' => '@fixture_conv_'.Str::random(6),
+        'is_shell' => true,
+        'created_source' => 'staff',
+    ]);
+    $conversationId = (string) Str::uuid7();
+    DB::table('conversations')->insert([
+        'id' => $conversationId,
+        'tenant_id' => $tenantId,
+        'channel' => 'fakechan',
+        'channel_ref_id' => 'bot-1',
+        'external_chat_id' => 'chat-'.Str::random(10),
+        'customer_id' => $customer->identifier(),
+        'state' => 'active',
+    ]);
+    /** @var App\Models\Conversation $conversation */
+    $conversation = App\Models\Conversation::query()->findOrFail($conversationId);
+
+    return [$tenantId, $conversation];
+}

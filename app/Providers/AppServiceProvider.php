@@ -73,6 +73,12 @@ class AppServiceProvider extends ServiceProvider
         );
         // Doc 11 (S11 STOP-A packet): Doc 06's commit-time capacity interface, Doc 11's
         // database-serialized implementation behind it (agent_assignment_stats FOR UPDATE).
+        // Doc 11 (S11 step 5): the strategy port — FirstEligible until step 6 resolves the queue's
+        // configured strategy behind the same port.
+        $this->app->bind(
+            \App\Domain\Routing\Strategies\AssignmentStrategy::class,
+            \App\Domain\Routing\Strategies\FirstEligible::class,
+        );
         $this->app->bind(
             \App\Domain\Tickets\Assignment\AssignmentCapacity::class,
             \App\Domain\Routing\Capacity\RoutingCapacity::class,

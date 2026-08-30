@@ -1,0 +1,283 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m4.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignmentStatsConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is registered as a DURABLE consumer of the four assignment-shape[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recomputes FROM TRUTH: a manual claim, a pending move and an una[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a redelivered event whose ticket no longer names the agent still[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\ConnectionRoutingTagSeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reads the fixture in local/testing and returns null for unknown[39m[90m… [39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\DecisionOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "ex[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "AI[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "AI[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "co[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "te[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "ru[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "de[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "RG[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "RG[39m[90m…[39m [90m0.11s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\DecisionRecordTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/BR-06: every automatic routing writes a COMPLETE record —[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit waits honestly (BR-05): no online agent → outcome waiting, the t[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: an engine exception PARKS the ticket in the department de[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02: the read door ELIDES per-agent facts for a viewer withou[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\EligibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05/BR-05: only ONLINE members with a free slot are routable;[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/US-07: capacity = queue rule ?? routing.capacity.default;[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14/EC-09: hours never touch eligibility — an Online agent at[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Routing\TriggersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is registered DURABLY on the five trigger events (ADR 0011) — ex[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit created: a new ticket with no department reaches the tenant defa[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit transferred: the new department is explicit; the router assigns[39m[90m… [39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit unassigned: a manual unassign (ticket.assigned with a null new a[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit deactivation hand-back (EC-06) and reopened-with-inactive-assign[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\DepartmentAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit grants department access AND default-queue membership in ONE tra[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a partial write is IMPOSSIBLE: a failure at the queue half rolls[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revoke ENDS both direct rows (never deletes) under org.departmen[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a department without a default queue (EC-10) — nothing w[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\EffectiveMembersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-50 obligation 1: department access without queue membership is[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: effective agents = direct ∪ via-team ∪ unexpired temporar[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\OrganizationSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds EXACTLY FR-01's nine departments, in order, each with one[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent and never overwrites an operator-edited seed: a re[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rides ProvisioningStep::Organization — ordered after DefaultRole[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs inside a real provisioning: a tenant provisioned through Te[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\StructureWritersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/EC-10: a department is created WITH its default queue in o[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/BR-01/FLAG B: the boost list is ordered, known and duplica[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: is_rg is at most one per tenant — the second is refused w[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/EC-10: deactivating a department's DEFAULT queue is refuse[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: teams span departments through queues; members added/remo[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.14s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\RouteCoverageSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses EVERY permission-declared staff route to an under-privil[39m[90m…[39m [90m1.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POSITIVE CONTROL: a holder passes the same middleware on the sam[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit masks object existence on out-of-scope reads — 404, never 403, f[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\DecisionOrderTest[22m [90m>[39m it AC-01: FR-08's order…   
+[39;1m  rule-matched routing tag beats the department default queue
+Failed asserting that two strings are identical.
+  [39;22m[31m-'01a052c5-2352-70bf-966f-a2087a6c6716'[39m[39;1m
+  [39;22m[32m+'01a052c5-2333-703c-b481-83fd1dd893cf'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Routing/DecisionOrderTest.php[39m:[32m85[39m
+     81▕     if (! empty($case['expect_flagged'])) {
+     82▕         expect($bySteps['department']['input']['ai_flagged'])->toBeTrue($case['name']);
+     83▕     }
+     84▕     if (isset($case['expect_queue'])) {
+  ➜  85▕         expect($result['queue_id'])->toBe($scene['queues'][$case['expect_queue']], $case['name']);
+     86▕     }
+     87▕     if (isset($case['expect_queue_source'])) {
+     88▕         expect($bySteps['queue']['input']['source'])->toBe($case['expect_queue_source'], $case['name']);
+     89▕     }
+
+  [33m1   [39m[39;1mtests/Feature/Routing/DecisionOrderTest.php[39;22m:[39;1m85[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\DecisionRecordTest[22m [90m>[39m it SEC-02: the read do…   
+[39;1m  Failed asserting that Array &0 [
+    'id' => '01a052c5-26c9-707f-a86d-f14ba753fa68',
+    'ticket_id' => '01a052c5-26c4-7322-bf4d-4fdb23881266',
+    'trigger' => 'created',
+    'outcome' => 'assigned',
+    'queue_id' => '01a052c5-2697-70ed-a1ea-98c734a2f1e5',
+    'department_id' => '01a052c5-2697-70ed-a1ea-98c7349c4646',
+    'strategy' => 'first_eligible',
+    'eligible_count' => 1,
+    'boosts_applied' => Array &1 [],
+    'waiting' => false,
+    'steps' => Array &2 [
+        0 => Array &3 [
+            'step' => 'department',
+            'input' => Array &4 [
+                'source' => 'explicit',
+                'department_id' => '01a052c5-2697-70ed-a1ea-98c7349c4646',
+            ],
+            'outcome' => 'explicit department applied',
+        ],
+        1 => Array &5 [
+            'step' => 'queue',
+            'input' => Array &6 [
+                'source' => 'department_default',
+                'queue_id' => '01a052c5-2697-70ed-a1ea-98c734a2f1e5',
+            ],
+            'outcome' => 'department default queue',
+        ],
+        2 => Array &7 [
+            'step' => 'position',
+            'input' => Array &8 [
+                'matched' => Array &9 [],
+                'age_seconds' => 0,
+                'cap_minutes' => 30,
+            ],
+            'outcome' => 'score 0 (boosts: none)',
+        ],
+        3 => Array &10 [
+            'step' => 'eligibility',
+            'input' => Array &11 [
+                'members' => 1,
+            ],
+            'outcome' => '1 routable — user-id order (the documented tiebreak floor)',
+        ],
+        4 => Array &12 [
+            'step' => 'assign',
+            'input' => Array &13 [],
+            'outcome' => 'assigned (actor=system, Doc 06 door)',
+        ],
+    ],
+    'at' => '2026-08-30 13:04:07.399727+00',
+] is null.[39;22m
+
+  at [32mtests/Feature/Routing/DecisionRecordTest.php[39m:[32m133[39m
+    129▕     expect($full['assigned_to'])->toBe($agent->identifier());
+    130▕     expect(collect($full['steps'])->firstWhere('step', 'assign')['input']['candidate'])->toBe($agent->identifier());
+    131▕ 
+    132▕     $blind = ticketActor([], 'Fixture Blind Viewer');
+  ➜ 133▕     expect($reader->forViewer($blind, $ticket->identifier(), $result['record_id']))->toBeNull();
+    134▕ });
+    135▕
+
+  [33m1   [39m[39;1mtests/Feature/Routing/DecisionRecordTest.php[39;22m:[39;1m133[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\TriggersTest[22m [90m>[39m it u… [41;1m TransitionNotPermitted [49;22m  
+[39;1m  transition_not_permitted: tickets.status.change is required.[39;22m
+
+  at [32mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39m:[32m440[39m
+    436▕                 $grantedBy = $verdict->grantedBy;
+    437▕                 $expiresAt = $verdict->expiresAt;
+    438▕             }
+    439▕ 
+  ➜ 440▕             throw new TransitionNotPermitted($edge['permission'], $grantedBy, $expiresAt);
+    441▕         }
+    442▕     }
+    443▕ 
+    444▕     /**
+
+  [33m1   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m440[39;22m
+  [33m2   [39m[39;1mapp/Domain/Tickets/Transitions/TicketTransitionService.php[39;22m:[39;1m70[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Routing\TriggersTest[22m [90m>[39m it… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Event "ticket.reopened" payload does not match its catalog entry. Missing: [actor_id, actor_type]. Declared: [actor_id, actor_type, assignee_id, conversation_id, from_status, reopened_count, tenant_id, ticket_id]. Extra keys are refused as firmly as missing ones — SEC-07 keeps PII out of the event stream by declaring what each event may carry.[39;22m
+
+  at [32mapp/Support/Events/EventCatalog.php[39m:[32m1210[39m
+    1206▕ 
+    1207▕         $missing = array_values(array_diff($declared, $actual));
+    1208▕         $extra = array_values(array_diff($actual, $declared));
+    1209▕ 
+  ➜ 1210▕         throw new InvalidArgumentException(sprintf(
+    1211▕             'Event "%s" payload does not match its catalog entry.%s%s Declared: [%s]. '
+    1212▕             .'Extra keys are refused as firmly as missing ones — SEC-07 keeps PII out of the event '
+    1213▕             .'stream by declaring what each event may carry.',
+    1214▕             $name,
+
+  [33m1   [39m[39;1mapp/Support/Events/EventCatalog.php[39;22m:[39;1m1210[39;22m
+  [33m2   [39m[39;1mapp/Support/Events/EventPublisher.php[39;22m:[39;1m49[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ReopenConsumerDrillTest[22m [90m>[39m ADR 0011: the dis…   
+[39;1m  ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator (S07 step 2 / S08 steps 3 and 8 / S09 step 11)
+Failed asserting that two arrays are identical.
+  [39;22m[32m     1 => 'App\Jobs\Customers\RollupConsumer',[39m[39;1m
+  [39;22m[32m     2 => 'App\Jobs\Customers\CustomerSearchIndexer',[39m[39;1m
+  [39;22m[32m     3 => 'App\Jobs\Ai\GenerateTicketSubject',[39m[39;1m
+  [39;22m[32m+    4 => 'App\Jobs\Routing\TicketCreatedRouter',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Tickets/ReopenConsumerDrillTest.php[39m:[32m70[39m
+     66▕         // arrays refresh on assignment change; contract fixtures
+     67▕         // doc08-events.json + doc08.json) — this guard fired on CI exactly as
+     68▕         // designed, and the pin moves WITH the registry change, again.
+     69▕         // S09 step 11: GenerateTicketSubject joined ticket.created (Doc 06 FR-03's generation half) — the pin moves WITH the registry, same commit.
+  ➜  70▕         ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator (S07 step 2 / S08 steps 3 and 8 / S09 step 11)')
+     71▕         ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class], 'S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
+     72▕ });
+     73▕ 
+     74▕ test('ADR 0011: relaying a mapped event queues the consumer once — event id, tenant and correlation stamped — and a relay re-run re-dispatches nothing', function () {
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ReopenConsumerDrillTest.php[39;22m:[39;1m70[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m88 passed[39;22m[90m (2184 assertions)[39m
+  [90mDuration:[39m [39m14.94s[39m
+

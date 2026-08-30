@@ -422,6 +422,9 @@ Route::middleware([
 
     Route::get('t/{ticketId}/timeline', [App\Http\Controllers\Inbox\TicketActionsController::class, 'timeline'])
         ->middleware('permission:tickets.view')->name('inbox.ticket.timeline');
+    // Doc 11 FR-17/SEC-02 (S11 step 5): the routing-record read door (elision by role inside RecordReader).
+    Route::get('t/{ticketId}/routing/{recordId}', [App\Http\Controllers\Routing\RoutingRecordController::class, 'show'])
+        ->middleware('permission:tickets.view')->name('inbox.ticket.routing_record');
     Route::get('assignees', [App\Http\Controllers\Inbox\TicketActionsController::class, 'assignees'])
         ->middleware('permission:tickets.assign')->name('inbox.assignees');
     Route::get('tags/suggest', [App\Http\Controllers\Inbox\TicketActionsController::class, 'suggestTags'])

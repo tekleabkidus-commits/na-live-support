@@ -79,7 +79,9 @@ final class ConsumerRegistry
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class],
+        // Doc 11 (S11 step 5): the five FR-07 trigger routers (TicketCreated/Transferred/Unassigned,
+        // AssigneeDeactivated, TicketReopened) join DELIBERATELY — durable, idempotent on event_id.
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
         // events DELIBERATELY (FR-05/FR-06 counters, recompute-from-truth; contract fixture
         // fixtures/tickets/consumers/doc11.json tightened in the same commit).
@@ -99,13 +101,13 @@ final class ConsumerRegistry
         // consumer, implemented — the starter set seeds right after activation (the disclosed
         // millisecond asynchrony). The ReopenConsumerDrillTest empty pin moves in THIS commit.
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
-        'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class],
+        'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
         'ticket.tagged' => [ListProjectorConsumer::class],
         'ticket.untagged' => [ListProjectorConsumer::class],
-        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
+        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketTransferredRouter::class],
         'ticket.escalated' => [ListProjectorConsumer::class],
         'ticket.deescalated' => [ListProjectorConsumer::class],
         'ticket.merged' => [ListProjectorConsumer::class],
@@ -117,7 +119,7 @@ final class ConsumerRegistry
         //    the AI decisions that created the ticket (ai_decisions.ticket_id);
         //    contract fixture fixtures/tickets/consumers/doc09.json; the
         //    ReopenConsumerDrillTest pin moves in THIS commit.
-        'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
+        'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Routing\TicketReopenedRouter::class],
         'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
         'ticket.closed' => [ListProjectorConsumer::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],

@@ -1,0 +1,14 @@
+{
+  "_comment": "Doc 11 AC-01 / T-09 — FR-08's decision order as table-driven fixtures. Each case names the inputs the pipeline sees and the department/queue source the record MUST show. Ids are symbolic; DecisionOrderTest materializes them. Synthetic per CLAUDE.md §8.",
+  "cases": [
+    { "name": "explicit beats everything", "explicit_department": "payments", "ai_suggested": "verification", "autoaccept": true, "connection_tag": "vip", "expect_department": "payments", "expect_step_source": "explicit" },
+    { "name": "AI suggestion applied when autoaccept on", "ai_suggested": "verification", "autoaccept": true, "connection_tag": "vip", "expect_department": "verification", "expect_step_source": "ai_suggestion" },
+    { "name": "AI suggestion flagged, General, when autoaccept off", "ai_suggested": "verification", "autoaccept": false, "connection_tag": "vip", "expect_department": "general", "expect_step_source": "tenant_default", "expect_flagged": true },
+    { "name": "connection tag when no explicit and no AI", "connection_tag": "vip", "expect_department": "vip", "expect_step_source": "connection_tag" },
+    { "name": "tenant default when nothing else", "expect_department": "general", "expect_step_source": "tenant_default" },
+    { "name": "rule-matched routing tag beats the department default queue", "explicit_department": "payments", "ticket_tags": ["refund"], "expect_department": "payments", "expect_queue": "payments-refunds", "expect_queue_source": "routing_tag" },
+    { "name": "department default queue otherwise", "explicit_department": "payments", "expect_department": "payments", "expect_queue": "payments-default", "expect_queue_source": "department_default" },
+    { "name": "RG finality: an rg-flagged customer is FORCED to the is_rg queue whatever else is set", "explicit_department": "payments", "ticket_tags": ["refund"], "rg_flag": true, "expect_department": "responsible-gaming", "expect_queue": "rg", "expect_rg_step": true },
+    { "name": "RG finality via the AI rg_risk reason", "explicit_department": "payments", "rg_reason": true, "expect_department": "responsible-gaming", "expect_queue": "rg", "expect_rg_step": true }
+  ]
+}

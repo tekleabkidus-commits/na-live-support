@@ -2599,3 +2599,15 @@ step-0 honest-trail line corrects R-D11-4's "S07 close prose" claim):
 FR-08 step 4 / A-11) is what hands Own-scoped agents their work. The two pinned docblocks and
 `PerViewerCountsTest` stay byte-identical. **The S07 owner override is hereby exercised as
 KEEP.** The handoff-carried revisit line is resolved by this entry; no future kit carries it.
+
+### A-55 (FILED INTERPRETATION, S11 step 5). FR-08 step 1's "tenant default department" is the seeded General department — no setting key
+
+Doc 11 FR-08 step 1 ends its precedence with "tenant default department" and names no setting;
+§4.1 FR-01 seeds "General" first. INTERPRETATION: the tenant default is the live, active
+department with slug `general` (OrganizationSeeder, position 0 — STOP-C.1 guarantees it from
+provisioning), else the lowest-positioned live active department (an operator who renames or
+reorders keeps a default). No `routing.default_department` setting is introduced: the document
+names none, and a setting that could point at a deleted or defaultless department would be a
+second EC-10 net to keep honest. A tenant with NO live department is FS-04's parked state, not
+a silent route. Implemented as `Routing/Intake/TenantDefaultDepartment`; the AI-suggestion-off
+branch ("off=General+flag") resolves through the same class with `ai_flagged` in the record.
