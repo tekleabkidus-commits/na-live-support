@@ -251,4 +251,51 @@ final class AssignTicket
             actorId: $actor?->identifier(),
         );
     }
+
+    /**
+     * Doc 11 FR-16a / EC-08 — THE SYSTEM RETURN (S11 step 9b, packet P-C6, countersigned 2026-08-30):
+     * routing hands an ASSIGNED ticket back to its queue as the SYSTEM actor — a rescue auto-return, or
+     * a reopen courtesy hold that expired. Mirrors assignBySystem's shape: no permission check
+     * (TransitionActor::System's own rule — server-internal, no route reaches it; SystemReturnDoorTest is
+     * the static assertion), the assignee_id write stays HERE (the one writer), the same FR-15 event
+     * `ticket.assigned{old, new: null, by: null}` (the catalog's keys, unchanged), the audit as
+     * actorType=System carrying the reason and the routing-decision linkage. Doc 11's unassigned
+     * trigger re-routes; AssignmentStats observes the freed slot through the same event.
+     */
+    public function unassignBySystem(Ticket $ticket, string $reason, string $routingDecisionId): Ticket
+    {
+        $previous = $ticket->assignee_id;
+
+        return DB::transaction(function () use ($ticket, $previous, $reason, $routingDecisionId): Ticket {
+            Ticket::query()->whereKey($ticket->identifier())->update([
+                'assignee_id' => null,
+                'updated_at' => DB::raw('clock_timestamp()'),
+            ]);
+            $ticket->refresh();
+
+            $this->events->publish('ticket.assigned', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'conversation_id' => $ticket->conversation_id,
+                'old_assignee_id' => $previous,
+                'new_assignee_id' => null,
+                'by' => null,
+            ]);
+            $this->audit->record(
+                actionKey: 'ticket.assigned',
+                entity: 'ticket',
+                entityId: $ticket->identifier(),
+                actorType: AuditActor::System,
+                payload: [
+                    'ticket_id' => $ticket->identifier(),
+                    'old_assignee_id' => $previous,
+                    'new_assignee_id' => null,
+                    'reason' => $reason,
+                    'routing_decision_id' => $routingDecisionId,
+                ],
+            );
+
+            return $ticket;
+        });
+    }
 }

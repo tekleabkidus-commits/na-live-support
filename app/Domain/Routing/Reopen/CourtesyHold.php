@@ -12,9 +12,7 @@ use App\Models\Ticket;
 use App\Support\Events\EventPublisher;
 use App\Support\Settings\SettingsRepository;
 use App\Support\Tenancy\TenantContext;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Doc 11 EC-08 (A-54) — "Reopened ticket with previous assignee now Away → waits for them
@@ -27,7 +25,7 @@ use Illuminate\Support\Facades\Log;
  * the truth of the hold — and arms the `hold` timer on the RescueTimers ZSET with the
  * decision id (A-54: a reuse of the pattern, not a new sweep species). The sweep re-checks
  * against that row: agent Online → released (nothing to do, they have it); still assigned
- * and still not Online → the `SystemReturn` port (P-C6, 9b) hands it back and Doc 11's
+ * and still not Online → the `SystemReturn` port (P-C6, landed 9b) hands it back and Doc 11's
  * unassigned trigger re-routes it.
  */
 final class CourtesyHold
@@ -40,7 +38,7 @@ final class CourtesyHold
         private readonly RescueTimers $timers,
         private readonly AgentStatus $status,
         private readonly EventPublisher $events,
-        private readonly Container $container,
+        private readonly SystemReturn $return,
     ) {}
 
     public function minutes(): int
@@ -96,12 +94,7 @@ final class CourtesyHold
 
             return 'released';   // they came back: the ticket stays theirs
         }
-        if (! $this->container->bound(SystemReturn::class)) {
-            Log::warning('EC-08 hold expired: SystemReturn door unbound — re-route deferred', ['ticket_id' => $ticket->identifier(), 'metric' => 'routing.reopen.hold_deferred']);
-
-            return 'deferred';
-        }
-        $this->container->make(SystemReturn::class)->returnToQueue($ticket, 'reopen:hold_expired');
+        $this->return->returnToQueue($ticket, 'reopen:hold_expired', $decisionId);   // the hold's own record is the linkage
         $this->timers->disarm($this->context->tenantId(), self::KIND, $decisionId);
 
         return 'returned';

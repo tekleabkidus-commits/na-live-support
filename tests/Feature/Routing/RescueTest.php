@@ -12,7 +12,6 @@ use App\Domain\Routing\Rescue\OrphanRescue;
 use App\Domain\Routing\Rescue\RescueFlags;
 use App\Domain\Routing\Rescue\RescueSweep;
 use App\Domain\Routing\Rescue\RescueTimers;
-use App\Domain\Routing\Rescue\SystemReturn;
 use App\Domain\Tickets\Assignment\AssignTicket;
 use App\Domain\Tickets\Creation\CreateTicket;
 use App\Domain\Tickets\Creation\NewTicket;
@@ -114,22 +113,52 @@ it('FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assigned tickets 
         ->and(DB::table('rescue_flags')->where('ticket_id', $t2->identifier())->value('auto_returned'))->toBeTrue();
 });
 
-it('FR-16a with routing.rescue.auto ON: the return needs the SystemReturn door (P-C6) — unbound, the visit FLAGS, refuses the return LOUDLY (metric + deferred outcome) and KEEPS the timer; nothing is silently skipped', function () {
-    [$tenantId, $payments, , $admin, $agent] = rescueScene();
+it('FR-16a with routing.rescue.auto ON — THE REAL PATH (9b, P-C6 landed; this case CONVERTED from the loud-absence proof of step 9, deliberately): the due visit flags, then RETURNS through Doc 06\'s unassignBySystem — a `rescue` record first, the system note, rescue.auto_returned + routing.rescue.auto_returned, the flag cleared auto_returned, the ticket LEAVES Rescue in both forms, the unassigned trigger re-routes it, and the agent\'s slot FREES (AssignmentStats)', function () {
+    [$tenantId, $payments, $queue, $admin, $agent] = rescueScene();
     $t = rescueTicketHeldBy($payments, $agent, $admin);
     app(App\Support\Settings\SettingsRepository::class)->set('routing.rescue.auto', true, tenantSurface: false);
-    expect(app()->bound(SystemReturn::class))->toBeFalse('P-C6 landed? then this test moves to the 9b shape');
-    Redis::connection('volatile')->del(sprintf('t:%s:agent_heartbeat:%s', $tenantId, $agent->identifier()));
+    app(App\Domain\Routing\Capacity\AssignmentStats::class)->recompute($agent->identifier());
+    expect(DB::table('agent_assignment_stats')->where('user_id', $agent->identifier())->value('open_assigned'))->toBe(1, 'precondition: the slot is taken');
     app(AgentStatus::class)->set($agent, 'online');
     Redis::connection('volatile')->del(sprintf('t:%s:agent_heartbeat:%s', $tenantId, $agent->identifier()));
     app(AgentStatus::class)->current($agent->identifier());
     app(RescueTimers::class)->arm($tenantId, HeartbeatRescue::KIND, $agent->identifier(), 1);
 
     $visit = app(HeartbeatRescue::class)->visit($agent->identifier());
-    expect($visit['outcome'])->toBe('deferred')->and($visit['flagged'])->toBe(1)->and($visit['returned'])->toBe(0);
-    expect(app(RescueFlags::class)->live($t->identifier()))->not->toBeNull()
-        ->and(DB::table('tickets')->where('id', $t->identifier())->value('assignee_id'))->toBe($agent->identifier())
-        ->and(app(RescueTimers::class)->score($tenantId, HeartbeatRescue::KIND, $agent->identifier()))->not->toBeNull('the deferred return dropped its timer');
+    expect($visit['outcome'])->toBe('returned')->and($visit['flagged'])->toBe(1)->and($visit['returned'])->toBe(1);
+
+    expect(DB::table('tickets')->where('id', $t->identifier())->value('assignee_id'))->toBeNull('the ticket was not returned');
+    $flag = DB::table('rescue_flags')->where('ticket_id', $t->identifier())->first();
+    expect($flag->cleared_at)->not->toBeNull()->and($flag->auto_returned)->toBeTrue();
+    $record = DB::table('routing_decisions')->where('ticket_id', $t->identifier())->where('trigger', 'rescue')->first();
+    expect($record)->not->toBeNull('no rescue record explains the return (FR-17)')->and($record->outcome)->toBe('waiting');
+    $audit = DB::table('audit_log')->where('action_key', 'ticket.assigned')->where('entity_id', $t->identifier())->orderByDesc('id')->first(['actor_type', 'actor_id', 'payload']);
+    $payload = json_decode((string) $audit->payload, true);
+    expect($audit->actor_type)->toBe('system')->and($audit->actor_id)->toBeNull()
+        ->and($payload['new_assignee_id'])->toBeNull()->and($payload['old_assignee_id'])->toBe($agent->identifier())
+        ->and($payload['reason'])->toBe('rescue:heartbeat_lost')->and($payload['routing_decision_id'])->toBe($record->id);
+    $event = json_decode((string) DB::table('outbox')->where('name', 'rescue.auto_returned')->orderByDesc('id')->value('payload'), true);
+    expect($event['ticket_id'])->toBe($t->identifier())->and($event['previous_assignee_id'])->toBe($agent->identifier())->and($event['queue_id'])->toBe($queue);
+    expect(DB::table('audit_log')->where('action_key', 'routing.rescue.auto_returned')->count())->toBe(1);
+    $marker = DB::table('messages')->where('conversation_id', $t->conversation_id)->where('kind', 'system')->orderByDesc('id')->value('channel_meta');
+    expect(json_decode((string) $marker, true)['system_code'])->toBe('routing_rescue_returned')
+        ->and(__('routing.system.routing_rescue_returned', [], 'am'))->not->toBe('routing.system.routing_rescue_returned');
+    expect(app(RescueTimers::class)->score($tenantId, HeartbeatRescue::KIND, $agent->identifier()))->toBeNull();
+
+    // Rescue view: LEAVES in both forms (P-C2's clearing condition).
+    expect(SystemViews::directQuery('rescue')->pluck('id')->all())->not->toContain($t->identifier());
+    runListProjector(relayOutboxRow('rescue.auto_returned'));
+    expect(app(ViewZsets::class)->allIds('rescue'))->not->toContain($t->identifier());
+
+    // The unassigned trigger re-routes (Doc 11's own consumer on ticket.assigned{new: null}); nobody online → waiting in its queue.
+    $assignedEvent = relayOutboxRow('ticket.assigned');
+    expect(in_array(App\Jobs\Routing\TicketUnassignedRouter::class, ConsumerRegistry::consumersFor('ticket.assigned'), true))->toBeTrue();
+    (new App\Jobs\Routing\TicketUnassignedRouter($assignedEvent))->handle(app(App\Domain\Routing\Pipeline\RoutingPipeline::class));
+    expect(DB::table('routing_decisions')->where('ticket_id', $t->identifier())->where('trigger', 'unassigned')->count())->toBe(1)
+        ->and(app(App\Domain\Routing\Waiting\WaitingSets::class)->position($queue, $t->identifier()))->not->toBeNull('the returned ticket is not waiting in its queue');
+    // AssignmentStats observes the unassignment: the agent's slot frees.
+    (new App\Jobs\Routing\AssignmentStatsConsumer($assignedEvent))->handle(app(App\Domain\Routing\Capacity\AssignmentStats::class), app(App\Domain\Routing\Estimator\Counters::class));
+    expect(DB::table('agent_assignment_stats')->where('user_id', $agent->identifier())->value('open_assigned'))->toBe(0, 'the returned agent\'s slot did not free');
 });
 
 it('FR-16b / AC-06 unreachable fixture: channel_unreachable populates Rescue IMMEDIATELY through Doc 05/07 (no timer, no flag) and routing NEVER auto-acts on it (Doc 06 BR-07): no flag row, no return, no record', function () {

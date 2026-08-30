@@ -1,0 +1,127 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Routing\RescueTest
+  ⨯ it FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig… 9.47s  
+  ⨯ it FR-16a with routing.rescue.auto ON — THE REAL PATH (9b, P-C6 lan… 0.31s  
+  ⨯ it FR-16b / AC-06 unreachable fixture: channel_unreachable populate… 0.25s  
+  ⨯ it FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every… 0.19s  
+  ✓ it P-C1 physics: one LIVE flag per ticket (the second refused by th… 0.31s  
+
+   FAIL  Tests\Feature\Routing\ReopenHoldTest
+  ⨯ it EC-08: a reopened ticket whose retained assignee is Away gets a…  0.26s  
+  ⨯ it EC-08 expiry — THE REAL PATH (9b, P-C6 landed; CONVERTED from st… 0.26s  
+
+   PASS  Tests\Security\SystemReturnDoorTest
+  ✓ it unassignBySystem is UNREACHABLE from HTTP: no route action names… 0.09s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\RescueTest > it…  BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Rescue\HeartbeatRescue].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +14 vendor frames 
+  15  tests/Feature/Routing/RescueTest.php:62
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\RescueTest > it…  BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Rescue\HeartbeatRescue].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +14 vendor frames 
+  15  tests/Feature/Routing/RescueTest.php:127
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\RescueTest > it…  BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Rescue\RescueSweep, App\Domain\Routing\Rescue\HeartbeatRescue].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +21 vendor frames 
+  22  tests/Feature/Routing/RescueTest.php:173
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\RescueTest > it…  BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Rescue\HeartbeatRescue].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +14 vendor frames 
+  15  tests/Feature/Routing/RescueTest.php:193
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\ReopenHoldTest…   BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Rescue\HeartbeatRescue].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +14 vendor frames 
+  15  tests/Feature/Routing/ReopenHoldTest.php:51
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\ReopenHoldTest…   BindingResolutionException   
+  Target [App\Domain\Routing\Rescue\SystemReturn] is not instantiable while building [App\Domain\Routing\Reopen\CourtesyHold].
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1435
+    1431▕         } else {
+    1432▕             $message = "Target [$concrete] is not instantiable.";
+    1433▕         }
+    1434▕ 
+  ➜ 1435▕         throw new BindingResolutionException($message);
+    1436▕     }
+    1437▕ 
+    1438▕     /**
+    1439▕      * Throw an exception for an unresolvable primitive.
+
+      +14 vendor frames 
+  15  tests/Feature/Routing/ReopenHoldTest.php:83
+
+
+  Tests:    6 failed, 2 passed (384 assertions)
+  Duration: 11.21s
+

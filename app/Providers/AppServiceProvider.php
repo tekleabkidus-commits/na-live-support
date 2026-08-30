@@ -47,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Domain\Ai\Pipeline\FlowStateProvider::class, \App\Domain\Ai\Pipeline\NullFlowState::class); // Doc 05 menus / Doc 12 forms bind theirs
 
         $this->app->singleton(TenantHint::class, fn (Application $app): TenantHint => new TenantHint($app));
+        // Doc 11 FR-16a / EC-08 — P-C6 (S11 step 9b, countersigned 2026-08-30): the SystemReturn port bound to
+        // Doc 06's unassignBySystem through its ONE adapter (SystemReturnDoorTest pins the single caller).
+        $this->app->bind(\App\Domain\Routing\Rescue\SystemReturn::class, \App\Domain\Routing\Rescue\SystemReturnViaDoc06::class);
 
         // THE T-05 SEAM (Doc 02 ↔ Doc 03), CLOSED at S19 step 7: the real
         // capability-map resolver replaced the registered-keys stand-in (its

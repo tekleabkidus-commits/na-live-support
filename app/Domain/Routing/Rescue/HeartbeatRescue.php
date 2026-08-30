@@ -8,9 +8,7 @@ use App\Domain\Inbox\Status\AgentStatus;
 use App\Models\Ticket;
 use App\Support\Settings\SettingsRepository;
 use App\Support\Tenancy\TenantContext;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Doc 11 FR-16a — "heartbeat-lost agent (Doc 07 FR-28) with active assigned open tickets →
@@ -22,8 +20,7 @@ use Illuminate\Support\Facades\Log;
  * under DB time: the agent still away/heartbeat_lost (AgentStatus::current materializes
  * a dead heartbeat) and each ticket still assigned to them and open-family — then FLAGS
  * (`RescueFlags`, one live flag per ticket) and, with `routing.rescue.auto`, RETURNS through
- * the `SystemReturn` port (P-C6 — unbound until 9b: the flag lands, the return is refused
- * loudly and the timer is kept for the next pass). A supervisor's manual return (Reassign)
+ * the `SystemReturn` port (P-C6, landed 9b: Doc 06's unassignBySystem behind SystemReturnViaDoc06). A supervisor's manual return (Reassign)
  * clears the flag through the projector's `ticket.assigned` recompute.
  */
 final class HeartbeatRescue
@@ -36,7 +33,7 @@ final class HeartbeatRescue
         private readonly RescueTimers $timers,
         private readonly RescueFlags $flags,
         private readonly AgentStatus $status,
-        private readonly Container $container,
+        private readonly SystemReturn $return,
     ) {}
 
     public function minutes(): int
@@ -89,7 +86,6 @@ final class HeartbeatRescue
         }
         $flagged = 0;
         $returned = 0;
-        $blocked = false;
         foreach ($tickets as $ticket) {
             if ($this->flags->live($ticket->identifier()) === null) {
                 $this->flags->flag($ticket->identifier(), 'heartbeat_lost');
@@ -98,21 +94,13 @@ final class HeartbeatRescue
             if (! $this->autoReturn()) {
                 continue;
             }
-            if (! $this->container->bound(SystemReturn::class)) {
-                $blocked = true;   // P-C6 unbound (step 9b): the flag stands, the return waits — loudly.
-                Log::warning('routing.rescue.auto: SystemReturn door unbound — return deferred', ['ticket_id' => $ticket->identifier(), 'metric' => 'routing.rescue.return_deferred']);
-
-                continue;
-            }
-            $this->container->make(SystemReturn::class)->returnToQueue($ticket, 'rescue:heartbeat_lost');
+            $this->return->returnToQueue($ticket, 'rescue:heartbeat_lost');
             $this->flags->clear($ticket->identifier(), autoReturned: true);
             $returned++;
         }
-        if (! $blocked) {
-            $this->timers->disarm($this->context->tenantId(), self::KIND, $userId);   // flagged (and returned when auto): the timer's job is done
-        }
+        $this->timers->disarm($this->context->tenantId(), self::KIND, $userId);   // flagged (and returned when auto): the timer's job is done
 
-        return ['flagged' => $flagged, 'returned' => $returned, 'outcome' => $blocked ? 'deferred' : 'flagged'];
+        return ['flagged' => $flagged, 'returned' => $returned, 'outcome' => $returned > 0 ? 'returned' : 'flagged'];
     }
 
     /** @return list<Ticket> */

@@ -13,10 +13,10 @@ use App\Models\Ticket;
  * `tickets.assign`). The implementation is the Doc 06 core-edit packet P-C6 (S11 step 9
  * STOP: `AssignTicket::unassignBySystem(Ticket, string $reason)` — the same `record()`,
  * `ticket.assigned{new: null, by: null}`, audited as system) bound here at step 9b under
- * its countersign. Until then no binding exists: the auto-return and hold-expiry legs
- * refuse loudly (`SystemReturnUnavailable`), the flags and the records still land.
+ * its countersign (LANDED at 9b: `SystemReturnViaDoc06`, bound in AppServiceProvider).
  */
 interface SystemReturn
 {
-    public function returnToQueue(Ticket $ticket, string $reason): Ticket;
+    /** `$decisionId` — the hold's own record for EC-08; null = write a `rescue` record first (FR-16a). */
+    public function returnToQueue(Ticket $ticket, string $reason, ?string $decisionId = null): Ticket;
 }

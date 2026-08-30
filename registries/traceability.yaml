@@ -2433,9 +2433,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      FLIPPED IN PART AT S11 STEP 9 (P-C1/P-C2/P-C3 landed): heartbeat-loss (timer → flag, both Rescue-view forms), unreachable (immediate via Doc 05/07, never auto-acted), orphan (auto-move + note + audit) fixtures; the courtesy hold (EC-08) in tests/Feature/Routing/ReopenHoldTest.php. PARTIAL: "correct auto-return behavior per setting" waits on the Doc 06 SYSTEM RETURN door (packet P-C6, docs/evidence/S11-step9/packet-P-C6-system-return.md) — the port's absence is proven LOUD, the leg lands at 9b under countersign.
+      FLIPPED AT S11 STEP 9 + 9b: heartbeat-loss (timer → flag; with routing.rescue.auto the REAL return through Doc 06's unassignBySystem — P-C6 landed 9b — rescue record, note, rescue.auto_returned, Rescue view leaves in both forms, re-routed, slot freed), unreachable (immediate via Doc 05/07, never auto-acted), orphan (auto-move + note + audit) fixtures; the courtesy hold (EC-08) incl. the hold-expiry re-route in tests/Feature/Routing/ReopenHoldTest.php; the door's HTTP-unreachability in tests/Security/SystemReturnDoorTest.php.
   - ac_ref: "Doc11 AC-07"
     suite_path: manual
     type: manual

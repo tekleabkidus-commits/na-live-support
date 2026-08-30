@@ -19,6 +19,8 @@ declare(strict_types=1);
 return [
     'system' => [
         // FR-16c: the orphan-move system note (persistSystemMarker code `routing_orphan_moved`, N-03).
+        // FR-16a: the auto-return system note (persistSystemMarker code `routing_rescue_returned`).
+        'routing_rescue_returned' => 'Returned to the queue — the assigned agent lost connection',
         'routing_orphan_moved' => 'Moved to the department default queue — its queue was deleted',
     ],
     'estimate' => [

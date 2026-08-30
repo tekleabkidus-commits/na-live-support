@@ -14,6 +14,8 @@ declare(strict_types=1);
 return [
     'system' => [
         // FR-16c: the orphan-move system note (persistSystemMarker code `routing_orphan_moved`, N-03).
+        // FR-16a: the auto-return system note (persistSystemMarker code `routing_rescue_returned`).
+        'routing_rescue_returned' => 'የተመደበው ወኪል ግንኙነት ስላጣ ወደ ወረፋው ተመልሷል',
         'routing_orphan_moved' => 'ወረፋው ስለተሰረዘ ወደ የክፍሉ ነባሪ ወረፋ ተዛውሯል',
     ],
     'estimate' => [

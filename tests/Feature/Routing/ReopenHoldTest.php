@@ -76,15 +76,23 @@ it('EC-08: a reopened ticket whose retained assignee is Away gets a HOLD — a r
     expect(app(CourtesyHold::class)->onReopened($ticket2))->toBeNull();
 });
 
-it('EC-08 expiry: still Away at the deadline → the re-route needs the SystemReturn door (P-C6); unbound, the visit answers deferred, keeps the timer and the ticket — never a silent skip', function () {
+it('EC-08 expiry — THE REAL PATH (9b, P-C6 landed; CONVERTED from step 9\'s loud-absence proof): still Away at the deadline → returned through Doc 06\'s door with the hold record as the linkage, the timer gone, and the unassigned trigger re-routes; the record shows the courtesy hold', function () {
     [$tenantId, $agent, $ticket] = holdScene();
     app(AgentStatus::class)->set($agent, 'away');
     app(App\Domain\Tickets\Reopen\ReopenTicket::class)->reopenByStaff($ticket, $agent, 'customer wrote back — fixture');
     $id = app(CourtesyHold::class)->onReopened($ticket->fresh());
     expect($id)->toBeString();
     app(RescueTimers::class)->arm($tenantId, CourtesyHold::KIND, (string) $id, 1);   // due now
-    expect(app()->bound(App\Domain\Routing\Rescue\SystemReturn::class))->toBeFalse();
-    expect(app(CourtesyHold::class)->visit((string) $id))->toBe('deferred')
-        ->and(app(RescueTimers::class)->score($tenantId, CourtesyHold::KIND, (string) $id))->not->toBeNull()
-        ->and($ticket->fresh()->assignee_id)->toBe($agent->identifier());
+
+    expect(app(CourtesyHold::class)->visit((string) $id))->toBe('returned')
+        ->and(app(RescueTimers::class)->score($tenantId, CourtesyHold::KIND, (string) $id))->toBeNull()
+        ->and($ticket->fresh()->assignee_id)->toBeNull('the hold expired but the ticket stayed with the Away agent');
+    $audit = json_decode((string) DB::table('audit_log')->where('action_key', 'ticket.assigned')->where('entity_id', $ticket->identifier())->orderByDesc('id')->value('payload'), true);
+    expect($audit['reason'])->toBe('reopen:hold_expired')->and($audit['routing_decision_id'])->toBe($id)->and($audit['new_assignee_id'])->toBeNull();
+    // No rescue record for a hold: the hold record IS the explanation; no rescue.auto_returned either (it is not a rescue).
+    expect(DB::table('routing_decisions')->where('ticket_id', $ticket->identifier())->where('trigger', 'rescue')->count())->toBe(0)
+        ->and(DB::table('outbox')->where('name', 'rescue.auto_returned')->count())->toBe(0);
+    $assignedEvent = relayOutboxRow('ticket.assigned');
+    (new App\Jobs\Routing\TicketUnassignedRouter($assignedEvent))->handle(app(App\Domain\Routing\Pipeline\RoutingPipeline::class));
+    expect(DB::table('routing_decisions')->where('ticket_id', $ticket->identifier())->where('trigger', 'unassigned')->count())->toBe(1);
 });
