@@ -115,7 +115,7 @@ it('escalate + deescalate doors: supervisor review with the ≥10-char reason; t
 it('transfer door: moves the ticket to the OPAQUE destination id (existence validation is Doc 11\'s arrival gift — the service\'s recorded posture); a Team-scoped actor answers the fail-closed refusal', function (): void {
     [$tenant, , $ticket, $actor] = operationScene('open', ['tickets.department.change']);
     $teamScoped = scopedOperator('Team', ['tickets.view', 'conversations.view', 'views.manage', 'tickets.department.change'], 'S14 TeamScoped Role');
-    $departmentId = (string) Illuminate\Support\Str::uuid7();
+    $departmentId = departmentFixture('Fixture Transfer Target'); // S11 step 2b: a REAL department — tickets_department_fk is the FR-22 'arrival gift'
 
     $this->actingAs($actor, 'staff')
         ->postJson('https://localhost/inbox/t/'.$ticket->identifier().'/transfer', ['department_id' => $departmentId])

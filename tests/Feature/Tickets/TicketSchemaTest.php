@@ -95,7 +95,12 @@ test('FR-01/A-7: the tickets column inventory is exactly the filed interpretatio
         'department_id', 'escalation', 'first_response_at', 'first_response_message_id',
         'form_data', 'id', 'idempotency_key', 'last_status_changed_at', 'linked_work',
         'merged_into', 'number', 'origin_ticket_id', 'parent_ticket_id', 'pending_reason',
-        'previous_ticket_id', 'priority', 'reopened_count', 'resolved_at',
+        'previous_ticket_id', 'priority',
+        // SCHEMA AMENDMENT 5 item 12 (S11 step 2b, countersigned): queue_id (the PlaceInQueue
+        // door's column) + the two DB-time placement stamps — the pin moves WITH the filed
+        // amendment, which is this test working as intended.
+        'queue_id', 'queued_at',
+        'reopened_count', 'resolved_at', 'routed_at',
         'source', 'spam_marked_at', 'spam_marked_by', 'status', 'subject',
         'subject_source', 'tags', 'tenant_id', 'updated_at', 'waiting_customer_seconds',
         'waiting_staff_seconds',

@@ -1,0 +1,219 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m5.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\StarvationCapPropertyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P1: the cap VALUE cannot be null, zero, negative, absent or non-[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: for 500 generated boost stacks, the plain ticket past the ca[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: below the cap the score orders — a plain ticket never outran[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4 (EC-04): at the cap the language requirement drops and the re[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no off-switch: no setting key in the registry can disable th[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\RoutingNeverWritesTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted direct ticket write at all — the positive cont[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/§21: no file in the routing package writes a ticket row or[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Doc 06 status physics green beside this one: the sole[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoPollingLoopTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see a planted polling loop — the positive control (sabotage[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the scheduled routing commands to exactly the two the docum[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\RoutingGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/BR-06 physics: routing_decisions carries NO app UPDATE gra[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / FLAG C: app holds no DELETE on departments, teams, qu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 11 table is FORCED row-level security with the t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03 physics: is_rg is at most one per tenant (partial unique),[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG F / FLAG G: the two stamping triggers exist as PLAIN plpgsq[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\ScopeFixtureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit produces the EXACT visible set for each scope level on list quer[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers the OBJECT check with the same implementation as the lis[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves Team scope with NO team to the empty set — fails closed[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a scope map SILENT about the module to the empty set (N[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the production pre-Doc 11 binding EMPTY membership — Team/[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\ChannelScopeReproofTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mT-06 ADMIT: an Own-scoped agent may subscribe to a conversation the[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06 DENY: the same Own-scoped agent is refused on a conversation t[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06 DENY: unassigning takes the subscription right away again[39m[90m      [39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membe[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-06: an All-scoped agent still subscribes, and conversations.view[39m[90m… [39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mFR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to th[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01: a Dept-scoped ACTOR cannot transfer into a department outsi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\StatusWriterEncapsulationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit can see the sanctioned writer at all — the positive control for[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has exactly one file in app/ that writes a ticket status (NFR-03[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit routes every status write through the transition service, which[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers no mass-assignment path to status on the Ticket model[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the service and repository as ordinary singleton-resolvabl[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\PerViewerCountsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: a shared saved view shows each viewer THEIR count — the v[39m[90m…[39m [90m3.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04 on a SYSTEM view: the base unassigned set and an Own-scope[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\InboxSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows[39m[90m…[39m [90m1.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC posture: the hydration order is the ZSET's and out-of-scope[39m[90m… [39m [90m2.57s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06 ADMIT… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m56[39m
+     52▕     return $user;
+     53▕ }
+     54▕ 
+     55▕ test('T-06 ADMIT: an Own-scoped agent may subscribe to a conversation they hold an assigned ticket on', function () {
+  ➜  56▕     [, $conversation] = creationFixture();
+     57▕     $agent = scopedAgent('Own', 'Own Admit');
+     58▕ 
+     59▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     60▕     app(AssignTicket::class)->claim($ticket, $agent);
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m56[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06 DENY:… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m75[39m
+     71▕ test('T-06 DENY: the same Own-scoped agent is refused on a conversation they hold nothing on', function () {
+     72▕     // Two conversations, ONE tenant — a second creationFixture() would rebind and put
+     73▕     // the first conversation out of RLS reach entirely, which is a different (and
+     74▕     // uninteresting) reason for a refusal.
+  ➜  75▕     [$tenant, $mine] = creationFixture();
+     76▕     $theirs = anotherConversation($tenant->identifier(), 'deny-');
+     77▕     $agent = scopedAgent('Own', 'Own Deny');
+     78▕ 
+     79▕     $ticket = app(CreateTicket::class)->create(new NewTicket($mine, TicketSource::Agent));
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m75[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06 DENY:… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m98[39m
+     94▕     expect(app(ConversationChannelGate::class)->authorize($agent, $mine->identifier()))->toBeArray();
+     95▕ });
+     96▕ 
+     97▕ test('T-06 DENY: unassigning takes the subscription right away again', function () {
+  ➜  98▕     [, $conversation] = creationFixture();
+     99▕     $agent = scopedAgent('Own', 'Own Revoke');
+    100▕ 
+    101▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+    102▕     app(AssignTicket::class)->claim($ticket, $agent);
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06: Team… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m118[39m
+    114▕ test('T-06: Team and Dept scopes stay REFUSED until Doc 11 supplies membership', function () {
+    115▕     // One conversation PER LEVEL, in one tenant: FR-10 allows a single open-family
+    116▕     // ticket per conversation, so reusing one conversation would test T-02 rather
+    117▕     // than the scope level.
+  ➜ 118▕     [$tenant] = creationFixture();
+    119▕     $tenantId = $tenant->identifier();
+    120▕ 
+    121▕     foreach (['Team', 'Dept'] as $level) {
+    122▕         $agent = scopedAgent($level, $level.' Still Closed');
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m118[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\ChannelScopeReproofTest[22m [90m>[39m T-06: an A… [41;1m Error [49;22m  
+[39;1m  Call to undefined function creationFixture()[39;22m
+
+  at [32mtests/Feature/Tickets/ChannelScopeReproofTest.php[39m:[32m141[39m
+    137▕     }
+    138▕ });
+    139▕ 
+    140▕ test('T-06: an All-scoped agent still subscribes, and conversations.view is still required first', function () {
+  ➜ 141▕     [, $conversation] = creationFixture();
+    142▕ 
+    143▕     $all = scopedAgent('All', 'All Access');
+    144▕     expect(app(ConversationChannelGate::class)->authorize($all, $conversation->identifier()))->toBeArray();
+    145▕
+
+  [33m1   [39m[39;1mtests/Feature/Tickets/ChannelScopeReproofTest.php[39;22m:[39;1m141[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TransferEscalateTest[22m [90m>[39m FR-2… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "tickets" violates foreign key constraint "tickets_department_fk"
+DETAIL:  Key is not present in table "departments". (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "tickets" set "department_id" = 01a05202-a58c-714c-88f2-b7989ffdb50e, "updated_at" = clock_timestamp() where "tickets"."id" = 01a05202-a578-7367-ab98-0eefb3421c43 and "tickets"."tenant_id" = 01a05202-a570-72fc-930d-99734e4334f5)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Tickets/Transfer/TransferTicket.php[39;22m:[39;1m82[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Tickets/Transfer/TransferTicket.php[39;22m:[39;1m75[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Tickets\TransferEscalateTest[22m [90m>[39m FR-2… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "tickets" violates foreign key constraint "tickets_department_fk"
+DETAIL:  Key is not present in table "departments". (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "tickets" set "department_id" = 01a05202-a5c4-70f6-9cca-5e489fc968fb, "assignee_id" = ?, "updated_at" = clock_timestamp() where "tickets"."id" = 01a05202-a5b4-71df-a2a3-c6b19f2b23f1 and "tickets"."tenant_id" = 01a05202-a5ac-711d-985f-467b1c7ec04e)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mapp/Domain/Tickets/Transfer/TransferTicket.php[39;22m:[39;1m82[39;22m
+      [2m+3 vendor frames [22m
+  [33m12  [39m[39;1mapp/Domain/Tickets/Transfer/TransferTicket.php[39;22m:[39;1m75[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m54 passed[39;22m[90m (1948 assertions)[39m
+  [90mDuration:[39m [39m17.52s[39m
+

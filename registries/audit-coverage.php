@@ -757,7 +757,9 @@ return [
         // unassign is as legible in the record as an assignment.
         'action_key' => 'ticket.assigned',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        // S11 STOP-A packet (Doc 11 T-02/A-49): AssignTicket::assignBySystem audits as the
+        // system actor with routing_decision_id in the payload — accepted as a filed amendment.
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'old_assignee_id', 'new_assignee_id'],
         'owning_doc' => 'Doc06',
     ],
@@ -1325,7 +1327,7 @@ return [
         // Doc 11 FR-01: a department was created (org.departments.manage).
         'action_key' => 'org.department.created',
         'entity' => 'department',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'], // system = OrganizationSeeder at provisioning (STOP-C.1)
         'required_fields' => ['department_id', 'name'],
         'owning_doc' => 'Doc11',
     ],
@@ -1413,7 +1415,7 @@ return [
         // Doc 11 FR-03 (org.queues.manage).
         'action_key' => 'org.queue.created',
         'entity' => 'queue',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'], // system = OrganizationSeeder at provisioning (STOP-C.1)
         'required_fields' => ['queue_id', 'department_id', 'assignment_strategy'],
         'owning_doc' => 'Doc11',
     ],

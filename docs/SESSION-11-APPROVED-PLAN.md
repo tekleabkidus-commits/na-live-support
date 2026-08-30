@@ -359,7 +359,7 @@ Unnumbered requirement rows carried as plan rows too: §8 (structure admin; wiza
 contracts; empty states; loading/error), §9 (badges; chips; warning badges; starvation row; record rows;
 responsive; dark/reduced-motion), §12 (six budget rows), §13 (a11y), §14 (localization).
 
-**Event family (FR-19; closed at SIXTEEN; catalog amendment filed at step 2b BEFORE any publish):**
+**Event family (FR-19; closed at EIGHTEEN — CORRECTED at step 2b, honest trail: the plan's "sixteen" was a miscount of the document's own list (9 org.* + 3 queue.* + 2 ticket.* + 2 routing.* + 2 rescue.* = 18); no event was added or removed, the catalog amendment carries exactly FR-19's names):**
 `org.department.created|updated|deleted`, `org.team.created|updated|deleted`,
 `org.queue.created|updated|deleted`, `queue.membership_changed`, `queue.temporary_grant.created|expired`,
 `ticket.routed {record_id}`, `ticket.waiting {queue, position}`, `routing.starvation_boosted`,
@@ -561,12 +561,13 @@ PARTIAL outside a named bucket does not exist.
                   tests/Feature/Rbac/ScopeFixtureTest.php \
                   tests/Feature/Tickets/ChannelScopeReproofTest.php \
                   tests/Feature/Tickets/TransferEscalateTest.php \
+                  tests/Feature/Tickets/CreationPathsTest.php \
                   tests/Feature/Tickets/StatusWriterEncapsulationTest.php \
                   tests/Feature/Tickets/ReopenConsumerDrillTest.php \
                   tests/Feature/Inbox/PerViewerCountsTest.php \
                   tests/Security/InboxSecurityTest.php
 ```
-Run in-container (`$(COMPOSE) exec -T app …`, the S10 environment law). Every step-commit: DOC 11 SUITES +
+Run in-container (`$(COMPOSE) exec -T app …`, the S10 environment law). `CreationPathsTest.php` is in the list because it DEFINES the `creationFixture()` helper `ChannelScopeReproofTest` calls — Pest helpers are file-scoped; the S11 step-2b first run found the subset undefined (`S11-step2b/doc11-suites-01.txt`), a command-definition correction, not an enumeration change. Every step-commit: DOC 11 SUITES +
 full battery + `make gates` + `make lint` (bare, `&&` chains) regardless of BAT1 (this machine reports no
 BAT1 node — wall power is stated per run from `/sys/class/power_supply`, "timing not taken" said plainly
 when it cannot be evidenced). CI once per checkpoint. `octane:reload` before every browser run. Never Pest

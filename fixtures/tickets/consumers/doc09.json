@@ -29,6 +29,19 @@
         "tenant_id",
         "ticket_id"
       ]
+    },
+    {
+      "event": "ticket.waiting",
+      "consumer": "Doc09/Chatbot",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "queue",
+        "position"
+      ],
+      "note": "Doc 11 FR-19 (S11 step 2b): declared with the catalog amendment; the consuming session tightens the reads when it builds."
     }
   ]
 }

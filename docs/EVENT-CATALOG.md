@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-115 event(s).
+133 event(s).
 
 ## `agent.status_changed`
 
@@ -599,6 +599,114 @@ An @mention inside a note named a staff member (FR-17; event name filed as inter
 - **Producers:** Doc04/NotesWriter
 - **Consumers:** Doc07/Notifications, Doc18/NotificationDelivery
 
+## `org.department.created`
+
+Doc 11 FR-19: a department was created (FR-01/02/03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `department_id`
+- **Producers:** Doc11/Departments
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `org.department.deleted`
+
+Doc 11 FR-19/FR-18: a department was tombstoned after the restructure wizard moved every reference.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `department_id`
+- **Producers:** Doc11/Departments
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `org.department.updated`
+
+Doc 11 FR-19: a department changed; `changed` lists the field names only.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `department_id`, `changed`
+- **Producers:** Doc11/Departments
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `org.queue.created`
+
+Doc 11 FR-19: a queue was created (FR-01/02/03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`
+- **Producers:** Doc11/Queues
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `org.queue.deleted`
+
+Doc 11 FR-19/FR-18: a queue was tombstoned after the restructure wizard moved every reference — EC-06: the orphan path consumes it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`
+- **Producers:** Doc11/Queues
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `org.queue.updated`
+
+Doc 11 FR-19: a queue changed; `changed` lists the field names only.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`, `changed`
+- **Producers:** Doc11/Queues
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `org.team.created`
+
+Doc 11 FR-19: a team was created (FR-01/02/03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `team_id`
+- **Producers:** Doc11/Teams
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `org.team.deleted`
+
+Doc 11 FR-19/FR-18: a team was tombstoned after the restructure wizard moved every reference.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `team_id`
+- **Producers:** Doc11/Teams
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `org.team.updated`
+
+Doc 11 FR-19: a team changed; `changed` lists the field names only.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `team_id`, `changed`
+- **Producers:** Doc11/Teams
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `queue.membership_changed`
+
+Doc 11 FR-19/FR-04: an effective member joined or left (change = added|removed; via = direct|team|temporary) — an availability event for the dispatcher (T-03) and Doc 07 EC-09's queue-view vanish.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`, `user_id`, `change`, `via`
+- **Producers:** Doc11/Queues
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc15/Reporting, Doc17/Audit
+
+## `queue.temporary_grant.created`
+
+Doc 11 FR-15/T-07/SEC-03: a pull-in created its Doc 03 grant (override_id) and the temporary membership.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`, `user_id`, `override_id`, `expires_at`
+- **Producers:** Doc11/PullIn
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc16/Notifications, Doc17/Audit
+
+## `queue.temporary_grant.expired`
+
+Doc 11 T-07/EC-07: a temporary membership ended (cause = expired|ended_by_staff); assignments already made persist.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`, `user_id`, `override_id`, `cause`
+- **Producers:** Doc11/ExpirySweep
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc17/Audit
+
 ## `rbac.highrisk.confirmed`
 
 A DISTINCT second admin approved a pending high-risk grant (T-06, ruling R-9) and it took effect.
@@ -689,6 +797,24 @@ A user was moved between roles (BR-01: exactly one). Queued work re-resolves at 
 - **Producers:** Doc03/RoleAdministration
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
 
+## `rescue.auto_returned`
+
+Doc 11 FR-16a: routing.rescue.auto returned a heartbeat-lost agent's ticket to its queue with a system note.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `queue_id`, `previous_assignee_id`
+- **Producers:** Doc11/Rescue
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `rescue.flagged`
+
+Doc 11 FR-16: a ticket entered the Rescue view (reason = heartbeat_lost|channel_unreachable|orphaned).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `reason`
+- **Producers:** Doc11/Rescue
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
 ## `retention.completed`
 
 A retention run finished (T-08/AC-09): counts per tenant; held rows moved to hold storage before their partition dropped (EC-09).
@@ -697,6 +823,24 @@ A retention run finished (T-08/AC-09): counts per tenant; held rows moved to hol
 - **Payload:** `tenant_id`, `partitions_dropped`, `messages_held`, `messages_removed`
 - **Producers:** Doc04/MessagesRetention
 - **Consumers:** Doc15/Reporting, Doc17/Audit, Doc18/Alerting
+
+## `routing.no_skill_match`
+
+Doc 11 FR-11/EC-04: a wait-fallback skill queue held past the alert threshold with no matching agent online (counts only, never names — SEC-05).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `queue_id`, `required_language`, `waiting_count`
+- **Producers:** Doc11/Routing
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `routing.starvation_boosted`
+
+Doc 11 FR-12/NFR-06/SEC-06: the age cap promoted a ticket to the queue head — standard audit.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `queue_id`, `waited_seconds`, `cap_minutes`
+- **Producers:** Doc11/Routing
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `telegram.bot_blocked`
 
@@ -959,6 +1103,15 @@ FR-06: a ticket entered `resolved`. Starts the FR-07 auto-close timer (armed in 
 - **Producers:** Doc06/TicketTransitionService
 - **Consumers:** Doc12/CsatFlow, Doc14/Sms, Doc07/Inbox, Doc09/OutcomeEnrichment, Doc15/Reporting, Doc17/Audit
 
+## `ticket.routed`
+
+Doc 11 FR-17/FR-19: an automatic routing decision was recorded (record_id → routing_decisions); assigned_to null = waiting. The timeline expandable reads the record by id (SEC-02 elision at the read door).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `record_id`, `queue_id`, `assigned_to`
+- **Producers:** Doc11/Routing
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
 ## `ticket.spam_marked`
 
 FR-09: a ticket was marked spam (reason on the audit entry, SEC-03). Excluded from SLA/CSAT/agent metrics while in this status (N-14); unmarkable for 7 days, terminal after (EC-09).
@@ -1039,6 +1192,15 @@ FR-19: tags were removed.
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `count`, `actor_id`
 - **Producers:** Doc06/TicketTags
 - **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `ticket.waiting`
+
+Doc 11 FR-19/FR-08 step 5: the ticket waits in `queue` at integer `position` (null = placed, not yet ranked); the estimator recomputes on it (T-06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `queue`, `position`
+- **Producers:** Doc11/Routing
+- **Consumers:** Doc07/Inbox, Doc09/Chatbot, Doc15/Reporting
 
 ## `transcript.exported`
 

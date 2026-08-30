@@ -1028,6 +1028,139 @@ final class EventCatalog
             'consumers' => ['Doc08/SearchIndexer', 'Doc17/Audit'],
             'description' => 'FR-22/FR-16: custom-field values changed for entity=customer (Doc 12 definitions; the player_id change re-feeds the duplicate-hint counts and the search index).',
         ],
+
+        /*
+        | Doc 11 — FR-19 (S11 step 2b; SCHEMA AMENDMENT 5 countersigned; the family is CLOSED at
+        | EIGHTEEN — the document's own FR-19 list; the plan's "sixteen" was a miscount, corrected
+        | here on the record — and grows only by filed amendment). Payloads carry identifiers and integers only —
+        | never names or record text (SEC-02/SEC-05). Every Doc 11 consumer is DURABLE (ADR 0011).
+        */
+        'org.department.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'department_id'],
+            'producers' => ['Doc11/Departments'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a department was created (FR-01/02/03).',
+        ],
+        'org.department.updated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'department_id', 'changed'],
+            'producers' => ['Doc11/Departments'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a department changed; `changed` lists the field names only.',
+        ],
+        'org.department.deleted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'department_id'],
+            'producers' => ['Doc11/Departments'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19/FR-18: a department was tombstoned after the restructure wizard moved every reference.',
+        ],
+        'org.team.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'team_id'],
+            'producers' => ['Doc11/Teams'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a team was created (FR-01/02/03).',
+        ],
+        'org.team.updated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'team_id', 'changed'],
+            'producers' => ['Doc11/Teams'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a team changed; `changed` lists the field names only.',
+        ],
+        'org.team.deleted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'team_id'],
+            'producers' => ['Doc11/Teams'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19/FR-18: a team was tombstoned after the restructure wizard moved every reference.',
+        ],
+        'org.queue.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id'],
+            'producers' => ['Doc11/Queues'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a queue was created (FR-01/02/03).',
+        ],
+        'org.queue.updated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id', 'changed'],
+            'producers' => ['Doc11/Queues'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19: a queue changed; `changed` lists the field names only.',
+        ],
+        'org.queue.deleted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id'],
+            'producers' => ['Doc11/Queues'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-19/FR-18: a queue was tombstoned after the restructure wizard moved every reference — EC-06: the orphan path consumes it.',
+        ],
+        'queue.membership_changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id', 'user_id', 'change', 'via'],
+            'producers' => ['Doc11/Queues'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => "Doc 11 FR-19/FR-04: an effective member joined or left (change = added|removed; via = direct|team|temporary) — an availability event for the dispatcher (T-03) and Doc 07 EC-09's queue-view vanish.",
+        ],
+        'queue.temporary_grant.created' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id', 'user_id', 'override_id', 'expires_at'],
+            'producers' => ['Doc11/PullIn'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-15/T-07/SEC-03: a pull-in created its Doc 03 grant (override_id) and the temporary membership.',
+        ],
+        'queue.temporary_grant.expired' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id', 'user_id', 'override_id', 'cause'],
+            'producers' => ['Doc11/ExpirySweep'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc17/Audit'],
+            'description' => 'Doc 11 T-07/EC-07: a temporary membership ended (cause = expired|ended_by_staff); assignments already made persist.',
+        ],
+        'ticket.routed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'record_id', 'queue_id', 'assigned_to'],
+            'producers' => ['Doc11/Routing'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-17/FR-19: an automatic routing decision was recorded (record_id → routing_decisions); assigned_to null = waiting. The timeline expandable reads the record by id (SEC-02 elision at the read door).',
+        ],
+        'ticket.waiting' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'queue', 'position'],
+            'producers' => ['Doc11/Routing'],
+            'consumers' => ['Doc07/Inbox', 'Doc09/Chatbot', 'Doc15/Reporting'],
+            'description' => 'Doc 11 FR-19/FR-08 step 5: the ticket waits in `queue` at integer `position` (null = placed, not yet ranked); the estimator recomputes on it (T-06).',
+        ],
+        'routing.starvation_boosted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'queue_id', 'waited_seconds', 'cap_minutes'],
+            'producers' => ['Doc11/Routing'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-12/NFR-06/SEC-06: the age cap promoted a ticket to the queue head — standard audit.',
+        ],
+        'routing.no_skill_match' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'queue_id', 'required_language', 'waiting_count'],
+            'producers' => ['Doc11/Routing'],
+            'consumers' => ['Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-11/EC-04: a wait-fallback skill queue held past the alert threshold with no matching agent online (counts only, never names — SEC-05).',
+        ],
+        'rescue.flagged' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'reason'],
+            'producers' => ['Doc11/Rescue'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 11 FR-16: a ticket entered the Rescue view (reason = heartbeat_lost|channel_unreachable|orphaned).',
+        ],
+        'rescue.auto_returned' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'queue_id', 'previous_assignee_id'],
+            'producers' => ['Doc11/Rescue'],
+            'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => "Doc 11 FR-16a: routing.rescue.auto returned a heartbeat-lost agent's ticket to its queue with a system note.",
+        ],
     ];
 
     /**

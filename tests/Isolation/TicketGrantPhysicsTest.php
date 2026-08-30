@@ -38,7 +38,10 @@ const DOC06_TABLES = [
 /** The R-19b denied set on tickets — every DB-time or metric-bearing column. */
 const TICKETS_DB_TIME_COLUMNS = [
     'agent_first_response_at', 'closed_at', 'created_at', 'first_response_at',
-    'last_status_changed_at', 'resolved_at', 'spam_marked_at',
+    'last_status_changed_at',
+    // SCHEMA AMENDMENT 5 item 12 / FLAG G (S11 step 2b): the placement stamps are
+    // ordering/metric-relevant — app-unwritable both doors, trigger-stamped.
+    'queued_at', 'resolved_at', 'routed_at', 'spam_marked_at',
     'waiting_customer_seconds', 'waiting_staff_seconds',
 ];
 

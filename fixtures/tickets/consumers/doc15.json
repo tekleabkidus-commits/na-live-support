@@ -1,6 +1,6 @@
 {
   "doc": "Doc15",
-  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
+  "spec": "Doc 06 NFR-06/T-09 — consumer contract (S22 step 8)",
   "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
   "entries": [
     {
@@ -227,6 +227,31 @@
         "conversation_id",
         "count"
       ]
+    },
+    {
+      "event": "ticket.routed",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "record_id",
+        "queue_id",
+        "assigned_to"
+      ],
+      "note": "Doc 11 FR-19 (S11 step 2b): declared with the catalog amendment; the consuming session tightens the reads when it builds."
+    },
+    {
+      "event": "ticket.waiting",
+      "consumer": "Doc15/Reporting",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "queue",
+        "position"
+      ],
+      "note": "Doc 11 FR-19 (S11 step 2b): declared with the catalog amendment; the consuming session tightens the reads when it builds."
     }
   ]
 }

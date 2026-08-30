@@ -11,7 +11,6 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +51,7 @@ test('FR-22: a transfer changes the department, keeps the status, retains an All
     Ticket::query()->whereKey($ticket->identifier())->update(['assignee_id' => $assignee->identifier()]);
     $ticket->refresh();
 
-    $destination = (string) Str::uuid7();
+    $destination = departmentFixture('Fixture Transfer Target'); // S11 step 2b: a REAL department (tickets_department_fk)
     app(TransferTicket::class)->transfer($ticket, $destination, $actor);
 
     $ticket->refresh();
@@ -77,7 +76,7 @@ test('FR-22: a Dept-scoped assignee FAILS CLOSED pre-Doc 11 — reset to the que
     Ticket::query()->whereKey($ticket->identifier())->update(['assignee_id' => $deptScoped->identifier()]);
     $ticket->refresh();
 
-    app(TransferTicket::class)->transfer($ticket, (string) Str::uuid7(), $actor);
+    app(TransferTicket::class)->transfer($ticket, departmentFixture('Fixture Transfer Target'), $actor); // S11 step 2b
 
     $ticket->refresh();
     expect($ticket->assignee_id)->toBeNull('EmptyMembership cannot contain the destination — the assignee must not silently keep invisible work');
@@ -95,7 +94,7 @@ test('SEC-01: a Dept-scoped ACTOR cannot transfer into a department outside thei
     [, , $ticket] = ticketFixture('open');
     $deptActor = scopedActor(['tickets.department.change', 'tickets.view'], 'Dept', 'Fixture Dept Actor Role');
 
-    expect(fn () => app(TransferTicket::class)->transfer($ticket, (string) Str::uuid7(), $deptActor))
+    expect(fn () => app(TransferTicket::class)->transfer($ticket, departmentFixture('Fixture Transfer Target'), $deptActor)) // S11 step 2b
         ->toThrow(TransitionRefused::class, 'target_out_of_scope');
 
     expect($ticket->fresh()->department_id)->toBeNull();

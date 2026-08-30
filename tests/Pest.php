@@ -560,6 +560,44 @@ function &capturedLogsRef(): array
 */
 
 /**
+ * Doc 11 (S11 step 2b, advisor-countersigned Option A): a REAL department + its default
+ * queue for the BOUND tenant, in OrganizationSeeder's own shape — ONE transaction with
+ * default_queue_id set before commit (SCHEMA AMENDMENT 5 FLAG A: this helper cannot mint
+ * the defaultless state the service door refuses; the deferrable FK lets the department
+ * name its queue before the queue row exists inside the same transaction). It replaces the
+ * opaque `Str::uuid7()` department ids Doc 06's suites minted before departments existed —
+ * TransferTicket.php:41's "existence validation is Doc 11's arrival gift" arrived with
+ * `tickets_department_fk`.
+ *
+ * @return string the department id
+ */
+function departmentFixture(string $name = 'Fixture Department', bool $isRg = false): string
+{
+    $tenantId = app(TenantContext::class)->tenantId();
+    $departmentId = (string) Str::uuid7();
+    $queueId = (string) Str::uuid7();
+
+    DB::transaction(function () use ($tenantId, $departmentId, $queueId, $name, $isRg): void {
+        DB::table('departments')->insert([
+            'id' => $departmentId,
+            'tenant_id' => $tenantId,
+            'name' => json_encode(['en' => $name], JSON_THROW_ON_ERROR),
+            'slug' => Str::slug($name).'-'.Str::lower(Str::random(4)),
+            'default_queue_id' => $queueId,
+        ]);
+        DB::table('queues')->insert([
+            'id' => $queueId,
+            'tenant_id' => $tenantId,
+            'department_id' => $departmentId,
+            'name' => $name,
+            'is_rg' => $isRg,
+        ]);
+    });
+
+    return $departmentId;
+}
+
+/**
  * A tenant + customer + conversation + one ticket at the requested status.
  *
  * Claims the conversation's Doc 04 open-ticket slot when the status is
