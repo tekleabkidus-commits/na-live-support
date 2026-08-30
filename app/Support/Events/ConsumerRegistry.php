@@ -80,7 +80,10 @@ final class ConsumerRegistry
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
         'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class],
-        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class],
+        // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
+        // events DELIBERATELY (FR-05/FR-06 counters, recompute-from-truth; contract fixture
+        // fixtures/tickets/consumers/doc11.json tightened in the same commit).
+        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
         //    kb.article.published — chunk → sanitize (the one door) → embed changed
         //    chunks → ONE-statement generation swap → kb.retrieval.updated. Idempotent
@@ -96,13 +99,13 @@ final class ConsumerRegistry
         // consumer, implemented — the starter set seeds right after activation (the disclosed
         // millisecond asynchrony). The ReopenConsumerDrillTest empty pin moves in THIS commit.
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
-        'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
+        'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
         'ticket.tagged' => [ListProjectorConsumer::class],
         'ticket.untagged' => [ListProjectorConsumer::class],
-        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class],
+        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class],
         'ticket.escalated' => [ListProjectorConsumer::class],
         'ticket.deescalated' => [ListProjectorConsumer::class],
         'ticket.merged' => [ListProjectorConsumer::class],

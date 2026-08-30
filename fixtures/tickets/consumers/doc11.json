@@ -1,7 +1,7 @@
 {
   "doc": "Doc11",
-  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
-  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "spec": "Doc 06 NFR-06/T-09 — consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds. TIGHTENED at S11 step 4 (AssignmentStatsConsumer): ticket.assigned reads old/new assignee ids; status_changed/transferred read ticket_id (the assignee via the row).",
   "entries": [
     {
       "event": "ticket.assigned",
@@ -11,6 +11,7 @@
         "tenant_id",
         "ticket_id",
         "conversation_id",
+        "old_assignee_id",
         "new_assignee_id"
       ]
     },
