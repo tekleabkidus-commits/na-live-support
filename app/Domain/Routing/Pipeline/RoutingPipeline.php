@@ -198,7 +198,7 @@ final class RoutingPipeline
         $ordered = $this->strategy->order($queueId, $routable, $ticketFacts + ['department_id' => $departmentId, 'starved' => $pos['starved']]);
         $record->strategy($this->strategy->name(), count($routable));
         $record->snapshot(['routable' => $routable, 'candidates' => $ordered['candidates'], 'position' => $pos, 'queue_id' => $queueId, 'department_id' => $departmentId]);
-        $record->step('eligibility', ['members' => count($this->members->eligible($queueId)), 'routable' => count($routable)], $routable === [] ? 'no eligible agent online with a free slot' : sprintf('%d routable — %s', count($routable), $ordered['note']));
+        $record->step('eligibility', ['members' => count($this->members->eligible($queueId)), 'routable' => count($routable)] + (array) ($ordered['facts'] ?? []), $routable === [] ? 'no eligible agent online with a free slot' : sprintf('%d routable — %s', count($routable), $ordered['note']));
 
         foreach ($ordered['candidates'] as $userId) {
             $agent = User::query()->find($userId);

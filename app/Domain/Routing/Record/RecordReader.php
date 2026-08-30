@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class RecordReader
 {
-    private const AGENT_KEYS = ['candidate', 'by', 'assigned_to', 'routable', 'candidates'];
+    private const AGENT_KEYS = ['candidate', 'by', 'assigned_to', 'routable', 'candidates', 'pointer', 'next', 'manual_by', 'old_assignee_id', 'new_assignee_id', 'hold_for', 'previous_assignee_id'];
 
     public function __construct(private readonly TicketScope $scope, private readonly CapabilityMapProvider $maps) {}
 
@@ -68,6 +68,25 @@ final class RecordReader
         ];
         if ($seesAgents) {
             $out['assigned_to'] = $row->assigned_to;   // present ONLY for supervision-scope viewers (absence, not null)
+            // S11 step 11b (STOP-G): the drawn card renders NAMES, not raw ids — the map exists
+            // ONLY when the agent facts themselves do (SEC-02 by absence, same key law).
+            $ids = [];
+            foreach ($steps as $step) {
+                foreach (self::AGENT_KEYS as $k) {
+                    $v = $step['input'][$k] ?? null;
+                    foreach (is_array($v) ? $v : [$v] as $one) {
+                        if (is_string($one) && strlen($one) === 36) {
+                            $ids[$one] = true;
+                        }
+                    }
+                }
+            }
+            if (is_string($row->assigned_to)) {
+                $ids[$row->assigned_to] = true;
+            }
+            /** @var array<string, string> $names */
+            $names = $ids === [] ? [] : DB::table('users')->whereIn('id', array_keys($ids))->pluck('name', 'id')->all();
+            $out['names'] = $names;
         }
 
         return $out;

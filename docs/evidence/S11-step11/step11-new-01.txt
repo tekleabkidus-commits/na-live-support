@@ -1,0 +1,87 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Inbox\QueueViewsTest
+  ⨯ it STOP-H: the workspace payload carries REAL queue views per effec… 7.67s  
+  ⨯ it FR-05/FR-08 step 3: the queue view LIST serves the waiting set i… 0.31s  
+
+   FAIL  Tests\Security\RoutingRecordElisionTest
+  ⨯ it SEC-02: the SAME record answers BOTH roles — the supervision vie… 0.19s  
+
+   PASS  Tests\Feature\Routing\DecisionRecordTest
+  ✓ it FR-17/BR-06: every automatic routing writes a COMPLETE record —…  0.24s  
+  ✓ it waits honestly (BR-05): no online agent → outcome waiting, the t… 0.17s  
+  ✓ it FS-04: an engine exception PARKS the ticket in the department de… 0.19s  
+  ✓ it SEC-02: the read door ELIDES per-agent facts for a viewer withou… 0.30s  
+
+   PASS  Tests\Feature\Inbox\ViewDeltaProtocolTest
+  ✓ it T-02: membership changes publish v:1 deltas — add with integer-µ… 5.28s  
+  ✓ it T-03: the pushed count IS the server ZCARD — three rapid deltas…  2.70s  
+  ✓ it SEC-06/32KB: the view-channel door refuses a foreign-tenant payl… 0.05s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 1.56s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 0.47s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\QueueViewsTest > it STOP-H: the workspace pay…   
+  the seam fixture survived (STOP-H: deleted in the same commit)
+Failed asserting that true is false.
+
+  at tests/Feature/Inbox/QueueViewsTest.php:67
+     63▕         ->and(array_column(app(QueueViews::class)->forViewer($expired), 'id'))->not->toContain($queue, 'an EXPIRED temporary member still sees the queue view (EC-07/EC-09)')
+     64▕         ->and(app(QueueViews::class)->forViewer(qvActor(['tickets.view', 'views.manage', 'conversations.view'], 'S11 QV Nobody')))->toBe([]);
+     65▕ 
+     66▕     // The seam is GONE: no fixture file, no ?seam_queues reference anywhere under app/.
+  ➜  67▕     expect(is_file(base_path('fixtures/inbox/seams/doc11-queue-views.json')))->toBeFalse('the seam fixture survived (STOP-H: deleted in the same commit)')
+     68▕         ->and(str_contains((string) file_get_contents(app_path('Http/Controllers/Inbox/WorkspaceController.php')), 'seam_queues'))->toBeFalse();
+     69▕ 
+     70▕     // The workspace payload itself carries the real rows.
+     71▕     activateTenant($tenant);
+
+  1   tests/Feature/Inbox/QueueViewsTest.php:67
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Inbox\QueueViewsTest > it FR-05/FR-08 step 3: the q…   
+  the list order is not the dispatcher's (FR-08 step 3)
+Failed asserting that two arrays are identical.
+  -Array &0 [
+  -    0 => '01a05454-4dd8-729e-a9de-edeedd436ee3',
+  -    1 => '01a05454-4e17-70b6-ae26-5d82e2ea5b00',
+  -]
+  +Array &0 []
+  
+
+  at tests/Feature/Inbox/QueueViewsTest.php:100
+     96▕     $first = $this->actingAs($agent, 'staff')->getJson('https://localhost/inbox/list?view=queue:'.$queue.'&limit=2');
+     97▕     $first->assertStatus(200);
+     98▕     bindTenant($tenant);
+     99▕     expect($first->json('total'))->toBe(3)
+  ➜ 100▕         ->and(array_column((array) $first->json('rows'), 'ticket_id'))->toBe(app(WaitingSets::class)->head($queue, 2), 'the list order is not the dispatcher\'s (FR-08 step 3)')
+    101▕         ->and($first->json('next_cursor'))->toBeString();
+    102▕     $second = $this->actingAs($agent, 'staff')->getJson('https://localhost/inbox/list?view=queue:'.$queue.'&limit=2&cursor='.$first->json('next_cursor'));
+    103▕     bindTenant($tenant);
+    104▕     expect(array_column((array) $second->json('rows'), 'ticket_id'))->toBe([$ids[2]])
+
+  1   tests/Feature/Inbox/QueueViewsTest.php:100
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\RoutingRecordElisionTest > it SEC-02: the SAME rec…   
+  an agent id leaked into the elided record
+Failed asserting that true is false.
+
+  at tests/Security/RoutingRecordElisionTest.php:70
+     66▕     expect($elided)->not->toBeNull();
+     67▕     expect(array_key_exists('assigned_to', $elided))->toBeFalse('elision must be ABSENCE — the key itself may not exist')
+     68▕         ->and(array_key_exists('names', $elided))->toBeFalse();
+     69▕     $elidedJson = json_encode($elided, JSON_THROW_ON_ERROR);
+  ➜  70▕     expect(str_contains($elidedJson, $agent->identifier()))->toBeFalse('an agent id leaked into the elided record')
+     71▕         ->and(str_contains($elidedJson, 'Fixture Elision Agent Dawit'))->toBeFalse('an agent NAME leaked into the elided record');
+     72▕     // The logic stays whole (C11's note): same steps, same outcomes, strategy, boosts.
+     73▕     expect(array_column($elided['steps'], 'step'))->toBe(array_column($full['steps'], 'step'))
+     74▕         ->and(array_column($elided['steps'], 'outcome'))->toBe(array_column($full['steps'], 'outcome'))
+
+  1   tests/Security/RoutingRecordElisionTest.php:70
+
+
+  Tests:    3 failed, 9 passed (135 assertions)
+  Duration: 19.24s
+

@@ -65,6 +65,6 @@ final class SkillBased implements AssignmentStrategy
         $subset = array_values(array_filter($routable, static fn (array $r): bool => in_array($r['user_id'], $matching, true)));
         $ordered = $this->loadBased->order($queueId, $subset, $ticket);
 
-        return ['candidates' => $ordered['candidates'], 'note' => $note.'; then '.$ordered['note']];
+        return ['candidates' => $ordered['candidates'], 'note' => $note.'; then '.$ordered['note'], 'facts' => $ordered['facts'] ?? []];
     }
 }

@@ -94,6 +94,15 @@ async function fetchPage(cursor: string | null): Promise<void> {
             headers: { Accept: 'application/json' },
         });
         if (!response.ok) {
+            // S11 step 11a (Doc 07 EC-09 / Doc 11 EC-07): a queue view answering 404 is GONE —
+            // membership ended (pull-in expiry, removal, queue deleted). The drawn toast +
+            // fall-back machinery handles it; an error state would misname a legitimate vanish.
+            if (response.status === 404 && props.view.startsWith('queue:')) {
+                // Directly: on a FRESH click the store's viewKey is still the previous view,
+                // so onViewRemoved's key guard would no-op; the vanish is real either way.
+                list.removedViewToast = true;
+                return;
+            }
             loadError.value = true;
             return;
         }

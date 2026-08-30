@@ -181,7 +181,8 @@ final class WorkspaceController extends Controller
             // Doc 11 SEAM (FR-05): the queue-view TYPE renders against the
             // fixture rows in the browser proof; membership/config are
             // Doc 11's. Empty everywhere else — the section hides itself.
-            'queueViews' => $this->queueViewsSeam($request),
+            // Doc 07 FR-05 REAL (S11 step 11a, STOP-H): per effective membership; the seam and its door are gone.
+            'queueViews' => app(\App\Domain\Inbox\Views\QueueViews::class)->forViewer($user),
             // FR-28: the status control's first paint + BR-06's registered
             // idle policy; FR-26: the bell badge's first value (T-03 posture:
             // a server count, never a client derivation).
@@ -288,25 +289,6 @@ final class WorkspaceController extends Controller
         }
 
         return $badges;
-    }
-
-    /**
-     * @return list<array{id: string, name: string, count: int}>
-     */
-    private function queueViewsSeam(Request $request): array
-    {
-        if ($request->query('seam_queues') !== '1' || ! app()->environment(['local', 'testing', 'ci'])) {
-            return [];
-        }
-        /** @var array{queues?: list<array{id: string, name: string, count: int}>} $seam */
-        $seam = json_decode(
-            (string) file_get_contents(base_path('fixtures/inbox/seams/doc11-queue-views.json')),
-            true,
-            8,
-            JSON_THROW_ON_ERROR,
-        );
-
-        return $seam['queues'] ?? [];
     }
 
     /**

@@ -193,7 +193,9 @@ final class TicketActionsController extends Controller
             ->when(! $all, fn ($q) => $q->limit(6))
             ->get(['id', 'name', 'payload', 'occurred_at'])->all();
 
-        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path'];
+        // S11 step 11b (STOP-G, the packet's named lines): ticket.routed carries record_id (the
+        // expandable fetches the record by id through its own SEC-02 door), ticket.waiting its queue/position.
+        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path', 'record_id', 'queue', 'position'];
         $decoded = array_map(function (object $row) use ($detailKeys): array {
             /** @var array<string, mixed> $payload */
             $payload = json_decode($row->payload, true, 8, JSON_THROW_ON_ERROR);

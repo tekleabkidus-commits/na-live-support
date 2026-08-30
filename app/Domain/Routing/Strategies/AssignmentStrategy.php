@@ -17,7 +17,7 @@ interface AssignmentStrategy
     /**
      * @param  list<array{user_id: string, capacity: int, load: int, free: int}>  $routable
      * @param  array<string, mixed>  $ticket  language, department_id, tags, priority
-     * @return array{candidates: list<string>, note: string}
+     * @return array{candidates: list<string>, note: string, facts?: array<string, mixed>} facts = AGENT-ID step-input keys (SEC-02: elided per role by the record reader; NEVER inside the prose note)
      */
     public function order(string $queueId, array $routable, array $ticket): array;
 }

@@ -70,6 +70,54 @@ final class WaitingSets
     }
 
     /** 1-based position of a ticket in its queue, null when absent (FR-19 ticket.waiting {position}). */
+    /**
+     * Doc 07 FR-05's queue-view page (S11 step 11a): the waiting set in ITS OWN order
+     * (ascending score = the dispatcher's order), cursored the ViewZsets way — inclusive
+     * bound at the cursor score, the over-fetch margin covering same-score members.
+     *
+     * @return list<array{id: string, score: int}>
+     */
+    public function cursorPage(string $queueId, ?int $cursorScore, ?string $cursorId, int $limit): array
+    {
+        $key = $this->key($queueId);
+        $connection = Redis::connection(self::CONNECTION);
+        if ($cursorScore === null) {
+            /** @var array<string, string|int|float>|list<string|int|float> $flat */
+            $flat = $connection->command('zrange', [$key, 0, $limit - 1, true]);
+        } else {
+            $options = ['withscores' => true, 'limit' => [0, $limit + 100]];
+            /** @var array<string, string|int|float>|list<string|int|float> $flat */
+            $flat = $connection->command('zrangebyscore', [$key, (string) $cursorScore, '+inf', $options]);
+        }
+        /** @var list<array{id: string, score: int}> $pairs */
+        $pairs = [];
+        $pending = null;
+        foreach ($flat as $k => $v) {
+            if (is_string($k)) {
+                $pairs[] = ['id' => $k, 'score' => (int) $v];
+            } elseif ($pending === null) {
+                $pending = (string) $v;
+            } else {
+                $pairs[] = ['id' => $pending, 'score' => (int) $v];
+                $pending = null;
+            }
+        }
+        if ($cursorScore !== null && $cursorId !== null) {
+            // Drop everything up to and including the cursor member itself.
+            $index = null;
+            foreach ($pairs as $i => $pair) {
+                if ($pair['id'] === $cursorId) {
+                    $index = $i;
+
+                    break;
+                }
+            }
+            $pairs = $index === null ? $pairs : array_slice($pairs, $index + 1);
+        }
+
+        return array_slice($pairs, 0, $limit);
+    }
+
     public function position(string $queueId, string $ticketId): ?int
     {
         $rank = Redis::connection(self::CONNECTION)->zrank($this->key($queueId), $ticketId);

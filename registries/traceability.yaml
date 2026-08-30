@@ -2453,9 +2453,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      FLIPPED IN PART AT THE S11 BATCH-C CHECKPOINT (registry lag): the record half landed at step 5 (988f628) — every automatic routing writes a record; replay through the T-08 harness (d60eac3) yields the same outcome. PARTIAL: the supervisor rendering (C09–C11) and SEC-02's per-role elision proof (RoutingRecordElisionTest) are step 11b's.
+      COMPLETED AT S11 STEP 11b: the record half at step 5 (988f628 — every automatic routing writes a record; T-08 replay = same outcome, d60eac3); the supervisor rendering (B5-S02 §D C09–C11, the TicketTimeline expandable) and SEC-02's per-role elision at 11b — tests/Security/RoutingRecordElisionTest.php (absence not redaction, names map for supervision viewers, the logic whole) + tests/Browser/routing-record.spec.ts (the VISIBLE-absence C11 leg, light+dark axe-clean). Sabotage #12 red against this family at step 5.
   - ac_ref: "Doc11 AC-09"
     suite_path: tests/Feature/Routing/EstimatorTest.php
     type: automated

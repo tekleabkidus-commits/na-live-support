@@ -1,0 +1,289 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Routing\AssignBySystemDoorTest
+  ✓ it is UNREACHABLE from HTTP: no route action names assignBySystem,…  8.63s  
+  ✓ it assigns as the SYSTEM: assignee set, FR-05 new → open through th… 0.33s  
+  ✓ it carries FR-15's as-if-assigned check exactly as the staff path:…  0.15s  
+  ✓ it loses the FR-16 race to a manual claim that landed first (BR-03:… 0.19s  
+
+   PASS  Tests\Feature\Routing\AssignmentStatsConsumerTest
+  ✓ it is registered as a DURABLE consumer of the four assignment-shape… 0.04s  
+  ✓ it recomputes FROM TRUTH: a manual claim, a pending move and an una… 0.17s  
+  ✓ it a redelivered event whose ticket no longer names the agent still… 0.05s  
+
+   PASS  Tests\Feature\Routing\CapacityRaceTest
+  ✓ it AC-03 (1): capacity C admits exactly C assignments; the C+1th an… 0.30s  
+  ✓ it AC-03 (2): the commit path WAITS on the stats row lock held by a… 0.90s  
+  ✓ it FR-06: pending_customer does not consume a slot unless count_pen… 0.34s  
+
+   PASS  Tests\Feature\Routing\ConnectionRoutingTagSeamTest
+  ✓ it reads the fixture in local/testing and returns null for unknown…  0.04s  
+
+   PASS  Tests\Feature\Routing\DecisionOrderTest
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ex… 0.25s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.31s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.32s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "co… 0.28s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "te… 0.23s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ru… 0.27s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "de… 0.16s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.31s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.26s  
+
+   PASS  Tests\Feature\Routing\DecisionRecordTest
+  ✓ it FR-17/BR-06: every automatic routing writes a COMPLETE record —…  0.33s  
+  ✓ it waits honestly (BR-05): no online agent → outcome waiting, the t… 0.31s  
+  ✓ it FS-04: an engine exception PARKS the ticket in the department de… 0.24s  
+  ✓ it SEC-02: the read door ELIDES per-agent facts for a viewer withou… 0.42s  
+
+   PASS  Tests\Feature\Routing\DispatcherTest
+  ✓ it FS-02: the head is READ, not removed — a dying worker leaves the… 0.40s  
+  ✓ it EC-01/EC-03: two waiting tickets, one free slot — exactly one is… 0.47s  
+  ✓ it the AvailabilityConsumer is the dispatcher's ONLY trigger (durab… 0.44s  
+
+   PASS  Tests\Feature\Routing\EligibilityTest
+  ✓ it FR-05/BR-05: only ONLINE members with a free slot are routable;…  0.21s  
+  ✓ it FR-06/US-07: capacity = queue rule ?? routing.capacity.default;…  0.16s  
+  ✓ it FR-14/EC-09: hours never touch eligibility — an Online agent at…  0.10s  
+
+   PASS  Tests\Feature\Routing\EstimatorTest
+  ✓ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 0.45s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.20s  
+  ✓ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.22s  
+  ✓ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.36s  
+  ✓ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.36s  
+
+   PASS  Tests\Feature\Routing\HoursTest
+  ✓ it FR-14 / A-53: the fixture-shaped contract — default always open,… 0.18s  
+  ✓ it EC-09 NO CLIFF: outside the department's hours an Online agent i… 0.33s  
+
+   PASS  Tests\Feature\Routing\LoadBasedTest
+  ✓ it orders by load, then by last_assigned_at (never-assigned first),… 0.06s  
+
+   PASS  Tests\Feature\Routing\RebuildDrillTest
+  ✓ it FS-01: after the ZSETs and pointers are FLUSHED, routing:rebuild… 0.48s  
+
+   PASS  Tests\Feature\Routing\ReopenHoldTest
+  ✓ it EC-08: a reopened ticket whose retained assignee is Away gets a…  0.52s  
+  ✓ it EC-08 expiry — THE REAL PATH (9b, P-C6 landed; CONVERTED from st… 0.39s  
+
+   PASS  Tests\Feature\Routing\RescueTest
+  ✓ it FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig… 0.46s  
+  ✓ it FR-16a with routing.rescue.auto ON — THE REAL PATH (9b, P-C6 lan… 0.46s  
+  ✓ it FR-16b / AC-06 unreachable fixture: channel_unreachable populate… 0.33s  
+  ✓ it FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every… 0.31s  
+  ✓ it P-C1 physics: one LIVE flag per ticket (the second refused by th… 0.31s  
+
+   PASS  Tests\Feature\Routing\RgFinalityTest
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.04s  
+  ✓ it BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r… 0.06s  
+  ✓ it FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex… 0.04s  
+
+   PASS  Tests\Feature\Routing\RoundRobinSpliceTest
+  ✓ it rotates fairly, splices on join/leave without resetting, and ski… 0.07s  
+
+   PASS  Tests\Feature\Routing\SkillBasedTest
+  ✓ it filters to skill-matching agents then load-based among them (US-… 0.13s  
+  ✓ it nearest_skill: no language match → the language requirement drop… 0.12s  
+  ✓ it wait: no language match → HOLD (no candidates) with the online/s… 0.11s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.39s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.36s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.38s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.31s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.34s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.11s  
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 0.27s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.20s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.33s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.24s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.26s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.27s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.31s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.35s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.29s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.57s  
+
+   PASS  Tests\Feature\Routing\TriggersTest
+  ✓ it is registered DURABLY on the five trigger events (ADR 0011) — ex… 0.07s  
+  ✓ it created: a new ticket with no department reaches the tenant defa… 0.28s  
+  ✓ it transferred: the new department is explicit; the router assigns…  0.30s  
+  ✓ it unassigned: a manual unassign (ticket.assigned with a null new a… 0.39s  
+  ✓ it deactivation hand-back (EC-06) and reopened-with-inactive-assign… 0.44s  
+
+   PASS  Tests\Feature\Org\DepartmentAccessTest
+  ✓ it grants department access AND default-queue membership in ONE tra… 0.13s  
+  ✓ it a partial write is IMPOSSIBLE: a failure at the queue half rolls… 0.10s  
+  ✓ it revoke ENDS both direct rows (never deletes) under org.departmen… 0.13s  
+  ✓ it refuses a department without a default queue (EC-10) — nothing w… 0.10s  
+
+   PASS  Tests\Feature\Org\EffectiveMembersTest
+  ✓ it A-50 obligation 1: department access without queue membership is… 0.19s  
+  ✓ it FR-04: effective agents = direct ∪ via-team ∪ unexpired temporar… 0.19s  
+
+   PASS  Tests\Feature\Org\OrganizationSeederTest
+  ✓ it seeds EXACTLY FR-01's nine departments, in order, each with one…  0.18s  
+  ✓ it is idempotent and never overwrites an operator-edited seed: a re… 0.21s  
+  ✓ it rides ProvisioningStep::Organization — ordered after DefaultRole… 0.04s  
+  ✓ it runs inside a real provisioning: a tenant provisioned through Te… 0.33s  
+
+[dev-hardware-indicative] NFR-05 10k move: 86.7 s in 20 chunks; sibling decision baseline 160.6 ms, during (n=4) max 153.3 ms
+
+   PASS  Tests\Feature\Org\RestructureTest
+  ✓ it AC-07 / R-05 inventory-first: the queue preview discovers EVERY…  0.38s  
+  ✓ it AC-07 "the SAME query": a confirmation typed for a stale count i… 0.38s  
+  ✓ it FR-18 delete queue (empty-or-reassign): tickets move to the chos… 0.42s  
+  ✓ it FR-01 / FR-18 RG special-case: deleting the RG queue REQUIRES a…  0.22s  
+  ✓ it SS-03 / FR-18 delete department (the reorg): every ticket transf… 0.54s  
+  ✓ it SEC-04: the operator's permissions are re-resolved PER CHUNK — r… 0.26s  
+  ✓ it NFR-05 dev-scale: a 10,000-ticket queue moves in chunks of 500…  98.45s  
+  ✓ it the wizard doors: preview 200 (computed confirmation), execute 2… 0.39s  
+
+   PASS  Tests\Feature\Org\StructureWritersTest
+  ✓ it FR-01/EC-10: a department is created WITH its default queue in o… 0.10s  
+  ✓ it FR-03/BR-01/FLAG B: the boost list is ordered, known and duplica… 0.09s  
+  ✓ it FR-03: is_rg is at most one per tenant — the second is refused w… 0.10s  
+  ✓ it FR-18/EC-10: deactivating a department's DEFAULT queue is refuse… 0.11s  
+  ✓ it FR-02: teams span departments through queues; members added/remo… 0.16s  
+
+   PASS  Tests\Property\StarvationCapPropertyTest
+  ✓ it P1: the cap VALUE cannot be null, zero, negative, absent or non-… 0.05s  
+  ✓ it P2: for 500 generated boost stacks, the plain ticket past the ca… 0.88s  
+  ✓ it P3: below the cap the score orders — a plain ticket never outran… 0.17s  
+  ✓ it P4 (EC-04): at the cap the language requirement drops and the re… 0.03s  
+  ✓ it has no off-switch: no setting key in the registry can disable th… 0.03s  
+
+   PASS  Tests\Property\RoutingDeterminismHarnessTest
+  ✓ it T-08: 300 generated snapshots + ticket streams replayed twice yi… 0.11s  
+  ✓ it the REAL LoadBased strategy agrees with the documented simulatio… 0.03s  
+  ✓ it SAME-SECOND TIE (advisor-ordered, S11 step 9): two tickets queue… 0.02s  
+
+   PASS  Tests\Security\RoutingNeverWritesTicketsTest
+  ✓ it can see a planted direct ticket write at all — the positive cont… 0.03s  
+  ✓ it T-02/§21: no file in the routing package writes a ticket row or…  0.04s  
+  ✓ it keeps the Doc 06 status physics green beside this one: the sole…  0.03s  
+
+   PASS  Tests\Security\MembershipTransitionTest
+  ✓ it PRE-BINDING: with the real tables POPULATED, EmptyMembership sti… 0.10s  
+  ✓ it POST-BINDING: OrgMembership yields EXACTLY the expected sets — d… 0.14s  
+  ✓ it the production container binds OrgMembership (the seam is real),… 0.02s  
+  ✓ it A-50 obligation 2 — DIVERGENCE: a teammate ASSIGNED a ticket in…  0.10s  
+  ✓ it obligation 6 — the production WIRING binds OrgMembership, and Em… 0.03s  
+
+   PASS  Tests\Security\EstimatorLeakageTest
+  ✓ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 0.16s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.12s  
+  ✓ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.03s  
+
+   PASS  Tests\Security\SystemReturnDoorTest
+  ✓ it unassignBySystem is UNREACHABLE from HTTP: no route action names… 0.04s  
+
+   PASS  Tests\Security\RoutingRecordElisionTest
+  ✓ it SEC-02: the SAME record answers BOTH roles — the supervision vie… 0.18s  
+
+   PASS  Tests\Security\NoPollingLoopTest
+  ✓ it can see a planted polling loop — the positive control (sabotage…  0.03s  
+  ✓ it FR-08 step 5 / NFR-02: no sleep, spin or self-scheduling exists…  0.03s  
+  ✓ it pins the scheduled routing commands to exactly the two the docum… 0.02s  
+
+   PASS  Tests\Isolation\RoutingGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app role denied set per table and privilege…  0.27s  
+  ✓ it FR-17/BR-06 physics: routing_decisions carries NO app UPDATE gra… 0.04s  
+  ✓ it ADR 0003 / FLAG C: app holds no DELETE on departments, teams, qu… 0.04s  
+  ✓ it N-01: every Doc 11 table is FORCED row-level security with the t… 0.05s  
+  ✓ it FR-03 physics: is_rg is at most one per tenant (partial unique),… 0.04s  
+  ✓ it FLAG F / FLAG G: the two stamping triggers exist as PLAIN plpgsq… 0.03s  
+
+   PASS  Tests\Contract\RoutingEventConsumerContractsTest
+  ✓ the routing family is exactly EIGHTEEN events (FR-19; grown only by… 0.04s  
+  ✓ completeness: every routing-family event has a contract entry in EV… 0.03s  
+  ✓ fidelity: every fixture entry names a real catalog relationship, re… 0.03s  
+  ✓ Doc 11's own durable consumers are contracted: the availability con… 0.03s  
+
+   PASS  Tests\Contract\TicketEventConsumerContractsTest
+  ✓ NFR-06 completeness: every ticket.* event has a contract entry in E… 0.03s  
+  ✓ NFR-06 fidelity: every fixture entry names a real relationship, rea… 0.03s  
+  ✓ T-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia… 0.03s  
+
+   PASS  Tests\Feature\Rbac\ScopeFixtureTest
+  ✓ it produces the EXACT visible set for each scope level on list quer… 0.14s  
+  ✓ it answers the OBJECT check with the same implementation as the lis… 0.10s  
+  ✓ it resolves Team scope with NO team to the empty set — fails closed… 0.09s  
+  ✓ it resolves a scope map SILENT about the module to the empty set (N… 0.09s  
+  ✓ it keeps the TEST-ONLY EmptyMembership control fail-closed — Team/D… 0.09s  
+  ✓ it AC-03 RE-PROOF: OrgMembership over REAL rows yields the SAME exa… 0.10s  
+
+   PASS  Tests\Feature\Tickets\ChannelScopeReproofTest
+  ✓ T-06 ADMIT: an Own-scoped agent may subscribe to a conversation the… 0.09s  
+  ✓ T-06 DENY: the same Own-scoped agent is refused on a conversation t… 0.12s  
+  ✓ T-06 DENY: unassigning takes the subscription right away again       0.09s  
+  ✓ T-06 INVERTED (S11 step 3, Packet 3 — A-50; the S20 inversion prece… 0.22s  
+  ✓ T-06: an All-scoped agent still subscribes, and conversations.view…  0.06s  
+
+   PASS  Tests\Feature\Tickets\TransferEscalateTest
+  ✓ FR-22: a transfer changes the department, keeps the status, retains… 0.07s  
+  ✓ FR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne… 0.09s  
+  ✓ SEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR…  0.08s  
+  ✓ FR-23: escalation writes the {path, reason, target, at, by} payload… 0.08s  
+  ✓ FR-23/BR-06: a short reason is refused by the edge (reason_too_shor… 0.05s  
+  ✓ FR-23: a named target who is disabled is refused escalation_target_… 0.06s  
+  ✓ FR-23: de-escalation returns to open with the actor's note, clears…  0.10s  
+  ✓ EC-05: deactivating a named target re-routes the escalation to supe… 0.08s  
+
+   PASS  Tests\Feature\Tickets\CreationPathsTest
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.06s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.05s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.05s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.04s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.04s  
+  ✓ FR-14: the offline form is tagged offline by the path itself, not b… 0.04s  
+  ✓ FR-12: an open-family ticket blocks a second create and hands back…  0.06s  
+  ✓ FR-13: an idempotency key makes a replayed create return the SAME t… 0.05s  
+  ✓ AC-02 (concurrent half): concurrent creates on one conversation yie… 0.31s  
+  ✓ FR-21: a split target takes NO open slot — the one sanctioned multi… 0.09s  
+  ✓ FR-03: a subject given at creation is marked staff-authored; an abs… 0.09s  
+
+   PASS  Tests\Feature\Tickets\AssignmentClaimTest
+  ✓ FR-16/US-01: the loser of a claim race is told WHO won, not just th… 0.16s  
+  ✓ FR-16: the same person claiming twice is a double-click, not a race  0.16s  
+  ✓ FR-05: the first assignment opens a new ticket, through the transit… 0.15s  
+  ✓ FR-15: an assignee who cannot see the ticket is refused with assign… 0.10s  
+  ✓ FR-15: every change emits ticket.assigned {old, new, by} — includin… 0.07s  
+  ✓ FR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur… 0.15s  
+  ✓ FR-05: an implicit claim never fails the reply it rode in on         0.15s  
+  ✓ EC-06: a deactivated assignee hands back every OPEN-family ticket,…  0.24s  
+
+   PASS  Tests\Feature\Tickets\StatusWriterEncapsulationTest
+  ✓ it can see the sanctioned writer at all — the positive control for…  0.05s  
+  ✓ it has exactly one file in app/ that writes a ticket status (NFR-03… 0.20s  
+  ✓ it routes every status write through the transition service, which…  0.15s  
+  ✓ it offers no mass-assignment path to status on the Ticket model      0.04s  
+  ✓ it binds the service and repository as ordinary singleton-resolvabl… 0.03s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.05s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.37s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.24s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.54s  
+
+   PASS  Tests\Feature\Inbox\PerViewerCountsTest
+  ✓ it EC-04: a shared saved view shows each viewer THEIR count — the v… 6.66s  
+  ✓ it EC-04 on a SYSTEM view: the base unassigned set and an Own-scope… 1.22s  
+
+   PASS  Tests\Security\InboxSecurityTest
+  ✓ it BR-03/scoped-list: an Own-scoped viewer hydrates ONLY their rows… 1.26s  
+  ✓ it N-01: a FOREIGN TENANT's id planted in this tenant's ZSET hydrat… 0.50s  
+  ✓ it SEC posture: the hydration order is the ZSET's and out-of-scope…  1.58s  
+
+  Tests:    192 passed (4337 assertions)
+  Duration: 152.71s
+

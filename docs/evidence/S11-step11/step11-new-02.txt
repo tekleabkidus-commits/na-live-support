@@ -1,0 +1,39 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Inbox\QueueViewsTest
+  ✓ it STOP-H: the workspace payload carries REAL queue views per effec… 9.81s  
+  ✓ it FR-05/FR-08 step 3: the queue view LIST serves the waiting set i… 0.59s  
+
+   PASS  Tests\Security\RoutingRecordElisionTest
+  ✓ it SEC-02: the SAME record answers BOTH roles — the supervision vie… 0.41s  
+
+   PASS  Tests\Feature\Routing\DecisionRecordTest
+  ✓ it FR-17/BR-06: every automatic routing writes a COMPLETE record —…  0.27s  
+  ✓ it waits honestly (BR-05): no online agent → outcome waiting, the t… 0.22s  
+  ✓ it FS-04: an engine exception PARKS the ticket in the department de… 0.22s  
+  ✓ it SEC-02: the read door ELIDES per-agent facts for a viewer withou… 0.34s  
+
+   PASS  Tests\Feature\Routing\RoundRobinSpliceTest
+  ✓ it rotates fairly, splices on join/leave without resetting, and ski… 0.09s  
+
+   PASS  Tests\Feature\Routing\LoadBasedTest
+  ✓ it orders by load, then by last_assigned_at (never-assigned first),… 0.08s  
+
+   PASS  Tests\Feature\Routing\SkillBasedTest
+  ✓ it filters to skill-matching agents then load-based among them (US-… 0.10s  
+  ✓ it nearest_skill: no language match → the language requirement drop… 0.12s  
+  ✓ it wait: no language match → HOLD (no candidates) with the online/s… 0.10s  
+
+   PASS  Tests\Feature\Routing\DispatcherTest
+  ✓ it FS-02: the head is READ, not removed — a dying worker leaves the… 0.39s  
+  ✓ it EC-01/EC-03: two waiting tickets, one free slot — exactly one is… 0.54s  
+  ✓ it the AvailabilityConsumer is the dispatcher's ONLY trigger (durab… 0.44s  
+
+   PASS  Tests\Property\RoutingDeterminismHarnessTest
+  ✓ it T-08: 300 generated snapshots + ticket streams replayed twice yi… 0.17s  
+  ✓ it the REAL LoadBased strategy agrees with the documented simulatio… 0.03s  
+  ✓ it SAME-SECOND TIE (advisor-ordered, S11 step 9): two tickets queue… 0.02s  
+
+  Tests:    18 passed (759 assertions)
+  Duration: 14.03s
+

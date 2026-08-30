@@ -64,7 +64,8 @@ final class ListController extends Controller
 
         /** @var array{view?: string, saved?: string, cursor?: string, limit?: int|string, sort?: string, filters?: string} $input */
         $input = $request->validate([
-            'view' => ['required_without:saved', 'string', 'in:my_open,unassigned,mentions,following,sla_at_risk,expiring_windows,rescue'],
+            // S11 step 11a (STOP-H): `queue:{uuid}` joins the closed set — Doc 07 FR-05's real queue views.
+            'view' => ['required_without:saved', 'string', 'regex:/^(my_open|unassigned|mentions|following|sla_at_risk|expiring_windows|rescue|queue:[0-9a-f\-]{36})$/'],
             'saved' => ['required_without:view', 'uuid'],
             'cursor' => ['sometimes', 'string', 'max:400'],
             'limit' => ['sometimes', 'integer', 'min:1', 'max:100'],
@@ -106,6 +107,11 @@ final class ListController extends Controller
             $savedFilters = json_decode($saved->filters, true, 16, JSON_THROW_ON_ERROR);
             $zsetKey = $this->viewHash->savedZsetKeyForViewer($savedId, $user);
             $zsetKey = $this->ensureVariant($zsetKey, $savedFilters);
+        } elseif (is_string($view) && str_starts_with($view, 'queue:')) {
+            // Doc 07 FR-05 queue views (S11 step 11a): membership = the queue's WAITING set in the
+            // dispatcher's own order (FR-08 step 3). A viewer who is not an effective member gets
+            // the 404 PATTERN (C-10 — Doc 07 EC-09's vanish: the client toasts and drops the view).
+            return $this->queuePage($user, substr($view, 6), $input['cursor'] ?? null, $limit);
         } else {
             $savedFilters = null;
             $zsetKey = $this->viewHash->zsetKeyForViewer((string) $view, $user);
@@ -333,6 +339,59 @@ final class ListController extends Controller
         }
 
         return $zsetKey;
+    }
+
+    /** @return array{0: string|null, 1: string|null} */
+    /**
+     * S11 step 11a (STOP-H): one queue view's page — the WaitingSets ZSET in its own
+     * ascending order, hydrated through the same read model, the same overlay, the same
+     * cursor codec. Total = the set's depth (the rail's count, one truth).
+     */
+    private function queuePage(User $user, string $queueId, ?string $cursor, int $limit): JsonResponse
+    {
+        if (! app(\App\Domain\Inbox\Views\QueueViews::class)->isMember($user, $queueId)) {
+            \Illuminate\Support\Facades\Log::info('queue view 404-pattern served', ['metric' => 'security.cross_tenant_probe']);
+
+            return new JsonResponse(['rows' => [], 'next_cursor' => null, 'total' => 0, 'error' => 'queue_view_gone'], 404);
+        }
+        [$cursorScore, $cursorId] = $this->decodeCursor($cursor);
+        $waiting = app(\App\Domain\Routing\Waiting\WaitingSets::class);
+        $entries = $waiting->cursorPage($queueId, $cursorScore !== null ? (int) $cursorScore : null, $cursorId, $limit);
+        $rows = $this->readModel->hydrate(array_map(fn (array $entry): string => $entry['id'], $entries), $user);
+        $scores = [];
+        foreach ($entries as $entry) {
+            $scores[$entry['id']] = $entry['score'];
+        }
+        /** @var list<TicketListItem> $rows */
+        foreach ($rows as $row) {
+            $ticketIdRaw = $row->getAttribute('ticket_id');
+            $row->setAttribute('sort_key', $scores[is_string($ticketIdRaw) ? $ticketIdRaw : ''] ?? 0);
+        }
+        $nextCursor = count($entries) === $limit
+            ? $this->encodeCursor((string) $entries[count($entries) - 1]['score'], $entries[count($entries) - 1]['id'])
+            : null;
+        $overlay = $this->markers->overlay($user, array_values(array_unique(array_map(static function (TicketListItem $row): string {
+            $raw = $row->getAttribute('conversation_id');
+
+            return is_string($raw) ? $raw : '';
+        }, $rows))));
+
+        return new JsonResponse([
+            'rows' => array_map(function (TicketListItem $row) use ($overlay): array {
+                /** @var array<string, mixed> $data */
+                $data = $row->getAttributes();
+                $conversationIdRaw = $row->getAttribute('conversation_id');
+                $conversationId = is_string($conversationIdRaw) ? $conversationIdRaw : '';
+                $tagsRaw = $data['tags'] ?? '[]';
+                $data['tags'] = json_decode(is_string($tagsRaw) ? $tagsRaw : '[]', true, 8, JSON_THROW_ON_ERROR);
+                $data['unread'] = $overlay['unread'][$conversationId] ?? 0;
+                $data['has_draft'] = $overlay['drafts'][$conversationId] ?? false;
+
+                return $data;
+            }, $rows),
+            'next_cursor' => $nextCursor,
+            'total' => $waiting->depth($queueId),
+        ]);
     }
 
     /** @return array{0: string|null, 1: string|null} */

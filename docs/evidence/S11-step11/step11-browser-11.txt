@@ -1,0 +1,82 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-views.spec.ts:64:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) (2.2s)
+  ✓  2 [chromium] › tests/Browser/inbox-views.spec.ts:102:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows (1.8s)
+  ✓  3 [chromium] › tests/Browser/inbox-views.spec.ts:133:1 › FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned copy and opens the editor on it (1.7s)
+  ✘  4 [chromium] › tests/Browser/inbox-views.spec.ts:150:1 › Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order (30.1s)
+  ✘  5 [chromium] › tests/Browser/routing-record.spec.ts:47:1 › C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text (7.1s)
+  ✘  6 [chromium] › tests/Browser/routing-record.spec.ts:65:1 › C11 + §13: the elided card for a viewer without individual-metrics rights (this fixture agent) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean (30.1s)
+
+
+  1) [chromium] › tests/Browser/inbox-views.spec.ts:150:1 › Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#login-email')
+
+
+      52 | async function openInbox(page: Page, query = ''): Promise<void> {
+      53 |     await page.goto('/login');
+    > 54 |     await page.locator('#login-email').fill(AGENT_EMAIL);
+         |                                        ^
+      55 |     await page.locator('#login-password').fill(PASSWORD);
+      56 |     await page.getByTestId('login-submit').click();
+      57 |     await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+        at openInbox (/home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts:54:40)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts:171:5
+
+    Error Context: test-results/inbox-views-Doc-07-FR-05-R-95ef3-t-in-the-dispatcher-s-order-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/routing-record.spec.ts:47:1 › C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-record-toggle]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-record-toggle]').first()
+
+
+      49 |
+      50 |     const toggle = page.locator('[data-record-toggle]').first();
+    > 51 |     await expect(toggle).toBeVisible();
+         |                          ^
+      52 |     await toggle.click();
+      53 |
+      54 |     const card = page.getByTestId('routing-record-card');
+        at /home/kidus/projects/na-live-support/tests/Browser/routing-record.spec.ts:51:26
+
+    Error Context: test-results/routing-record-C09-the-rou-3be78-onospace-facts-Copy-as-text-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/routing-record.spec.ts:65:1 › C11 + §13: the elided card for a viewer without individual-metrics rights (this fixture agent) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-record-toggle]').first()
+
+
+      65 | test('C11 + §13: the elided card for a viewer without individual-metrics rights (this fixture agent) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean', async ({ page, browser }) => {
+      66 |     await openTicketOne(page);
+    > 67 |     await page.locator('[data-record-toggle]').first().click();
+         |                                                        ^
+      68 |     const card = page.getByTestId('routing-record-card');
+      69 |     await expect(card).toBeVisible();
+      70 |     // The fixture agent holds tickets.view only — the C11 state is the one drawn for them.
+        at /home/kidus/projects/na-live-support/tests/Browser/routing-record.spec.ts:67:56
+
+    Error Context: test-results/routing-record-C11-§13-the-5f598-and-dark-are-both-axe-clean-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-views.spec.ts:150:1 › Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order 
+    [chromium] › tests/Browser/routing-record.spec.ts:47:1 › C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text 
+    [chromium] › tests/Browser/routing-record.spec.ts:65:1 › C11 + §13: the elided card for a viewer without individual-metrics rights (this fixture agent) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean 
+  3 passed (1.4m)

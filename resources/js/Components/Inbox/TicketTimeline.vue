@@ -30,6 +30,71 @@ const emit = defineEmits<{
 const rows = ref<TimelineRow[]>([]);
 const total = ref(0);
 const expanded = ref(false);
+
+// S11 step 11b (STOP-G, countersigned): the FR-17 expandable — a `ticket.routed` row opens the
+// record card (B5-S02 §D C09–C11 at full fidelity, tokens only). The record is fetched by id
+// through its own SEC-02 door; elision is ABSENCE in the payload (no names map, no assigned_to)
+// and the card renders the drawn "Names hidden" state (C11), never a redacted-looking blank.
+type RoutingRecord = {
+    id: string;
+    trigger: string;
+    outcome: string;
+    strategy: string | null;
+    boosts_applied: string[];
+    waiting: boolean;
+    steps: { step: string; input: Record<string, unknown>; outcome: string }[];
+    at: string;
+    assigned_to?: string | null;
+    names?: Record<string, string>;
+};
+const openRecordId = ref<string | null>(null);
+const record = ref<RoutingRecord | null>(null);
+const recordError = ref(false);
+async function toggleRecord(recordId: string): Promise<void> {
+    if (openRecordId.value === recordId) {
+        openRecordId.value = null;
+        record.value = null;
+        return;
+    }
+    openRecordId.value = recordId;
+    record.value = null;
+    recordError.value = false;
+    try {
+        const response = await fetch(`/inbox/t/${props.ticketId}/routing/${recordId}`, {
+            headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        record.value = (await response.json()) as RoutingRecord;
+    } catch {
+        recordError.value = true;
+    }
+}
+function agentName(value: unknown): string {
+    if (typeof value !== 'string') return String(value ?? '');
+    return record.value?.names?.[value] ?? value;
+}
+function recordTitle(): string {
+    const r = record.value;
+    if (r === null) return '';
+    if (r.outcome === 'waiting' || r.waiting) return props.t.record_title_waiting ?? '';
+    const name = typeof r.assigned_to === 'string' ? agentName(r.assigned_to) : null;
+    return name !== null
+        ? (props.t.record_title_assigned ?? ':name').replace(':name', name)
+        : (props.t.record_title_assigned_anon ?? '');
+}
+function inputLine(input: Record<string, unknown>): string {
+    return Object.entries(input)
+        .map(([k, v]) => `${k}=${Array.isArray(v) ? v.map(agentName).join(',') : agentName(v)}`)
+        .join(' · ');
+}
+function copyRecord(): void {
+    const r = record.value;
+    if (r === null) return;
+    const lines = r.steps.map(
+        (step, i) => `${i + 1}. ${step.outcome}\n   ${inputLine(step.input)}`,
+    );
+    void navigator.clipboard?.writeText(`${recordTitle()}\n${lines.join('\n')}`);
+}
 // D6: this panel section can fail ALONE — the state says so and offers the
 // retry; the conversation to the left is untouched (the drawn copy's law).
 const failed = ref(false);
@@ -151,10 +216,86 @@ function showEarlier(): void {
                 <span v-if="detailLine(row) !== ''" :style="{ color: 'var(--ds-text-secondary)' }">
                     · {{ detailLine(row) }}</span
                 >
+                <button
+                    v-if="row.name === 'ticket.routed' && typeof row.detail.record_id === 'string'"
+                    type="button"
+                    class="ml-1 text-xs underline"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    :data-record-toggle="row.detail.record_id"
+                    :aria-expanded="openRecordId === row.detail.record_id"
+                    @click="void toggleRecord(String(row.detail.record_id))"
+                >
+                    {{ t.record_open }}
+                </button>
                 <br />
                 <span :style="{ color: 'var(--ds-text-muted)' }" data-timeline-actor
                     >{{ actorLabel(row) }} · {{ timeLabel(row.occurred_at) }}</span
                 >
+                <!-- B5-S02 §D C09–C11: the record card. Border/radius/typography from tokens; the
+                     numbered plain-language line + monospace facts line per step; the C11 lock chip
+                     and elision note render on ABSENCE of the names map. -->
+                <div
+                    v-if="row.name === 'ticket.routed' && openRecordId === row.detail.record_id"
+                    class="mt-2 overflow-hidden rounded-lg border"
+                    :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-surface)' }"
+                    data-testid="routing-record-card"
+                >
+                    <p v-if="recordError" class="p-3" :style="{ color: 'var(--ds-danger-strong)' }">
+                        ⚠ {{ t.record_load_failed }}
+                    </p>
+                    <template v-else-if="record !== null">
+                        <div
+                            class="flex items-center gap-2 border-b px-3 py-2"
+                            :style="{ borderColor: 'var(--ds-border-soft)' }"
+                        >
+                            <span class="text-[12.5px] font-semibold" :style="{ color: 'var(--ds-text-primary)' }" data-testid="record-title">{{ recordTitle() }}</span>
+                            <span
+                                v-if="!record.names"
+                                class="ml-auto inline-flex flex-none items-center gap-1 whitespace-nowrap text-[10.5px]"
+                                :style="{ color: 'var(--ds-text-muted)' }"
+                                data-testid="record-names-hidden"
+                                >🔒 {{ t.record_names_hidden }}</span
+                            >
+                            <button
+                                type="button"
+                                class="flex-none rounded-md border px-2 py-1 text-[11px] font-semibold"
+                                :class="record.names ? 'ml-auto' : ''"
+                                :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)', background: 'var(--ds-surface)' }"
+                                data-testid="record-copy"
+                                @click="copyRecord"
+                            >
+                                {{ t.record_copy }}
+                            </button>
+                        </div>
+                        <ol class="flex flex-col gap-2 p-3">
+                            <li v-for="(step, index) in record.steps" :key="index" class="flex gap-2.5" :data-record-step="step.step">
+                                <span
+                                    class="w-[18px] flex-none font-mono text-[11px] font-semibold"
+                                    :style="{ color: 'var(--ds-text-muted)' }"
+                                    aria-hidden="true"
+                                    >{{ index + 1 }}</span
+                                >
+                                <span class="min-w-0">
+                                    <span class="block text-[12.5px] leading-relaxed" :style="{ color: 'var(--ds-text-primary)' }">{{ step.outcome }}</span>
+                                    <span
+                                        v-if="inputLine(step.input) !== ''"
+                                        class="mt-0.5 block break-all font-mono text-[10.5px]"
+                                        :style="{ color: 'var(--ds-text-muted)' }"
+                                        >{{ inputLine(step.input) }}</span
+                                    >
+                                </span>
+                            </li>
+                        </ol>
+                        <div
+                            v-if="!record.names"
+                            class="mx-3 mb-3 rounded-md border p-2.5 text-[11.5px] leading-relaxed"
+                            :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)', color: 'var(--ds-text-secondary)' }"
+                            data-testid="record-elision-note"
+                        >
+                            {{ t.record_elision_note }}
+                        </div>
+                    </template>
+                </div>
             </li>
         </ol>
         <button

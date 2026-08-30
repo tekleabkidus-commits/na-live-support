@@ -280,7 +280,7 @@ function onDrop(section: string, token: string): void {
                                     .replace(':count', String(queue.count))
                             "
                             draggable="true"
-                            @click.prevent
+                            @click.prevent="emit('select', 'queue:' + queue.id)"
                             @keydown="(e) => onRowKeydown(e, 'queue', 'queue:' + queue.id)"
                             @dragstart="onDragStart('queue:' + queue.id)"
                             @dragover="(e) => onDragOver(e, 'queue:' + queue.id)"

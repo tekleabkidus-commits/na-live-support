@@ -53,7 +53,9 @@ final class RoundRobin implements AssignmentStrategy
         }
         $ring = [...array_slice($ids, $start), ...array_slice($ids, 0, $start)];
 
-        return ['candidates' => $ring, 'note' => sprintf('pointer %s → next %s (%d in the ring)', $pointer ?? 'none', $ring[0], count($ring))];
+        // SEC-02 (S11 step 11b honest trail): the pointer/next AGENT IDS travel as FACTS —
+        // step-input keys the record reader elides per role — never inside the prose note.
+        return ['candidates' => $ring, 'note' => sprintf('%d in the ring, pointer advanced', count($ring)), 'facts' => ['pointer' => $pointer, 'next' => $ring[0]]];
     }
 
     /** The persisted pointer: Redis first, the DB checkpoint when Redis has nothing (FS-01 — a fairness restart is noted by the caller). */

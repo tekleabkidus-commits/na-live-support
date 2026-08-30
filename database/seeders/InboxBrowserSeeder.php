@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Domain\Inbox\Health\ChannelHealthState;
 use App\Domain\Inbox\Views\SavedViews;
+use App\Models\Ticket;
 use App\Models\User;
 use App\Support\Tenancy\ResolutionSource;
 use App\Support\Tenancy\RlsSession;
@@ -135,6 +136,7 @@ final class InboxBrowserSeeder extends Seeder
         // ticket-status-writer gate and its structural twin police app code,
         // and the R-20 trigger still stamps these updates like any other.
         $healedTicketIds = $this->healListScene($agent);
+        $this->seedQueueViewScene($agent);
 
         // CLOCK-BEARING fixture state decays between runs (a 45-minute
         // window seeded this morning is expired by lunch — the capture run
@@ -218,6 +220,80 @@ final class InboxBrowserSeeder extends Seeder
     }
 
     /** @return list<string> the ticket ids whose state was actually repaired */
+    /**
+     * S11 step 11 (STOP-G/STOP-H): the queue-view + routing-record scene. Fixed ids (0l law:
+     * dedicated rows, never a shared canon row); every seed HEALS by re-asserting membership,
+     * re-placing the waiting tickets through the real doors and reprojecting — a spec run that
+     * claimed or moved a fixture ticket is put back, and the WaitingSets mirror is rebuilt for
+     * exactly this queue by re-routing (the engine's own scores).
+     */
+    private function seedQueueViewScene(User $agent): void
+    {
+        $tenantId = app(TenantContext::class)->tenantId();
+        $deptId = '00000000-0000-7000-8000-00000000d011';
+        $queueId = '00000000-0000-7000-8000-00000000d012';
+        if (! DB::table('departments')->where('id', $deptId)->exists()) {
+            DB::table('departments')->insert(['id' => $deptId, 'tenant_id' => $tenantId, 'name' => json_encode(['en' => 'Fixture Routing', 'am' => 'ፊክስቸር መስመር'], JSON_THROW_ON_ERROR), 'slug' => 'fixture-routing', 'default_queue_id' => null]);
+        }
+        if (! DB::table('queues')->where('id', $queueId)->exists()) {
+            DB::table('queues')->insert(['id' => $queueId, 'tenant_id' => $tenantId, 'department_id' => $deptId, 'name' => 'Fixture payments queue', 'position' => 0]);
+        }
+        DB::table('departments')->where('id', $deptId)->update(['default_queue_id' => $queueId, 'is_active' => true, 'deleted_at' => null]);
+        DB::table('queues')->where('id', $queueId)->update(['is_active' => true, 'deleted_at' => null]);
+        // Membership heals: ended rows are FLAG-C tombstones — a live direct row is re-asserted.
+        if (! DB::table('queue_members')->where('queue_id', $queueId)->where('user_id', $agent->identifier())->whereNull('ended_at')->exists()) {
+            DB::table('queue_members')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'queue_id' => $queueId, 'user_id' => $agent->identifier(), 'kind' => 'direct']);
+        }
+
+        // Three waiting tickets with fixed conversation subjects; heal = unassign-and-replace
+        // through the doors is not available for a system heal, so the rows are reset directly
+        // (the seeder is the 0l heal actor) and then RE-ROUTED through the real pipeline —
+        // records accumulate (INSERT-only), the spec reads the NEWEST routed event.
+        $pipeline = app(\App\Domain\Routing\Pipeline\RoutingPipeline::class);
+        foreach ([1, 2, 3] as $n) {
+            $ticketId = sprintf('00000000-0000-7000-8000-0000000d11%02d', $n);
+            $ticket = Ticket::query()->find($ticketId);
+            if (! $ticket instanceof Ticket) {
+                $conversation = $this->conversationForQueueScene($agent, $n);
+                $customerId = DB::table('conversations')->where('id', $conversation)->value('customer_id');
+                DB::table('tickets')->insert([
+                    'id' => $ticketId, 'tenant_id' => $tenantId, 'conversation_id' => $conversation, 'customer_id' => is_string($customerId) ? $customerId : '',
+                    'number' => 990000 + $n, 'status' => 'open', 'priority' => 'normal', 'source' => 'agent', 'subject' => sprintf('Routing fixture %d', $n), 'subject_source' => 'staff',
+                ]);
+                $ticket = Ticket::query()->findOrFail($ticketId);
+            }
+            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => null, 'status' => 'open', 'department_id' => $deptId]);
+            $ticket = Ticket::query()->findOrFail($ticketId);
+            // C-06: domain events publish inside a transaction (the outbox law) — a bare seeder
+            // call would park the ticket as an FS-04 engine error (the honest net, doing its job).
+            DB::transaction(static fn () => $pipeline->route($ticket, 'created', ['explicit_department_id' => $deptId, 'explicit_queue_id' => $queueId]));
+            app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
+        }
+    }
+
+    private function conversationForQueueScene(User $agent, int $n): string
+    {
+        $tenantId = app(TenantContext::class)->tenantId();
+        $customerIdRaw = DB::table('customers')->where('tenant_id', $tenantId)->orderBy('id')->value('id');
+        $customerId = is_string($customerIdRaw) ? $customerIdRaw : '';
+        $conversationId = sprintf('00000000-0000-7000-8000-0000000d12%02d', $n);
+        if (! DB::table('conversations')->where('id', $conversationId)->exists()) {
+            /** @var object{channel: string, channel_ref_id: string}|null $template */
+            $template = DB::table('conversations')->where('tenant_id', $tenantId)->orderBy('id')->first(['channel', 'channel_ref_id']);
+            if ($template === null) {
+                throw new RuntimeException('the fixture tenant has no conversation to copy the channel shape from — run BrowserFixtureSeeder first');
+            }
+            DB::table('conversations')->insert([
+                'id' => $conversationId, 'tenant_id' => $tenantId, 'customer_id' => $customerId,
+                'channel' => $template->channel, 'channel_ref_id' => $template->channel_ref_id,
+                'external_chat_id' => 'fixture-queue-scene-'.$n, 'state' => 'active',
+            ]);
+        }
+
+        return $conversationId;
+    }
+
+    /** @return list<string> the ticket ids the heal touched (their index docs re-sync) */
     private function healListScene(User $agent): array
     {
         $projector = app(\App\Domain\Inbox\ReadModels\ListProjector::class);

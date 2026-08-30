@@ -147,14 +147,29 @@ test('FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned cop
     }
 });
 
-test('Doc 11 SEAM: ?seam_queues=1 renders the Queues section TYPE from the fixture — counts and order, no membership logic', async ({
+test('Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent\'s effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher\'s order', async ({
     page,
 }) => {
-    await openInbox(page, '?seam_queues=1');
+    await openInbox(page);
 
     const queues = page.getByTestId('queues-section');
     await expect(queues).toBeVisible();
-    await expect(queues.locator('[data-queue-view]').first()).toContainText('Payments');
-    await expect(queues).toContainText('14');
-    await expect(queues).toContainText('KYC & verification');
+    const row = queues.locator('[data-queue-view="00000000-0000-7000-8000-00000000d012"]');
+    await expect(row).toContainText('Fixture payments queue');
+    await expect(row).toContainText('3');
+
+    await row.click();
+    const list = page.getByTestId('ticket-list');
+    // FR-08 step 3: the dispatcher's own order — the three fixed-id fixtures, FIFO.
+    await expect(list.locator('[data-ticket]')).toHaveCount(3);
+    await expect(list.locator('[data-ticket]').first()).toHaveAttribute(
+        'data-ticket',
+        '00000000-0000-7000-8000-0000000d1101',
+    );
+
+    // The retired seam door is gone: the query flag renders NOTHING extra (the section is the
+    // real one). Same session — a second /login visit would bounce an authenticated user.
+    await page.goto('/inbox?seam_queues=1');
+    await dismissCoachMarks(page);
+    await expect(page.getByTestId('queues-section').locator('[data-queue-view]')).toHaveCount(1);
 });
