@@ -393,9 +393,25 @@ final class InboxBrowserSeeder extends Seeder
     private function conversationForQueueScene(User $agent, int $n): string
     {
         $tenantId = app(TenantContext::class)->tenantId();
-        $customerIdRaw = DB::table('customers')->where('tenant_id', $tenantId)->orderBy('id')->value('id');
-        $customerId = is_string($customerIdRaw) ? $customerIdRaw : '';
+        // ONE dedicated customer PER scene ticket (the 0l law, applied properly after the CI reds
+        // of 2026-08-31: borrowing the canonical customer made every scene row wear the Doc 05
+        // dual-channel badge — the projector groups ≥2 open conversations per CUSTOMER — and
+        // collide with strict text locators; even one shared scene customer would self-trigger
+        // the group. Distinct customers → no group, no badges, no collisions).
+        $customerId = sprintf('00000000-0000-7000-8000-0000000d13%02d', $n);
+        if (! DB::table('customers')->where('id', $customerId)->exists()) {
+            DB::table('customers')->insert([
+                'id' => $customerId, 'tenant_id' => $tenantId,
+                'display_name' => sprintf('Fixture Routing Player %d', $n),
+                'username' => sprintf('@fixture_routing_%02d', $n),
+                'is_shell' => true, 'created_source' => 'staff',
+            ]);
+        }
         $conversationId = sprintf('00000000-0000-7000-8000-0000000d12%02d', $n);
+        // Heal the WHOLE shape: rows from an earlier seed may still point at the borrowed
+        // canonical customer — re-point both sides every seed (no-op on a fresh DB).
+        DB::table('conversations')->where('id', $conversationId)->update(['customer_id' => $customerId]);
+        DB::table('tickets')->where('conversation_id', $conversationId)->update(['customer_id' => $customerId]);
         if (! DB::table('conversations')->where('id', $conversationId)->exists()) {
             /** @var object{channel: string, channel_ref_id: string}|null $template */
             $template = DB::table('conversations')->where('tenant_id', $tenantId)->orderBy('id')->first(['channel', 'channel_ref_id']);

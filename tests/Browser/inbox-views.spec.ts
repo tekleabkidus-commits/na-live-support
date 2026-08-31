@@ -147,7 +147,7 @@ test('FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned cop
     }
 });
 
-test('Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent\'s effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher\'s order', async ({
+test("Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order", async ({
     page,
 }) => {
     await openInbox(page);
@@ -156,16 +156,28 @@ test('Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELE
     await expect(queues).toBeVisible();
     const row = queues.locator('[data-queue-view="00000000-0000-7000-8000-00000000d012"]');
     await expect(row).toContainText('Fixture payments queue');
-    await expect(row).toContainText('3');
+    // The depth badge is the DISPATCHER'S truth, and on CI the suite shares one DB — earlier
+    // specs' created-tickets route into the tenant-default queue (this one), so an exact pin
+    // is depth-fragile there (the 2026-08-31 CI reds). The law asserted instead: the badge
+    // NUMBER equals the count the CLICKED view then serves (badge == list — one truth), the
+    // three fixed-id fixtures are AMONG the rows, and the head is the FIFO first (exact-depth
+    // stays pinned server-side in QueueViewsTest, where the scene is isolated).
+    const badgeText = (await row.textContent()) ?? '';
+    const depth = Number(badgeText.replace(/[^0-9]/g, ''));
+    expect(depth).toBeGreaterThanOrEqual(3);
 
     await row.click();
     const list = page.getByTestId('ticket-list');
-    // FR-08 step 3: the dispatcher's own order — the three fixed-id fixtures, FIFO.
-    await expect(list.locator('[data-ticket]')).toHaveCount(3);
+    await expect(list.locator('[data-ticket]')).toHaveCount(depth);
     await expect(list.locator('[data-ticket]').first()).toHaveAttribute(
         'data-ticket',
         '00000000-0000-7000-8000-0000000d1101',
     );
+    for (const n of ['01', '02', '03']) {
+        await expect(
+            list.locator(`[data-ticket="00000000-0000-7000-8000-0000000d11${n}"]`),
+        ).toBeVisible();
+    }
 
     // The retired seam door is gone: the query flag renders NOTHING extra (the section is the
     // real one). Same session — a second /login visit would bounce an authenticated user.
